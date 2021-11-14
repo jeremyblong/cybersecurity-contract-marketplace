@@ -1,8 +1,7 @@
 import React, { Fragment,useState,useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import './index.scss';
+// import './index.scss';
 import App from './components/app';
-import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
 import store from './store'
 import {BrowserRouter,Switch,Route,Redirect} from 'react-router-dom'
@@ -32,7 +31,7 @@ const Root = (props) =>  {
 
     return(
       <Fragment>
-        <Provider store={store}>
+        {/* <Provider store={store}> */}
         <BrowserRouter basename={`/`}>
         <Switch>
           <App>
@@ -58,12 +57,13 @@ const Root = (props) =>  {
           </App>
         </Switch>
         </BrowserRouter>
-        </Provider>
+        {/* </Provider> */}
       </Fragment>
       )
 }
-ReactDOM.render(<Root/>,
-  document.getElementById('root')
-);
+export default Root;
+// ReactDOM.render(<Root/>,
+//   document.getElementById('root')
+// );
 
-serviceWorker.unregister();
+// serviceWorker.unregister();

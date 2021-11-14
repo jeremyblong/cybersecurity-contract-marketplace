@@ -14,22 +14,27 @@ import App from 'next/app';
 import Head from 'next/head';
 import Layout from '../components/_App/Layout';
 import { NotificationContainer } from 'react-notifications';
-
+import Root from "../admin/src/index.jsx";
+import { store } from "../redux/store/store.js";
+import { Provider } from "react-redux";
 
 export default class MyApp extends App {
     render () {
         const { Component, pageProps } = this.props
         return (
-            <RecoilRoot>
-                <Layout>
-                    <Head>
-                        <meta charSet="utf-8" />
-                        <meta name="viewport" content="width=device-width, initial-scale=1" />
-                    </Head>
-                    <NotificationContainer/>
-                    <Component {...pageProps} />
-                </Layout>
-            </RecoilRoot>
+            <Provider store={store}>
+                <RecoilRoot>
+                    <Layout>
+                        <Head>
+                            <meta charSet="utf-8" />
+                            <meta name="viewport" content="width=device-width, initial-scale=1" />
+                        </Head>
+                        <NotificationContainer/>
+                        <Component {...pageProps} />
+                        <Root />
+                    </Layout>
+                </RecoilRoot>
+            </Provider>
         );
     }
 }

@@ -1,6 +1,9 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import createSagaMiddleware from 'redux-saga'
 import reducers from '../redux/index';
+import window from 'global';
+
+
 const sagaMiddleware = createSagaMiddleware()
 
 const store = createStore(

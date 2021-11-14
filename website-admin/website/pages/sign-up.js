@@ -6,7 +6,8 @@ import Link from 'next/link';
 import { NotificationManager } from 'react-notifications';
 import baseUrl from "../utils/baseUrl.js";
 import axios from "axios";
-
+import { authentication } from "../redux/actions/authentication/auth.js";
+import { connect } from "react-redux";
 
 class SignIn extends Component {
 constructor (props) {
@@ -63,6 +64,8 @@ constructor (props) {
 
                             setTimeout(() => {
                                 // do authentication - registration redux logic
+
+                                this.props.authentication(res.data.data);
                             }, 3000);
                         })
                     } else {
@@ -201,4 +204,4 @@ constructor (props) {
     }
 }
 
-export default SignIn;
+export default connect(null, { authentication })(SignIn);
