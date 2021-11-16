@@ -1,8 +1,8 @@
 import 'react-notifications/lib/notifications.css';
 import './styles/bootstrap.min.css';
 import './styles/animate.css';
-// import './styles/boxicons.min.css';
-// import './styles/flaticon.css';
+import './styles/boxicons.min.css';
+import './styles/flaticon.css';
 import '../node_modules/react-modal-video/css/modal-video.min.css';
 import 'react-accessible-accordion/dist/fancy-example.css';
 import './styles/style.css';
@@ -27,7 +27,8 @@ import { RecoilRoot } from 'recoil';
 import SignIn from "./pages/sign-in.js";
 import SignUp from "./pages/sign-up.js";
 import { store } from "./redux/store/store.js";
-
+import ForgotPassword from "./pages/forgot-password.js";
+import Contact from "./pages/contact.js";
 
 
 const Root = (props) =>  {
@@ -58,6 +59,8 @@ const Root = (props) =>  {
           <Route exact path="/" component={Index} />
           <Route exact path="/sign-in" component={SignIn} />
           <Route exact path="/sign-up" component={SignUp} />
+          <Route exact path="/forgot-password" component={ForgotPassword} />
+          <Route exact path="/contact" component={Contact} />
           <App>
             <TransitionGroup>
               {routes.map(({ path, Component }) => (

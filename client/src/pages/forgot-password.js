@@ -21,7 +21,7 @@ const ForgotPassword = () => {
                     <div className="contact-form-action">
                         <div className="form-heading text-center">
                             <h3 className="form-title">Reset Password!</h3>
-                            <p className="reset-desc">Enter the email of your account to reset the password. Then you will receive a link to email to reset the password. If you have any issue about reset password <Link href="/contact"><a>contact us.</a></Link></p>
+                            <p className="reset-desc">Enter the email of your account to reset the password. Then you will receive a link to email to reset the password. If you have any issue about reset password <Link to="/contact"><a>contact us.</a></Link></p>
                         </div>
 
                         <form method="post">
@@ -33,14 +33,14 @@ const ForgotPassword = () => {
                                 </div>
                                 
                                 <div className="col-lg-6 col-sm-6">
-                                    <Link href="/sign-in">
+                                    <Link to="/sign-in">
                                         <a className="now-log-in font-q">Sign In your account</a>
                                     </Link>
                                 </div>
                                 <div className="col-lg-6 col-sm-6">
                                     <p className="now-register">
                                         Not a member?
-                                        <Link href="/sign-up"><a className="font-q">Sign Up</a></Link>
+                                        <Link to="/sign-up"><a className="font-q">Sign Up</a></Link>
                                     </p>
                                 </div>
                                 <div className="col-12">

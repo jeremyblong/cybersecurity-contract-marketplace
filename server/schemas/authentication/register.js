@@ -1,32 +1,48 @@
 const mongoose = require("mongoose");
+const passportLocalMongoose = require("passport-local-mongoose");
+const Schema = mongoose.Schema;
 
-const UserSchema =  new mongoose.Schema({
+const Session = new Schema({
+    refreshToken: {
+      type: String,
+      default: "",
+    }  
+})
+
+const UserSchema =  new Schema({
     firstName: {
-        type: String
+        type: String,
+        default: ""
     }, 
     lastName: {
-        type: String
+        type: String,
+        default: ""
     }, 
     email: {
-        type: String
+        type: String,
+        default: ""
     }, 
     username: {
-        type: String
+        type: String,
+        default: ""
     }, 
     password: {
-        type: String
+        type: String,
+        default: ""
     }, 
     agreement: {
         type: Boolean
     },
     uniqueId: {
-        type: String
+        type: String,
+        default: ""
     },
     registrationDate: {
         type: Date
     },
     registrationDateString: {
-        type: String
+        type: String,
+        default: ""
     },
     completedJobs: {
         type: Number
@@ -45,7 +61,28 @@ const UserSchema =  new mongoose.Schema({
     },
     followingCompanies: {
         type: Array
+    },
+    authStrategy: {
+        type: String,
+        default: "local"
+    },
+    points: {
+        type: Number,
+        default: 0
+    },
+    refreshToken: {
+        type: [Session]
     }
 });
+
+UserSchema.set("toJSON", {
+    transform: function (doc, ret, options) {
+      delete ret.refreshToken
+      return ret
+    }
+});
+  
+UserSchema.plugin(passportLocalMongoose)
+
 
 module.exports = User = mongoose.model("hacker", UserSchema);

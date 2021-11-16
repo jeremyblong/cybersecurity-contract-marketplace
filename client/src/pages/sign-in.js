@@ -1,10 +1,60 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Navbar from '../components/_App/Navbar';
 import PageBanner from '../components/Common/PageBanner';
 import Footer from '../components/_App/Footer';
 import {Link} from 'react-router-dom'; 
+import Switch from "react-switch";
+import { NotificationManager } from 'react-notifications';
+import axios from "axios";
+
 
 const SignIn = () => {
+
+    const [ checked, setchecked ] = useState(false);
+    const [ data, setData ] = useState({});
+    const [ switchAccountType, switchType ] = useState("You're logging in as - 'Company/Employer'");
+
+    const handleChange = (checked) => {
+        setchecked(checked);
+
+        if (checked === true) {
+            switchType("You're logging in as - 'Hacker/Security Expert'")
+        } else {
+            switchType("You're logging in as - 'Company/Employer'");
+        }
+    }
+    const handleSubmission = (e) => {
+        e.preventDefault();
+
+        console.log("submitted.");
+
+        const { password, usernameOrEmail } = data;
+
+        axios.post("http://localhost:5000/login/account", {
+            accountType: checked === true ? "hacker" : "employer",
+            password,
+            usernameOrEmail
+        }).then((res) => {
+            if (res.data.message === "Successfully logged-in!") {
+                console.log("success!", res.data);
+            } else {
+                NotificationManager.error('An error occurred when attempting to login...Please try again.', 'ERROR LOGGING-IN!.', 3500);
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
+    }
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+
+        setData(prevState => {
+            return {
+                ...prevState,
+                [name]: value
+            }
+        });
+    }
+    console.log("data", data);
     return (
         <>
             <Navbar />
@@ -24,17 +74,23 @@ const SignIn = () => {
                     </div>
 
                     <div className="contact-form-action">
-                        <form method="post">
+                        <form onSubmit={handleSubmission}>
                             <div className="row">
                                 <div className="col-12">
                                     <div className="form-group">
-                                        <input className="form-control" type="text" name="name" placeholder="Username or Email" />
+                                        <input value={data.usernameOrEmail} onChange={handleInputChange} className="form-control" type="text" name="usernameOrEmail" placeholder="Username or Email" />
                                     </div>
                                 </div>
 
                                 <div className="col-12">
                                     <div className="form-group">
-                                        <input className="form-control" type="password" name="password" placeholder="Password" />
+                                        <input value={data.password} onChange={handleInputChange} className="form-control" type="password" name="password" placeholder="Password" />
+                                    </div>
+                                </div>
+                                <div style={{ paddingBottom: "15px" }} className="col-12">
+                                    <div style={{ flexDirection: "row", display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                        <Switch onColor={"#00acee"} onChange={handleChange} checked={checked} />
+                                        <label style={{ marginLeft: "10px" }}>{switchAccountType}</label>
                                     </div>
                                 </div>
 

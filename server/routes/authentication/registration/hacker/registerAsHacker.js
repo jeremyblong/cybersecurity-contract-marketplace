@@ -3,8 +3,11 @@ const router = express.Router();
 const User = require("../../../../schemas/authentication/register.js");
 const { v4: uuidv4 } = require('uuid');
 const moment = require("moment");
+const { getToken, COOKIE_OPTIONS, getRefreshToken } = require("../../../../schemas/authentication/authenticate.js");
+
 
 router.post("/", (req, res) => {
+
     const { 
         firstName, 
         lastName, 
@@ -14,7 +17,7 @@ router.post("/", (req, res) => {
         agreement 
     } = req.body;
 
-    const newUserRegister = new User({
+    User.register(new User({
         firstName: firstName.toLowerCase().trim(), 
         lastName: lastName.toLowerCase().trim(), 
         email: email.toLowerCase().trim(), 
@@ -30,21 +33,36 @@ router.post("/", (req, res) => {
         identityVerified: false,
         followingHackers: [],
         followingCompanies: []
-    })
-
-    newUserRegister.save((err, data) => {
+    }), password, (err, user) => {
         if (err) {
-            res.json({
-                message: "Error saving user information",
-                err
+
+            res.statusCode = 500;
+
+            res.send(err);
+
+          } else {
+
+            user.firstName = firstName;
+
+            user.lastName = lastName || "";
+
+            const token = getToken({ _id: user._id });
+
+            const refreshToken = getRefreshToken({ _id: user._id });
+
+            user.refreshToken.push({ refreshToken });
+
+            user.save((err, user) => {
+              if (err) {
+                res.statusCode = 500
+                res.send(err);
+              } else {
+                res.cookie("refreshToken", refreshToken, COOKIE_OPTIONS)
+                res.send({ success: true, token, message: "Successfully registered!" });
+              }
             })
-        } else {
-            res.json({
-                message: "Successfully registered!",
-                data
-            }) 
         }
-    })
+    });
 });
 
 module.exports = router;

@@ -1,13 +1,10 @@
 const express = require("express");
 const app = express();
-const connectDB = require("./config/db.js");
-const router = express.Router();
 const config = require("config");
 // init middleware
 const bodyParser = require('body-parser');
 const cors = require("cors");
 const mongoDB = require("./config/db.js");
-const path = require("path");
 const http = require("http");
 const server = http.createServer(app);
 const io = require('socket.io')(server, {
@@ -20,7 +17,15 @@ const helmet = require("helmet");
 const mongoSanitize = require('express-mongo-sanitize');
 const rateLimit = require("express-rate-limit");
 const aws = require('aws-sdk');
+const cookieParser = require("cookie-parser");
+const passport = require("passport");
+const mongoUtil = require("./mongoUtil.js");
 
+app.use(cookieParser(config.get("COOKIE_SECRET")));
+
+require("./strategies/jwtstrategy.js");
+require("./strategies/localstrategy.js");
+require("./schemas/authentication/authenticate.js");
 
 aws.config.update({
     secretAccessKey: config.get("awsAccessKey"),
@@ -44,6 +49,22 @@ app.use(bodyParser.urlencoded({
 	extended: false
 }));
 
+const whitelist = config.get("WHITELISTED_DOMAINS") ? config.get("WHITELISTED_DOMAINS").split(",") : [];
+
+const corsOptions = {
+	origin: function (origin, callback) {
+	  if (!origin || whitelist.indexOf(origin) !== -1) {
+		callback(null, true)
+	  } else {
+		callback(new Error("Not allowed by CORS"))
+	  }
+	},
+	credentials: true,
+}
+  
+app.use(cors(corsOptions));
+
+app.use(passport.initialize());
 
 const limiter = rateLimit({
     max: 100,// max requests
@@ -58,9 +79,14 @@ app.use(limiter);
 
 
 // routes go here...
-app.use("/registration/hacker", require("./routes/authentication/registration/hacker/registerAsHacker.js"));
-
-
+mongoUtil.connectToServer((err, client) => {
+	if (err) {
+		console.log(err);
+	} else {
+		app.use("/registration/hacker", require("./routes/authentication/registration/hacker/registerAsHacker.js"));
+		app.use("/login/account", require("./routes/authentication/login/login.js"));
+	}
+});
 
 app.get('*', function(req, res) {
   res.sendFile(__dirname, './client/public/index.html')
