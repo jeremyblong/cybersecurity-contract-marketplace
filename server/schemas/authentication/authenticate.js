@@ -26,4 +26,8 @@ exports.getRefreshToken = user => {
   return refreshToken
 }
 
-exports.verifyUser = passport.authenticate("jwt", { session: false })
+exports.verifyUser = passport.authenticate("jwt", { session: false });
+
+exports.checkAuthenticated = (req, res, next) => {
+  if (req.isAuthenticated()) return next();
+}

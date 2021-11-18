@@ -2,13 +2,16 @@ import React, { useState } from 'react';
 import Navbar from '../components/_App/Navbar';
 import PageBanner from '../components/Common/PageBanner';
 import Footer from '../components/_App/Footer';
-import {Link} from 'react-router-dom'; 
+import {Link, useHistory} from 'react-router-dom'; 
 import Switch from "react-switch";
 import { NotificationManager } from 'react-notifications';
 import axios from "axios";
+import { authentication } from "../redux/actions/authentication/auth.js";
+import { connect } from "react-redux";
 
+const SignIn = ({ authentication }) => {
 
-const SignIn = () => {
+    const history = useHistory();
 
     const [ checked, setchecked ] = useState(false);
     const [ data, setData ] = useState({});
@@ -30,13 +33,23 @@ const SignIn = () => {
 
         const { password, usernameOrEmail } = data;
 
-        axios.post("http://localhost:5000/login/account", {
-            accountType: checked === true ? "hacker" : "employer",
+        axios.post("http://localhost:5000/login/hacker", {
+            accountType: checked === true ? "hackers" : "employers",
             password,
-            usernameOrEmail
+            usernameOrEmail,
+            username: usernameOrEmail
         }).then((res) => {
-            if (res.data.message === "Successfully logged-in!") {
+            if (res.data.message === "Successfully logged in!") {
                 console.log("success!", res.data);
+
+                NotificationManager.success('Successful authentication! You will be logged-in momentarily...', 'Successfully authenticated!', 3000);
+
+                setTimeout(() => {
+                    // do authentication - registration redux logic
+                    authentication(res.data.data);
+
+                    history.push("/dashboard");
+                }, 3000);
             } else {
                 NotificationManager.error('An error occurred when attempting to login...Please try again.', 'ERROR LOGGING-IN!.', 3500);
             }
@@ -69,7 +82,7 @@ const SignIn = () => {
             <div className="user-area-all-style log-in-area ptb-100">
                 <div className="container">
                     <div className="section-title">
-                        <h2>Log In to your account!</h2>
+                        <h2>Log In to your <em><strong>{checked === true ? "Hacker" : "Employer/Company"}</strong> account</em>!</h2>
                         <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laudantium quas cumque iste veniam id dolorem deserunt ratione error voluptas rem ullam possimus placeat, ut, odio</p>
                     </div>
 
@@ -128,5 +141,4 @@ const SignIn = () => {
         </>
     )
 }
-
-export default SignIn;
+export default connect(null, { authentication })(SignIn);

@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const passportLocalMongoose = require("passport-local-mongoose");
+
 const Schema = mongoose.Schema;
 
 const Session = new Schema({
@@ -26,9 +27,11 @@ const UserSchema =  new Schema({
         type: String,
         default: ""
     }, 
+    accountType: {
+        type: String
+    },
     password: {
-        type: String,
-        default: ""
+        type: Object
     }, 
     agreement: {
         type: Boolean

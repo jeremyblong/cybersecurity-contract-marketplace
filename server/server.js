@@ -4,14 +4,12 @@ const config = require("config");
 // init middleware
 const bodyParser = require('body-parser');
 const cors = require("cors");
-const mongoDB = require("./config/db.js");
-const http = require("http");
-const server = http.createServer(app);
-const io = require('socket.io')(server, {
-	cors: {
-		origin: '*',
-	}
-});
+// const server = http.createServer(app);
+// const io = require('socket.io')(server, {
+// 	cors: {
+// 		origin: '*',
+// 	}
+// });
 const xss = require('xss-clean');
 const helmet = require("helmet");
 const mongoSanitize = require('express-mongo-sanitize');
@@ -19,7 +17,8 @@ const rateLimit = require("express-rate-limit");
 const aws = require('aws-sdk');
 const cookieParser = require("cookie-parser");
 const passport = require("passport");
-const mongoUtil = require("./mongoUtil.js");
+const { Connection } = require("./mongoUtil.js");
+
 
 app.use(cookieParser(config.get("COOKIE_SECRET")));
 
@@ -35,17 +34,15 @@ aws.config.update({
 
 const PORT = process.env.PORT || 5000;
 
-mongoDB();
-
 app.options('*', cors());
 app.use('*', cors());
 app.use(cors());
 
 app.use(bodyParser.json({
-	limit: "20mb"
+	limit: "500mb"
 }));
 app.use(bodyParser.urlencoded({
-	limit: "20mb",
+	limit: "500mb",
 	extended: false
 }));
 
@@ -79,14 +76,11 @@ app.use(limiter);
 
 
 // routes go here...
-mongoUtil.connectToServer((err, client) => {
-	if (err) {
-		console.log(err);
-	} else {
-		app.use("/registration/hacker", require("./routes/authentication/registration/hacker/registerAsHacker.js"));
-		app.use("/login/account", require("./routes/authentication/login/login.js"));
-	}
-});
+app.use("/registration/hacker", require("./routes/authentication/registration/hacker/registerAsHacker.js"));
+app.use("/login/hacker", require("./routes/authentication/login/hackerLogin.js"));
+app.use("/login/employer", require("./routes/authentication/login/employerLogin.js"));
+app.use("/refresh/token", require("./routes/authentication/refreshToken/refresh.js"));
+app.use("/logout", require("./routes/authentication/logout/logout.js"));
 
 app.get('*', function(req, res) {
   res.sendFile(__dirname, './client/public/index.html')
@@ -116,13 +110,16 @@ app.use(function(req, res, next) {
 	next();
 });
 
-io.on("connection", socket => {
+// io.on("connection", socket => {
 
-	console.log("New client connected");
+// 	console.log("New client connected");
 
-	socket.on("disconnect", () => console.log("Client disconnected"));
-});
+// 	socket.on("disconnect", () => console.log("Client disconnected"));
+// });
 
-server.listen(PORT, () => {
-	console.log(`Server listening on port ${PORT}!`);
+Connection.open();
+
+app.listen(PORT, () => {
+
+	console.log(`app listening on port ${PORT}!`);
 });

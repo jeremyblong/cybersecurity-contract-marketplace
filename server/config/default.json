@@ -1,5 +1,5 @@
 {
-    "mongoURI": "mongodb+srv://blongjeremy:Jer$8246355abc123@db.rl5nz.mongodb.net/db?retryWrites=true&w=majority",
+    "mongoURI": "mongodb+srv://blongjeremy:Jab-1994444@db.rl5nz.mongodb.net/db?retryWrites=true&w=majority",
     "cryptoSecret": "vOVH6sdmpNWjRRIqCc7rdxs01lwHzfr3",
     "cryptoAlg": "aes-256-ctr",
     "awsAccessKey": "AKIAQSRUS3VO2JMTTEBG",

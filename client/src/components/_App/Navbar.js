@@ -1,10 +1,18 @@
 import React from 'react';
 import { useRecoilState } from 'recoil'
 import { collapsedState } from '../../utils/recoil-atoms'
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import TopHeader from './TopHeader';
+import { connect } from "react-redux";
+import _ from "lodash";
+import axios from "axios";
+import { NotificationManager } from 'react-notifications';
+import { authentication } from "../../redux/actions/authentication/auth.js";
 
-const Navbar = () => {
+const Navbar = ({ data, authenticated, authentication }) => {
+
+    const history = useHistory();
+
     const [collapsed, setCollapsed] = useRecoilState(collapsedState);
 
     const toggleNavbar = () => {
@@ -26,6 +34,30 @@ const Navbar = () => {
     const classOne = collapsed ? 'collapse navbar-collapse' : 'collapse navbar-collapse show';
     const classTwo = collapsed ? 'navbar-toggler navbar-toggler-right collapsed' : 'navbar-toggler navbar-toggler-right';
 
+    const handleLogout = (e) => {
+        axios.get("http://localhost:5000/logout", {
+            params: {
+                uniqueId: data.uniqueId,
+                accountType: "hackers"
+            }
+        }).then((res) => {
+            if (res.data.message === "Successfully logged out!") {
+                console.log("res.data - logout", res.data);
+
+                NotificationManager.info('You have successfully logged-out!', 'Successfully deauthenticated...', 3000);
+
+                setTimeout(() => {
+                    authentication({});
+
+                    history.push("/");
+                }, 3000);
+            } else {
+                console.log("err", res.data);
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
+    }
     return (
         <>
             <header className="header-area fixed-top">
@@ -274,11 +306,13 @@ const Navbar = () => {
                                     </div>
                                     <div className="others-option">
                                         <div className="get-quote">
-                                            <Link to="/sign-in">
+                                            {authenticated === false ? <Link to="/sign-in">
                                                 <a className="default-btn">
                                                     Login/Sign-Up - Dashboard
                                                 </a>
-                                            </Link>
+                                            </Link> : <a onClick={handleLogout} className="default-secondary-btn">
+                                                Sign-Out/Deauthenticate
+                                            </a>}
                                         </div>
                                     </div>
                                 </nav>
@@ -290,5 +324,10 @@ const Navbar = () => {
         </>
     );
 }
-
-export default Navbar;
+const mapStateToProps = (state) => {
+    return {
+        data: state.auth.data,
+        authenticated: (_.has(state.auth, "data") && Object.keys(state.auth.data).length > 0) ? true : false
+    }
+}
+export default connect(mapStateToProps, { authentication })(Navbar);

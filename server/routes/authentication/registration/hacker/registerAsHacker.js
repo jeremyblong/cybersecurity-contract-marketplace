@@ -4,7 +4,7 @@ const User = require("../../../../schemas/authentication/register.js");
 const { v4: uuidv4 } = require('uuid');
 const moment = require("moment");
 const { getToken, COOKIE_OPTIONS, getRefreshToken } = require("../../../../schemas/authentication/authenticate.js");
-
+const { encrypt } = require("../../../../crypto.js");
 
 router.post("/", (req, res) => {
 
@@ -17,12 +17,15 @@ router.post("/", (req, res) => {
         agreement 
     } = req.body;
 
+    console.log("boom");
+
     User.register(new User({
         firstName: firstName.toLowerCase().trim(), 
         lastName: lastName.toLowerCase().trim(), 
         email: email.toLowerCase().trim(), 
         username: username.toLowerCase().trim(), 
-        password: password.trim(), 
+        password: encrypt(password.trim()), 
+        accountType: "hackers",
         agreement,
         uniqueId: uuidv4(),
         registrationDate: new Date(),
@@ -36,15 +39,15 @@ router.post("/", (req, res) => {
     }), password, (err, user) => {
         if (err) {
 
+            console.log(err);
+
             res.statusCode = 500;
 
             res.send(err);
 
           } else {
 
-            user.firstName = firstName;
-
-            user.lastName = lastName || "";
+            console.log("else ran")
 
             const token = getToken({ _id: user._id });
 
@@ -58,7 +61,7 @@ router.post("/", (req, res) => {
                 res.send(err);
               } else {
                 res.cookie("refreshToken", refreshToken, COOKIE_OPTIONS)
-                res.send({ success: true, token, message: "Successfully registered!" });
+                res.send({ success: true, token, message: "Successfully registered!", data: user });
               }
             })
         }
