@@ -34,10 +34,6 @@ aws.config.update({
 
 const PORT = process.env.PORT || 5000;
 
-app.options('*', cors());
-app.use('*', cors());
-app.use(cors());
-
 app.use(bodyParser.json({
 	limit: "500mb"
 }));
@@ -81,6 +77,7 @@ app.use("/login/hacker", require("./routes/authentication/login/hackerLogin.js")
 app.use("/login/employer", require("./routes/authentication/login/employerLogin.js"));
 app.use("/refresh/token", require("./routes/authentication/refreshToken/refresh.js"));
 app.use("/logout", require("./routes/authentication/logout/logout.js"));
+app.use("/registration/employer", require("./routes/authentication/registration/employer/registerAsEmployer.js"));
 
 app.get('*', function(req, res) {
   res.sendFile(__dirname, './client/public/index.html')
@@ -103,7 +100,7 @@ app.get('/*', cors(), function(_, res) {
 });
 
 app.use(function(req, res, next) {
-	res.header("Access-Control-Allow-Origin", '*');
+	res.header("Access-Control-Allow-Origin", req.headers.origin);
 	res.header("Access-Control-Allow-Credentials", true);
 	res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
 	res.header("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json');

@@ -8,7 +8,7 @@ import 'react-accessible-accordion/dist/fancy-example.css';
 import './styles/style.css';
 import './styles/responsive.css';
 import 'react-phone-number-input/style.css'
-
+import 'react-confirm-alert/src/react-confirm-alert.css';
 // components
 import React, { Fragment,useState,useEffect } from 'react';
 import ReactDOM from 'react-dom';

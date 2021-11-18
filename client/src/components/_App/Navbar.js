@@ -8,6 +8,8 @@ import _ from "lodash";
 import axios from "axios";
 import { NotificationManager } from 'react-notifications';
 import { authentication } from "../../redux/actions/authentication/auth.js";
+import { confirmAlert } from 'react-confirm-alert';
+
 
 const Navbar = ({ data, authenticated, authentication }) => {
 
@@ -38,8 +40,9 @@ const Navbar = ({ data, authenticated, authentication }) => {
         axios.get("http://localhost:5000/logout", {
             params: {
                 uniqueId: data.uniqueId,
-                accountType: "hackers"
-            }
+                accountType: data.accountType
+            },
+            withCredentials: true
         }).then((res) => {
             if (res.data.message === "Successfully logged out!") {
                 console.log("res.data - logout", res.data);
@@ -57,6 +60,26 @@ const Navbar = ({ data, authenticated, authentication }) => {
         }).catch((err) => {
             console.log(err);
         })
+    }
+    const handlePreviewActivate = () => {
+        confirmAlert({
+          title: 'Want to Sign-Out?',
+          message: "Are you sure you'd like to sign-out? This will take your status 'offline' and will sign you out.",
+          buttons: [
+            {
+              label: 'Sign-out',
+              onClick: () => {
+                handleLogout();
+              }
+            },
+            {
+              label: 'Cancel',
+              onClick: () => {
+                console.log("do nothing...");
+              }
+            }
+          ]
+        });
     }
     return (
         <>
@@ -310,7 +333,7 @@ const Navbar = ({ data, authenticated, authentication }) => {
                                                 <a className="default-btn">
                                                     Login/Sign-Up - Dashboard
                                                 </a>
-                                            </Link> : <a onClick={handleLogout} className="default-secondary-btn">
+                                            </Link> : <a onClick={handlePreviewActivate} className="default-secondary-btn">
                                                 Sign-Out/Deauthenticate
                                             </a>}
                                         </div>

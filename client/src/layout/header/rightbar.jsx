@@ -11,6 +11,14 @@ import {
 } from 'react-switch-lang';
 
 import {English,Deutsch,Español,Français,Português,简体中文,Notification,DeliveryProcessing,OrderComplete,TicketsGenerated,DeliveryComplete,CheckAllNotification,ViewAll,MessageBox,EricaHughes,KoriThomas,Admin,Account,Inbox,Taskboard,LogOut,AinChavez,CheckOut,ShopingBag,OrderTotal,GoToShopingBag} from '../../constant'
+import { connect } from "react-redux";
+import _ from "lodash";
+import axios from "axios";
+import { NotificationManager } from 'react-notifications';
+import { authentication } from "../../redux/actions/authentication/auth.js";
+import { useHistory } from "react-router-dom";
+import { confirmAlert } from 'react-confirm-alert';
+
 
 import en from '../../assets/i18n/en.json';
 import es from '../../assets/i18n/es.json';
@@ -25,7 +33,9 @@ setTranslations({ en, es, pt, fr, du, cn, ae });
 setDefaultLanguage('en');
 setLanguageCookie();
 
-const Rightbar = (props) => {    
+const Rightbar = ({ authenticated, data, authentication }) => {   
+  const history = useHistory();
+   
   const [searchresponsive, setSearchresponsive] = useState(false)
   const [langdropdown, setLangdropdown] = useState(false)
   const [moonlight, setMoonlight] = useState(false)
@@ -97,7 +107,51 @@ const Rightbar = (props) => {
       localStorage.setItem('layout_version', 'dark-only');
     }
   }
+  const handleDeauthentication = () => {
+    axios.get("http://localhost:5000/logout", {
+        params: {
+            uniqueId: data.uniqueId,
+            accountType: data.accountType
+        },
+        withCredentials: true
+    }).then((res) => {
+        if (res.data.message === "Successfully logged out!") {
+            console.log("res.data - logout", res.data);
 
+            NotificationManager.info('You have successfully logged-out!', 'Successfully deauthenticated...', 3000);
+
+            authentication({});
+
+            setTimeout(() => {
+                history.push("/");
+            }, 3000);
+        } else {
+            console.log("err", res.data);
+        }
+    }).catch((err) => {
+        console.log(err);
+    })
+  }
+  const handlePreviewActivate = () => {
+    confirmAlert({
+      title: 'Want to Sign-Out?',
+      message: "Are you sure you'd like to sign-out? This will take your status 'offline' and will sign you out.",
+      buttons: [
+        {
+          label: 'Sign-out',
+          onClick: () => {
+            handleDeauthentication();
+          }
+        },
+        {
+          label: 'Cancel',
+          onClick: () => {
+            console.log("do nothing...");
+          }
+        }
+      ]
+    });
+  }
   return (
     <Fragment>
       <div className="nav-right col-8 pull-right right-header p-0">
@@ -254,7 +308,7 @@ const Rightbar = (props) => {
               <li><User /><span>{Account} </span></li>
               <li><Mail /><span>{Inbox}</span></li>
               <li><FileText /><span>{Taskboard}</span></li>
-              <li><LogIn /><span>{LogOut}</span></li>
+              <li><LogIn /><span onClick={handlePreviewActivate}>{LogOut}</span></li>
             </ul>
           </li>
         </ul>
@@ -263,4 +317,11 @@ const Rightbar = (props) => {
 
   );
 }
-export default translate(Rightbar);
+
+const mapStateToProps = (state) => {
+  return {
+      data: state.auth.data,
+      authenticated: (_.has(state.auth, "data") && Object.keys(state.auth.data).length > 0) ? true : false
+  }
+}
+export default connect(mapStateToProps, { authentication })(translate(Rightbar));

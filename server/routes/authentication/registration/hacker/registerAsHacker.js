@@ -14,7 +14,8 @@ router.post("/", (req, res) => {
         email, 
         username, 
         password, 
-        agreement 
+        agreement,
+        accountType
     } = req.body;
 
     console.log("boom");
@@ -25,7 +26,7 @@ router.post("/", (req, res) => {
         email: email.toLowerCase().trim(), 
         username: username.toLowerCase().trim(), 
         password: encrypt(password.trim()), 
-        accountType: "hackers",
+        accountType,
         agreement,
         uniqueId: uuidv4(),
         registrationDate: new Date(),

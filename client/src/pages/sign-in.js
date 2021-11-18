@@ -32,12 +32,14 @@ const SignIn = ({ authentication }) => {
         console.log("submitted.");
 
         const { password, usernameOrEmail } = data;
-
-        axios.post("http://localhost:5000/login/hacker", {
+        
+        axios.post(`http://localhost:5000/login/${checked === true ? "hacker" : "employer"}`, {
             accountType: checked === true ? "hackers" : "employers",
             password,
             usernameOrEmail,
             username: usernameOrEmail
+        }, {
+            withCredentials: true
         }).then((res) => {
             if (res.data.message === "Successfully logged in!") {
                 console.log("success!", res.data);

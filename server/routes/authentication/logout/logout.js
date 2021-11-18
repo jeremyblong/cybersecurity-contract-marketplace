@@ -11,6 +11,8 @@ router.get("/", (req, res, next) => {
     const { refreshToken } = signedCookies;
     const { accountType, uniqueId } = req.query;
 
+    console.log("refreshToken", refreshToken, signedCookies);
+
     const collection = Connection.db.db("db").collection(accountType)
 
     collection.findOne({ uniqueId }).then((user) => {
@@ -21,7 +23,9 @@ router.get("/", (req, res, next) => {
 
         const tokenIndex = user.refreshToken.findIndex(
           item => item.refreshToken === refreshToken
-        )
+        );
+
+        console.log("index", tokenIndex);
   
         if (tokenIndex !== -1) {
           user.refreshToken.splice(tokenIndex, 1);

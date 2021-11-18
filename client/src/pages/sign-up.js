@@ -7,6 +7,8 @@ import { NotificationManager } from 'react-notifications';
 import axios from "axios";
 import { authentication } from "../redux/actions/authentication/auth.js";
 import { connect } from "react-redux";
+import Switch from "react-switch";
+
 
 class SignUp extends Component {
 constructor (props) {
@@ -19,10 +21,20 @@ constructor (props) {
         email: "",
         password: "",
         username: "",
-        agreement: false
+        agreement: false,
+        switchAccountType: "You're registering as a 'Company/Employer'",
+        checked: false
     }
 }
 
+    handleCheckChange = (checked) => {
+        console.log(checked);
+
+        this.setState({
+            checked,
+            switchAccountType: checked === true ? "You're registering as a 'Hacker/Security Expert'" : "You're registering as a 'Company/Employer'"
+        })
+    }
     handleChange = (e) => {
         const { value, name } = e.target;
 
@@ -35,18 +47,21 @@ constructor (props) {
 
         console.log("submitted.");
 
-        const { firstName, lastName, email, username, password, agreement } = this.state;
+        const { firstName, lastName, email, username, password, agreement, checked } = this.state;
 
         if ((typeof firstName !== "undefined" && firstName.length > 0) && (typeof lastName !== "undefined" && lastName.length > 0) && (typeof email !== "undefined" && email.length > 0) && (typeof username !== "undefined" && username.length > 0) && (typeof password !== "undefined" && password.length > 0)) {
             if (agreement === true) {
                 // agreed
-                axios.post("http://localhost:5000/registration/hacker", {
+                axios.post(`http://localhost:5000/registration/${checked === true ? "hacker" : "employer"}`, {
                     firstName, 
                     lastName, 
                     email, 
                     username, 
                     password, 
-                    agreement
+                    agreement,
+                    accountType: checked === true ? "hackers" : "employers"
+                }, {
+                    withCredentials: true
                 }).then((res) => {
                     if (res.data.message === "Successfully registered!") {
                         console.log("success!", res.data);
@@ -57,7 +72,9 @@ constructor (props) {
                             email: "",
                             password: "",
                             username: "",
-                            agreement: false
+                            agreement: false,
+                            checked: false,
+                            switchAccountType: "You're registering as a 'Company/Employer'"
                         }, () => {
                             NotificationManager.success('Successfully registered! We will log you in momentarily...', 'Successfully registered!', 3000);
 
@@ -85,6 +102,8 @@ constructor (props) {
     }
     render () {
         console.log(this.state);
+
+        const { switchAccountType, checked } = this.state;
         return (
             <>
                 <Navbar />
@@ -164,6 +183,13 @@ constructor (props) {
                                             onChange={this.handleChange}
                                             name="password" 
                                             placeholder="Password" />
+                                        </div>
+                                    </div>
+
+                                    <div style={{ paddingBottom: "15px" }} className="col-12">
+                                        <div style={{ flexDirection: "row", display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                            <Switch onColor={"#00acee"} onChange={this.handleCheckChange} checked={checked} />
+                                            <label style={{ marginLeft: "10px" }}>{switchAccountType}</label>
                                         </div>
                                     </div>
 
