@@ -34,7 +34,6 @@ router.get("/", (req, res, next) => {
             if (err) {
               console.log("err saving - ", err);
             } else {
-              console.log("saved and sent response... - !", data);
 
               req.logout();
               res.clearCookie("refreshToken", COOKIE_OPTIONS)
@@ -42,8 +41,6 @@ router.get("/", (req, res, next) => {
             }
           })
         } else {
-          console.log("no token already existed...");
-
           req.logout();
           res.clearCookie("refreshToken", COOKIE_OPTIONS)
           res.send({ success: true, message: "Successfully logged out!" })

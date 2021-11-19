@@ -53,7 +53,9 @@ passport.use("employers", new LocalStrategy((username, password, done) => {
         console.log(user);
 
         if (!user) {
-            return done(null, false, { message: 'Error - a problem occurred...' });
+            console.log("RAN!");
+            
+            return done(null, false, { message: "'Error - a problem occurred...'" });
         } else {
             if (((trimmed === user.username) || (trimmed === user.email)) && (password === decrypt(user.password))) {
                 return done(null, user);

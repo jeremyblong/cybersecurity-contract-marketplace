@@ -121,10 +121,6 @@ const Rightbar = ({ authenticated, data, authentication }) => {
             NotificationManager.info('You have successfully logged-out!', 'Successfully deauthenticated...', 3000);
 
             authentication({});
-
-            setTimeout(() => {
-                history.push("/");
-            }, 3000);
         } else {
             console.log("err", res.data);
         }

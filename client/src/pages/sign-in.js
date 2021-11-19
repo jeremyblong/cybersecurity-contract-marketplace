@@ -53,7 +53,10 @@ const SignIn = ({ authentication }) => {
                     history.push("/dashboard");
                 }, 3000);
             } else {
-                NotificationManager.error('An error occurred when attempting to login...Please try again.', 'ERROR LOGGING-IN!.', 3500);
+
+                console.log("err", res.data);
+                
+                NotificationManager.error(res.data.message, 'ERROR LOGGING-IN!.', 3500);
             }
         }).catch((err) => {
             console.log(err);

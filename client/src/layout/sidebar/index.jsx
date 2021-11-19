@@ -6,7 +6,8 @@ import { Link } from 'react-router-dom'
 import { translate } from 'react-switch-lang';
 import configDB from '../../data/customizer/config';
 import { DefaultLayout } from '../theme-customizer';
-
+import { connect } from 'react-redux';
+import _ from "lodash";
 
 const Sidebar = (props) => {
   const id = window.location.pathname.split('/').pop()
@@ -25,7 +26,7 @@ const Sidebar = (props) => {
     }else{
       document.querySelector(".sidebar-main").className = "sidebar-main"
     }
-}
+  }
   useEffect(() => {
     document.querySelector(".left-arrow").classList.add("d-none")
     window.addEventListener('resize', handleResize)
@@ -55,8 +56,15 @@ const Sidebar = (props) => {
       })
       return items
     })
-    window.addEventListener('scroll',handleScroll)
-    handleScroll();
+    if (!_.isEmpty(props.userData)) {
+      window.addEventListener('scroll', handleScroll);
+    }
+
+    console.log("userData", props.userData, !_.isEmpty(props.userData));
+    
+    if (!_.isEmpty(props.userData)) {
+      handleScroll();
+    }
 
     return () => {
       window.removeEventListener('scroll', handleScroll)
@@ -305,5 +313,9 @@ const Sidebar = (props) => {
     </Fragment>
   );
 }
-
-export default translate(Sidebar);
+const mapStateToProps = (state) => {
+  return {
+    userData: state.auth.data
+  }
+}
+export default connect(mapStateToProps, { })(translate(Sidebar));

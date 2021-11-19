@@ -1,9 +1,8 @@
 // dashbaord
-import Default from '../components/dashboard/default'
-import Ecommerce from '../components/dashboard/ecommerce'
-
+import Default from '../components/dashboard/default';
+import Ecommerce from '../components/dashboard/ecommerce';
 // starter kits 
-import Starterkits from '../components/starter-kits'
+import Starterkits from '../components/starter-kits';
 
 export const routes = [
         { path:`${process.env.PUBLIC_URL}/dashboard/default/:layout`, Component:Default},

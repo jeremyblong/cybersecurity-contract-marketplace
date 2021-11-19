@@ -29,62 +29,94 @@ import SignUp from "./pages/sign-up.js";
 import { store } from "./redux/store/store.js";
 import ForgotPassword from "./pages/forgot-password.js";
 import Contact from "./pages/contact.js";
+import axios from "axios";
+import _ from "lodash";
+import ProtectedRoute from "./route/protected/protectedRoute.js";
 
 
 const Root = (props) =>  {
-
   const [anim, setAnim] = useState("");
   const animation = localStorage.getItem("animation") || ConfigDB.data.router_animation || 'fade'
   const abortController = new AbortController();
   const defaultLayoutObj = classes.find(item => Object.values(item).pop(1) === 'compact-wrapper');
   const layout = localStorage.getItem('layout') ||  Object.keys(defaultLayoutObj).pop();
 
+  const refreshTokenApiRequest = () => {
+
+    const accountData = store.getState().auth.data;
+
+    if (!_.isEmpty(accountData)) {
+      axios.post(`http://localhost:5000/refresh/token/${accountData.accountType === "hackers" ? "hacker" : "employer"}`, null, {
+        withCredentials: true
+      }).then((res) => {
+        if (res.data.message === "Gathered refresh token!") {
+          console.log(res.data);
+        } else {
+          console.log("err", res.data);
+        }
+      }).catch((err) => {
+        console.log(err);
+      })
+    } else {
+      console.log("store user data is empty.");
+    }
+  }
+
   useEffect(() => {
-      setAnim(animation)
+      setAnim(animation);
+
+      setTimeout(refreshTokenApiRequest, 5 * 60 * 1000);
+
+      setTimeout(() => {
+        refreshTokenApiRequest();
+      }, 500);
+
       console.ignoredYellowBox = ["Warning: Each", "Warning: Failed"];
       console.disableYellowBox = true;
       return function cleanup() {
           abortController.abort();
         }
       // eslint-disable-next-line
-    }, []);
+  }, []);
 
-    return(
-      <Fragment>
-        <Provider store={store}>
-        <RecoilRoot>
-        <NotificationContainer />
-        <BrowserRouter>
-        <Switch>
-          <Route exact path="/" component={Index} />
-          <Route exact path="/sign-in" component={SignIn} />
-          <Route exact path="/sign-up" component={SignUp} />
-          <Route exact path="/forgot-password" component={ForgotPassword} />
-          <Route exact path="/contact" component={Contact} />
-          <App>
-            <TransitionGroup>
-              {routes.map(({ path, Component }) => (
-                  <Route key={path} exact   path={`${process.env.PUBLIC_URL}${path}`}>
-                      {({ match }) => (
-                          <CSSTransition 
-                          in={match != null}
-                          timeout={100}
-                          classNames={anim} 
-                          unmountOnExit
-                          >
-                          <div><Component/></div>
-                          </CSSTransition> 
-                      )}
-                  </Route>
-                  ))}
-            </TransitionGroup>
-          </App>
-        </Switch>
-        </BrowserRouter>
-        </RecoilRoot>
-        </Provider>
-      </Fragment>
-      )
+  return(
+    <Fragment>
+      <Provider store={store}>
+      <RecoilRoot>
+      <NotificationContainer />
+      <BrowserRouter>
+      <Switch>
+        <Route exact path="/" component={Index} />
+        <Route exact path="/sign-in" component={SignIn} />
+        <Route exact path="/sign-up" component={SignUp} />
+        <Route exact path="/forgot-password" component={ForgotPassword} />
+        <Route exact path="/contact" component={Contact} />
+        <App>
+          <TransitionGroup>
+            {routes.map(({ path, Component }) => (
+                <ProtectedRoute key={path} exact path={`${process.env.PUBLIC_URL}${path}`}>
+                    {({ match }) => (
+                        <CSSTransition 
+                        in={match != null}
+                        timeout={100}
+                        classNames={anim} 
+                        unmountOnExit
+                        >
+                        <div>
+                          <Component />
+                        </div>
+                        </CSSTransition> 
+                    )}
+                </ProtectedRoute>
+                ))}
+          </TransitionGroup>
+        </App>
+      </Switch>
+      </BrowserRouter>
+      </RecoilRoot>
+      </Provider>
+    </Fragment>
+  )
 }
 ReactDOM.render(<Root/>,
   document.getElementById('root')

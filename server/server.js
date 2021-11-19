@@ -18,7 +18,8 @@ const aws = require('aws-sdk');
 const cookieParser = require("cookie-parser");
 const passport = require("passport");
 const { Connection } = require("./mongoUtil.js");
-
+const flash = require('connect-flash');
+const session = require('express-session');
 
 app.use(cookieParser(config.get("COOKIE_SECRET")));
 
@@ -53,7 +54,18 @@ const corsOptions = {
 	  }
 	},
 	credentials: true,
-}
+};
+
+app.use(flash());
+
+app.use(session({ 
+	cookie: { 
+		maxAge: 60000 
+	}, 
+	secret: 'woot',
+	resave: false, 
+	saveUninitialized: false
+}));
   
 app.use(cors(corsOptions));
 
@@ -75,7 +87,8 @@ app.use(limiter);
 app.use("/registration/hacker", require("./routes/authentication/registration/hacker/registerAsHacker.js"));
 app.use("/login/hacker", require("./routes/authentication/login/hackerLogin.js"));
 app.use("/login/employer", require("./routes/authentication/login/employerLogin.js"));
-app.use("/refresh/token", require("./routes/authentication/refreshToken/refresh.js"));
+app.use("/refresh/token/hacker", require("./routes/authentication/refreshToken/hackerRefresh.js"));
+app.use("/refresh/token/employer", require("./routes/authentication/refreshToken/employerRefresh.js"));
 app.use("/logout", require("./routes/authentication/logout/logout.js"));
 app.use("/registration/employer", require("./routes/authentication/registration/employer/registerAsEmployer.js"));
 
