@@ -11,7 +11,8 @@ export const MENUITEMS = [
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Public', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Restricted/Private', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Earned/Won', type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'Directory Of Companies', type: 'link' }
+                    { path: `${process.env.PUBLIC_URL}/`, title: 'Directory Of Companies', type: 'link' },
+                    { path: `${process.env.PUBLIC_URL}/map/employers/available/jobs`, title: 'Interactive Map Of Active Jobs', type: 'link' }
                 ]
             },
             {
@@ -21,7 +22,8 @@ export const MENUITEMS = [
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Leaderboards', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Weekly Event(s)', type: 'link' }
                 ]
-            },{
+            },
+            {
                 title: "Purchase", icon: ShoppingCart, type: "sub", active: false, children: [
                     { path: `${process.env.PUBLIC_URL}/`, title: "Purchase 'Connects/Tokens'", type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/`, title: "Buy 'Profile Boosts'", type: 'link' },

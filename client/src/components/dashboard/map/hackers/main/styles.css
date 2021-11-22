@@ -1,0 +1,15 @@
+.mapboxgl-ctrl-attrib-inner {
+    display: none !important;
+}
+.wraprow-items {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    height: 100vh;
+    min-height: 100vh;
+    max-height: 100vh !important;
+    overflow-y: scroll !important;
+}
+.custom-project-box {
+    max-width: 48.5%;
+}

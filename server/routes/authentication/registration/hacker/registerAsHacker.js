@@ -36,7 +36,9 @@ router.post("/", (req, res) => {
         fullyVerified: false,
         identityVerified: false,
         followingHackers: [],
-        followingCompanies: []
+        followingCompanies: [],
+        experiencePoints: 0,
+        rankLevel: 1
     }), password, (err, user) => {
         if (err) {
 

@@ -13,6 +13,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import "react-sliding-pane/dist/react-sliding-pane.css";
 import 'react-dropzone-uploader/dist/styles.css';
 import 'rc-slider/assets/index.css';
+import 'mapbox-gl/dist/mapbox-gl.css';
 // components
 import React, { Fragment,useState,useEffect } from 'react';
 import ReactDOM from 'react-dom';
@@ -70,7 +71,7 @@ const Root = (props) =>  {
 
   useEffect(() => {
 
-      console.log("process.env.REACT_APP_ASSET_LINK", process.env.REACT_APP_ASSET_LINK);
+      console.log("process.env.REACT_APP_MAPBOX_TOKEN", process.env.REACT_APP_MAPBOX_TOKEN);
 
       setAnim(animation);
 

@@ -75,6 +75,12 @@ const UserSchema =  new Schema({
     },
     refreshToken: {
         type: [Session]
+    },
+    experiencePoints: {
+        type: Number
+    },
+    rankLevel: {
+        type: Number
     }
 });
 

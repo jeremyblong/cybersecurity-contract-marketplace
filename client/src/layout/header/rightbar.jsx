@@ -298,8 +298,8 @@ const Rightbar = ({ authenticated, data, authentication }) => {
           <li className="profile-nav onhover-dropdown p-0">
             <div className="media profile-media">
               <img className="b-r-10" src={man} alt="" />
-              <div className="media-body"><span>{'Emay Walter'}</span>
-                <p className="mb-0 font-roboto">{Admin} <i className="middle fa fa-angle-down"></i></p>
+              <div className="media-body"><span>{`${data.firstName} ${data.lastName}`}</span>
+                <p className="mb-0 font-roboto">{data.accountType === "hackers" ? "Hacker" : "Employer"}<i className="middle fa fa-angle-down"></i></p>
               </div>
             </div>
             <ul className="profile-dropdown onhover-show-div">

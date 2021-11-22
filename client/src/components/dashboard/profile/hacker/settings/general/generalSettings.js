@@ -15,6 +15,7 @@ import _ from "lodash";
 import AvatarEditor from 'react-avatar-editor';
 import "./styles.css";
 import Slider from 'rc-slider';
+import { authentication } from "../../../../../../redux/actions/authentication/auth.js";
 
 const options = [
     { value: 'male', label: 'Male' },
@@ -44,7 +45,7 @@ const yearOptions = [
 ];
 
 
-const GeneralSettingsHelper = ({ userData }) => {
+const GeneralSettingsHelper = ({ userData, authentication }) => {
     const [ yearsOfExperience, setYearsOfExperience ] = useState(null);
     const [birthdate, setBirthDate] = useState(new Date());
     const [ file, setFile ] = useState(null);
@@ -255,6 +256,10 @@ const GeneralSettingsHelper = ({ userData }) => {
         }).then((res) => {
             if (res.data.message === "Successfully updated profile data!") {
                 console.log(res.data);
+
+                const { user } = res.data;
+
+                authentication(user);
 
                 setValues({
                     title: "", 
@@ -550,4 +555,4 @@ const mapStateToProps = (state) => {
         userData: state.auth.data
     }
 }
-export default connect(mapStateToProps, {  })(GeneralSettingsHelper);
+export default connect(mapStateToProps, { authentication })(GeneralSettingsHelper);
