@@ -1,5 +1,4 @@
 /*
-@File: Pisa Template Styles
 
 * This file contains the styling for the actual template, this
 is the file you need to edit to change the look of the
@@ -36,6 +35,25 @@ This files table contents are outlined below>>>>>
 ** - Nice select Area
 ******************************************* /*
 
+
+/* admin/dashboard/authenticated */
+.overlaySlide {
+  z-index: 99999999999999999 !important;
+}
+.horizontally-centered {
+  width: 50%;
+  margin: 0 auto
+}
+.loadingBarRaise {
+  z-index: 9999999999999999999999999999999999 !important;
+}
+.centered {
+  display: 'flex'; 
+  align-items: center; 
+  justify-content: center;
+  align-content: center;
+}
+/* admin/dashboard/authenticated - END */
 /*
 Default Style
 ============================*/

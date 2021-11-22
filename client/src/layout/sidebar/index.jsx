@@ -280,7 +280,7 @@ const Sidebar = (props) => {
                                       : ''}
 
                                     {(childrenItem.type === 'link') ?
-                                      <Link  to={childrenItem.path+'/'+layout} className={`${childrenItem.active ? 'active' : ''}`} onClick={() => toggletNavActive(childrenItem)}>{props.t(childrenItem.title)}</Link>
+                                      <Link  to={childrenItem.path} className={`${childrenItem.active ? 'active' : ''}`} onClick={() => toggletNavActive(childrenItem)}>{props.t(childrenItem.title)}</Link>
                                       : ''}
 
                                     {childrenItem.children ?

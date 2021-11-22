@@ -28,8 +28,8 @@ require("./strategies/localstrategy.js");
 require("./schemas/authentication/authenticate.js");
 
 aws.config.update({
-    secretAccessKey: config.get("awsAccessKey"),
-    accessKeyId: config.get("awsSecretKey"),
+    secretAccessKey: config.get("awsSecretKey"),
+    accessKeyId: config.get("awsAccessKey"),
     region: config.get("awsRegion")
 });
 
@@ -91,6 +91,9 @@ app.use("/refresh/token/hacker", require("./routes/authentication/refreshToken/h
 app.use("/refresh/token/employer", require("./routes/authentication/refreshToken/employerRefresh.js"));
 app.use("/logout", require("./routes/authentication/logout/logout.js"));
 app.use("/registration/employer", require("./routes/authentication/registration/employer/registerAsEmployer.js"));
+app.use("/upload/profile/picture/video", require("./routes/hackers/profile/profilePicVideo/uploadData.js"));
+app.use("/gather/general/user/data", require("./routes/shared/general/userInfo/gatherGeneralUserInfo.js"));
+app.use("/update/hacker/profile/information/basic", require("./routes/hackers/profile/generaInfomation/updateGeneralInfomation.js"));
 
 app.get('*', function(req, res) {
   res.sendFile(__dirname, './client/public/index.html')

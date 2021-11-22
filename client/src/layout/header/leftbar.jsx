@@ -3,7 +3,10 @@ import { Container, Row, Col } from 'reactstrap'
 import { X, Layers, GitPullRequest, User, Users, UserMinus, UserCheck, Airplay, Zap,Heart,Inbox, Sliders } from 'react-feather'
 import { Link } from 'react-router-dom'
 import { errorPages, authPages, usefullPages, comingsoonPages } from './pages'
-import {BonusUi,MegaMenu,ErrorPage,Authentication,UsefullPages,ComingSoon, FileManager,SocialApp,UserEdit,UsersCards,UserProfile,KanbanBoard,Bookmark,LevelMenu} from '../../constant'
+import {BonusUi,MegaMenu,ErrorPage,Authentication,UsefullPages,ComingSoon, FileManager,SocialApp,UserEdit,UsersCards,UserProfile,KanbanBoard,Bookmark,LevelMenu} from '../../constant';
+
+
+
 const Leftbar = (props) => {
 
   const [bonusui, setBonusUI] = useState(false)

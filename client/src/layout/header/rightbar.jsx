@@ -289,7 +289,9 @@ const Rightbar = ({ authenticated, data, authentication }) => {
                   <p className="f-12 font-danger">{"32 mins ago"}</p>
                 </div>
               </li>
-              <li className="text-center"> <button className="btn btn-primary">{ViewAll}     </button></li>
+              <li className="text-center"> <button onClick={() => {
+                history.push("/messaging/main")
+              }} className="btn btn-primary">{ViewAll}</button></li>
             </ul>
           </li>
           <li className="maximize"><a className="text-dark" href="#javascript" onClick={goFull}><Minimize /></a></li>

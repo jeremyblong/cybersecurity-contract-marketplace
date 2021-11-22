@@ -9,6 +9,10 @@ import './styles/style.css';
 import './styles/responsive.css';
 import 'react-phone-number-input/style.css'
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import "react-datepicker/dist/react-datepicker.css";
+import "react-sliding-pane/dist/react-sliding-pane.css";
+import 'react-dropzone-uploader/dist/styles.css';
+import 'rc-slider/assets/index.css';
 // components
 import React, { Fragment,useState,useEffect } from 'react';
 import ReactDOM from 'react-dom';
@@ -33,6 +37,8 @@ import axios from "axios";
 import _ from "lodash";
 import ProtectedRoute from "./route/protected/protectedRoute.js";
 
+
+require('dotenv').config();
 
 const Root = (props) =>  {
   const [anim, setAnim] = useState("");
@@ -63,6 +69,9 @@ const Root = (props) =>  {
   }
 
   useEffect(() => {
+
+      console.log("process.env.REACT_APP_ASSET_LINK", process.env.REACT_APP_ASSET_LINK);
+
       setAnim(animation);
 
       setTimeout(refreshTokenApiRequest, 5 * 60 * 1000);

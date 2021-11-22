@@ -13,8 +13,6 @@ constructor(props) {
     }
 }
     componentDidUpdate (prevProps) {
-        console.log("prevProps", prevProps, this.state);
-
         if (this.state.isLoading === true) {
             if (JSON.stringify(prevProps.userData) !== JSON.stringify(this.props.userData)) {
                 
@@ -26,27 +24,20 @@ constructor(props) {
     }
     componentDidMount () {
         setTimeout(() => {
-            console.log("cdm ran.");
-            
             this.setState({
                 isLoading: false
             })
         }, 2500)
     }
     render() {
-        console.log("props!", this.props);
-
         const { component: Component, ...rest } = this.props;
 
         if(this.state.isLoading) {
-            console.log("loading still.")
             return <ReactLoading type={"cubes"} color={"#00acee"} height={350} width={650} />;
         } else {
             if(!_.isEmpty(this.props.userData)){
-                console.log("is NOT empty.")
                 return (<Route {...rest} render={(props) => (<Component {...props}/>)} />);
             } else {
-                console.log("redirect to sign-in TWO.")
                 return <Redirect to='/sign-in' />;
             }
         }

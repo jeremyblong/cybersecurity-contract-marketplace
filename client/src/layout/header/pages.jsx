@@ -1,8 +1,7 @@
 import { Film, Image,File } from "react-feather"
 
 export const errorPages = [
-    
-            { path: `${process.env.PUBLIC_URL}/dashboard/default`, title: 'Error 400', type: 'link' },
+            { path: `${process.env.PUBLIC_URL}/profile/settings/edit`, title: 'Edit Profile', type: 'link' },
             { path: `${process.env.PUBLIC_URL}/dashboard/default`, title: 'Error 401', type: 'link' },
             { path: `${process.env.PUBLIC_URL}/dashboard/default`, title: 'Error 403', type: 'link' },
             { path: `${process.env.PUBLIC_URL}/dashboard/default`, title: 'Error 404', type: 'link' },
