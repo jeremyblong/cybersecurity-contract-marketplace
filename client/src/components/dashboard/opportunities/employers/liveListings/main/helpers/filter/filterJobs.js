@@ -69,7 +69,7 @@ const JobFilter = () => {
                                 <CardHeader>
                                     <h5 className="mb-0">
                                         <Button color="link pl-0" data-toggle="collapse" onClick={() => setLocation(!location)}
-                                            data-target="#collapseicon1" aria-expanded={location} aria-controls="collapseicon1">{Location}  </Button>
+                                            data-target="#collapseicon1" aria-expanded={location} aria-controls="collapseicon1">Program Features</Button>
                                     </h5>
                                 </CardHeader>
                                 <Collapse isOpen={location}>
@@ -77,27 +77,35 @@ const JobFilter = () => {
                                         <div className="location-checkbox">
                                             <Label className="d-block" htmlFor="chk-ani6">
                                                 <Input className="checkbox_animated" id="chk-ani6" type="checkbox" />
-                                                {"New York"}<span className="d-block">{"NY (399)"}</span>
-                                                </Label>
+                                                {"IBB"}<span className="d-block">{"220 Listings"}</span>
+                                            </Label>
                                             <Label className="d-block" htmlFor="chk-ani7">
                                                 <Input className="checkbox_animated" id="chk-ani7" type="checkbox" />
-                                                {"San Francisco"}<span className="d-block">{"CA (252)"}</span>
-                                                </Label>
+                                                {"Offers bounties"}<span className="d-block">{"700 Listings"}</span>
+                                            </Label>
                                             <Label className="d-block mb-0" htmlFor="chk-ani8">
                                                 <Input className="checkbox_animated" id="chk-ani8" type="checkbox" />
-                                                {"Washington"}<span className="d-block">{"DC (226)"}</span>
-                                                </Label>
+                                                {"High response efficiency"}<span className="d-block">{"477 Listings"}</span>
+                                            </Label>
                                             <Label className="d-block mb-0" htmlFor="chk-ani9">
                                                 <Input className="checkbox_animated" id="chk-ani9" type="checkbox" />
-                                                {"Seattle"}<span className="d-block">{"WA (242)"}</span>
-                                                </Label>
+                                                {"Managed by CyberHunt"}<span className="d-block">{"905 Listings"}</span>
+                                            </Label>
                                             <Label className="d-block mb-0" htmlFor="chk-ani10">
                                                 <Input className="checkbox_animated" id="chk-ani10" type="checkbox" />
-                                                {"Chicago"}<span className="d-block">{"IL (187)"}</span>
-                                                </Label>
+                                                {"Offers retesting"}<span className="d-block">{"101 Listings"}</span>
+                                            </Label>
+                                            <Label className="d-block mb-0" htmlFor="chk-ani10">
+                                                <Input className="checkbox_animated" id="chk-ani10" type="checkbox" />
+                                                {"Active programs"}<span className="d-block">{"54 Listings"}</span>
+                                            </Label>
+                                            <Label className="d-block mb-0" htmlFor="chk-ani10">
+                                                <Input className="checkbox_animated" id="chk-ani10" type="checkbox" />
+                                                {"Bounty splitting"}<span className="d-block">{"665 Listings"}</span>
+                                            </Label>
                                         </div>
                                     </CardBody>
-                                    <Button className="btn-block text-center" color="primary">{AllLocations}</Button>
+                                    <Button className="btn-block text-center" color="primary">All Program Types</Button>
                                 </Collapse>
                             </Card>
                         </Col>
@@ -106,33 +114,81 @@ const JobFilter = () => {
                                 <CardHeader>
                                     <h5 className="mb-0">
                                         <Button color="link pl-0" onClick={() => setisJobTitle(!isJobTitle)}
-                                            data-toggle="collapse" data-target="#collapseicon2" aria-expanded={isJobTitle} aria-controls="collapseicon2">{JobTitle}</Button>
+                                            data-toggle="collapse" data-target="#collapseicon2" aria-expanded={isJobTitle} aria-controls="collapseicon2">Asset Type</Button>
                                     </h5>
                                 </CardHeader>
                                 <Collapse isOpen={isJobTitle}>
                                     <CardBody className="animate-chk">
                                         <Label className="d-block" htmlFor="chk-ani11">
                                             <Input className="checkbox_animated" id="chk-ani11" type="checkbox" />
-                                            {"UI/Ux designer(25)"}
+                                            {"Any"}
                                         </Label>
                                         <Label className="d-block" htmlFor="chk-ani12">
                                             <Input className="checkbox_animated" id="chk-ani12" type="checkbox" />
-                                            {"Graphic designer(10)"}
-                                        </Label>
-                                        <Label className="d-block" htmlFor="chk-ani13">
-                                            <Input className="checkbox_animated" id="chk-ani13" type="checkbox" />
-                                            {"Front end designer(15)"}
+                                            {"CIDR"}
                                         </Label>
                                         <Label className="d-block" htmlFor="chk-ani14">
                                             <Input className="checkbox_animated" id="chk-ani14" type="checkbox" />
-                                            {"PHP developer(42)"}
+                                            {"Domain"}
                                         </Label>
-                                        <Label className="d-block mb-0" htmlFor="chk-ani15">
+                                        <Label className="d-block" htmlFor="chk-ani15">
                                             <Input className="checkbox_animated" id="chk-ani15" type="checkbox" />
-                                            {"React Developer(5)"}
+                                            {"iOS: App Store"}
+                                        </Label>
+                                        <Label className="d-block" htmlFor="chk-ani16">
+                                            <Input className="checkbox_animated" id="chk-ani16" type="checkbox" />
+                                            {"iOS: Testflight"}
+                                        </Label>
+                                        <Label className="d-block" htmlFor="chk-ani17">
+                                            <Input className="checkbox_animated" id="chk-ani17" type="checkbox" />
+                                            {"iOS: .ipa"}
+                                        </Label>
+                                        <Label className="d-block" htmlFor="chk-ani18">
+                                            <Input className="checkbox_animated" id="chk-ani18" type="checkbox" />
+                                            {"Android: Play Store"}
+                                        </Label>
+                                        <Label className="d-block" htmlFor="chk-ani19">
+                                            <Input className="checkbox_animated" id="chk-ani19" type="checkbox" />
+                                            {"Android: .apk"}
+                                        </Label>
+                                        <Label className="d-block" htmlFor="chk-ani20">
+                                            <Input className="checkbox_animated" id="chk-ani20" type="checkbox" />
+                                            {"Windows: Microsoft Store"}
+                                        </Label>
+                                        <Label className="d-block" htmlFor="chk-ani21">
+                                            <Input className="checkbox_animated" id="chk-ani21" type="checkbox" />
+                                            {"Source Code"}
+                                        </Label>
+                                        <Label className="d-block" htmlFor="chk-ani22">
+                                            <Input className="checkbox_animated" id="chk-ani22" type="checkbox" />
+                                            {"Executable"}
+                                        </Label>
+                                        <Label className="d-block" htmlFor="chk-ani23">
+                                            <Input className="checkbox_animated" id="chk-ani23" type="checkbox" />
+                                            {"Hardware/IoT"}
+                                        </Label>
+                                        <Label className="d-block" htmlFor="chk-ani24">
+                                            <Input className="checkbox_animated" id="chk-ani24" type="checkbox" />
+                                            {"External Network Testing"}
+                                        </Label>
+                                        <Label className="d-block" htmlFor="chk-ani25">
+                                            <Input className="checkbox_animated" id="chk-ani25" type="checkbox" />
+                                            {"Internal Network Testing"}
+                                        </Label>
+                                        <Label className="d-block" htmlFor="chk-ani26">
+                                            <Input className="checkbox_animated" id="chk-ani26" type="checkbox" />
+                                            {"Social Engineering Testing"}
+                                        </Label>
+                                        <Label className="d-block" htmlFor="chk-ani27">
+                                            <Input className="checkbox_animated" id="chk-ani27" type="checkbox" />
+                                            {"Physical/On-Site Testing"}
+                                        </Label>
+                                        <Label className="d-block mb-0" htmlFor="chk-ani28">
+                                            <Input className="checkbox_animated" id="chk-ani28" type="checkbox" />
+                                            {"Wireless Testing"}
                                         </Label>
                                     </CardBody>
-                                    <Button className="btn-block text-center" color="primary">{AllJobTitle}</Button>
+                                    <Button className="btn-block text-center" color="primary">View All Asset Types</Button>
                                 </Collapse>
                             </Card>
                         </Col>
