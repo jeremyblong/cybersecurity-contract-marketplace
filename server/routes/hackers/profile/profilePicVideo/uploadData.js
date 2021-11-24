@@ -69,7 +69,8 @@ router.post("/", upload.single('file'), (req, resppppp, next) => {
         
                         resppppp.json({
                             message: "Successfully uploaded content!",
-                            generatedID: generatedIDImage
+                            generatedID: generatedIDImage,
+                            file: compoundedFile
                         })
                     }
                 }).catch((err) => {
@@ -98,7 +99,8 @@ router.post("/", upload.single('file'), (req, resppppp, next) => {
 
                 resppppp.json({
                     message: "Successfully uploaded content!",
-                    generatedID
+                    generatedID,
+                    file: compoundedFile
                 })
             }
         }).catch((err) => {

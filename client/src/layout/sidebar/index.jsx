@@ -199,7 +199,21 @@ const Sidebar = (props) => {
     document.querySelector(".page-header").className = "page-header close_icon";
     document.querySelector(".sidebar-wrapper").className = "sidebar-wrapper close_icon"
   }
-  
+  const renderCertainPaths = (menuItem) => {
+    if (!_.isEmpty(props.userData)) {
+      if (menuItem.path === "/profile/settings/edit") {
+        if (props.userData.accountType === "hackers") {
+          return "/profile/settings/edit";
+        } else {
+          return "/profile/settings/edit/employer";
+        }
+      } else {
+        return menuItem.path;
+      }
+    } else {
+      return menuItem.path;
+    }
+  }
   return (
     <Fragment>
        <div className={`bg-overlay1`} onClick={() => {closeOverlay()}} ></div>
@@ -248,7 +262,7 @@ const Sidebar = (props) => {
                             : ''}
 
                           {(menuItem.type === 'link') ?
-                            <Link  to={menuItem.path+'/'+layout} className={`sidebar-link sidebar-title link-nav  ${menuItem.active ? 'active' : ''}`} onClick={() => toggletNavActive(menuItem)}>
+                            <Link to={renderCertainPaths(menuItem)} className={`sidebar-link sidebar-title link-nav  ${menuItem.active ? 'active' : ''}`} onClick={() => toggletNavActive(menuItem)}>
                               <menuItem.icon />
                               <span>{props.t(menuItem.title)}</span>
                               {menuItem.badge ? <label className={menuItem.badge}>{menuItem.badgetxt}</label> : ""}
@@ -280,7 +294,7 @@ const Sidebar = (props) => {
                                       : ''}
 
                                     {(childrenItem.type === 'link') ?
-                                      <Link  to={childrenItem.path} className={`${childrenItem.active ? 'active' : ''}`} onClick={() => toggletNavActive(childrenItem)}>{props.t(childrenItem.title)}</Link>
+                                      <Link to={renderCertainPaths(childrenItem)} className={`${childrenItem.active ? 'active' : ''}`} onClick={() => toggletNavActive(childrenItem)}>{props.t(childrenItem.title)}</Link>
                                       : ''}
 
                                     {childrenItem.children ?

@@ -153,9 +153,27 @@ const GeneralSettingsHelper = ({ userData, authentication }) => {
                 }
             };
     
-            axios.post(`http://localhost:5000/upload/profile/picture/video`, data, config).then((res) => {
+            axios.post(`${process.env.REACT_APP_BASE_URL}/upload/profile/picture/video/hacker`, data, config).then((res) => {
                 if (res.data.message === "Successfully uploaded content!") {
                     console.log(res.data);
+
+                    const { file } = res.data;
+
+                    if (typeof personal.profilePicsVideos !== "undefined" && personal.profilePicsVideos.length > 0) {
+                        setPersonalData(prevState => {
+                            return {
+                                ...prevState,
+                                profilePicsVideos: personal.profilePicsVideos.push(file)
+                            }
+                        });
+                    } else {
+                        setPersonalData(prevState => {
+                            return {
+                                ...prevState,
+                                profilePicsVideos: [file]
+                            }
+                        });
+                    }
     
                     NotificationManager.success('Successfully uploaded your data! Your new profile picture is now live.', 'Successfully uploaded data!', 4500);
                 } else {
@@ -193,9 +211,27 @@ const GeneralSettingsHelper = ({ userData, authentication }) => {
                 }
             };
     
-            axios.post(`http://localhost:5000/upload/profile/picture/video`, data, config).then((res) => {
+            axios.post(`${process.env.REACT_APP_BASE_URL}/upload/profile/picture/video/hacker`, data, config).then((res) => {
                 if (res.data.message === "Successfully uploaded content!") {
                     console.log(res.data);
+
+                    const { file } = res.data;
+
+                    if (typeof personal.profilePicsVideos !== "undefined" && personal.profilePicsVideos.length > 0) {
+                        setPersonalData(prevState => {
+                            return {
+                                ...prevState,
+                                profilePicsVideos: personal.profilePicsVideos.push(file)
+                            }
+                        });
+                    } else {
+                        setPersonalData(prevState => {
+                            return {
+                                ...prevState,
+                                profilePicsVideos: [file]
+                            }
+                        });
+                    }
     
                     NotificationManager.success('Successfully uploaded your data! Your new profile video is now live.', 'Successfully uploaded data!', 4500);
                 } else {
@@ -239,48 +275,105 @@ const GeneralSettingsHelper = ({ userData, authentication }) => {
 
         const { title, firstName, publicEmailAddress, lastName, addressLineOne, addressPostalCode, country,addressCity, aboutMe } = values;
 
-        axios.post(`${process.env.REACT_APP_BASE_URL}/update/hacker/profile/information/basic`, {
-            title, 
-            firstName, 
-            publicEmailAddress, 
-            lastName, 
-            addressLineOne, 
-            addressPostalCode, 
-            country, 
-            addressCity, 
-            aboutMe,
-            gender: selectedOption,
-            yearsOfExperience,
-            birthdate,
-            id: userData.uniqueId
-        }).then((res) => {
-            if (res.data.message === "Successfully updated profile data!") {
-                console.log(res.data);
+        if ((typeof addressLineOne !== "undefined" && addressLineOne.length > 0) || (typeof addressCity !== "undefined" && addressCity.length > 0) || (typeof country !== "undefined" && country.length > 0) || (typeof addressPostalCode !== "undefined" && addressPostalCode.length > 0)) {
+            if ((typeof addressLineOne !== "undefined" && addressLineOne.length > 0) && (typeof addressCity !== "undefined" && addressCity.length > 0) && (typeof country !== "undefined" && country.length > 0) && (typeof addressPostalCode !== "undefined" && addressPostalCode.length > 0)) {
+                axios.post(`${process.env.REACT_APP_BASE_URL}/update/hacker/profile/information/basic`, {
+                    title, 
+                    firstName, 
+                    publicEmailAddress, 
+                    lastName, 
+                    addressLineOne, 
+                    addressPostalCode, 
+                    country, 
+                    addressCity, 
+                    aboutMe,
+                    gender: selectedOption,
+                    yearsOfExperience,
+                    birthdate,
+                    id: userData.uniqueId
+                }).then((res) => {
+                    if (res.data.message === "Successfully updated profile data!") {
+                        console.log(res.data);
+        
+                        const { user } = res.data;
+        
+                        authentication(user);
+        
+                        setValues({
+                            title: "", 
+                            firstName: "", 
+                            publicEmailAddress: "", 
+                            lastName: "",
+                            addressLineOne: "", 
+                            addressPostalCode: "",
+                            country: "",
+                            addressCity: "",
+                            aboutMe: ""
+                        });
+                        setBirthDate(new Date());
+                        setYearsOfExperience(null);
+                        setSelectedOption(null);
 
-                const { user } = res.data;
+                        NotificationManager.success(`We've successfully updated your profile information with your newly entered data, Check out your public profile to see the changes.`, 'Successfully updated profile data!', 4000);
+                    } else {
+                        console.log("err", res.data);
 
-                authentication(user);
-
-                setValues({
-                    title: "", 
-                    firstName: "", 
-                    publicEmailAddress: "", 
-                    lastName: "",
-                    addressLineOne: "", 
-                    addressPostalCode: "",
-                    country: "",
-                    addressCity: "",
-                    aboutMe: ""
-                });
-                setBirthDate(new Date());
-                setYearsOfExperience(null);
-                setSelectedOption(null);
+                        NotificationManager.error(`An error occurred while attempting to save your new data - we were unable to successfully update your profile.`, 'An error occurred while saving...', 4000);
+                    }
+                }).catch((err) => {
+                    console.log(err);
+                })
             } else {
-                console.log("err", res.data);
+                NotificationManager.warning('You must complete all address related fields if updating one of the address fields - address, zipcode, country and city. Please update all 4 fields for your new address...', 'Update address information!', 5500);
             }
-        }).catch((err) => {
-            console.log(err);
-        })
+        } else {
+            axios.post(`${process.env.REACT_APP_BASE_URL}/update/hacker/profile/information/basic`, {
+                title, 
+                firstName, 
+                publicEmailAddress, 
+                lastName, 
+                addressLineOne, 
+                addressPostalCode, 
+                country, 
+                addressCity, 
+                aboutMe,
+                gender: selectedOption,
+                yearsOfExperience,
+                birthdate,
+                id: userData.uniqueId
+            }).then((res) => {
+                if (res.data.message === "Successfully updated profile data!") {
+                    console.log(res.data);
+    
+                    const { user } = res.data;
+    
+                    authentication(user);
+    
+                    setValues({
+                        title: "", 
+                        firstName: "", 
+                        publicEmailAddress: "", 
+                        lastName: "",
+                        addressLineOne: "", 
+                        addressPostalCode: "",
+                        country: "",
+                        addressCity: "",
+                        aboutMe: ""
+                    });
+                    setBirthDate(new Date());
+                    setYearsOfExperience(null);
+                    setSelectedOption(null);
+
+                    NotificationManager.success(`We've successfully updated your profile information with your newly entered data, Check out your public profile to see the changes.`, 'Successfully updated profile data!', 4000);
+                } else {
+                    console.log("err", res.data);
+
+                    NotificationManager.error(`An error occurred while attempting to save your new data - we were unable to successfully update your profile.`, 'An error occurred while saving...', 4000);
+                }
+            }).catch((err) => {
+                console.log(err);
+            });
+        }
     }
     console.log("personal", personal);
     return (
@@ -293,7 +386,7 @@ const GeneralSettingsHelper = ({ userData, authentication }) => {
             containerClassName="loadingBarRaise"
             height={5}
         />
-        <Breadcrumb parent="Users" title="Edit Profile" />
+        <Breadcrumb parent="Hacker Account" title="Edit Profile" />
         <Container fluid={true}>
             <div className="edit-profile">
             <Row>
@@ -314,7 +407,7 @@ const GeneralSettingsHelper = ({ userData, authentication }) => {
                     <Form>
                         <Row className="mb-2">
                         <div className="col-auto">
-                            {!_.isEmpty(personal) ? renderPhotoOrVideo(personal.profilePicsVideos[personal.profilePicsVideos.length - 1]) : <Media onClick={() => {
+                            {(!_.isEmpty(personal) && _.has(personal, "profilePicsVideos") && personal.profilePicsVideos.length > 0) ? renderPhotoOrVideo(personal.profilePicsVideos[personal.profilePicsVideos.length - 1]) : <Media onClick={() => {
                                 setPane(prevState => {
                                     return {
                                         ...prevState,

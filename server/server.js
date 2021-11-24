@@ -91,9 +91,11 @@ app.use("/refresh/token/hacker", require("./routes/authentication/refreshToken/h
 app.use("/refresh/token/employer", require("./routes/authentication/refreshToken/employerRefresh.js"));
 app.use("/logout", require("./routes/authentication/logout/logout.js"));
 app.use("/registration/employer", require("./routes/authentication/registration/employer/registerAsEmployer.js"));
-app.use("/upload/profile/picture/video", require("./routes/hackers/profile/profilePicVideo/uploadData.js"));
+app.use("/upload/profile/picture/video/hacker", require("./routes/hackers/profile/profilePicVideo/uploadData.js"));
+app.use("/upload/profile/picture/video/employer", require("./routes/employers/profile/profilePicVideo/uploadData.js"));
 app.use("/gather/general/user/data", require("./routes/shared/general/userInfo/gatherGeneralUserInfo.js"));
 app.use("/update/hacker/profile/information/basic", require("./routes/hackers/profile/generaInfomation/updateGeneralInfomation.js"));
+app.use("/update/employer/profile/information/basic", require("./routes/employers/profile/generalInformation/updateGeneralInformation.js"));
 
 app.get('*', function(req, res) {
   res.sendFile(__dirname, './client/public/index.html')

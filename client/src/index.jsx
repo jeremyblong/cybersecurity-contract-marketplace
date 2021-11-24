@@ -14,6 +14,7 @@ import "react-sliding-pane/dist/react-sliding-pane.css";
 import 'react-dropzone-uploader/dist/styles.css';
 import 'rc-slider/assets/index.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import 'react-phone-number-input/style.css';
 // components
 import React, { Fragment,useState,useEffect } from 'react';
 import ReactDOM from 'react-dom';

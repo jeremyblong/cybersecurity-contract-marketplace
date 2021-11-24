@@ -148,6 +148,13 @@ const Rightbar = ({ authenticated, data, authentication }) => {
       ]
     });
   }
+  const renderAccountType = (accountType) => {
+    if (accountType === "hackers") {
+      return "Hacker";
+    } else {
+      return "Employer";
+    }
+  }
   return (
     <Fragment>
       <div className="nav-right col-8 pull-right right-header p-0">
@@ -298,8 +305,8 @@ const Rightbar = ({ authenticated, data, authentication }) => {
           <li className="profile-nav onhover-dropdown p-0">
             <div className="media profile-media">
               <img className="b-r-10" src={man} alt="" />
-              <div className="media-body"><span>{`${data.firstName} ${data.lastName}`}</span>
-                <p className="mb-0 font-roboto">{data.accountType === "hackers" ? "Hacker" : "Employer"}<i className="middle fa fa-angle-down"></i></p>
+              <div className="media-body"><span>{authenticated === true ? `${data.firstName} ${data.lastName}` : "Un-authenticated"}</span>
+                <p className="mb-0 font-roboto">{authenticated === true ? renderAccountType(data.accountType) : "Un-authenticated"}<i className="middle fa fa-angle-down"></i></p>
               </div>
             </div>
             <ul className="profile-dropdown onhover-show-div">

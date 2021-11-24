@@ -126,7 +126,7 @@ constructor (props) {
                             <form onSubmit={this.handleSubmission}>
                                 <div className="row">
                                     <div className="col-md-12 col-sm-12">
-                                        <p style={{ marginBottom: "15px" }}>*Your name will be publically visible when recognized for successful reports - feel free to use a alias.</p>
+                                        <p style={{ marginBottom: "15px" }}>{checked === false ? "*You're registering as a company - we will only gather breif infomation now but you will be required to submit detailed information before posting jobs*" : "*Your name will be publically visible when recognized for successful reports - feel free to use a alias."}</p>
                                         <div className="form-group">
                                             <input 
                                                 value={this.state.firstName}

@@ -1,5 +1,4 @@
-import {Home,Bell,Headphones,ShoppingCart,Activity,Monitor,Subscription} from 'react-feather';
-
+import {Home,Bell,Headphones,ShoppingCart,Activity,Monitor} from 'react-feather';
 
 export const MENUITEMS = [
     {
@@ -12,6 +11,7 @@ export const MENUITEMS = [
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Restricted/Private', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Earned/Won', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Directory Of Companies', type: 'link' },
+                    { path: `${process.env.PUBLIC_URL}/employer/listings/available`, title: 'Employer Listings (All-Access/Anyone)', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/map/employers/available/jobs`, title: 'Interactive Map Of Active Jobs', type: 'link' }
                 ]
             },
@@ -28,7 +28,7 @@ export const MENUITEMS = [
                     { path: `${process.env.PUBLIC_URL}/`, title: "Purchase 'Connects/Tokens'", type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/`, title: "Buy 'Profile Boosts'", type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Buy Tickets - Restricted Events', type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'Subscribe To Membership', type: 'link' }
+                    { path: `${process.env.PUBLIC_URL}/memberships/selection`, title: 'Subscribe To Membership', type: 'link' }
                 ]
             }
         ]
@@ -154,8 +154,8 @@ export const MENUITEMS = [
         menucontent:"Manage your account settings & more...",
         Items:[
             {
-                title: 'Raise Support', icon: Headphones, type: 'sub',active: false, children: [
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'Ecommerce', type: 'link' }
+                title: 'Raise Support', icon: Headphones, type: 'sub', active: false, children: [
+                    { path: `${process.env.PUBLIC_URL}/profile/settings/edit`, title: 'Edit Profile', type: 'link' }
                 ]
             }
         ]          
