@@ -42,7 +42,7 @@ export const MENUITEMS = [
                 title: 'Recruit Hackers', icon: Monitor, type: 'sub', active: false, children: [
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Hacker Directory', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Host A Competition', type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'List An Opportunity', type: 'link' },
+                    { path: `${process.env.PUBLIC_URL}/create/employer/listing/general`, title: 'List An Opportunity', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Manage Active Interviews', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Active Jobs', type: 'link' }
                 ]
