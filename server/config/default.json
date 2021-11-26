@@ -11,5 +11,8 @@
     "COOKIE_SECRET": "lakdkjflmqkmqlmpqpwolkmgolkmfjndjcnvksndkfjomqsqkewkwiirueruyeuty",
     "WHITELISTED_DOMAINS": "http://localhost:3000",
     "SESSION_EXPIRY": 900,
-    "REFRESH_TOKEN_EXPIRY": 2592000
+    "REFRESH_TOKEN_EXPIRY": 2592000,
+    "tomtomApiKey": "1stNLMNQehPpc5K6Oo1AHqkFMKzeJNSL",
+    "algoliaApiKeyBackend": "398ac576c0bcfc87483a3e889dc83b28",
+    "algoliaAppID": "RG9Z0QAI22"
 }

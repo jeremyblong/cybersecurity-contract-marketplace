@@ -10,6 +10,7 @@ import uuid from "react-uuid";
 import { MultiSelect } from "react-multi-select-component";
 import CKEditors from "react-ckeditor-component";
 import CreateHashtagsListingComponent from "./helpers/hashtags/createHashtagsListing.js";
+import LocationSearchInput from "./helpers/location/searchAddress.js";
 
 const idealTimespanOptions = [
   { value: 7, label: '7 Days' },
@@ -92,6 +93,33 @@ const maxNumberOfHackersOptions = [
     { label: "9 Hackers", value: 9 },
     { label: "10 Hackers", value: 10 }
 ];
+const tokensApplyOptions = [
+    { value: 2, label: "2 Tokens To Apply" },
+    { value: 4, label: "4 Tokens To Apply" },
+    { value: 7, label: "7 Tokens To Apply" },
+    { value: 10, label: "10 Tokens To Apply" },
+    { value: 12, label: "12 Tokens To Apply" },
+    { value: 14, label: "14 Tokens To Apply" },
+    { value: 16, label: "16 Tokens To Apply" },
+    { value: 18, label: "18 Tokens To Apply" },
+    { value: 20, label: "20 Tokens To Apply" },
+    { value: 23, label: "23 Tokens To Apply" },
+    { value: 25, label: "25 Tokens To Apply" },
+    { value: 28, label: "28 Tokens To Apply" },
+    { value: 30, label: "30 Tokens To Apply" },
+    { value: 32, label: "32 Tokens To Apply" },
+    { value: 34, label: "34 Tokens To Apply" },
+    { value: 35, label: "35 Tokens To Apply" }
+];
+const disclosureOptions = [
+    { label: "Public Disclosure", value: "public-disclosure" },
+    { label: "Private Disclosure", value: "private-disclosure" },
+    { label: "Partial Disclosure", value: "partial-disclosure" }
+];
+const physicalOptions = [
+    { label: "Physical Location Hacking Required", value: "physical-hack" },
+    { label: "Digital/Internet Asset Hacking Required", value: "digital-internet-hack" }
+];
 
 const CreateJobListingMainHelper = (props) => {
     
@@ -111,6 +139,9 @@ const CreateJobListingMainHelper = (props) => {
     const [ content,setContent ] = useState('Enter your content here...');
     const [ maxNumberOfApplicants, setMaxNumberOfApplicants ] = useState(null);
     const [ popoverOpen, setPopoverOpen ] = useState(false);
+    const [ tokensRequiredToApply, setTokensRequiredToApply ] = useState(null);
+    const [ disclosureVisibility, setDisclosureVisibility ] = useState(null);
+    const [ typeOfHack, setTypeOfHack ] = useState(null);
 
     const onChangeDescription = (evt) => {
         const newContent = evt.editor.getData();
@@ -284,18 +315,32 @@ const CreateJobListingMainHelper = (props) => {
                                                     </Popover>
                                                     <FormGroup>
                                                         <Select
-                                                            value={maxNumberOfApplicants}
-                                                            onChange={setMaxNumberOfApplicants}
-                                                            options={maxNumberOfHackersOptions}
+                                                            value={tokensRequiredToApply}
+                                                            onChange={setTokensRequiredToApply}
+                                                            options={tokensApplyOptions}
                                                         />
                                                     </FormGroup>
                                                 </Col>
                                             </Row>
                                             <Row>
-                                                <Col>
+                                                <Col sm="12" md="6" lg="6">
                                                     <FormGroup>
-                                                        <Label htmlFor="exampleFormControlInput4">{PhoneNumber}:</Label>
-                                                        <Input className="form-control" id="exampleFormControlInput4" type="email" placeholder="Enter Phone no." />
+                                                        <Label htmlFor="exampleFormControlInput4">Public Or Private Vulnerability Disclosures (Upon Successful Hack):</Label>
+                                                        <Select
+                                                            value={disclosureVisibility}
+                                                            onChange={setDisclosureVisibility}
+                                                            options={disclosureOptions}
+                                                        />
+                                                    </FormGroup>
+                                                </Col>
+                                                <Col sm="12" md="6" lg="6">
+                                                    <FormGroup>
+                                                        <Label htmlFor="exampleFormControlInput4">Type Of Hack Required (Physical/in-person <strong>OR</strong> digital/online assets):</Label>
+                                                        <Select
+                                                            value={typeOfHack}
+                                                            onChange={setTypeOfHack}
+                                                            options={physicalOptions}
+                                                        />
                                                     </FormGroup>
                                                 </Col>
                                             </Row>
@@ -346,6 +391,17 @@ const CreateJobListingMainHelper = (props) => {
                                                     <FormGroup>
                                                         <Label htmlFor="exampleFormControlInput6">{Specialization}:<span className="font-danger">*</span></Label>
                                                         <Input className="form-control" id="exampleFormControlInput6" type="email" placeholder="Enter specialization" />
+                                                    </FormGroup>
+                                                </Col>
+                                            </Row>
+                                        </Form>
+                                        <h6 className="mb-0">Location - Physical Hacking (Only Provided To <strong>SELECTED/HIRED</strong> Applicants)</h6>
+                                        <Form className="theme-form">
+                                            <Row>
+                                                <Col sm="12" lg="12" md="12" xl="12">
+                                                    <FormGroup>
+                                                        <Label htmlFor="exampleFormControlInput1">Enter your company business address (the address that your hackers will be testing at):<span className="font-danger">*</span></Label>
+                                                        <LocationSearchInput props={props} />
                                                     </FormGroup>
                                                 </Col>
                                             </Row>
