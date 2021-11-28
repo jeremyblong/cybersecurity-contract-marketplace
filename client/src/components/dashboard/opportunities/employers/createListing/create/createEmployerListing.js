@@ -1,168 +1,72 @@
-import React, {Fragment, useState} from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import Breadcrumb from '../../../../../../layout/breadcrumb';
-import { Typeahead } from 'react-bootstrap-typeahead';
-import DatePicker from "react-datepicker";
 import one from '../../../../../../assets/images/job-search/1.jpg';
 import {Container,Row,Col,Card,CardBody,Media,Button,Form,FormGroup,Label,Input,InputGroup,InputGroupAddon,ListGroup,ListGroupItem,InputGroupText,Popover,PopoverBody,PopoverHeader} from 'reactstrap';
-import { Password,RepeatPassword,BirthDate,PhoneNumber,Period,DegreeLevel,Specialization,UploadRecommendations,UploadCoverLetter,UploadYourCV,UploadYourFiles,Submit,Cancel } from "../../../../../../constant";
+import { Submit,Cancel } from "../../../../../../constant";
 import Select from 'react-select';
 import uuid from "react-uuid";
+import _ from "lodash";
 import { MultiSelect } from "react-multi-select-component";
 import CKEditors from "react-ckeditor-component";
 import CreateHashtagsListingComponent from "./helpers/hashtags/createHashtagsListing.js";
 import LocationSearchInput from "./helpers/location/searchAddress.js";
-
-const idealTimespanOptions = [
-  { value: 7, label: '7 Days' },
-  { value: 10, label: '10 Days' },
-  { value: 14, label: '14 Days' },
-  { value: 18, label: '18 Days' },
-  { value: 23, label: '23 Days' },
-  { value: 27, label: '27 Days' },
-  { value: 31, label: '31 Days' },
-  { value: 35, label: '35 Days' },
-  { value: 40, label: '40 Days' },
-  { value: 45, label: '45 Days' },
-  { value: 50, label: '50 Days' },
-  { value: 55, label: '55 Days' },
-  { value: 60, label: '60 Days' }
-];
-// $1.00 === 1000xp
-const experienceOptions = [
-    { value: '5,000 XP Reward & $5.00 To Post', label: '5,000 XP Reward & $5.00 To Post', experience: 5000, cost: 500 },
-    { value: '7,500 XP Reward & $7.50 To Post', label: '7,500 XP Reward & $7.50 To Post', experience: 7500, cost: 750 },
-    { value: '10,000 XP Reward & $10.00 To Post', label: '10,000 XP Reward & $10.00 To Post', experience: 10000, cost: 1000 },
-    { value: '15,000 XP Reward & $15.00 To Post', label: '15,000 XP Reward & $15.00 To Post', experience: 15000, cost: 1500 },
-    { value: '20,000 XP Reward & $20.00 To Post', label: '20,000 XP Reward & $20.00 To Post', experience: 20000, cost: 2000 },
-    { value: '25,000 XP Reward & $25.00 To Post', label: '25,000 XP Reward & $25.00 To Post', experience: 25000, cost: 2500 },
-    { value: '30,000 XP Reward & $30.00 To Post', label: '30,000 XP Reward & $30.00 To Post', experience: 30000, cost: 3000 },
-    { value: '40,000 XP Reward & $40.00 To Post', label: '40,000 XP Reward & $40.00 To Post', experience: 40000, cost: 4000 }
-]
-const rankOptions = [
-    { value: '1-3', label: 'Levels 1-3' },
-    { value: '3-5', label: 'Levels 3-5' },
-    { value: '6-8', label: 'Levels 6-8' },
-    { value: '9-13', label: 'Levels 9-13' },
-    { value: '14-17', label: 'Levels 14-17' },
-    { value: '18-21', label: 'Levels 18-21' },
-    { value: '22-26', label: 'Levels 22-26' },
-    { value: '27-31', label: 'Levels 27-31' },
-    { value: '32-36', label: 'Levels 32-36' },
-    { value: '37-42', label: 'Levels 37-42' },
-    { value: '43-45', label: 'Levels 43-45' },
-    { value: '46-48', label: 'Levels 46-48' },
-    { value: '49-50', label: 'Levels 49-50' }
-];
-const desiredSkillsOptions = [
-    { label: "Coding/Programming Experience (Average)", value: "Coding/Programming Experience (Average)" },
-    { label: "Coding/Programming Experience (Expert/Advanced)", value: "Coding/Programming Experience (Expert/Advanced)" },
-    { label: "Cryptography Experience", value: "Cryptography Experience" },
-    { label: "Social engineering Experience", value: "Social engineering Experience" },
-    { label: "Wireless technologies Hacking Experience", value: "Wireless technologies Hacking Experience" },
-    { label: "Computer Networking Experience", value: "Computer Networking Experience" },
-    { label: "Networking Experience (Average)", value: "Networking Experience (Average)" },
-    { label: "Networking Experience (Expert/Advanced)", value: "Networking Experience (Expert/Advanced)" },
-    { label: "Server Room Hardware Experience & Understanding", value: "Server Room Hardware Experience & Understanding" },
-    { label: "System Administration Experience", value: "System Administration Experience" },
-    { label: "Shell Scripting Experience", value: "Shell Scripting Experience" },
-    { label: "Ability To Find PoC's (Proof Of Concept Code) & Exploits", value: "Ability To Find PoC's (Proof Of Concept Code) & Exploits" },
-    { label: "OSINT Gathering Experience", value: "OSINT Gathering Experience" },
-    { label: "Database Knowledge (Average)", value: "Database Knowledge (Average)" },
-    { label: "Database Knowledge (Expert/Advanced)", value: "Database Knowledge (Expert/Advanced)" },
-    { label: "Auditing & Compliance Experience", value: "Auditing & Compliance Experience" },
-    { label: "Mobile Technology Hacking Experience", value: "Mobile Technology Hacking Experience" },
-    { label: "Web Technology Hacking Experience", value: "Web Technology Hacking Experience" },
-    { label: "Password & Hash Cracking Experience", value: "Password & Hash Cracking Experience" },
-    { label: "Threat Intelligence Experience", value: "Threat Intelligence Experience" },
-    { label: "Incident Handling Experience", value: "Incident Handling Experience" },
-    { label: "Forensic Skills Experience", value: "Forensics Skills Experience" },
-    { label: "Virtualization And Cloud Computing Experience", value: "Virtualization And Cloud Computing Experience" },
-    { label: "DevSecOps Skills Experience", value: "DevSecOps Skills Experience" },
-    { label: "Access Management Experience", value: "Access Management Experience" },
-    { label: "Health Information Security Experience", value: "Health Information Security Experience" }
-];
-const maxNumberOfHackersOptions = [
-    { label: "1 Hacker", value: 1 },
-    { label: "2 Hackers", value: 2 },
-    { label: "3 Hackers", value: 3 },
-    { label: "4 Hackers", value: 4 },
-    { label: "5 Hackers", value: 5 },
-    { label: "6 Hackers", value: 6 },
-    { label: "7 Hackers", value: 7 },
-    { label: "8 Hackers", value: 8 },
-    { label: "9 Hackers", value: 9 },
-    { label: "10 Hackers", value: 10 }
-];
-const tokensApplyOptions = [
-    { value: 2, label: "2 Tokens To Apply" },
-    { value: 4, label: "4 Tokens To Apply" },
-    { value: 7, label: "7 Tokens To Apply" },
-    { value: 10, label: "10 Tokens To Apply" },
-    { value: 12, label: "12 Tokens To Apply" },
-    { value: 14, label: "14 Tokens To Apply" },
-    { value: 16, label: "16 Tokens To Apply" },
-    { value: 18, label: "18 Tokens To Apply" },
-    { value: 20, label: "20 Tokens To Apply" },
-    { value: 23, label: "23 Tokens To Apply" },
-    { value: 25, label: "25 Tokens To Apply" },
-    { value: 28, label: "28 Tokens To Apply" },
-    { value: 30, label: "30 Tokens To Apply" },
-    { value: 32, label: "32 Tokens To Apply" },
-    { value: 34, label: "34 Tokens To Apply" },
-    { value: 35, label: "35 Tokens To Apply" }
-];
-const disclosureOptions = [
-    { label: "Public Disclosure", value: "public-disclosure" },
-    { label: "Private Disclosure", value: "private-disclosure" },
-    { label: "Partial Disclosure", value: "partial-disclosure" }
-];
-const physicalOptions = [
-    { label: "Physical Location Hacking Required", value: "physical-hack" },
-    { label: "Digital/Internet Asset Hacking Required", value: "digital-internet-hack" }
-];
+import { XCircle } from "react-feather";
+import "./styles.css";
+import SimpleMDE from "react-simplemde-editor";
+import { DateRangePicker } from 'react-date-range';
+import Dropzone from 'react-dropzone-uploader';
+import { connect } from "react-redux";
+import { saveListingData } from "../../../../../../redux/actions/employer/listings/listingData.js";
+import {
+    experienceOptions,
+    desiredSkillsOptions,
+    rankOptions,
+    maxNumberOfHackersOptions,
+    tokensApplyOptions,
+    disclosureOptions,
+    physicalOptions,
+    visibilityOptions
+} from "./helpers/options/selectionOptions.js";
+import { NotificationManager } from 'react-notifications';
+import axios from "axios";
+import LoadingBar from 'react-top-loading-bar';
 
 const CreateJobListingMainHelper = (props) => {
-    
-    // dont need these ...
-    const [multiple, setMultiple] = useState(false);
-    const [startDate, setStartDate] = useState(new Date(),);
-    const [startDate1, setStartDate1] = useState(new Date(),);
-    const [startDate2, setStartDate2] = useState(new Date(),);
-    const [startDate3, setStartDate3] = useState(new Date(),);
-    // dont need these ^^^^^^^^^^^^^
     const [ assetArray, setAssetArray ] = useState([]);
-    const [ timespan, setTimespan ] = useState(null);
     const [ data, setData ] = useState({});
     const [ requiredRankToApply, setRequiredRankToApply ] = useState(null);
     const [ experienceAndCost, setExperienceAndCost ] = useState(null);
     const [ desiredSkills, setDesiredSkills ] = useState([]);
-    const [ content,setContent ] = useState('Enter your content here...');
+    const [ content,setContent ] = useState("");
     const [ maxNumberOfApplicants, setMaxNumberOfApplicants ] = useState(null);
     const [ popoverOpen, setPopoverOpen ] = useState(false);
     const [ tokensRequiredToApply, setTokensRequiredToApply ] = useState(null);
     const [ disclosureVisibility, setDisclosureVisibility ] = useState(null);
     const [ typeOfHack, setTypeOfHack ] = useState(null);
+    const [ rules, setRules ] = useState("");
+    const [ outOfScope, setOutOfScope ] = useState("");
+    const [ progress, setProgress ] = useState(0);
+    const [ selectionRange, setSelectionRange ] = useState({
+        startDate: new Date(),
+        endDate: new Date(),
+        key: 'selection',
+    });
+    const [ availiableHackerDates, handleHackerDates ] = useState([{
+        startDate: new Date(),
+        endDate: new Date(),
+        key: 'selection',
+    }]);
+    const [ listingVisibility, setListingVisibility ] = useState(null);
 
-    const onChangeDescription = (evt) => {
-        const newContent = evt.editor.getData();
-        setContent(newContent)
+    const onChangeDescription = (value) => {
+
+        setContent(value);
+
+        props.saveListingData({
+            ...props.previousData,
+            listingDescription: value
+        })
     }
-    
-    const handleChange = date => {
-       setStartDate(date)
-    };
-
-    const handleChange1 = date => {
-        setStartDate1(date)
-    };
-
-    const handleChange2 = date => {
-        setStartDate2(date)
-    };
-
-    const handleChange3 = date => {
-        setStartDate3(date)
-    };
     const handleChangeInput = (e) => {
         const { name, value } = e.target;
 
@@ -172,22 +76,53 @@ const CreateJobListingMainHelper = (props) => {
                 [name]: value
             }
         })
+
+        props.saveListingData({
+            ...props.previousData,
+            [name]: value
+        })
     }
     const handleAssetAddition = (e) => {
         e.preventDefault();
         // assetName
 
         setAssetArray(prevState => {
+            props.saveListingData({
+                ...props.previousData,
+                assetArray: [...prevState, {
+                    id: uuid(),
+                    name: data.assetName
+                }]
+            })
             return [...prevState, {
                 id: uuid(),
                 name: data.assetName
             }]
+        });
+        setData(prevState => {
+            return {
+                ...prevState,
+                assetName: ""
+            }
         })
     }
     const changeBountyPrices = (e, rewardLevel, asset) => {
         const { value } = e.target;
 
         setAssetArray(prevState => {
+            props.saveListingData({
+                ...props.previousData,
+                assetArray: prevState.map((item, i) => {
+                    if (item.id === asset.id) {
+                        return {
+                            ...item,
+                            [rewardLevel]: Number(value)
+                        }
+                    } else {
+                        return item;
+                    }
+                })
+            })
             return prevState.map((item, i) => {
                 if (item.id === asset.id) {
                     return {
@@ -200,10 +135,131 @@ const CreateJobListingMainHelper = (props) => {
             });
         });
     }
-    console.log("experienceAndCost", experienceAndCost);
+    const renderBusinessLocationPortion = () => {
+        if (typeOfHack !== null && typeOfHack.value === "physical-hack") {
+            return (
+                <Fragment>
+                    <h6 className="mb-0">Location - Physical Hacking (Only Provided To <strong>SELECTED/HIRED</strong> Applicants)</h6>
+                    <Form className="theme-form">
+                        <Row>
+                            <Col sm="12" lg="12" md="12" xl="12">
+                                <FormGroup>
+                                    <Label htmlFor="exampleFormControlInput1">Enter your company business address (the address that your hackers will be testing at):<span className="font-danger">*</span></Label>
+                                    <LocationSearchInput props={props} />
+                                </FormGroup>
+                            </Col>
+                        </Row>
+                    </Form>
+                </Fragment>
+            );
+        }
+    }
+    const renderPhysicalHackingDates = () => {
+        if (typeOfHack !== null && typeOfHack.value === "physical-hack") {
+            return (
+                <Fragment>
+                    <Label htmlFor="exampleFormControlInput1">Dates Availiable To Hackers To Test Physical/Digital Assets:<span className="font-danger">*</span></Label>
+                    <p>These are the days that will be available to the <strong>hired/selected</strong> hacker canidates to choose from when deciding which days they will attempt to infiltrate your company. This is only relevant for <strong style={{ color: "blue" }}>PHYSICAL</strong> hacking requirements.</p>
+                    <p style={{ paddingBottom: "20px" }}></p>
+                    <DateRangePicker
+                        ranges={availiableHackerDates}
+                        onChange={handleDatesSelectable}
+                    />
+                </Fragment>
+            );
+        }
+    }
+    const handleDeadlineSelect = (ranges) => {
+        setSelectionRange(ranges.selection);
+
+        props.saveListingData({
+            ...props.previousData,
+            estimatedCompletionDate: ranges.selection
+        });
+    }
+    const handleDatesSelectable = (ranges) => {
+        handleHackerDates(prevState => {
+            props.saveListingData({
+                ...props.previousData,
+                testingDatesHackers: [...prevState, ranges.selection]
+            });
+            return [...prevState, ranges.selection];
+        });
+    }
+    const getUploadParams = ({ meta }) => { 
+        return { 
+            url: 'https://httpbin.org/post' 
+        } 
+    };
+
+    const handleChangeStatus = ({ meta, file }, status) => { 
+        console.log(status, meta, file);
+
+        if (status === "done") {
+            const data = new FormData();
+    
+            data.append("file", file);
+            data.append("meta", meta);
+
+            const config = {
+                onUploadProgress: function(progressEvent) {
+                    let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+
+                    console.log("percentCompleted", percentCompleted);
+
+                    setProgress(percentCompleted);
+                },
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            };
+
+            axios.post(`${process.env.REACT_APP_BASE_URL}/upload/file/upon/selection/employer/listing`, data, config).then((res) => {
+                if (res.data.message === "Successfully uploaded content!") {
+                    console.log(res.data);
+
+                    const { file } = res.data;
+
+                    NotificationManager.success(`We've successfully uploaded your file! Please proceed filling out your information or add more files.`, 'Successfully uploaded file!', 4500);
+                } else {
+                    console.log("err", res.data);
+                }
+            }).catch((err) => {
+                console.log(err);
+            })
+        }
+    };
+    const handleListingSubmission = (e) => {
+
+        e.preventDefault();
+
+        const { assetArray, typeOfHack, testingDatesHackers, rulesOfEngagement, publicCompanyName, outOfScopeVulnerabilities, listingDescription, hashtags, businessAddress, requiredRankToApply, experienceAndCost, desiredSkills, maxNumberOfApplicants, disclosureVisibility, tokensRequiredToApply, listingVisibility, estimatedCompletionDate } = props.previousData;
+
+        if ((typeof assetArray !== "undefined" && assetArray.length > 0) && (typeOfHack !== null) && (typeof rulesOfEngagement !== "undefined" && rulesOfEngagement.length > 0) && (typeof publicCompanyName !== "undefined" && publicCompanyName.length > 0) && (typeof outOfScopeVulnerabilities !== "undefined" && outOfScopeVulnerabilities.length > 0) && (typeof listingDescription !== "undefined" && listingDescription.length > 0) && (typeof hashtags !== "undefined" && hashtags.length > 0) && (typeof requiredRankToApply !== "undefined" && _.has(props.previousData, "requiredRankToApply") && Object.keys(requiredRankToApply).length > 0) && (typeof experienceAndCost !== "undefined" && _.has(props.previousData, "experienceAndCost") && Object.keys(experienceAndCost).length > 0) && (typeof desiredSkills !== "undefined" && desiredSkills.length > 0) && (typeof maxNumberOfApplicants !== "undefined" && _.has(props.previousData, "maxNumberOfApplicants") && Object.keys(maxNumberOfApplicants).length > 0) && (typeof disclosureVisibility !== "undefined" && _.has(props.previousData, "disclosureVisibility") && Object.keys(disclosureVisibility).length > 0) && (typeof tokensRequiredToApply !== "undefined" && _.has(props.previousData, "tokensRequiredToApply") && Object.keys(tokensRequiredToApply).length > 0) && (typeof listingVisibility !== "undefined" && _.has(props.previousData, "listingVisibility") && Object.keys(listingVisibility).length > 0) && (typeof estimatedCompletionDate !== "undefined" && _.has(props.previousData, "estimatedCompletionDate") && Object.keys(estimatedCompletionDate).length > 0)) {
+            // check if physical location
+            if ((typeof testingDatesHackers !== "undefined" && testingDatesHackers.length > 0) && (typeof businessAddress !== "undefined" && _.has(props.previousData, "businessAddress") && Object.keys(businessAddress).length > 0)) {
+                // location data is properly filled out.
+                NotificationManager.success(`Success!`, "GREAT SUCCESS!", 4500);
+            } else {
+                // did NOT Properly fill out location data
+                NotificationManager.warning(`You have selected a 'physical' hack requiring approved hackers to know your address yet both 'testing dates' and 'business address' fields are incomplete.`, "Testing dates & address are INCOMPLETE!", 4500);
+            }
+        } else {
+            // need to complete more fields!
+            NotificationManager.error(`You MUST complete ALL of the required fields (marked with red asterisk) - review your edits and make sure everything is filled out.`, "INCOMPLETE FORM/INPUTS!", 4500);
+        }
+    }
     return (
         <Fragment>
             <Breadcrumb parent="Create Listing" title="Create a public employer listing"/>
+            <LoadingBar
+                color='#f11946'
+                progress={progress}
+                onLoaderFinished={() => setProgress(0)}
+                className="loadingBarRaise"
+                containerClassName="loadingBarRaise"
+                height={5}
+            />
             <Container fluid={true}>
                 <Row>
                     {/* <JobFilter /> */}
@@ -217,12 +273,12 @@ const CreateJobListingMainHelper = (props) => {
                                             <h6 className="f-w-600">
                                                 <a href="#">Create an employer listing</a>
                                                 <span className="pull-right">
-                                                <Button color="primary">
+                                                {/* <Button color="primary">
                                                     <span>
                                                         <i className="fa fa-check text-white">
                                                         </i>
                                                     </span>{"Save this job"}
-                                                </Button>
+                                                </Button> */}
                                                 </span>
                                             </h6>
                                             <p>Create a listing requesting for your company to be hacked (this will be public visible information to our database of hackers)</p>
@@ -243,7 +299,14 @@ const CreateJobListingMainHelper = (props) => {
                                                         <Label htmlFor="exampleFormControlInput1">Preferred Rank/Level Required To Apply:<span className="font-danger">*</span></Label>
                                                         <Select
                                                             value={requiredRankToApply}
-                                                            onChange={setRequiredRankToApply}
+                                                            onChange={(value) => {
+                                                                setRequiredRankToApply(value);
+
+                                                                props.saveListingData({
+                                                                    ...props.previousData,
+                                                                    requiredRankToApply: value
+                                                                })
+                                                            }}
                                                             options={rankOptions}
                                                         />
                                                     </FormGroup>
@@ -256,7 +319,14 @@ const CreateJobListingMainHelper = (props) => {
                                                         <p style={{ paddingTop: "7px", paddingBottom: "7px" }} className="text-left">Experience is rewarded to the hacker winner. Hackers level up their accounts with XP points and can redeem the XP for cash ($-USD) after reaching certain ranks/levels. Having a <strong>higher</strong> XP reward will incentivize hackers to pick your company over others - however it <strong>costs more</strong>.</p>
                                                         <Select
                                                             value={experienceAndCost}
-                                                            onChange={setExperienceAndCost}
+                                                            onChange={(value) => {
+                                                                setExperienceAndCost(value);
+
+                                                                props.saveListingData({
+                                                                    ...props.previousData,
+                                                                    experienceAndCost: value
+                                                                })
+                                                            }}
                                                             options={experienceOptions}
                                                         />
                                                     </FormGroup>
@@ -269,7 +339,14 @@ const CreateJobListingMainHelper = (props) => {
                                                         <MultiSelect
                                                             options={desiredSkillsOptions}
                                                             value={desiredSkills}
-                                                            onChange={setDesiredSkills}
+                                                            onChange={(value) => {
+                                                                setDesiredSkills(value);
+
+                                                                props.saveListingData({
+                                                                    ...props.previousData,
+                                                                    desiredSkills: value
+                                                                })
+                                                            }}
                                                             labelledBy="Select"
                                                         />
                                                     </FormGroup>
@@ -289,7 +366,14 @@ const CreateJobListingMainHelper = (props) => {
                                                     <FormGroup>
                                                         <Select
                                                             value={maxNumberOfApplicants}
-                                                            onChange={setMaxNumberOfApplicants}
+                                                            onChange={(value) => {
+                                                                setMaxNumberOfApplicants(value);
+
+                                                                props.saveListingData({
+                                                                    ...props.previousData,
+                                                                    maxNumberOfApplicants: value
+                                                                })
+                                                            }}
                                                             options={maxNumberOfHackersOptions}
                                                         />
                                                     </FormGroup>
@@ -316,7 +400,14 @@ const CreateJobListingMainHelper = (props) => {
                                                     <FormGroup>
                                                         <Select
                                                             value={tokensRequiredToApply}
-                                                            onChange={setTokensRequiredToApply}
+                                                            onChange={(value) => {
+                                                                setTokensRequiredToApply(value);
+
+                                                                props.saveListingData({
+                                                                    ...props.previousData,
+                                                                    tokensRequiredToApply: value
+                                                                })
+                                                            }}
                                                             options={tokensApplyOptions}
                                                         />
                                                     </FormGroup>
@@ -328,7 +419,14 @@ const CreateJobListingMainHelper = (props) => {
                                                         <Label htmlFor="exampleFormControlInput4">Public Or Private Vulnerability Disclosures (Upon Successful Hack):</Label>
                                                         <Select
                                                             value={disclosureVisibility}
-                                                            onChange={setDisclosureVisibility}
+                                                            onChange={(value) => {
+                                                                setDisclosureVisibility(value);
+
+                                                                props.saveListingData({
+                                                                    ...props.previousData,
+                                                                    disclosureVisibility: value
+                                                                })
+                                                            }}
                                                             options={disclosureOptions}
                                                         />
                                                     </FormGroup>
@@ -338,93 +436,90 @@ const CreateJobListingMainHelper = (props) => {
                                                         <Label htmlFor="exampleFormControlInput4">Type Of Hack Required (Physical/in-person <strong>OR</strong> digital/online assets):</Label>
                                                         <Select
                                                             value={typeOfHack}
-                                                            onChange={setTypeOfHack}
+                                                            onChange={(value) => {
+                                                                setTypeOfHack(value);
+
+                                                                props.saveListingData({
+                                                                    ...props.previousData,
+                                                                    typeOfHack: value
+                                                                })
+                                                            }}
                                                             options={physicalOptions}
                                                         />
                                                     </FormGroup>
                                                 </Col>
                                             </Row>
                                         </Form>
-                                        <h6 className="mb-0">Timespan & Timeline Information</h6>
+                                        <h6 className="mb-0">Timespan & Timeline Information + Visibility Type</h6>
                                         <Form className="theme-form">
                                             <Row>
-                                                <Col xl="6 xl-100">
+                                                <Col md="6" lg="6" xl="6">
+                                                    <Col sm="12" md="12" lg="12" xl="12 xl-100">
+                                                        <FormGroup>
+                                                            <Label htmlFor="exampleFormControlInput1">Visibility Type (Who Can See Your Listing Or Apply Once Live):<span className="font-danger">*</span></Label>
+                                                            <Select
+                                                                value={listingVisibility}
+                                                                onChange={(value) => {
+                                                                    setListingVisibility(value);
+
+                                                                    props.saveListingData({
+                                                                        ...props.previousData,
+                                                                        listingVisibility: value
+                                                                    })
+                                                                }}
+                                                                options={visibilityOptions}
+                                                            />
+                                                        </FormGroup>
+                                                        {renderPhysicalHackingDates()}
+                                                    </Col>
+                                                </Col>
+                                                <Col md="12" lg="12" xl="6 xl-100">
                                                     <FormGroup>
-                                                        <Label htmlFor="exampleFormControlInput1">Timespan allocated for hackers to test/exploit (Maximum - from posted date):<span className="font-danger">*</span></Label>
-                                                        <Select
-                                                            value={timespan}
-                                                            onChange={(value) => {
-                                                                setTimespan(value);
-                                                            }}
-                                                            options={idealTimespanOptions}
+                                                        <Label htmlFor="exampleFormControlInput1">Estimated/Expected Day Of Completion (Must Be Successfully Hacked By This Day For Full Payment):<span className="font-danger">*</span></Label>
+                                                        <p style={{ paddingBottom: "20px" }}>These are the days in which you expect the hired hackers/contractors to have <strong>successfully</strong> completed any hacks or attacks (digital or physical) against your company. Disclosures will occurr shortly after whichever days are selected and any further testing or reporting shall proceed at that point.</p>
+                                                        <DateRangePicker
+                                                            ranges={[selectionRange]}
+                                                            onChange={handleDeadlineSelect}
                                                         />
-                                                    </FormGroup>
-                                                </Col>
-                                                <Col xl="6 xl-100">
-                                                    <Label className="col-form-label text-right pt-0">{Period}:<span className="font-danger">*</span></Label>
-                                                    <Row>
-                                                        <Col sm="6">
-                                                            <FormGroup>
-                                                                <DatePicker className="form-control digits" selected={startDate} onChange={handleChange} />
-                                                            </FormGroup>
-                                                        </Col>
-                                                        <Col sm="6">
-                                                            <FormGroup>
-                                                                <DatePicker className="form-control digits" selected={startDate1} onChange={handleChange1} />
-                                                            </FormGroup>
-                                                        </Col>
-                                                    </Row>
-                                                </Col>
-                                                <Col lg="6">
-                                                    <div className="col-form-label pt-0">{DegreeLevel}:<span className="font-danger">*</span></div>
-                                                    <FormGroup>
-                                                        <Typeahead
-                                                            id="basic-typeahead"
-                                                            labelKey="name"
-                                                            multiple={multiple}
-                                                            options={['Student', 'Bachelor', 'Master', 'Associate']}
-                                                            placeholder="Degree"
-                                                        />
-                                                    </FormGroup>
-                                                </Col>
-                                                <Col lg="6">
-                                                    <FormGroup>
-                                                        <Label htmlFor="exampleFormControlInput6">{Specialization}:<span className="font-danger">*</span></Label>
-                                                        <Input className="form-control" id="exampleFormControlInput6" type="email" placeholder="Enter specialization" />
                                                     </FormGroup>
                                                 </Col>
                                             </Row>
                                         </Form>
-                                        <h6 className="mb-0">Location - Physical Hacking (Only Provided To <strong>SELECTED/HIRED</strong> Applicants)</h6>
-                                        <Form className="theme-form">
-                                            <Row>
-                                                <Col sm="12" lg="12" md="12" xl="12">
-                                                    <FormGroup>
-                                                        <Label htmlFor="exampleFormControlInput1">Enter your company business address (the address that your hackers will be testing at):<span className="font-danger">*</span></Label>
-                                                        <LocationSearchInput props={props} />
-                                                    </FormGroup>
-                                                </Col>
-                                            </Row>
-                                        </Form>
-                                        <h6 className="mb-0"><strong>DIGITAL</strong> Assets & Payment/Reward Information</h6>
+                                        {renderBusinessLocationPortion()}
+                                        <h6 className="mb-0"><strong>DIGITAL</strong> Assets & Payment/Reward Information - Digital Scope</h6>
                                         <Form className="theme-form">
                                             <Row>
                                                 <Col xl="12 xl-100">
                                                     <FormGroup>
                                                         <Label htmlFor="exampleFormControlInput7">Asset Endpoint Or URL:<span className="font-danger">*</span></Label>
                                                         <InputGroup>
-                                                            <Input onChange={handleChangeInput} className="form-control" id="exampleFormControlInput7" name="assetName" type="text" placeholder="Eg.'s - api.yourcompany.com OR https://www.yourcompanywebsite.com" />
+                                                            <Input onChange={handleChangeInput} value={data.assetName} className="form-control" id="exampleFormControlInput7" name="assetName" type="text" placeholder="Eg.'s - api.yourcompany.com OR https://www.yourcompanywebsite.com" />
                                                             <InputGroupAddon addonType="append"><Button onClick={handleAssetAddition} color="secondary">Add Asset</Button></InputGroupAddon>
                                                         </InputGroup>
                                                     </FormGroup>
                                                 </Col>
                                                 <ListGroup>
                                                 {typeof assetArray !== "undefined" && assetArray.length > 0 ? assetArray.map((asset, index) => {
-                                                    console.log("asset", asset);
                                                     return (
                                                         <ListGroupItem key={index} className="list-group-item flex-column align-items-start">
                                                             <Row style={{ paddingBottom: "12px" }}>
-                                                                <ListGroupItem active>{asset.name}</ListGroupItem>
+                                                                <ListGroupItem active>{asset.name}<div onClick={() => {
+                                                                    setAssetArray(prevState => {
+                                                                        props.saveListingData({
+                                                                            ...props.previousData,
+                                                                            assetArray: prevState.filter((item, index) => {
+                                                                                if (item.id !== asset.id) {
+                                                                                    return item;
+                                                                                }
+                                                                            })
+                                                                        }) 
+                                                                        return prevState.filter((item, index) => {
+                                                                            if (item.id !== asset.id) {
+                                                                                return item;
+                                                                            }
+                                                                        });
+                                                                    });  
+                                                                }} id="float-right-icon"><XCircle /></div></ListGroupItem>
                                                             </Row>
                                                             <Row>
                                                                 <Col md="3" lg="3" sm="6">
@@ -474,46 +569,69 @@ const CreateJobListingMainHelper = (props) => {
                                                 </ListGroup>
                                             </Row>
                                         </Form>
-                                        <h6 className="mb-0">{UploadYourFiles}</h6>
+                                        <h6 className="mb-0">Upload Any Supporting Documents/Files</h6>
                                         <Form className="theme-form">
                                             <Row>
                                                 <Col>
                                                     <FormGroup>
-                                                        <Label className="col-form-label pt-0">{UploadCoverLetter}:<span className="font-danger">*</span></Label>
-                                                        <Input className="form-control" type="file" />
-                                                    </FormGroup>
-                                                </Col>
-                                            </Row>
-                                            <Row>
-                                                <Col>
-                                                    <FormGroup>
-                                                        <Label className="col-form-label pt-0">{UploadYourCV}:<span className="font-danger">*</span></Label>
-                                                        <Input className="form-control" type="file" />
-                                                    </FormGroup>
-                                                </Col>
-                                            </Row>
-                                            <Row>
-                                                <Col>
-                                                    <FormGroup className="mb-0">
-                                                        <Label className="col-form-label pt-0">{UploadRecommendations}:</Label>
-                                                        <Input className="form-control" type="file" />
+                                                        <Label className="col-form-label pt-0">Upload File(s):<span className="font-danger">*</span></Label>
+                                                        <div className="dz-message needsclick">
+                                                            <Dropzone
+                                                                getUploadParams={getUploadParams}
+                                                                onChangeStatus={handleChangeStatus}
+                                                                maxFiles={1}
+                                                                multiple={true}
+                                                                canCancel={false}
+                                                                inputContent="Drop A File(s)"
+                                                                styles={{
+                                                                    dropzone: { height: 225 },
+                                                                    dropzoneActive: { borderColor: 'green' },
+                                                                }}
+                                                            />
+                                                        </div>
                                                     </FormGroup>
                                                 </Col>
                                             </Row>
                                         </Form>
-                                        <h6 className="mb-0" style={{ paddingBottom: "25px" }}>Listing Description/Information</h6>
-                                        <CKEditors
-                                            activeclassName="p10"
-                                            content={content}
-                                            events={{
-                                                "change": onChangeDescription
+                                        <h6 className="mb-0" style={{ paddingBottom: "15px" }}>Listing Description/Information</h6>
+                                        <p style={{ paddingBottom: "25px" }}>Include as detailed of a description as you possibly can so our hackers will know what they're being asked to attempt/hack. This can be <strong>general</strong> information as well as any other information that you'd like to include. Strong/detailed listing descriptions generally always have higher response/application rates compared to minimal detail listings.</p>
+                                        <SimpleMDE
+                                            id="editor_container"
+                                            onChange={onChangeDescription}
+                                            value={content}
+                                        />
+                                        <h6 className="mb-0" style={{ paddingBottom: "15px", paddingTop: "25px" }}>Program/Listing Rules & Conditions Of Engagement</h6>
+                                        <p style={{ paddingBottom: "25px" }}>Please include an <strong>exhaustive list</strong> of specific <strong>RULES</strong> our hackers should follow and abide by while applying allowed hacks to avoid <strong>termination or suspension</strong> from our platform for misuse (referring to our hackers). We stand by our rules and proceedures so please be as detailed and clear as possible while outlines what you expect from potential hacker candiates and the conditions in place once hired.</p>
+                                        <SimpleMDE
+                                            id="editor_container"
+                                            onChange={(value) => {
+                                                setRules(value);
+
+                                                props.saveListingData({
+                                                    ...props.previousData,
+                                                    rulesOfEngagement: value
+                                                })
                                             }}
+                                            value={rules}
+                                        />
+                                        <h6 className="mb-0" style={{ paddingBottom: "15px", paddingTop: "25px" }}><strong>OUT OF SCOPE</strong> Vulnerabilities & Boundaries</h6>
+                                        <p style={{ paddingBottom: "25px" }}>Please include an exhaustive list of which vulnerabilities are <strong>NOT</strong> included as acceptable reports as well as anything you would like our hackers to <strong>abstain</strong> from testing or tampering with such as texting accounts, unauthenticated tests, etc... <em>BE AS SPECIFIC AS POSSIBLE.</em></p>
+                                        <SimpleMDE
+                                            id="editor_container_two"
+                                            onChange={(value) => {
+                                                setOutOfScope(value);
+
+                                                props.saveListingData({
+                                                    ...props.previousData,
+                                                    outOfScopeVulnerabilities: value
+                                                })
+                                            }}
+                                            value={outOfScope}
                                         />
                                     </div>
                                 </CardBody>
                                 <div className="card-footer">
-                                    <Button color="primary mr-1">{Submit}</Button>
-                                    <Button color="light">{Cancel}</Button>
+                                    <Button style={{ width: "100%" }} onClick={handleListingSubmission} color="primary mr-1">Submit & Continue To Payment/Confirmation Page</Button>
                                 </div>
                             </div>
                         </Card>
@@ -523,5 +641,9 @@ const CreateJobListingMainHelper = (props) => {
         </Fragment>
     );
 };
-
-export default CreateJobListingMainHelper;
+const mapStateToProps = (state) => {
+    return {
+        previousData: _.has(state.listingData, "listingData") ? state.listingData.listingData : {}
+    }
+}
+export default connect(mapStateToProps, { saveListingData })(CreateJobListingMainHelper);

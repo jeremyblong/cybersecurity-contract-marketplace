@@ -96,6 +96,7 @@ app.use("/upload/profile/picture/video/employer", require("./routes/employers/pr
 app.use("/gather/general/user/data", require("./routes/shared/general/userInfo/gatherGeneralUserInfo.js"));
 app.use("/update/hacker/profile/information/basic", require("./routes/hackers/profile/generaInfomation/updateGeneralInfomation.js"));
 app.use("/update/employer/profile/information/basic", require("./routes/employers/profile/generalInformation/updateGeneralInformation.js"));
+app.use("/upload/file/upon/selection/employer/listing", require("./routes/employers/createListing/uploadFile/uploadGeneralFileListing.js"));
 
 app.get('*', function(req, res) {
   res.sendFile(__dirname, './client/public/index.html')

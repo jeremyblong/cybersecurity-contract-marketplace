@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { WithContext as ReactTags } from 'react-tag-input';
 import "./styles.css";
+import { connect } from "react-redux";
+import { saveListingData } from "../../../../../../../../redux/actions/employer/listings/listingData.js";
+import _ from "lodash";
 
 const KeyCodes = {
   comma: 188,
@@ -14,17 +17,8 @@ class CreateHashtagsListingComponent extends Component {
         super(props);
 
         this.state = {
-            tags: [
-                { id: "Start by deleting this tag & add your own!", text: "Start by deleting this tag & add your own!" }
-             ],
-            suggestions: [
-                { id: 'USA', text: 'USA' },
-                { id: 'Germany', text: 'Germany' },
-                { id: 'Austria', text: 'Austria' },
-                { id: 'Costa Rica', text: 'Costa Rica' },
-                { id: 'Sri Lanka', text: 'Sri Lanka' },
-                { id: 'Thailand', text: 'Thailand' }
-             ]
+            tags: [],
+            suggestions: []
         };
         this.handleDelete = this.handleDelete.bind(this);
         this.handleAddition = this.handleAddition.bind(this);
@@ -33,13 +27,25 @@ class CreateHashtagsListingComponent extends Component {
 
     handleDelete(i) {
         const { tags } = this.state;
+
         this.setState({
-         tags: tags.filter((tag, index) => index !== i),
+            tags: tags.filter((tag, index) => index !== i),
+        }, () => {
+            this.props.saveListingData({
+                ...this.props.previousData,
+                hashtags: this.state.tags
+            })
         });
     }
-
     handleAddition(tag) {
-        this.setState(state => ({ tags: [...state.tags, tag] }));
+        this.setState(state => {
+            return { tags: [...state.tags, tag] }
+        }, () => {
+            this.props.saveListingData({
+                ...this.props.previousData,
+                hashtags: this.state.tags
+            })
+        });
     }
 
     handleDrag(tag, currPos, newPos) {
@@ -50,7 +56,12 @@ class CreateHashtagsListingComponent extends Component {
         newTags.splice(newPos, 0, tag);
 
         // re-render
-        this.setState({ tags: newTags });
+        this.setState({ tags: newTags }, () => {
+            this.props.saveListingData({
+                ...this.props.previousData,
+                hashtags: newTags
+            })
+        });
     }
 
     render() {
@@ -79,6 +90,10 @@ class CreateHashtagsListingComponent extends Component {
         )
     }
 };
-export default CreateHashtagsListingComponent;
 
-{/* <Badge color="primary">{Primary}</Badge><Badge color="secondary">{secondary}</Badge> */}
+const mapStateToProps = (state) => {
+    return {
+        previousData: _.has(state.listingData, "listingData") ? state.listingData.listingData : {}
+    }
+}
+export default connect(mapStateToProps, { saveListingData })(CreateHashtagsListingComponent);

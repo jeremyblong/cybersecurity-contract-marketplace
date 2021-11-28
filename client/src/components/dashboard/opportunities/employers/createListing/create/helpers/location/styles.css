@@ -2,3 +2,8 @@
     background-color: white !important;
     z-index: 99999999999999999999999999 !important;
 }
+.customized-list-item:hover {
+    background-color: white !important;
+    z-index: 99999999999999999999999999 !important;
+    cursor: pointer;
+}

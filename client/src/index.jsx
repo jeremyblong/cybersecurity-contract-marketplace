@@ -15,6 +15,9 @@ import 'react-dropzone-uploader/dist/styles.css';
 import 'rc-slider/assets/index.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import 'react-phone-number-input/style.css';
+import "easymde/dist/easymde.min.css";
+import 'react-date-range/dist/styles.css';
+import 'react-date-range/dist/theme/default.css';
 // components
 import React, { Fragment,useState,useEffect } from 'react';
 import ReactDOM from 'react-dom';

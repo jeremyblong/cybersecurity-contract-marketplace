@@ -3,7 +3,11 @@ import Autocomplete from "react-autocomplete";
 import axios from "axios";
 import { ListGroup, ListGroupItem } from "reactstrap";
 import "./styles.css";
- 
+import { saveListingData } from "../../../../../../../../redux/actions/employer/listings/listingData.js";
+import { connect } from "react-redux";
+import _ from "lodash";
+
+
 class LocationSearchInput extends Component {
 constructor(props) {
     super(props);
@@ -23,8 +27,6 @@ constructor(props) {
             axios.get(`https://api.tomtom.com/search/2/search/${this.state.address}.json?key=${process.env.REACT_APP_TOMTOM_API_KEY}&language=en-US&limit=10&idxSet=PAD`).then((res) => {
 
                 const { results } = res.data;
-
-                console.log("Response from tomtom: ", res.data, results);
                 
                 this.setState({
                     results
@@ -54,8 +56,6 @@ constructor(props) {
                         className: "form-control"
                     }}
                     renderItem={(item, isHighlighted) => {
-                        console.log(item);
-
                         return (
                             <div key={item.id} className={`list-group-item-action flex-column align-items-start customized-list-item`}>
                                 <div className="d-flex w-100 justify-content-between">
@@ -67,8 +67,14 @@ constructor(props) {
                     }}
                     value={address}
                     onChange={this.handleChange}
-                    onSelect={(val) => {
-                        console.log("selected: ", val);
+                    onSelect={(val, obj) => {
+
+                        console.log("selected: ", val, obj);
+
+                        this.props.saveListingData({
+                            ...this.props.previousData,
+                            businessAddress: obj
+                        })
                     }}
                 />
             </ListGroup>
@@ -76,4 +82,9 @@ constructor(props) {
         );
     }
 }
-export default LocationSearchInput;
+const mapStateToProps = (state) => {
+    return {
+        previousData: _.has(state.listingData, "listingData") ? state.listingData.listingData : {}
+    }
+}
+export default connect(mapStateToProps, { saveListingData })(LocationSearchInput);

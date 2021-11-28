@@ -248,7 +248,7 @@ const Sidebar = (props) => {
                       {Item.Items.map((menuItem, i) =>
                         <li className="sidebar-list" key={i}>
                           {(menuItem.type === 'sub') ?
-                            <a href="javascript" className={`sidebar-link sidebar-title ${menuItem.active ? activeClass() : ''}`} onClick={(event) => {event.preventDefault(); setNavActive(menuItem)}}>
+                            <a href="javascript" className={`sidebar-link sidebar-title ${menuItem.active ? "" : ''}`} onClick={(event) => {event.preventDefault(); setNavActive(menuItem)}}>
                               <menuItem.icon />
                               <span>{props.t(menuItem.title)}</span>
                               {menuItem.badge ? <label className={menuItem.badge}>{menuItem.badgetxt}</label> : ""}

@@ -11,14 +11,15 @@ const moment = require("moment");
 const s3 = new aws.S3();
 const s3Bucket = new aws.S3({ params: { Bucket: config.get("awsBucketName") }});
 
-const generatedID = uuidv4();
-
 const upload = multer({
     storage: multerS3({
         s3: s3,
         bucket: config.get("awsBucketName"),
         key: function (req, file, cb) {
             console.log(file);
+
+            const generatedID = uuidv4();
+
             cb(null, generatedID); 
         }
     })
@@ -79,13 +80,13 @@ router.post("/", upload.single('file'), (req, resppppp, next) => {
               }
         });
     } else {
-        const { fieldname, originalname, mimetype } = req.file;
+        const { fieldname, originalname, mimetype, key } = req.file;
 
         const compoundedFile = {
             id: uuidv4(),
             systemDate: new Date(),
             date: moment(new Date()).format("MM/DD/YYYY hh:mm:ss a"),
-            link: generatedID,
+            link: key,
             type: mimetype,
             name: originalname,
             dataType: mimetype.includes("video") ? "video" : "image"
@@ -99,7 +100,7 @@ router.post("/", upload.single('file'), (req, resppppp, next) => {
 
                 resppppp.json({
                     message: "Successfully uploaded content!",
-                    generatedID,
+                    generatedID: key,
                     file: compoundedFile
                 })
             }
