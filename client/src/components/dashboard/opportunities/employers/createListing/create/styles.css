@@ -9,3 +9,6 @@
     top: 10px;
     cursor: pointer;
 }
+.hover-text:hover {
+    cursor: pointer;
+}

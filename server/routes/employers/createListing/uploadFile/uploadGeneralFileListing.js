@@ -51,7 +51,7 @@ router.post("/", upload.single('file'), (req, resppppp, next) => {
         type: mimetype,
         name: originalname,
         dataType: renderDataTypeCalculation()
-    }
+    };
 
     resppppp.json({
         message: "Successfully uploaded content!",

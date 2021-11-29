@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect } from 'react';
 import { WithContext as ReactTags } from 'react-tag-input';
 import "./styles.css";
 import { connect } from "react-redux";
@@ -63,13 +63,17 @@ class CreateHashtagsListingComponent extends Component {
             })
         });
     }
-
+    componentDidMount() {
+        this.setState({
+            tags: this.props.previousData.hashtags
+        })
+    }
     render() {
         const { tags, suggestions } = this.state;
         return (
             <div>
                 <ReactTags 
-                    tags={tags}
+                    tags={this.props.previousData.hashtags}
                     classNames={{
                         tags: 'tagsClass',
                         tagInput: 'tagInputClass',

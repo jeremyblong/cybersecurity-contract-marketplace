@@ -6,6 +6,7 @@ import GeneralSettingsEmployerPage from "../pages/dashboard/profile/employer/set
 import LiveEmployerListingsPage from "../pages/dashboard/opportunities/employers/liveListings/main/liveListingsMain.js";
 import ViewIndividualJobListingPage from "../pages/dashboard/opportunities/employers/liveListings/individual/viewListing/viewIndividualListing.js";
 import CreateJobListingMainPage from "../pages/dashboard/opportunities/employers/createListing/create/createEmployerListing.js";
+import ReviewListingInformationAndPayPage from "../pages/dashboard/opportunities/employers/createListing/review/reviewInformationAndPay.js";
 
 export const routes = [
         { path:`${process.env.PUBLIC_URL}/profile/settings/edit`, Component: GeneralSettingsPage },
@@ -15,5 +16,6 @@ export const routes = [
         { path: `${process.env.PUBLIC_URL}/profile/settings/edit/employer`, Component: GeneralSettingsEmployerPage },
         { path: `${process.env.PUBLIC_URL}/employer/listings/available`, Component: LiveEmployerListingsPage },
         { path: `${process.env.PUBLIC_URL}/view/individual/employer/listing/public/:id`, Component: ViewIndividualJobListingPage },
-        { path: `${process.env.PUBLIC_URL}/create/employer/listing/general`, Component: CreateJobListingMainPage }
+        { path: `${process.env.PUBLIC_URL}/create/employer/listing/general`, Component: CreateJobListingMainPage },
+        { path: `${process.env.PUBLIC_URL}/review/employer/listing/data/payment`, Component: ReviewListingInformationAndPayPage }
 ]

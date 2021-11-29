@@ -2,18 +2,16 @@ import React, {Fragment, useEffect, useState} from 'react';
 import Breadcrumb from '../../../../../../layout/breadcrumb';
 import one from '../../../../../../assets/images/job-search/1.jpg';
 import {Container,Row,Col,Card,CardBody,Media,Button,Form,FormGroup,Label,Input,InputGroup,InputGroupAddon,ListGroup,ListGroupItem,InputGroupText,Popover,PopoverBody,PopoverHeader} from 'reactstrap';
-import { Submit,Cancel } from "../../../../../../constant";
 import Select from 'react-select';
 import uuid from "react-uuid";
 import _ from "lodash";
 import { MultiSelect } from "react-multi-select-component";
-import CKEditors from "react-ckeditor-component";
 import CreateHashtagsListingComponent from "./helpers/hashtags/createHashtagsListing.js";
 import LocationSearchInput from "./helpers/location/searchAddress.js";
 import { XCircle } from "react-feather";
 import "./styles.css";
 import SimpleMDE from "react-simplemde-editor";
-import { DateRangePicker } from 'react-date-range';
+import { DateRangePicker, Calendar } from 'react-date-range';
 import Dropzone from 'react-dropzone-uploader';
 import { connect } from "react-redux";
 import { saveListingData } from "../../../../../../redux/actions/employer/listings/listingData.js";
@@ -30,8 +28,14 @@ import {
 import { NotificationManager } from 'react-notifications';
 import axios from "axios";
 import LoadingBar from 'react-top-loading-bar';
+import { useHistory } from "react-router-dom";
+import { addDays } from 'date-fns';
+
 
 const CreateJobListingMainHelper = (props) => {
+
+    const history = useHistory();
+
     const [ assetArray, setAssetArray ] = useState([]);
     const [ data, setData ] = useState({});
     const [ requiredRankToApply, setRequiredRankToApply ] = useState(null);
@@ -46,17 +50,44 @@ const CreateJobListingMainHelper = (props) => {
     const [ rules, setRules ] = useState("");
     const [ outOfScope, setOutOfScope ] = useState("");
     const [ progress, setProgress ] = useState(0);
-    const [ selectionRange, setSelectionRange ] = useState({
-        startDate: new Date(),
-        endDate: new Date(),
-        key: 'selection',
-    });
+    const [ selectionRange, setSelectionRange ] = useState(new Date());
+    const [ count, setCount ] = useState(0);
     const [ availiableHackerDates, handleHackerDates ] = useState([{
         startDate: new Date(),
         endDate: new Date(),
-        key: 'selection',
+        key: 'selection'
     }]);
     const [ listingVisibility, setListingVisibility ] = useState(null);
+
+    useEffect(() => {
+        const { assetArray, typeOfHack, testingDatesHackers, rulesOfEngagement, publicCompanyName, outOfScopeVulnerabilities, listingDescription, requiredRankToApply, experienceAndCost, desiredSkills, maxNumberOfApplicants, disclosureVisibility, tokensRequiredToApply, listingVisibility, estimatedCompletionDate } = props.previousData;
+
+        // update state according to redux memory...
+
+        setAssetArray(assetArray);
+        setTypeOfHack(typeOfHack);
+        setRules(rulesOfEngagement);
+        setData(prevState => {
+            return {
+                ...prevState,
+                publicCompanyName
+            }
+        });
+        setOutOfScope(outOfScopeVulnerabilities);
+        setContent(listingDescription);
+        setMaxNumberOfApplicants(maxNumberOfApplicants);
+        setRequiredRankToApply(requiredRankToApply);
+        setExperienceAndCost(experienceAndCost);
+        setDesiredSkills(desiredSkills);
+        setDisclosureVisibility(disclosureVisibility);
+        setTokensRequiredToApply(tokensRequiredToApply);
+        setListingVisibility(listingVisibility);
+
+        props.saveListingData({
+            ...props.previousData,
+            testingDatesHackers: []
+        })
+    }, [])
 
     const onChangeDescription = (value) => {
 
@@ -158,10 +189,13 @@ const CreateJobListingMainHelper = (props) => {
         if (typeOfHack !== null && typeOfHack.value === "physical-hack") {
             return (
                 <Fragment>
-                    <Label htmlFor="exampleFormControlInput1">Dates Availiable To Hackers To Test Physical/Digital Assets:<span className="font-danger">*</span></Label>
+                    <Label htmlFor="exampleFormControlInput1">Dates Availiable To Hackers To Test Physical Assets:<span className="font-danger">*</span></Label>
                     <p>These are the days that will be available to the <strong>hired/selected</strong> hacker canidates to choose from when deciding which days they will attempt to infiltrate your company. This is only relevant for <strong style={{ color: "blue" }}>PHYSICAL</strong> hacking requirements.</p>
                     <p style={{ paddingBottom: "20px" }}></p>
                     <DateRangePicker
+                        minDate={new Date()}
+                        showSelectionPreview={true}
+                        moveRangeOnFirstSelection={true}
                         ranges={availiableHackerDates}
                         onChange={handleDatesSelectable}
                     />
@@ -169,22 +203,52 @@ const CreateJobListingMainHelper = (props) => {
             );
         }
     }
-    const handleDeadlineSelect = (ranges) => {
-        setSelectionRange(ranges.selection);
+    const handleDeadlineSelect = (date) => {
 
-        props.saveListingData({
-            ...props.previousData,
-            estimatedCompletionDate: ranges.selection
-        });
-    }
-    const handleDatesSelectable = (ranges) => {
-        handleHackerDates(prevState => {
+        if (new Date(date) > new Date()) {
+            setSelectionRange(date);
+
             props.saveListingData({
                 ...props.previousData,
-                testingDatesHackers: [...prevState, ranges.selection]
+                estimatedCompletionDate: date
             });
-            return [...prevState, ranges.selection];
-        });
+        } else {
+            NotificationManager.warning(`You must select a date that is current or beyond today's current date.`, "Pick a valid date!", 3500);
+        }
+    }
+    console.log("availiableHackerDates", availiableHackerDates);
+    const handleDatesSelectable = (ranges) => {
+        console.log("ranges", ranges.selection);
+
+        if (new Date(ranges.selection.startDate) > new Date()) {
+            if (count === 0) {
+                handleHackerDates(prevState => {
+
+                    console.log("ran.", prevState);
+        
+                    props.saveListingData({
+                        ...props.previousData,
+                        testingDatesHackers: [ranges.selection]
+                    });
+                    return [ranges.selection];
+                });
+                setCount(count + 1);
+            } else {
+                handleHackerDates(prevState => {
+
+                    console.log("ran.", prevState);
+        
+                    props.saveListingData({
+                        ...props.previousData,
+                        testingDatesHackers: [...prevState, ranges.selection]
+                    });
+                    return [...prevState, ranges.selection];
+                });
+                setCount(count + 1);
+            }
+        } else {
+            NotificationManager.warning(`You must select a date that is current or beyond today's current date.`, "Pick a valid date!", 3500);
+        };
     }
     const getUploadParams = ({ meta }) => { 
         return { 
@@ -218,7 +282,25 @@ const CreateJobListingMainHelper = (props) => {
                 if (res.data.message === "Successfully uploaded content!") {
                     console.log(res.data);
 
-                    const { file } = res.data;
+                    const { file, generatedID } = res.data;
+
+                    if (typeof props.previousData.uploadedFiles !== "undefined" && props.previousData.uploadedFiles.length > 0) {
+                        props.saveListingData({
+                            ...props.previousData,
+                            uploadedFiles: [...props.previousData.uploadedFiles, {
+                                ...file,
+                                onlineID: generatedID
+                            }]
+                        });
+                    } else {
+                        props.saveListingData({
+                            ...props.previousData,
+                            uploadedFiles: [{
+                                ...file,
+                                onlineID: generatedID
+                            }]
+                        });
+                    }
 
                     NotificationManager.success(`We've successfully uploaded your file! Please proceed filling out your information or add more files.`, 'Successfully uploaded file!', 4500);
                 } else {
@@ -237,12 +319,55 @@ const CreateJobListingMainHelper = (props) => {
 
         if ((typeof assetArray !== "undefined" && assetArray.length > 0) && (typeOfHack !== null) && (typeof rulesOfEngagement !== "undefined" && rulesOfEngagement.length > 0) && (typeof publicCompanyName !== "undefined" && publicCompanyName.length > 0) && (typeof outOfScopeVulnerabilities !== "undefined" && outOfScopeVulnerabilities.length > 0) && (typeof listingDescription !== "undefined" && listingDescription.length > 0) && (typeof hashtags !== "undefined" && hashtags.length > 0) && (typeof requiredRankToApply !== "undefined" && _.has(props.previousData, "requiredRankToApply") && Object.keys(requiredRankToApply).length > 0) && (typeof experienceAndCost !== "undefined" && _.has(props.previousData, "experienceAndCost") && Object.keys(experienceAndCost).length > 0) && (typeof desiredSkills !== "undefined" && desiredSkills.length > 0) && (typeof maxNumberOfApplicants !== "undefined" && _.has(props.previousData, "maxNumberOfApplicants") && Object.keys(maxNumberOfApplicants).length > 0) && (typeof disclosureVisibility !== "undefined" && _.has(props.previousData, "disclosureVisibility") && Object.keys(disclosureVisibility).length > 0) && (typeof tokensRequiredToApply !== "undefined" && _.has(props.previousData, "tokensRequiredToApply") && Object.keys(tokensRequiredToApply).length > 0) && (typeof listingVisibility !== "undefined" && _.has(props.previousData, "listingVisibility") && Object.keys(listingVisibility).length > 0) && (typeof estimatedCompletionDate !== "undefined" && _.has(props.previousData, "estimatedCompletionDate") && Object.keys(estimatedCompletionDate).length > 0)) {
             // check if physical location
-            if ((typeof testingDatesHackers !== "undefined" && testingDatesHackers.length > 0) && (typeof businessAddress !== "undefined" && _.has(props.previousData, "businessAddress") && Object.keys(businessAddress).length > 0)) {
-                // location data is properly filled out.
-                NotificationManager.success(`Success!`, "GREAT SUCCESS!", 4500);
+            if ((typeof typeOfHack !== "undefined" && _.has(props.previousData, "typeOfHack") && typeOfHack.value === "physical-hack")) {
+                if ((typeof testingDatesHackers !== "undefined" && testingDatesHackers.length > 0) && (typeof businessAddress !== "undefined" && _.has(props.previousData, "businessAddress") && Object.keys(businessAddress).length > 0)) {
+                    // location data is properly filled out.
+                    const jobData = {
+                        assetArray, 
+                        typeOfHack, 
+                        testingDatesHackers, 
+                        rulesOfEngagement, 
+                        publicCompanyName, 
+                        outOfScopeVulnerabilities, 
+                        listingDescription, 
+                        hashtags, 
+                        businessAddress, 
+                        requiredRankToApply, 
+                        experienceAndCost, 
+                        desiredSkills, 
+                        maxNumberOfApplicants, 
+                        disclosureVisibility, 
+                        tokensRequiredToApply, 
+                        listingVisibility, 
+                        estimatedCompletionDate,
+                        physicalLocation: true 
+                    };
+                    history.push("/review/employer/listing/data/payment", { jobData });
+                } else {
+                    NotificationManager.warning(`You have selected a 'physical' hack requiring approved hackers to know your address yet both 'testing dates' and 'business address' fields are incomplete.`, "Testing dates & address are INCOMPLETE!", 4500);
+                }
             } else {
-                // did NOT Properly fill out location data
-                NotificationManager.warning(`You have selected a 'physical' hack requiring approved hackers to know your address yet both 'testing dates' and 'business address' fields are incomplete.`, "Testing dates & address are INCOMPLETE!", 4500);
+                const jobData = {
+                    assetArray, 
+                    typeOfHack, 
+                    testingDatesHackers: null, 
+                    rulesOfEngagement, 
+                    publicCompanyName, 
+                    outOfScopeVulnerabilities, 
+                    listingDescription, 
+                    hashtags, 
+                    businessAddress: null, 
+                    requiredRankToApply, 
+                    experienceAndCost, 
+                    desiredSkills, 
+                    maxNumberOfApplicants, 
+                    disclosureVisibility, 
+                    tokensRequiredToApply, 
+                    listingVisibility, 
+                    estimatedCompletionDate,
+                    physicalLocation: false
+                };
+                history.push("/review/employer/listing/data/payment", { jobData });
             }
         } else {
             // need to complete more fields!
@@ -477,8 +602,9 @@ const CreateJobListingMainHelper = (props) => {
                                                     <FormGroup>
                                                         <Label htmlFor="exampleFormControlInput1">Estimated/Expected Day Of Completion (Must Be Successfully Hacked By This Day For Full Payment):<span className="font-danger">*</span></Label>
                                                         <p style={{ paddingBottom: "20px" }}>These are the days in which you expect the hired hackers/contractors to have <strong>successfully</strong> completed any hacks or attacks (digital or physical) against your company. Disclosures will occurr shortly after whichever days are selected and any further testing or reporting shall proceed at that point.</p>
-                                                        <DateRangePicker
-                                                            ranges={[selectionRange]}
+                                                        <Calendar 
+                                                            minDate={new Date()}
+                                                            date={new Date(props.previousData.estimatedCompletionDate)}
                                                             onChange={handleDeadlineSelect}
                                                         />
                                                     </FormGroup>
@@ -528,7 +654,7 @@ const CreateJobListingMainHelper = (props) => {
                                                                         <InputGroup>
                                                                         <Input onChange={(e) => {
                                                                             changeBountyPrices(e, "lowSeverity", asset);
-                                                                        }} className="form-control" type="text" placeholder="Average Cash($) Reward Price" aria-label="Average Cash($) Reward Price"/>
+                                                                        }} value={asset.lowSeverity} className="form-control" type="text" placeholder="Average Cash($) Reward Price" aria-label="Average Cash($) Reward Price"/>
                                                                         </InputGroup>
                                                                     </FormGroup>
                                                                 </Col>
@@ -538,7 +664,7 @@ const CreateJobListingMainHelper = (props) => {
                                                                         <InputGroup>
                                                                         <Input onChange={(e) => {
                                                                             changeBountyPrices(e, "mediumSeverity", asset);
-                                                                        }} className="form-control" type="text" placeholder="Average Cash($) Reward Price" aria-label="Average Cash($) Reward Price"/>
+                                                                        }} value={asset.mediumSeverity} className="form-control" type="text" placeholder="Average Cash($) Reward Price" aria-label="Average Cash($) Reward Price"/>
                                                                         </InputGroup>
                                                                     </FormGroup>
                                                                 </Col>
@@ -548,7 +674,7 @@ const CreateJobListingMainHelper = (props) => {
                                                                         <InputGroup>
                                                                         <Input onChange={(e) => {
                                                                             changeBountyPrices(e, "highSeverity", asset);
-                                                                        }} className="form-control" type="text" placeholder="Average Cash($) Reward Price" aria-label="Average Cash($) Reward Price"/>
+                                                                        }} value={asset.highSeverity} className="form-control" type="text" placeholder="Average Cash($) Reward Price" aria-label="Average Cash($) Reward Price"/>
                                                                         </InputGroup>
                                                                     </FormGroup>
                                                                 </Col>
@@ -558,7 +684,7 @@ const CreateJobListingMainHelper = (props) => {
                                                                         <InputGroup>
                                                                         <Input onChange={(e) => {
                                                                             changeBountyPrices(e, "criticalSeverity", asset);
-                                                                        }} className="form-control" type="text" placeholder="Average Cash($) Reward Price" aria-label="Average Cash($) Reward Price"/>
+                                                                        }} value={asset.criticalSeverity} className="form-control" type="text" placeholder="Average Cash($) Reward Price" aria-label="Average Cash($) Reward Price"/>
                                                                         </InputGroup>
                                                                     </FormGroup>
                                                                 </Col>
@@ -579,8 +705,8 @@ const CreateJobListingMainHelper = (props) => {
                                                             <Dropzone
                                                                 getUploadParams={getUploadParams}
                                                                 onChangeStatus={handleChangeStatus}
-                                                                maxFiles={1}
-                                                                multiple={true}
+                                                                maxFiles={5}
+                                                                multiple={false}
                                                                 canCancel={false}
                                                                 inputContent="Drop A File(s)"
                                                                 styles={{
@@ -593,6 +719,22 @@ const CreateJobListingMainHelper = (props) => {
                                                 </Col>
                                             </Row>
                                         </Form>
+                                        <ListGroup style={{ paddingBottom: "25px" }}>
+                                            {typeof props.previousData.uploadedFiles !== "undefined" && props.previousData.uploadedFiles.length > 0 ? props.previousData.uploadedFiles.map((file, index) => {
+                                                return (
+                                                    <ListGroupItem className="d-flex justify-content-between align-items-center">{file.name}<span onClick={() => {
+                                                        props.saveListingData({
+                                                            ...props.previousData,
+                                                            uploadedFiles: props.previousData.uploadedFiles.filter((item, indxxx) => {
+                                                                if (item.id !== file.id) {
+                                                                    return item;
+                                                                }
+                                                            })
+                                                        });
+                                                    }} className="badge badge-primary counter digits hover-text">Remove file from uploads</span></ListGroupItem>
+                                                );
+                                            }) : null}
+                                        </ListGroup>
                                         <h6 className="mb-0" style={{ paddingBottom: "15px" }}>Listing Description/Information</h6>
                                         <p style={{ paddingBottom: "25px" }}>Include as detailed of a description as you possibly can so our hackers will know what they're being asked to attempt/hack. This can be <strong>general</strong> information as well as any other information that you'd like to include. Strong/detailed listing descriptions generally always have higher response/application rates compared to minimal detail listings.</p>
                                         <SimpleMDE
