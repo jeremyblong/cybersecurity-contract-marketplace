@@ -14,5 +14,7 @@
     "REFRESH_TOKEN_EXPIRY": 2592000,
     "tomtomApiKey": "1stNLMNQehPpc5K6Oo1AHqkFMKzeJNSL",
     "algoliaApiKeyBackend": "398ac576c0bcfc87483a3e889dc83b28",
-    "algoliaAppID": "RG9Z0QAI22"
+    "algoliaAppID": "RG9Z0QAI22",
+    "stripePublishableKey": "pk_test_51K1aNlCq2blL6mnOH3rD7ahXrPncFgB0sgtXZxL7gMDivUgJZzFkWA6vUcbzS99yKLx8VxaWDpTc8skFgpJJ1gRe00AZxnUKAS",
+    "stripeSecretKey": "sk_test_51K1aNlCq2blL6mnO7DWimw9eNhKqmaD0Z3dTBziOGc1EnOpEx3C7hS9NiLvEPETFSuxELRpSwHd8Y6f9dhNRSqGi00PvRTqzul"
 }

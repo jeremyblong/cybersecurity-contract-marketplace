@@ -18,6 +18,9 @@ import 'react-phone-number-input/style.css';
 import "easymde/dist/easymde.min.css";
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
+import 'react-credit-cards/es/styles-compiled.css';
+import 'react-calendar/dist/Calendar.css';
+import 'react-responsive-modal/styles.css';
 // components
 import React, { Fragment,useState,useEffect } from 'react';
 import ReactDOM from 'react-dom';

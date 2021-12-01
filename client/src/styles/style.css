@@ -40,6 +40,9 @@ This files table contents are outlined below>>>>>
 .overlaySlide {
   z-index: 99999999999999999 !important;
 }
+.disabled {
+  background-color: #EBEBE4 !important;
+}
 .horizontally-centered {
   width: 50%;
   margin: 0 auto

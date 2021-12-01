@@ -4,3 +4,15 @@
 .blue-heavy-text {
     color: rgb(20, 16, 255);
 }
+.underline-header {
+    text-decoration-line: underline;
+    color: rgb(20, 16, 255);
+}
+.create-space {
+    margin-bottom: 40px;
+    padding: 15px;
+}
+.customModal {
+    min-width: 90vw;
+    max-width: 90vw;
+}

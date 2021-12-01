@@ -64,8 +64,9 @@ class CreateHashtagsListingComponent extends Component {
         });
     }
     componentDidMount() {
+        const { hashtags } = this.props.previousData;
         this.setState({
-            tags: this.props.previousData.hashtags
+            tags: typeof hashtags !== "undefined" && hashtags.length > 0 ? hashtags : []
         })
     }
     render() {
@@ -73,7 +74,7 @@ class CreateHashtagsListingComponent extends Component {
         return (
             <div>
                 <ReactTags 
-                    tags={this.props.previousData.hashtags}
+                    tags={tags}
                     classNames={{
                         tags: 'tagsClass',
                         tagInput: 'tagInputClass',

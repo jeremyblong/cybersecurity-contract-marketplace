@@ -64,24 +64,24 @@ const CreateJobListingMainHelper = (props) => {
 
         // update state according to redux memory...
 
-        setAssetArray(assetArray);
-        setTypeOfHack(typeOfHack);
-        setRules(rulesOfEngagement);
-        setData(prevState => {
+        setAssetArray(typeof assetArray !== "undefined" && assetArray.length > 0 ? assetArray : []);
+        setTypeOfHack(typeof typeOfHack !== "undefined" ? typeOfHack : null);
+        setRules(typeof rulesOfEngagement !== "undefined" ? rulesOfEngagement : "");
+        setData(typeof publicCompanyName !== "undefined" ? prevState => {
             return {
                 ...prevState,
                 publicCompanyName
             }
-        });
-        setOutOfScope(outOfScopeVulnerabilities);
-        setContent(listingDescription);
-        setMaxNumberOfApplicants(maxNumberOfApplicants);
-        setRequiredRankToApply(requiredRankToApply);
-        setExperienceAndCost(experienceAndCost);
-        setDesiredSkills(desiredSkills);
-        setDisclosureVisibility(disclosureVisibility);
-        setTokensRequiredToApply(tokensRequiredToApply);
-        setListingVisibility(listingVisibility);
+        } : {});
+        setOutOfScope(typeof outOfScopeVulnerabilities !== "undefined" ? outOfScopeVulnerabilities : "");
+        setContent(typeof listingDescription !== "undefined" ? listingDescription : "");
+        setMaxNumberOfApplicants(typeof maxNumberOfApplicants !== "undefined" ? maxNumberOfApplicants : null);
+        setRequiredRankToApply(typeof requiredRankToApply !== "undefined" ? requiredRankToApply : null);
+        setExperienceAndCost(typeof experienceAndCost !== "undefined" ? experienceAndCost : null);
+        setDesiredSkills(typeof desiredSkills !== "undefined" ? desiredSkills : []);
+        setDisclosureVisibility(typeof disclosureVisibility !== "undefined" ? disclosureVisibility : null);
+        setTokensRequiredToApply(typeof tokensRequiredToApply !== "undefined" ? tokensRequiredToApply : null);
+        setListingVisibility(typeof listingVisibility !== "undefined" ? listingVisibility : null);
 
         props.saveListingData({
             ...props.previousData,
@@ -167,7 +167,7 @@ const CreateJobListingMainHelper = (props) => {
         });
     }
     const renderBusinessLocationPortion = () => {
-        if (typeOfHack !== null && typeOfHack.value === "physical-hack") {
+        if (_.has(props.previousData, "typeOfHack") && typeOfHack !== null && typeOfHack.value === "physical-hack") {
             return (
                 <Fragment>
                     <h6 className="mb-0">Location - Physical Hacking (Only Provided To <strong>SELECTED/HIRED</strong> Applicants)</h6>
@@ -186,7 +186,7 @@ const CreateJobListingMainHelper = (props) => {
         }
     }
     const renderPhysicalHackingDates = () => {
-        if (typeOfHack !== null && typeOfHack.value === "physical-hack") {
+        if (_.has(props.previousData, "typeOfHack") && typeOfHack !== null && typeOfHack.value === "physical-hack") {
             return (
                 <Fragment>
                     <Label htmlFor="exampleFormControlInput1">Dates Availiable To Hackers To Test Physical Assets:<span className="font-danger">*</span></Label>
@@ -317,11 +317,141 @@ const CreateJobListingMainHelper = (props) => {
 
         const { assetArray, typeOfHack, testingDatesHackers, rulesOfEngagement, publicCompanyName, outOfScopeVulnerabilities, listingDescription, hashtags, businessAddress, requiredRankToApply, experienceAndCost, desiredSkills, maxNumberOfApplicants, disclosureVisibility, tokensRequiredToApply, listingVisibility, estimatedCompletionDate } = props.previousData;
 
-        if ((typeof assetArray !== "undefined" && assetArray.length > 0) && (typeOfHack !== null) && (typeof rulesOfEngagement !== "undefined" && rulesOfEngagement.length > 0) && (typeof publicCompanyName !== "undefined" && publicCompanyName.length > 0) && (typeof outOfScopeVulnerabilities !== "undefined" && outOfScopeVulnerabilities.length > 0) && (typeof listingDescription !== "undefined" && listingDescription.length > 0) && (typeof hashtags !== "undefined" && hashtags.length > 0) && (typeof requiredRankToApply !== "undefined" && _.has(props.previousData, "requiredRankToApply") && Object.keys(requiredRankToApply).length > 0) && (typeof experienceAndCost !== "undefined" && _.has(props.previousData, "experienceAndCost") && Object.keys(experienceAndCost).length > 0) && (typeof desiredSkills !== "undefined" && desiredSkills.length > 0) && (typeof maxNumberOfApplicants !== "undefined" && _.has(props.previousData, "maxNumberOfApplicants") && Object.keys(maxNumberOfApplicants).length > 0) && (typeof disclosureVisibility !== "undefined" && _.has(props.previousData, "disclosureVisibility") && Object.keys(disclosureVisibility).length > 0) && (typeof tokensRequiredToApply !== "undefined" && _.has(props.previousData, "tokensRequiredToApply") && Object.keys(tokensRequiredToApply).length > 0) && (typeof listingVisibility !== "undefined" && _.has(props.previousData, "listingVisibility") && Object.keys(listingVisibility).length > 0) && (typeof estimatedCompletionDate !== "undefined" && _.has(props.previousData, "estimatedCompletionDate") && Object.keys(estimatedCompletionDate).length > 0)) {
-            // check if physical location
-            if ((typeof typeOfHack !== "undefined" && _.has(props.previousData, "typeOfHack") && typeOfHack.value === "physical-hack")) {
-                if ((typeof testingDatesHackers !== "undefined" && testingDatesHackers.length > 0) && (typeof businessAddress !== "undefined" && _.has(props.previousData, "businessAddress") && Object.keys(businessAddress).length > 0)) {
-                    // location data is properly filled out.
+        let count = 0;
+
+        if (typeof typeOfHack !== "undefined") {
+            if (typeOfHack.value === "physical-hack") {
+                for (const key in props.previousData) {
+                    const el = props.previousData[key];
+
+                    console.log("physical - ", key, el);
+        
+                    switch (key) {
+                        case "testingDatesHackers":
+                            if (typeof el !== "undefined" && el.length > 0) {
+                                count++;
+                            } else {
+                                NotificationManager.error(`You are missing or haven't filled out the 'Required Testing Dates'`, "Complete 'required testing dates'!", 4500);
+                            }
+                            break;
+                        case "listingDescription":
+                            if (typeof el !== "undefined" && el.length > 0) {
+                                count++;
+                            } else {
+                                NotificationManager.error(`You are missing or haven't filled out the 'Listing Description'`, "Complete 'Listing Description'!", 4500);
+                            }
+                            break;
+                        case "rulesOfEngagement":
+                            if (typeof el !== "undefined" && el.length > 0) {
+                                count++;
+                            } else {
+                                NotificationManager.error(`You are missing or haven't filled out the 'Rules Of Engagement'`, "Complete 'Rules Of Engagement'!", 4500);
+                            }
+                            break;
+                        case "publicCompanyName":
+                            if (typeof el !== "undefined" && el.length > 0) {
+                                count++;
+                            } else {
+                                NotificationManager.error(`You are missing or haven't filled out the 'Public Company Name'`, "Complete 'Public Company Name'!", 4500);
+                            }
+                            break;
+                        case "outOfScopeVulnerabilities":
+                            if (typeof el !== "undefined" && el.length > 0) {
+                                count++;
+                            } else {
+                                NotificationManager.error(`You are missing or haven't filled out the 'Out Of Scope Vulnerabilities'`, "Complete 'Out Of Scope Vulnerabilities'!", 4500);
+                            }
+                            break;
+                        case "requiredRankToApply":
+                            if (!_.isEmpty(el)) {
+                                count++;
+                            } else {
+                                NotificationManager.error(`You are missing or haven't filled out the 'Required Rank To Apply'`, "Complete 'Required Rank To Apply'!", 4500);
+                            }
+                            break;
+                        case "experienceAndCost":
+                            if (!_.isEmpty(el)) {
+                                count++;
+                            } else {
+                                NotificationManager.error(`You are missing or haven't filled out the 'Experience & Cost'`, "Complete 'Experience & Cost'!", 4500);
+                            }
+                            break;
+                        case "desiredSkills":
+                            if (typeof el !== "undefined" && el.length > 0) {
+                                count++;
+                            } else {
+                                NotificationManager.error(`You are missing or haven't filled out the 'Desired Skills'`, "Complete 'Desired Skills'!", 4500);
+                            }
+                            break;
+                        case "hashtags":
+                            if (typeof el !== "undefined" && el.length > 0) {
+                                count++;
+                            } else {
+                                NotificationManager.error(`You are missing or haven't filled out the 'Hashtags'`, "Complete 'Hashtags'!", 4500);
+                            }
+                            break;
+                        case "maxNumberOfApplicants":
+                            if (!_.isEmpty(el)) {
+                                count++;
+                            } else {
+                                NotificationManager.error(`You are missing or haven't filled out the 'Max Number Of Applicants'`, "Complete 'Max Number Of Applicants'!", 4500);
+                            }
+                            break;
+                        case "tokensRequiredToApply":
+                            if (!_.isEmpty(el)) {
+                                count++;
+                            } else {
+                                NotificationManager.error(`You are missing or haven't filled out the 'Tokens Required To Apply'`, "Complete 'Tokens Required To Apply'!", 4500);
+                            }
+                            break;
+                        case "disclosureVisibility":
+                            if (!_.isEmpty(el)) {
+                                count++;
+                            } else {
+                                NotificationManager.error(`You are missing or haven't filled out the 'Disclosure Visibility'`, "Complete 'Disclosure Visibility'!", 4500);
+                            }
+                            break;
+                        case "typeOfHack":
+                            if (!_.isEmpty(el)) {
+                                count++;
+                            } else {
+                                NotificationManager.error(`You are missing or haven't filled out the 'Type Of Hacks'`, "Complete 'Type Of Hacks'!", 4500);
+                            }
+                            break;
+                        case "listingVisibility":
+                            if (!_.isEmpty(el)) {
+                                count++;
+                            } else {
+                                NotificationManager.error(`You are missing or haven't filled out the 'Listing Visibility'`, "Complete 'Listing Visibility'!", 4500);
+                            }
+                            break;
+                        case "estimatedCompletionDate":
+                            if (typeof el !== "undefined" && el.length > 0) {
+                                count++;
+                            } else {
+                                NotificationManager.error(`You are missing or haven't filled out the 'Estimated Completion Date'`, "Complete 'Estimated Completion Date'!", 4500);
+                            }
+                            break;
+                        case "businessAddress":
+                            if (!_.isEmpty(el)) {
+                                count++;
+                            } else {
+                                NotificationManager.error(`You are missing or haven't filled out the 'Business Address'`, "Complete 'Business Address'!", 4500);
+                            }
+                            break;
+                        case "assetArray":
+                            if (typeof el !== "undefined" && el.length > 0) {
+                                count++;
+                            } else {
+                                NotificationManager.error(`You are missing or haven't filled out the 'Asset List'`, "Complete 'Asset List'!", 4500);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                };
+
+                if (count >= 17) {
                     const jobData = {
                         assetArray, 
                         typeOfHack, 
@@ -343,35 +473,150 @@ const CreateJobListingMainHelper = (props) => {
                         physicalLocation: true 
                     };
                     history.push("/review/employer/listing/data/payment", { jobData });
-                } else {
-                    NotificationManager.warning(`You have selected a 'physical' hack requiring approved hackers to know your address yet both 'testing dates' and 'business address' fields are incomplete.`, "Testing dates & address are INCOMPLETE!", 4500);
                 }
             } else {
-                const jobData = {
-                    assetArray, 
-                    typeOfHack, 
-                    testingDatesHackers: null, 
-                    rulesOfEngagement, 
-                    publicCompanyName, 
-                    outOfScopeVulnerabilities, 
-                    listingDescription, 
-                    hashtags, 
-                    businessAddress: null, 
-                    requiredRankToApply, 
-                    experienceAndCost, 
-                    desiredSkills, 
-                    maxNumberOfApplicants, 
-                    disclosureVisibility, 
-                    tokensRequiredToApply, 
-                    listingVisibility, 
-                    estimatedCompletionDate,
-                    physicalLocation: false
-                };
-                history.push("/review/employer/listing/data/payment", { jobData });
+                for (const key in props.previousData) {
+                    const el = props.previousData[key];
+
+                    console.log("digital - ", key, el);
+        
+                    switch (key) {
+                        case "listingDescription":
+                            if (typeof el !== "undefined" && el.length > 0) {
+                                count++;
+                            } else {
+                                NotificationManager.error(`You are missing or haven't filled out the 'Listing Description'`, "Complete 'Listing Description'!", 4500);
+                            }
+                            break;
+                        case "rulesOfEngagement":
+                            if (typeof el !== "undefined" && el.length > 0) {
+                                count++;
+                            } else {
+                                NotificationManager.error(`You are missing or haven't filled out the 'Rules Of Engagement'`, "Complete 'Rules Of Engagement'!", 4500);
+                            }
+                            break;
+                        case "publicCompanyName":
+                            if (typeof el !== "undefined" && el.length > 0) {
+                                count++;
+                            } else {
+                                NotificationManager.error(`You are missing or haven't filled out the 'Public Company Name'`, "Complete 'Public Company Name'!", 4500);
+                            }
+                            break;
+                        case "outOfScopeVulnerabilities":
+                            if (typeof el !== "undefined" && el.length > 0) {
+                                count++;
+                            } else {
+                                NotificationManager.error(`You are missing or haven't filled out the 'Out Of Scope Vulnerabilities'`, "Complete 'Out Of Scope Vulnerabilities'!", 4500);
+                            }
+                            break;
+                        case "requiredRankToApply":
+                            if (!_.isEmpty(el)) {
+                                count++;
+                            } else {
+                                NotificationManager.error(`You are missing or haven't filled out the 'Required Rank To Apply'`, "Complete 'Required Rank To Apply'!", 4500);
+                            }
+                            break;
+                        case "experienceAndCost":
+                            if (!_.isEmpty(el)) {
+                                count++;
+                            } else {
+                                NotificationManager.error(`You are missing or haven't filled out the 'Experience & Cost'`, "Complete 'Experience & Cost'!", 4500);
+                            }
+                            break;
+                        case "desiredSkills":
+                            if (typeof el !== "undefined" && el.length > 0) {
+                                count++;
+                            } else {
+                                NotificationManager.error(`You are missing or haven't filled out the 'Desired Skills'`, "Complete 'Desired Skills'!", 4500);
+                            }
+                            break;
+                        case "hashtags":
+                            if (typeof el !== "undefined" && el.length > 0) {
+                                count++;
+                            } else {
+                                NotificationManager.error(`You are missing or haven't filled out the 'Hashtags'`, "Complete 'Hashtags'!", 4500);
+                            }
+                            break;
+                        case "maxNumberOfApplicants":
+                            if (!_.isEmpty(el)) {
+                                count++;
+                            } else {
+                                NotificationManager.error(`You are missing or haven't filled out the 'Max Number Of Applicants'`, "Complete 'Max Number Of Applicants'!", 4500);
+                            }
+                            break;
+                        case "tokensRequiredToApply":
+                            if (!_.isEmpty(el)) {
+                                count++;
+                            } else {
+                                NotificationManager.error(`You are missing or haven't filled out the 'Tokens Required To Apply'`, "Complete 'Tokens Required To Apply'!", 4500);
+                            }
+                            break;
+                        case "disclosureVisibility":
+                            if (!_.isEmpty(el)) {
+                                count++;
+                            } else {
+                                NotificationManager.error(`You are missing or haven't filled out the 'Disclosure Visibility'`, "Complete 'Disclosure Visibility'!", 4500);
+                            }
+                            break;
+                        case "typeOfHack":
+                            if (!_.isEmpty(el)) {
+                                count++;
+                            } else {
+                                NotificationManager.error(`You are missing or haven't filled out the 'Type Of Hacks'`, "Complete 'Type Of Hacks'!", 4500);
+                            }
+                            break;
+                        case "listingVisibility":
+                            if (!_.isEmpty(el)) {
+                                count++;
+                            } else {
+                                NotificationManager.error(`You are missing or haven't filled out the 'Listing Visibility'`, "Complete 'Listing Visibility'!", 4500);
+                            }
+                            break;
+                        case "estimatedCompletionDate":
+                            if (typeof el !== "undefined" && el.length > 0) {
+                                count++;
+                            } else {
+                                NotificationManager.error(`You are missing or haven't filled out the 'Estimated Completion Date'`, "Complete 'Estimated Completion Date'!", 4500);
+                            }
+                            break;
+                        case "assetArray":
+                            if (typeof el !== "undefined" && el.length > 0) {
+                                count++;
+                            } else {
+                                NotificationManager.error(`You are missing or haven't filled out the 'Asset List'`, "Complete 'Asset List'!", 4500);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                if (count >= 15) {
+                    const jobData = {
+                        assetArray, 
+                        typeOfHack, 
+                        testingDatesHackers: null, 
+                        rulesOfEngagement, 
+                        publicCompanyName, 
+                        outOfScopeVulnerabilities, 
+                        listingDescription, 
+                        hashtags, 
+                        businessAddress: null, 
+                        requiredRankToApply, 
+                        experienceAndCost, 
+                        desiredSkills, 
+                        maxNumberOfApplicants, 
+                        disclosureVisibility, 
+                        tokensRequiredToApply, 
+                        listingVisibility, 
+                        estimatedCompletionDate,
+                        physicalLocation: false
+                    };
+                    history.push("/review/employer/listing/data/payment", { jobData });
+                }
             }
         } else {
-            // need to complete more fields!
-            NotificationManager.error(`You MUST complete ALL of the required fields (marked with red asterisk) - review your edits and make sure everything is filled out.`, "INCOMPLETE FORM/INPUTS!", 4500);
+            NotificationManager.error("You must choose a hack type - physical OR digital but you must choose.", "Choose Hack Type!", 4500);
         }
     }
     return (
@@ -604,7 +849,7 @@ const CreateJobListingMainHelper = (props) => {
                                                         <p style={{ paddingBottom: "20px" }}>These are the days in which you expect the hired hackers/contractors to have <strong>successfully</strong> completed any hacks or attacks (digital or physical) against your company. Disclosures will occurr shortly after whichever days are selected and any further testing or reporting shall proceed at that point.</p>
                                                         <Calendar 
                                                             minDate={new Date()}
-                                                            date={new Date(props.previousData.estimatedCompletionDate)}
+                                                            date={_.has(props.previousData, "estimatedCompletionDate") ? new Date(props.previousData.estimatedCompletionDate) : new Date()}
                                                             onChange={handleDeadlineSelect}
                                                         />
                                                     </FormGroup>
