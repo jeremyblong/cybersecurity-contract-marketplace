@@ -14,6 +14,36 @@ import { DateRange } from 'react-date-range';
 import { Modal } from 'react-responsive-modal';
 import FileViewer from 'react-file-viewer';
 
+const monthOptions = [
+  { value: '01', label: '01' },
+  { value: '02', label: '02' },
+  { value: '03', label: '03' },
+  { value: '04', label: '04' },
+  { value: '05', label: '05' },
+  { value: '06', label: '06' },
+  { value: '07', label: '07' },
+  { value: '08', label: '08' },
+  { value: '09', label: '09' },
+  { value: '10', label: '10' },
+  { value: '11', label: '11' },
+  { value: '12', label: '12' },
+];
+const yearOptions = [
+    { label: "2022", value: "22" },
+    { label: "2023", value: "23" },
+    { label: "2024", value: "24" },
+    { label: "2025", value: "25" },
+    { label: "2026", value: "26" },
+    { label: "2027", value: "27" },
+    { label: "2028", value: "28" },
+    { label: "2029", value: "29" },
+    { label: "2030", value: "30" },
+    { label: "2031", value: "31" },
+    { label: "2032", value: "32" },
+    { label: "2033", value: "33" },
+    { label: "2034", value: "34" },
+    { label: "2035", value: "35" }
+];
 
 const Map = ReactMapboxGl({
     accessToken: process.env.REACT_APP_MAPBOX_TOKEN
@@ -34,7 +64,15 @@ constructor(props) {
         selectedPaymentCard: null,
         previousCardOptions: [],
         ranges: [],
-        showFileModal: false
+        showFileModal: false,
+        selectedMonth: {
+            label: "Month",
+            value: ""
+        },
+        selectedYear: {
+            label: "Year",
+            value: ""
+        }
     }
 }
     handleInputFocus = (e) => {
@@ -60,21 +98,21 @@ constructor(props) {
                     number: ""
                 });
             }
+        } else if (name === "cvc") {
+            if (value.length !== 0) {
+                let filtered = value.replace(/\D/, '');
+
+                this.setState({ 
+                    cvc: filtered
+                });
+            } else {
+                this.setState({ 
+                    cvc: ""
+                });
+            }
         } else {
             this.setState({ [name]: value });
         }
-    }
-    handleExpiryInput = (e) => {
-        const { name, value } = e.target;
-
-        let textTemp = value;
-
-        if (textTemp.length === 2) {
-            textTemp += '/';
-        }
-        this.setState({
-            expiry: textTemp
-        })
     }
     componentDidMount() {
         const { testingDatesHackers } = this.props.previousData;
@@ -164,6 +202,37 @@ constructor(props) {
                 break;
             default:
                 break;
+        }
+    }
+    handleSelectBlur = (type, full, monthOrYear) => {
+        if (type === "selectedMonth") {
+            this.setState({
+                expiry: `${monthOrYear}/${this.state.selectedYear.value}`,
+                selectedMonth: full
+            }, () => {
+                console.log("blurred...:", this.state.expiry);
+            });
+        } else if (type === "selectedYear") {
+            this.setState({
+                expiry: `${this.state.selectedMonth.value}/${monthOrYear}`,
+                selectedYear: full
+            }, () => {
+                console.log("blurred...:", this.state.expiry);
+            });
+        }
+    }
+    renderConditional = () => {
+        const {
+            name,
+            number,
+            expiry,
+            cvc
+        } = this.state;
+
+        if ((typeof name !== "undefined" && name.length > 0) && (typeof number !== "undefined" && number.length > 0) && (typeof expiry !== "undefined" && expiry.length > 0 && (expiry.length === 4 || expiry.length === 5)) && (typeof cvc !== "undefined" && cvc.length > 0 && (cvc.length === 3 || cvc.length === 4))) {
+            return true;
+        } else {
+            return false;
         }
     }
     render() {
@@ -266,15 +335,42 @@ constructor(props) {
                                                 <FormGroup>
                                                     <Label>Expiration</Label>
                                                     <InputGroup>
-                                                        <Input onFocus={this.handleInputFocus} value={expiry} onChange={this.handleExpiryInput} name="expiry" className="form-control" maxlength="5" size="5" type="text" placeholder="MM/YY" aria-label="MM/YY"/>
+                                                        <Select
+                                                            value={this.state.selectedMonth}
+                                                            onChange={(value) => {
+                                                                this.setState({
+                                                                    selectedMonth: value
+                                                                })
+                                                            }}
+                                                            onBlur={() => {
+                                                                this.handleSelectBlur("selectedMonth", this.state.selectedMonth, this.state.selectedMonth.value);
+                                                            }}
+                                                            className="stretch"
+                                                            placeholder={"MONTH"}
+                                                            options={monthOptions}
+                                                        />
+                                                        <Select
+                                                            value={this.state.selectedYear}
+                                                            onChange={(value) => {
+                                                                this.setState({
+                                                                    selectedYear: value
+                                                                })
+                                                            }}
+                                                            onBlur={() => {
+                                                                this.handleSelectBlur("selectedYear", this.state.selectedYear, this.state.selectedYear.value);
+                                                            }}
+                                                            className="stretch-two"
+                                                            placeholder={"YEAR"}
+                                                            options={yearOptions}
+                                                        />
                                                     </InputGroup>
                                                 </FormGroup>
                                             </Col>
                                             <Col sm="6" md="4" lg="4" xl="4">
                                                 <FormGroup>
-                                                    <Label>CVV</Label>
+                                                    <Label>CVC</Label>
                                                     <InputGroup>
-                                                        <Input onFocus={this.handleInputFocus} onChange={this.handleInputChange} value={cvc} name="cvc" className="form-control" maxlength="4" size="4" type="text" placeholder="CVV" aria-label="CVV"/>
+                                                        <Input onFocus={this.handleInputFocus} onChange={this.handleInputChange} value={cvc} name="cvc" className="form-control" maxlength="4" size="4" type="text" placeholder="CVC" aria-label="CVC"/>
                                                     </InputGroup>
                                                 </FormGroup>
                                             </Col>
@@ -294,7 +390,7 @@ constructor(props) {
                                 </Row>
                             </CardBody>
                             <div className="create-space">
-                                <Button className="btn disabled" style={{ width: "100%" }} onClick={this.handlePayment} color="mr-1">Submit/Manage Payment & Continue</Button>
+                                {this.renderConditional() ? <Button className="btn btn-secondary" style={{ width: "100%" }} onClick={this.handlePayment} color="mr-1">Submit/Manage Payment & Continue</Button> : <Button className="btn disabled" style={{ width: "100%" }} color="mr-1">Submit/Manage Payment & Continue</Button>}
                             </div>
                         </Card>
                     </Col>

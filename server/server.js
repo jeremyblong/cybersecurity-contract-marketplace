@@ -20,12 +20,27 @@ const passport = require("passport");
 const { Connection } = require("./mongoUtil.js");
 const flash = require('connect-flash');
 const session = require('express-session');
+const { register } = require('/fabric/wallet');
+const { connect } = require('/fabric/gateway');
+const { unlockScriptFolder } = require("/cli");
 
 app.use(cookieParser(config.get("COOKIE_SECRET")));
 
 require("./strategies/jwtstrategy.js");
 require("./strategies/localstrategy.js");
 require("./schemas/authentication/authenticate.js");
+
+const setupFabricWalletAndGateway = async () => {
+	unlockScriptFolder();
+  
+	// sample implementation of Fabric SDK gateway and wallet
+	console.log('Setting up fabric wallet and gateway...');
+	await register('user01');
+	await connect('user01');
+	console.log('Set up complete!');
+}
+  
+// setupFabricWalletAndGateway();
 
 aws.config.update({
     secretAccessKey: config.get("awsSecretKey"),
