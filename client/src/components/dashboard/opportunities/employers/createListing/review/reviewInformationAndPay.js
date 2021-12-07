@@ -13,6 +13,7 @@ import Calendar from 'react-calendar';
 import { DateRange } from 'react-date-range';
 import { Modal } from 'react-responsive-modal';
 import FileViewer from 'react-file-viewer';
+import axios from "axios";
 
 const monthOptions = [
   { value: '01', label: '01' },
@@ -234,6 +235,48 @@ constructor(props) {
         } else {
             return false;
         }
+    }
+    handlePayment = (e) => {
+        e.preventDefault();
+
+        console.log("ran function handlePayment!");
+
+        const { assetArray, typeOfHack, testingDatesHackers, rulesOfEngagement, publicCompanyName, outOfScopeVulnerabilities, listingDescription, hashtags, businessAddress, requiredRankToApply, experienceAndCost, desiredSkills, maxNumberOfApplicants, disclosureVisibility, tokensRequiredToApply, listingVisibility, estimatedCompletionDate, timespan, uploadedFiles } = this.props.previousData;
+
+        const newData = {
+            assetArray, 
+            typeOfHack, 
+            testingDatesHackers, 
+            rulesOfEngagement, 
+            publicCompanyName, 
+            outOfScopeVulnerabilities, 
+            listingDescription, 
+            hashtags, 
+            businessAddress, 
+            requiredRankToApply, 
+            experienceAndCost, 
+            desiredSkills, 
+            maxNumberOfApplicants, 
+            disclosureVisibility, 
+            tokensRequiredToApply, 
+            listingVisibility, 
+            estimatedCompletionDate, 
+            timespan, 
+            uploadedFiles
+        }
+        
+        axios.post(`${process.env.REACT_APP_BASE_URL}/post/employer/listing/recruit`, {
+            data: newData,
+            uniqueId: this.props.userData.uniqueId
+        }).then((res) => {
+            if (res.data.message === "Successfully posted a new employer listing!") {
+                console.log(res.data);
+            } else {
+                console.log("err", res.data);
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
     }
     render() {
         const { assetArray, typeOfHack, testingDatesHackers, rulesOfEngagement, publicCompanyName, outOfScopeVulnerabilities, listingDescription, hashtags, businessAddress, requiredRankToApply, experienceAndCost, desiredSkills, maxNumberOfApplicants, disclosureVisibility, tokensRequiredToApply, listingVisibility, estimatedCompletionDate, timespan, uploadedFiles } = this.props.previousData;
@@ -609,7 +652,8 @@ constructor(props) {
 }
 const mapStateToProps = (state) => {
     return {
-        previousData: _.has(state.listingData, "listingData") ? state.listingData.listingData : {}
+        previousData: _.has(state.listingData, "listingData") ? state.listingData.listingData : {},
+        userData: state.auth.data
     }
 }
 export default connect(mapStateToProps, {  })(ReviewListingInformationAndPayHelper);

@@ -12,3 +12,10 @@
 .hover-text:hover {
     cursor: pointer;
 }
+.outlined-box:hover {
+    cursor: pointer;
+}
+.blue-text {
+    color: blue;
+    text-align: center;
+}

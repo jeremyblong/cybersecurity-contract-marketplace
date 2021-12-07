@@ -16,13 +16,5 @@
     "algoliaApiKeyBackend": "398ac576c0bcfc87483a3e889dc83b28",
     "algoliaAppID": "RG9Z0QAI22",
     "stripePublishableKey": "pk_test_51K1aNlCq2blL6mnOH3rD7ahXrPncFgB0sgtXZxL7gMDivUgJZzFkWA6vUcbzS99yKLx8VxaWDpTc8skFgpJJ1gRe00AZxnUKAS",
-    "stripeSecretKey": "sk_test_51K1aNlCq2blL6mnO7DWimw9eNhKqmaD0Z3dTBziOGc1EnOpEx3C7hS9NiLvEPETFSuxELRpSwHd8Y6f9dhNRSqGi00PvRTqzul",
-    "AS_LOCALHOST": false,
-    "CHANNEL_ID": "defaultchannel",
-    "CHAINCODE_NAME": "cyberhuntcontract",
-    "CHAINCODE_VERSION": 1,
-    "CHAINCODE_SEQUENCE": 1,
-    "MSP_ID": "Org1MSP",
-    "ORDERER_NAME": "orderer.example.com",
-    "PEER_NAME": "peer0.org1.example.com"
+    "stripeSecretKey": "sk_test_51K1aNlCq2blL6mnO7DWimw9eNhKqmaD0Z3dTBziOGc1EnOpEx3C7hS9NiLvEPETFSuxELRpSwHd8Y6f9dhNRSqGi00PvRTqzul"
 }

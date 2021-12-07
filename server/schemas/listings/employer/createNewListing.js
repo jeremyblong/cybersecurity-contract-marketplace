@@ -1,0 +1,74 @@
+const mongoose = require("mongoose");
+
+const Schema = mongoose.Schema;
+
+const EmployerListingSchema = new Schema({
+    assetArray: {
+        type: Array
+    }, 
+    typeOfHack: {
+        type: Object
+    }, 
+    testingDatesHackers: {
+        type: Array
+    }, 
+    rulesOfEngagement: {
+        type: String
+    }, 
+    publicCompanyName: {
+        type: String
+    }, 
+    outOfScopeVulnerabilities: {
+        type: String
+    }, 
+    listingDescription: {
+        type: String
+    }, 
+    hashtags: {
+        type: Array
+    }, 
+    businessAddress: {
+        type: Object
+    }, 
+    requiredRankToApply: {
+        type: Object
+    }, 
+    experienceAndCost: {
+        type: Object
+    }, 
+    desiredSkills: {
+        type: Array
+    }, 
+    maxNumberOfApplicants: {
+        type: Object
+    }, 
+    disclosureVisibility: {
+        type: Object
+    }, 
+    tokensRequiredToApply: {
+        type: Object
+    }, 
+    listingVisibility: {
+        type: Object
+    }, 
+    estimatedCompletionDate: {
+        type: String
+    },  
+    uploadedFiles: {
+        type: Array
+    },
+    postedBy: {
+        type: String
+    },
+    postedDate: {
+        type: String
+    },
+    systemDate: {
+        type: Number
+    },
+    applicants: {
+        type: Array
+    }
+});
+
+module.exports = Listing = mongoose.model("employerListing", EmployerListingSchema);

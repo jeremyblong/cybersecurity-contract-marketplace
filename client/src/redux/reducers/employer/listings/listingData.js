@@ -1,7 +1,25 @@
 import { LISTING_INFORMATION } from "../../../actions/types.js";
 
 const initialState = {
-	data: {}
+	// listingData: {
+	// 	testingDatesHackers: [],
+	// 	listingDescription: "",
+	// 	rulesOfEngagement: "",
+	// 	assetArray: [], 
+	// 	typeOfHack: {}, 
+	// 	publicCompanyName: "", 
+	// 	outOfScopeVulnerabilities: "", 
+	// 	hashtags: [], 
+	// 	businessAddress: {}, 
+	// 	requiredRankToApply: {}, 
+	// 	experienceAndCost: {}, 
+	// 	desiredSkills: [], 
+	// 	maxNumberOfApplicants: {}, 
+	// 	disclosureVisibility: {}, 
+	// 	tokensRequiredToApply: {}, 
+	// 	listingVisibility: {}, 
+	// 	estimatedCompletionDate: null
+	// }
 };
 
 export default (state = initialState, action) => {

@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import ReactMapboxGl, { Layer, Feature } from 'react-mapbox-gl';
 import "./styles.css";
 import {Issues,Resolved,Comment,Done} from '../../../../../constant';
-import { Container, Row, Col, Progress } from 'reactstrap';
-
+import { Container, Row, Col, Progress, Button } from 'reactstrap';
+import axios from "axios";
 
 class MainMapViewEmployerJobsHelper extends Component {
 constructor(props) {
@@ -97,6 +97,19 @@ constructor(props) {
         }]
     }
 }
+    handleRandomSubmission = (e) => {
+        e.preventDefault();
+
+        console.log("random submission clicked!");
+
+        axios.post(`${process.env.REACT_APP_BASE_URL}/process/random/action`, {
+
+        }).then((res) => {
+            console.log(res.data);
+        }).catch((err) => {
+            console.log(err);
+        })
+    }
     render() {
         const Map = ReactMapboxGl({
             accessToken: process.env.REACT_APP_MAPBOX_TOKEN
@@ -105,6 +118,9 @@ constructor(props) {
         return (
             <div>
                 <Container fluid={true}>
+                    <Row>
+                        <Button onClick={this.handleRandomSubmission} className="btn btn-secondary" style={{ width: "100%" }}>Random Action!</Button>
+                    </Row>
                     <Row style={{ paddingTop: "10px" }}>
                         <Col md="6" lg="6" sm="12">
                             <Map

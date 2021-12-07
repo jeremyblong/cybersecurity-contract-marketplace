@@ -30,6 +30,11 @@ export const MENUITEMS = [
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Buy Tickets - Restricted Events', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/memberships/selection`, title: 'Subscribe To Membership', type: 'link' }
                 ]
+            },
+            {
+                title: "Explore/Connect", icon: ShoppingCart, type: "sub", active: false, children: [
+                    { path: `${process.env.PUBLIC_URL}/people/list/employers/general`, title: "Browse Employer's", type: 'link' }
+                ]
             }
         ]
        
@@ -44,7 +49,8 @@ export const MENUITEMS = [
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Host A Competition', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/create/employer/listing/general`, title: 'List An Opportunity', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Manage Active Interviews', type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'Active Jobs', type: 'link' }
+                    { path: `${process.env.PUBLIC_URL}/`, title: 'Active Jobs', type: 'link' },
+                    { path: `${process.env.PUBLIC_URL}/people/list/hackers/general`, title: "Browse Hacker's", type: 'link' }
                 ]
             },
             {
@@ -84,7 +90,7 @@ export const MENUITEMS = [
         Items:[
             {
                 title: 'Knowledge Expansion', icon: Home, type: 'sub', active: false, children: [
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'Courses', type: 'link' },
+                    { path: `${process.env.PUBLIC_URL}/course/learning/list/main`, title: 'Courses', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Professional Seminars', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Live Hacking-Streams', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Chat Rooms', type: 'link' },

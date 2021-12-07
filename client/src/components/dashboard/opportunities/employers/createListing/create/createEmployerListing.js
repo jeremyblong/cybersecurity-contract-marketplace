@@ -199,6 +199,11 @@ const CreateJobListingMainHelper = (props) => {
                         ranges={availiableHackerDates}
                         onChange={handleDatesSelectable}
                     />
+                    <div onClick={() => {
+                        handleDatesSelectable([]);
+                    }} className="outlined-box">
+                        <p className="lead blue-text">Clear previously selected dates...</p>
+                    </div>
                 </Fragment>
             );
         }
@@ -220,35 +225,56 @@ const CreateJobListingMainHelper = (props) => {
     const handleDatesSelectable = (ranges) => {
         console.log("ranges", ranges.selection);
 
-        if (new Date(ranges.selection.startDate) > new Date()) {
-            if (count === 0) {
-                handleHackerDates(prevState => {
-
-                    console.log("ran.", prevState);
-        
-                    props.saveListingData({
-                        ...props.previousData,
-                        testingDatesHackers: [ranges.selection]
+        if (typeof ranges.selection !== "undefined") {
+            if (new Date(ranges.selection.startDate) > new Date()) {
+                if (count === 0) {
+                    handleHackerDates(prevState => {
+    
+                        console.log("ran.", prevState);
+            
+                        props.saveListingData({
+                            ...props.previousData,
+                            testingDatesHackers: [ranges.selection]
+                        });
+                        return [ranges.selection];
                     });
-                    return [ranges.selection];
-                });
-                setCount(count + 1);
+                    setCount(count + 1);
+                } else {
+                    handleHackerDates(prevState => {
+    
+                        console.log("ran.", prevState);
+            
+                        props.saveListingData({
+                            ...props.previousData,
+                            testingDatesHackers: [...prevState, ranges.selection]
+                        });
+                        return [...prevState, ranges.selection];
+                    });
+                    setCount(count + 1);
+                }
             } else {
-                handleHackerDates(prevState => {
-
-                    console.log("ran.", prevState);
-        
-                    props.saveListingData({
-                        ...props.previousData,
-                        testingDatesHackers: [...prevState, ranges.selection]
-                    });
-                    return [...prevState, ranges.selection];
-                });
-                setCount(count + 1);
-            }
+                NotificationManager.warning(`You must select a date that is current or beyond today's current date.`, "Pick a valid date!", 3500);
+            };
         } else {
-            NotificationManager.warning(`You must select a date that is current or beyond today's current date.`, "Pick a valid date!", 3500);
-        };
+            handleHackerDates(prevState => {
+    
+                console.log("ran else!...", prevState);
+    
+                props.saveListingData({
+                    ...props.previousData,
+                    testingDatesHackers: [{
+                        startDate: new Date(),
+                        endDate: new Date(),
+                        key: 'selection'
+                    }]
+                });
+                return [{
+                    startDate: new Date(),
+                    endDate: new Date(),
+                    key: 'selection'
+                }];
+            });
+        }
     }
     const getUploadParams = ({ meta }) => { 
         return { 
@@ -426,7 +452,7 @@ const CreateJobListingMainHelper = (props) => {
                             }
                             break;
                         case "estimatedCompletionDate":
-                            if (typeof el !== "undefined" && el.length > 0) {
+                            if (el && typeof el.getMonth === 'function') {
                                 count++;
                             } else {
                                 NotificationManager.error(`You are missing or haven't filled out the 'Estimated Completion Date'`, "Complete 'Estimated Completion Date'!", 4500);
@@ -573,7 +599,7 @@ const CreateJobListingMainHelper = (props) => {
                             }
                             break;
                         case "estimatedCompletionDate":
-                            if (typeof el !== "undefined" && el.length > 0) {
+                            if (el && typeof el.getMonth === 'function') {
                                 count++;
                             } else {
                                 NotificationManager.error(`You are missing or haven't filled out the 'Estimated Completion Date'`, "Complete 'Estimated Completion Date'!", 4500);
@@ -1030,7 +1056,26 @@ const CreateJobListingMainHelper = (props) => {
 };
 const mapStateToProps = (state) => {
     return {
-        previousData: _.has(state.listingData, "listingData") ? state.listingData.listingData : {}
+        previousData: _.has(state.listingData, "listingData") ? {
+            testingDatesHackers: [],
+            listingDescription: "",
+            rulesOfEngagement: "",
+            assetArray: [], 
+            typeOfHack: {}, 
+            publicCompanyName: "", 
+            outOfScopeVulnerabilities: "", 
+            hashtags: [], 
+            businessAddress: {}, 
+            requiredRankToApply: {}, 
+            experienceAndCost: {}, 
+            desiredSkills: [], 
+            maxNumberOfApplicants: {}, 
+            disclosureVisibility: {}, 
+            tokensRequiredToApply: {}, 
+            listingVisibility: {}, 
+            estimatedCompletionDate: null,
+            ...state.listingData.listingData
+        } : {}
     }
 }
 export default connect(mapStateToProps, { saveListingData })(CreateJobListingMainHelper);

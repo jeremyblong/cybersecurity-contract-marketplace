@@ -20,27 +20,12 @@ const passport = require("passport");
 const { Connection } = require("./mongoUtil.js");
 const flash = require('connect-flash');
 const session = require('express-session');
-const { register } = require('/fabric/wallet');
-const { connect } = require('/fabric/gateway');
-const { unlockScriptFolder } = require("/cli");
 
 app.use(cookieParser(config.get("COOKIE_SECRET")));
 
 require("./strategies/jwtstrategy.js");
 require("./strategies/localstrategy.js");
 require("./schemas/authentication/authenticate.js");
-
-const setupFabricWalletAndGateway = async () => {
-	unlockScriptFolder();
-  
-	// sample implementation of Fabric SDK gateway and wallet
-	console.log('Setting up fabric wallet and gateway...');
-	await register('user01');
-	await connect('user01');
-	console.log('Set up complete!');
-}
-  
-// setupFabricWalletAndGateway();
 
 aws.config.update({
     secretAccessKey: config.get("awsSecretKey"),
@@ -97,7 +82,6 @@ app.use(helmet());
 app.use(mongoSanitize());
 app.use(limiter);
 
-
 // routes go here...
 app.use("/registration/hacker", require("./routes/authentication/registration/hacker/registerAsHacker.js"));
 app.use("/login/hacker", require("./routes/authentication/login/hackerLogin.js"));
@@ -112,6 +96,7 @@ app.use("/gather/general/user/data", require("./routes/shared/general/userInfo/g
 app.use("/update/hacker/profile/information/basic", require("./routes/hackers/profile/generaInfomation/updateGeneralInfomation.js"));
 app.use("/update/employer/profile/information/basic", require("./routes/employers/profile/generalInformation/updateGeneralInformation.js"));
 app.use("/upload/file/upon/selection/employer/listing", require("./routes/employers/createListing/uploadFile/uploadGeneralFileListing.js"));
+app.use("/post/employer/listing/recruit", require("./routes/employers/createListing/create/createEmployerListing.js"));
 
 app.get('*', function(req, res) {
   res.sendFile(__dirname, './client/public/index.html')
