@@ -52,7 +52,7 @@ constructor (props) {
         if ((typeof firstName !== "undefined" && firstName.length > 0) && (typeof lastName !== "undefined" && lastName.length > 0) && (typeof email !== "undefined" && email.length > 0) && (typeof username !== "undefined" && username.length > 0) && (typeof password !== "undefined" && password.length > 0)) {
             if (agreement === true) {
                 // agreed
-                axios.post(`http://localhost:5000/registration/${checked === true ? "hacker" : "employer"}`, {
+                axios.post(`${process.env.REACT_APP_BASE_URL}/registration/${checked === true ? "hacker" : "employer"}`, {
                     firstName, 
                     lastName, 
                     email, 

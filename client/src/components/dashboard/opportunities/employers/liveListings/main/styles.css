@@ -1,0 +1,10 @@
+.custom-markdown-container {
+    max-height: 250px;
+    overflow-y: scroll;
+}
+.heavy-blue {
+    color: blue;
+}
+.spacing-bottom {
+    margin-bottom: 17.5px;
+}

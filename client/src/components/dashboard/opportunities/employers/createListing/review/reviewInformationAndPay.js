@@ -14,6 +14,7 @@ import { DateRange } from 'react-date-range';
 import { Modal } from 'react-responsive-modal';
 import FileViewer from 'react-file-viewer';
 import axios from "axios";
+import { withRouter } from "react-router-dom";
 
 const monthOptions = [
   { value: '01', label: '01' },
@@ -271,6 +272,8 @@ constructor(props) {
         }).then((res) => {
             if (res.data.message === "Successfully posted a new employer listing!") {
                 console.log(res.data);
+
+                this.props.history.push("/dashboard");
             } else {
                 console.log("err", res.data);
             }
@@ -656,4 +659,4 @@ const mapStateToProps = (state) => {
         userData: state.auth.data
     }
 }
-export default connect(mapStateToProps, {  })(ReviewListingInformationAndPayHelper);
+export default connect(mapStateToProps, {  })(withRouter(ReviewListingInformationAndPayHelper));

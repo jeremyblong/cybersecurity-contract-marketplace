@@ -24,6 +24,9 @@ const EmployerListingSchema = new Schema({
     listingDescription: {
         type: String
     }, 
+    uniqueId: {
+        type: String
+    },
     hashtags: {
         type: Array
     }, 

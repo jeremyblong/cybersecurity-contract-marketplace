@@ -51,7 +51,7 @@ const GeneralSettingsHelper = ({ userData, authentication }) => {
     useEffect(() => {
         console.log("mounted.", userData.uniqueId);
 
-        axios.get(`http://localhost:5000/gather/general/user/data`, {
+        axios.get(`${process.env.REACT_APP_BASE_URL}/gather/general/user/data`, {
             params: {
                 id: userData.uniqueId,
                 accountType: userData.accountType

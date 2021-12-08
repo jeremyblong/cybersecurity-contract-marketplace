@@ -1,116 +1,42 @@
 import React, {Fragment,useState,useEffect} from 'react';
-import Breadcrumb from '../../../../../../layout/breadcrumb'
-import { Container,Row,Col,Card,CardBody,Media } from 'reactstrap'
+import Breadcrumb from '../../../../../../layout/breadcrumb';
+import { Container,Row,Col,Card,CardBody,Media,Badge } from 'reactstrap';
 import JobFilter from './helpers/filter/filterJobs.js';
-import { Link, useHistory }  from 'react-router-dom'
-import axios from 'axios'
+import { Link, useHistory }  from 'react-router-dom';
+import axios from 'axios';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { connect } from "react-redux";
+import "./styles.css";
+import moment from "moment";
 
-const LiveEmployerListingsHelper = (props) => {
+const LiveEmployerListingsHelper = ({ userData }) => {
 
     const history = useHistory();
 
-    const [JobData,setJobData] = useState([{
-        badgeType: "primary",
-        job_name: "Praesent tempor porta ante et semper. In vulputate tellus a ipsum pharetra, ac rutrum diam pellentesqu",
-        job_description: "Donec porta euismod molestie. Nunc eu imperdiet odio, eget tristique arcu. Mauris velit augue, commodo luctus est et, dignissim gravida est. Donec aliquam mattis auctor. In dolor dui, ullamcorper non bibendum nec, tincidunt a est. Duis interdum molestie pulvinar. Quisque consectetur nibh id orci auctor, in vestibulum ante pretium. Nullam sed bibendum ex.",
-        job_area: "North Carolina",
-        job_city: "Charlotte",
-        badgeValue: "Newly Posted",
-        uniqueId: "292a60dc-46db-421a-8ed5-a401942aca07"
-    }, {
-        badgeType: "primary",
-        job_name: "Praesent tempor porta ante et semper. In vulputate tellus a ipsum pharetra, ac rutrum diam pellentesqu",
-        job_description: "Donec porta euismod molestie. Nunc eu imperdiet odio, eget tristique arcu. Mauris velit augue, commodo luctus est et, dignissim gravida est. Donec aliquam mattis auctor. In dolor dui, ullamcorper non bibendum nec, tincidunt a est. Duis interdum molestie pulvinar. Quisque consectetur nibh id orci auctor, in vestibulum ante pretium. Nullam sed bibendum ex.",
-        job_area: "North Carolina",
-        job_city: "Charlotte",
-        badgeValue: "Newly Posted",
-        uniqueId: "a29f1b98-2fcc-460e-a748-483538676e89"
-    }, {
-        badgeType: "primary",
-        job_name: "Praesent tempor porta ante et semper. In vulputate tellus a ipsum pharetra, ac rutrum diam pellentesqu",
-        job_description: "Donec porta euismod molestie. Nunc eu imperdiet odio, eget tristique arcu. Mauris velit augue, commodo luctus est et, dignissim gravida est. Donec aliquam mattis auctor. In dolor dui, ullamcorper non bibendum nec, tincidunt a est. Duis interdum molestie pulvinar. Quisque consectetur nibh id orci auctor, in vestibulum ante pretium. Nullam sed bibendum ex.",
-        job_area: "North Carolina",
-        job_city: "Charlotte",
-        badgeValue: "Newly Posted",
-        uniqueId: "85f073fa-9700-4f49-982d-3cd479a6f001"
-    }, {
-        badgeType: "primary",
-        job_name: "Praesent tempor porta ante et semper. In vulputate tellus a ipsum pharetra, ac rutrum diam pellentesqu",
-        job_description: "Donec porta euismod molestie. Nunc eu imperdiet odio, eget tristique arcu. Mauris velit augue, commodo luctus est et, dignissim gravida est. Donec aliquam mattis auctor. In dolor dui, ullamcorper non bibendum nec, tincidunt a est. Duis interdum molestie pulvinar. Quisque consectetur nibh id orci auctor, in vestibulum ante pretium. Nullam sed bibendum ex.",
-        job_area: "North Carolina",
-        job_city: "Charlotte",
-        badgeValue: "Newly Posted",
-        uniqueId: "10f1e2f4-d0d5-419a-831c-59299a8187ad"
-    }, {
-        badgeType: "primary",
-        job_name: "Praesent tempor porta ante et semper. In vulputate tellus a ipsum pharetra, ac rutrum diam pellentesqu",
-        job_description: "Donec porta euismod molestie. Nunc eu imperdiet odio, eget tristique arcu. Mauris velit augue, commodo luctus est et, dignissim gravida est. Donec aliquam mattis auctor. In dolor dui, ullamcorper non bibendum nec, tincidunt a est. Duis interdum molestie pulvinar. Quisque consectetur nibh id orci auctor, in vestibulum ante pretium. Nullam sed bibendum ex.",
-        job_area: "North Carolina",
-        job_city: "Charlotte",
-        badgeValue: "Newly Posted",
-        uniqueId: "885cdc2e-12e3-4a9a-a147-9d390cd92f7b"
-    }, {
-        badgeType: "primary",
-        job_name: "Praesent tempor porta ante et semper. In vulputate tellus a ipsum pharetra, ac rutrum diam pellentesqu",
-        job_description: "Donec porta euismod molestie. Nunc eu imperdiet odio, eget tristique arcu. Mauris velit augue, commodo luctus est et, dignissim gravida est. Donec aliquam mattis auctor. In dolor dui, ullamcorper non bibendum nec, tincidunt a est. Duis interdum molestie pulvinar. Quisque consectetur nibh id orci auctor, in vestibulum ante pretium. Nullam sed bibendum ex.",
-        job_area: "North Carolina",
-        job_city: "Charlotte",
-        badgeValue: "Newly Posted",
-        uniqueId: "f583586e-d52c-4e45-aa7e-94c42f8eb949"
-    }, {
-        badgeType: "secondary",
-        job_name: "Praesent tempor porta ante et semper. In vulputate tellus a ipsum pharetra, ac rutrum diam pellentesqu",
-        job_description: "Donec porta euismod molestie. Nunc eu imperdiet odio, eget tristique arcu. Mauris velit augue, commodo luctus est et, dignissim gravida est. Donec aliquam mattis auctor. In dolor dui, ullamcorper non bibendum nec, tincidunt a est. Duis interdum molestie pulvinar. Quisque consectetur nibh id orci auctor, in vestibulum ante pretium. Nullam sed bibendum ex.",
-        job_area: "North Carolina",
-        job_city: "Charlotte",
-        badgeValue: "Newly Posted",
-        uniqueId: "08f549ff-c5c5-4eec-826e-7323c9fcfa52"
-    }, {
-        badgeType: "secondary",
-        job_name: "Praesent tempor porta ante et semper. In vulputate tellus a ipsum pharetra, ac rutrum diam pellentesqu",
-        job_description: "Donec porta euismod molestie. Nunc eu imperdiet odio, eget tristique arcu. Mauris velit augue, commodo luctus est et, dignissim gravida est. Donec aliquam mattis auctor. In dolor dui, ullamcorper non bibendum nec, tincidunt a est. Duis interdum molestie pulvinar. Quisque consectetur nibh id orci auctor, in vestibulum ante pretium. Nullam sed bibendum ex.",
-        job_area: "North Carolina",
-        job_city: "Charlotte",
-        badgeValue: "Newly Posted",
-        uniqueId: "29df568c-dd4c-4df2-b3ce-0d4a779835ce"
-    }, {
-        badgeType: "primary",
-        job_name: "Praesent tempor porta ante et semper. In vulputate tellus a ipsum pharetra, ac rutrum diam pellentesqu",
-        job_description: "Donec porta euismod molestie. Nunc eu imperdiet odio, eget tristique arcu. Mauris velit augue, commodo luctus est et, dignissim gravida est. Donec aliquam mattis auctor. In dolor dui, ullamcorper non bibendum nec, tincidunt a est. Duis interdum molestie pulvinar. Quisque consectetur nibh id orci auctor, in vestibulum ante pretium. Nullam sed bibendum ex.",
-        job_area: "North Carolina",
-        job_city: "Charlotte",
-        badgeValue: "Newly Posted",
-        uniqueId: "cc5f6436-14f8-445d-9ec8-60d00a5e436d"
-    }, {
-        badgeType: "primary",
-        job_name: "Praesent tempor porta ante et semper. In vulputate tellus a ipsum pharetra, ac rutrum diam pellentesqu",
-        job_description: "Donec porta euismod molestie. Nunc eu imperdiet odio, eget tristique arcu. Mauris velit augue, commodo luctus est et, dignissim gravida est. Donec aliquam mattis auctor. In dolor dui, ullamcorper non bibendum nec, tincidunt a est. Duis interdum molestie pulvinar. Quisque consectetur nibh id orci auctor, in vestibulum ante pretium. Nullam sed bibendum ex.",
-        job_area: "North Carolina",
-        job_city: "Charlotte",
-        badgeValue: "Newly Posted",
-        uniqueId: "160f69d6-6e3a-4da7-9630-f53085469403"
-    }, {
-        badgeType: "secondary",
-        job_name: "Praesent tempor porta ante et semper. In vulputate tellus a ipsum pharetra, ac rutrum diam pellentesqu",
-        job_description: "Donec porta euismod molestie. Nunc eu imperdiet odio, eget tristique arcu. Mauris velit augue, commodo luctus est et, dignissim gravida est. Donec aliquam mattis auctor. In dolor dui, ullamcorper non bibendum nec, tincidunt a est. Duis interdum molestie pulvinar. Quisque consectetur nibh id orci auctor, in vestibulum ante pretium. Nullam sed bibendum ex.",
-        job_area: "North Carolina",
-        job_city: "Charlotte",
-        badgeValue: "Newly Posted",
-        uniqueId: "69ac0d19-329f-4f4d-a2ac-31a6c150b7e8"
-    }, {
-        badgeType: "secondary",
-        job_name: "Praesent tempor porta ante et semper. In vulputate tellus a ipsum pharetra, ac rutrum diam pellentesqu",
-        job_description: "Donec porta euismod molestie. Nunc eu imperdiet odio, eget tristique arcu. Mauris velit augue, commodo luctus est et, dignissim gravida est. Donec aliquam mattis auctor. In dolor dui, ullamcorper non bibendum nec, tincidunt a est. Duis interdum molestie pulvinar. Quisque consectetur nibh id orci auctor, in vestibulum ante pretium. Nullam sed bibendum ex.",
-        job_area: "North Carolina",
-        job_city: "Charlotte",
-        badgeValue: "Newly Posted",
-        uniqueId: "e502944e-c780-45d0-b494-a0add9c0e9e2"
-    }])
+    const [ listings, setListings ] = useState([]);
+
     const handleRedirectIndividualPage = (uniqueId) => {
         console.log("uniqueId", uniqueId);
 
         history.push(`/view/individual/employer/listing/public/${uniqueId}`);
     }
+
+    useEffect(() => {
+        axios.get(`${process.env.REACT_APP_BASE_URL}/gather/employer/listings/general`).then((res) => {
+            if (res.data.message === "Gathered general employer listings!") {
+                console.log(res.data);
+
+                const { listings } = res.data;
+
+                setListings(listings);
+            } else {
+                console.log("err", res.data);
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
+    }, [])
     return (
         <Fragment>
             <Breadcrumb parent="Active Hacking Opportunities" title="Hacking Jobs"/>
@@ -119,42 +45,42 @@ const LiveEmployerListingsHelper = (props) => {
                     <JobFilter />
                     <Col xl="9 xl-60">
                         <Row>
-                            {JobData.map((data, i) => {
+                            {listings.map((listing, i) => {
+                                console.log("listing", listing);
                                 return (
                                     <Col xl="6 xl-100" key={i}>
                                         <Card onClick={() => {
-                                            handleRedirectIndividualPage(data.uniqueId);
-                                        }} className={`${data.badgeValue ? '' : 'ribbon-vertical-left-wrapper'}`}>
+                                            handleRedirectIndividualPage(listing.uniqueId);
+                                        }} className={`${false ? '' : 'ribbon-vertical-left-wrapper'}`}>
                                             <div className="job-search">
                                                 <CardBody>
                                                     <Media>
                                                         <img className="img-40 img-fluid m-r-20" src={require(`../../../../../../assets/images/user/6.jpg`)} alt="" />
                                                         <Media body>
                                                             <h6 className="f-w-600">
-                                                                <Link to={`${process.env.PUBLIC_URL}/app/jobSearch/job-detail`}> 
-                                                                    {data.job_name}
+                                                                <Link className="heavy-blue" to={`${process.env.PUBLIC_URL}/app/jobSearch/job-detail`}> 
+                                                                    {listing.publicCompanyName}
                                                                 </Link>
-                                                                {(data.badgeType === 'primary' ?
+                                                                {(listing.applicants.includes(userData.uniqueId) ?
                                                                     <span className="badge badge-primary pull-right">
-                                                                        {data.badgeValue}
+                                                                        {"Already Applied!"}
                                                                     </span>
                                                                     : <div className="ribbon ribbon-bookmark ribbon-vertical-left ribbon-secondary">
                                                                         <i className="icofont icofont-love"></i>
                                                                     </div>
                                                                 )}
                                                             </h6>
-                                                            <p>{data.job_area}, {data.job_city}
-                                                                <span>
-                                                                    <i className="fa fa-star font-warning"></i>
-                                                                    <i className="fa fa-star font-warning"></i>
-                                                                    <i className="fa fa-star font-warning"></i>
-                                                                    <i className="fa fa-star font-warning"></i>
-                                                                    <i className="fa fa-star font-warning"></i>
-                                                                </span>
-                                                            </p>
+                                                            <p>XP Reward: <em className="heavy-blue">{listing.experienceAndCost.experience}</em> <strong>~</strong> <em className="heavy-blue">{listing.tokensRequiredToApply.value}</em> tokens required to apply...</p>
                                                         </Media>
                                                     </Media>
-                                                    <p>{data.job_description}</p>
+                                                    <p style={{ marginTop: "0px" }}>Preferred applicant rank: <em className="heavy-blue">{listing.requiredRankToApply.label}</em></p>
+                                                    <p style={{ marginTop: "-15px" }}>Posted on: <em className="heavy-blue">{moment(listing.systemDate).fromNow()}</em></p>
+                                                    <div className="spacing-bottom">
+                                                        {typeof listing.hashtags !== "undefined" && listing.hashtags.length > 0 ? listing.hashtags.map((tag, indexxxx) => {
+                                                            return <Badge key={indexxxx} color="info" pill>{tag.text}</Badge>;
+                                                        }) : null}
+                                                    </div>
+                                                    <ReactMarkdown className="custom-markdown-container" children={listing.listingDescription} remarkPlugins={[remarkGfm]} />
                                                 </CardBody>
                                             </div>
                                         </Card>
@@ -168,5 +94,18 @@ const LiveEmployerListingsHelper = (props) => {
         </Fragment>
     );
 };
+const mapStateToProps = (state) => {
+    return {
+        userData: state.auth.data
+    }
+}
+export default connect(mapStateToProps, {  })(LiveEmployerListingsHelper);
 
-export default LiveEmployerListingsHelper;
+
+{/* <span>
+    <i className="fa fa-star font-warning"></i>
+    <i className="fa fa-star font-warning"></i>
+    <i className="fa fa-star font-warning"></i>
+    <i className="fa fa-star font-warning"></i>
+    <i className="fa fa-star font-warning"></i>
+</span> */}
