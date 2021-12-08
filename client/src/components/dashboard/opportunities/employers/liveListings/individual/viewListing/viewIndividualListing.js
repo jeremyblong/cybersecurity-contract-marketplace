@@ -1,13 +1,34 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import Breadcrumb from '../../../../../../../layout/breadcrumb';
-import { Container,Row,Col,Card,CardBody,Media,Button } from 'reactstrap';
+import { Container,Row,Col,Card,CardBody,Media,Button,Badge,CardHeader } from 'reactstrap';
 import one from '../../../../../../../assets/images/job-search/1.jpg';
 import two from '../../../../../../../assets/images/job-search/6.jpg';
-import { Link }  from 'react-router-dom';
-import { CreativeUnitedStates,JobDescription,Qualifications,AgencyExperience,Perks,Share,SimilarJobs,SeniorUXDesigner } from "../../../../../../../constant";
-// import axios from 'axios';
+import { Link, useLocation }  from 'react-router-dom';
+import { Share,SimilarJobs,SeniorUXDesigner } from "../../../../../../../constant";
+import axios from 'axios';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { connect } from "react-redux";
+import _ from 'lodash';
+import "./styles.css";
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+import ReactMapboxGl, { Marker } from 'react-mapbox-gl';
+import AccordionWithOpenandCloseIcon from "./helpers/accordion/index.js";
+import Calendar from 'react-calendar';
+import { DateRange } from 'react-date-range';
+
+
+const Map = ReactMapboxGl({
+    accessToken: process.env.REACT_APP_MAPBOX_TOKEN
+});
 
 const ViewIndividualJobListingHelper = (props) => {
+    
+    const passedData = useLocation();
+
+    const [ data, setData ] = useState(null);
+    const [ ready, setReady ] = useState(false);
+
     const [JobData,setJobData] = useState([{
         badgeType: "primary",
         job_name: "Praesent tempor porta ante et semper. In vulputate tellus a ipsum pharetra, ac rutrum diam pellentesqu",
@@ -105,13 +126,60 @@ const ViewIndividualJobListingHelper = (props) => {
         badgeValue: "Newly Posted",
         uniqueId: "e502944e-c780-45d0-b494-a0add9c0e9e2"
     }]);
-    return (
-        <Fragment>
-            <Breadcrumb parent="Active Hacking Opportunities" title="Individual Job Details"/>
-            <Container fluid={true}>
-                <Row>
-                    {/* <JobFilter /> */}
-                    <Col xl="12 xl-60">
+
+    useEffect(() => {
+        if (typeof passedData.state !== "undefined" && _.has(passedData.state, "listing")) {
+            const { assetArray, typeOfHack, testingDatesHackers, rulesOfEngagement, publicCompanyName, outOfScopeVulnerabilities, listingDescription, hashtags, businessAddress, requiredRankToApply, experienceAndCost, desiredSkills, maxNumberOfApplicants, disclosureVisibility, tokensRequiredToApply, listingVisibility, estimatedCompletionDate, uploadedFiles } = passedData.state.listing;
+
+            const newDatesArray = [];
+
+            for (let index = 0; index < testingDatesHackers.length; index++) {
+                const selectedDate = testingDatesHackers[index];
+                
+                const { startDate, endDate, key } = selectedDate;
+
+                const newData = {
+                    startDate: new Date(startDate),
+                    endDate: new Date(endDate),
+                    key
+                }
+
+                newDatesArray.push(newData);
+            }
+
+            const newData = {
+                assetArray, 
+                typeOfHack, 
+                testingDatesHackers: newDatesArray, 
+                rulesOfEngagement, 
+                publicCompanyName, 
+                outOfScopeVulnerabilities, 
+                listingDescription, 
+                hashtags, 
+                businessAddress, 
+                requiredRankToApply, 
+                experienceAndCost, 
+                desiredSkills, 
+                maxNumberOfApplicants, 
+                disclosureVisibility, 
+                tokensRequiredToApply, 
+                listingVisibility, 
+                estimatedCompletionDate, 
+                uploadedFiles
+            };
+
+            setData(newData);
+            setReady(true);
+        };
+    }, []);
+
+    console.log("data", data);
+
+    const renderContent = () => {
+        if (ready === true) {
+            return (
+                <Fragment>
+                    <Col sm="12" md="12" lg="12" xl="12 xl-100">
                         <Card>
                             <div className="job-search">
                                 <CardBody>
@@ -119,66 +187,154 @@ const ViewIndividualJobListingHelper = (props) => {
                                         <img className="img-40 img-fluid m-r-20" src={one} alt="" />
                                         <Media body>
                                             <h6 className="f-w-600">
-                                                <a href="#javascript">{"Product Designer (UI/UX Designer)"}</a>
+                                                <a href="#javascript">{data.publicCompanyName}</a>
                                                 <span className="pull-right">
                                                     <Link to={`${process.env.PUBLIC_URL}/apply/employer/listing`}> 
                                                     <Button color="primary">{"Apply for this job"}</Button>
                                                     </Link>
                                                 </span>
                                             </h6>
-                                                <p>{CreativeUnitedStates}
-                                                <span>
-                                                    <i className="fa fa-star font-warning"></i>
-                                                    <i className="fa fa-star font-warning"></i>
-                                                    <i className="fa fa-star font-warning"></i>
-                                                    <i className="fa fa-star font-warning"></i>
-                                                    <i className="fa fa-star font-warning"></i>
-                                                </span>
-                                            </p>
+                                            <p>XP Reward: <em className="heavy-blue">{data.experienceAndCost.experience}</em> <strong>~</strong> <em className="heavy-blue">{data.tokensRequiredToApply.value}</em> tokens required to apply...</p>
                                         </Media>
                                     </Media>
+                                    <Row style={{ marginTop: "20px" }}>
+                                        <Col sm="6" md="12" lg="12" xl="4">
+                                            <Card className="card-absolute">
+                                                <CardHeader className="bg-secondary">
+                                                    <h5 className="text-white">General Details</h5>
+                                                </CardHeader>
+                                                <CardBody>
+                                                    <AccordionWithOpenandCloseIcon data={data} props={props} />
+                                                </CardBody>
+                                            </Card>
+                                        </Col>
+                                        <Col sm="6" md="12" lg="12" xl="4">
+                                            <Card className="card-absolute">
+                                                <CardHeader className="bg-secondary">
+                                                    <h5 className="text-white">Expected Completion Date</h5>
+                                                </CardHeader>
+                                                <CardBody>
+                                                    <Calendar
+                                                        value={new Date(data.estimatedCompletionDate)}
+                                                    />
+                                                </CardBody>
+                                            </Card>
+                                        </Col>
+                                        <Col sm="6" md="12" lg="12" xl="4">
+                                            <Card className="card-absolute">
+                                                <CardHeader className="bg-secondary">
+                                                    <h5 className="text-white">Title Here</h5>
+                                                </CardHeader>
+                                                <CardBody>
+                                                    <DateRange 
+                                                        ranges={data.testingDatesHackers}
+                                                    />
+                                                </CardBody>
+                                            </Card>
+                                        </Col>
+                                    </Row>
+                                    <Row style={{ marginTop: "20px" }}>
+                                        <Col sm="6" md="12" lg="12" xl="4">
+                                            <Card className="card-absolute">
+                                                <CardHeader className="bg-secondary">
+                                                    <h5 className="text-white">Title Here</h5>
+                                                    {/* tokensRequiredToApply */}
+                                                </CardHeader>
+                                                <CardBody>
+                                                    <p>
+                                                        {"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been"}
+                                                        {"the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley"}
+                                                        {"of type and scrambled. Lorem Ipsum is simply dummy text of the printing and typesetting"}
+                                                        {"industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an"}
+                                                        {"unknown printer took a galley of type and scrambled."}
+                                                    </p>
+                                                </CardBody>
+                                            </Card>
+                                        </Col>
+                                        <Col sm="6" md="12" lg="12" xl="4">
+                                            <Card className="card-absolute">
+                                                <CardHeader className="bg-secondary">
+                                                    <h5 className="text-white">Title Here</h5>
+                                                </CardHeader>
+                                                <CardBody>
+                                                    <p>
+                                                        {"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been"}
+                                                        {"the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley"}
+                                                        {"of type and scrambled. Lorem Ipsum is simply dummy text of the printing and typesetting"}
+                                                        {"industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an"}
+                                                        {"unknown printer took a galley of type and scrambled."}
+                                                    </p>
+                                                </CardBody>
+                                            </Card>
+                                        </Col>
+                                        <Col sm="6" md="12" lg="12" xl="4">
+                                            <Card className="card-absolute">
+                                                <CardHeader className="bg-secondary">
+                                                    <h5 className="text-white">Title Here</h5>
+                                                </CardHeader>
+                                                <CardBody>
+                                                    <p>
+                                                        {"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been"}
+                                                        {"the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley"}
+                                                        {"of type and scrambled. Lorem Ipsum is simply dummy text of the printing and typesetting"}
+                                                        {"industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an"}
+                                                        {"unknown printer took a galley of type and scrambled."}
+                                                    </p>
+                                                </CardBody>
+                                            </Card>
+                                        </Col>
+                                    </Row>
                                     <div className="job-description">
-                                        <h6>{JobDescription}</h6>
-                                        <p>{"Creative is looking for a UI/UX Designer to join our team. The world is seeing an explosion in the amount and variety of location-baWe are looking for a versatile UX/UI Designer to join our growing design team. Our designers contribute to clients’ projects at all stages of development. We might start from scratch, conducting user and stakeholder interviews, making personas and journey maps, and continue on to iterating on designs and prototypes through delivering final assets for launch. We might come into the middle of an in-flight program-size project and conduct analysis and usability correction or feature enhancement. We might provide research and vision for handoff to an internal development team."}</p>
+                                        <h6 className="blue-text-listing">General Details</h6>
+
                                     </div>
                                     <div className="job-description">
-                                        <h6>{Qualifications} </h6>
-                                        <ul>
-                                            <li>{"Have shipped multiple iOS, Android, and/or web products "}</li>
-                                            <li>{"5+ years UI/UX experience"}</li>
-                                            <li>{"Portfolio demonstrating mastery of native iOS, Android, and/or responsive web design principles"}</li>
-                                            <li>{"Ability to autonomously pursue elegant solutions to open-ended problems"}</li>
-                                            <li>{"Comfort with ambiguity"}</li>
-                                            <li>{"Proven ability to create interactive prototypes"}</li>
-                                            <li>{"Strong verbal communication skills with ability to clearly communicate complex ideas and champion a design vision across all levels of an organization"}</li>
-                                            <li>{"Strong written communication skills with ability to make transparent design documentation and client-facing presentations"}</li>
-                                            <li>{"Ability to create and maintain flow charts, wire frames, prototypes, and mockups."}</li>
-                                            <li>{"Ability to effectively work on more than one project at a time"}</li>
-                                            <li>{"Experience conducting user research and stakeholder interviews"}</li>
-                                            <li>{"Solid grasp of standard design tools, ex: Sketch, Omnigraffle, the Adobe Suite, Zeplin, etc."}</li>
-                                            <li>{"Bonus Considerations "}</li>
-                                        </ul>
+                                        <h6 className="blue-text-listing">Hashtags</h6>
+                                        <div>
+                                            {typeof data.hashtags !== "undefined" && data.hashtags.length > 0 ? data.hashtags.map((tag, indexxxx) => {
+                                                return <Badge style={{ fontSize: "13px" }} key={indexxxx} color="info">{tag.text}</Badge>;
+                                            }) : null}
+                                        </div>
                                     </div>
                                     <div className="job-description">
-                                        <h6>{AgencyExperience}</h6>
-                                        <ul>
-                                            <li>{"Experience working with Agile development teams"}</li>
-                                            <li>{"Experience with RITE method usability testing"}</li>
-                                            <li>{"Experience in visual and motion design; ability to translate UX design into high quality visuals"}</li>
-                                            <li>{"Mastery of Sketch & InVision"}</li>
-                                            <li>{"Knowledge of mobile or front-end web programming"}</li>
-                                        </ul>
+                                        <h6 className="blue-text-listing">Desired Skills</h6>
+                                        <div>
+                                            {typeof data.desiredSkills !== "undefined" && data.desiredSkills.length > 0 ? data.desiredSkills.map((skill, indexxxx) => {
+                                                return <Badge style={{ fontSize: "13px", marginTop: "5px" }} key={indexxxx} color="dark">{skill.label}</Badge>;
+                                            }) : null}
+                                        </div>
                                     </div>
                                     <div className="job-description">
-                                        <h6>{Perks}</h6>
-                                        <ul>
-                                            <li>{"Competitive pay"}</li>
-                                            <li>{"Competitive medical, dental, and vision insurance plans"}</li>
-                                            <li>{"Company-provided 401(k) plan"}</li>
-                                            <li>{"Paid vacation and sick time"}</li>
-                                            <li>{"Free snacks and beverages"}</li>
-                                        </ul>
+                                        <h6 className="blue-text-listing">Location Details</h6>
+                                        <Map
+                                            style="mapbox://styles/mapbox/streets-v9"
+                                            containerStyle={{
+                                                height: '225px',
+                                                width: '100%'
+                                            }}
+                                            center={[data.businessAddress.position.lon, data.businessAddress.position.lat]}
+                                        >
+                                            <Marker
+                                                style={{ maxWidth: "45px", maxHeight: "45px" }}
+                                                coordinates={[data.businessAddress.position.lon, data.businessAddress.position.lat]}
+                                                anchor="bottom">
+                                                <img src={require("../../../../../../../assets/images/location.png")}/>
+                                            </Marker>
+                                        </Map>
                                     </div>
+                                    <div className="job-description">
+                                        <h6 className="blue-text-listing">Listing Description</h6>
+                                        <ReactMarkdown className="markdown-listing-individual-container" children={data.listingDescription} remarkPlugins={[remarkGfm]} />
+                                    </div>
+                                    <div className="job-description">
+                                        <h6 className="blue-text-listing">Rules Of Engagement (Strict Enforcement!)</h6>
+                                        <ReactMarkdown className="markdown-listing-individual-container" children={data.rulesOfEngagement} remarkPlugins={[remarkGfm]} />
+                                    </div>
+                                    <div className="job-description">
+                                        <h6 className="blue-text-listing">Out-Of-Scope Vulnerabilities</h6>
+                                        <ReactMarkdown className="markdown-listing-individual-container" children={data.outOfScopeVulnerabilities} remarkPlugins={[remarkGfm]} />
+                                    </div>
+                                    
                                     <div className="job-description">
                                         <Button color="primary mr-1"><span><i className="fa fa-check"></i></span> {"Save this job"}</Button>
                                         <Button color="primary"><span><i className="fa fa-share-alt"></i></span> {Share}</Button>
@@ -240,6 +396,25 @@ const ViewIndividualJobListingHelper = (props) => {
                             </Col>
                         </Row>
                     </Col>
+                </Fragment>
+            );
+        } else {
+            return (
+                <SkeletonTheme baseColor="#c9c9c9" highlightColor="#444">
+                    <p>
+                        <Skeleton count={50} />
+                    </p>
+                </SkeletonTheme>
+            );
+        }
+    }
+    return (
+        <Fragment>
+            <Breadcrumb parent="Active Hacking Opportunities" title="Individual Job Details"/>
+            <Container fluid={true}>
+                <Row>
+                    {/* <JobFilter /> */}
+                    {renderContent()}
                 </Row>
             </Container>
         </Fragment>

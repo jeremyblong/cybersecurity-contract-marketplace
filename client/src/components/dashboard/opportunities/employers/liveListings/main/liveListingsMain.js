@@ -16,10 +16,10 @@ const LiveEmployerListingsHelper = ({ userData }) => {
 
     const [ listings, setListings ] = useState([]);
 
-    const handleRedirectIndividualPage = (uniqueId) => {
-        console.log("uniqueId", uniqueId);
+    const handleRedirectIndividualPage = (listing) => {
+        console.log("listing passed: ", listing);
 
-        history.push(`/view/individual/employer/listing/public/${uniqueId}`);
+        history.push(`/view/individual/employer/listing/public/${listing.uniqueId}`, { listing });
     }
 
     useEffect(() => {
@@ -50,7 +50,7 @@ const LiveEmployerListingsHelper = ({ userData }) => {
                                 return (
                                     <Col xl="6 xl-100" key={i}>
                                         <Card onClick={() => {
-                                            handleRedirectIndividualPage(listing.uniqueId);
+                                            handleRedirectIndividualPage(listing);
                                         }} className={`${false ? '' : 'ribbon-vertical-left-wrapper'}`}>
                                             <div className="job-search">
                                                 <CardBody>
