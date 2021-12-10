@@ -98,10 +98,11 @@ app.use("/update/employer/profile/information/basic", require("./routes/employer
 app.use("/upload/file/upon/selection/employer/listing", require("./routes/employers/employerListings/createListing/uploadFile/uploadGeneralFileListing.js"));
 app.use("/post/employer/listing/recruit", require("./routes/employers/employerListings/createListing/create/createEmployerListing.js"));
 app.use("/gather/employer/listings/general", require("./routes/employers/employerListings/gatherListings/visibility/general/gatherGeneralEmployerListings.js"));
+app.use("/gather/hackers/random/general", require("./routes/hackers/directory/gatherHackers/randomizedGeneralHackersGather.js"));
 
 app.get('*', function(req, res) {
   res.sendFile(__dirname, './client/public/index.html')
-})
+});
 
 app.get('*', cors(), function(_, res) {
 	res.sendFile(__dirname, './client/build/index.html'), function(err) {

@@ -10,6 +10,7 @@ import ReviewListingInformationAndPayPage from "../pages/dashboard/opportunities
 import CourseListPage from "../pages/dashboard/learning/list/courseList.js";
 import UsersCardsListPage from "../pages/dashboard/people/hackers/peopleList/list.js";
 import UsersCardsEmployersAccountsPage from "../pages/dashboard/people/employers/peopleList/list.js";
+import MainHackerDirectoryDisplayPage from "../pages/dashboard/directory/hackers/main/mainHackerDirectory.js";
 
 export const routes = [
         { path:`${process.env.PUBLIC_URL}/profile/settings/edit`, Component: GeneralSettingsPage },
@@ -23,5 +24,6 @@ export const routes = [
         { path: `${process.env.PUBLIC_URL}/review/employer/listing/data/payment`, Component: ReviewListingInformationAndPayPage },
         { path: `${process.env.PUBLIC_URL}/course/learning/list/main`, Component: CourseListPage },
         { path: `${process.env.PUBLIC_URL}/people/list/hackers/general`, Component: UsersCardsListPage },
-        { path: `${process.env.PUBLIC_URL}/people/list/employers/general`, Component: UsersCardsEmployersAccountsPage }
+        { path: `${process.env.PUBLIC_URL}/people/list/employers/general`, Component: UsersCardsEmployersAccountsPage },
+        { path: `${process.env.PUBLIC_URL}/hacker/directory/main/profiles`, Component: MainHackerDirectoryDisplayPage }
 ]

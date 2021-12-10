@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import Breadcrumb from '../../../../../../../layout/breadcrumb';
-import { Container,Row,Col,Card,CardBody,Media,Button,Badge,CardHeader } from 'reactstrap';
+import { Container,Row,Col,Card,CardBody,Media,Button,Badge,CardHeader,Input,InputGroup,ListGroupItem,ListGroup,FormGroup,Label } from 'reactstrap';
 import one from '../../../../../../../assets/images/job-search/1.jpg';
 import two from '../../../../../../../assets/images/job-search/6.jpg';
 import { Link, useLocation }  from 'react-router-dom';
@@ -16,7 +16,9 @@ import ReactMapboxGl, { Marker } from 'react-mapbox-gl';
 import AccordionWithOpenandCloseIcon from "./helpers/accordion/index.js";
 import Calendar from 'react-calendar';
 import { DateRange } from 'react-date-range';
-
+import ReactPlayer from 'react-player';
+import FileViewer from 'react-file-viewer';
+import { Modal } from 'react-responsive-modal';
 
 const Map = ReactMapboxGl({
     accessToken: process.env.REACT_APP_MAPBOX_TOKEN
@@ -28,6 +30,8 @@ const ViewIndividualJobListingHelper = (props) => {
 
     const [ data, setData ] = useState(null);
     const [ ready, setReady ] = useState(false);
+    const [ fileModal, setFileModal ] = useState(false);
+    const [ file, setFile ] = useState(null);
 
     const [JobData,setJobData] = useState([{
         badgeType: "primary",
@@ -129,7 +133,7 @@ const ViewIndividualJobListingHelper = (props) => {
 
     useEffect(() => {
         if (typeof passedData.state !== "undefined" && _.has(passedData.state, "listing")) {
-            const { assetArray, typeOfHack, testingDatesHackers, rulesOfEngagement, publicCompanyName, outOfScopeVulnerabilities, listingDescription, hashtags, businessAddress, requiredRankToApply, experienceAndCost, desiredSkills, maxNumberOfApplicants, disclosureVisibility, tokensRequiredToApply, listingVisibility, estimatedCompletionDate, uploadedFiles } = passedData.state.listing;
+            const { assetArray, typeOfHack, testingDatesHackers, rulesOfEngagement, publicCompanyName, outOfScopeVulnerabilities, listingDescription, hashtags, businessAddress, requiredRankToApply, experienceAndCost, desiredSkills, maxNumberOfApplicants, disclosureVisibility, tokensRequiredToApply, listingVisibility, estimatedCompletionDate, uploadedFiles, applicants } = passedData.state.listing;
 
             const newDatesArray = [];
 
@@ -165,7 +169,8 @@ const ViewIndividualJobListingHelper = (props) => {
                 tokensRequiredToApply, 
                 listingVisibility, 
                 estimatedCompletionDate, 
-                uploadedFiles
+                uploadedFiles,
+                applicants
             };
 
             setData(newData);
@@ -173,8 +178,70 @@ const ViewIndividualJobListingHelper = (props) => {
         };
     }, []);
 
-    console.log("data", data);
-
+    const onError = (err, other) => {
+        console.log("ERRRRR:", err, other);
+    }
+    const renderColor = (i) => {
+        switch (i) {
+            case 1:
+                return "txt-success";
+                break;
+            case 2:
+                return "txt-info";
+                break;
+            case 3:
+                return "txt-danger";
+                break;
+            case 4:
+                return "txt-warning";
+                break;
+            case 5:
+                return "txt-dark";
+                break;
+            default:
+                return "txt-success";
+                break;
+        }
+    }
+    const calculateFileType = (type) => {
+        switch (type) {
+            case "video/mp4":
+                return "mp4";
+                break;
+            case "image/png":
+                return "png";
+                break;
+            case "image/jpeg":
+                return "jpeg";
+                break;
+            case "image/gif":
+                return "gif";
+                break;
+            case "image/bmp":
+                return "bmp";
+                break;
+            case "application/pdf":
+                return "pdf";
+                break;
+            case "text/csv":
+                return "csv";
+                break;
+            case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+                return "xlsx";
+                break;
+            case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+                return "docx";
+                break;
+            case "video/webm":
+                return "webm";
+                break;
+            case "audio/mpeg":
+                return "mp3";
+                break;
+            default:
+                break;
+        }
+    }
     const renderContent = () => {
         if (ready === true) {
             return (
@@ -198,7 +265,7 @@ const ViewIndividualJobListingHelper = (props) => {
                                         </Media>
                                     </Media>
                                     <Row style={{ marginTop: "20px" }}>
-                                        <Col sm="6" md="12" lg="12" xl="4">
+                                        <Col sm="12" md="12" lg="12" xl="4">
                                             <Card className="card-absolute">
                                                 <CardHeader className="bg-secondary">
                                                     <h5 className="text-white">General Details</h5>
@@ -208,7 +275,7 @@ const ViewIndividualJobListingHelper = (props) => {
                                                 </CardBody>
                                             </Card>
                                         </Col>
-                                        <Col sm="6" md="12" lg="12" xl="4">
+                                        <Col sm="12" md="12" lg="12" xl="4">
                                             <Card className="card-absolute">
                                                 <CardHeader className="bg-secondary">
                                                     <h5 className="text-white">Expected Completion Date</h5>
@@ -220,13 +287,14 @@ const ViewIndividualJobListingHelper = (props) => {
                                                 </CardBody>
                                             </Card>
                                         </Col>
-                                        <Col sm="6" md="12" lg="12" xl="4">
+                                        <Col sm="12" md="12" lg="12" xl="4">
                                             <Card className="card-absolute">
                                                 <CardHeader className="bg-secondary">
-                                                    <h5 className="text-white">Title Here</h5>
+                                                    <h5 className="text-white">Available Testing Dates</h5>
                                                 </CardHeader>
                                                 <CardBody>
                                                     <DateRange 
+                                                        showDateDisplay={false}
                                                         ranges={data.testingDatesHackers}
                                                     />
                                                 </CardBody>
@@ -234,59 +302,144 @@ const ViewIndividualJobListingHelper = (props) => {
                                         </Col>
                                     </Row>
                                     <Row style={{ marginTop: "20px" }}>
-                                        <Col sm="6" md="12" lg="12" xl="4">
+                                        <Col sm="12" md="12" lg="12" xl="12">
                                             <Card className="card-absolute">
                                                 <CardHeader className="bg-secondary">
-                                                    <h5 className="text-white">Title Here</h5>
+                                                    <h5 className="text-white">Location Details</h5>
                                                     {/* tokensRequiredToApply */}
                                                 </CardHeader>
                                                 <CardBody>
-                                                    <p>
-                                                        {"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been"}
-                                                        {"the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley"}
-                                                        {"of type and scrambled. Lorem Ipsum is simply dummy text of the printing and typesetting"}
-                                                        {"industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an"}
-                                                        {"unknown printer took a galley of type and scrambled."}
-                                                    </p>
-                                                </CardBody>
-                                            </Card>
-                                        </Col>
-                                        <Col sm="6" md="12" lg="12" xl="4">
-                                            <Card className="card-absolute">
-                                                <CardHeader className="bg-secondary">
-                                                    <h5 className="text-white">Title Here</h5>
-                                                </CardHeader>
-                                                <CardBody>
-                                                    <p>
-                                                        {"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been"}
-                                                        {"the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley"}
-                                                        {"of type and scrambled. Lorem Ipsum is simply dummy text of the printing and typesetting"}
-                                                        {"industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an"}
-                                                        {"unknown printer took a galley of type and scrambled."}
-                                                    </p>
-                                                </CardBody>
-                                            </Card>
-                                        </Col>
-                                        <Col sm="6" md="12" lg="12" xl="4">
-                                            <Card className="card-absolute">
-                                                <CardHeader className="bg-secondary">
-                                                    <h5 className="text-white">Title Here</h5>
-                                                </CardHeader>
-                                                <CardBody>
-                                                    <p>
-                                                        {"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been"}
-                                                        {"the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley"}
-                                                        {"of type and scrambled. Lorem Ipsum is simply dummy text of the printing and typesetting"}
-                                                        {"industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an"}
-                                                        {"unknown printer took a galley of type and scrambled."}
-                                                    </p>
+                                                    <div className="job-description">
+                                                        <p>Location details are <em style={{ textDecorationLine: "underline" }}>approximate</em> and accurate/detailed address and location information will be released once hired or selected by the employer.</p>
+                                                        <p>This listing/employer is located in <em style={{ color: "blue" }}>{data.businessAddress.address.municipality}, {data.businessAddress.address.countrySubdivisionName}</em> in the <em style={{ color: "blue" }}>{data.businessAddress.address.country}</em></p>
+                                                        <hr />
+                                                        <Map
+                                                            style="mapbox://styles/mapbox/streets-v9"
+                                                            containerStyle={{
+                                                                height: '275px',
+                                                                width: '100%'
+                                                            }}
+                                                            center={[data.businessAddress.position.lon, data.businessAddress.position.lat]}
+                                                        >
+                                                            <Marker
+                                                                style={{ maxWidth: "45px", maxHeight: "45px" }}
+                                                                coordinates={[data.businessAddress.position.lon, data.businessAddress.position.lat]}
+                                                                anchor="bottom">
+                                                                <img src={require("../../../../../../../assets/images/location.png")}/>
+                                                            </Marker>
+                                                        </Map>
+                                                    </div>
                                                 </CardBody>
                                             </Card>
                                         </Col>
                                     </Row>
                                     <div className="job-description">
-                                        <h6 className="blue-text-listing">General Details</h6>
-
+                                        <h6 className="blue-text-listing">Reward/Payout Per Asset</h6>
+                                        <ListGroup>
+                                            {typeof data.assetArray !== "undefined" && data.assetArray.length > 0 ? data.assetArray.map((asset, index) => {
+                                                return (
+                                                    <ListGroupItem key={index} className="list-group-item flex-column align-items-start">
+                                                        <Row style={{ paddingBottom: "12px" }}>
+                                                            <ListGroupItem active>{asset.name}</ListGroupItem>
+                                                        </Row>
+                                                        <Row>
+                                                            <Col md="3" lg="3" sm="6">
+                                                                <FormGroup>
+                                                                    <Label><span style={{ color: "#ffc800" }}>Low</span> Severity Bounty Reward</Label>
+                                                                    <InputGroup>
+                                                                    <Input value={`$${(asset.lowSeverity).toFixed(2)}`} className="form-control" type="text" placeholder="Average Cash($) Reward Price" aria-label="Average Cash($) Reward Price"/>
+                                                                    </InputGroup>
+                                                                </FormGroup>
+                                                            </Col>
+                                                            <Col md="3" lg="3" sm="6">
+                                                                <FormGroup>
+                                                                    <Label><span style={{ color: "#ed3824" }}>Medium</span> Severity Bounty Reward</Label>
+                                                                    <InputGroup>
+                                                                    <Input value={`$${(asset.mediumSeverity).toFixed(2)}`} className="form-control" type="text" placeholder="Average Cash($) Reward Price" aria-label="Average Cash($) Reward Price"/>
+                                                                    </InputGroup>
+                                                                </FormGroup>
+                                                            </Col>
+                                                            <Col md="3" lg="3" sm="6">
+                                                                <FormGroup>
+                                                                    <Label><span style={{ color: "#8f0091" }}>High</span> Severity Bounty Reward</Label>
+                                                                    <InputGroup>
+                                                                    <Input value={`$${(asset.highSeverity).toFixed(2)}`} className="form-control" type="text" placeholder="Average Cash($) Reward Price" aria-label="Average Cash($) Reward Price"/>
+                                                                    </InputGroup>
+                                                                </FormGroup>
+                                                            </Col>
+                                                            <Col md="3" lg="3" sm="6">
+                                                                <FormGroup>
+                                                                    <Label><span style={{ color: "#b30211" }}>Critical</span> Severity Bounty Reward</Label>
+                                                                    <InputGroup>
+                                                                    <Input value={`$${(asset.criticalSeverity).toFixed(2)}`} className="form-control" type="text" placeholder="Average Cash($) Reward Price" aria-label="Average Cash($) Reward Price"/>
+                                                                    </InputGroup>
+                                                                </FormGroup>
+                                                            </Col>
+                                                        </Row>
+                                                    </ListGroupItem>
+                                                );
+                                            }) : null}
+                                        </ListGroup>
+                                    </div>
+                                    <div className="file-content">
+                                        <CardBody className="file-manager">
+                                            <h4 className="mb-3">All Uploaded Files</h4>
+                                            <h6>Uploaded file(s) from this employer - these are public - check them out before applying, they are important!</h6>
+                                            <ul className="files">
+                                                {typeof data.uploadedFiles !== "undefined" && data.uploadedFiles.length > 0 ? data.uploadedFiles.map((file, index) => {
+                                                    if (file.type === "video/mp4") {
+                                                        return (
+                                                            <li className="file-box" key={index}>
+                                                                <div className="file-top">
+                                                                    <ReactPlayer playing={true} muted={true} url={`${process.env.REACT_APP_ASSET_LINK}/${file.onlineID}`} className="stretch-both-ways" />
+                                                                </div>
+                                                                <div className="file-bottom">
+                                                                    <h6>{file.name} </h6>
+                                                                    {/* <p className="mb-1">{data.size}</p> */}
+                                                                    <p> <b>{"File Type"} : </b>{file.type}</p>
+                                                                    <Button style={{ width: "100%" }} onClick={() => {
+                                                                        setFileModal(true);
+                                                                        setFile(file);
+                                                                    }} color="primary mr-1">View File</Button>
+                                                                </div>
+                                                            </li>
+                                                        );
+                                                    } else if (file.type === "image/jpeg" || file.type === "image/jpg" || file.type === "image/png") {
+                                                        return (
+                                                            <li className="file-box" key={index}>
+                                                                <div className="file-top"><img src={`${process.env.REACT_APP_ASSET_LINK}/${file.onlineID}`} className="stretch-both-ways" /><i className="fa fa-ellipsis-v f-14 ellips"></i>
+                                                                </div>
+                                                                <div className="file-bottom">
+                                                                    <h6>{file.name} </h6>
+                                                                    {/* <p className="mb-1">{data.size}</p> */}
+                                                                    <p> <b>{"File Type"} : </b>{file.type}</p>
+                                                                    <Button style={{ width: "100%" }} onClick={() => {
+                                                                        setFileModal(true);
+                                                                        setFile(file);
+                                                                    }} color="primary mr-1">View File</Button>
+                                                                </div>
+                                                            </li>
+                                                        );
+                                                    } else {
+                                                        return (
+                                                            <li className="file-box" key={index}>
+                                                                <div className="file-top"><i className={`fa fa-file-text-o ${renderColor(index)}`}></i><i className="fa fa-ellipsis-v f-14 ellips"></i>
+                                                                </div>
+                                                                <div className="file-bottom">
+                                                                    <h6>{file.name} </h6>
+                                                                    {/* <p className="mb-1">{data.size}</p> */}
+                                                                    <p> <b>{"File Type"} : </b>{file.type}</p>
+                                                                    <Button style={{ width: "100%" }} onClick={() => {
+                                                                        setFileModal(true);
+                                                                        setFile(file);
+                                                                    }} color="primary mr-1">View File</Button>
+                                                                </div>
+                                                            </li>
+                                                        );
+                                                    }
+                                                }) : null}
+                                            </ul>
+                                        </CardBody>
                                     </div>
                                     <div className="job-description">
                                         <h6 className="blue-text-listing">Hashtags</h6>
@@ -300,28 +453,11 @@ const ViewIndividualJobListingHelper = (props) => {
                                         <h6 className="blue-text-listing">Desired Skills</h6>
                                         <div>
                                             {typeof data.desiredSkills !== "undefined" && data.desiredSkills.length > 0 ? data.desiredSkills.map((skill, indexxxx) => {
-                                                return <Badge style={{ fontSize: "13px", marginTop: "5px" }} key={indexxxx} color="dark">{skill.label}</Badge>;
+                                                return <Badge style={{ fontSize: "13px", marginTop: "5px" }} key={indexxxx} color="primary">{skill.label}</Badge>;
                                             }) : null}
                                         </div>
                                     </div>
-                                    <div className="job-description">
-                                        <h6 className="blue-text-listing">Location Details</h6>
-                                        <Map
-                                            style="mapbox://styles/mapbox/streets-v9"
-                                            containerStyle={{
-                                                height: '225px',
-                                                width: '100%'
-                                            }}
-                                            center={[data.businessAddress.position.lon, data.businessAddress.position.lat]}
-                                        >
-                                            <Marker
-                                                style={{ maxWidth: "45px", maxHeight: "45px" }}
-                                                coordinates={[data.businessAddress.position.lon, data.businessAddress.position.lat]}
-                                                anchor="bottom">
-                                                <img src={require("../../../../../../../assets/images/location.png")}/>
-                                            </Marker>
-                                        </Map>
-                                    </div>
+                                    
                                     <div className="job-description">
                                         <h6 className="blue-text-listing">Listing Description</h6>
                                         <ReactMarkdown className="markdown-listing-individual-container" children={data.listingDescription} remarkPlugins={[remarkGfm]} />
@@ -417,6 +553,29 @@ const ViewIndividualJobListingHelper = (props) => {
                     {renderContent()}
                 </Row>
             </Container>
+            {file !== null ? <Modal open={fileModal} onClose={() => {
+                setFileModal(false);
+            }} classNames={{
+                modal: 'customModal'
+            }} center>
+                <Col lg="12 box-col-12" xl="12 xl-100" md="12">
+                    <Card>
+                        <CardBody>
+                            <h3 className="text-left">File Details/Preview</h3>  
+                            <FileViewer
+                                fileType={calculateFileType(file.type)}
+                                filePath={`${process.env.REACT_APP_ASSET_LINK}/${file.onlineID}`}
+                                onError={onError}
+                            />
+                        </CardBody>
+                        <div className="create-space">
+                            <Button style={{ width: "100%" }} onClick={() => {
+                                setFileModal(false);
+                            }} color="secondary mr-1">Close/Exit Modal</Button>
+                        </div>
+                    </Card>
+                </Col>
+            </Modal> : null}
         </Fragment>
     );
 };

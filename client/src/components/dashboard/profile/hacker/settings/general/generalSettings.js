@@ -20,7 +20,7 @@ import {
     yearOptions,
     options
 } from "./helpers/options/selectionOptions.js";
-
+import ReactPlayer from 'react-player';
 
 const GeneralSettingsHelper = ({ userData, authentication }) => {
     const [ yearsOfExperience, setYearsOfExperience ] = useState(null);
@@ -233,6 +233,8 @@ const GeneralSettingsHelper = ({ userData, authentication }) => {
                     })
                 }} className="img-70 rounded-circle" alt="" src={`${process.env.REACT_APP_ASSET_LINK}/${avatar.link}`} />
             );
+        } else if (avatar.dataType === "video") {
+            return <ReactPlayer playing={true} muted={true} style={{ maxWidth: "75px", maxHeight: "75px" }} url={`${process.env.REACT_APP_ASSET_LINK}/${avatar.link}`} />;
         } else {
             return (
                 <Media onClick={() => {

@@ -11,7 +11,7 @@ import {
 const AccordionWithOpenandCloseIcon = (props) => {
     console.log("PROPS! : ", props);
 
-    const { experienceAndCost, disclosureVisibility, maxNumberOfApplicants, requiredRankToApply, tokensRequiredToApply } = props.data;
+    const { experienceAndCost, disclosureVisibility, maxNumberOfApplicants, requiredRankToApply, tokensRequiredToApply, applicants } = props.data;
     return (
         <Fragment>
             <Accordion>
@@ -72,6 +72,18 @@ const AccordionWithOpenandCloseIcon = (props) => {
                     <AccordionItemPanel>
                         <CardBody>
                             {"This gig/job costs "}<strong style={{ color: "blue" }}>{`${tokensRequiredToApply.value}`}</strong>{" tokens to apply. You may need to purchase these from our subscription/token page if you run out of the free credits given to each account upon initial registration."}
+                        </CardBody>
+                    </AccordionItemPanel>
+                </AccordionItem>
+                <AccordionItem>
+                    <AccordionItemHeading>
+                        <AccordionItemButton className="btn btn-link txt-white">
+                            <i className="icofont icofont-info-alt-2"></i>Previous/Pending Applicants That've Applied
+                        </AccordionItemButton>
+                    </AccordionItemHeading>
+                    <AccordionItemPanel>
+                        <CardBody>
+                            {"This listing already has roughly "}<strong style={{ color: "blue" }}>{`${applicants.length}`}</strong>{" applicants/people that have already applied to this listing. This is consistently updating and is a live accurate number of competition."}
                         </CardBody>
                     </AccordionItemPanel>
                 </AccordionItem>
