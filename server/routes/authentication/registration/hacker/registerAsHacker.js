@@ -6,7 +6,6 @@ const moment = require("moment");
 const { getToken, COOKIE_OPTIONS, getRefreshToken } = require("../../../../schemas/authentication/authenticate.js");
 const { encrypt } = require("../../../../crypto.js");
 const config = require("config");
-const stripe = require('stripe')(config.get("stripeSecretKey"));
 
 
 router.post("/", async (req, res) => {

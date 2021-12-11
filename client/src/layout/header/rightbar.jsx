@@ -311,7 +311,9 @@ const Rightbar = ({ authenticated, data, authentication, saveListingData }) => {
               </div>
             </div>
             <ul className="profile-dropdown onhover-show-div">
-              <li><User /><span>{Account} </span></li>
+              <li onClick={() => {
+                history.push("/hacker/profile/main/display/personal");
+              }}><User /><span>{Account} </span></li>
               <li><Mail /><span>{Inbox}</span></li>
               <li><FileText /><span>{Taskboard}</span></li>
               <li><LogIn /><span onClick={handlePreviewActivate}>{LogOut}</span></li>

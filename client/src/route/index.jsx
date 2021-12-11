@@ -11,19 +11,23 @@ import CourseListPage from "../pages/dashboard/learning/list/courseList.js";
 import UsersCardsListPage from "../pages/dashboard/people/hackers/peopleList/list.js";
 import UsersCardsEmployersAccountsPage from "../pages/dashboard/people/employers/peopleList/list.js";
 import MainHackerDirectoryDisplayPage from "../pages/dashboard/directory/hackers/main/mainHackerDirectory.js";
+import PersonalProfileDetailsMainPage from "../pages/dashboard/profile/hacker/view/generalDetails/personalProfileDetails.js";
+import InitializeVerificationFlowPage from "../pages/dashboard/verification/initialize/startVerification.js";
 
 export const routes = [
-        { path:`${process.env.PUBLIC_URL}/profile/settings/edit`, Component: GeneralSettingsPage },
-        { path:`${process.env.PUBLIC_URL}/messaging/main`, Component: MessagingMainPage },
-        { path: `${process.env.PUBLIC_URL}/memberships/selection`, Component: PricingSelectMembershipPage },
-        { path:`${process.env.PUBLIC_URL}/map/employers/available/jobs`, Component: MainMapViewEmployerJobsPage },
-        { path: `${process.env.PUBLIC_URL}/profile/settings/edit/employer`, Component: GeneralSettingsEmployerPage },
-        { path: `${process.env.PUBLIC_URL}/employer/listings/available`, Component: LiveEmployerListingsPage },
-        { path: `${process.env.PUBLIC_URL}/view/individual/employer/listing/public/:id`, Component: ViewIndividualJobListingPage },
-        { path: `${process.env.PUBLIC_URL}/create/employer/listing/general`, Component: CreateJobListingMainPage },
-        { path: `${process.env.PUBLIC_URL}/review/employer/listing/data/payment`, Component: ReviewListingInformationAndPayPage },
-        { path: `${process.env.PUBLIC_URL}/course/learning/list/main`, Component: CourseListPage },
-        { path: `${process.env.PUBLIC_URL}/people/list/hackers/general`, Component: UsersCardsListPage },
-        { path: `${process.env.PUBLIC_URL}/people/list/employers/general`, Component: UsersCardsEmployersAccountsPage },
-        { path: `${process.env.PUBLIC_URL}/hacker/directory/main/profiles`, Component: MainHackerDirectoryDisplayPage }
+        { path:"/profile/settings/edit", Component: GeneralSettingsPage },
+        { path:"/messaging/main", Component: MessagingMainPage },
+        { path: "/memberships/selection", Component: PricingSelectMembershipPage },
+        { path:"/map/employers/available/jobs", Component: MainMapViewEmployerJobsPage },
+        { path: "/profile/settings/edit/employer", Component: GeneralSettingsEmployerPage },
+        { path: "/employer/listings/available", Component: LiveEmployerListingsPage },
+        { path: "/view/individual/employer/listing/public/:id", Component: ViewIndividualJobListingPage },
+        { path: "/create/employer/listing/general", Component: CreateJobListingMainPage },
+        { path: "/review/employer/listing/data/payment", Component: ReviewListingInformationAndPayPage },
+        { path: "/course/learning/list/main", Component: CourseListPage },
+        { path: "/people/list/hackers/general", Component: UsersCardsListPage },
+        { path: "/people/list/employers/general", Component: UsersCardsEmployersAccountsPage },
+        { path: "/hacker/directory/main/profiles", Component: MainHackerDirectoryDisplayPage },
+        { path: "/hacker/profile/main/display/personal", Component: PersonalProfileDetailsMainPage },
+        { path: "/start/verification/flow", Component: InitializeVerificationFlowPage }
 ]

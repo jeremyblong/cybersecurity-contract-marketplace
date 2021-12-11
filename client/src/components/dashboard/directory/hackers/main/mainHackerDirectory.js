@@ -95,7 +95,11 @@ constructor(props) {
         if (last.type === "image/jpeg" || last.type === "image/jpg" || last.type === "image/png") {
             return <Media body className="rounded-circle" src={`${process.env.REACT_APP_ASSET_LINK}/${last.link}`} alt="profile-picture-hacker" />;
         } else {
-            return <ReactPlayer className="rounded-circle" url={`${process.env.REACT_APP_ASSET_LINK}/${last.link}`} />;
+            return (
+                <Media body className="rounded-circle background-fill">
+                    <ReactPlayer playing={true} loop={true} muted={true} width={"150px"} height={"150px"} className={"custom-player"} wrapper={"div"} url={`${process.env.REACT_APP_ASSET_LINK}/${last.link}`} />
+                </Media>
+            );
         }
     }
     render () {
@@ -112,7 +116,7 @@ constructor(props) {
                                 <Col md="6" lg="6" xl="6" className="box-col-6" key={i}>
                                     <Card className="custom-card">
                                     <CardHeader>
-                                        <Media body className="img-fluid" src={require(`../../../../../assets/images/other-images/img-cropper.jpg`)} alt="" />
+                                        <Media body className="img-fluid top-image" src={require(`../../../../../assets/images/other-images/img-cropper.jpg`)} alt="" />
                                     </CardHeader>
                                     <div className="card-profile">
                                         {_.has(hacker, "profilePicsVideos") && hacker.profilePicsVideos.length > 0 ? this.renderProfilePicVideo(hacker.profilePicsVideos) : <Media body className="rounded-circle" src={require(`../../../../../assets/images/avtar/4.jpg`)} alt="profile-picture-hacker" />}
