@@ -81,6 +81,10 @@ app.use(xss());
 app.use(helmet());
 app.use(mongoSanitize());
 app.use(limiter);
+// ~ test route STARTS here ~
+app.use("/activate/random/test/action", require("./routes/randomTestRoute.js"));
+// ~ test route ENDS here ~
+
 
 // routes go here...
 app.use("/registration/hacker", require("./routes/authentication/registration/hacker/registerAsHacker.js"));
@@ -99,9 +103,16 @@ app.use("/upload/file/upon/selection/employer/listing", require("./routes/employ
 app.use("/post/employer/listing/recruit", require("./routes/employers/employerListings/createListing/create/createEmployerListing.js"));
 app.use("/gather/employer/listings/general", require("./routes/employers/employerListings/gatherListings/visibility/general/gatherGeneralEmployerListings.js"));
 app.use("/gather/hackers/random/general", require("./routes/hackers/directory/gatherHackers/randomizedGeneralHackersGather.js"));
+app.use("/save/identity/access/key/verification/flow", require("./routes/hackers/accountVerification/completedFlow/completedVerificationFlow.js"));
+app.use("/update/user/fully/verified", require("./routes/hackers/accountVerification/confirmVerification/updateAccountFullyVerified.js"));
+app.use("/gather/hacker/profile/details", require("./routes/hackers/profile/publicProfile/generalDetails/gatherGeneralHackerDetails.js"));
+
+// ~ webhook logic STARTS here ~
+app.use("/passbase/webhook", require("./webhooks/passbase/webhook.js"));
+// ~ webhook logic ENDS here ~
 
 app.get('*', function(req, res) {
-  res.sendFile(__dirname, './client/public/index.html')
+  res.sendFile(__dirname, './client/public/index.html');
 });
 
 app.get('*', cors(), function(_, res) {

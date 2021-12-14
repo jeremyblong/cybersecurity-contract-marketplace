@@ -312,7 +312,11 @@ const Rightbar = ({ authenticated, data, authentication, saveListingData }) => {
             </div>
             <ul className="profile-dropdown onhover-show-div">
               <li onClick={() => {
-                history.push("/hacker/profile/main/display/personal");
+                if (data.accountType === "employers") {
+                  history.push("/employer/profile/main/display/personal");
+                } else {
+                  history.push("/hacker/profile/main/display/personal");
+                }
               }}><User /><span>{Account} </span></li>
               <li><Mail /><span>{Inbox}</span></li>
               <li><FileText /><span>{Taskboard}</span></li>

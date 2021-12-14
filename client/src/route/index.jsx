@@ -12,7 +12,10 @@ import UsersCardsListPage from "../pages/dashboard/people/hackers/peopleList/lis
 import UsersCardsEmployersAccountsPage from "../pages/dashboard/people/employers/peopleList/list.js";
 import MainHackerDirectoryDisplayPage from "../pages/dashboard/directory/hackers/main/mainHackerDirectory.js";
 import PersonalProfileDetailsMainPage from "../pages/dashboard/profile/hacker/view/generalDetails/personalProfileDetails.js";
-import InitializeVerificationFlowPage from "../pages/dashboard/verification/initialize/startVerification.js";
+import InitializeVerificationFlowPage from "../pages/dashboard/verification/initialize/hacker/startVerification.js";
+import ProfileHackerIndividualPage from "../pages/dashboard/people/hackers/individualProfile/index.js";
+import PersonalProfileEmployerDetailsMainPage from "../pages/dashboard/profile/employer/view/generalDetails/personalProfileDetails.js";
+import InitializeVerificationProcessEmployerPage from "../pages/dashboard/verification/initialize/employer/startVerification.js";
 
 export const routes = [
         { path:"/profile/settings/edit", Component: GeneralSettingsPage },
@@ -29,5 +32,8 @@ export const routes = [
         { path: "/people/list/employers/general", Component: UsersCardsEmployersAccountsPage },
         { path: "/hacker/directory/main/profiles", Component: MainHackerDirectoryDisplayPage },
         { path: "/hacker/profile/main/display/personal", Component: PersonalProfileDetailsMainPage },
-        { path: "/start/verification/flow", Component: InitializeVerificationFlowPage }
+        { path: "/start/verification/flow", Component: InitializeVerificationFlowPage },
+        { path: "/hacker/profile/individual/view/:id", Component: ProfileHackerIndividualPage },
+        { path: "/employer/profile/main/display/personal", Component: PersonalProfileEmployerDetailsMainPage },
+        { path: "/start/verification/flow/employer", Component: InitializeVerificationProcessEmployerPage }
 ]

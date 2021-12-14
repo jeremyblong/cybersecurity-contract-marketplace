@@ -1,12 +1,13 @@
 import React, { Fragment,Component } from 'react';
 import Breadcrumb from '../../../../../layout/breadcrumb';
-import { Container, Row, Col, Card, CardHeader, CardFooter, Media } from 'reactstrap';
+import { Container, Row, Col, Card, CardHeader, CardFooter, Media, Button } from 'reactstrap';
 import HackerDirectoryFilterOptions from "./helpers/filter/filterResults.js";
 import axios from 'axios';
 import moment from "moment";
 import _ from "lodash";
 import "./styles.css";
 import ReactPlayer from 'react-player';
+import { withRouter } from "react-router-dom";
 
 class MainHackerDirectoryDisplayHelper extends Component {
 constructor(props) {
@@ -144,9 +145,12 @@ constructor(props) {
                                         </Col>
                                         <Col sm="4 col-4">
                                         <h6>Verified Account</h6>
-                                        <h3><span className="counter">{hacker.identityVerified === true ? "Fully-verified" : "Un-verified"}</span></h3>
+                                        <h3><span className="counter">{hacker.fullyVerified === true ? "Fully-verified" : "Un-verified"}</span></h3>
                                         </Col>
                                     </CardFooter>
+                                    <Button style={{ marginTop: "12px" }} onClick={() => {
+                                        this.props.history.push(`/hacker/profile/individual/view/${hacker.uniqueId}`);
+                                    }} className="btn-pill btn-air-secondary" color="secondary" >View/Visit Hacker Profile</Button>
                                     </Card>
                                 </Col>
                             )}
@@ -159,4 +163,4 @@ constructor(props) {
     }
 }
 
-export default MainHackerDirectoryDisplayHelper;
+export default withRouter(MainHackerDirectoryDisplayHelper);

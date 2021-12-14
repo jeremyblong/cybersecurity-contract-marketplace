@@ -23,7 +23,7 @@ constructor(props) {
     render() {
         return (
             <Fragment>
-                <Breadcrumb parent="Users" title="User Profile" />
+                <Breadcrumb parent="Profile data" title="Employer Profile" />
                 <Container fluid={true}>
                     <div className="user-profile">
                     <Row>

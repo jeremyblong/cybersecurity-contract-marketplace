@@ -97,6 +97,24 @@ constructor(props) {
         }]
     }
 }
+    handleRandomAction = (e) => {
+        e.preventDefault();
+
+        console.log("random action fired!");
+
+        axios.post(`${process.env.REACT_APP_BASE_URL}/activate/random/test/action`, {
+            
+        }).then((res) => {
+            if (res.data.message === "Success!") {
+                console.log(res.data);
+                // NotificationManager.success(`You've successfully completed the required verification process/flow, we are reviewing your information and will notify you when approved.`, 'Completed Verification Flow!', 4500);
+            } else {
+                console.log("err", res.data);
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
+    }
     render() {
         const Map = ReactMapboxGl({
             accessToken: process.env.REACT_APP_MAPBOX_TOKEN
@@ -105,6 +123,11 @@ constructor(props) {
         return (
             <div>
                 <Container fluid={true}>
+                    <Row>
+                        <Col md="12" lg="12" xl="12" sm="12">
+                            <Button onClick={this.handleRandomAction} style={{ width: "100%" }} color="secondary">Fire Random Action</Button>
+                        </Col>
+                    </Row>
                     <Row style={{ paddingTop: "10px" }}>
                         <Col md="6" lg="6" sm="12">
                             <Map

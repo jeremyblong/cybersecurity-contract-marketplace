@@ -15,5 +15,6 @@
     "tomtomApiKey": "1stNLMNQehPpc5K6Oo1AHqkFMKzeJNSL",
     "algoliaApiKeyBackend": "398ac576c0bcfc87483a3e889dc83b28",
     "algoliaAppID": "RG9Z0QAI22",
-    "passbaseSecretApiKey": "dyq90GkVu98gCQLJ34nWHvS4ZknCZYfSv9gjgU5alyzumIiM788ds5iTDCDKZyYv4Tgoswcu6oaR3YzVxojuUCGE4lOgOMWkZR3NL3DEruFxFMTEKutgkdGVNrgEO0co"
+    "passbaseSecretApiKey": "dyq90GkVu98gCQLJ34nWHvS4ZknCZYfSv9gjgU5alyzumIiM788ds5iTDCDKZyYv4Tgoswcu6oaR3YzVxojuUCGE4lOgOMWkZR3NL3DEruFxFMTEKutgkdGVNrgEO0co",
+    "baseServerURL": "http://localhost:5000"
 }
