@@ -83,7 +83,11 @@ constructor (props) {
 
                                 this.props.authentication(res.data.data);
 
-                                this.props.history.push("/dashboard");
+                                if (res.data.data.accountType === "employers") {
+                                    this.props.history.push("/dashboard/employer");
+                                } else {
+                                    this.props.history.push("/dashboard/hacker");
+                                }
                             }, 3000);
                         })
                     } else {

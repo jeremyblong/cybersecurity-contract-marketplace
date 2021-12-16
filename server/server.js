@@ -103,9 +103,10 @@ app.use("/upload/file/upon/selection/employer/listing", require("./routes/employ
 app.use("/post/employer/listing/recruit", require("./routes/employers/employerListings/createListing/create/createEmployerListing.js"));
 app.use("/gather/employer/listings/general", require("./routes/employers/employerListings/gatherListings/visibility/general/gatherGeneralEmployerListings.js"));
 app.use("/gather/hackers/random/general", require("./routes/hackers/directory/gatherHackers/randomizedGeneralHackersGather.js"));
-app.use("/save/identity/access/key/verification/flow", require("./routes/hackers/accountVerification/completedFlow/completedVerificationFlow.js"));
-app.use("/update/user/fully/verified", require("./routes/hackers/accountVerification/confirmVerification/updateAccountFullyVerified.js"));
+app.use("/save/identity/access/key/verification/flow", require("./routes/verification/accountVerification/completedFlow/completedVerificationFlow.js"));
+app.use("/update/user/fully/verified", require("./routes/verification/accountVerification/confirmVerification/updateAccountFullyVerified.js"));
 app.use("/gather/hacker/profile/details", require("./routes/hackers/profile/publicProfile/generalDetails/gatherGeneralHackerDetails.js"));
+app.use("/save/user/geolocation", require("./routes/locationServices/userLocation/saveHackerEmployerAccountLocation.js"));
 
 // ~ webhook logic STARTS here ~
 app.use("/passbase/webhook", require("./webhooks/passbase/webhook.js"));

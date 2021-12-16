@@ -2,8 +2,10 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import ModalVideo from 'react-modal-video';
 import Features from './Features';
+import { connect } from "react-redux";
+import _ from "lodash";
 
-const MainBanner = () => {
+const MainBanner = ({ authenticatedAccount }) => {
     const [isOpen, setIsOpen] = React.useState(true);
     const openModal = () => {
         setIsOpen(!isOpen);
@@ -28,11 +30,15 @@ const MainBanner = () => {
                                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil architecto laborum eaque! Deserunt maxime, minus quas molestiae reiciendis esse natus nisi iure.</p>
 
                                 <div className="banner-btn">
-                                    <Link to="/contact">
+                                    {authenticatedAccount === true ? <Link to="/dashboard">
+                                        <a className="default-btn">
+                                            Redirect To Dashboard
+                                        </a>
+                                    </Link> : <Link to="/contact">
                                         <a className="default-btn">
                                             Booking Now
                                         </a>
-                                    </Link>
+                                    </Link>}
                                     <Link to="/about">
                                         <a className="default-btn active">
                                             About Us
@@ -67,5 +73,9 @@ const MainBanner = () => {
         </>
     )
 }
-
-export default MainBanner;
+const mapStateToProps = (state) => {
+    return {
+        authenticatedAccount: !_.isEmpty(state.auth.data) ? true : false
+    }
+}
+export default connect(mapStateToProps, { })(MainBanner);

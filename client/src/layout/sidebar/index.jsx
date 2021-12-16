@@ -219,7 +219,7 @@ const Sidebar = (props) => {
        <div className={`bg-overlay1`} onClick={() => {closeOverlay()}} ></div>
       <div className="sidebar-wrapper">
         <div className="logo-wrapper">
-          <Link to={"/dashboard/default"}>
+          <Link to={props.userData.accountType === "employers" ? "/dashboard/employer" : "/dashboard/hacker"}>
             <img className="img-fluid for-light" src={require("../../assets/images/logo/logo.png")} alt="" />
             <img className="img-fluid for-dark" src={require("../../assets/images/logo/logo_dark.png")} alt="" />
           </Link>

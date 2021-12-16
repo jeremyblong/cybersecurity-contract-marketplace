@@ -50,7 +50,11 @@ const SignIn = ({ authentication }) => {
                     // do authentication - registration redux logic
                     authentication(res.data.data);
 
-                    history.push("/dashboard");
+                    if (res.data.data.accountType === "employers") {
+                        history.push("/dashboard/employer");
+                    } else {
+                        history.push("/dashboard/hacker");
+                    }
                 }, 3000);
             } else {
 

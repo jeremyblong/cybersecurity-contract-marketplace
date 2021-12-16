@@ -21,7 +21,8 @@ constructor (props) {
 
         axios.post(`${process.env.REACT_APP_BASE_URL}/save/identity/access/key/verification/flow`, {
             identityAccessKey,
-            uniqueId: this.props.userData.uniqueId
+            uniqueId: this.props.userData.uniqueId,
+            accountType: "hackers"
         }).then((res) => {
             if (res.data.message === "Saved verification data!") {
                 console.log(res.data);
@@ -65,11 +66,11 @@ constructor (props) {
                                             apiKey={process.env.REACT_APP_PASSBASE_PUBLISHABLE_API_KEY}
                                             onSubmitted={(identityAccessKey) => {
                                                 console.log("onSubmitted - identityAccessKey", identityAccessKey);
+
+                                                this.handleSubmissionOfVerification(identityAccessKey);
                                             }}
                                             onFinish={(identityAccessKey) => {
                                                 console.log("onFinish - identityAccessKey", identityAccessKey);
-
-                                                this.handleSubmissionOfVerification(identityAccessKey);
                                             }}
                                             onError={(errorCode) => {
                                                 console.log("errorCode", errorCode);

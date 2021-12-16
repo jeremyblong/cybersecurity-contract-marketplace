@@ -393,8 +393,8 @@ const GeneralSettingsEmployerHelper = ({ userData, authentication }) => {
                             }} className="img-70 rounded-circle" alt="" src={require("../../../../../../assets/images/user/7.jpg")} />}
                         </div>
                         <Col>
-                            <h3 className="mb-1">{MarkJecno}</h3>
-                            <p className="mb-4">{Designer}</p>
+                            <h3 className="mb-1">{`${userData.firstName} ${userData.lastName}`}</h3>
+                            <p className="mb-4">{userData.fullyVerified === true ? "Fully-verified Account" : "Un-verified Account"}</p>
                         </Col>
                         </Row>
                         <FormGroup>
