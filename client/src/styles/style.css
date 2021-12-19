@@ -35,7 +35,29 @@ This files table contents are outlined below>>>>>
 ** - Nice select Area
 ******************************************* /*
 
-
+/* slide up bottom pane styles START */
+.react-modal-sheet-backdrop {
+  /* custom styles */
+}
+.react-modal-sheet-container {
+  /* custom styles */
+  height: 85vh !important;
+}
+.react-modal-sheet-header {
+  /* custom styles */
+}
+.react-modal-sheet-drag-indicator {
+  /* custom styles */
+}
+.react-modal-sheet-content {
+  /* custom styles */
+}
+@media only screen and (max-width: 800px) {
+  .react-modal-sheet-container {
+      /* custom styles */
+      height: 100vh !important;
+  }
+}
 /* admin/dashboard/authenticated */
 .overlaySlide {
   z-index: 99999999999999999 !important;

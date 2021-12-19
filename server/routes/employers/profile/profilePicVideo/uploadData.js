@@ -34,6 +34,8 @@ router.post("/", upload.single('file'), (req, resppppp, next) => {
     const collection = Connection.db.db("db").collection("employers");
 
     if (typeof req.file === "undefined") {
+
+        console.log("this one ran.");
         
         const generatedIDImage = uuidv4();
 
@@ -64,9 +66,9 @@ router.post("/", upload.single('file'), (req, resppppp, next) => {
                     dataType: mimetype.includes("video") ? "video" : "image"
                 }
         
-                collection.findOneAndUpdate({ uniqueId }, { $addToSet: { "profilePicsVideos": compoundedFile }}).then((user) => {
-                    if (!user) {
-                        console.log("User does NOT exist or could not be found.");
+                collection.findOneAndUpdate({ uniqueId }, { $push: { "profilePicsVideos": compoundedFile }}, (err, user) => {
+                    if (err) {
+                        console.log("User does NOT exist or could not be found.", err);
                     } else {
                         console.log("user", user);
         
@@ -76,12 +78,13 @@ router.post("/", upload.single('file'), (req, resppppp, next) => {
                             file: compoundedFile
                         })
                     }
-                }).catch((err) => {
-                    console.log(err);
                 })
               }
         });
     } else {
+
+        console.log("other one ran!");
+        
         const { fieldname, originalname, mimetype, key } = req.file;
 
         const compoundedFile = {
@@ -94,9 +97,9 @@ router.post("/", upload.single('file'), (req, resppppp, next) => {
             dataType: mimetype.includes("video") ? "video" : "image"
         }
 
-        collection.findOneAndUpdate({ uniqueId }, { $addToSet: { "profilePicsVideos": compoundedFile }}).then((user) => {
-            if (!user) {
-                console.log("User does NOT exist or could not be found.");
+        collection.findOneAndUpdate({ uniqueId }, { $push: { "profilePicsVideos": compoundedFile }}, (err, user) => {
+            if (err) {
+                console.log("User does NOT exist or could not be found.", err);
             } else {
                 console.log("user", user);
 
@@ -106,8 +109,6 @@ router.post("/", upload.single('file'), (req, resppppp, next) => {
                     file: compoundedFile
                 })
             }
-        }).catch((err) => {
-            console.log(err);
         })
     }
 });

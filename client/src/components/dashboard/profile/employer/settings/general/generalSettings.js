@@ -137,7 +137,7 @@ const GeneralSettingsEmployerHelper = ({ userData, authentication }) => {
                         setPersonalData(prevState => {
                             return {
                                 ...prevState,
-                                profilePicsVideos: personal.profilePicsVideos.push(file)
+                                profilePicsVideos: [...personal.profilePicsVideos, file]
                             }
                         });
                     } else {
@@ -195,7 +195,7 @@ const GeneralSettingsEmployerHelper = ({ userData, authentication }) => {
                         setPersonalData(prevState => {
                             return {
                                 ...prevState,
-                                profilePicsVideos: personal.profilePicsVideos.push(file)
+                                profilePicsVideos: [...personal.profilePicsVideos, file]
                             }
                         });
                     } else {
@@ -231,7 +231,18 @@ const GeneralSettingsEmployerHelper = ({ userData, authentication }) => {
                 }} className="img-70 rounded-circle" alt="" src={`${process.env.REACT_APP_ASSET_LINK}/${avatar.link}`} />
             );
         } else if (avatar.dataType === "video") {
-            return <ReactPlayer playing={true} muted={true} style={{ maxWidth: "75px", maxHeight: "75px" }} url={`${process.env.REACT_APP_ASSET_LINK}/${avatar.link}`} />;
+            return (
+                <div onClick={() => {
+                    setPane(prevState => {
+                        return {
+                            ...prevState,
+                            isPaneOpen: true
+                        }
+                    })
+                }}>
+                    <ReactPlayer playing={true} muted={true} style={{ maxWidth: "75px", maxHeight: "75px" }} url={`${process.env.REACT_APP_ASSET_LINK}/${avatar.link}`} />
+                </div>
+            );
         } else {
             return (
                 <Media onClick={() => {

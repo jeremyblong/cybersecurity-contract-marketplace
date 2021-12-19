@@ -107,6 +107,7 @@ app.use("/save/identity/access/key/verification/flow", require("./routes/verific
 app.use("/update/user/fully/verified", require("./routes/verification/accountVerification/confirmVerification/updateAccountFullyVerified.js"));
 app.use("/gather/hacker/profile/details", require("./routes/hackers/profile/publicProfile/generalDetails/gatherGeneralHackerDetails.js"));
 app.use("/save/user/geolocation", require("./routes/locationServices/userLocation/saveHackerEmployerAccountLocation.js"));
+app.use("/upload/banner/photo/employer/profile", require("./routes/employers/profile/newBanner/uploadNewBannerImage.js"));
 
 // ~ webhook logic STARTS here ~
 app.use("/passbase/webhook", require("./webhooks/passbase/webhook.js"));

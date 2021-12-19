@@ -70,3 +70,32 @@
     margin-top: 15px !important;
     margin: 0 auto;
 }
+.heavy-blue-lead {
+    font-weight: 500;
+    color: blue;
+    font-size: 15px !important;
+}
+/* slide up bottom pane styles END */
+#scroller-details-preview {
+    max-height: 425px;
+    overflow-y: scroll;
+}
+.header-space-edges {
+    margin: 15px 20px 20px 20px;
+}
+.centered-menu-icon {
+    text-align: center;
+}
+#menu-icon-custom {
+    max-width: 45px;
+    margin-top: -25px;
+    max-height: 45px;
+    display: inline-block;
+}
+.mapboxgl-ctrl-bottom-right {
+    display: none !important;
+}
+.stretched-map {
+    min-height: 200px !important;
+    min-width: 100% !important;
+}

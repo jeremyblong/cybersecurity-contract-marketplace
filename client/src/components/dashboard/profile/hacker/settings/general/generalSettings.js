@@ -140,7 +140,7 @@ const GeneralSettingsHelper = ({ userData, authentication }) => {
                         setPersonalData(prevState => {
                             return {
                                 ...prevState,
-                                profilePicsVideos: personal.profilePicsVideos.push(file)
+                                profilePicsVideos: [...personal.profilePicsVideos, file]
                             }
                         });
                     } else {
@@ -198,7 +198,7 @@ const GeneralSettingsHelper = ({ userData, authentication }) => {
                         setPersonalData(prevState => {
                             return {
                                 ...prevState,
-                                profilePicsVideos: personal.profilePicsVideos.push(file)
+                                profilePicsVideos: [...personal.profilePicsVideos, file]
                             }
                         });
                     } else {

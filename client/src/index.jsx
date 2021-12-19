@@ -23,6 +23,7 @@ import 'react-calendar/dist/Calendar.css';
 import 'react-responsive-modal/styles.css';
 import 'react-loading-skeleton/dist/skeleton.css';
 import 'react-accessible-accordion/dist/fancy-example.css';
+import 'react-image-crop/dist/ReactCrop.css';
 // components
 import React, { Fragment,useState,useEffect } from 'react';
 import ReactDOM from 'react-dom';

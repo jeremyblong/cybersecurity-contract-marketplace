@@ -1,0 +1,84 @@
+.absolute-img-top-right {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    max-width: 35px;
+    background-color: white !important;
+    max-height: 35px;
+    border-radius: 7.5px;
+    border: 3.5px solid #7366ff;
+}
+.lower-crop-container {
+    margin: 25px;
+}
+.overlay-superiority {
+    z-index: 999999999999999999999999999999999999999999999999 !important;
+}
+.center-selected-content { 
+    width: 50%;
+    margin: 0 auto;
+}
+#banner-photo-cover-all {
+    object-fit: cover !important;
+    max-height: 100% !important;
+    min-width: 100% !important;
+}
+#override-cardheader {
+    margin: 0px;
+    padding: 0px;
+    height: 350px;
+    max-height: 350px;
+}
+@media only screen and (max-width: 1500px) {
+    #override-cardheader {
+        margin: 0px;
+        padding: 0px;
+        height: 300px;
+        max-height: 300px;
+    }
+}
+@media only screen and (max-width: 1335px) {
+    #override-cardheader {
+        margin: 0px;
+        padding: 0px;
+        height: 225px;
+        max-height: 225px;
+    }
+}
+/* profile picture video styles START */
+
+.profile-picture-account {
+    width: 50%;
+    margin: 0 auto;
+    z-index: 999999999999999999999999999999999 !important;
+}
+
+.profile-picture-account video {
+    width: 125px;
+    height: 125px;
+    max-width: 155px;
+    max-height: 155px;
+    border-radius: 50%;
+    border: 7px solid white;
+    z-index: 999999999999999999999999999999999 !important;
+    background-color: rgb(219, 219, 219);
+    margin-top: -25px;
+}
+
+/* .user-image {
+    position: relative;
+    height: 0;
+    .avatar {
+      margin-top: -100px;
+      img {
+        width: 125px;
+        height: 125px;
+        max-width: 155px;
+        max-height: 155px;
+        border-radius: 50%;
+        border: 7px solid $white;
+      }
+    } */
+/* profile picture video styles END */
+
+/* .profile-picture-account */
