@@ -1,6 +1,6 @@
 import React, { Fragment, Component } from 'react';
 import Breadcrumb from '../../../../../../layout/breadcrumb';
-import { Container, Row, Col, Card, CardHeader, Media, CardBody, Button, Form } from 'reactstrap';
+import { Container, Row, Col, Card, CardHeader, Media, CardBody, Button, Form, Popover, PopoverBody, PopoverHeader } from 'reactstrap';
 import {Email,MarekjecnoMailId,BOD,DDMMYY,Designer,ContactUs,ContactUsNumber,LocationDetails,MarkJecno,Follower,Following,Location} from '../../../../../../constant';
 import { withRouter } from "react-router-dom";
 import axios from "axios";
@@ -29,6 +29,7 @@ constructor(props) {
         progress: 0,
         data: {},
         isOpen: false,
+        popoverOpen: false,
         errorUpload: ""
     }
 }
@@ -186,6 +187,15 @@ constructor(props) {
             console.log(err);
         })
     }
+    handleBasicInfoModificationRedirect = () => {
+        console.log("handleBasicInfoModificationRedirect ran!");
+
+        this.setState({
+            popoverOpen: false
+        }, () => {
+            this.props.history.push("/profile/settings/edit/employer");
+        })
+    }
     render() {
         const { aspect, file, submissionButton, data, errorUpload } = this.state;
 
@@ -279,11 +289,26 @@ constructor(props) {
                             <div className="avatar">
                                 {renderProfilePicVideo(data.profilePicsVideos)}
                             </div>
-                            <div className="icon-wrapper" data-intro="Change Profile image here">
-                                <i className="icofont icofont-pencil-alt-5">
-                                <input className="upload" type="file" />
-                                </i>
-                            </div>
+                                <div id="Popover1" onClick={() => {
+                                    this.setState({
+                                        popoverOpen: true
+                                    })
+                                }} className="icon-wrapper" data-intro="Change Profile image here">
+                                    <i className="icofont icofont-pencil-alt-5">
+                                        <Popover placement="bottom" isOpen={this.state.popoverOpen} target="Popover1" toggle={() => {
+                                            this.setState({
+                                                popoverOpen: !this.state.popoverOpen
+                                            })
+                                        }}>
+                                            <PopoverHeader>Update Profile Picture?</PopoverHeader>
+                                            <PopoverBody>
+                                            Would you like to update your profile pic and/or basic profile information? The button below will redirect you appropriately if choose to.
+                                            <hr />
+                                            <Button style={{ width: "100%" }} onClick={this.handleBasicInfoModificationRedirect} color="secondary">Redirect Me!</Button>
+                                            </PopoverBody>
+                                        </Popover>
+                                    </i>
+                                </div>
                             </div>
                             <div id="custom-info-override" className="info">
                             <Row>

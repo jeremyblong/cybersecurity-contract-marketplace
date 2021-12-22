@@ -231,7 +231,7 @@ const GeneralSettingsHelper = ({ userData, authentication }) => {
                             isPaneOpen: true
                         }
                     })
-                }} className="img-70 rounded-circle" alt="" src={`${process.env.REACT_APP_ASSET_LINK}/${avatar.link}`} />
+                }} className="img-70 rounded-circle hover-rounded-circle" alt="" src={`${process.env.REACT_APP_ASSET_LINK}/${avatar.link}`} />
             );
         } else if (avatar.dataType === "video") {
             return <ReactPlayer playing={true} muted={true} style={{ maxWidth: "75px", maxHeight: "75px" }} url={`${process.env.REACT_APP_ASSET_LINK}/${avatar.link}`} />;
@@ -244,7 +244,7 @@ const GeneralSettingsHelper = ({ userData, authentication }) => {
                             isPaneOpen: true
                         }
                     })
-                }} className="img-70 rounded-circle" alt="" src={require("../../../../../../assets/images/user/7.jpg")} />
+                }} className="img-70 rounded-circle hover-rounded-circle" alt="" src={require("../../../../../../assets/images/user/7.jpg")} />
             );
         }
     }
@@ -393,7 +393,7 @@ const GeneralSettingsHelper = ({ userData, authentication }) => {
                                         isPaneOpen: true
                                     }
                                 })
-                            }} className="img-70 rounded-circle" alt="" src={require("../../../../../../assets/images/user/7.jpg")} />}
+                            }} className="img-70 rounded-circle hover-rounded-circle" alt="" src={require("../../../../../../assets/images/user/7.jpg")} />}
                         </div>
                         <Col>
                             <h3 className="mb-1">{`${userData.firstName} ${userData.lastName}`}</h3>

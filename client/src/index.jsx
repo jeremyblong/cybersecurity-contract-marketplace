@@ -24,6 +24,8 @@ import 'react-responsive-modal/styles.css';
 import 'react-loading-skeleton/dist/skeleton.css';
 import 'react-accessible-accordion/dist/fancy-example.css';
 import 'react-image-crop/dist/ReactCrop.css';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 // components
 import React, { Fragment,useState,useEffect } from 'react';
 import ReactDOM from 'react-dom';
@@ -57,6 +59,7 @@ const Root = (props) =>  {
   const abortController = new AbortController();
   const defaultLayoutObj = classes.find(item => Object.values(item).pop(1) === 'compact-wrapper');
   const layout = localStorage.getItem('layout') ||  Object.keys(defaultLayoutObj).pop();
+  const [ authenticated, setAuthenticatedStatus ] = useState(false);
 
   const refreshTokenApiRequest = () => {
 
@@ -81,22 +84,34 @@ const Root = (props) =>  {
 
   useEffect(() => {
 
-      console.log("process.env.REACT_APP_MAPBOX_TOKEN", process.env.REACT_APP_MAPBOX_TOKEN);
+    setTimeout(() => {
+      const accountData = store.getState().auth.data;
 
-      setAnim(animation);
+      if (!_.isEmpty(accountData)) {
 
-      setTimeout(refreshTokenApiRequest, 5 * 60 * 1000);
+        console.log("authenticated redux state is NOT empty!");
 
-      setTimeout(() => {
-        refreshTokenApiRequest();
-      }, 500);
+        setAuthenticatedStatus(true);
+      } else {
 
-      console.ignoredYellowBox = ["Warning: Each", "Warning: Failed"];
-      console.disableYellowBox = true;
-      return function cleanup() {
-          abortController.abort();
-        }
-      // eslint-disable-next-line
+        console.log("authenticated redux state is confirmed to be EMPTY.");
+      }
+    }, 100)
+
+    setAnim(animation);
+
+    setTimeout(refreshTokenApiRequest, 5 * 60 * 1000);
+
+    setTimeout(() => {
+      refreshTokenApiRequest();
+    }, 500);
+
+    console.ignoredYellowBox = ["Warning: Each", "Warning: Failed"];
+    console.disableYellowBox = true;
+    return function cleanup() {
+        abortController.abort();
+      }
+    // eslint-disable-next-line
   }, []);
 
   return(

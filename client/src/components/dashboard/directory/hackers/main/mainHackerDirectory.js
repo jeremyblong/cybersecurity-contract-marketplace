@@ -117,7 +117,7 @@ constructor(props) {
                                 <Col md="6" lg="6" xl="6" className="box-col-6" key={i}>
                                     <Card className="custom-card">
                                     <CardHeader>
-                                        <Media body className="img-fluid top-image" src={require(`../../../../../assets/images/other-images/img-cropper.jpg`)} alt="" />
+                                        {_.has(hacker, "profileBannerImage") ? <Media body className="img-fluid top-image" src={`${process.env.REACT_APP_ASSET_LINK}/${hacker.profileBannerImage.link}`} alt="" /> : <Media body className="img-fluid top-image" src={require(`../../../../../assets/images/other-images/img-cropper.jpg`)} alt="" />}
                                     </CardHeader>
                                     <div className="card-profile">
                                         {_.has(hacker, "profilePicsVideos") && hacker.profilePicsVideos.length > 0 ? this.renderProfilePicVideo(hacker.profilePicsVideos) : <Media body className="rounded-circle" src={require(`../../../../../assets/images/avtar/4.jpg`)} alt="profile-picture-hacker" />}

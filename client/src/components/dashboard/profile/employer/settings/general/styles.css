@@ -1,0 +1,5 @@
+/* this SAME classname is referenced in "hacker" generalSettings.js css file as well */
+.hover-rounded-circle:hover {
+    border: 3.5px solid blue !important;
+    cursor: pointer !important;
+}

@@ -99,3 +99,6 @@
     min-height: 200px !important;
     min-width: 100% !important;
 }
+.mapboxgl-marker:hover {
+    cursor: crosshair !important;
+}

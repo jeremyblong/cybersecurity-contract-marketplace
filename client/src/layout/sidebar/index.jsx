@@ -207,6 +207,12 @@ const Sidebar = (props) => {
         } else {
           return "/profile/settings/edit/employer";
         }
+      } else if (menuItem.path === "/create/listing/software/exchange/hacker/account") {
+        if (props.userData.accountType === "hackers") {
+          return "/create/listing/software/exchange/hacker/account";
+        } else {
+          return "/unauthorized/access/restricted";
+        }
       } else {
         return menuItem.path;
       }

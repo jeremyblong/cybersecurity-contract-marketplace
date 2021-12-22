@@ -1,0 +1,11 @@
+#override-grid-options-distorted {
+    left: 0px !important;
+    top: 20px !important;
+}
+#merge-horizontal-list li a span {
+    cursor: pointer;
+}
+#merge-horizontal-list .layout-view-item {
+    position: absolute !important;
+    top: 10px !important;
+}

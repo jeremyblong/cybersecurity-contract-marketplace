@@ -18,6 +18,11 @@ import PersonalProfileEmployerDetailsMainPage from "../pages/dashboard/profile/e
 import InitializeVerificationProcessEmployerPage from "../pages/dashboard/verification/initialize/employer/startVerification.js";
 import MainLandingPageEmployerPage from "../pages/dashboard/homepage/employers/main/mainLandingPage.js";
 import MainLandingPageHackerPage from "../pages/dashboard/homepage/hackers/main/mainLandingPage.js";
+import HardwareLandingMainHelper from "../pages/dashboard/softwareHardwareExchanges/hardware/landing/hardwareLandingMainPage.js";
+import SoftwareLandingMainHelper from "../pages/dashboard/softwareHardwareExchanges/software/landing/softwareLandingMainPage.js";
+import DisplayIndividualListingSoftwarePage from "../pages/dashboard/softwareHardwareExchanges/software/individual/displayIndividualListing.js";
+import CreateNewSoftwareListingPage from "../pages/dashboard/softwareHardwareExchanges/software/createListing/createNewListing.js";
+import UnauthorizedAccessPage from "../pages/dashboard/unauthorized/unauthorizedAccess.js";
 
 export const routes = [
         { path:"/profile/settings/edit", Component: GeneralSettingsPage },
@@ -39,5 +44,10 @@ export const routes = [
         { path: "/employer/profile/main/display/personal", Component: PersonalProfileEmployerDetailsMainPage },
         { path: "/start/verification/flow/employer", Component: InitializeVerificationProcessEmployerPage },
         { path: "/dashboard/employer", Component: MainLandingPageEmployerPage },
-        { path: "/dashboard/hacker", Component: MainLandingPageHackerPage }
+        { path: "/dashboard/hacker", Component: MainLandingPageHackerPage },
+        { path: "/software/exchange/landing", Component: SoftwareLandingMainHelper },
+        { path: "/hardware/exchange/landing", Component: HardwareLandingMainHelper },
+        { path: "/software/exchange/individual/listing/view/:id", Component: DisplayIndividualListingSoftwarePage },
+        { path: "/create/listing/software/exchange/hacker/account", Component: CreateNewSoftwareListingPage },
+        { path: "/unauthorized/access/restricted", Component: UnauthorizedAccessPage }
 ]

@@ -108,6 +108,8 @@ app.use("/update/user/fully/verified", require("./routes/verification/accountVer
 app.use("/gather/hacker/profile/details", require("./routes/hackers/profile/publicProfile/generalDetails/gatherGeneralHackerDetails.js"));
 app.use("/save/user/geolocation", require("./routes/locationServices/userLocation/saveHackerEmployerAccountLocation.js"));
 app.use("/upload/banner/photo/employer/profile", require("./routes/employers/profile/newBanner/uploadNewBannerImage.js"));
+app.use("/retrieve/related/employer/core/information", require("./routes/employers/employerListings/gatherPosterInformation/fetchCoreRelatedInfo/fetchDetails.js"));
+app.use("/upload/banner/photo/hacker/profile", require("./routes/hackers/profile/newBanner/uploadNewBannerImage.js"));
 
 // ~ webhook logic STARTS here ~
 app.use("/passbase/webhook", require("./webhooks/passbase/webhook.js"));

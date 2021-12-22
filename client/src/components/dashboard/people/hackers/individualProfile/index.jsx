@@ -1,6 +1,6 @@
 import React, { Fragment, Component } from 'react';
 import Breadcrumb from '../../../../../layout/breadcrumb'
-import { Container, Row, Col, Card, Media, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
+import { Container, Row, Col, Card, Media, TabContent, TabPane, Nav, NavItem, NavLink, CardHeader } from 'reactstrap';
 import TimelineTab from './timelineTab';
 import AboutTab from './aboutTab';
 import FriendsTab from './friendsTab';
@@ -8,6 +8,8 @@ import PhotosTab from './photosTab';
 import {Timline,Friends,About,Photos,GeneralManager} from "../../../../../constant";
 import axios from "axios";
 import { withRouter } from "react-router-dom";
+import _ from "lodash";
+import { renderProfilePicVideo } from "./helpers/misc/index.js";
 
 class ProfileHackerIndividualHelper extends Component {
 constructor(props) {
@@ -44,7 +46,7 @@ constructor(props) {
         })
     }
     render () {
-        const { activeTab } = this.state;
+        const { activeTab, user } = this.state;
         return (
             <Fragment>
                 <Breadcrumb parent="Profile's" title="Individual Hacker Profile" />
@@ -53,12 +55,15 @@ constructor(props) {
                         <Row>
                             <Col sm="12">
                                 <Card className="hovercard text-center">
-                                    <div className="cardheader socialheader"></div>
+                                    <CardHeader className="cardheader socialheader" id="override-cardheader">
+                                        {_.has(user, "profileBannerImage") ? <img src={`${process.env.REACT_APP_ASSET_LINK}/${user.profileBannerImage.link}`} id="banner-photo-cover-all" /> : <img src={require('../../../../../assets/images/banner/2.jpg')} id="banner-photo-cover-all" />}
+                                    </CardHeader>
                                     <div className="user-image">
                                         <div className="avatar">
-                                            <Media body alt="user" src={require("../../../../../assets/images/user/1.jpg")} />
+                                            {user !== null ? renderProfilePicVideo(user.profilePicsVideos) : <Media body alt="user" src={require("../../../../../assets/images/user/1.jpg")} />}
                                         </div>
-                                        <div className="icon-wrapper"><i className="icofont icofont-pencil-alt-5"></i></div>
+                                        
+                                        {/* <div className="icon-wrapper"><i className="icofont icofont-pencil-alt-5"></i></div> */}
                                         <ul className="share-icons">
                                             <li><a className="social-icon bg-primary" href="#javascripts"><i className="fa fa-smile-o"></i></a></li>
                                             <li><a className="social-icon bg-secondary" href="#javascripts"><i className="fa fa-wechat"></i></a></li>

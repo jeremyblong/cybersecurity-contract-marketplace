@@ -35,7 +35,15 @@ This files table contents are outlined below>>>>>
 ** - Nice select Area
 ******************************************* /*
 
+
+
 /* slide up bottom pane styles START */
+
+@media only screen and (max-width: 754px) {
+  #hide-on-small {
+    display: none !important;
+  }
+}
 .react-modal-sheet-backdrop {
   /* custom styles */
 }

@@ -1,4 +1,4 @@
-import {Home,Bell,Headphones,ShoppingCart,Activity,Monitor} from 'react-feather';
+import {Home,Bell,Headphones,ShoppingCart,Activity,Monitor, Grid,Cpu,Briefcase,User,Command,CreditCard} from 'react-feather';
 
 export const MENUITEMS = [
     {
@@ -32,8 +32,19 @@ export const MENUITEMS = [
                 ]
             },
             {
-                title: "Explore/Connect", icon: ShoppingCart, type: "sub", active: false, children: [
+                title: "Explore/Connect", icon: Grid, type: "sub", active: false, children: [
                     { path: `${process.env.PUBLIC_URL}/people/list/employers/general`, title: "Browse Employer's", type: 'link' }
+                ]
+            },
+            {
+                title: "Software Exchange", icon: Cpu, type: "sub", active: false, children: [
+                    { path: `${process.env.PUBLIC_URL}/software/exchange/landing`, title: "Main Exchange Page", type: 'link' },
+                    { path: `${process.env.PUBLIC_URL}/create/listing/software/exchange/hacker/account`, title: "Create A Listing (Hacker's ONLY)", type: 'link' }
+                ]
+            },
+            {
+                title: "Hardware Exchange", icon: Cpu, type: "sub", active: false, children: [
+                    { path: `${process.env.PUBLIC_URL}/hardware/exchange/landing`, title: "Main Exchange Page", type: 'link' }
                 ]
             }
         ]
@@ -54,28 +65,28 @@ export const MENUITEMS = [
                 ]
             },
             {
-                title: 'Job Management', icon: Monitor, type: 'sub', active: false, children: [
+                title: 'Job Management', icon: Briefcase, type: 'sub', active: false, children: [
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Pay On Completed Hacks', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Manage Reviews & Past Work', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Current Hires', type: 'link' }
                 ]
             },
             {
-                title: 'Account Management', icon: Monitor, type: 'sub', active: false, children: [
+                title: 'Account Management', icon: User, type: 'sub', active: false, children: [
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Manage Core Settings', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Company Video/Intro', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Manage Public Profile', type: 'link' }
                 ]
             },
             {
-                title: 'Promote/Advertise', icon: Monitor, type: 'sub', active: false, children: [
+                title: 'Promote/Advertise', icon: Command, type: 'sub', active: false, children: [
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Advertise/Promote Account', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Manage Subscriptions', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Purchase Competition Slot/Entry', type: 'link' }
                 ]
             },
             {
-                title: 'Payments & Transfers', icon: Monitor, type: 'sub', active: false, children: [
+                title: 'Payments & Transfers', icon: CreditCard, type: 'sub', active: false, children: [
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Add/Manage Payment Methods', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Deposit Funds Into Account', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Make Payment To Hacker', type: 'link' },

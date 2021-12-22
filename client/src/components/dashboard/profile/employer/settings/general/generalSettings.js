@@ -22,6 +22,7 @@ import {
     options
 } from "./helpers/options/selectionOptions.js";
 import ReactPlayer from 'react-player';
+import "./styles.css";
 
 const GeneralSettingsEmployerHelper = ({ userData, authentication }) => {
     const [openAssets, setOpenAssets] = useState([]);
@@ -228,7 +229,7 @@ const GeneralSettingsEmployerHelper = ({ userData, authentication }) => {
                             isPaneOpen: true
                         }
                     })
-                }} className="img-70 rounded-circle" alt="" src={`${process.env.REACT_APP_ASSET_LINK}/${avatar.link}`} />
+                }} className="img-70 rounded-circle hover-rounded-circle" alt="" src={`${process.env.REACT_APP_ASSET_LINK}/${avatar.link}`} />
             );
         } else if (avatar.dataType === "video") {
             return (
@@ -252,7 +253,7 @@ const GeneralSettingsEmployerHelper = ({ userData, authentication }) => {
                             isPaneOpen: true
                         }
                     })
-                }} className="img-70 rounded-circle" alt="" src={require("../../../../../../assets/images/user/7.jpg")} />
+                }} className="img-70 rounded-circle hover-rounded-circle" alt="" src={require("../../../../../../assets/images/user/7.jpg")} />
             );
         }
     }
@@ -401,7 +402,7 @@ const GeneralSettingsEmployerHelper = ({ userData, authentication }) => {
                                         isPaneOpen: true
                                     }
                                 })
-                            }} className="img-70 rounded-circle" alt="" src={require("../../../../../../assets/images/user/7.jpg")} />}
+                            }} className="img-70 rounded-circle hover-rounded-circle" alt="" src={require("../../../../../../assets/images/user/7.jpg")} />}
                         </div>
                         <Col>
                             <h3 className="mb-1">{`${userData.firstName} ${userData.lastName}`}</h3>

@@ -65,20 +65,11 @@
     margin-top: -25px;
 }
 
-/* .user-image {
-    position: relative;
-    height: 0;
-    .avatar {
-      margin-top: -100px;
-      img {
-        width: 125px;
-        height: 125px;
-        max-width: 155px;
-        max-height: 155px;
-        border-radius: 50%;
-        border: 7px solid $white;
-      }
-    } */
 /* profile picture video styles END */
 
-/* .profile-picture-account */
+
+/* this SAME classname is referenced in "employer" generalSettings.js css file as well */
+.hover-rounded-circle:hover {
+    border: 3.5px solid blue !important;
+    cursor: pointer !important;
+}

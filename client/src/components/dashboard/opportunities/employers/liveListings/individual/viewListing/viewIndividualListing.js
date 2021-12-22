@@ -19,6 +19,8 @@ import { DateRange } from 'react-date-range';
 import ReactPlayer from 'react-player';
 import FileViewer from 'react-file-viewer';
 import { Modal } from 'react-responsive-modal';
+import { renderProfilePicVideo } from "./helpers/profilePicVideo/displayPicOrVideo.js";
+
 
 const Map = ReactMapboxGl({
     accessToken: process.env.REACT_APP_MAPBOX_TOKEN
@@ -32,6 +34,7 @@ const ViewIndividualJobListingHelper = (props) => {
     const [ ready, setReady ] = useState(false);
     const [ fileModal, setFileModal ] = useState(false);
     const [ file, setFile ] = useState(null);
+    const [ employerInfo, setEmployerInfo ] = useState(null);
 
     const [JobData,setJobData] = useState([{
         badgeType: "primary",
@@ -133,48 +136,66 @@ const ViewIndividualJobListingHelper = (props) => {
 
     useEffect(() => {
         if (typeof passedData.state !== "undefined" && _.has(passedData.state, "listing")) {
-            const { assetArray, typeOfHack, testingDatesHackers, rulesOfEngagement, publicCompanyName, outOfScopeVulnerabilities, listingDescription, hashtags, businessAddress, requiredRankToApply, experienceAndCost, desiredSkills, maxNumberOfApplicants, disclosureVisibility, tokensRequiredToApply, listingVisibility, estimatedCompletionDate, uploadedFiles, applicants } = passedData.state.listing;
+            const { assetArray, typeOfHack, testingDatesHackers, rulesOfEngagement, publicCompanyName, outOfScopeVulnerabilities, listingDescription, hashtags, businessAddress, requiredRankToApply, experienceAndCost, desiredSkills, maxNumberOfApplicants, disclosureVisibility, tokensRequiredToApply, listingVisibility, estimatedCompletionDate, uploadedFiles, applicants, postedBy } = passedData.state.listing;
 
             const newDatesArray = [];
 
-            for (let index = 0; index < testingDatesHackers.length; index++) {
-                const selectedDate = testingDatesHackers[index];
-                
-                const { startDate, endDate, key } = selectedDate;
-
-                const newData = {
-                    startDate: new Date(startDate),
-                    endDate: new Date(endDate),
-                    key
+            axios.get(`${process.env.REACT_APP_BASE_URL}/retrieve/related/employer/core/information`, {
+                params: {
+                    uniqueId: postedBy
                 }
+            }).then((res) => {
+                if (res.data.message === "Gathered relevant information!") {
+                    console.log(res.data);
 
-                newDatesArray.push(newData);
-            }
+                    const { user } = res.data;
 
-            const newData = {
-                assetArray, 
-                typeOfHack, 
-                testingDatesHackers: newDatesArray, 
-                rulesOfEngagement, 
-                publicCompanyName, 
-                outOfScopeVulnerabilities, 
-                listingDescription, 
-                hashtags, 
-                businessAddress, 
-                requiredRankToApply, 
-                experienceAndCost, 
-                desiredSkills, 
-                maxNumberOfApplicants, 
-                disclosureVisibility, 
-                tokensRequiredToApply, 
-                listingVisibility, 
-                estimatedCompletionDate, 
-                uploadedFiles,
-                applicants
-            };
+                    setEmployerInfo(user);
 
-            setData(newData);
-            setReady(true);
+                    for (let index = 0; index < testingDatesHackers.length; index++) {
+                        const selectedDate = testingDatesHackers[index];
+                        
+                        const { startDate, endDate, key } = selectedDate;
+        
+                        const newData = {
+                            startDate: new Date(startDate),
+                            endDate: new Date(endDate),
+                            key
+                        }
+        
+                        newDatesArray.push(newData);
+                    }
+        
+                    const newData = {
+                        assetArray, 
+                        typeOfHack, 
+                        testingDatesHackers: newDatesArray, 
+                        rulesOfEngagement, 
+                        publicCompanyName, 
+                        outOfScopeVulnerabilities, 
+                        listingDescription, 
+                        hashtags, 
+                        businessAddress, 
+                        requiredRankToApply, 
+                        experienceAndCost, 
+                        desiredSkills, 
+                        maxNumberOfApplicants, 
+                        disclosureVisibility, 
+                        tokensRequiredToApply, 
+                        listingVisibility, 
+                        estimatedCompletionDate, 
+                        uploadedFiles,
+                        applicants
+                    };
+        
+                    setData(newData);
+                    setReady(true);
+                } else {
+                    console.log("err", res.data);
+                }
+            }).catch((err) => {
+                console.log(err);
+            })
         };
     }, []);
 
@@ -544,10 +565,98 @@ const ViewIndividualJobListingHelper = (props) => {
             );
         }
     }
+    const renderHeaderConditionally = () => {
+        if (ready === true) {
+            return (
+                <Row>
+                    <Col sm="12">
+                    <Card className="card hovercard text-center">
+                        <CardHeader id="override-cardheader">
+                            {_.has(employerInfo, "profileBannerImage") ? <img src={`${process.env.REACT_APP_ASSET_LINK}/${employerInfo.profileBannerImage.link}`} id="banner-photo-cover-all" /> : <img src={require('../../../../../../../assets/images/banner/2.jpg')} id="banner-photo-cover-all" />}
+                            <img src={require('../../../../../../../assets/icons/edit-image.png')} onClick={() => {
+                                this.setState({
+                                    isOpen: true
+                                })
+                            }} className="absolute-img-top-right" />
+                        </CardHeader>
+                        <div className="user-image">
+                        <div className="avatar">
+                            {renderProfilePicVideo(employerInfo.profilePicsVideos)}
+                        </div>
+                        
+                        </div>
+                        <div id="custom-info-override" className="info">
+                        <Row>
+                            <Col sm="6" lg="4" className="order-sm-1 order-xl-0">
+                            <Row >
+                                <Col md="6">
+                                <div className="ttl-info text-left">
+                                    <h6><i className="fa fa-envelope mr-2"></i>Email</h6><span>Enter some random BS here...</span>
+                                </div>
+                                </Col>
+                                <Col md="6">
+                                <div className="ttl-info text-left ttl-sm-mb-0">
+                                    <h6><i className="fa fa-calendar"></i>DOB</h6><span>Enter some random BS here...</span>
+                                </div>
+                                </Col>
+                            </Row>
+                            </Col>
+                            <Col sm="12" lg="4" className="order-sm-0 order-xl-1">
+                            <div className="user-designation">
+                                <div className="title"><a target="_blank" href="#javascript">Enter some random BS here...</a></div>
+                                <div className="desc mt-2">Designer</div>
+                            </div>
+                            </Col>
+                            <Col sm="6" lg="4" className="order-sm-2 order-xl-2">
+                            <Row>
+                                <Col md="6">
+                                <div className="ttl-info text-left ttl-xs-mt">
+                                    <h6><i className="fa fa-phone"></i>Contact Us</h6><span>Enter some random BS here...</span>
+                                </div>
+                                </Col>
+                                <Col md="6">
+                                <div className="ttl-info text-left ttl-sm-mb-0">
+                                    <h6><i className="fa fa-location-arrow"></i>Location</h6><span>Enter some random BS here...</span>
+                                </div>
+                                </Col>
+                            </Row>
+                            </Col>
+                        </Row>
+                        <hr />
+                        <div className="social-media step4" data-intro="This is your Social details">
+                            <ul className="list-inline">
+                            <li className="list-inline-item"><a href="#javascript"><i className="fa fa-facebook"></i></a></li>
+                            <li className="list-inline-item"><a href="#javascript"><i className="fa fa-google-plus"></i></a></li>
+                            <li className="list-inline-item"><a href="#javascript"><i className="fa fa-twitter"></i></a></li>
+                            <li className="list-inline-item"><a href="#javascript"><i className="fa fa-instagram"></i></a></li>
+                            <li className="list-inline-item"><a href="#javascript"><i className="fa fa-rss"></i></a></li>
+                            </ul>
+                        </div>
+                        <div className="follow">
+                            <Row>
+                            <Col col="6" className="text-md-right border-right">
+                                <div className="follow-num counter">{"25869"}</div><span>Follower</span>
+                            </Col>
+                            <Col col="6" className="text-md-left">
+                                <div className="follow-num counter">{"659887"}</div><span>Following</span>
+                            </Col>
+                            </Row>
+                        </div>
+                        </div>
+                    </Card>
+                    </Col>
+                </Row>
+            );
+        } 
+    }
+    console.log("employerInfo", employerInfo);
     return (
         <Fragment>
             <Breadcrumb parent="Active Hacking Opportunities" title="Individual Job Details"/>
             <Container fluid={true}>
+                <div className="user-profile">
+                    {renderHeaderConditionally()}
+                </div>
                 <Row>
                     {/* <JobFilter /> */}
                     {renderContent()}
