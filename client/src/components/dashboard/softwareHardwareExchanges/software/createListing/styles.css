@@ -1,0 +1,37 @@
+.push-bottom-progress-bar {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    margin: 12.5px;
+    z-index: 1 !important;
+}
+.position-middle-bar-div {
+    width: 37.5%;
+    margin: 0 auto;
+    margin-bottom: -7.5px !important;
+}
+#progress-text-centered {
+    font-weight: 500;
+    z-index: 99999 !important;
+}
+.reactstrap-progress-bar-custom {
+    z-index: -1 !important;
+    position: relative;
+}
+.spacer-paragraph {
+    padding-bottom: 20px;
+}
+@media only screen and (max-width: 1080px) {
+    .spacer-paragraph {
+        padding-bottom: 50px;
+    }
+}
+@media only screen and (max-width: 890px) {
+    .spacer-paragraph {
+        padding-bottom: 80px;
+    }
+}
+.container-create-listing-software-loadbar {
+    z-index: 100 !important;
+}

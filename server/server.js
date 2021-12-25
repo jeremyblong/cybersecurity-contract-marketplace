@@ -110,6 +110,7 @@ app.use("/save/user/geolocation", require("./routes/locationServices/userLocatio
 app.use("/upload/banner/photo/employer/profile", require("./routes/employers/profile/newBanner/uploadNewBannerImage.js"));
 app.use("/retrieve/related/employer/core/information", require("./routes/employers/employerListings/gatherPosterInformation/fetchCoreRelatedInfo/fetchDetails.js"));
 app.use("/upload/banner/photo/hacker/profile", require("./routes/hackers/profile/newBanner/uploadNewBannerImage.js"));
+app.use("/upload/misc/file/softare/listing/sale", require("./routes/hackers/softwareHardwareMarketplace/software/createListing/uploadFiles/uploadGeneralFilePremature.js"));
 
 // ~ webhook logic STARTS here ~
 app.use("/passbase/webhook", require("./webhooks/passbase/webhook.js"));

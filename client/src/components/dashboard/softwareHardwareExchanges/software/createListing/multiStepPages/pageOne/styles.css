@@ -3,7 +3,52 @@
     margin-top: 0.1rem;
     font-size: 0.875rem;
     line-height: 1.5;
-    color: #fff;
+    color: #fff !important;
     background-color: rgba(220, 53, 69, 0.9);
     border-radius: 0.25rem;
+}
+.bottom-row-spacing {
+    padding-bottom: 50px;
+}
+.custom-link-within-desc {
+    background-color: rgba(84, 66, 247, 0.897);
+    color: white;
+    padding: 0px 3.5px;
+}
+.custom-strong-company-name {
+    color: black;
+    text-decoration-line: underline;
+}
+.popover-cancel-container {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    max-width: 25px;
+    max-height: 25px;
+    min-width: 25px;
+    min-height: 25px;
+    z-index: 9999999999 !important;
+    cursor: pointer !important;
+}
+.small-close-popover-icon {
+    max-width: 25px;
+    max-height: 25px;
+    min-width: 25px;
+    min-height: 25px;
+    z-index: 9999999999 !important;
+    cursor: pointer !important;
+}
+.make-popover-interactive {
+    z-index: 99999999999999999 !important;
+}
+.title-selectors {
+    padding-bottom: 20px;
+}
+.stretch-bars {
+    width: 100%;
+    min-width: 100%;
+}
+.small-sub-text {
+    font-size: 12px;
+    color: darkblue;
 }
