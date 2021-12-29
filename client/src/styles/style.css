@@ -36,6 +36,22 @@ This files table contents are outlined below>>>>>
 ******************************************* /*
 
 
+/* CUSTOM BUTTON STYLING START - ENTIRE APPLICATION */
+.btn-disabled {
+  background-color: rgb(235, 235, 228) !important;
+}
+.centered-both-ways {
+  display: -webkit-flexbox;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  justify-content: center;
+}
+/* CUSTOM BUTTON STYLING END - ENTIRE APPLICATION */
 
 /* slide up bottom pane styles START */
 

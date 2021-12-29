@@ -10,8 +10,9 @@ import { NotificationManager } from 'react-notifications';
 import { authentication } from "../../redux/actions/authentication/auth.js";
 import { confirmAlert } from 'react-confirm-alert';
 import { saveListingData } from "../../redux/actions/employer/listings/listingData.js";
+import { saveSoftwareListingInfo } from "../../redux/actions/hackers/createSoftwareListing/createNewSoftwareListingSale.js";
 
-const Navbar = ({ data, authenticated, authentication, saveListingData }) => {
+const Navbar = ({ data, authenticated, authentication, saveListingData, saveSoftwareListingInfo }) => {
 
     const history = useHistory();
 
@@ -52,6 +53,7 @@ const Navbar = ({ data, authenticated, authentication, saveListingData }) => {
                 setTimeout(() => {
                     authentication({});
                     saveListingData({});
+                    saveSoftwareListingInfo({});
 
                     history.push("/");
                 }, 3000);
@@ -354,4 +356,4 @@ const mapStateToProps = (state) => {
         authenticated: (_.has(state.auth, "data") && Object.keys(state.auth.data).length > 0) ? true : false
     }
 }
-export default connect(mapStateToProps, { authentication, saveListingData })(Navbar);
+export default connect(mapStateToProps, { authentication, saveListingData, saveSoftwareListingInfo })(Navbar);

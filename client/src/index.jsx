@@ -26,6 +26,7 @@ import 'react-accessible-accordion/dist/fancy-example.css';
 import 'react-image-crop/dist/ReactCrop.css';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import "react-image-gallery/styles/css/image-gallery.css";
 // components
 import React, { Fragment,useState,useEffect } from 'react';
 import ReactDOM from 'react-dom';

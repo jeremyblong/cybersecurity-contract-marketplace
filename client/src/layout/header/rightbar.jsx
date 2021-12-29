@@ -19,6 +19,7 @@ import { authentication } from "../../redux/actions/authentication/auth.js";
 import { useHistory } from "react-router-dom";
 import { confirmAlert } from 'react-confirm-alert';
 import { saveListingData } from "../../redux/actions/employer/listings/listingData.js";
+import { saveSoftwareListingInfo } from "../../redux/actions/hackers/createSoftwareListing/createNewSoftwareListingSale.js";
 
 import en from '../../assets/i18n/en.json';
 import es from '../../assets/i18n/es.json';
@@ -33,7 +34,7 @@ setTranslations({ en, es, pt, fr, du, cn, ae });
 setDefaultLanguage('en');
 setLanguageCookie();
 
-const Rightbar = ({ authenticated, data, authentication, saveListingData }) => {   
+const Rightbar = ({ authenticated, data, authentication, saveListingData, saveSoftwareListingInfo }) => {   
   const history = useHistory();
    
   const [searchresponsive, setSearchresponsive] = useState(false)
@@ -122,6 +123,7 @@ const Rightbar = ({ authenticated, data, authentication, saveListingData }) => {
 
             authentication({});
             saveListingData({});
+            saveSoftwareListingInfo({});
         } else {
             console.log("err", res.data);
         }
@@ -340,4 +342,4 @@ const mapStateToProps = (state) => {
       authenticated: (_.has(state.auth, "data") && Object.keys(state.auth.data).length > 0) ? true : false
   }
 }
-export default connect(mapStateToProps, { authentication, saveListingData })(translate(Rightbar));
+export default connect(mapStateToProps, { authentication, saveListingData, saveSoftwareListingInfo })(translate(Rightbar));

@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import _ from 'lodash';
 import PageTwoMainHelper from "./multiStepPages/pageTwo/pageTwoMain.js";
 import "./styles.css";
+import PageThreeHelper from "./multiStepPages/pageThree/pageThreeMain.js";
 
 class CreateNewSoftwareListingHelper extends Component {
 constructor (props) {
@@ -31,6 +32,9 @@ constructor (props) {
                 break;
             case 2: 
                 return <PageTwoMainHelper props={this.props} />;
+                break;
+            case 3: 
+                return <PageThreeHelper props={this.props} />;
                 break;
             default:
                 break;
@@ -86,10 +90,10 @@ constructor (props) {
                     }}
                 />
                 <Breadcrumb parent="Software (digital assets) Marketplace" title="Create a listing to sell software/code"/>
-                <Container fluid={true}>
+                <Container className="full-height-container" fluid={true}>
                     <Row>
                         <Col sm="12" md="12" lg="12" xl="12">
-                            <Card>
+                            <Card className="full-height-container">
                                 <CardHeader>
                                     <h5>Create a <strong style={{ color: "blue" }}>software</strong> listing - post a code snippet, malware, viruses, etc...</h5>
                                     <p>We are <em style={{ color: "red", textDecorationLine: "underline" }}>NOT</em> in any shape or form responsible if you use these codes/programs in a malicious manner AND any suspicious activity or reports <strong style={{ textDecorationLine: "underline", color: "red" }}>WILL</strong> be throughly investigated & reported to the appropriate authorities.</p>
@@ -102,7 +106,7 @@ constructor (props) {
                                         <Progress className="reactstrap-progress-bar-custom" animated color="secondary" value={progress} />
                                     </div>
                                 </CardHeader>
-                                <CardBody>
+                                <CardBody className="full-height-cardbody-extra">
                                     {this.renderConditionalPageContent()}
                                 </CardBody>
                             </Card>
@@ -117,7 +121,7 @@ const mapStateToProps = (state) => {
     console.log("State in 'createNewListing.js'", state);
 
     return {
-        currentPage: _.has(state.softwareListingSale, "softwareListingSaleInfo") ? state.softwareListingSale.softwareListingSaleInfo.currentPage : 1
+        currentPage: _.has(state.softwareListingSale, "softwareListingSaleInfo") && Object.keys(state.softwareListingSale.softwareListingSaleInfo).length > 0 ? state.softwareListingSale.softwareListingSaleInfo.currentPage : 1
     }
 }
 export default connect(mapStateToProps, {  })(CreateNewSoftwareListingHelper);

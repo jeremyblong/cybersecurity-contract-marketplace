@@ -71,3 +71,124 @@
     -webkit-box-shadow: 0px 0px 12px 2px #fff !important; 
     box-shadow: 0px 0px 12px 2px #fff !important;
 }
+/* file data PREVIEW START */
+.filereader-preview-dropzone {
+    margin-top: 50px !important;
+    margin-bottom: 100px !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+/* file data PREVIEW END */
+
+.absolutely-position-submit-btn {
+    position: relative;
+    margin-top: -45px;
+    margin-bottom: 100px;
+    padding-bottom: 100px;
+}
+.absolutely-position-submit-btn button {
+    min-width: 100% !important;
+    padding-right: 175px !important;
+    margin-top: 125px !important;
+    padding-left: 175px !important;
+}
+@media only screen and (max-width: 1175px) {
+    .absolutely-position-submit-btn button {
+        min-width: 100% !important;
+        padding-right: 25px !important;
+        padding-left: 25px !important;
+    }
+}
+.filereader-preview-dropzone .pg-viewer-wrapper {
+    min-width: 400px;
+    min-height: calc(100% + 40px);
+}
+.filereader-preview-dropzone img {
+    width: 75%;
+    position: absolute;
+    min-height: 225px;
+    top: 10px;
+    object-fit: contain;
+    height: 75%;
+    max-width: 75%;
+    max-height: 75%;
+}
+.filereader-preview-dropzone video {
+    width: 75%;
+    position: absolute;
+    min-height: 225px;
+    top: 10px;
+    object-fit: contain;
+    height: 75%;
+    max-width: 75%;
+    max-height: 75%;
+}
+.apply-special-hover-effect:hover {
+    cursor: pointer;
+    color: blue !important;
+}
+.apply-special-hover-effect-black-icon:hover {
+    cursor: pointer;
+    color: blue !important;
+}
+.apply-special-hover-effect-black-icon {
+    color: black !important;
+}
+.filereader-preview-dropzone .video-container {
+    min-height: 250px !important;
+}
+.filereader-preview-dropzone #pg-photo-container {
+    width: 65%;
+    height: 65%;
+    max-width: 65%;
+    max-height: 65%;
+    margin: 0 auto;
+}
+.custom-input-dropzone-copy {
+    display: flex;
+    background-color: transparent !important;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    font-family: 'Helvetica', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: #7366ff !important;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    cursor: pointer;
+}
+.custom-dropzone-input-actual-input {
+    margin: 0;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    background-color: transparent !important;
+}
+#modal-button-showcase-cardbody {
+    max-width: 40vw;   
+}
+.centered-button-container {
+    margin-top: 25px;
+}
+.secondary-hr {
+    border-top: 1px solid #f73164;
+    background-color: #f73164;
+    margin-top: 25px;
+}
+#button-group-custom-secondary {
+    width: 100%;
+}
+.set-background-hover:hover {
+    color: #2c323f !important;
+    border-color: #2c323f !important;
+    background-color: transparent !important;
+    border-width: 2.5px !important;
+}
+.specific-edit-border-right {
+    border-right: 3px solid #7366ff !important;
+}

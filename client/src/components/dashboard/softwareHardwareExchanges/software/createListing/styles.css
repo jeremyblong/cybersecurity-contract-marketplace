@@ -35,3 +35,9 @@
 .container-create-listing-software-loadbar {
     z-index: 100 !important;
 }
+.reactstrap-progress-bar-custom {
+    height: 0.5rem !important;
+}
+.full-height-cardbody-extra {
+    /* nothing should go here for now */
+}

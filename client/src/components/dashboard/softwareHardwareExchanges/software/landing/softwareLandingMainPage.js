@@ -8,7 +8,6 @@ import errorImg from '../../../../../assets/images/search-not-found.png';
 import Allfilters from './helpers/allfilters.jsx';
 import Carousal from './helpers/carousal.jsx';
 import uuid from "react-uuid";
-// import { getVisibleproducts } from '../../../services/ecommerce.service';
 import { Filters,ShowingProducts,Featured,LowestPrices,HighestPrices,NotFoundData,ProductDetails,Quantity,AddToCart,ViewDetails,ProductSizeArray } from "../../../../../constant";
 import "./styles.css";
 

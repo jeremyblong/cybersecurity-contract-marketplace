@@ -1,0 +1,246 @@
+.hashtagsTagsClass {
+    /* tags */
+}
+.hashtagsTagInputClass {
+    /* tagInput */
+}
+.hashtagsTagInputFieldClass {
+    /* tagInputField */
+    display: block;
+    width: 100%;
+    height: calc(1.5em + 0.75rem + 2px);
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.hashtagsSelectedClass {
+    /* selected */
+}
+.hashtagsTagClass {
+    /* tag */
+    margin: 2.5px 5px;
+    font-size: 14px;
+}
+.hashtagsRemoveClass {
+    /* remove */
+    margin-left: 10px;
+    color: white !important;
+    border: 1.5px solid white;
+    border-radius: 5px;
+    background-color: black;
+}
+.hashtagsSuggestionsClass {
+    /* suggestions */
+}
+.hashtagsActiveSuggestionClass {
+    /* activeSuggestion */
+}
+.custom-suggestion-groupitem:hover {
+    background-color: #7366ff !important;
+    color: white !important;
+    cursor: pointer !important;
+}
+#PopoverReviewersInfo:hover {
+    cursor: pointer !important;
+}
+.subheader-tabbed-card {
+    color: white !important;
+    font-weight: 450;
+}
+.custom-tabbed-card-form {
+    min-height: 325px !important;
+    height: calc(100% + 85px) !important;
+}
+.add-custom-card-border-tabbed {
+    
+}
+
+/* START Of upload card styles */
+.redesign-custom-tab-card-upload-content {
+    top: 75px !important;
+    height: 100% !important;
+    box-shadow: 0px 0px 17.5px 6px rgba(8, 21, 66, 0.175) !important;
+}
+#cardbody-dropzone-one {
+    height: 100%;
+}
+#upload-row-custom .card .tabbed-card .tabpane-custom-maxed .redesign-custom-tab-card-upload-content {
+    max-height: 775px !important;
+    overflow-y: scroll;
+}
+.redesign-custom-tab-card-upload-content .card-body {
+    /* border-left: 0.5px solid black;
+    border-right: 0.5px solid black; */
+    /* border-bottom: 0.5px solid black;
+    border-bottom-left-radius: 12.5px;
+    border-bottom-right-radius: 12.5px; */
+    margin-top: -22.5px !important;
+}
+.redesign-custom-tab-card-upload-content .card-header {
+    background-color: #fff !important;
+    left: 0px !important;
+    padding: 40px !important;
+    border-bottom: 1px solid #ecf3fa !important;
+    border-bottom-width: 1px !important;
+    border-top-left-radius: 15px !important;
+    border-bottom: 1px solid #7366ff !important;
+    border-top-right-radius: 15px !important;
+    position: relative !important;
+}
+.outsider-header-card-custom {
+    border: 2.25px solid black;
+}
+.outsider-header-card-custom h5 {
+    /* this is the custom card header text */
+}
+#upload-row-custom .tabbed-card .nav-pills .nav-item .active {
+    background-color: #000 !important;
+    color: white !important;
+}
+#upload-row-custom .tabbed-card .nav-pills .nav-item .nav-link {
+    color: #000;
+}
+#upload-row-custom .tabbed-card .nav-pills .nav-item .nav-link:hover {
+    cursor: pointer;
+}
+.outsider-header-card-custom-upload {
+    background-color: #fff !important;
+    border: 1.75px solid black;
+    box-shadow: 0px -2.25px 5px 0px rgba(8, 21, 66, 0.175) !important;
+}
+.outsider-header-card-custom-upload h5 {
+    color: black !important;
+}
+/*  END Of upload content styles */
+.redesign-custom-tab-card {
+    top: 75px !important;
+    height: 425px !important;
+    box-shadow: 0px -2.25px 25px 6px rgba(8, 21, 66, 0.175) !important;
+}
+.redesign-custom-tab-card .card-body {
+    border-left: 0.5px solid black;
+    border-right: 0.5px solid black;
+    border-bottom: 0.5px solid black;
+    border-bottom-left-radius: 12.5px;
+    border-bottom-right-radius: 12.5px;
+    margin-top: -22.5px !important;
+    max-height: 800px !important;
+    overflow-y: scroll;
+}
+/* @media only screen and (max-width: 1550px) {
+    .redesign-custom-tab-card .card-body {
+        border-left: 0.5px solid black;
+        border-right: 0.5px solid black;
+        border-bottom: 0.5px solid black;
+        border-bottom-left-radius: 12.5px;
+        border-bottom-right-radius: 12.5px;
+        margin-top: -22.5px !important;
+        max-height: 775px !important;
+        overflow-y: scroll;
+    }
+} */
+.redesign-custom-tab-card .card-header {
+    background-color: #fff !important;
+    left: 0px !important;
+    padding: 40px !important;
+    border-bottom: 1px solid #ecf3fa !important;
+    border-bottom-width: 1px !important;
+    border-top-left-radius: 15px !important;
+    border-bottom: 1px solid #7366ff !important;
+    border-top-right-radius: 15px !important;
+    position: relative !important;
+}
+.mobile-adjustment-upload-related {
+    margin-top: 75px !important;
+    margin-bottom: 75px !important;
+}
+/* EDIT THIS STUFF FOR CARD HEIGHT - CURRENT TASK */
+@media only screen and (max-width: 1550px) {
+    .mobile-adjustment-upload-related {
+        margin-top: 200px !important;
+    }
+    #upload-row-custom div .card {
+        height: calc(100% + 100px) !important;
+        /* margin-bottom: 125px !important; */
+    }
+}
+@media only screen and (min-width: 1100px) {
+    #upload-row-custom div .card {
+        height: calc(100% + 100px) !important;
+        margin-bottom: 45px;
+    }
+}
+#upload-row-custom div .card {
+    height: calc(100% + 100px) !important;
+    margin-bottom: 55px;
+}
+#upload-row-custom > div:nth-child(1) > div:nth-child(1) {
+    height: calc(100% + 100px) !important;
+    margin-bottom: 85px;
+}
+@media only screen and (max-width: 1000px) {
+    #upload-row-custom div .card {
+        height: calc(100% + 100px) !important;
+        margin-bottom: 107.5px !important;
+    }
+}
+/* EDIT THIS STUFF FOR CARD HEIGHT - CURRENT TASK ABOVE ^^^^^ */
+.cancel-button-upload {
+    width: 37.5%;
+}
+.custom-tabbed-card-form .nav .nav-item .nav-link {
+    margin: 7.5px !important;
+    margin-top: 17.5px !important;
+}
+div.card-absolute.card div.tabbed-card.custom-tabbed-card-form.card-body div.tab-content div.tab-pane.tabpane-custom-maxed.active div.redesign-custom-tab-card-upload-content.card {
+    margin-top: 45px;
+}
+@media only screen and (max-width: 750px) {
+    div.card-absolute.card div.tabbed-card.custom-tabbed-card-form.card-body div.tab-content div.tab-pane.tabpane-custom-maxed.active div.redesign-custom-tab-card-upload-content.card {
+        /* margin-top: 0px !important; */
+        top: -12.5px !important;
+    }
+}
+@media only screen and (min-width: 1375px) {
+    div.card-absolute.card div.tabbed-card.custom-tabbed-card-form.card-body div.tab-content div.tab-pane.tabpane-custom-maxed.active div.redesign-custom-tab-card-upload-content.card {
+        margin-top: 0px;
+    }
+}
+div.card-absolute.card div.tabbed-card.custom-tabbed-card-form.card-body div.tab-content div.tab-pane.tabpane-custom-maxed.active div.redesign-custom-tab-card.card {
+    margin-top: 45px;
+}
+/* bottom card logic */
+@media only screen and (max-width: 1466px) {
+    div.card-absolute.card div.tabbed-card.custom-tabbed-card-form.card-body div.tab-content div.tab-pane.tabpane-custom-maxed.active div.redesign-custom-tab-card.card {
+        top: 112.5px !important;
+    }
+}
+@media only screen and (max-width: 1116px) {
+    div.card-absolute.card div.tabbed-card.custom-tabbed-card-form.card-body div.tab-content div.tab-pane.tabpane-custom-maxed.active div.redesign-custom-tab-card.card {
+        top: 175px !important;
+    }
+}
+@media only screen and (max-width: 969px) {
+    div.card-absolute.card div.tabbed-card.custom-tabbed-card-form.card-body div.tab-content div.tab-pane.tabpane-custom-maxed.active div.redesign-custom-tab-card.card {
+        top: 92.5px !important;
+    }
+}
+@media only screen and (max-width: 750px) {
+    div.card-absolute.card div.tabbed-card.custom-tabbed-card-form.card-body div.tab-content div.tab-pane.tabpane-custom-maxed.active div.redesign-custom-tab-card.card {
+        top: 0px !important;
+    }
+}
+.full-height-container {
+    height: 100% !important;
+}
+/* end of media queries - tabs specifically */
+/* div.card div.card-body div div.container-fluid form.needs-validation.tooltip-validation div#upload-row-custom.row div.col-sm-12.col-md-12.col-lg-12.col-xl-12 div.card-absolute.card div.tabbed-card.custom-tabbed-card-form.card-body {
+    height: 2250px !important;
+} */

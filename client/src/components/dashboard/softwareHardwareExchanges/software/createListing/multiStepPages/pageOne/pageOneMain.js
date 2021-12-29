@@ -304,15 +304,11 @@ const PageOneMainHelper = ({ saveSoftwareListingInfo }) => {
                                 setPopover(!popoverOpen);
                             }}>support policy</a> {" for what it means to support or not support your buyers. "}</span>
                             <Popover
-                            // onMouseLeave={() => {
-                            //     if (popoverOpen === true) {
-                            //         setPopover(false);
-                            //     }
-                            // }} 
-                            className="make-popover-interactive"
-                            placement="bottom" isOpen={popoverOpen} target="Popover1" toggle={() => {
-                                setPopover(!popoverOpen);
-                            }}>
+                                className="make-popover-interactive"
+                                placement="bottom" isOpen={popoverOpen} target="Popover1" toggle={() => {
+                                    setPopover(!popoverOpen);
+                                }}
+                            >
                                 <PopoverHeader>Support Policy Re-direct! <div className="popover-cancel-container" onClick={() => {
                                     setPopover(false);
                                 }}><img src={require("../../../../../../../assets/icons/close-64.png")} className="small-close-popover-icon" /></div></PopoverHeader>

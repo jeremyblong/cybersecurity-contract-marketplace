@@ -1,0 +1,49 @@
+.stretched-purchase-options-btn {
+    width: 62.50% !important;
+}
+.custom-breadcrumb-class .breadcrumb {
+    background-color: transparent !important;
+    padding: 0;
+    margin-top: 5px;
+    margin-bottom: 0;
+    justify-content: flex-end;
+}
+.custom-breadcrumb-class .breadcrumb .breadcrumb-item a svg {
+    width: 14px;
+    height: 14px;
+    vertical-align: text-top;
+}
+.add-normal-backer {
+    background-color: #f8f8f8 !important;
+    width: 100% !important;
+    height: 100% !important;
+    padding: 17.5px;
+}
+.card-main-container {
+    height: 100%;
+}
+.stretch-and-space-btn-left {
+    width: 100%;
+}
+.stretch-and-space-btn-right {
+    width: 100%;
+}
+.sheetheader .row div {
+    margin: 0px !important;
+    z-index: 0 !important;
+    padding: 0px !important;
+}
+html body.light-only.ltr div#sheet-ultimate {
+    z-index: 100 !important;
+}
+html body.light-only.ltr div#root div#pageWrapper.page-wrapper.compact-wrapper.enact-nonclick {
+    z-index: -100 !important;
+    pointer-events: none;
+} 
+html body.light-only.ltr div#sheet-ultimate div.react-modal-sheet-container {
+    z-index: 100 !important;
+    /* pointer-events: none !important; */
+}
+html body.light-only.ltr div#sheet-ultimate div#custom-backdrop-noclick.react-modal-sheet-backdrop {
+    pointer-events: none !important;
+}

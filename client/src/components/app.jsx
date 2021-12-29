@@ -1,17 +1,26 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import Loader from "../layout/loader";
 import Header from '../layout/header'
 import Sidebar from '../layout/sidebar'
 import Footer from '../layout/footer'
 import ThemeCustomize from "../layout/theme-customizer";
-import {ToastContainer} from 'react-toastify'
+import {ToastContainer} from 'react-toastify';
+import { connect } from "react-redux";
+import _ from "lodash";
+import { shiftCoreStyles } from "../redux/actions/universal/index.js";
 
-const App = ({children}) => {
+const App = ({ children, paneActive }) => {
+
+  useEffect(() => {
+    console.log("state change");
+    
+    shiftCoreStyles(false);
+  }, [])
   console.warn = () => {}
   return (
     <Fragment>
       <Loader/>
-      <div className="page-wrapper compact-wrapper" id="pageWrapper">
+      <div className={paneActive === true ? "page-wrapper compact-wrapper enact-nonclick" : "page-wrapper compact-wrapper"} id="pageWrapper">
       <Header/>
       <div className="page-body-wrapper sidebar-icon">
         <Sidebar/>
@@ -26,5 +35,10 @@ const App = ({children}) => {
     </Fragment>
   );
 }
-
-export default App;
+const mapStateToProps = (state) => {
+  console.log("state THE MF JACKPOT! : ", state); // changeGlobalStyles
+  return {
+    paneActive: _.has(state.changeGlobalStyles, "paneActive") ? state.changeGlobalStyles.paneActive : false
+  }
+}
+export default connect(mapStateToProps, { shiftCoreStyles })(App);
