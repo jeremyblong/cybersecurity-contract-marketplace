@@ -232,7 +232,7 @@ const Rightbar = ({ authenticated, data, authentication, saveListingData, saveSo
                     </div>
                     <h6 className="text-right text-muted">{"$299.00"}</h6>
                   </div>
-                  <div className="close-circle"><a href="#javascript"><X/></a></div>
+                  <div className="close-circle"><a href={null}><X/></a></div>
                 </div>
               </li>
               <li className="mt-0">
@@ -252,7 +252,7 @@ const Rightbar = ({ authenticated, data, authentication, saveListingData, saveSo
                     </div>
                     <h6 className="text-right text-muted">{"$299.00"}</h6>
                   </div>
-                  <div className="close-circle"><a href="#javascript"><X/></a></div>
+                  <div className="close-circle"><a href={null}><X/></a></div>
                 </div>
               </li>
               <li>
@@ -304,7 +304,7 @@ const Rightbar = ({ authenticated, data, authentication, saveListingData, saveSo
               }} className="btn btn-primary">{ViewAll}</button></li>
             </ul>
           </li>
-          <li className="maximize"><a className="text-dark" href="#javascript" onClick={goFull}><Minimize /></a></li>
+          <li className="maximize"><a className="text-dark" href={null} onClick={goFull}><Minimize /></a></li>
           <li className="profile-nav onhover-dropdown p-0">
             <div className="media profile-media">
               <img className="b-r-10" src={man} alt="" />

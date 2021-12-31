@@ -15,10 +15,18 @@ import Head from 'next/head';
 import Layout from '../components/_App/Layout';
 import { NotificationContainer } from 'react-notifications';
 import Root from "../admin/src/index.jsx";
-import { store } from "../redux/store/store.js";
-import { Provider } from "react-redux";
+import { store, persistor } from "../redux/store/store.js";
+import { Provider, PersistGate } from "react-redux";
+import { shiftCoreStyles } from "../redux/actions/universal/index.js";
 
-export default class MyApp extends App {
+class MyApp extends App {
+constructor(props) {
+    super(props);
+
+    this.state = {
+        rehydrated: false
+    }
+}
     render () {
         const { Component, pageProps } = this.props
         return (
@@ -38,3 +46,4 @@ export default class MyApp extends App {
         );
     }
 }
+export default connect(null, { shiftCoreStyles })(MyApp);

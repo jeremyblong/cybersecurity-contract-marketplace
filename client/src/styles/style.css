@@ -37,6 +37,13 @@ This files table contents are outlined below>>>>>
 
 
 /* CUSTOM BUTTON STYLING START - ENTIRE APPLICATION */
+a:hover {
+  cursor: pointer !important;
+}
+.natural-sm-spacer {
+  padding-top: 5.75px;
+  padding-bottom: 5.75px;
+}
 .btn-disabled {
   background-color: rgb(235, 235, 228) !important;
 }

@@ -1,7 +1,8 @@
 import { CHANGE_MAIN_STYLES } from "../../actions/types.js";
 
 const initialState = {
-	data: {}
+	data: {},
+    paneActive: false
 };
 
 export default (state = initialState, action) => {

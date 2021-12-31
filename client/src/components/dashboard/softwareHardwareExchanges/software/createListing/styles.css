@@ -7,7 +7,7 @@
     z-index: 1 !important;
 }
 .position-middle-bar-div {
-    width: 37.5%;
+    width: 47.5%;
     margin: 0 auto;
     margin-bottom: -7.5px !important;
 }
@@ -40,4 +40,13 @@
 }
 .full-height-cardbody-extra {
     /* nothing should go here for now */
+}
+/* confetti styles */
+.confetti-custom-styles {
+    position: fixed !important;
+    z-index: 999999999999999999999999999999999999999999999999999999999999999999999999999 !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: 0 !important;
+    bottom: 0 !important;
 }

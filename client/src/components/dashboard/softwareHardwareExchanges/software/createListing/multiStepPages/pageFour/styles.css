@@ -1,0 +1,119 @@
+.descriptive-chunk {
+    text-decoration-line: underline;
+    color: rgb(41, 39, 175);
+    font-size: 1.05em !important;
+    padding-right: 15px;
+}
+.markdown-description-display {
+    max-height: 325px;
+    overflow-y: scroll;
+    width: 100%;
+    border: 2.25px solid rgb(41, 39, 175);
+    padding: 5px;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+.inactive-radio-selection {
+    padding: 12.5px;
+    background-color: #e25865;
+    color: white;
+    font-weight: 425;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+.inactive-radio-selection h6 {
+    color: white !important;
+    text-decoration-line: underline;
+    font-weight: 600;
+}
+.active-radio-selection {
+    padding: 12.5px;
+    background-color: #5bd22a;
+    font-weight: 425;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+.active-radio-selection h6 {
+    text-decoration-line: underline;
+    font-weight: 600;
+}
+.custom-badge-outline-not-included {
+    border: 3px solid white;
+}
+.custom-badge-outline-included {
+    border: 3px solid white;
+}
+.flat-white-background-rounded {
+    background-color: #fff;
+    border-radius: 10.5px;
+    padding: 3.5px 8px;
+}
+.support-url-text {
+    font-size: 1.05rem;
+    letter-spacing: 0.5px;
+}
+.listing-review-text {
+    text-decoration-line: underline;
+    font-weight: bold;
+    color: #7366ff;
+}
+.action-link-demourl-text {
+    color: black;
+}
+.action-link-demourl-text:hover {
+    color: red;
+}
+.fileviewer-wrapper-slider {
+    max-height: 425px;
+    min-height: 425px;
+    max-width: 100%;
+    min-width: 100%;
+    overflow-y: scroll;
+    border: 2.25px solid rgb(41, 39, 175);
+}
+.fileviewer-wrapper-slider .pg-viewer-wrapper #pg-viewer #pg-photo-container {
+    max-height: 425px !important;
+    min-width: 100% !important;
+    min-height: 425px !important;
+    object-fit: contain !important;
+}
+div.fileviewer-wrapper-slider div.pg-viewer-wrapper div#pg-viewer.pg-viewer div#pg-photo-coverer.photo-viewer-container img.photo {
+    min-width: 100% !important;
+    min-height: 425px !important;
+    max-height: 425px !important;
+    object-fit: contain !important;
+}
+.fileviewer-wrapper-slider div.pg-viewer-wrapper div#pg-viewer.pg-viewer .pg-driver-view .video-container video {
+    max-height: 500px !important;
+}
+.stretch-card-to-parent {
+    padding: 15px;
+    margin-left: 20px;
+    margin-top: 20px;
+    width: 96.25%;
+}
+
+.enhance-default-icon-size {
+    font-size: 5rem;
+    padding: 22.5px;
+}
+.custom-listgroup-item-outter {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+.restyle-core-color-bottomtext {
+    color: #f73164;
+    font-weight: 450;
+    font-size: 0.95rem;
+    margin-top: 7.5px !important;
+}
+.custom-listgroup-item-outter div .top-right-title {
+    background-color: #fdfeff;
+    color: #000;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    padding: 7.5px;
+    border-radius: 12.5px;
+    font-weight: 500 !important;
+    border: 1.5px solid black;
+    font-size: 0.725rem;
+    margin-right: -12.5px;
+}
+.custom-note-text {
+    padding-top: 12.5px;
+}

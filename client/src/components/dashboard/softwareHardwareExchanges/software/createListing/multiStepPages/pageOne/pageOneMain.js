@@ -334,6 +334,10 @@ const PageOneMainHelper = ({ saveSoftwareListingInfo }) => {
                                             <Input onChange={(value) => {
                                                 setCheckedSupportOption("no-support");
 
+                                                setValue('supportItemCommentsSelector', {
+                                                    type: checkedOptionSupport
+                                                }, { shouldValidate: false });
+
                                                 removeUnneccessaryFieldAndReset();
                                             }} id="radio23" type="radio" name="not-supported" checked={checkedOptionSupport === "no-support" ? true : false} />
                                             <Label for="radio23"></Label>

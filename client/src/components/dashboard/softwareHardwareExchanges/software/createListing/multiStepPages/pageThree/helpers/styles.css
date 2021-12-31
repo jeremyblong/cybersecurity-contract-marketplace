@@ -59,3 +59,9 @@
 .column-targeting-inner-card .card {
     margin: 0px !important;
 }
+#tour-wrapper {
+    overflow-x: hidden !important;
+}
+.spacer-error {
+    padding-top: 7.5px !important;
+}

@@ -14,6 +14,10 @@ import Dropzone from 'react-dropzone-uploader';
 import axios from 'axios';
 import LoadingBar from 'react-top-loading-bar';
 import helperFunctions from "./helpers/slideUpPane/pane.js";
+import Tour from 'reactour';
+import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
+import functionsHelperMain from "./helpers/reactHookFormHelpers/helpers.js";
+
 
 const KeyCodes = {
     comma: 188,
@@ -22,6 +26,11 @@ const KeyCodes = {
   
 const delimiters = [...KeyCodes.enter, KeyCodes.comma];
 
+// radio selection helpers
+const radioSelectionPricingOptionsOne = functionsHelperMain().radioSelectionPricingOptionsOne;
+const radioSelectionPricingOptionsTwo = functionsHelperMain().radioSelectionPricingOptionsTwo;
+const radioSelectionPricingOptionsThree = functionsHelperMain().radioSelectionPricingOptionsThree;
+const radioSelectionPricingOptionsFour = functionsHelperMain().radioSelectionPricingOptionsFour;
 
 const { ConnectedSlideUpPaneAuctionPurchase, RenderConditionalBasedUponSellingType } = helperFunctions;
 
@@ -34,6 +43,7 @@ const PageThreeHelper = ({ saveSoftwareListingInfo, previouslySavedSoftwareData,
     const dropzoneScreenshotsRef = useRef(null);
     const dropzoneRef = useRef(null);
     const mounted = useRef();
+    const scrollToTourWrapper = useRef(null);
     // state creation...
     const [ selectors, setSelectorsState ] = useState(null);
     const [validateClass , setValidateClass] = useState(false);
@@ -52,6 +62,9 @@ const PageThreeHelper = ({ saveSoftwareListingInfo, previouslySavedSoftwareData,
     const [ screenshotUploadImages, setScreenshotUploadStatus ] = useState([]);
     const [ changeOptions, setChangeOptions ] = useState(null);
     const [ typeOfListing, setTypeOfListingState ] = useState(null);
+    // create state to CHECK if submission (react-form-hook) was by pageThreeMain.js OR pane.js (nested component);
+    const [ paneFileSubmissionRan, setPaneFileSubmissionRanState ] = useState(false);
+    const [ isTourOpen, setIsTourOpenStatus ] = useState(false);
      
     const { register, handleSubmit, control, reset, getValues, setValue, setError, clearErrors, formState: { errors }} = useForm({
         mode: "onTouched",
@@ -88,24 +101,58 @@ const PageThreeHelper = ({ saveSoftwareListingInfo, previouslySavedSoftwareData,
         // prevent reload
         e.preventDefault();
 
-        if ((typeof gatheredValues.hashtags !== "undefined") && (gatheredValues.hashtags.length >= 5)) {
-            console.log("hashtags have been completed...");
-            // run final logic
-            if (data !== '') {
-                // everything is properly filled out
-                console.log("success! :) - : ", data);
-            } else {
-                errors.showMessages();
+        if (data !== '') {
+            // everything is properly filled out
+            console.log("everything is completed/filled-out appropriatly");
+            // ~ deconstruct filled out form details of MAIN form ~
+            const { auctionPurchaseType, commentToReviewer, demoURL, hashtags, listingTimespan } = data;
+            // ~ deconstruct selected redux pricing/auction purchase detail data AND ALL other related redux data from form (previously filled out pages too) ~
+            const { auctionPriceRelatedData, category, codingLanguageContent, currentPage, description, listingTitle, supportExternalURL, supportItemCommentsSelector, uploadedPublicFiles } = previouslySavedSoftwareData;
+            // save ALL details to new redux state to prep for 'review' next page
+
+            const newDataObjCombinedStates = {
+                auctionPriceRelatedData, 
+                category, 
+                codingLanguageContent, 
+                currentPage, 
+                description, 
+                listingTitle, 
+                supportProvidedExternalURL: _.has(previouslySavedSoftwareData, "supportExternalURL") ? true : false,
+                supportExternalURL: _.has(previouslySavedSoftwareData, "supportExternalURL") ? supportExternalURL : undefined, 
+                supportResponseTimespanData: (supportItemCommentsSelector.type === "no-support") ? "no-support-provided" : supportItemCommentsSelector, 
+                uploadedPublicFiles,
+                auctionPurchaseType, 
+                commentToReviewer, 
+                demoURL, 
+                hashtags, 
+                listingTimespan,
+                currentPage: 4
             }
+
+            // save new state
+            saveSoftwareListingInfo(newDataObjCombinedStates);
+            // end
         } else {
-            setError("hashtags", {
-                type: "manual",
-                message: "You MUST enter a MINIMUM of 5 (five) hashtags",
-            });
+            errors.showMessages();
         }
     };
-    const onError = (errors, e) => {
-        console.log("error submitting...!", errors);
+    // current filled out values - "gatheredValues"
+    const onErrorMainForm = (errors, e, innerRun, tourTrue) => {
+        if (innerRun === true) {
+            // ~ this ONLY runs when the MAIN FUNCTION/FORM submits rather than the nested component ~
+            setPaneFileSubmissionRanState(false);
+        } else {
+            // loop thru errors and clear appropriate FALSE CALLS... ~
+            const valuesToClear = [];
+            // interate for conditional check
+            for (let key in errors) {
+                const individual = errors[key];
+                const name = individual.ref.name;
+                // push values into array to clear after completion of loop.
+                valuesToClear.push(name);
+            }
+            clearErrors(valuesToClear);
+        }
     };
     const listingTimelineSelectClose = (data) => {
 
@@ -322,8 +369,6 @@ const PageThreeHelper = ({ saveSoftwareListingInfo, previouslySavedSoftwareData,
     useEffect(() => {
         console.log("updated or ran.");
 
-        // const custom = RenderOptionsRadioSelectsAuctionType();
-
         if (!mounted.current) {
             // do componentDidMount logic
             mounted.current = true;
@@ -339,7 +384,29 @@ const PageThreeHelper = ({ saveSoftwareListingInfo, previouslySavedSoftwareData,
     const watchRadioListingFormatChangeEvent = (type) => {
         // OPTIONS/VALUES that will be returned ---------- "buy-it-now-ONLY", "auction-ONLY", "auction-AND-buy-it-now", "buy-it-now-OR-best-offer"
         setTypeOfListingState(type);
+
+        setValue("auctionPurchaseType", type, { shouldValidate: true });
     }
+
+    //  TOUR related LOCK SCREEN functions - DISABLE body scrolling
+    const disableBodyAndScroll = target => {
+
+        // scrollToTourWrapper.current.scrollIntoView();
+        disableBodyScroll(target);        
+        // setTimeout(() => {
+        //     disableBodyScroll(target);
+        // }, 1000)
+    };
+    // enable body!
+    const enableBody = target => clearAllBodyScrollLocks();
+    // TOUR related variable
+    const steps = [
+        {
+            selector: '#tour-wrapper',
+            content: 'Please select an option to switch listing payment type(s) in order to change your current settings or select your initial setting...'
+        }
+    ];
+
     return (
         <div>
             <LoadingBar
@@ -351,20 +418,40 @@ const PageThreeHelper = ({ saveSoftwareListingInfo, previouslySavedSoftwareData,
                 }}
             />
             <Container className="full-height-container" fluid={true}>
-                <Form className={`needs-validation tooltip-validation ${validateClass ? 'validateClass' : ''}`} noValidate="" onSubmit={handleSubmit(onSubmit, onError)}>
+                <Form className={`needs-validation tooltip-validation ${validateClass ? 'validateClass' : ''}`} noValidate="" onSubmit={handleSubmit(onSubmit, (errors, e) => {
+                    return onErrorMainForm(errors, e, paneFileSubmissionRan);
+                })}>
                     <Row>
                         <Col sm="12" md="6" lg="6" xl="6">
                             <Label>Demo URL (<strong style={{ color: "red", textDecorationLine: "underline" }}>optional</strong> - if you want to display working code at an external URL)</Label>
                             <input {...register("demoURL", { required: false, minLength: {
-                                value: 15,
-                                message: "You must enter AT Least 15 characters"
+                                value: 8,
+                                message: "You must enter AT Least 8 characters"
                             }, maxLength: {
                                 value: 75,
                                 message: "You may ONLY enter 75 characters or less"
                             }, onBlur: (e) => {
                                 // check if valid url in helper file.
-                                return helpers.CalculateWhetherURLIsLegit(e.target.value);
+                                const validOrNot = helpers.CalculateWhetherURLIsLegit(e.target.value);
+                                // extracted final value from input
+                                const value = e.target.value;
+
+                                if (validOrNot === true) {
+                                    setValue('demoURL', value, { shouldValidate: false });
+                                    // clear error after setting proper change state
+                                    clearErrors("demoURL");
+                                } else {
+                                    setTimeout(() => {
+                                        if (!errors.demoURL) {
+                                            setError("demoURL", {
+                                                type: "manual",
+                                                message: "You MUST enter a VALID URL including http/https and ://",
+                                            });
+                                        }
+                                    }, 75)
+                                }
                             }})} className="form-control" name="demoURL" type="text" placeholder="Listing title" onChange={handleInputChange} value={data.demoURL} />
+                            {errors.demoURL ? <span className="span-tooltip">{errors.demoURL.message}</span> : null}
                             <div className="valid-feedback">{"Looks good!"}</div>
                         </Col>
                         <Col className="input-surrounding-col" sm="12" md="6" lg="6" xl="6">
@@ -502,9 +589,18 @@ const PageThreeHelper = ({ saveSoftwareListingInfo, previouslySavedSoftwareData,
                             <div className="valid-feedback">{"Looks good!"}</div>
                         </Col>
                     </Row>
-                    <RenderOptionsRadioSelectsAuctionType selected={typeOfListing} onRadioChange={watchRadioListingFormatChangeEvent} />
+                    <Tour
+                        steps={steps}
+                        isOpen={isTourOpen}
+                        onAfterOpen={disableBodyAndScroll}
+                        onBeforeClose={enableBody}
+                        onRequestClose={() => {
+                            setIsTourOpenStatus(false);
+                        }} 
+                    />
+                    <RenderOptionsRadioSelectsAuctionType clearErrors={clearErrors} control={control} setError={setError} register={register} radioSelectionPricingOptionsOne={radioSelectionPricingOptionsOne} radioSelectionPricingOptionsTwo={radioSelectionPricingOptionsTwo} radioSelectionPricingOptionsThree={radioSelectionPricingOptionsThree} radioSelectionPricingOptionsFour={radioSelectionPricingOptionsFour} errors={errors} scrollToTourWrapper={scrollToTourWrapper} selected={typeOfListing} onRadioChange={watchRadioListingFormatChangeEvent} />
                     {/* bid, buyitnow, best offer, etc... goes here */}
-                    {typeOfListing !== null ? <ConnectedSlideUpPaneAuctionPurchase selected={typeOfListing} /> : null}
+                    {typeOfListing !== null ? <ConnectedSlideUpPaneAuctionPurchase clearAllBodyScrollLocks={clearAllBodyScrollLocks} typeOfListing={typeOfListing} scrollToTourWrapper={scrollToTourWrapper} setIsTourOpenStatus={setIsTourOpenStatus} selected={typeOfListing} /> : null}
                     {/* bid, buyitnow, best offer, etc... goes here */}
                     <hr className="secondary-hr" />
                     <Row style={{ marginTop: "45px" }}>
@@ -533,13 +629,13 @@ const PageThreeHelper = ({ saveSoftwareListingInfo, previouslySavedSoftwareData,
                                     </Popover>
                                     <textarea rows={8} {...register("commentToReviewer", { required: {
                                         value: true,
-                                        message: "You MUST enter AT least 50 characters with a maximum of 500 characters"
+                                        message: "You MUST enter AT least 50 characters with a maximum of 1450 characters"
                                     }, minLength: {
                                         value: 50,
                                         message: "You must enter AT Least 50 characters"
                                     }, maxLength: {
-                                        value: 500,
-                                        message: "You may ONLY enter 500 characters or less"
+                                        value: 1450,
+                                        message: "You may ONLY enter 1450 characters or less"
                                     }, onBlur: (e) => {
                                         // check whether valid on click-off/blur
                                         console.log("blurred.");
@@ -806,7 +902,7 @@ const PageThreeHelper = ({ saveSoftwareListingInfo, previouslySavedSoftwareData,
                     <Row style={{ marginTop: "45px" }}>
                         <Col sm="12" md="12" lg="12" xl="12">
                             <Button color="secondary" style={{ width: "100%" }} type="submit" onClick={() => {
-
+                                setPaneFileSubmissionRanState(true);
                             }}>~ Submit form details and proceed to next page ~</Button>
                         </Col>
                     </Row>

@@ -47,3 +47,9 @@ html body.light-only.ltr div#sheet-ultimate div.react-modal-sheet-container {
 html body.light-only.ltr div#sheet-ultimate div#custom-backdrop-noclick.react-modal-sheet-backdrop {
     pointer-events: none !important;
 }
+.custom-dollarsign-addon .input-group-text {
+    background-color: #7366ff;
+    color: white;
+    font-size: 13px;
+    font-weight: 525;
+}

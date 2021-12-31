@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, Component } from 'react';
 import Loader from "../layout/loader";
 import Header from '../layout/header'
 import Sidebar from '../layout/sidebar'
@@ -9,31 +9,49 @@ import { connect } from "react-redux";
 import _ from "lodash";
 import { shiftCoreStyles } from "../redux/actions/universal/index.js";
 
-const App = ({ children, paneActive }) => {
 
-  useEffect(() => {
-    console.log("state change");
-    
+class App extends Component {
+constructor(props) {
+  super(props);
+
+  this.state = {
+
+  }
+}
+  componentDidMount() {
+    console.log("MOUNTED IN APP.JS");
+
+    const { shiftCoreStyles } = this.props;
+
     shiftCoreStyles(false);
-  }, [])
-  console.warn = () => {}
-  return (
-    <Fragment>
-      <Loader/>
-      <div className={paneActive === true ? "page-wrapper compact-wrapper enact-nonclick" : "page-wrapper compact-wrapper"} id="pageWrapper">
-      <Header/>
-      <div className="page-body-wrapper sidebar-icon">
-        <Sidebar/>
-        <div className="page-body">
-          {children}
+  }
+  componentDidUpdate(prevProps, prevState) {
+    const { shiftCoreStyles } = this.props;
+
+    if (prevProps.paneActive === true) {
+      shiftCoreStyles(false);
+    }
+  }
+  render () {
+    const { children, paneActive } = this.props;
+    return (
+      <Fragment>
+        <Loader/>
+        <div className={paneActive === true ? "page-wrapper compact-wrapper enact-nonclick" : "page-wrapper compact-wrapper"} id="pageWrapper">
+        <Header/>
+        <div className="page-body-wrapper sidebar-icon">
+          <Sidebar/>
+          <div className="page-body">
+            {children}
+          </div>
+          <Footer/>
+          <ThemeCustomize/>
+          </div>
         </div>
-        <Footer/>
-        <ThemeCustomize/>
-        </div>
-      </div>
-      <ToastContainer/>
-    </Fragment>
-  );
+        <ToastContainer/>
+      </Fragment>
+    );
+  }
 }
 const mapStateToProps = (state) => {
   console.log("state THE MF JACKPOT! : ", state); // changeGlobalStyles

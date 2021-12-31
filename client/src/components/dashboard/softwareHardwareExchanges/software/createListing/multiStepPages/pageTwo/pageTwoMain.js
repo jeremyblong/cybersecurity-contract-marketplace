@@ -29,6 +29,7 @@ const PageTwoMainHelper = ({ userData, saveSoftwareListingInfo, previouslySavedS
     const [ popoverOne, setPopoverOneState ] = useState(false);
     const [ popoverTwo, setPopoverTwoState ] = useState(false);
     const [ popoverThree, setPopoverThreeState ] = useState(false);
+    const [ changeOptions, setChangeOptions ] = useState(null);
     // popover main logic (after clicking button - create state for each iteration/item);
     const [ popoverGeneralStatus, setPopoverGeneralStatus ] = useState({
         popover0: false,
@@ -609,6 +610,7 @@ const PageTwoMainHelper = ({ userData, saveSoftwareListingInfo, previouslySavedS
                         <Card>
                             <CardHeader>
                                 <h5>Upload related files & attachments</h5>
+                                <p style={{ paddingTop: "7.5px" }}>Content to be transfered to purchaser of your listing. Read bottom details if confused or if you require more information or guidance.</p>
                             </CardHeader>
                             <CardBody>
                                 <Form>
@@ -620,6 +622,9 @@ const PageTwoMainHelper = ({ userData, saveSoftwareListingInfo, previouslySavedS
                                             PreviewComponent={(data) => renderPreviewOfFile(data)}
                                             maxFiles={1}
                                             autoUpload={true}
+                                            onChangeStatus={(functions) => {
+                                                setChangeOptions(functions);
+                                            }}
                                             submitButtonDisabled={false}
                                             InputComponent={CustomInputHelper}
                                             getFilesFromEvent={getFilesFromEvent}
@@ -639,6 +644,18 @@ const PageTwoMainHelper = ({ userData, saveSoftwareListingInfo, previouslySavedS
                                             }}
                                         />
                                     </div>
+                                    {fileReady === true ? <Fragment>
+                                        <hr className="secondary-hr" />
+                                        <div className="centered-both-ways">
+                                            <Button style={{ marginTop: "25px" }} onClick={(e) => {
+                                                setMetaFileData(null);
+                                                setFileReadyStatus(false);
+                                                setCurrentUploadFileStatus(null);
+
+                                                changeOptions.remove();
+                                            }} className="btn-air-danger cancel-button-upload" color="danger" size="md">Cancel Current/Pending Upload</Button>
+                                        </div>
+                                    </Fragment> : null}
                                 </Form>
                             </CardBody>
                         </Card>
@@ -662,16 +679,10 @@ const PageTwoMainHelper = ({ userData, saveSoftwareListingInfo, previouslySavedS
                         <Col sm="12" md="12" lg="12" xl="12">
                             <Card className="card-absolute">
                                 <CardHeader className="bg-secondary">
-                                    <h5>Upload at least three (3) files to proceed w/this form</h5>
+                                    <h5 style={{ color: "white" }}>Upload at least three (3) files to proceed w/this form</h5>
                                 </CardHeader>
                                 <CardBody>
-                                    <p>
-                                        {"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been"}
-                                        {"the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley"}
-                                        {"of type and scrambled. Lorem Ipsum is simply dummy text of the printing and typesetting"}
-                                        {"industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an"}
-                                        {"unknown printer took a galley of type and scrambled."}
-                                    </p>
+                                    <p>You <strong style={{ color: "red", textDecorationLine: "underline" }}>MUST</strong> upload related files & attachements that will be <strong>transfered/given</strong> to the highest bidder OR person that purchases your listing via buy-it-now or best-offer (or any other methods available). Please keep in mind, <strong style={{ color: "red", textDecorationLine: "underline" }}>ALL</strong> of the files uploaded in this form page (40% aka page TWO ONLY) will be <strong style={{ color: "red", textDecorationLine: "underline" }}>TRANSFERED</strong> to the winner/purchaser of your listing. You should include the code and whatever related files/folders linked to what you're selling - IF you're NOT sure about what all needs to be uploaded, it's generally better to be safe and upload <strong style={{ color: "red", textDecorationLine: "underline" }}>everything (even if you have to question whether a file is relevant)</strong> than have to eventually <strong style={{ color: "red", textDecorationLine: "underline" }}>partially/fully refund</strong> the buyer due to illusions/deceit of what's actually included in this listing. Be honest, transparent and include everything that is supposedly for sale.</p>
                                 </CardBody>
                             </Card>
                         </Col>

@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment } from "react";
 import { NotificationManager } from 'react-notifications';
 import uuid from "react-uuid";
 import FileViewer from 'react-file-viewer';
@@ -6,6 +6,7 @@ import { Button, Label, Row, Col, Card, CardBody, CardHeader, Container, Media, 
 import "./styles.css";
 import ReactPlayer from 'react-player';
 import ImageGallery from 'react-image-gallery';
+import { Controller } from 'react-hook-form';
 
 // functions with export ability to slim down main component (pageThreeMain.js)..
 const CalculateWhetherURLIsLegit = (data) => {
@@ -129,7 +130,8 @@ const renderVideoDemoPreview = (file) => {
         ); 
     }
 }
-const RenderOptionsRadioSelectsAuctionType = ({ onRadioChange, selected }) => {
+const RenderOptionsRadioSelectsAuctionType = ({ clearErrors, control, setError, register, radioSelectionPricingOptionsOne, radioSelectionPricingOptionsTwo, radioSelectionPricingOptionsThree, radioSelectionPricingOptionsFour, errors, onRadioChange, selected, scrollToTourWrapper}) => {
+    // radioSelectionPricingOptions - react-hook-form logic
     return (
         <Fragment>
             <Row style={{ paddingTop: "17.5px", paddingBottom: "7.5px" }}>
@@ -138,74 +140,106 @@ const RenderOptionsRadioSelectsAuctionType = ({ onRadioChange, selected }) => {
                     <p>You <strong>MUST</strong> choose <strong>ONE</strong> option from the selections below - this is the way your listing will be posted and the available options for potential buyers to choose from... Each selection type has its own pro's and con's so choose wisely - you cannot change this option later.</p>
                 </Col>
             </Row>
-            <Row className="row-margin-radios">
-                <Col className="column-targeting-inner-card" sm="12" md="6" lg="6" xl="6">
-                    <Card>
-                    <Media className="p-20 custom-media-container">
-                        <div className="radio radio-secondary mr-3">
-                        <Input onChange={(e) => {
-                            onRadioChange(e.currentTarget.value);
-                        }} checked={selected === "auction-ONLY" ? true : false} id="auction-ONLY" type="radio" name="auction-ONLY" value={"auction-ONLY"} />
-                        <Label for="auction-ONLY"></Label>
-                        </div>
-                        <Media body>
-                        <h6 className="mt-0 mega-title-badge">Auction <em style={{ color: "#f73164" }}>ONLY</em><span className="badge badge-secondary pull-right digits">{"AUCTION"}</span></h6>
-                        <p>Selecting this option will set your listing as an <strong style={{ color: "#f73164" }}>auction listing</strong> so people will <strong style={{ color: "#f73164" }}>ONLY</strong> be able post "bids" on your listing VS "buy-it-now" or "best-offer". You will need to set select your auction options after selecting this option.</p>
+            <div ref={scrollToTourWrapper} id="tour-wrapper">
+                <Row className="row-margin-radios">
+                    <Col className="column-targeting-inner-card" sm="12" md="6" lg="6" xl="6">
+                        <Card>
+                        <Media className="p-20 custom-media-container">
+                            <div className="radio radio-secondary mr-3">
+                            <Controller
+                                control={control}
+                                name={radioSelectionPricingOptionsOne.name}
+                                {...radioSelectionPricingOptionsOne.check(setError, register, clearErrors)}
+                                render={({ field }) => (
+                                    <Input {...field} onChange={(e) => {
+                                        onRadioChange(e.currentTarget.value);
+                                    }} checked={selected === radioSelectionPricingOptionsOne.value ? true : false} id={radioSelectionPricingOptionsOne.id} type="radio" value={radioSelectionPricingOptionsOne.value} />
+                                )}
+                            />
+                            <Label for="auction-ONLY"></Label>
+                            </div>
+                            <Media body>
+                            <h6 className="mt-0 mega-title-badge">Auction <em style={{ color: "#f73164" }}>ONLY</em><span className="badge badge-secondary pull-right digits">{"AUCTION"}</span></h6>
+                            <p>Selecting this option will set your listing as an <strong style={{ color: "#f73164" }}>auction listing</strong> so people will <strong style={{ color: "#f73164" }}>ONLY</strong> be able post "bids" on your listing VS "buy-it-now" or "best-offer". You will need to set select your auction options after selecting this option.</p>
+                            </Media>
                         </Media>
-                    </Media>
-                    </Card>
-                </Col>
-                <Col className="column-targeting-inner-card" sm="12" md="6" lg="6" xl="6">
-                    <Card>
-                    <Media className="p-20 custom-media-container">
-                        <div className="radio radio-primary mr-3">
-                        <Input onChange={(e) => {
-                            onRadioChange(e.currentTarget.value);
-                        }} checked={selected === "auction-AND-buy-it-now" ? true : false} id="auction-AND-buy-it-now" type="radio" name="auction-AND-buy-it-now" value={"auction-AND-buy-it-now"} />
-                        <Label for="auction-AND-buy-it-now"></Label>
-                        </div>
-                        <Media body>
-                        <h6 className="mt-0 mega-title-badge">Auction <em style={{ color: "#7366ff" }}>AND</em> "Buy-it-now"<span className="badge badge-primary pull-right digits">{"ACTION + BUY-IT-NOW"}</span></h6>
-                        <p>Selecting this option will set your listing as a <strong style={{ color: "#7366ff" }}>auction AND "buy-it-now" listing</strong> so people will have the option to <em>immediately</em> purchase your software/code for sale OR they may place a bid. If someone purchases via <strong style={{ color: "#7366ff" }}>"buy-it-now"</strong> then the auction will end abruptly and any bids will be discarded and null/void.</p>
+                        </Card>
+                    </Col>
+                    <Col className="column-targeting-inner-card" sm="12" md="6" lg="6" xl="6">
+                        <Card>
+                        <Media className="p-20 custom-media-container">
+                            <div className="radio radio-primary mr-3">
+                            <Controller
+                                control={control}
+                                name={radioSelectionPricingOptionsTwo.name}
+                                {...radioSelectionPricingOptionsTwo.check(setError, register, clearErrors)}
+                                render={({ field }) => (
+                                    <Input {...field} onChange={(e) => {
+                                        onRadioChange(e.currentTarget.value);
+                                    }} checked={selected === radioSelectionPricingOptionsTwo.value ? true : false} id={radioSelectionPricingOptionsTwo.id} type="radio" value={radioSelectionPricingOptionsTwo.value} />
+                                )}
+                            />
+                            <Label for="auction-AND-buy-it-now"></Label>
+                            </div>
+                            <Media body>
+                            <h6 className="mt-0 mega-title-badge">Auction <em style={{ color: "#7366ff" }}>AND</em> "Buy-it-now"<span className="badge badge-primary pull-right digits">{"ACTION + BUY-IT-NOW"}</span></h6>
+                            <p>Selecting this option will set your listing as a <strong style={{ color: "#7366ff" }}>auction AND "buy-it-now" listing</strong> so people will have the option to <em>immediately</em> purchase your software/code for sale OR they may place a bid. If someone purchases via <strong style={{ color: "#7366ff" }}>"buy-it-now"</strong> then the auction will end abruptly and any bids will be discarded and null/void.</p>
+                            </Media>
                         </Media>
-                    </Media>
-                    </Card>
-                </Col>
-            </Row>
-            <Row> {/* ---- auction-ONLY ---- auction-AND-buy-it-now ---- buy-it-now-OR-best-offer ---- buy-it-now-ONLY ---- */}
-                <Col className="column-targeting-inner-card" sm="12" md="6" lg="6" xl="6">
-                    <Card>
-                    <Media className="p-20 custom-media-container">
-                        <div className="radio radio-primary mr-3">
-                        <Input onChange={(e) => {
-                            onRadioChange(e.currentTarget.value);
-                        }} checked={selected === "buy-it-now-OR-best-offer" ? true : false} id="buy-it-now-OR-best-offer" type="radio" name="buy-it-now-OR-best-offer" value={"buy-it-now-OR-best-offer"} />
-                        <Label for="buy-it-now-OR-best-offer"></Label>
-                        </div>
-                        <Media body>
-                        <h6 className="mt-0 mega-title-badge">"Buy-it-now" OR "best-offer" <em style={{ color: "#7366ff" }}>ONLY</em><span className="badge badge-primary pull-right digits">{"BUY-IT-NOW OR BEST-OFFER"}</span></h6>
-                            <p>Selecting this option will set your listing as a <strong style={{ color: "#7366ff" }}>buy-it-now OR best-offer</strong> listing which means people will only be able to "immediately" purchase your software/code OR they may <strong style={{ color: "#7366ff" }}>"make an offer"</strong> for you to respond whether or not you deem the offer acceptable. You can/will recieve multiple offers (if listing is popular/in-demand) in which you'll be able to extend, select, deny or message (more options exist) in response to offers recieved.</p>
+                        </Card>
+                    </Col>
+                </Row>
+                <Row> {/* ---- auction-ONLY ---- auction-AND-buy-it-now ---- buy-it-now-OR-best-offer ---- buy-it-now-ONLY ---- */}
+                    <Col className="column-targeting-inner-card" sm="12" md="6" lg="6" xl="6">
+                        <Card>
+                        <Media className="p-20 custom-media-container">
+                            <div className="radio radio-primary mr-3">
+                            <Controller
+                                control={control}
+                                name={radioSelectionPricingOptionsThree.name}
+                                {...radioSelectionPricingOptionsThree.check(setError, register, clearErrors)}
+                                render={({ field }) => (
+                                    <Input {...field} onChange={(e) => {
+                                        onRadioChange(e.currentTarget.value);
+                                    }} checked={selected === radioSelectionPricingOptionsThree.value ? true : false} id={radioSelectionPricingOptionsThree.id} type="radio" value={radioSelectionPricingOptionsThree.value} />
+                                )}
+                            />
+                            <Label for="buy-it-now-OR-best-offer"></Label>
+                            </div>
+                            <Media body>
+                            <h6 className="mt-0 mega-title-badge">"Buy-it-now" OR "best-offer" <em style={{ color: "#7366ff" }}>ONLY</em><span className="badge badge-primary pull-right digits">{"BUY-IT-NOW OR BEST-OFFER"}</span></h6>
+                                <p>Selecting this option will set your listing as a <strong style={{ color: "#7366ff" }}>buy-it-now OR best-offer</strong> listing which means people will only be able to "immediately" purchase your software/code OR they may <strong style={{ color: "#7366ff" }}>"make an offer"</strong> for you to respond whether or not you deem the offer acceptable. You can/will recieve multiple offers (if listing is popular/in-demand) in which you'll be able to extend, select, deny or message (more options exist) in response to offers recieved.</p>
+                            </Media>
                         </Media>
-                    </Media>
-                    </Card>
-                </Col>
-                <Col className="column-targeting-inner-card" sm="12" md="6" lg="6" xl="6">
-                    <Card>
-                    <Media className="p-20 custom-media-container">
-                        <div className="radio radio-secondary mr-3">
-                        <Input onChange={(e) => {
-                            onRadioChange(e.currentTarget.value);
-                        }} checked={selected === "buy-it-now-ONLY" ? true : false} id="buy-it-now-ONLY" type="radio" name="buy-it-now-ONLY" value={"buy-it-now-ONLY"} />
-                        <Label for="buy-it-now-ONLY"></Label>
-                        </div>
-                        <Media body>
-                        <h6 className="mt-0 mega-title-badge">"Buy-it-now" <em style={{ color: "#f73164" }}>ONLY</em><span className="badge badge-secondary pull-right digits">{"BUY-IT-NOW"}</span></h6>
-                            <p>Selecting this option will set your listing as a <strong style={{ color: "#f73164" }}>buy-it-now</strong> listing which means people will only be able to purchase what's for sale via a one-time non-negotiable payment which ends the listing. This does <strong style={{ color: "#f73164" }}>NOT</strong> include <strong style={{ color: "#f73164" }}>best-offer's</strong>.</p>
+                        </Card>
+                    </Col>
+                    <Col className="column-targeting-inner-card" sm="12" md="6" lg="6" xl="6">
+                        <Card>
+                        <Media className="p-20 custom-media-container">
+                            <div className="radio radio-secondary mr-3">
+                            <Controller
+                                control={control}
+                                name={radioSelectionPricingOptionsThree.name}
+                                {...radioSelectionPricingOptionsThree.check(setError, register, clearErrors)}
+                                render={({ field }) => (
+                                    <Input {...field} onChange={(e) => {
+                                        onRadioChange(e.currentTarget.value);
+                                    }} checked={selected === radioSelectionPricingOptionsFour.value ? true : false} id={radioSelectionPricingOptionsThree.id} type="radio" value={radioSelectionPricingOptionsThree.value} />
+                                )}
+                            />
+                            <Label for="buy-it-now-ONLY"></Label>
+                            </div>
+                            <Media body>
+                            <h6 className="mt-0 mega-title-badge">"Buy-it-now" <em style={{ color: "#f73164" }}>ONLY</em><span className="badge badge-secondary pull-right digits">{"BUY-IT-NOW"}</span></h6>
+                                <p>Selecting this option will set your listing as a <strong style={{ color: "#f73164" }}>buy-it-now</strong> listing which means people will only be able to purchase what's for sale via a one-time non-negotiable payment which ends the listing. This does <strong style={{ color: "#f73164" }}>NOT</strong> include <strong style={{ color: "#f73164" }}>best-offer's</strong>.</p>
+                            </Media>
                         </Media>
-                    </Media>
-                    </Card>
-                </Col>
-            </Row>
+                        </Card>
+                    </Col>
+                </Row>
+            </div>
+            <div className="spacer-error" />
+            {errors.auctionPurchaseType ? <span className="span-tooltip">{errors.auctionPurchaseType.message}</span> : null}
         </Fragment>
     );
 }
