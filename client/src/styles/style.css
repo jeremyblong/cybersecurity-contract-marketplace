@@ -40,6 +40,11 @@ This files table contents are outlined below>>>>>
 a:hover {
   cursor: pointer !important;
 }
+.success-hr {
+  border-top: 1px solid #51bb25;
+  background-color: #51bb25;
+  margin-top: 25px;
+}
 .natural-sm-spacer {
   padding-top: 5.75px;
   padding-bottom: 5.75px;

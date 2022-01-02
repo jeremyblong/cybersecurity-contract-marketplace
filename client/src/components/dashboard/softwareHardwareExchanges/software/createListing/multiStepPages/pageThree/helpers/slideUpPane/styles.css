@@ -53,3 +53,15 @@ html body.light-only.ltr div#sheet-ultimate div#custom-backdrop-noclick.react-mo
     font-size: 13px;
     font-weight: 525;
 }
+/* buyitnow switch styles START */
+.selector-container {
+    padding-top: 12.5px;
+}
+.buyitnow-switch-class .react-switch-bg {
+    min-width: 100% !important;
+}
+.switch-text-custom {
+    color: blue;
+    text-decoration-line: underline;
+}
+/* buyitnow switch styles END */

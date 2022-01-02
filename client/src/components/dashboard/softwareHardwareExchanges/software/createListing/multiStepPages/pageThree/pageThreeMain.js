@@ -107,19 +107,22 @@ const PageThreeHelper = ({ saveSoftwareListingInfo, previouslySavedSoftwareData,
             // ~ deconstruct filled out form details of MAIN form ~
             const { auctionPurchaseType, commentToReviewer, demoURL, hashtags, listingTimespan } = data;
             // ~ deconstruct selected redux pricing/auction purchase detail data AND ALL other related redux data from form (previously filled out pages too) ~
-            const { auctionPriceRelatedData, category, codingLanguageContent, currentPage, description, listingTitle, supportExternalURL, supportItemCommentsSelector, uploadedPublicFiles } = previouslySavedSoftwareData;
+            const { auctionPriceRelatedData, category, codingLanguageContent, currentPage, description, listingTitle, supportExternalURL, supportResponseTimespanData, uploadedPublicFiles } = previouslySavedSoftwareData;
             // save ALL details to new redux state to prep for 'review' next page
 
             const newDataObjCombinedStates = {
                 auctionPriceRelatedData, 
                 category, 
+                thumbnailImage,
+                videoDemoFile,
+                screenshotUploadImages,
                 codingLanguageContent, 
                 currentPage, 
                 description, 
                 listingTitle, 
                 supportProvidedExternalURL: _.has(previouslySavedSoftwareData, "supportExternalURL") ? true : false,
                 supportExternalURL: _.has(previouslySavedSoftwareData, "supportExternalURL") ? supportExternalURL : undefined, 
-                supportResponseTimespanData: (supportItemCommentsSelector.type === "no-support") ? "no-support-provided" : supportItemCommentsSelector, 
+                supportResponseTimespanData: (supportResponseTimespanData.type === "no-support") ? "no-support-provided" : supportResponseTimespanData, 
                 uploadedPublicFiles,
                 auctionPurchaseType, 
                 commentToReviewer, 
@@ -243,9 +246,17 @@ const PageThreeHelper = ({ saveSoftwareListingInfo, previouslySavedSoftwareData,
                 onSubmit();
             } else {
                 console.log("Err", res.data);
+
+                NotificationManager.error(res.data.message, 'An error occurred while uploading file!', 4500);
+
+                onSubmit();
             }
         }).catch((err) => {
             console.log(err);
+
+            NotificationManager.error("An unknown error has occurred while uploading your file - please try again or contact support if the issue persists...", 'An error occurred while uploading file!', 4500);
+
+            onSubmit();
         })
     }
     const renderCustomButtonDropzone = (data, e, uploadType) => {
@@ -406,7 +417,10 @@ const PageThreeHelper = ({ saveSoftwareListingInfo, previouslySavedSoftwareData,
             content: 'Please select an option to switch listing payment type(s) in order to change your current settings or select your initial setting...'
         }
     ];
-
+    const handlePageChange = (page) => {
+        changePageUploadTabs(page);
+        setActiveTab(page);
+    }
     return (
         <div>
             <LoadingBar
@@ -450,7 +464,7 @@ const PageThreeHelper = ({ saveSoftwareListingInfo, previouslySavedSoftwareData,
                                         }
                                     }, 75)
                                 }
-                            }})} className="form-control" name="demoURL" type="text" placeholder="Listing title" onChange={handleInputChange} value={data.demoURL} />
+                            }})} className="form-control" name="demoURL" type="text" placeholder={"Demo URL (FULL URL including http/https://)"} onChange={handleInputChange} value={data.demoURL} />
                             {errors.demoURL ? <span className="span-tooltip">{errors.demoURL.message}</span> : null}
                             <div className="valid-feedback">{"Looks good!"}</div>
                         </Col>
@@ -491,11 +505,7 @@ const PageThreeHelper = ({ saveSoftwareListingInfo, previouslySavedSoftwareData,
                                         value={gatheredValues.listingTimespan}
                                         onChange={(selectedOption) => {
                                             // run conditionals
-                                            if (typeof gatheredValues.listingTimespan === "undefined") {
-                                                setValue('listingTimespan', selectedOption, { shouldValidate: false });
-                                            } else {
-                                                clearErrors("listingTimespan");
-                                            }
+                                            setValue('listingTimespan', selectedOption, { shouldValidate: false });
 
                                             listingTimespanGeneratedRef.current.blur();
                                         }}
@@ -654,17 +664,17 @@ const PageThreeHelper = ({ saveSoftwareListingInfo, previouslySavedSoftwareData,
                                 <CardBody className="tabbed-card custom-tabbed-card-form">
                                     <Nav  className="nav-pills nav-secondary">
                                         <NavItem>
-                                            <NavLink className={activeTabUploadState === '1' ? 'active' : ''} onClick={() => changePageUploadTabs("1")}>
+                                            <NavLink className={activeTabUploadState === '1' ? 'active' : ''} onClick={() => handlePageChange("1")}>
                                                 <i className="icofont icofont-ui-home"></i>Thumbnail/Display Image
                                             </NavLink>
                                         </NavItem>
                                         <NavItem>
-                                            <NavLink className={activeTabUploadState === '2' ? 'active' : ''} onClick={() => changePageUploadTabs("2")}>
+                                            <NavLink className={activeTabUploadState === '2' ? 'active' : ''} onClick={() => handlePageChange("2")}>
                                                 <i className="icofont icofont-man-in-glasses"></i>Video Demo Preview (Optional)
                                             </NavLink>
                                         </NavItem>
                                         <NavItem>
-                                            <NavLink className={activeTabUploadState === '3' ? 'active' : ''} onClick={() => changePageUploadTabs("3")}>
+                                            <NavLink className={activeTabUploadState === '3' ? 'active' : ''} onClick={() => handlePageChange("3")}>
                                                 <i className="icofont icofont-contacts"></i>Screenshots/Demonstration Images
                                             </NavLink>
                                         </NavItem>
@@ -843,17 +853,17 @@ const PageThreeHelper = ({ saveSoftwareListingInfo, previouslySavedSoftwareData,
                                 <CardBody className="tabbed-card custom-tabbed-card-form">
                                     <Nav  className="nav-pills nav-secondary">
                                         <NavItem>
-                                            <NavLink className={activeTab === '1' ? 'active' : ''} onClick={() => setActiveTab('1')}>
+                                            <NavLink className={activeTab === '1' ? 'active' : ''} onClick={() => handlePageChange("1")}>
                                                 <i className="icofont icofont-ui-home"></i>Uploaded Thumbnail Content Preview
                                             </NavLink>
                                         </NavItem>
                                         <NavItem>
-                                            <NavLink className={activeTab === '2' ? 'active' : ''} onClick={() => setActiveTab('2')}>
+                                            <NavLink className={activeTab === '2' ? 'active' : ''} onClick={() => handlePageChange("2")}>
                                                 <i className="icofont icofont-man-in-glasses"></i>Video Demo Preview (Optional)
                                             </NavLink>
                                         </NavItem>
                                         <NavItem>
-                                            <NavLink className={activeTab === '3' ? 'active' : ''} onClick={() => setActiveTab('3')}>
+                                            <NavLink className={activeTab === '3' ? 'active' : ''} onClick={() => handlePageChange("3")}>
                                                 <i className="icofont icofont-contacts"></i>Screenshots/Demonstration Images
                                             </NavLink>
                                         </NavItem>

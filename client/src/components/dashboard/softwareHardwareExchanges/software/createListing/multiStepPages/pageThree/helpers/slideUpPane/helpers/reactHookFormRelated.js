@@ -64,13 +64,13 @@ const HookHelpers = () => {
             return (
                 {...register("whatsIncluded", { required: {
                     value: true,
-                    message: "You MUST enter AT least 75 characters to 1250 characters"
+                    message: "You MUST enter AT least 75 characters to 1500 characters"
                 }, minLength: {
                     value: 75,
                     message: "You must enter AT Least 75 characters"
                 }, maxLength: {
-                    value: 1250,
-                    message: "You may ONLY enter 1250 characters or less"
+                    value: 1500,
+                    message: "You may ONLY enter 1500 characters or less"
                 }, onBlur: (e) => {
                     // code here...
                 }})}

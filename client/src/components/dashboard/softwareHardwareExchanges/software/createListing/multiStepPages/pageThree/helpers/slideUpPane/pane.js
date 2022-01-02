@@ -3,7 +3,6 @@ import Sheet from 'react-modal-sheet';
 import { Button, Container, Col, Row, Card, FormGroup, Label, CardBody, Form, InputGroupAddon, InputGroup, InputGroupText } from "reactstrap";
 import "./styles.css";
 import Breadcrumb from "../../../../../../../../../layout/breadcrumb";
-import { Link } from "react-router-dom";
 import helpers from "./helpers/reactHookFormRelated.js";
 import functions from "./helpers/helperFunctions.js";
 import { useForm, Controller } from 'react-hook-form';
@@ -14,6 +13,7 @@ import { saveSoftwareListingInfo } from "../../../../../../../../../redux/action
 import { NotificationManager } from 'react-notifications';
 import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
 import _ from "lodash";
+import Switch from "react-switch";
 
 // ~ helper function rendered in main component (bottom of this component) ~
 const RenderConditionalBasedUponSellingType = ({ clearAllBodyScrollLocks, handleDynamicFormReset, quantityAvailabilityOptions, acceptCouponsDiscountsOptions, reset, type, setValue, getValues, errors, setError, register, control, clearErrors, biddingIncrementIntervalOptions, handleSubmit, shiftCoreStyles, setModalOpenStatus, saveSoftwareListingInfo, previouslySavedSoftwareData }) => {
@@ -33,6 +33,11 @@ const RenderConditionalBasedUponSellingType = ({ clearAllBodyScrollLocks, handle
     const minimumRequiredOffer = helpers().minimumRequiredOffer;
     // gather redux-hook-form values (basically a "state" replacement).
     const currentValues = getValues();
+
+    const [ buyitnowChecked, setBuyitnowState ] = useState(true);
+    const [ auctionChecked, setAuctionCheckedState ] = useState(true);
+    const [ switchText, setSwitchTextState ] = useState("'AUCTION & BUY-IT-NOW' (gives user's both options) is enabled/selected currently/by-default and you're only allowed to sell ONE (1) quantity of what you're selling (1 Quantity Available TOTAL - this will create competition between submitted offers to submit the highest offer to win this listing). Your selection of 'AUCTION & BUY-IT-NOW' is now SELECTED!");
+    const [ switchTextAuctionBuyitnow, setSwitchTextAuctionBuyitnowState ] = useState("'AUCTION & BIDDING' both are enabled/selected currently/by-default and you're only allowed to sell ONE (1) quantity of what you're selling (1 Quantity Available TOTAL - this will create competition between submitted offers to submit the highest offer to win this listing). Your selection of 'AUCTION & BIDDING' both are now SELECTED!");
 
     // console.log("startBidCheck : ", startBidCheck);
     const handleInputChange = (e) => {
@@ -108,7 +113,13 @@ const RenderConditionalBasedUponSellingType = ({ clearAllBodyScrollLocks, handle
                                 ...omittedKeysAuctionAndBuyitnow,
                                 reservePrice: Number(Math.round(Number(reservePrice))), 
                                 startBid: Number(Math.round(Number(startBid))),
-                                buyItNowPrice: Number(Math.round(Number(data.buyItNowPrice))),
+                                buyItNowData: auctionChecked === true ? {
+                                    active: true,
+                                    buyItNowPrice: Number(Math.round(Number(data.buyItNowPrice)))
+                                } : {
+                                    active: false,
+                                    buyItNowPrice: undefined
+                                },
                                 auctionSelectedType: selectedType
                             }
                         }
@@ -149,8 +160,15 @@ const RenderConditionalBasedUponSellingType = ({ clearAllBodyScrollLocks, handle
                             auctionPriceRelatedData: {
                                 ...omittedKeysBuyitnowOrBestOffer,
                                 buyItNowPrice: Number(Math.round(Number(data.buyItNowPrice))),
-                                minimumRequiredOfferValue: Number(Math.round(Number(data.minimumRequiredOfferValue))),
-                                automaticBestOfferAccept: Number(Math.round(Number(data.automaticBestOfferAccept))),
+                                offerFeatureData: buyitnowChecked === true ? {
+                                    minimumRequiredOfferValue: Number(Math.round(Number(data.minimumRequiredOfferValue))),
+                                    automaticBestOfferAccept: Number(Math.round(Number(data.automaticBestOfferAccept))),
+                                    active: true
+                                } : {
+                                    active: false,
+                                    automaticBestOfferAccept: undefined,
+                                    minimumRequiredOfferValue: undefined
+                                },
                                 auctionSelectedType: selectedType
                             }
                         };
@@ -183,6 +201,52 @@ const RenderConditionalBasedUponSellingType = ({ clearAllBodyScrollLocks, handle
 
     console.log("currentValues : ", currentValues);
 
+    const handleSwitchValueChange = (value) => {
+        if (value === true) {
+            const option = { label: "1 Quantity Available (Can be sold an unlimited amount of times - basically 1 per purchase per user)", value: "1", numericalAmount: 1, min: 1, max: 1 };
+
+            setSwitchTextState("'AUCTION & BUY-IT-NOW' (gives user's both options) is enabled/selected currently/by-default and you're only allowed to sell ONE (1) quantity of what you're selling (1 Quantity Available TOTAL - this will create competition between submitted offers to submit the highest offer to win this listing). Your selection of 'AUCTION & BUY-IT-NOW' is now SELECTED!");
+            // check if quanitity value already selected
+            if (currentValues.quantityAvailableForSale && Object.keys(currentValues.quantityAvailableForSale).length > 0) {
+                // update switch state
+                setBuyitnowState(value);
+            } else {
+                // update react-hook-form state with default "Buy-it-now" option as "option" from above
+                setValue('quantityAvailableForSale', option, { shouldValidate: false });
+                // quantity value NOT already selected - do nothing but update switch state
+                setBuyitnowState(value);
+            }
+        } else {
+            setSwitchTextState("MULTIPLE quantities are selected (ALLOWING MULTIPLE SALES) and available so you can sell multiples of whatever software you're selling (Can be sold an unlimited amount of times - basically 1 per purchase per user). You've SELECTED to DISABLE the 'BEST-OFFER' setting.");
+            // clear non-used redux-hook-form value (since its not being used anymore temporarily)
+            reset({ automaticBestOfferAccept: "", minimumRequiredOfferValue: "" });
+            // update switch state
+            setBuyitnowState(value);
+        }
+    }
+    const handleSwitchValueChangeAuctionBuyitnow = (value) => {
+        if (value === true) {
+            const option = { label: "1 Quantity Available (Can be sold an unlimited amount of times - basically 1 per purchase per user)", value: "1", numericalAmount: 1, min: 1, max: 1 };
+            // setSwitchTextAuctionBuyitnowState
+            setSwitchTextAuctionBuyitnowState("'AUCTION & BIDDING' both are enabled/selected currently/by-default and you're only allowed to sell ONE (1) quantity of what you're selling (1 Quantity Available TOTAL - this will create competition between submitted offers to submit the highest offer to win this listing). Your selection of 'AUCTION & BIDDING' both are now SELECTED!");
+            // check if quanitity value already selected
+            if (currentValues.quantityAvailableForSale && Object.keys(currentValues.quantityAvailableForSale).length > 0) {
+                // update switch state
+                setAuctionCheckedState(value);
+            } else {
+                // update react-hook-form state with default "Buy-it-now" option as "option" from above
+                setValue('quantityAvailableForSale', option, { shouldValidate: false });
+                // quantity value NOT already selected - do nothing but update switch state
+                setAuctionCheckedState(value);
+            }
+        } else {
+            setSwitchTextAuctionBuyitnowState("'AUCTION-ONLY' is enabled/selected currently and you're only allowed to sell ONE (1) quantity of what you're selling (1 Quantity Available TOTAL - this will create competition between submitted offers to submit the highest offer to win this listing). Your selection of 'AUCTION-ONLY' is now SELECTED!");
+            // clear non-used redux-hook-form value (since its not being used anymore temporarily)
+            reset({ buyItNowPrice: "" });
+            // update switch state
+            setAuctionCheckedState(value);
+        }
+    }
     const renderMainContentPassedConditional = (selectedType) => {
         switch (selectedType) {
             case "auction-ONLY":
@@ -337,18 +401,34 @@ const RenderConditionalBasedUponSellingType = ({ clearAllBodyScrollLocks, handle
                                         </FormGroup>
                                     </Col>
                                 </Row>
-                                <Col sm="12" md="12" lg="12" xl="12">
-                                    <FormGroup>
-                                        <Label>{buyItNowHelper.label}</Label>
-                                        <InputGroup>
-                                            <InputGroupAddon className={"custom-dollarsign-addon"} addonType="prepend"><InputGroupText>{"$ (USD)"}</InputGroupText></InputGroupAddon>
-                                            <input {...buyItNowHelper.check(setError, register)} pattern="[0-9]*" className="form-control" type={buyItNowHelper.type} name={buyItNowHelper.name} placeholder={buyItNowHelper.placeholder} onChange={(e) => {
-                                                return handleInputChange(e);
-                                            }} value={currentValues.buyItNowPrice} />
-                                        </InputGroup>
-                                        {errors.buyItNowPrice ? <span className="span-tooltip">{errors.buyItNowPrice.message}</span> : null}
-                                    </FormGroup>
-                                </Col>
+                                <Row>
+                                    {auctionChecked === true ? <Col sm="12" md="6" lg="6" xl="6">
+                                        <FormGroup>
+                                            <Label>{buyItNowHelper.label}</Label>
+                                            <InputGroup>
+                                                <InputGroupAddon className={"custom-dollarsign-addon"} addonType="prepend"><InputGroupText>{"$ (USD)"}</InputGroupText></InputGroupAddon>
+                                                <input {...buyItNowHelper.check(setError, register)} pattern="[0-9]*" className="form-control" type={buyItNowHelper.type} name={buyItNowHelper.name} placeholder={buyItNowHelper.placeholder} onChange={(e) => {
+                                                    return handleInputChange(e);
+                                                }} value={currentValues.buyItNowPrice} />
+                                            </InputGroup>
+                                            {errors.buyItNowPrice ? <span className="span-tooltip">{errors.buyItNowPrice.message}</span> : null}
+                                        </FormGroup>
+                                    </Col> : null}
+                                    <Col sm="12" md="6" lg="6" xl="6">
+                                        <FormGroup>
+                                            <Label>Would you like to have this listing as an "AUCTION-ONLY" listing OR a an "AUCTION W/BUY-IT-NOW" listing? (***auction W/BUY-IT-NOW allows for both bids/offers as well as a 'Buy-it-now' option IF ONLY ONE item is being sold)</Label>
+                                            <Row className="selector-container">
+                                                <Col sm="2" md="2" lg="2" xl="2">
+                                                    <Switch width={72.5} boxShadow={"0px 0px 15px 4.5px #6A6A6A"} offColor={"#888"} className={"buyitnow-switch-class"} onColor={"#51bb25"} onChange={handleSwitchValueChangeAuctionBuyitnow} checked={auctionChecked} />
+                                                </Col>
+                                                <Col sm="10" md="10" lg="10" xl="10">
+                                                    <p className="switch-text-custom">{switchTextAuctionBuyitnow}</p> 
+                                                </Col>
+                                            </Row>
+                                            {errors.buyItNowPrice ? <span className="span-tooltip">{errors.buyItNowPrice.message}</span> : null}
+                                        </FormGroup>
+                                    </Col>
+                                </Row>
                                 <Row>
                                     <Col sm="12" md="6" lg="6" xl="6">
                                         <FormGroup>
@@ -369,7 +449,7 @@ const RenderConditionalBasedUponSellingType = ({ clearAllBodyScrollLocks, handle
                                                         onChange={(selectedOption) => {
                                                             return handleQuantityAvailabilityChange(selectedOption);
                                                         }}
-                                                        options={quantityAvailabilityOptions}
+                                                        options={buyitnowChecked === true ? [quantityAvailabilityOptions[0]] : quantityAvailabilityOptions}
                                                     />
                                                 )}
                                             />
@@ -435,7 +515,7 @@ const RenderConditionalBasedUponSellingType = ({ clearAllBodyScrollLocks, handle
                             }, (errors, e) => {
                                 return onError(errors, e, true);
                             })}>
-                                <Row>
+                                {buyitnowChecked === true ? <Row>
                                     <Col sm="12" md="6" lg="6" xl="6">
                                         <FormGroup>
                                             <Label>{automaticAcceptBestOffer.label}</Label>
@@ -460,19 +540,35 @@ const RenderConditionalBasedUponSellingType = ({ clearAllBodyScrollLocks, handle
                                             {errors.minimumRequiredOfferValue ? <span className="span-tooltip">{errors.minimumRequiredOfferValue.message}</span> : null}
                                         </FormGroup>
                                     </Col>
+                                </Row> : null}
+                                <Row>
+                                    <Col sm="12" md="6" lg="6" xl="6">
+                                        <FormGroup>
+                                            <Label>{buyItNowHelper.label}</Label>
+                                            <InputGroup>
+                                                <InputGroupAddon className={"custom-dollarsign-addon"} addonType="prepend"><InputGroupText>{"$ (USD)"}</InputGroupText></InputGroupAddon>
+                                                <input {...buyItNowHelper.check(setError, register)} pattern="[0-9]*" className="form-control" type={buyItNowHelper.type} name={buyItNowHelper.name} placeholder={buyItNowHelper.placeholder} onChange={(e) => {
+                                                    return handleInputChange(e);
+                                                }} value={currentValues.buyItNowPrice} />
+                                            </InputGroup>
+                                            {errors.buyItNowPrice ? <span className="span-tooltip">{errors.buyItNowPrice.message}</span> : null}
+                                        </FormGroup>
+                                    </Col>
+                                    <Col sm="12" md="6" lg="6" xl="6">
+                                        <FormGroup>
+                                            <Label>Would you like to offer "buy-it-now" AND "best-offer" options? Select to ALLOW buy it now (will limit quanitity for sale to 1-ONE) or disallow to allow multiple sales</Label>
+                                            <Row className="selector-container">
+                                                <Col sm="2" md="2" lg="2" xl="2">
+                                                    <Switch width={72.5} boxShadow={"0px 0px 15px 4.5px #6A6A6A"} offColor={"#888"} className={"buyitnow-switch-class"} onColor={"#51bb25"} onChange={handleSwitchValueChange} checked={buyitnowChecked} />
+                                                </Col>
+                                                <Col sm="10" md="10" lg="10" xl="10">
+                                                    <p className="switch-text-custom">{switchText}</p> 
+                                                </Col>
+                                            </Row>
+                                            {errors.buyItNowPrice ? <span className="span-tooltip">{errors.buyItNowPrice.message}</span> : null}
+                                        </FormGroup>
+                                    </Col>
                                 </Row>
-                                <Col sm="12" md="12" lg="12" xl="12">
-                                    <FormGroup>
-                                        <Label>{buyItNowHelper.label}</Label>
-                                        <InputGroup>
-                                            <InputGroupAddon className={"custom-dollarsign-addon"} addonType="prepend"><InputGroupText>{"$ (USD)"}</InputGroupText></InputGroupAddon>
-                                            <input {...buyItNowHelper.check(setError, register)} pattern="[0-9]*" className="form-control" type={buyItNowHelper.type} name={buyItNowHelper.name} placeholder={buyItNowHelper.placeholder} onChange={(e) => {
-                                                return handleInputChange(e);
-                                            }} value={currentValues.buyItNowPrice} />
-                                        </InputGroup>
-                                        {errors.buyItNowPrice ? <span className="span-tooltip">{errors.buyItNowPrice.message}</span> : null}
-                                    </FormGroup>
-                                </Col>
                                 <Row>
                                     <Col sm="12" md="6" lg="6" xl="6">
                                         <FormGroup>
@@ -493,7 +589,7 @@ const RenderConditionalBasedUponSellingType = ({ clearAllBodyScrollLocks, handle
                                                         onChange={(selectedOption) => {
                                                             return handleQuantityAvailabilityChange(selectedOption);
                                                         }}
-                                                        options={quantityAvailabilityOptions}
+                                                        options={buyitnowChecked === true ? [quantityAvailabilityOptions[0]] : quantityAvailabilityOptions}
                                                     />
                                                 )}
                                             />

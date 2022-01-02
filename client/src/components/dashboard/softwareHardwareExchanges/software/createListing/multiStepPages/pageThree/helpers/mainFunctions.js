@@ -69,6 +69,9 @@ const calculateFileType = (type) => {
         case "image/jpeg":
             return "jpeg";
             break;
+        case "image/jpg":
+            return "jpg";
+            break;
         case "image/gif":
             return "gif";
             break;
@@ -219,12 +222,12 @@ const RenderOptionsRadioSelectsAuctionType = ({ clearErrors, control, setError, 
                             <div className="radio radio-secondary mr-3">
                             <Controller
                                 control={control}
-                                name={radioSelectionPricingOptionsThree.name}
-                                {...radioSelectionPricingOptionsThree.check(setError, register, clearErrors)}
+                                name={radioSelectionPricingOptionsFour.name}
+                                {...radioSelectionPricingOptionsFour.check(setError, register, clearErrors)}
                                 render={({ field }) => (
                                     <Input {...field} onChange={(e) => {
                                         onRadioChange(e.currentTarget.value);
-                                    }} checked={selected === radioSelectionPricingOptionsFour.value ? true : false} id={radioSelectionPricingOptionsThree.id} type="radio" value={radioSelectionPricingOptionsThree.value} />
+                                    }} checked={selected === radioSelectionPricingOptionsFour.value ? true : false} id={radioSelectionPricingOptionsFour.id} type="radio" value={radioSelectionPricingOptionsFour.value} />
                                 )}
                             />
                             <Label for="buy-it-now-ONLY"></Label>

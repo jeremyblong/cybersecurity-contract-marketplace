@@ -43,7 +43,7 @@ const supportItemCommentsSelectorOptions = [
     { value: "10-days", label: "10 Days (excessive timespan)" },
 ]
 
-const PageOneMainHelper = ({ saveSoftwareListingInfo }) => {
+const PageOneMainHelper = ({ saveSoftwareListingInfo, previouslySavedSoftwareData }) => {
 
     const history = useHistory();
 
@@ -74,14 +74,39 @@ const PageOneMainHelper = ({ saveSoftwareListingInfo }) => {
         e.preventDefault();
 
         if (data !== '') {
-            console.log("success! :)");
 
             console.log("data", data);
-            
-            saveSoftwareListingInfo({
-                ...data,
-                currentPage: 2
-            });
+
+            if (typeof previouslySavedSoftwareData.redirected !== "undefined" && previouslySavedSoftwareData.redirected === true) {
+                // values already persist to ommit them and add new values (because this is the original redux state creation function)...
+                const omittedPreviousKeysRedux = _.omit(previouslySavedSoftwareData, ["listingTitle", "category", "codingLanguageContent", "supportResponseTimespanData", "supportExternalURL", "description"]);
+                // deconstruct values off of "data" on submit object
+                const {
+                    listingTitle, 
+                    category, 
+                    codingLanguageContent, 
+                    supportResponseTimespanData, 
+                    supportExternalURL, 
+                    description
+                } = data;
+                // update redux state
+                saveSoftwareListingInfo({
+                    ...omittedPreviousKeysRedux,
+                    listingTitle, 
+                    category, 
+                    codingLanguageContent, 
+                    supportResponseTimespanData, 
+                    supportExternalURL, 
+                    description,
+                    currentPage: 4
+                });
+            } else {
+                // create new redux state for form-logic
+                saveSoftwareListingInfo({
+                    ...data,
+                    currentPage: 2
+                });
+            }
         } else {
             errors.showMessages();
         }
@@ -206,13 +231,13 @@ const PageOneMainHelper = ({ saveSoftwareListingInfo }) => {
                         <Label>Listing Title (Be As Specific As Possible)</Label>
                         <input {...register("listingTitle", { required: {
                             value: true,
-                            message: "You MUST enter a value between 15-75 characters"
+                            message: "You MUST enter a value between 15-125 characters"
                         }, minLength: {
                             value: 15,
                             message: "You must enter AT Least 15 characters"
                         }, maxLength: {
-                            value: 75,
-                            message: "You may ONLY enter 75 characters or less"
+                            value: 125,
+                            message: "You may ONLY enter 125 characters or less"
                         }})} className="form-control" name="listingTitle" type="text" placeholder="Listing title" onChange={handleInputChange} value={data.listingTitle} />
                         {/* 'Listing title is required & total length must be less than 50 charectors' */}
                         {errors.listingTitle ? <span className="span-tooltip">{errors.listingTitle.message}</span> : null}
@@ -334,7 +359,7 @@ const PageOneMainHelper = ({ saveSoftwareListingInfo }) => {
                                             <Input onChange={(value) => {
                                                 setCheckedSupportOption("no-support");
 
-                                                setValue('supportItemCommentsSelector', {
+                                                setValue('supportResponseTimespanData', {
                                                     type: checkedOptionSupport
                                                 }, { shouldValidate: false });
 
@@ -408,14 +433,14 @@ const PageOneMainHelper = ({ saveSoftwareListingInfo }) => {
                                     <Label>Response Time (up to - how long you typically take to reply/respond)</Label>
                                     <Controller
                                         control={control}
-                                        name="supportItemCommentsSelector"
-                                        {...register("supportItemCommentsSelector", { required: true, onBlur: () => {
+                                        name="supportResponseTimespanData"
+                                        {...register("supportResponseTimespanData", { required: true, onBlur: () => {
                                             console.log("onBlur...!");
 
                                             if (supportViaItemComments === true) {
-                                                alert("supportItemCommentsSelector HAS value")
+                                                alert("supportResponseTimespanData HAS value")
                                             } else {
-                                                clearErrors("supportItemCommentsSelector");
+                                                clearErrors("supportResponseTimespanData");
                                             }
                                         }})}
                                         render={({ field }) => (
@@ -436,7 +461,7 @@ const PageOneMainHelper = ({ saveSoftwareListingInfo }) => {
                                                             }
                                                         }
                                                     });
-                                                    setValue('supportItemCommentsSelector', {
+                                                    setValue('supportResponseTimespanData', {
                                                         ...selectedOption,
                                                         type: checkedOptionSupport
                                                     }, { shouldValidate: false });
@@ -447,7 +472,7 @@ const PageOneMainHelper = ({ saveSoftwareListingInfo }) => {
                                             />
                                         )}
                                     />
-                                    {errors.supportItemCommentsSelector ? <span className="span-tooltip">{'You must select a timespan to reflect your selected support option/type before proceeding'}</span> : null}
+                                    {errors.supportResponseTimespanData ? <span className="span-tooltip">{'You must select a timespan to reflect your selected support option/type before proceeding'}</span> : null}
                                     <div className="valid-feedback">{"Looks good!"}</div>
                                 </Col>
                             </Row> : null}
@@ -486,8 +511,6 @@ const PageOneMainHelper = ({ saveSoftwareListingInfo }) => {
                                 value: 6000,
                                 message: "You may only enter up to a max of 6000 characters or 475 words"
                             }, onBlur: () => {
-
-                                console.log("onBlur...!");
 
                                 setTimeout(() => {
                                     if ((typeof data.description !== "undefined") && ((data.description.length >= 1000) && (data.description.length <= 6000))) {
@@ -532,13 +555,9 @@ const PageOneMainHelper = ({ saveSoftwareListingInfo }) => {
                                 placeholder={"Enter your text here... (You can use MARKUP & various text styling tools with the bar above)"}
                                 name="description"
                                 onFocus={() => {
-                                    console.log("focussed and re-cleared error (description).");
-
                                     clearErrors("description");
                                 }}
                                 onBlur={() => {
-                                    console.log("blurred thank gawd");
-
                                     if (_.has(data, "description") && data.description.length > 0) {
                                         calculateWordCountOnBlur(data.description);
                                     }
@@ -576,7 +595,9 @@ const PageOneMainHelper = ({ saveSoftwareListingInfo }) => {
 }
 const mapStateToProps = (state) => {
     return {
-
+        previouslySavedSoftwareData: _.has(state.softwareListingSale, "softwareListingSaleInfo") ? state.softwareListingSale.softwareListingSaleInfo : {
+            redirect: false
+        }
     }
 }
 export default connect(mapStateToProps, { saveSoftwareListingInfo })(PageOneMainHelper);

@@ -312,6 +312,9 @@ const PageTwoMainHelper = ({ userData, saveSoftwareListingInfo, previouslySavedS
             case "image/jpeg":
                 return "jpeg";
                 break;
+            case "image/jpg":
+                return "jpg";
+                break;
             case "image/gif":
                 return "gif";
                 break;
@@ -456,11 +459,18 @@ const PageTwoMainHelper = ({ userData, saveSoftwareListingInfo, previouslySavedS
         console.log("handleFinalSubmissionOfForm clicked!");
         // close modal (confirmation NOT file modal).
         onClose();
-        // go to page 3 (75%)
-        saveSoftwareListingInfo({
-            ...previouslySavedSoftwareData,
-            currentPage: 3
-        });
+        // go to page 3 (75%) or final page IF REDIRECT EXISTS
+        if (typeof previouslySavedSoftwareData.redirected !== "undefined" && previouslySavedSoftwareData.redirected === true) {
+            saveSoftwareListingInfo({
+                ...previouslySavedSoftwareData,
+                currentPage: 4
+            });
+        } else {
+            saveSoftwareListingInfo({
+                ...previouslySavedSoftwareData,
+                currentPage: 3
+            });
+        }
     }
     const closeModalAndReviewFiles = (onClose) => {
         onClose();

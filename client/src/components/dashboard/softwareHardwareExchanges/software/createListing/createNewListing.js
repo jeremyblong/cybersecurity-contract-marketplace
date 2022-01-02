@@ -1,6 +1,6 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, Fragment } from 'react';
 import PageOneMainHelper from "./multiStepPages/pageOne/pageOneMain.js";
-import { Container, Col, Row, CardHeader, CardBody, Card, Progress } from "reactstrap";
+import { Container, Col, Row, CardHeader, CardBody, Card, Progress, Button, ButtonGroup } from "reactstrap";
 import Breadcrumb from '../../../../../layout/breadcrumb';
 import LoadingBar from 'react-top-loading-bar';
 import { connect } from "react-redux";
@@ -12,8 +12,11 @@ import PageFourMainHelper from "./multiStepPages/pageFour/pageFourMain.js";
 import useWindowSize from 'react-use/lib/useWindowSize';
 import Confetti from 'react-confetti';
 import { NotificationManager } from 'react-notifications';
+import { confirmAlert } from 'react-confirm-alert';
+import { saveSoftwareListingInfo } from "../../../../../redux/actions/hackers/createSoftwareListing/createNewSoftwareListingSale.js";
+import ConfirmationSuccessfullyPostedHelper from "./multiStepPages/pageFive/successConfirmationHelper.js";
 
-const CreateNewSoftwareListingHelper = ({ currentPage }) => {
+const CreateNewSoftwareListingHelper = ({ currentPage, saveSoftwareListingInfo }) => {
     // state for this component ONLY - PROGRESS
     const [ progress, setProgress ] = useState(0);
     const [ runConfettiState, changeSetRunConfettiState ] = useState(true);
@@ -38,6 +41,9 @@ const CreateNewSoftwareListingHelper = ({ currentPage }) => {
                 break;
             case 4: 
                 return <PageFourMainHelper />
+                break;
+            case 5:
+                return <ConfirmationSuccessfullyPostedHelper />;
                 break;
             default:
                 break;
@@ -115,6 +121,73 @@ const CreateNewSoftwareListingHelper = ({ currentPage }) => {
     // create window height/width sizes for confetti component
     const { width, height } = useWindowSize();
 
+    const closeModalAndRestartForm = (onClose) => {
+        console.log("closeModalAndRestartForm ran.");
+
+        onClose();
+
+        saveSoftwareListingInfo({
+            currentPage: 1
+        })
+    }
+    const promptConfirmationWindowSelection = () => {
+        confirmAlert({
+            customUI: ({ onClose }) => {
+                return (
+                    <Fragment>
+                        <Card>
+                            <CardHeader className="b-l-primary border-3 specific-edit-border-right">
+                                <h3>Are you sure you'd like to CANCEL & RESTART this form?</h3>
+                            </CardHeader>
+                            <CardBody id="modal-button-showcase-cardbody" className="btn-group-showcase">
+                                <Row>
+                                    <Col sm="12" md="12" lg="12" xl="12">
+                                        <p className="button-group-text-above">Are you sure you'd like to restart this form? You will lose ALL previous entries & and logic previously entered. You will be returned to PAGE ONE (20%) so you can continue with your re-entries...</p>
+                                    </Col>
+                                    <Col sm="12" md="12" lg="12" xl="12">
+                                        <hr className="secondary-hr" />
+                                        <div className="centered-button-container">
+                                            <ButtonGroup id="button-group-custom-secondary">
+                                                <Button outline color="danger" onClick={onClose}>Cancel/Close</Button>
+                                                <Button outline color="success" onClick={() => {
+                                                    closeModalAndRestartForm(onClose);
+                                                }}>RESTART</Button>
+                                            </ButtonGroup>
+                                        </div>
+                                    </Col>
+                                </Row>
+                            </CardBody>
+                        </Card>
+                    </Fragment>
+              );
+            }
+        });
+    }
+    const renderTopBar = () => {
+        if (currentPage !== 5) {
+            return (
+                <Fragment>
+                    <h5>Create a <strong style={{ color: "blue" }}>software</strong> listing - post a code snippet, malware, viruses, etc...</h5>
+                    <p>We are <em style={{ color: "red", textDecorationLine: "underline" }}>NOT</em> in any shape or form responsible if you use these codes/programs in a malicious manner AND any suspicious activity or reports <strong style={{ textDecorationLine: "underline", color: "red" }}>WILL</strong> be throughly investigated & reported to the appropriate authorities.</p>
+                    <hr />
+                        {currentPage !== 1 ? <div className="centered-both-ways">
+                            <Button className="btn-air-danger" color="danger" style={{ width: "65%" }} onClick={() => {
+                                // cancel & restart
+                                promptConfirmationWindowSelection();
+                            }}>~ Cancel & Restart Form Entries ~</Button>
+                        </div> : null}
+                    <hr />
+                    <p className="spacer-paragraph">In order to post a listing to sell or trade digital software related content, you will need to complete the following <strong>multi-page</strong> form to completion & your listing/item will be immediately posted shortly thereafter!</p>
+                    <div className="push-bottom-progress-bar">
+                        <div className="position-middle-bar-div">
+                            <h4 id="progress-text-centered">{`${progress}% Completed (Create-listing flow ${progress === 80 ? "- last page - review" : ""})`}</h4>
+                        </div>
+                        <Progress className="reactstrap-progress-bar-custom" animated color="secondary" value={progress} />
+                    </div>
+                </Fragment>
+            );
+        }
+    }
     // MAIN logic below... (returning majority of data)
     return (
         <div>
@@ -126,7 +199,7 @@ const CreateNewSoftwareListingHelper = ({ currentPage }) => {
                 containerClassName={"container-create-listing-software-loadbar"}
                 loaderSpeed={3500}
                 onLoaderFinished={() => {
-                    setProgress(false);
+                    setProgress(0);
                 }}
             />
             {showConfetti === true ? <Confetti
@@ -135,27 +208,18 @@ const CreateNewSoftwareListingHelper = ({ currentPage }) => {
                 className={"confetti-custom-styles"}
                 wind={0.0125}
                 gravity={0.075}
-                numberOfPieces={750}
+                numberOfPieces={500}
                 run={runConfettiState}
                 onConfettiComplete={handleConfettiCompletion}
                 recycle={true}
             /> : null}
             <Breadcrumb parent="Software (digital assets) Marketplace" title="Create a listing to sell software/code"/>
-            <Container style={{ marginBottom: "125px" }} className="full-height-container" fluid={true}>
+            <Container style={{ marginBottom: "225px" }} className="full-height-container" fluid={true}>
                 <Row>
                     <Col sm="12" md="12" lg="12" xl="12">
-                        <Card className="full-height-container">
+                        <Card id="over-extend-height-main-container" className="full-height-container">
                             <CardHeader>
-                                <h5>Create a <strong style={{ color: "blue" }}>software</strong> listing - post a code snippet, malware, viruses, etc...</h5>
-                                <p>We are <em style={{ color: "red", textDecorationLine: "underline" }}>NOT</em> in any shape or form responsible if you use these codes/programs in a malicious manner AND any suspicious activity or reports <strong style={{ textDecorationLine: "underline", color: "red" }}>WILL</strong> be throughly investigated & reported to the appropriate authorities.</p>
-                                <hr />
-                                <p className="spacer-paragraph">In order to post a listing to sell or trade digital software related content, you will need to complete the following <strong>multi-page</strong> form to completion & your listing/item will be immediately posted shortly thereafter!</p>
-                                <div className="push-bottom-progress-bar">
-                                    <div className="position-middle-bar-div">
-                                        <h4 id="progress-text-centered">{`${progress}% Completed (Create-listing flow ${progress === 80 ? "- last page - review" : ""})`}</h4>
-                                    </div>
-                                    <Progress className="reactstrap-progress-bar-custom" animated color="secondary" value={progress} />
-                                </div>
+                                {renderTopBar()}
                             </CardHeader>
                             <CardBody className="full-height-cardbody-extra">
                                 {renderConditionalPageContent()}
@@ -174,4 +238,4 @@ const mapStateToProps = (state) => {
         currentPage: _.has(state.softwareListingSale, "softwareListingSaleInfo") && Object.keys(state.softwareListingSale.softwareListingSaleInfo).length > 0 ? state.softwareListingSale.softwareListingSaleInfo.currentPage : 1
     }
 }
-export default connect(mapStateToProps, {  })(CreateNewSoftwareListingHelper);
+export default connect(mapStateToProps, { saveSoftwareListingInfo })(CreateNewSoftwareListingHelper);

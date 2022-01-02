@@ -48,7 +48,7 @@ const biddingIncrementIntervalOptions = [
 ];
 
 const quantityAvailabilityOptions = [
-    { label: "1 Quantity Available", value: "1", numericalAmount: 1, min: 1, max: 1 },
+    { label: "1 Quantity Available (Can be sold an unlimited amount of times - basically 1 per purchase per user)", value: "1", numericalAmount: 1, min: 1, max: 1 },
     { label: "2 Quantities Available", value: "2", numericalAmount: 2, min: 2, max: 2 },
     { label: "3 Quantities Available", value: "3", numericalAmount: 3, min: 3, max: 3 },
     { label: "4 Quantities Available", value: "4", numericalAmount: 4, min: 4, max: 4 },

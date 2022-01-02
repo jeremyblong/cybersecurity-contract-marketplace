@@ -50,3 +50,6 @@
     top: 0 !important;
     bottom: 0 !important;
 }
+#over-extend-height-main-container {
+    height: calc(100% + 125px) !important;
+}
