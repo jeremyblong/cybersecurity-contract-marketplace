@@ -23,6 +23,7 @@ import SoftwareLandingMainHelper from "../pages/dashboard/softwareHardwareExchan
 import DisplayIndividualListingSoftwarePage from "../pages/dashboard/softwareHardwareExchanges/software/individual/displayIndividualListing.js";
 import CreateNewSoftwareListingPage from "../pages/dashboard/softwareHardwareExchanges/software/createListing/createNewListing.js";
 import UnauthorizedAccessPage from "../pages/dashboard/unauthorized/unauthorizedAccess.js";
+import ViewIndividualListingSoftwarePagePage from "../pages/dashboard/softwareHardwareExchanges/software/individual/liveIndividualListing/viewLiveIndividualListingData.js";
 
 export const routes = [
         { path:"/profile/settings/edit", Component: GeneralSettingsPage },
@@ -49,5 +50,6 @@ export const routes = [
         { path: "/hardware/exchange/landing", Component: HardwareLandingMainHelper },
         { path: "/software/exchange/individual/listing/view/:id", Component: DisplayIndividualListingSoftwarePage },
         { path: "/create/listing/software/exchange/hacker/account", Component: CreateNewSoftwareListingPage },
-        { path: "/unauthorized/access/restricted", Component: UnauthorizedAccessPage }
+        { path: "/unauthorized/access/restricted", Component: UnauthorizedAccessPage },
+        { path: "/software/listing/individual/page/:id", Component: ViewIndividualListingSoftwarePagePage }
 ]

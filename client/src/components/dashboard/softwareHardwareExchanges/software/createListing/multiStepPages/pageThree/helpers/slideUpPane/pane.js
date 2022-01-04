@@ -425,7 +425,6 @@ const RenderConditionalBasedUponSellingType = ({ clearAllBodyScrollLocks, handle
                                                     <p className="switch-text-custom">{switchTextAuctionBuyitnow}</p> 
                                                 </Col>
                                             </Row>
-                                            {errors.buyItNowPrice ? <span className="span-tooltip">{errors.buyItNowPrice.message}</span> : null}
                                         </FormGroup>
                                     </Col>
                                 </Row>
@@ -565,7 +564,6 @@ const RenderConditionalBasedUponSellingType = ({ clearAllBodyScrollLocks, handle
                                                     <p className="switch-text-custom">{switchText}</p> 
                                                 </Col>
                                             </Row>
-                                            {errors.buyItNowPrice ? <span className="span-tooltip">{errors.buyItNowPrice.message}</span> : null}
                                         </FormGroup>
                                     </Col>
                                 </Row>
@@ -844,7 +842,7 @@ const SlideUpPaneAuctionPurchaseSelectionData = ({ clearAllBodyScrollLocks, type
                                 <Button onClick={() => {
                                     // run submission logic
                                     handleFinalSubmissionInputs(setModalOpenStatus, shiftCoreStyles, setIsTourOpenStatus, clearErrors, handleDynamicFormReset, typeOfListing, clearAllBodyScrollLocks);
-                                }} className="btn-square stretch-and-space-btn-left" active color="primary" size="md">Submit Completed Data & Close/Exit</Button>
+                                }} className="btn-square stretch-and-space-btn-left" active color="primary" size="md">Close/Exit Pane & Go Back To Listing Selection Area</Button>
                             </Col>
                             <Col sm="12" md="6" lg="6" xl="6">
                                 <Button onClick={() => {

@@ -1,30 +1,45 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import Breadcrumb from '../../../../../layout/breadcrumb';
 import { connect } from 'react-redux';
-import { Container, Row, Col, Card, CardHeader, CardBody, Button, ListGroup, Form, FormGroup, Input, Media, Modal, ModalHeader, ModalBody, InputGroup, InputGroupAddon, InputGroupText } from 'reactstrap';
+import { Container, Row, Col, Card, CardHeader, CardBody, Button, ListGroup, Form, FormGroup, Input, Media } from 'reactstrap';
 import { Grid, List } from 'react-feather';
 import { Link, useHistory } from 'react-router-dom';
 import errorImg from '../../../../../assets/images/search-not-found.png';
 import Allfilters from './helpers/allfilters.jsx';
 import Carousal from './helpers/carousal.jsx';
 import uuid from "react-uuid";
-import { Filters,ShowingProducts,Featured,LowestPrices,HighestPrices,NotFoundData,ProductDetails,Quantity,AddToCart,ViewDetails,ProductSizeArray } from "../../../../../constant";
+import { Filters,ShowingProducts,Featured,LowestPrices,HighestPrices,NotFoundData } from "../../../../../constant";
 import "./styles.css";
+import axios from "axios";
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import helpers from "./helpers/generalHelperFunctions.js";
+import moment from "moment";
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import { NotificationManager } from 'react-notifications';
 
 const SoftwareLandingMainHelper = (props) => {
 
     const history = useHistory();
-
+    // helper functions
+    const { 
+        dummyNoteDescription, 
+        preparePriceString, 
+        renderTags,
+        calculateAuctionType,
+        calculateStatus,
+        RenderConditionalRealDataOrNot
+    } = helpers;
 
     //   const dispatch = useDispatch()
     const data = []; // useSelector(content => content.data.productItems)
     // eslint-disable-next-line 
     const [layoutColumns, setLayoutColumns] = useState(3);
-
-    const symbol = "$"; // useSelector(content => content.data.symbol)
+    // universal symbol for currency variable
+    const symbol = "$";
     const [open, setOpen] = useState(false);
     const [sidebaron, setSidebaron] = useState(true);
-    const [singleProduct, setSingleProduct] = useState([]);
+    const [singleProduct, setSingleProduct] = useState(null);
     const [searchKeyword, setSearchKeyword] = useState('');
     // eslint-disable-next-line
     const [stock, setStock] = useState('');
@@ -33,52 +48,56 @@ const SoftwareLandingMainHelper = (props) => {
     const filters = []; // useSelector(content => content.filters)
     const [products, setProducts ] = useState([]); // getVisibleproducts(data, filters)
 
-    const calculateStatus = (num) => {
-        switch (num) {
-            case 1:
-                return "love"
-                break;
-            case 2: 
-                return "Hot"
-                break;
-            case 3:
-                return "gift"
-                break;
-            case 4: 
-                return "50%"
-                break;
-            case 5:
-                return "sale"
-                break;
-            default:
-                break;
-        }
-    }
-
     useEffect(() => {
-      const newProductArray = [];
-        // dispatch(watchfetchProducts());
-        new Promise((resolve, reject) => {
-            new Array(20).fill("").map((item, index) => {
-                const generated = Math.floor(Math.random() * 1000) + 1;
-                const statusGeneration = Math.floor(Math.random() * 5) + 1;
-                newProductArray.push({
-                    status: calculateStatus(statusGeneration),
-                    id: uuid(),
-                    name: "Software item",
-                    note: "Simply dummy text of the printing",
-                    price: (generated).toString(),
-                    discountPrice: ((generated - 150 > 0) ? (generated - 150) : 50).toString(),
-                    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-                    category: "Digital Software Code Snippet"
+        // already displayed/pooled listings
+        const alreadyPooled = [];
+        // configuration for api request
+        const configuration = {
+            params: {
+                alreadyPooled
+            }
+        };
+        // api request
+        axios.get(`${process.env.REACT_APP_BASE_URL}/gather/software/listings`, configuration).then((res) => {
+            if (res.data.message === "Successfully gathered listing items!") {
+                console.log(res.data);
+
+                const { listings } = res.data;
+
+                const newlyConstructedArr = [...listings];
+
+                new Promise((resolve, reject) => {
+                    const subtractionArrLength = 20 - listings.length;
+                    console.log("subtractionArrLength", subtractionArrLength);
+                    new Array(subtractionArrLength).fill("").map((item, index) => {
+                        console.log("index", index);
+                        const generated = Math.floor(Math.random() * 1000) + 1;
+                        const statusGeneration = Math.floor(Math.random() * 5) + 1;
+                        newlyConstructedArr.push({
+                            status: calculateStatus(statusGeneration),
+                            id: uuid(),
+                            name: "This is a dummy listing preview - this is only for UI design purposes - NOT active.",
+                            note: "Simply dummy text of the printing",
+                            price: (generated).toString(),
+                            discountPrice: ((generated - 150 > 0) ? (generated - 150) : 50).toString(),
+                            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+                            category: "Digital Software Code Snippet",
+                            default: true
+                        });
+                        // once it reaches 20 (twenty/number) array length filled extras
+                        if (index === subtractionArrLength - 1) {
+                            resolve(newlyConstructedArr);
+                        }
+                    });
+                }).then((passedArray) => {
+                    setProducts(passedArray);
                 });
-                if (index === 19) {
-                    resolve(newProductArray);
-                }
-            });
-        }).then((passedArray) => {
-            setProducts(passedArray);
-        });
+            } else {
+                console.log("Err", res.data);
+            }
+        }).catch((err) => {
+            console.log("errrrrrrr", err);
+        })
     }, []);
 
 //   const filterSortFunc = (event) => {
@@ -126,13 +145,26 @@ const SoftwareLandingMainHelper = (props) => {
     }
 
 
-    const onOpenModal = (productId) => {
-        setOpen(true);
-        products.forEach((product, i) => {
-            if (product.id === productId) {
-                setSingleProduct(product)
-            }
-        })
+    const onOpenModal = (obj) => {
+        const { id, live } = obj;
+        
+        if (live === true) {
+            products.forEach((product, i) => {
+                if (product.uniqueId === id) {
+                    setSingleProduct(product);
+    
+                    setOpen(true);
+                }
+            })
+        } else {
+            products.forEach((product, i) => {
+                if (product.id === id) {
+                    setSingleProduct(product);
+    
+                    setOpen(true);
+                }
+            })
+        }
     };
 
     const onCloseModal = () => {
@@ -141,21 +173,58 @@ const SoftwareLandingMainHelper = (props) => {
 
 
     const minusQty = () => {
-        if (quantity > 1) {
-        setStock('InStock')
-        setQuantity(quantity - 1)
+        // min amount available
+        const minQuantity = singleProduct.auctionPriceRelatedData.quantityAvailableForSale.min;
+
+        if (minQuantity === 1) {
+            // CANNOT decrease value
+            NotificationManager.warning(`Cannot CHANGE value, There is only ONE ITEM in this listing for sale (You're trying to add to an immutable count)...!`, 'ONLY ONE ITEM FOR SALE!', 4500);
+        } else {
+            // CAN decrease value!
+            // check if current value is less than max
+            if (quantity > minQuantity) {
+                // add one to count because current value is less-than MAX value from listing info
+                setQuantity(quantity - 1);
+            } else {
+                setQuantity("Can't decrease/lower quanity any further...");
+
+                NotificationManager.warning('Cannot lower count any further - MINIMUM quantity reached!', 'MIN QUANTITY LIMIT REACHED!', 4500);
+            }
         }
     }
 
     const changeQty = (e) => {
-        setQuantity(parseInt(e.target.value))
+        // max value from listing
+        const maxQuantity = singleProduct.auctionPriceRelatedData.quantityAvailableForSale.max;
+        // min amount available
+        const minQuantity = singleProduct.auctionPriceRelatedData.quantityAvailableForSale.min;
+        // select current value
+        const parsedValue = parseInt(e.target.value);
+        // check if parsedValue meets BOTH conditions (max & min)
+        if ((parsedValue >= minQuantity) && (parsedValue <= maxQuantity)) {
+            setQuantity(parsedValue)
+        } else {
+            // error - over or under reached
+            setQuantity("ERROR - Can't set quantity!");
+        }
     }
 
     const plusQty = () => {
-        if (quantity >= 1) {
-        setQuantity(quantity + 1)
+        const maxQuantity = singleProduct.auctionPriceRelatedData.quantityAvailableForSale.max;
+        // check if current value is less than max
+        if (maxQuantity === 1) {
+            // CANNOT increase value
+            NotificationManager.warning(`Cannot CHANGE value, There is only ONE ITEM in this listing for sale (You're trying to add to an immutable count)...!`, 'ONLY ONE ITEM FOR SALE!', 4500);
         } else {
-        setStock('Out of Stock !')
+            // CAN increase value!
+            if (quantity < maxQuantity) {
+                // add one to count because current value is less-than MAX value from listing info
+                setQuantity(quantity + 1);
+            } else {
+                setQuantity("MAX LIMIT Reached!");
+    
+                NotificationManager.warning('You cannot add another item, MAX limit reached!', 'MAX QUANTITY LIMIT REACHED!', 4500);
+            }
         }
     }
 
@@ -178,8 +247,17 @@ const SoftwareLandingMainHelper = (props) => {
         const id = product.id;
         history.push(`/software/exchange/individual/listing/view/${id}`)
     }
-
-
+    const handleRedirectToIndividualSoftwarePage = (item, history, onCloseModal, modalExists) => {
+        console.log("handleRedirectToIndividualSoftwarePage ran!");
+    
+        if (modalExists !== true) {
+            history.push(`/software/listing/individual/page/${item.uniqueId}`, { item });
+        } else {
+            onCloseModal();
+    
+            history.push(`/software/listing/individual/page/${item.uniqueId}`, { item });
+        }
+    }
     return (
         <Fragment>
         <Breadcrumb parent="Shop for digital software (snippets, code, CLI commands, etc..)" title="Digital Software Marketplace" />
@@ -306,143 +384,113 @@ const SoftwareLandingMainHelper = (props) => {
                     </div>
                 </div>
                 :
-                <Row className="gridRow">
-                    {products ? products.map((item, i) =>
-                    <div className={`${layoutColumns === 3 ? 'col-xl-3 col-sm-6 xl-4 col-grid-box' : 'col-xl-' + layoutColumns}`} key={i}>
-                        <Card>
-                        <div className="product-box">
-                            <div className="product-img">
-                            {(item.status === 'sale') ?
-                                <span className="ribbon ribbon-danger">
-                                {item.status}
-                                </span> : ''}
-                            {(item.status === '50%') ?
-                                <span className="ribbon ribbon-success ribbon-right">
-                                {item.status}
-                                </span> : ''}
-                            {(item.status === 'gift') ?
-                                <span className="ribbon ribbon-secondary ribbon-vertical-left">
-                                <i className="icon-gift"></i>
-                                </span> : ''}
-                            {(item.status === 'love') ?
-                                <span className="ribbon ribbon-bookmark ribbon-vertical-right ribbon-info">
-                                <i className="icon-heart"></i>
-                                </span> : ''}
-                            {(item.status === 'Hot') ?
-                                <span className="ribbon ribbon ribbon-clip ribbon-warning">
-                                {item.status}
-                                </span> : ''}
-                            <img className="img-fluid" src={require("../../../../../assets/images/product/12.png")} alt="" />
-                            <div className="product-hover">
-                                <ul>
-                                <li>
-                                    <Link to={`/`}>
-                                    <Button color="default" onClick={() => {
-                                            console.log("purchase - add to cart!")
-                                            //   addcart(item, quantity)
-                                    }}>
-                                        <i className="icon-shopping-cart"></i>
-                                    </Button>
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Button color="default" data-toggle="modal"
-                                    onClick={() => onOpenModal(item.id)}>
-                                    <i className="icon-eye"></i>
-                                    </Button>
-                                </li>
-                                <li>
-                                    <Link to={`/`}>
-                                    <Button color="default" onClick={() => {
-
-                                    }}>
+                <Row className="gridRow custom-gridRow">
+                    {products ? products.map((item, i) => {
+                        // actual live data or not
+                        const live = item.default !== true ? true : false;
+                        // selectors obj creator
+                        const title = live ? item.listingTitle : null;
+                        const thumbnail = live ? `${process.env.REACT_APP_ASSET_LINK}/${item.thumbnailImage.link}` : null;
+                        const buyitnowPrice = live ? item.auctionPriceRelatedData.buyItNowPrice : null;
+                        const description = live ? item.description : null;
+                        const tags = live ? item.hashtags : null;
+                        const bookmarks = live ? item.bookmarks : null;
+                        const auctionType = live ? item.auctionPurchaseType : null;
+                        // return data and display
+                        return (
+                            <div className={`${layoutColumns === 3 ? 'col-xl-3 col-sm-6 xl-4 col-grid-box custom-grid-box-3-layout' : 'custom-grid-box-unknown col-xl-' + layoutColumns}`} key={i}>
+                                <Card className="custom-listing-card-display">
+                                <div className="product-box">
+                                    <div className="product-img">
+                                    {live === true ? <span className="ribbon ribbon-danger">
+                                        {calculateAuctionType(auctionType)}
+                                    </span> : ''}
+                                    {/* {(item.status === '50%') ?
+                                        <span className="ribbon ribbon-success ribbon-right">
+                                        {item.status}
+                                        </span> : ''}
+                                    {(item.status === 'gift') ?
+                                        <span className="ribbon ribbon-secondary ribbon-vertical-left">
+                                        <i className="icon-gift"></i>
+                                        </span> : ''}
+                                    {(item.status === 'love') ?
+                                        <span className="ribbon ribbon-bookmark ribbon-vertical-right ribbon-info">
                                         <i className="icon-heart"></i>
-                                    </Button>
-                                    </Link>
-                                </li>
-                                </ul>
-                            </div>
-                            </div>
-                            <div className="product-details">
-                            <div className="rating">
-                                <i className="fa fa-star"></i>
-                                <i className="fa fa-star"></i>
-                                <i className="fa fa-star"></i>
-                                <i className="fa fa-star"></i>
-                                <i className="fa fa-star"></i>
-                            </div>
-                            <h4 onClick={() => onClickDetailPage(item)} className="font-primary" >{item.name}</h4>
-                            <p>{item.note}</p>
-                            <div className="product-price">
-                                {symbol} {item.price}
-                                <del>{symbol} {item.discountPrice}</del>
-                                
-                            </div>
-                            </div>
-                        </div>
-                        </Card>
-                    </div>
-                    ) : ''}
+                                        </span> : ''}
+                                    {(item.status === 'Hot') ?
+                                        <span className="ribbon ribbon ribbon-clip ribbon-warning">
+                                        {item.status}
+                                        </span> : ''} */}
+                                        <LazyLoadImage
+                                            alt={"listing-picture-preview"}
+                                            height={"100%"}
+                                            src={thumbnail !== null ? thumbnail : require("../../../../../assets/images/product/12.png")}
+                                            width={"100%"} 
+                                            className="img-fluid custom-fluid-thumbnail"
+                                        />
+                                        <div className="product-hover">
+                                            <ul>
+                                            <li>
+                                                <Link to={`/`}>
+                                                    <Button color="default" onClick={() => {
+                                                            console.log("purchase - add to cart!")
+                                                            //   addcart(item, quantity)
+                                                    }}>
+                                                        <i className="icon-shopping-cart"></i>
+                                                    </Button>
+                                                </Link>
+                                            </li>
+                                            <li>
+                                                <Button color="default" data-toggle="modal"
+                                                onClick={() => onOpenModal(live === true ? {
+                                                    id: item.uniqueId,
+                                                    live: true
+                                                } : {
+                                                    id: item.id,
+                                                    live: false
+                                                })}>
+                                                    <i className="icon-eye"></i>
+                                                </Button>
+                                            </li>
+                                            <li>
+                                                <Link to={`/`}>
+                                                    <Button color="default" onClick={() => {
 
-                    <Modal className="modal-lg modal-dialog-centered product-modal" isOpen={open}>
-                    <ModalBody>
-                        <ModalHeader toggle={onCloseModal}>
-                        <div className="product-box row">
-                            <Col lg="6" className="product-img">
-                            <Media className="img-fluid" src={require("../../../../../assets/images/product/12.png")} alt="" />
-                            </Col>
-                            <Col lg="6" className="product-details  text-left">
-                            <h4>{singleProduct.category}</h4>
-                            <div className="product-price">
-                                {symbol}{singleProduct.price}
-                                <del>{symbol}{singleProduct.discountPrice}</del>
-                            </div>
-                            <div className="product-view">
-                                <h6 className="f-w-600">{ProductDetails}</h6>
-                                <p className="mb-0">{singleProduct.description}</p>
-                            </div>
-                            <div className="product-size">
-                                <ul>
-                                {ProductSizeArray.map((items,i) => 
-                                    <li key={i}>
-                                    <Button color="outline-light">{items}</Button>
-                                    </li>
-                                )}
-                                </ul>
-                            </div>
-                            <div className="product-qnty">
-                                <h6 className="f-w-600">{Quantity}</h6>
-                                <fieldset>
-                                <InputGroup className="bootstrap-touchspin">
-                                    <InputGroupAddon addonType="prepend">
-                                    <Button color="primary btn-square" className="bootstrap-touchspin-down" onClick={minusQty}><i className="fa fa-minus"></i></Button>
-                                    </InputGroupAddon>
-                                    <InputGroupAddon addonType="prepend">
-                                    <InputGroupText className="bootstrap-touchspin-prefix" style={{ display: "none" }}></InputGroupText>
-                                    </InputGroupAddon>
-                                    <Input className="touchspin text-center" type="text" name="quantity" value={quantity} onChange={(e) => changeQty(e)} style={{ display: "block" }} />
-                                    <InputGroupAddon addonType="append">
-                                    <InputGroupText className="bootstrap-touchspin-postfix" style={{ display: "none" }}></InputGroupText>
-                                    </InputGroupAddon>
-                                    <InputGroupAddon addonType="append" className="ml-0">
-                                    <Button color="primary btn-square" className="bootstrap-touchspin-up" onClick={plusQty}><i className="fa fa-plus"></i></Button>
-                                    </InputGroupAddon>
-                                </InputGroup>
-                                </fieldset>
-                                <div className="addcart-btn">
-                                <Link to={`${process.env.PUBLIC_URL}/app/ecommerce/cart`}><Button color="primary" className="mr-2 mt-2" onClick={() => {
-                                    console.log("purchase - add to cart (last func)!");
-
-                                    // addcart(singleProduct, quantity)
-                                }}>{AddToCart}</Button></Link>
-                                <Button onClick={() => onClickDetailPage(singleProduct)} color="primary" className="mr-2 mt-2">Visit/View Listing</Button>
+                                                    }}>
+                                                        <i className="icon-heart"></i>
+                                                    </Button>
+                                                </Link>
+                                            </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div className="product-details">
+                                        <div className="rating">
+                                            <i className="fa fa-star"></i>
+                                            <i className="fa fa-star"></i>
+                                            <i className="fa fa-star"></i>
+                                            <i className="fa fa-star"></i>
+                                            <i className="fa fa-star"></i>
+                                        </div>
+                                    <h4 onClick={() => handleRedirectToIndividualSoftwarePage(item, history, null, false)} className="font-primary" >{title !== null ? title : item.name}</h4>
+                                    <hr className="secondary-hr" />
+                                    <p className="listing-description-header">Description/Brief-info</p>
+                                    {live === true ? <ReactMarkdown className="markdown-description--mapped-listing" children={item.description} remarkPlugins={[remarkGfm]} /> : <ReactMarkdown className="markdown-description--mapped-listing" children={dummyNoteDescription} remarkPlugins={[remarkGfm]} />}
+                                    {tags !== null ? renderTags(tags) : null}
+                                    <p className="date-posted-listing">Posted {moment(item.systemDate).fromNow()}</p>
+                                    <div className="product-price">
+                                        {preparePriceString(item.bids, item.currentBidPrice, auctionType, live, item, false)}
+                                        {live === false ? <del>{`$${Number(item.discountPrice).toFixed(2)}`}</del> : null}
+                                    </div>
+                                    </div>
                                 </div>
+                                </Card>
                             </div>
-                            </Col>
-                        </div>
-                        </ModalHeader>
-                    </ModalBody>
-                    </Modal>
+                        );
+                    }) : ''}
+                    {/* render modal START */}
+                    {singleProduct !== null ? <RenderConditionalRealDataOrNot history={history} handleRedirectToIndividualSoftwarePage={handleRedirectToIndividualSoftwarePage} open={open} singleProduct={singleProduct} onCloseModal={onCloseModal} minusQty={minusQty} plusQty={plusQty} quantity={quantity} changeQty={changeQty} onClickDetailPage={onClickDetailPage} /> : null}
+                    {/* render modal END */}
                 </Row>
                 }
             </div>

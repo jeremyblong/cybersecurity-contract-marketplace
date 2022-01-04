@@ -1,0 +1,162 @@
+
+.custom-product-inner-price {
+    font-size: 1.375rem !important;
+}
+.markdown-individual-listing-info {
+    max-height: 425px;
+    overflow-y: scroll;
+    border: 2.5px solid black;
+    padding: 17.5px;
+}
+.pricing-details-custom-inner {
+    font-size: 1.50rem !important;
+    color: #f73164;
+}
+.product-social-listing-custom li {
+   
+}
+.redish-b {
+    color: black;
+}
+.blue-strong {
+    color: blue;
+}
+.td-custom-product {
+    /* max-width: vw !important; */
+}
+.tr-custom-product {
+    border-bottom: 1px solid black;
+    min-width: 50vw !important;
+    min-height: 70px !important;
+    width: 50vw !important;
+}
+.custom-table-container table tbody {
+    min-height: 400px !important;
+    width: 100% !important;
+}
+.custom-table-container table {
+    min-height: 400px !important;
+    width: 100% !important;
+}
+.lower-td-custom {
+    text-align: right;
+    float: right;
+    /* width: 100%; */
+
+}
+/* TD row style */
+.tr-custom-product .row {
+    min-height: 57.5px !important;
+    min-width: 100% !important;
+}
+/*  custom COL */
+.custom-col-product-individual {
+    margin-top: 7.5px;
+    padding-bottom: 7.5px;
+}
+div.custom-table-container {
+    height: 100% !important;
+    width: 100% !important;
+}
+.price-price-header {
+    font-size: 1.15rem !important;
+    color: black;
+    font-style: italic;
+}
+.fixed-textarea-input-noedit {
+    width: 100%;
+}
+#textarea-nonactive-individual-view {
+    width: 100%;
+    padding: 12.5px;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+.custom-label-view {
+    margin-bottom: 12.5px;
+    font-size: 1rem;
+    text-decoration-line: underline;
+    color: #7366ff;
+}
+#bid-strong {
+    color: black;
+    font-style: italic;
+    text-decoration-line: underline;
+}
+.posted-ago-date {
+    font-size: 0.775rem;
+    color: red;
+    font-weight: 500;
+    margin-top: 12.5px;
+}
+.normal-text-styled {
+
+}
+.selected-option-listing-type-red {
+    border: 2.35px solid #f73164 !important;
+}
+.selected-option-listing-type-blue {
+    border: 2.35px solid #7366ff !important;
+}
+.float-left-all-content .badge {
+    float: left !important;
+    margin: 1.5px;
+    font-size: 0.85rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+.aboutme-other-user-bio {
+    max-height: 175px;
+    overflow-y: scroll;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.125) !important;
+    padding: 6.5px;
+}
+.color-purple-red {
+    color: black;
+}
+/* bids list scrolling */
+.most-recent-bids-list {
+    max-height: 325px;
+    overflow-y: scroll;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.125) !important;
+    min-height: 325px;
+}
+.red-text-secondary {
+    color: #f73164 !important;
+    font-weight: bold;
+}
+/* video demo NOT UPLOADED placeholder styles */
+.preview-image-thumbnail-individual-listing {
+    max-width: 100%;
+    max-height: calc(100% - 100px);
+    height: 100%;
+    width: 100%;
+}
+.video-preview-container-wrapper {
+    max-height: 100%;
+    max-width: 100%;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175) !important;
+}
+.custom-tab-pane {
+    height: 100% !important;
+}
+#tabbed-card-listing-individual {
+
+}
+#my-tabbed-content-listing {
+    height: 100% !important;
+}
+.adjust-top-margin {
+    
+}
+.float-align-right {
+    /* float: right !important; */
+    position: absolute;
+    right: 65px;
+    top: 0px;
+    width: 100%;
+}
+.float-align-right-stars {
+    /* float: right !important; */
+    position: absolute;
+    right: 10px;
+    top: 0px;
+}

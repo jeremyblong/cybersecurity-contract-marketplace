@@ -9,7 +9,6 @@ import ReactPlayer from 'react-player';
 import Tour from 'reactour';
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 import ImageGallery from 'react-image-gallery';
-import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 
 const renderSupportDetails = (option) => {
     const renderHelper = () => {

@@ -112,7 +112,8 @@ app.use("/retrieve/related/employer/core/information", require("./routes/employe
 app.use("/upload/banner/photo/hacker/profile", require("./routes/hackers/profile/newBanner/uploadNewBannerImage.js"));
 app.use("/upload/misc/file/softare/listing/sale", require("./routes/hackers/softwareHardwareMarketplace/software/createListing/uploadFiles/uploadGeneralFilePremature.js"));
 app.use("/upload/software/listing/for/sale/data", require("./routes/hackers/softwareHardwareMarketplace/software/createListing/postListing/postFinalListingDataLive.js"));
-
+app.use("/gather/software/listings", require("./routes/hackers/softwareHardwareMarketplace/software/gatherListing/gatherListingsInitial.js"));
+app.use("/gather/core/anonymous/user/data", require("./routes/shared/general/userInfo/gatherRestrictedCoreUserInfo.js"));
 
 // ~ webhook logic STARTS here ~
 app.use("/passbase/webhook", require("./webhooks/passbase/webhook.js"));

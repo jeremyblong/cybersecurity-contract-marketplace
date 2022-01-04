@@ -52,6 +52,26 @@ a:hover {
 .btn-disabled {
   background-color: rgb(235, 235, 228) !important;
 }
+.custom-code {
+  color: #7366ff !important;
+  background-color: rgba(115, 102, 255, 0.03);
+  padding: 5px 4px;
+  border: 1.25px solid #7366ff;
+  font-weight: bold;
+  margin: 1.5 4.5px;
+  border-radius: 2px;
+}
+.custom-price-tag {
+  color: black !important;
+  background-color: rgba(115, 102, 255, 0.03);
+  padding: 3.5px 6.5px;
+  border: 1.25px solid #7366ff;
+  font-weight: bold;
+  font-size: 1.325rem;
+  margin: 2.5 4.75px;
+  border-radius: 2px;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.10) !important;
+}
 .centered-both-ways {
   display: -webkit-flexbox;
   display: -ms-flexbox;

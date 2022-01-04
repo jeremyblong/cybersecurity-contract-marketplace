@@ -9,3 +9,68 @@
     position: absolute !important;
     top: 10px !important;
 }
+.pricing-details-custom {
+    color: #f73164;
+}
+.markdown-description--mapped-listing {
+    max-height: 300px !important;
+    overflow-y: scroll;
+    border: 2.5px solid darkgrey;
+    margin: 15px 0px;
+    padding: 12.5px;
+}
+.listing-description-header {
+    text-decoration-line: underline;
+    color: black;
+    font-weight: bold;
+    font-size: 1rem;
+}
+.tags-container-listing-preview {
+    margin-bottom: 12.5px !important;
+}
+.listing-preview-badge {
+    color: white !important;
+}
+.custom-listing-card-display {
+    min-height: 97.5%;
+}
+.custom-gridRow {
+    
+}
+.custom-grid-box-unknown {
+    margin-bottom: 32.5px;
+}
+.custom-grid-box-3-layout {
+    margin-bottom: 32.5px;
+}
+/* modal for custom modal styles - REAL DATA DISPLAYED MODAL */
+.custom-product-modal-styled {
+    min-width: 82.5vw;
+}
+.markdown-description-modal-listing-preview {
+    max-height: 275px;
+    overflow-y: scroll;
+}
+.listing-preview-badge-larger {
+    color: white !important;
+}
+.pricing-details-custom-modal-text {
+    font-size: 1.20rem;
+    color: #f73164;
+}
+#stretch-pill-button-custom-group {
+    min-width: 100% !important;
+}
+.image-gallery-product-view {
+  
+}
+.inner-img-thumbnail-slider-product-show {
+    max-width: 95% !important;
+}
+.custom-product-img-gallery {
+    max-width: 95% !important;
+}
+/* .hover-click-state:hover {
+    cursor: pointer !important;
+    color: #f73164 !important;
+} */

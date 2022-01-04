@@ -163,6 +163,13 @@ const CreateNewSoftwareListingHelper = ({ currentPage, saveSoftwareListingInfo }
             }
         });
     }
+    const restartFormStatusProcess = () => {
+        console.log("restartFormStatusProcess ran...!");
+
+        saveSoftwareListingInfo({
+            currentPage: 1
+        })
+    }
     const renderTopBar = () => {
         if (currentPage !== 5) {
             return (
@@ -184,6 +191,15 @@ const CreateNewSoftwareListingHelper = ({ currentPage, saveSoftwareListingInfo }
                         </div>
                         <Progress className="reactstrap-progress-bar-custom" animated color="secondary" value={progress} />
                     </div>
+                </Fragment>
+            );
+        } else if (currentPage === 5) {
+            return (
+                <Fragment>
+                    <Button className="btn-air-success" color="success" style={{ width: "100%" }} onClick={() => {
+                        // cancel & restart
+                        restartFormStatusProcess();
+                    }}>~ Post another listing & restart process! ~</Button>
                 </Fragment>
             );
         }

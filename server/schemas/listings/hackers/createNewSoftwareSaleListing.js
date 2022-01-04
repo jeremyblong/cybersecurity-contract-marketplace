@@ -74,6 +74,12 @@ const NewSoftwareForSaleListingCreate = new Schema({
     },
     likes: {
         type: Number
+    },
+    bids: {
+        type: Schema.Types.Mixed
+    },
+    currentBidPrice: {
+        type: Schema.Types.Mixed
     }
 });
 
