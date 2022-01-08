@@ -14,6 +14,7 @@ const SignIn = ({ authentication }) => {
     const history = useHistory();
 
     const [ checked, setchecked ] = useState(false);
+    const [ hidePassword, setHidePassword ] = useState(false);
     const [ data, setData ] = useState({});
     const [ switchAccountType, switchType ] = useState("You're logging in as - 'Company/Employer'");
 
@@ -106,7 +107,12 @@ const SignIn = ({ authentication }) => {
 
                                 <div className="col-12">
                                     <div className="form-group">
-                                        <input value={data.password} onChange={handleInputChange} className="form-control" type="password" name="password" placeholder="Password" />
+                                        <div className="input-group">
+                                            <input value={data.password} onChange={handleInputChange} className="form-control custom-password-input-signin" type={hidePassword === true ? "text" : "password"} name="password" placeholder="Password" />
+                                            <span className="input-group-text custom-input-text-group-transparent"><img onClick={() => {
+                                                setHidePassword(!hidePassword);
+                                            }} src={require("../assets/icons/eye.png")} className="eye-icon-custom" /></span>
+                                        </div>
                                     </div>
                                 </div>
                                 <div style={{ paddingBottom: "15px" }} className="col-12">

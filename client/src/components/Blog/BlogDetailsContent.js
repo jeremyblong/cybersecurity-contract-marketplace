@@ -16,13 +16,13 @@ const BlogDetailsContent = () => {
 									<ul>
 										<li>
                                             <span>Posted On:</span> 
-                                            <Link href="#">
+                                            <Link to={"/"}>
                                                 <a>May 19, 2020</a>
                                             </Link>
                                         </li>
 										<li>
                                             <span>Posted By:</span> 
-                                            <Link href="#">
+                                            <Link to={"/"}>
                                                 <a>John Anderson</a>
                                             </Link>
                                         </li>
@@ -50,28 +50,28 @@ const BlogDetailsContent = () => {
 								<div className="article-tags">
 									<span><i className='bx bx-share-alt'></i></span>
 
-									<a href="#">Share</a>
+									<a to={"/"}>Share</a>
 								</div>
 
 								<div className="article-share">
 									<ul className="social">
 										<li>
-											<a href="https://facebook.com/" target="_blank">
+											<a to="https://facebook.com/" target="_blank">
 												<i className='bx bxl-facebook'></i>
 											</a>
 										</li>
 										<li>
-											<a href="https://twitter.com/" target="_blank">
+											<a to="https://twitter.com/" target="_blank">
 												<i className='bx bxl-twitter'></i>
 											</a>
 										</li>
 										<li>
-											<a href="https://linkedin.com/" target="_blank">
+											<a to="https://linkedin.com/" target="_blank">
 												<i className='bx bxl-linkedin'></i>
 											</a>
 										</li>
 										<li>
-											<a href="https://pinterest.com/" target="_blank">
+											<a to="https://pinterest.com/" target="_blank">
 												<i className='bx bxl-pinterest-alt'></i>
 											</a>
 										</li>
@@ -82,7 +82,7 @@ const BlogDetailsContent = () => {
 							<div className="post-navigation">
 								<div className="navigation-links">
 									<div className="nav-previous">
-                                        <Link href="#">
+                                        <Link to={"/"}>
                                             <a>
                                                 <i className='bx bx-left-arrow-alt'></i> Prev Post
                                             </a>
@@ -90,7 +90,7 @@ const BlogDetailsContent = () => {
 									</div>
 
 									<div className="nav-next">
-                                        <Link href="#">
+                                        <Link to={"/"}>
                                             <a>Next Post <i className='bx bx-right-arrow-alt'></i></a>
                                         </Link>
 									</div>
@@ -120,7 +120,7 @@ const BlogDetailsContent = () => {
 											</div>
 
 											<div className="reply">
-                                                <Link href="#">
+                                                <Link to={"/"}>
                                                     <a className="comment-reply-link">Reply</a>
                                                 </Link>
 											</div>
@@ -146,7 +146,7 @@ const BlogDetailsContent = () => {
 													</div>
 			
 													<div className="reply">
-                                                        <Link href="#">
+                                                        <Link to={"/"}>
                                                             <a className="comment-reply-link">Reply</a>
                                                         </Link>
                                                     </div>
@@ -174,7 +174,7 @@ const BlogDetailsContent = () => {
 											</div>
 
 											<div className="reply">
-                                                <Link href="#">
+                                                <Link to={"/"}>
                                                     <a className="comment-reply-link">Reply</a>
                                                 </Link>
 											</div>

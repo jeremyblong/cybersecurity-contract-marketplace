@@ -1,0 +1,89 @@
+#input-knowledge {
+    width: 100% !important;
+    padding: 2.5px 10px !important;
+}
+#knowledge-wrapper div .form-inline {
+    box-shadow: 0 0.5rem 1rem #fff !important;
+    border: 1.775px solid black;
+} 
+#input-knowledge::placeholder {
+    color: #f73164;
+}
+#knowledge-wrapper div .form-inline {
+    width: 1000px!important;
+}
+.listgroup-inner-h6-custom {
+    color: #7366ff;
+}
+.custom-accordion-bidding {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175) !important;
+}
+.custom-inputgroup-bidding {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175) !important;
+}
+.bg-light-card-custom {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175) !important;
+    border: 1.25px solid black;
+    color: black;
+}
+.custom-shadow-popover .popover-inner {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.35) !important;
+    background-color: white !important;
+}
+.knowledge-base-custom-banner {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175) !important;
+}
+.custom-icon-attached {
+    max-width: 32.5px !important;
+    max-height: 32.5px;
+}
+.custom-icon-attached:hover {
+    max-width: 32.5px !important;
+    max-height: 32.5px;
+    cursor: pointer;
+}
+.custom-white-h6 {
+    color: white !important;
+}
+.dollar-sign-custom-icon {
+    max-height: 22.5px;
+    max-width: 22.5px;
+}
+.padding-button-wrapper {
+    padding: 22.5px;
+}
+.background-stock .card-main-container {
+    
+}
+.card-custom-pane-bidding {
+    margin-top: 25px;
+}
+.card-header-max-width-betting {
+    max-width: 50%;
+}
+.tabbed-card betting-custom-cardbody {
+
+}
+.nav-pills nav-primary betting-custom-nav {
+
+}
+.custom-cardheader-customized {
+    background-color: #fff !important;
+    padding: 40px !important;
+    border-bottom: 2.25px solid #7366ff !important;
+    border-bottom-width: 1px !important;
+    left: -1.5px !important;
+    border-left: 2.25px solid #7366ff !important;
+    border-top-left-radius: 15px !important;
+    border-top-right-radius: 15px !important;
+    position: relative !important;
+}
+.customized-card-card {
+    margin-bottom: 30px !important;
+    margin: 25px !important;
+    border: none !important;
+    transition: all 0.3s ease !important;
+    letter-spacing: 0.5px !important;
+    border-radius: 15px !important;
+    box-shadow: 0 0.35rem 15px 0.5rem #20187e48 !important;
+}

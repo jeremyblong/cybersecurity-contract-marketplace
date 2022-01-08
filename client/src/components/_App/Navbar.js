@@ -100,7 +100,7 @@ const Navbar = ({ data, authenticated, authentication, saveListingData, saveSoft
                                             <img src="/img/logo.png" alt="logo" />
                                         </a>
                                     </Link>
-
+                                    {/* frequently-asked-questions */}
                                     <button 
                                         onClick={toggleNavbar} 
                                         className={classTwo}
@@ -117,215 +117,226 @@ const Navbar = ({ data, authenticated, authentication, saveListingData, saveSoft
 
                                     <div className={classOne} id="navbarSupportedContent">
                                         <ul className="navbar-nav m-auto">
-                                            <li className="nav-item">
-                                                <Link to="/#" activeClassName="active">
-                                                    <a onClick={e => e.preventDefault()} className="nav-link">
-                                                        Home <i className='bx bx-chevron-down'></i>
-                                                    </a>
-                                                </Link>
+                                            {/* <li className="nav-item custom-nav-item-link"> */}
+                                                <li className="nav-item custom-nav-item-link">
+                                                    <Link to="/" activeClassName="active">
+                                                        <a onClick={e => {}} className="nav-link nav-link-custom-homepage">Home (<strong>Not</strong> dashboard)</a>
+                                                    </Link>
+                                                </li>
 
-                                                <ul className="dropdown-menu">
-                                                    <li className="nav-item">
+                                                {authenticated === true ? <li className="nav-item custom-nav-item-link">
+                                                    <Link to="/dashboard" activeClassName="active">
+                                                        <a onClick={e => {}} className="nav-link nav-link-custom-homepage">Go-to <strong style={{ color: "#f73164" }}>Dashboard</strong> (Authenticated)</a>
+                                                    </Link>
+                                                </li> : null}
+                                                {/* <ul className="dropdown-menu">
+                                                    <li className="nav-item custom-nav-item-link">
                                                         <Link to="/" activeClassName="active">
-                                                            <a onClick={() => setCollapsed(true)} className="nav-link">Home One</a>
+                                                            <a onClick={() => setCollapsed(true)} className="nav-link nav-link-custom-homepage">Home One</a>
                                                         </Link>
                                                     </li>
 
-                                                    <li className="nav-item">
+                                                    <li className="nav-item custom-nav-item-link">
                                                         <Link to="/index2" activeClassName="active">
-                                                            <a onClick={() => setCollapsed(true)} className="nav-link">Home Two</a>
+                                                            <a onClick={() => setCollapsed(true)} className="nav-link nav-link-custom-homepage">Home Two</a>
                                                         </Link>
                                                     </li>
 
-                                                    <li className="nav-item">
+                                                    <li className="nav-item custom-nav-item-link">
                                                         <Link to="/index3" activeClassName="active">
-                                                            <a onClick={() => setCollapsed(true)} className="nav-link">Home Three</a>
+                                                            <a onClick={() => setCollapsed(true)} className="nav-link nav-link-custom-homepage">Home Three</a>
                                                         </Link>
                                                     </li>
 
-                                                    <li className="nav-item">
+                                                    <li className="nav-item custom-nav-item-link">
                                                         <Link to="/index4" activeClassName="active">
-                                                            <a onClick={() => setCollapsed(true)} className="nav-link">Home Four</a>
+                                                            <a onClick={() => setCollapsed(true)} className="nav-link nav-link-custom-homepage">Home Four</a>
                                                         </Link>
                                                     </li> 
 
-                                                    <li className="nav-item">
+                                                    <li className="nav-item custom-nav-item-link">
                                                         <Link to="/index5" activeClassName="active">
-                                                            <a onClick={() => setCollapsed(true)} className="nav-link">Home Five</a>
+                                                            <a onClick={() => setCollapsed(true)} className="nav-link nav-link-custom-homepage">Home Five</a>
                                                         </Link>
                                                     </li>
 
-                                                    <li className="nav-item">
+                                                    <li className="nav-item custom-nav-item-link">
                                                         <Link to="/index6" activeClassName="active">
-                                                            <a onClick={() => setCollapsed(true)} className="nav-link">Home Six</a>
+                                                            <a onClick={() => setCollapsed(true)} className="nav-link nav-link-custom-homepage">Home Six</a>
                                                         </Link>
                                                     </li>
-                                                </ul>
-                                            </li>
+                                                </ul> */}
+                                            {/* </li> */}
 
-                                            <li className="nav-item">
+                                            <li className="nav-item custom-nav-item-link">
                                                 <Link to="/about" activeClassName="active">
-                                                    <a onClick={() => setCollapsed(true)} className="nav-link">About</a>
+                                                    <a onClick={() => setCollapsed(true)} className="nav-link nav-link-custom-homepage">About</a>
                                                 </Link>
                                             </li>
 
-                                            <li className="nav-item">
+                                            <li className="nav-item custom-nav-item-link">
                                                 <Link to="/#">
-                                                    <a onClick={e => e.preventDefault()} className="nav-link">
+                                                    <a onClick={e => e.preventDefault()} className="nav-link nav-link-custom-homepage">
                                                         Pages <i className='bx bx-chevron-down'></i>
                                                     </a>
                                                 </Link>
 
                                                 <ul className="dropdown-menu">
-                                                    <li className="nav-item">
-                                                        <Link to="/pricing" activeClassName="active">
-                                                            <a onClick={() => setCollapsed(true)} className="nav-link">Pricing</a>
+                                                    <li className="nav-item custom-nav-item-link">
+                                                        <Link to="/pricing-before-login" activeClassName="active">
+                                                            <a onClick={() => setCollapsed(true)} className="nav-link nav-link-custom-homepage">Pricing</a>
                                                         </Link>
                                                     </li>
 
-                                                    <li className="nav-item">
+                                                    <li className="nav-item custom-nav-item-link">
                                                         <Link to="/testimonials" activeClassName="active">
-                                                            <a onClick={() => setCollapsed(true)} className="nav-link">Testimonials</a>
+                                                            <a onClick={() => setCollapsed(true)} className="nav-link nav-link-custom-homepage">Testimonials</a>
                                                         </Link>
                                                     </li>
 
-                                                    <li className="nav-item">
+                                                    <li className="nav-item custom-nav-item-link">
                                                         <Link to="/team" activeClassName="active">
-                                                            <a onClick={() => setCollapsed(true)} className="nav-link">Team</a>
+                                                            <a onClick={() => setCollapsed(true)} className="nav-link nav-link-custom-homepage">Team</a>
                                                         </Link>
                                                     </li>
 
-                                                    <li className="nav-item">
-                                                        <Link to="/faq" activeClassName="active">
-                                                            <a onClick={() => setCollapsed(true)} className="nav-link">FAQ</a>
+                                                    <li className="nav-item custom-nav-item-link">
+                                                        <Link to="/frequently-asked-questions" activeClassName="active">
+                                                            <a onClick={() => setCollapsed(true)} className="nav-link nav-link-custom-homepage">FAQ</a>
                                                         </Link>
                                                     </li>
  
-                                                    <li className="nav-item">
+                                                    <li className="nav-item custom-nav-item-link">
                                                         <Link to="/#">
-                                                            <a onClick={e => e.preventDefault()} className="nav-link">
+                                                            <a onClick={e => e.preventDefault()} className="nav-link nav-link-custom-homepage">
                                                                 User <i className='bx bx-chevron-down'></i>
                                                             </a>
                                                         </Link>
 
                                                         <ul className="dropdown-menu">
-                                                            <li className="nav-item">
+                                                            <li className="nav-item custom-nav-item-link">
                                                                 <Link to="/sign-in" activeClassName="active">
-                                                                    <a onClick={() => setCollapsed(true)} className="nav-link">Sign In</a>
+                                                                    <a onClick={() => setCollapsed(true)} className="nav-link nav-link-custom-homepage">Sign In</a>
                                                                 </Link>
                                                             </li>
 
-                                                            <li className="nav-item">
+                                                            <li className="nav-item custom-nav-item-link">
                                                                 <Link to="/sign-up" activeClassName="active">
-                                                                    <a onClick={() => setCollapsed(true)} className="nav-link">Sign Up</a>
+                                                                    <a onClick={() => setCollapsed(true)} className="nav-link nav-link-custom-homepage">Sign Up</a>
                                                                 </Link>
                                                             </li>
 
-                                                            <li className="nav-item">
+                                                            <li className="nav-item custom-nav-item-link">
                                                                 <Link to="/forgot-password" activeClassName="active">
-                                                                    <a onClick={() => setCollapsed(true)} className="nav-link">Forgot Password</a>
+                                                                    <a onClick={() => setCollapsed(true)} className="nav-link nav-link-custom-homepage">Forgot Password</a>
                                                                 </Link>
                                                             </li>
                                                         </ul>
                                                     </li>
 
-                                                    <li className="nav-item">
+                                                    <li className="nav-item custom-nav-item-link">
                                                         <Link to="/coming-soon" activeClassName="active">
-                                                            <a onClick={() => setCollapsed(true)} className="nav-link">Coming Soon</a>
+                                                            <a onClick={() => setCollapsed(true)} className="nav-link nav-link-custom-homepage">Coming Soon</a>
                                                         </Link>
                                                     </li>
 
-                                                    <li className="nav-item">
+                                                    <li className="nav-item custom-nav-item-link">
                                                         <Link to="/404" activeClassName="active">
-                                                            <a onClick={() => setCollapsed(true)} className="nav-link">404 Error Page</a>
+                                                            <a onClick={() => setCollapsed(true)} className="nav-link nav-link-custom-homepage">404 Error Page</a>
                                                         </Link>
                                                     </li>
  
-                                                    <li className="nav-item">
+                                                    <li className="nav-item custom-nav-item-link">
                                                         <Link to="/privacy-policy" activeClassName="active">
-                                                            <a onClick={() => setCollapsed(true)} className="nav-link">Privacy Policy</a>
+                                                            <a onClick={() => setCollapsed(true)} className="nav-link nav-link-custom-homepage">Privacy Policy</a>
                                                         </Link>
                                                     </li>
 
-                                                    <li className="nav-item">
+                                                    <li className="nav-item custom-nav-item-link">
                                                         <Link to="/terms-conditions" activeClassName="active">
-                                                            <a onClick={() => setCollapsed(true)} className="nav-link">Terms & Conditions</a>
+                                                            <a onClick={() => setCollapsed(true)} className="nav-link nav-link-custom-homepage">Terms & Conditions</a>
                                                         </Link>
                                                     </li>
                                                 </ul>
                                             </li>
  
-                                            <li className="nav-item">
+                                            <li className="nav-item custom-nav-item-link">
                                                 <Link to="/#" activeClassName="active">
-                                                    <a onClick={e => e.preventDefault()} className="nav-link">
+                                                    <a onClick={e => e.preventDefault()} className="nav-link nav-link-custom-homepage">
                                                         Services <i className='bx bx-chevron-down'></i>
                                                     </a>
                                                 </Link>
                                                 
                                                 <ul className="dropdown-menu">
-                                                    <li className="nav-item">
-                                                        <Link to="/services-one" activeClassName="active">
-                                                            <a onClick={() => setCollapsed(true)} className="nav-link">Services Style One</a>
-                                                        </Link>
-                                                    </li>
-
-                                                    <li className="nav-item">
-                                                        <Link to="/services-two" activeClassName="active">
-                                                            <a onClick={() => setCollapsed(true)} className="nav-link">Services Style Two</a>
-                                                        </Link>
-                                                    </li>
-
-                                                    <li className="nav-item">
-                                                        <Link to="/services-three" activeClassName="active">
-                                                            <a onClick={() => setCollapsed(true)} className="nav-link">Services Style Three</a>
-                                                        </Link>
-                                                    </li>
-
-                                                    <li className="nav-item">
+                                                    <li className="nav-item custom-nav-item-link">
                                                         <Link to="/service-details" activeClassName="active">
-                                                            <a onClick={() => setCollapsed(true)} className="nav-link">Service Details</a>
+                                                            <a onClick={() => setCollapsed(true)} className="nav-link nav-link-custom-homepage">Service Details</a>
+                                                        </Link>
+                                                    </li>
+                                                    
+                                                    <li className="nav-item custom-nav-item-link">
+                                                        <Link to="/services-one" activeClassName="active">
+                                                            <a onClick={() => setCollapsed(true)} className="nav-link nav-link-custom-homepage">Services Style One</a>
+                                                        </Link>
+                                                    </li>
+
+                                                    <li className="nav-item custom-nav-item-link">
+                                                        <Link to="/services-two" activeClassName="active">
+                                                            <a onClick={() => setCollapsed(true)} className="nav-link nav-link-custom-homepage">Services Style Two</a>
+                                                        </Link>
+                                                    </li>
+
+                                                    <li className="nav-item custom-nav-item-link">
+                                                        <Link to="/services-three" activeClassName="active">
+                                                            <a onClick={() => setCollapsed(true)} className="nav-link nav-link-custom-homepage">Services Style Three</a>
+                                                        </Link>
+                                                    </li>
+
+                                                    <li className="nav-item custom-nav-item-link">
+                                                        <Link to="/service-details" activeClassName="active">
+                                                            <a onClick={() => setCollapsed(true)} className="nav-link nav-link-custom-homepage">Service Details</a>
                                                         </Link>
                                                     </li>
                                                 </ul>
                                             </li>
   
-                                            <li className="nav-item">
+                                            <li className="nav-item custom-nav-item-link">
                                                 <Link to="/#">
-                                                    <a onClick={e => e.preventDefault()} className="nav-link">
+                                                    <a onClick={e => e.preventDefault()} className="nav-link nav-link-custom-homepage">
                                                         Blog <i className='bx bx-chevron-down'></i>
                                                     </a>
                                                 </Link>
 
                                                 <ul className="dropdown-menu">
-                                                    <li className="nav-item">
-                                                        <Link to="/blog-grid" activeClassName="active">
-                                                            <a onClick={() => setCollapsed(true)} className="nav-link">Blog Grid</a>
+                                                    <li className="nav-item custom-nav-item-link">
+                                                        <Link to="/blog-main" activeClassName="active">
+                                                            <a onClick={() => setCollapsed(true)} className="nav-link nav-link-custom-homepage">Blog Main/Grid</a>
                                                         </Link>
                                                     </li>
 
-                                                    <li className="nav-item">
+                                                    <li className="nav-item custom-nav-item-link">
                                                         <Link to="/blog-left-sidebar" activeClassName="active">
-                                                            <a onClick={() => setCollapsed(true)} className="nav-link">Blog Left Sidebar</a>
+                                                            <a onClick={() => setCollapsed(true)} className="nav-link nav-link-custom-homepage">Blog Left Sidebar</a>
                                                         </Link>
                                                     </li>
 
-                                                    <li className="nav-item">
+                                                    <li className="nav-item custom-nav-item-link">
                                                         <Link to="/blog-right-sidebar" activeClassName="active">
-                                                            <a onClick={() => setCollapsed(true)} className="nav-link">Blog Right Sidebar</a>
+                                                            <a onClick={() => setCollapsed(true)} className="nav-link nav-link-custom-homepage">Blog Right Sidebar</a>
                                                         </Link>
                                                     </li>
 
-                                                    <li className="nav-item">
+                                                    <li className="nav-item custom-nav-item-link">
                                                         <Link to="/blog-details" activeClassName="active">
-                                                            <a onClick={() => setCollapsed(true)} className="nav-link">Blog Details</a>
+                                                            <a onClick={() => setCollapsed(true)} className="nav-link nav-link-custom-homepage">Blog Details</a>
                                                         </Link>
                                                     </li>
                                                 </ul>
                                             </li>
 
-                                            <li className="nav-item">
+                                            <li className="nav-item custom-nav-item-link">
                                                 <Link to="/contact" activeClassName="active">
-                                                    <a onClick={() => setCollapsed(true)} className="nav-link">Contact</a>
+                                                    <a onClick={() => setCollapsed(true)} className="nav-link nav-link-custom-homepage">Contact</a>
                                                 </Link>
                                             </li>
                                         </ul>

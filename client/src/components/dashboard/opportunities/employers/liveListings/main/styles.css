@@ -1,5 +1,8 @@
 .custom-markdown-container {
     max-height: 250px;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    border: 2.175px solid black;
+    padding: 7.5px;
     overflow-y: scroll;
 }
 .heavy-blue {
@@ -7,4 +10,11 @@
 }
 .spacing-bottom {
     margin-bottom: 17.5px;
+}
+.btn-redirect-listing-container-wrapper {
+    margin-top: 18.5px;
+    margin-bottom: 10px;
+}
+.custom-project-box {
+    height: 100% !important;
 }

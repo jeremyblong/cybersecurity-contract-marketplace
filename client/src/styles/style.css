@@ -35,10 +35,36 @@ This files table contents are outlined below>>>>>
 ** - Nice select Area
 ******************************************* /*
 
-
+/* MODAL STYLES START (SLIDE UP FROM BOTTOM MODAL/PANE) START */
+.react-modal-sheet-content {
+    background-color: #f8f8f8;
+}
 /* CUSTOM BUTTON STYLING START - ENTIRE APPLICATION */
 a:hover {
   cursor: pointer !important;
+}
+.nav-link-custom-homepage {
+  min-width: 100% !important;
+}
+.custom-nav-item-link a {
+  min-width: 100% !important;
+}
+.custom-input-text-group-transparent {
+  background-color: transparent !important;
+  border-left: 0px !important;
+}
+.custom-input-text-group-transparent:hover {
+  background-color: transparent !important;
+  border-left: 0px !important;
+  background-color: rgb(241, 241, 241) !important;
+  cursor: pointer;
+}
+.custom-password-input-signin {
+  border-right: 0px !important;
+}
+.eye-icon-custom {
+  width: 21.5px;
+  height: 21.5px;
 }
 .success-hr {
   border-top: 1px solid #51bb25;
@@ -51,6 +77,9 @@ a:hover {
 }
 .btn-disabled {
   background-color: rgb(235, 235, 228) !important;
+}
+.white-background {
+  background-color: #fff !important;
 }
 .custom-code {
   color: #7366ff !important;

@@ -9,7 +9,7 @@ const PageBanner = ({pageTitle, homePageUrl, homePageText, activePageText}) => {
                     <h2>{pageTitle}</h2>
                     <ul>
                         <li>
-                            <Link href={homePageUrl}>
+                            <Link to={homePageUrl}>
                                 <a>{homePageText}</a>
                             </Link>
                         </li>

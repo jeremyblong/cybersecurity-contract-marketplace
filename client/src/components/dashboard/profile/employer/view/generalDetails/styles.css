@@ -73,3 +73,9 @@
     border: 3.5px solid blue !important;
     cursor: pointer !important;
 }
+.red-text-status {
+    color: red !important;
+}
+.blue-text-status {
+    color: blue !important;
+}

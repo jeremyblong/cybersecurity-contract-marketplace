@@ -3,7 +3,7 @@ import Breadcrumb from '../../../../../../../layout/breadcrumb';
 import { Container,Row,Col,Card,CardBody,Media,Button,Badge,CardHeader,Input,InputGroup,ListGroupItem,ListGroup,FormGroup,Label } from 'reactstrap';
 import one from '../../../../../../../assets/images/job-search/1.jpg';
 import two from '../../../../../../../assets/images/job-search/6.jpg';
-import { Link, useLocation }  from 'react-router-dom';
+import { Link, useLocation, useHistory }  from 'react-router-dom';
 import { Share,SimilarJobs,SeniorUXDesigner } from "../../../../../../../constant";
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
@@ -20,7 +20,7 @@ import ReactPlayer from 'react-player';
 import FileViewer from 'react-file-viewer';
 import { Modal } from 'react-responsive-modal';
 import { renderProfilePicVideo } from "./helpers/profilePicVideo/displayPicOrVideo.js";
-
+import moment from "moment";
 
 const Map = ReactMapboxGl({
     accessToken: process.env.REACT_APP_MAPBOX_TOKEN
@@ -29,6 +29,7 @@ const Map = ReactMapboxGl({
 const ViewIndividualJobListingHelper = (props) => {
     
     const passedData = useLocation();
+    const history = useHistory();
 
     const [ data, setData ] = useState(null);
     const [ ready, setReady ] = useState(false);
@@ -134,6 +135,10 @@ const ViewIndividualJobListingHelper = (props) => {
         uniqueId: "e502944e-c780-45d0-b494-a0add9c0e9e2"
     }]);
 
+    const generateRandomNumber = (num) => {
+        return Math.floor(Math.random() * num) + 1;
+    }
+
     useEffect(() => {
         if (typeof passedData.state !== "undefined" && _.has(passedData.state, "listing")) {
             const { assetArray, typeOfHack, testingDatesHackers, rulesOfEngagement, publicCompanyName, outOfScopeVulnerabilities, listingDescription, hashtags, businessAddress, requiredRankToApply, experienceAndCost, desiredSkills, maxNumberOfApplicants, disclosureVisibility, tokensRequiredToApply, listingVisibility, estimatedCompletionDate, uploadedFiles, applicants, postedBy } = passedData.state.listing;
@@ -167,6 +172,7 @@ const ViewIndividualJobListingHelper = (props) => {
                     }
         
                     const newData = {
+                        ...passedData.state.listing,
                         assetArray, 
                         typeOfHack, 
                         testingDatesHackers: newDatesArray, 
@@ -263,6 +269,11 @@ const ViewIndividualJobListingHelper = (props) => {
                 break;
         }
     }
+    const handleRedirectToHackingBettingPages = (item) => {
+        console.log("handleRedirectToHackingBettingPages ran... : ", item);
+
+        history.push("/employer/listing/betting/bidding/main/page", { item, listing: data });
+    }
     const renderContent = () => {
         if (ready === true) {
             return (
@@ -277,9 +288,11 @@ const ViewIndividualJobListingHelper = (props) => {
                                             <h6 className="f-w-600">
                                                 <a href="#javascript">{data.publicCompanyName}</a>
                                                 <span className="pull-right">
-                                                    <Link to={`${process.env.PUBLIC_URL}/apply/employer/listing`}> 
-                                                    <Button color="primary">{"Apply for this job"}</Button>
-                                                    </Link>
+                                                    <div> 
+                                                        <Button onClick={() => {
+                                                            handleHackerApplyLogic(data);
+                                                        }} style={{ width: "275px" }} className="btn-square info" outline color="info-2x">{"Apply for this job (As a hacker)"}</Button>
+                                                    </div>
                                                 </span>
                                             </h6>
                                             <p>XP Reward: <em className="heavy-blue">{data.experienceAndCost.experience}</em> <strong>~</strong> <em className="heavy-blue">{data.tokensRequiredToApply.value}</em> tokens required to apply...</p>
@@ -565,7 +578,13 @@ const ViewIndividualJobListingHelper = (props) => {
             );
         }
     }
+    const handleHackerApplyLogic = (data) => {
+        console.log("handleHackerApplyLogic clicked.");
+
+        history.push(`/hacker/apply/employer/listing/${data.uniqueId}`, { listingData: data });
+    }
     const renderHeaderConditionally = () => {
+        
         if (ready === true) {
             return (
                 <Row>
@@ -596,27 +615,27 @@ const ViewIndividualJobListingHelper = (props) => {
                                 </Col>
                                 <Col md="6">
                                 <div className="ttl-info text-left ttl-sm-mb-0">
-                                    <h6><i className="fa fa-calendar"></i>DOB</h6><span>Enter some random BS here...</span>
+                                    <h6><i className="fa fa-calendar"></i> DOB</h6><span>Enter some random BS here...</span>
                                 </div>
                                 </Col>
                             </Row>
                             </Col>
                             <Col sm="12" lg="4" className="order-sm-0 order-xl-1">
                             <div className="user-designation">
-                                <div className="title"><a target="_blank" href="#javascript">Enter some random BS here...</a></div>
-                                <div className="desc mt-2">Designer</div>
+                                <div className="title"><a target="_blank" href="#javascript">{data.publicCompanyName}</a></div>
+                                <div className="desc mt-2">Poster's Company Name</div>
                             </div>
                             </Col>
                             <Col sm="6" lg="4" className="order-sm-2 order-xl-2">
                             <Row>
                                 <Col md="6">
                                 <div className="ttl-info text-left ttl-xs-mt">
-                                    <h6><i className="fa fa-phone"></i>Contact Us</h6><span>Enter some random BS here...</span>
+                                    <h6><i className="fa fa-phone"></i> Contact Us</h6><span>Enter some random BS here...</span>
                                 </div>
                                 </Col>
                                 <Col md="6">
                                 <div className="ttl-info text-left ttl-sm-mb-0">
-                                    <h6><i className="fa fa-location-arrow"></i>Location</h6><span>Enter some random BS here...</span>
+                                    <h6><i className="fa fa-location-arrow"></i> Location</h6><span>Enter some random BS here...</span>
                                 </div>
                                 </Col>
                             </Row>
@@ -634,12 +653,72 @@ const ViewIndividualJobListingHelper = (props) => {
                         </div>
                         <div className="follow">
                             <Row>
-                            <Col col="6" className="text-md-right border-right">
-                                <div className="follow-num counter">{"25869"}</div><span>Follower</span>
-                            </Col>
-                            <Col col="6" className="text-md-left">
-                                <div className="follow-num counter">{"659887"}</div><span>Following</span>
-                            </Col>
+                                <Col sm="12" lg="6" xl="6" md="6" className="centered-both-ways">
+                                    <Card className="custom-card-top-bar">
+                                        <CardHeader className="b-r-primary border-3">
+                                            <h5 className="text-right">Listing Core Information / Previous Interactions</h5>
+                                        </CardHeader>
+                                        <CardBody className="b-l-primary border-3 add-border-bottom-thin-listing">
+                                            <div className="list-listview-wrapper-wrap">
+                                                <ListGroupItem className="listgroupitem-list-custom">
+                                                    <ListGroup>
+                                                        <p className="lead-list-group-item"><strong style={{ fontSize: "17.5px" }}>{generateRandomNumber(17)}</strong> people have already been hired for this job/gig</p>
+                                                    </ListGroup>
+                                                </ListGroupItem>
+                                                <ListGroupItem className="listgroupitem-list-custom-active active">
+                                                    <ListGroup>
+                                                        <p className="lead-list-group-item"><strong style={{ fontSize: "17.5px" }}>{generateRandomNumber(33)}</strong> total hackers are required for this listing</p>
+                                                    </ListGroup>
+                                                </ListGroupItem>
+                                                <ListGroupItem className="listgroupitem-list-custom">
+                                                    <ListGroup>
+                                                        <p className="lead-list-group-item"><strong style={{ fontSize: "17.5px" }}>{generateRandomNumber(100)}</strong> total <strong style={{ fontSize: "17.5px" }}>CURRENT</strong> applicants</p>
+                                                    </ListGroup>
+                                                </ListGroupItem>
+                                                <ListGroupItem className="listgroupitem-list-custom-active active">
+                                                    <ListGroup>
+                                                        <p className="lead-list-group-item"><strong style={{ fontSize: "17.5px" }}>{generateRandomNumber(325)}</strong> people are <strong style={{ fontSize: "17.5px" }}>currently bidding</strong> on this job/listing</p>
+                                                    </ListGroup>
+                                                </ListGroupItem>
+                                                <ListGroupItem className="listgroupitem-list-custom">
+                                                    <ListGroup>
+                                                        <p className="lead-list-group-item">Job expected to be <strong style={{ fontSize: "17.5px" }}>completed/done</strong> in <strong style={{ fontSize: "17.5px" }}>{moment(data.estimatedCompletionDate).fromNow(true)}</strong> from now</p>
+                                                    </ListGroup>
+                                                </ListGroupItem>
+                                            </div>
+                                        </CardBody>
+                                    </Card>
+                                </Col>
+                                <Col sm="12" lg="6" xl="6" md="6" className="centered-both-ways">
+                                    <Card className="custom-card-top-bar">
+                                        <CardHeader className="b-l-primary border-3">
+                                            <h5 className="text-left">Bidding/Betting - Want to wager bets on this listing?!</h5>
+                                        </CardHeader>
+                                        <CardBody className="b-r-primary border-3 add-border-bottom-thin-listing">
+                                            <p className="text-left">Would you like to wager a bet on these hackers hacking in this listing? If you're confused what this means or how it works, <a style={{ color: "red", fontWeight: "bold" }} href={null}>READ THE RULES & REGULATIONS OF BETTING HERE.</a></p>
+                                            <hr />
+                                            <p>Click the button below to access the bidding portion/actions of this application ({process.env.REACT_APP_APPLICATION_NAME}) as well as ALL bets on this application are given/recieved in <strong style={{ color: "blue", fontWeight: "bold" }}>{process.env.REACT_APP_CRYPTO_TOKEN_NAME}</strong> which CAN BE cashed out for actual <strong>fiat money/financial's</strong>.</p>
+                                            <hr />
+                                            <Button onClick={() => {
+                                                handleRedirectToHackingBettingPages(employerInfo);
+                                            }} style={{ width: "100%" }} className="btn-pill btn-air-info" outline color="info-2x">View/Manage Betting Actions & Data</Button>
+                                        </CardBody>
+                                    </Card>
+                                </Col>
+                                {/* <Col col="6" className="text-md-right border-right">
+                                    <div className="follow-num counter">{"25869"}</div><span>Follower</span>
+                                </Col>
+                                <Col col="6" className="text-md-left">
+                                    <div className="follow-num counter">{"659887"}</div><span>Following</span>
+                                </Col> */}
+                            </Row>
+                            <Row style={{ paddingTop: "17.5px", paddingBottom: "17.5px" }}>
+                                <Col sm="12" md="12" lg="12" xl="12">
+                                    <Button style={{ width: "100%" }} className={"btn-pill btn-air-success"} onClick={() => {
+                                        // apply logic (hackers ONLY)...
+                                        handleHackerApplyLogic(data);
+                                    }} outline color="success-2x">Apply to this listing (As a hacker)</Button>
+                                </Col>
                             </Row>
                         </div>
                         </div>

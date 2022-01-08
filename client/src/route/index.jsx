@@ -24,6 +24,8 @@ import DisplayIndividualListingSoftwarePage from "../pages/dashboard/softwareHar
 import CreateNewSoftwareListingPage from "../pages/dashboard/softwareHardwareExchanges/software/createListing/createNewListing.js";
 import UnauthorizedAccessPage from "../pages/dashboard/unauthorized/unauthorizedAccess.js";
 import ViewIndividualListingSoftwarePagePage from "../pages/dashboard/softwareHardwareExchanges/software/individual/liveIndividualListing/viewLiveIndividualListingData.js";
+import MainBiddingBettingPageLandingPage from "../pages/dashboard/opportunities/employers/liveListings/biddingBetting/biddingPageMain/mainBiddingPage.js";
+import ApplyAsHackerEmployerListingPage from "../pages/dashboard/opportunities/employers/applyToListingHacker/applyAsHacker.js";
 
 export const routes = [
         { path:"/profile/settings/edit", Component: GeneralSettingsPage },
@@ -51,5 +53,7 @@ export const routes = [
         { path: "/software/exchange/individual/listing/view/:id", Component: DisplayIndividualListingSoftwarePage },
         { path: "/create/listing/software/exchange/hacker/account", Component: CreateNewSoftwareListingPage },
         { path: "/unauthorized/access/restricted", Component: UnauthorizedAccessPage },
-        { path: "/software/listing/individual/page/:id", Component: ViewIndividualListingSoftwarePagePage }
-]
+        { path: "/software/listing/individual/page/:id", Component: ViewIndividualListingSoftwarePagePage },
+        { path: "/employer/listing/betting/bidding/main/page", Component: MainBiddingBettingPageLandingPage },
+        { path: "/hacker/apply/employer/listing/:id", Component: ApplyAsHackerEmployerListingPage }
+];

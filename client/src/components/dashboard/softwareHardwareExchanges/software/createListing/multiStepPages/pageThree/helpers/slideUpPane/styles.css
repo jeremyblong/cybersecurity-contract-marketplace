@@ -16,6 +16,7 @@
 .add-normal-backer {
     background-color: #f8f8f8 !important;
     width: 100% !important;
+    min-height: calc(100% + 50px);
     height: 100% !important;
     padding: 17.5px;
 }

@@ -26,7 +26,9 @@ router.get("/", (req, resppppp, next) => {
         gender: 1,
         experiencePoints: 1,
         rankLevel: 1,
-        profileBannerImage: 1
+        profileBannerImage: 1,
+        points: 1,
+        fullyVerified: 1
     }}).then((user) => {
         if (!user) {
             console.log("User does NOT exist or could not be found.");

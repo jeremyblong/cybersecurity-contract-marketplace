@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link} from 'react-router-dom'; 
+import { Link } from 'react-router-dom'; 
 import Sidebar from './Sidebar';
 
 const BlogCardStyleOne = () => {
@@ -23,13 +23,13 @@ const BlogCardStyleOne = () => {
 
                                         <div className="blog-content">
                                             <h3>
-                                                <Link href="/blog-details">
+                                                <Link to="/blog-details">
                                                     <a>Secure Managed IT</a>
                                                 </Link>
                                             </h3>
                                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolorer</p>
 
-                                            <Link href="/blog-details">
+                                            <Link to="/blog-details">
                                                 <a className="read-more">Read More</a>
                                             </Link>
                                         </div>
@@ -42,12 +42,12 @@ const BlogCardStyleOne = () => {
 
                                         <div className="blog-content">
                                             <h3>
-                                                <Link href="/blog-details">
+                                                <Link to="/blog-details">
                                                     <a>Cloud Security</a>
                                                 </Link>
                                             </h3>
                                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolorer</p>
-                                            <Link href="/blog-details">
+                                            <Link to="/blog-details">
                                                 <a className="read-more">Read More</a>
                                             </Link>
                                         </div>
@@ -60,12 +60,12 @@ const BlogCardStyleOne = () => {
 
                                         <div className="blog-content">
                                             <h3>
-                                                <Link href="/blog-details">
+                                                <Link to="/blog-details">
                                                     <a>Secure Managed IT</a>
                                                 </Link>
                                             </h3>
                                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolorer</p>
-                                            <Link href="/blog-details">
+                                            <Link to="/blog-details">
                                                 <a className="read-more">Read More</a>
                                             </Link>
                                         </div>
@@ -84,12 +84,12 @@ const BlogCardStyleOne = () => {
                                             </div>
 
                                             <h3>
-                                                <Link href="/blog-details">
+                                                <Link to="/blog-details">
                                                     <a>DHS issues emergency directive to prevent hacking attack</a>
                                                 </Link>
                                             </h3>
 
-                                            <Link href="/blog-details">
+                                            <Link to="/blog-details">
                                                 <a className="read-more">Read More</a>
                                             </Link>
                                         </div>
@@ -108,12 +108,12 @@ const BlogCardStyleOne = () => {
                                             </div>
 
                                             <h3>
-                                                <Link href="/blog-details">
+                                                <Link to="/blog-details">
                                                     <a>Drughydrus  add google drive to roughrobin torjan</a>
                                                 </Link>
                                             </h3>
                                             
-                                            <Link href="/blog-details">
+                                            <Link to="/blog-details">
                                                 <a className="read-more">Read More</a>
                                             </Link>
                                         </div>
@@ -132,12 +132,12 @@ const BlogCardStyleOne = () => {
                                             </div>
 
                                             <h3>
-                                                <Link href="/blog-details">
+                                                <Link to="/blog-details">
                                                     <a>Security in a fragment world of workload</a>
                                                 </Link>
                                             </h3>
                                             
-                                            <Link href="/blog-details">
+                                            <Link to="/blog-details">
                                                 <a className="read-more">Read More</a>
                                             </Link>
                                         </div>
@@ -149,29 +149,29 @@ const BlogCardStyleOne = () => {
                                     <div className="page-navigation-area">
                                         <ul className="pagination">
                                             <li className="page-item">
-                                                <Link href="#">
+                                                <Link to={"/"}>
                                                     <a className="page-link page-links">
                                                         <i className='bx bx-chevrons-left'></i>
                                                     </a>
                                                 </Link>
                                             </li>
                                             <li className="page-item active">
-                                                <Link href="#">
+                                                <Link to={"/"}>
                                                     <a className="page-link">1</a>
                                                 </Link>
                                             </li>
                                             <li className="page-item">
-                                                <Link href="#">
+                                                <Link to={"/"}>
                                                     <a className="page-link">2</a>
                                                 </Link>
                                             </li>
                                             <li className="page-item">
-                                                <Link href="#">
+                                                <Link to={"/"}>
                                                     <a className="page-link">3</a>
                                                 </Link>
                                             </li>
                                             <li className="page-item">
-                                                <Link href="#">
+                                                <Link to={"/"}>
                                                     <a className="page-link">
                                                         <i className='bx bx-chevrons-right'></i>
                                                     </a>

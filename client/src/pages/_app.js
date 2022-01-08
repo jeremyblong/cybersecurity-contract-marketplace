@@ -8,7 +8,6 @@ import '../styles/style.css';
 import '../styles/responsive.css';
 import 'react-notifications/lib/notifications.css';
 
-
 import { RecoilRoot } from 'recoil'
 import App from 'next/app';
 import Head from 'next/head';

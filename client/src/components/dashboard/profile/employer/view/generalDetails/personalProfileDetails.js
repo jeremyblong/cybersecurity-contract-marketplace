@@ -13,6 +13,7 @@ import { confirmAlert } from 'react-confirm-alert';
 import { getCroppedImg } from "./helpers/croppingBannerImage/getCroppedImage.js";
 import { connect } from "react-redux";
 import _ from "lodash";
+import moment from "moment";
 import { renderProfilePicVideo } from "./helpers/miscFunctions/index.js";
 
 class PersonalProfileEmployerDetailsMainHelper extends Component {
@@ -199,6 +200,8 @@ constructor(props) {
     render() {
         const { aspect, file, submissionButton, data, errorUpload } = this.state;
 
+        const { userData } = this.props;
+
         console.log("personalProfileDetails this.state : ", this.state);
         return (
             <Fragment>
@@ -316,32 +319,32 @@ constructor(props) {
                                 <Row >
                                     <Col md="6">
                                     <div className="ttl-info text-left">
-                                        <h6><i className="fa fa-envelope mr-2"></i> {Email}</h6><span>{MarekjecnoMailId}</span>
+                                        <h6><i className="fa fa-envelope mr-2"></i> {Email}</h6><span>{userData.email}</span>
                                     </div>
                                     </Col>
                                     <Col md="6">
                                     <div className="ttl-info text-left ttl-sm-mb-0">
-                                        <h6><i className="fa fa-calendar"></i>   {BOD}</h6><span>{DDMMYY}</span>
+                                        <h6><i className="fa fa-calendar"></i>   {"Registered"}</h6><span> {moment(userData.registrationDate).fromNow()}</span>
                                     </div>
                                     </Col>
                                 </Row>
                                 </Col>
                                 <Col sm="12" lg="4" className="order-sm-0 order-xl-1">
                                 <div className="user-designation">
-                                    <div className="title"><a target="_blank" href="#javascript">{MarkJecno}</a></div>
-                                    <div className="desc mt-2">{Designer}</div>
+                                    <div className="title"><a target="_blank" href="#javascript">{_.has(userData, "companyName") ? userData.companyName : "No Company Name Specified."}</a></div>
+                                    <div className="desc mt-2">{_.has(userData, "yearsInBusiness") ? userData.yearsInBusiness.label : "Unknown Years In Business."}</div>
                                 </div>
                                 </Col>
                                 <Col sm="6" lg="4" className="order-sm-2 order-xl-2">
                                 <Row>
                                     <Col md="6">
                                     <div className="ttl-info text-left ttl-xs-mt">
-                                        <h6><i className="fa fa-phone"></i>   {ContactUs}</h6><span>{ContactUsNumber}</span>
+                                        <h6><i className="fa fa-phone"></i>   {"Contact Number(#)"} </h6><span>{_.has(userData, "phoneNumber") ? userData.phoneNumber : "Unknown Contact Number."}</span>
                                     </div>
                                     </Col>
                                     <Col md="6">
                                     <div className="ttl-info text-left ttl-sm-mb-0">
-                                        <h6><i className="fa fa-location-arrow"></i>   {Location}</h6><span>{LocationDetails}</span>
+                                        <h6><i className="fa fa-location-arrow"></i>   {"Speciality"}</h6><span>{_.has(userData, "sectorOrSpecialty") ? userData.sectorOrSpecialty : "Unknown Company Speciality."}</span>
                                     </div>
                                     </Col>
                                 </Row>
@@ -360,10 +363,10 @@ constructor(props) {
                             <div className="follow">
                                 <Row>
                                 <Col col="6" className="text-md-right border-right">
-                                    <div className="follow-num counter">{"25869"}</div><span>{Follower}</span>
+                                    <div className={userData.fullyVerified === true ? "follow-num counter blue-text-status" : "follow-num counter red-text-status"}>{userData.fullyVerified === true ? `Fully "Verified" Account!` : `"Un-Verified" Account.`}</div><span>{"Account Verification Status"}</span>
                                 </Col>
                                 <Col col="6" className="text-md-left">
-                                    <div className="follow-num counter">{"659887"}</div><span>{Following}</span>
+                                    <div className="follow-num counter"><strong style={{ color: "blue" }}>{userData.completedJobs}</strong> Completed Jobs</div><span>{"Completed Jobs/Gigs"}</span>
                                 </Col>
                                 </Row>
                             </div>

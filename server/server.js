@@ -114,6 +114,9 @@ app.use("/upload/misc/file/softare/listing/sale", require("./routes/hackers/soft
 app.use("/upload/software/listing/for/sale/data", require("./routes/hackers/softwareHardwareMarketplace/software/createListing/postListing/postFinalListingDataLive.js"));
 app.use("/gather/software/listings", require("./routes/hackers/softwareHardwareMarketplace/software/gatherListing/gatherListingsInitial.js"));
 app.use("/gather/core/anonymous/user/data", require("./routes/shared/general/userInfo/gatherRestrictedCoreUserInfo.js"));
+app.use("/gather/random/employer/accounts", require("./routes/employers/gatherRandomEmployerAccounts/gatherRandomAccounts.js"));
+app.use("/gather/random/hackers/accounts", require("./routes/hackers/gatherRandomHackerAccounts/gatherRandomAccounts.js"));
+app.use("/gather/listing/all/info", require("./routes/employers/employerListings/gatherListings/visibility/general/gatherIndividualSingularListing.js"));
 
 // ~ webhook logic STARTS here ~
 app.use("/passbase/webhook", require("./webhooks/passbase/webhook.js"));

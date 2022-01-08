@@ -89,7 +89,8 @@ const disclosureOptions = [
 ];
 const physicalOptions = [
     { label: "Physical Location Hacking Required", value: "physical-hack" },
-    { label: "Digital/Internet Asset Hacking Required", value: "digital-internet-hack" }
+    { label: "Digital/Internet Asset Hacking Required", value: "digital-internet-hack" },
+    { label: "BOTH Digital/Physical Assets Require Testing/Hacking", value: "both-assets" }
 ];
 const visibilityOptions = [
     { label: "Fully Public", value: "public-anyone" },

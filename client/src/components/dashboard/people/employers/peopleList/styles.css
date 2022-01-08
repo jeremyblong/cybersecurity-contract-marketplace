@@ -1,0 +1,15 @@
+div.profile-picture-account.media-body.rounded-circle-video-custom video {
+    position: relative;
+    margin-top: 0px;
+    z-index: 0 !important;
+}
+.custom-media-chunk {
+    max-height: 150px !important;
+    z-index: 1 !important;
+}
+.banner-banner-custom {
+    z-index: 0;
+}
+.card-header-banner-custom {
+    z-index: 0;
+}

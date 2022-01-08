@@ -9,7 +9,6 @@ import {
 } from 'react-accessible-accordion';
 
 const AccordionWithOpenandCloseIcon = (props) => {
-    console.log("PROPS! : ", props);
 
     const { experienceAndCost, disclosureVisibility, maxNumberOfApplicants, requiredRankToApply, tokensRequiredToApply, applicants } = props.data;
     return (

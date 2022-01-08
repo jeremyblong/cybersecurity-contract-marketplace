@@ -27,19 +27,19 @@ import 'react-image-crop/dist/ReactCrop.css';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "react-image-gallery/styles/css/image-gallery.css";
-// components
-import React, { Fragment,useState,useEffect } from 'react';
+// components & other various imported functionality/components
+import React, { Fragment, useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import './index.scss';
 import App from './components/app';
 import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
-import {BrowserRouter,Switch,Route,Redirect} from 'react-router-dom'
-import { CSSTransition,TransitionGroup } from 'react-transition-group'
-import {routes} from './route';
+import { BrowserRouter, Switch, Route } from 'react-router-dom'
+import { CSSTransition, TransitionGroup } from 'react-transition-group'
+import { routes } from './route';
 import ConfigDB from './data/customizer/config'
 import { classes } from './data/layouts';
-import {NotificationContainer} from 'react-notifications';
+import { NotificationContainer } from 'react-notifications';
 import Index from "./pages/index.js";
 import { RecoilRoot } from 'recoil';
 import SignIn from "./pages/sign-in.js";
@@ -49,12 +49,27 @@ import ForgotPassword from "./pages/forgot-password.js";
 import Contact from "./pages/contact.js";
 import axios from "axios";
 import _ from "lodash";
+import About from "./pages/about.js";
+import FAQ from "./pages/faq.js";
 import ProtectedRoute from "./route/protected/protectedRoute.js";
-
+import Testimonials from "./pages/testimonials.js";
+import Pricing from "./pages/pricing.js";
+import ComingSoon from "./pages/coming-soon.js";
+import PrivacyPolicy from "./pages/privacy-policy.js";
+import Team from "./pages/team.js";
+import ServiceDetails from "./pages/service-details.js";
+import BlogGrid from "./pages/blog-grid.js";
+import BlogDetails from "./pages/blog-details.js";
+import ServicesOne from "./pages/services-one.js";
+import ServicesTwo from "./pages/services-two.js";
+import ServicesThree from "./pages/services-three.js";
+import BlogLeftSidebar from "./pages/blog-left-sidebar.js";
+import BlogRightSidebar from "./pages/blog-right-sidebar.js";
 
 require('dotenv').config();
 
 const Root = (props) =>  {
+
   const [anim, setAnim] = useState("");
   const animation = localStorage.getItem("animation") || ConfigDB.data.router_animation || 'fade'
   const abortController = new AbortController();
@@ -127,6 +142,21 @@ const Root = (props) =>  {
         <Route exact path="/sign-up" component={SignUp} />
         <Route exact path="/forgot-password" component={ForgotPassword} />
         <Route exact path="/contact" component={Contact} />
+        <Route exact path="/about" component={About} />
+        <Route exact path="/frequently-asked-questions" component={FAQ} />
+        <Route exact path="/testimonials" component={Testimonials} />
+        <Route exact path="/pricing-before-login" component={Pricing} />
+        <Route exact path="/coming-soon" component={ComingSoon} />
+        <Route exact path="/privacy-policy" component={PrivacyPolicy} />
+        <Route exact path="/team" component={Team} />
+        <Route exact path="/service-details" component={ServiceDetails} />
+        <Route exact path="/blog-main" component={BlogGrid} />
+        <Route exact path="/blog-details" component={BlogDetails} />
+        <Route exact path="/services-one" component={ServicesOne} />
+        <Route exact path="/services-two" component={ServicesTwo} />
+        <Route exact path="/services-three" component={ServicesThree} />
+        <Route exact path="/blog-left-sidebar" component={BlogLeftSidebar} />
+        <Route exact path="/blog-right-sidebar" component={BlogRightSidebar} />
         <App>
           <TransitionGroup>
             {routes.map(({ path, Component }) => (

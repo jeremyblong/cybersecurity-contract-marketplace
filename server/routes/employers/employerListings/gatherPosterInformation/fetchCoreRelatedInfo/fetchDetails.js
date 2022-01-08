@@ -8,7 +8,18 @@ router.get("/", (req, resppppp, next) => {
 
     const collection = Connection.db.db("db").collection("employers");
 
-    const options = { fields: { profileBannerImage: 1, profilePicsVideos: 1 } };
+    const options = { fields: { 
+        email: 0, 
+        password: 0, 
+        agreement: 0, 
+        followingHackers: 0, 
+        followingEmployers: 0, 
+        authStrategy: 0, 
+        refreshToken: 0, 
+        salt: 0,
+        hash: 0, 
+        userLatestLocation: 0 
+    }};
 
     const query = { uniqueId };
 

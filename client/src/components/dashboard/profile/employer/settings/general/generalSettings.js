@@ -475,7 +475,7 @@ const GeneralSettingsEmployerHelper = ({ userData, authentication }) => {
                         <Col sm="6" md="4">
                         <FormGroup>
                             <Label className="form-label">Sector/Area Of Focus</Label>
-                            <Input value={values.specialty} className="form-control" onChange={handleInputChange} name="specialty" type="email" placeholder="Enter your business sector..." />
+                            <Input value={values.specialty} className="form-control" onChange={handleInputChange} name="specialty" type="text" placeholder="Enter your business sector..." />
                         </FormGroup>
                         </Col>
                         

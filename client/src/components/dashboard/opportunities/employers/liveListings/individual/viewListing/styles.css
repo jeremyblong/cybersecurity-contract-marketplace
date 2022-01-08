@@ -11,3 +11,24 @@
 .skeleton-stretch {
     min-width: 100%;
 }
+.add-border-bottom-thin-listing {
+    border-top: 1px solid #7366ff !important;
+}
+.lead-list-group-item {
+    font-size: 15px;
+    line-height: 1.7;
+    letter-spacing: 0.7px;
+}
+.listgroupitem-list-custom .list-group {
+
+}
+.custom-card-top-bar {
+    width: 100%;
+    margin: 12.5px;
+}
+.listgroupitem-list-custom-active {
+
+}
+.list-listview-wrapper-wrap {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}

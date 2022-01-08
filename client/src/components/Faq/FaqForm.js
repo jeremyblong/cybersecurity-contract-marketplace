@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
-import axios from 'axios'
-import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
-const MySwal = withReactContent(Swal)
-import baseUrl from '../../utils/baseUrl'
+import React, { useState } from 'react';
+import axios from 'axios';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+import baseUrl from '../../utils/baseUrl';
+const MySwal = withReactContent(Swal);
+
 
 const alertContent = () => {
     MySwal.fire({

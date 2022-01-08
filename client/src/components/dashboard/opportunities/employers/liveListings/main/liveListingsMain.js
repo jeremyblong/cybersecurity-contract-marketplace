@@ -1,6 +1,6 @@
 import React, {Fragment,useState,useEffect} from 'react';
 import Breadcrumb from '../../../../../../layout/breadcrumb';
-import { Container,Row,Col,Card,CardBody,Media,Badge } from 'reactstrap';
+import { Container,Row,Col,Card,CardBody,Media,Badge,Button } from 'reactstrap';
 import JobFilter from './helpers/filter/filterJobs.js';
 import { Link, useHistory }  from 'react-router-dom';
 import axios from 'axios';
@@ -49,11 +49,9 @@ const LiveEmployerListingsHelper = ({ userData }) => {
                                 console.log("listing", listing);
                                 return (
                                     <Col xl="6 xl-100" key={i}>
-                                        <Card onClick={() => {
-                                            handleRedirectIndividualPage(listing);
-                                        }} className={`${false ? '' : 'ribbon-vertical-left-wrapper'}`}>
+                                        <Card className={`${false ? '' : 'ribbon-vertical-left-wrapper'}`}>
                                             <div className="job-search">
-                                                <CardBody>
+                                                <CardBody id="custom-cardbody-listing-map">
                                                     <Media>
                                                         <img className="img-40 img-fluid m-r-20" src={require(`../../../../../../assets/images/user/6.jpg`)} alt="" />
                                                         <Media body>
@@ -81,6 +79,11 @@ const LiveEmployerListingsHelper = ({ userData }) => {
                                                         }) : null}
                                                     </div>
                                                     <ReactMarkdown className="custom-markdown-container" children={listing.listingDescription} remarkPlugins={[remarkGfm]} />
+                                                    <div className="btn-redirect-listing-container-wrapper">
+                                                        <Button onClick={() => {
+                                                            handleRedirectIndividualPage(listing);
+                                                        }} style={{ width: "100%" }} className="btn-pill btn-air-info" outline color="info-2x">Visit/View Listing</Button>
+                                                    </div>
                                                 </CardBody>
                                             </div>
                                         </Card>
@@ -100,12 +103,3 @@ const mapStateToProps = (state) => {
     }
 }
 export default connect(mapStateToProps, {  })(LiveEmployerListingsHelper);
-
-
-{/* <span>
-    <i className="fa fa-star font-warning"></i>
-    <i className="fa fa-star font-warning"></i>
-    <i className="fa fa-star font-warning"></i>
-    <i className="fa fa-star font-warning"></i>
-    <i className="fa fa-star font-warning"></i>
-</span> */}

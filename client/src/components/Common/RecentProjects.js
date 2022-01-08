@@ -1,7 +1,5 @@
 import React from 'react';
-import {Link} from 'react-router-dom'; 
-import dynamic from 'next/dynamic';
-const OwlCarousel = dynamic(import('react-owl-carousel3'));
+import { Link } from 'react-router-dom'; 
 
 const options = {
     loop:true,
@@ -27,7 +25,7 @@ const options = {
 };
 
 const RecentProjects = () => {
-    const [display, setDisplay] = React.useState(false);
+    const [ display, setDisplay ] = React.useState(false);
 
     React.useEffect(() => {
         setDisplay(true);
@@ -42,7 +40,7 @@ const RecentProjects = () => {
 				</div>
 
 				<div className="row">
-                    {display ? <OwlCarousel 
+                    {/* {display ? <OwlCarousel 
                         className="solutions-wrap owl-carousel owl-theme"
                         {...options}
                     >
@@ -78,7 +76,7 @@ const RecentProjects = () => {
                                 </Link>
 							</div>
 						</div>
-                    </OwlCarousel> : ''}
+                    </OwlCarousel> : ''} */}
 				</div>
 			</div>
 		</section>
