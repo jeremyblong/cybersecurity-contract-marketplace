@@ -3,7 +3,7 @@ import Breadcrumb from '../../../../../../../layout/breadcrumb';
 import { Container,Row,Col,Card,CardBody,Media,Button,Badge,CardHeader,Input,InputGroup,ListGroupItem,ListGroup,FormGroup,Label } from 'reactstrap';
 import one from '../../../../../../../assets/images/job-search/1.jpg';
 import two from '../../../../../../../assets/images/job-search/6.jpg';
-import { Link, useLocation, useHistory }  from 'react-router-dom';
+import { useLocation, useHistory }  from 'react-router-dom';
 import { Share,SimilarJobs,SeniorUXDesigner } from "../../../../../../../constant";
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
@@ -21,12 +21,14 @@ import FileViewer from 'react-file-viewer';
 import { Modal } from 'react-responsive-modal';
 import { renderProfilePicVideo } from "./helpers/profilePicVideo/displayPicOrVideo.js";
 import moment from "moment";
+import { NotificationManager } from 'react-notifications';
+
 
 const Map = ReactMapboxGl({
     accessToken: process.env.REACT_APP_MAPBOX_TOKEN
 });
 
-const ViewIndividualJobListingHelper = (props) => {
+const ViewIndividualJobListingHelper = ({ userData }) => {
     
     const passedData = useLocation();
     const history = useHistory();
@@ -286,12 +288,17 @@ const ViewIndividualJobListingHelper = (props) => {
                                         <img className="img-40 img-fluid m-r-20" src={one} alt="" />
                                         <Media body>
                                             <h6 className="f-w-600">
-                                                <a href="#javascript">{data.publicCompanyName}</a>
+                                                <a href={null}>{data.publicCompanyName}</a>
                                                 <span className="pull-right">
                                                     <div> 
-                                                        <Button onClick={() => {
-                                                            handleHackerApplyLogic(data);
-                                                        }} style={{ width: "275px" }} className="btn-square info" outline color="info-2x">{"Apply for this job (As a hacker)"}</Button>
+                                                        {userData.accountType === "hackers" ? <Button onClick={() => {
+                                                            // apply logic (hackers ONLY)...
+                                                            if (userData.accountType === "hackers") {
+                                                                handleHackerApplyLogic(data);
+                                                            } else {
+                                                                NotificationManager.error("You do NOT have proper account privileges, This option is ONLY availiable to 'hackers'.", "ONLY hacker's are allowed to use this link!", 4500);
+                                                            }
+                                                        }} style={{ width: "275px" }} className="btn-square info" outline color="info-2x">{"Apply for this job (As a hacker)"}</Button> : null}
                                                     </div>
                                                 </span>
                                             </h6>
@@ -305,7 +312,7 @@ const ViewIndividualJobListingHelper = (props) => {
                                                     <h5 className="text-white">General Details</h5>
                                                 </CardHeader>
                                                 <CardBody>
-                                                    <AccordionWithOpenandCloseIcon data={data} props={props} />
+                                                    <AccordionWithOpenandCloseIcon data={data} />
                                                 </CardBody>
                                             </Card>
                                         </Col>
@@ -525,7 +532,7 @@ const ViewIndividualJobListingHelper = (props) => {
                                                     <Media>
                                                         <img className="img-40 img-fluid m-r-20" src={require(`../../../../../../../assets/images/user/10.jpg`)} alt="" />
                                                         <Media body>
-                                                            <h6 className="f-w-600"><a href="#javascript">{data.job_name}</a>
+                                                            <h6 className="f-w-600"><a href={null}>{data.job_name}</a>
                                                                 {(data.badgeType === 'primary' ? <span className="badge badge-primary pull-right">{data.badgeValue}</span>
                                                                     : ''
                                                                 )}
@@ -555,7 +562,7 @@ const ViewIndividualJobListingHelper = (props) => {
                                             <Media>
                                                 <img className="img-40 img-fluid m-r-20" src={two} alt="" />
                                                 <Media body>
-                                                    <h6 className="f-w-600"><a href="#javascript">{SeniorUXDesigner}</a><span className="pull-right">{"5 days ago"}</span></h6>
+                                                    <h6 className="f-w-600"><a href={null}>{SeniorUXDesigner}</a><span className="pull-right">{"5 days ago"}</span></h6>
                                                     <p>{"Sutherland"} <span>{"Lelystad, Netherlands"} </span><span><i className="fa fa-star font-warning"></i><i className="fa fa-star font-warning"></i><i className="fa fa-star font-warning"></i><i className="fa fa-star font-warning-half-o"></i><i className="fa fa-star font-warning-o"></i></span></p>
                                                 </Media>
                                             </Media>
@@ -622,7 +629,7 @@ const ViewIndividualJobListingHelper = (props) => {
                             </Col>
                             <Col sm="12" lg="4" className="order-sm-0 order-xl-1">
                             <div className="user-designation">
-                                <div className="title"><a target="_blank" href="#javascript">{data.publicCompanyName}</a></div>
+                                <div className="title"><a target="_blank" href={null}>{data.publicCompanyName}</a></div>
                                 <div className="desc mt-2">Poster's Company Name</div>
                             </div>
                             </Col>
@@ -644,11 +651,11 @@ const ViewIndividualJobListingHelper = (props) => {
                         <hr />
                         <div className="social-media step4" data-intro="This is your Social details">
                             <ul className="list-inline">
-                            <li className="list-inline-item"><a href="#javascript"><i className="fa fa-facebook"></i></a></li>
-                            <li className="list-inline-item"><a href="#javascript"><i className="fa fa-google-plus"></i></a></li>
-                            <li className="list-inline-item"><a href="#javascript"><i className="fa fa-twitter"></i></a></li>
-                            <li className="list-inline-item"><a href="#javascript"><i className="fa fa-instagram"></i></a></li>
-                            <li className="list-inline-item"><a href="#javascript"><i className="fa fa-rss"></i></a></li>
+                            <li className="list-inline-item"><a href={null}><i className="fa fa-facebook"></i></a></li>
+                            <li className="list-inline-item"><a href={null}><i className="fa fa-google-plus"></i></a></li>
+                            <li className="list-inline-item"><a href={null}><i className="fa fa-twitter"></i></a></li>
+                            <li className="list-inline-item"><a href={null}><i className="fa fa-instagram"></i></a></li>
+                            <li className="list-inline-item"><a href={null}><i className="fa fa-rss"></i></a></li>
                             </ul>
                         </div>
                         <div className="follow">
@@ -714,10 +721,14 @@ const ViewIndividualJobListingHelper = (props) => {
                             </Row>
                             <Row style={{ paddingTop: "17.5px", paddingBottom: "17.5px" }}>
                                 <Col sm="12" md="12" lg="12" xl="12">
-                                    <Button style={{ width: "100%" }} className={"btn-pill btn-air-success"} onClick={() => {
+                                    {userData.accountType === "hackers" ? <Button style={{ width: "100%" }} className={"btn-pill btn-air-success"} onClick={() => {
                                         // apply logic (hackers ONLY)...
-                                        handleHackerApplyLogic(data);
-                                    }} outline color="success-2x">Apply to this listing (As a hacker)</Button>
+                                        if (userData.accountType === "hackers") {
+                                            handleHackerApplyLogic(data);
+                                        } else {
+                                            NotificationManager.error("You do NOT have proper account privileges, This option is ONLY availiable to 'hackers'.", "ONLY hacker's are allowed to use this link!", 4500);
+                                        }
+                                    }} outline color={"success-2x"}>Apply to this listing (As a hacker)</Button> : null}
                                 </Col>
                             </Row>
                         </div>
@@ -767,5 +778,9 @@ const ViewIndividualJobListingHelper = (props) => {
         </Fragment>
     );
 };
-
-export default ViewIndividualJobListingHelper;
+const mapStateToProps = (state) => {
+    return {
+        userData: state.auth.data
+    }
+}
+export default connect(mapStateToProps, {})(ViewIndividualJobListingHelper);

@@ -125,7 +125,7 @@ const Navbar = ({ data, authenticated, authentication, saveListingData, saveSoft
                                                 </li>
 
                                                 {authenticated === true ? <li className="nav-item custom-nav-item-link">
-                                                    <Link to="/dashboard" activeClassName="active">
+                                                    <Link to={data.accountType === "hackers" ? "/dashboard/hacker" : "/dashboard/employer"} activeClassName="active">
                                                         <a onClick={e => {}} className="nav-link nav-link-custom-homepage">Go-to <strong style={{ color: "#f73164" }}>Dashboard</strong> (Authenticated)</a>
                                                     </Link>
                                                 </li> : null}

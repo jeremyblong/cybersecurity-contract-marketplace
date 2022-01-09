@@ -9,7 +9,8 @@ import { Container, Row, Col, Card, CardBody, Button, CardHeader, ListGroupItem,
 import Breadcrumb from '../../../../../../layout/breadcrumb';
 import "../styles.css";
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
-
+import axios from "axios";
+import uuid from 'react-uuid';
 
 const TimelineHelper = () => {
     return (
@@ -403,7 +404,7 @@ const HelperRadioButtons = ({ listingReady, listingData, id }) => {
                                     <Label for="radio19"></Label>
                                 </div>
                                 <Media body>
-                                    <h6 className="mt-0 mega-title-badge">PHYSICAL HACK(ING) <strong style={{ color: "#7366ff" }}>ONLY</strong><span className="badge badge-primary pull-right digits">{"PHYSICAL HACK(ING) ONLY"}</span></h6>
+                                    <h6 className="mt-0 mega-title-badge custom-digits-change">PHYSICAL HACK(ING) <strong style={{ color: "#7366ff" }}>ONLY</strong><span className="badge badge-primary pull-right digits">{"PHYSICAL HACK(ING) ONLY"}</span></h6>
                                     <p>{"PHYSICAL HACK ONLY - This application process is related to a 'Physical-Hack' type listing so you will be required to be ON-SITE at your specified/agreed dates between you and the employer testing REAL/Physical assets - if a selected job is OUT of your home-region, we expect you to fly/travel to said destination IF you decide to take 'said' job "}<strong>AT YOUR OWN EXPENSE</strong></p>
                                 </Media>
                             </Media>
@@ -417,7 +418,7 @@ const HelperRadioButtons = ({ listingReady, listingData, id }) => {
                                     <Label for="radio20"></Label>
                                 </div>
                                 <Media body>
-                                    <h6 className="mt-0 mega-title-badge">DIGITAL ASSETS <strong style={{ color: "#7366ff" }}>ONLY</strong><span className="badge badge-secondary pull-right digits">{"DIGITAL ASSETS - ONLY"}</span></h6>
+                                    <h6 className="mt-0 mega-title-badge custom-digits-change">DIGITAL ASSETS <strong style={{ color: "#7366ff" }}>ONLY</strong><span className="badge badge-secondary pull-right digits">{"DIGITAL ASSETS - ONLY"}</span></h6>
                                     <p>{"This option indicates this listing is a 'DIGITAL ASSETS TESTING' ONLY type of listing. This means you will be testing websites, API endpoints and really any other forward-facing assets availiable to the web/internet. PHYSICAL-HACKS are "}<strong>NOT PERMITTED</strong> with this type of listing. Lack of compliance will result in <strong>IMMEDIATE BANNING FOREVER.</strong></p>
                                 </Media>
                             </Media>
@@ -431,7 +432,7 @@ const HelperRadioButtons = ({ listingReady, listingData, id }) => {
                                     <Label for="radio21"></Label>
                                 </div>
                                 <Media body>
-                                    <h6 className="mt-0 mega-title-badge"><strong style={{ color: "#a927f9" }}>BOTH</strong> DIGITAL/PHYSICAL ASSETS<span className="badge badge-info pull-right digits">{"BOTH DIGITAL/PHYSICAL ASSETS - EITHER"}</span></h6>
+                                    <h6 className="mt-0 mega-title-badge custom-digits-change"><strong style={{ color: "#a927f9" }}>BOTH</strong> DIGITAL/PHYSICAL ASSETS<span className="badge badge-info pull-right digits">{"BOTH DIGITAL/PHYSICAL ASSETS - EITHER"}</span></h6>
                                     <p>{"This option indicates this listing is a 'BOTH DIGITAL/PHYSICAL ASSETS TESTING' types which means you're allowed to test BOTH/EITHER physical OR digital assets simultaniously! You can pick n' choose which you'd like to exploit if the current listing's settings align or are set to this type of listing. Physical hacks should still align with orchasrated/organized schedule with your selected employer HOWEVER digital assets can be "}<strong>hacked/tampered with at any point in time <em style={{ color: "red" }}>during</em> hired period.</strong></p>
                                 </Media>
                             </Media>
@@ -448,9 +449,152 @@ const HelperRadioButtons = ({ listingReady, listingData, id }) => {
         </Fragment>
     );
 }
+const handleDeletionLink = (link, setSelectedLinks) => {
+    console.log("handle deletion!");
 
+    setSelectedLinks(prevState => {
+        return prevState.filter((linky, i) => {
+            if (linky.id !== link.id) {
+                return true;
+            }
+        })
+    })
+} 
+const renderMountedLogic = (globalConfig, setPhysicalOrDigitalHackOptionsState, setListingData, setDatesReady, setDateRanges, setDisabledDaysState, setListingReady) => {
+    // fetch user information
+    axios.get(`${process.env.REACT_APP_BASE_URL}/gather/listing/all/info`, globalConfig.configuration).then((res) => {
+        if (res.data.message === "Successfully gathered listing information!") {
+            console.log(res.data);
+            // deconstruct listing data/obj
+            const { listing } = res.data;
+            // update selected date ranges
+
+            // set listing data
+            setListingData(listing);
+            // new promise to delay response
+                new Promise((resolve, reject) => {
+                    // create new date array
+                    const newDateArray = [];
+                    // start & end dates array's
+                    const endDateArray = [];
+                    const startDateArray = [];
+                    // update selected date ranges
+                    const selected = listing.testingDatesHackers;
+                    // loop & prepare listing data related to dates
+                    for (let index = 0; index < selected.length; index++) {
+                        const el = selected[index];
+                        newDateArray.push({
+                            startDate: new Date(el.startDate),
+                            endDate: new Date(el.endDate),
+                            key: 'selection',
+                        });
+                        startDateArray.push(new Date(new Date(el.startDate)));
+                        endDateArray.push(new Date(new Date(el.endDate)));
+                        // check when last element is TRUE and end looping array
+                        if ((selected.length - 1) === index) {
+                            resolve({ newDateArray, startDateArray, endDateArray });
+                        }
+                    }
+                }).then((values) => {
+
+                    const { startDateArray, endDateArray, newDateArray } = values;
+
+                    console.log(startDateArray, endDateArray)
+                    // min & max dates
+                    const maxDate = new Date(Math.max.apply(null, endDateArray));
+                    const minDate = new Date(Math.min.apply(null, startDateArray));
+
+                    const maxedDate = moment(maxDate).startOf('day').toString();
+
+                    // difference in days
+                    // const diffDays = Math.round(Math.abs((firstDate - secondDate) / oneDay));
+
+                    const mappedSelectedDates = [];
+                    const dismissDates = [];
+
+                    for (let index = 0; index < newDateArray.length; index++) {
+                        const date = newDateArray[index];
+                        
+                        for (let d = new Date(date.startDate); d <= new Date(date.endDate); d.setDate(d.getDate() + 1)) {
+                            const startOfDay = moment(new Date(d)).startOf('day').toString()
+
+                            if (!mappedSelectedDates.includes(startOfDay)) {
+                                mappedSelectedDates.push(startOfDay);
+                            } 
+                        }
+
+                        if ((newDateArray.length - 1) === index) {
+                            for (let d = minDate; d <= new Date(new Date(maxedDate).setDate(d.getDate() + 1)); d.setDate(d.getDate() + 1)) {
+                                const formatedLoopItem = moment(new Date(d)).startOf('day').toString();
+
+                                // console.log("formatedLoopItem", formatedLoopItem, maxedDate);
+                                if (!mappedSelectedDates.includes(formatedLoopItem)) {
+                                    dismissDates.push(new Date(d));
+
+                                    if (formatedLoopItem === maxedDate) {
+                                        // set disabled days array
+                                        setDisabledDaysState(dismissDates);
+                                        // set SELECTED/PREVIOUSLY-PICKED days state
+                                        setDateRanges(newDateArray);
+                                        // display content finally!
+                                        setDatesReady(true);
+                                    }
+                                } else {
+                                    if (formatedLoopItem === maxedDate) {
+                                        // set disabled days array
+                                        setDisabledDaysState(dismissDates);
+                                        // set SELECTED/PREVIOUSLY-PICKED days state
+                                        setDateRanges(newDateArray);
+                                        // display content finally!
+                                        setDatesReady(true);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    // min and max dates
+                    console.log("maxDate", maxDate);
+                    console.log("minDate", minDate);
+                })
+            // update physicalOrDigitalHackOptions options 
+            switch (listing.typeOfHack.value) {
+                case "physical-hack":
+                    setPhysicalOrDigitalHackOptionsState([{ label: "BOTH (Digital/Physical hack's) Hack Type's", value: "both-assets", isDisabled: true }, { label: "Digital/Internet-Hack ONLY", value: "digital-internet-hack", isDisabled: true }, { label: "Physical-Hack ONLY", value: "physical-hack" }]);
+                    break;
+                case "":
+                    setPhysicalOrDigitalHackOptionsState([{ label: "BOTH (Digital/Physical hack's) Hack Type's", value: "both-assets", isDisabled: true }, { label: "Digital/Internet-Hack ONLY", value: "digital-internet-hack" }, { isDisabled: true, label: "Physical-Hack ONLY", value: "physical-hack" }]);
+                    break;
+                case "":
+                    setPhysicalOrDigitalHackOptionsState([{ label: "BOTH (Digital/Physical hack's) Hack Type's", value: "both-assets" }, { isDisabled: true, label: "Digital/Internet-Hack ONLY", value: "digital-internet-hack" }, { isDisabled: true, label: "Physical-Hack ONLY", value: "physical-hack" }]);
+                    break;
+                default:
+                    break;
+            }
+            // set listing data READY
+            setListingReady(true);
+        } else {
+            // log error from DB request
+            console.log('err', res.data);
+        }
+    }).catch((err) => {
+        // log error from DB request
+        console.log(err);
+    })
+}
+const handleLinkAddition = (setSelectedLinks, link, clearInput) => {
+    console.log("handleLinkAddition ran...");
+
+    clearInput();
+
+    setSelectedLinks(prevState => {
+        return [...prevState, { urlName: link.split("//")[1], url: link, id: uuid() }]
+    })
+}
 export default {
     TimelineHelper,
     HelperRadioButtons,
-    SheetPaneSubmittingDataHelper
+    SheetPaneSubmittingDataHelper,
+    renderMountedLogic,
+    handleDeletionLink,
+    handleLinkAddition
 };

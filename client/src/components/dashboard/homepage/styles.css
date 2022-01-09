@@ -1,0 +1,21 @@
+
+.notification-custom {
+    box-sizing: border-box;
+    padding: 15px 15px 15px 58px;
+    padding-right: 15px;
+    padding-left: 58px;
+    border-radius: 2px;
+    color: #fff;
+    background-color: white;
+    padding: 22.5px 22.5px 0px 22.5px;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    cursor: pointer;
+    font-size: 1em;
+    line-height: 1.2em;
+    position: relative;
+    opacity: 0.9;
+    margin-bottom: 25px;
+}
+.shadow-md-custom {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}

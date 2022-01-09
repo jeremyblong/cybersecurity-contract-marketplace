@@ -142,3 +142,73 @@
     border: 2.35px solid #a927f9 !important;
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
 }
+.custom-digits-change {
+    font-size: 1.1rem !important;
+}
+.fontsize22 {
+    font-size: 22px;
+}
+.heavy-label {
+    font-weight: bold;
+}
+.group-addon-custom {
+    background-color: #a927f9 !important;
+    color: white;
+    z-index: 1 !important;
+    font-weight: 475;
+}
+.group-addon-custom-two {
+    background-color: #9c9b9b !important;
+    color: white;
+    z-index: 1 !important;
+    font-weight: 475;
+}
+.group-addon-custom:hover {
+    cursor: pointer;
+    box-shadow: 0px 0px 5px 2.5px grey !important;
+}
+#float-trash-right {
+    position: absolute;
+    right: 10px;
+    bottom: 7.5px;
+    top: 7.5px;
+    font-size: 21.5px;
+    color: red;
+    border-radius: 20px;
+    padding: 3.5px;
+    border: 1.875px solid black;
+}
+#float-trash-right:hover {
+    position: absolute;
+    cursor: pointer;
+    right: 10px;
+    bottom: 7.5px;
+    top: 7.5px;
+    font-size: 21.5px;
+    color: white;
+    background-color: rgb(0, 0, 0);
+    border-radius: 20px;
+    padding: 3.5px;
+    border: 1.875px solid black;
+}
+.custom-list-group-item-text {
+    font-weight: 525;
+    padding-left: 25px;
+}
+.absolute-position-bottom-right-fixed {
+    max-width: 27.5vw;
+    position: fixed;
+    right: 15px;
+    bottom: 15px;
+    border: 2.75px dotted black;
+    border-radius: 10px;
+    background-color: white;
+    z-index: 9999999999999 !important;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.225) !important;
+} 
+.redirect-fixed-bottom-right {
+    padding: 10px;
+}
+.media-body-customized-fixed {
+    height: 100%;
+}

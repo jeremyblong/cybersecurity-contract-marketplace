@@ -189,17 +189,12 @@ const PageOneMainHelper = ({ saveSoftwareListingInfo, previouslySavedSoftwareDat
         reset({ supportExternalURL: "" }, { keepValues: true });
     }
     const calculateWordCountOnBlur = (data) => {
-        console.log("data", data);
-
         const wordCount = data.split(" ").length;
-
-        console.log("wordCount : ", wordCount);
 
         setWordCount(wordCount);
     }
 
     const calculateWhetherURLIsLegit = (data) => {
-        console.log("data calculateWhetherURLIsLegit : ", data);
         
         const isValidHttpUrl = (string) => {
             let url;
