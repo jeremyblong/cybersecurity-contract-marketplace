@@ -129,7 +129,35 @@ const Root = (props) =>  {
       }
     // eslint-disable-next-line
   }, []);
-
+  const renderComponent = (Component, props) => {
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+    }, 225);
+    return <Component props={props} />
+  }
+  const renderDashboardComponents = (path, Component) => {
+    return (
+      <ProtectedRoute key={path} exact path={`${process.env.PUBLIC_URL}${path}`}>
+        {({ match }) => {
+          setTimeout(() => {
+            window.scrollTo(0, 0);
+          }, 500);
+          return (
+            <CSSTransition 
+              in={match != null}
+              timeout={100}
+              classNames={anim} 
+              unmountOnExit
+            >
+              <div>
+                <Component />
+              </div>
+            </CSSTransition> 
+          );
+        }}
+      </ProtectedRoute>
+    );
+  }
   return(
     <Fragment>
       <Provider store={store}>
@@ -137,44 +165,29 @@ const Root = (props) =>  {
       <NotificationContainer />
       <BrowserRouter>
       <Switch>
-        <Route exact path="/" component={Index} />
-        <Route exact path="/sign-in" component={SignIn} />
-        <Route exact path="/sign-up" component={SignUp} />
-        <Route exact path="/forgot-password" component={ForgotPassword} />
-        <Route exact path="/contact" component={Contact} />
-        <Route exact path="/about" component={About} />
-        <Route exact path="/frequently-asked-questions" component={FAQ} />
-        <Route exact path="/testimonials" component={Testimonials} />
-        <Route exact path="/pricing-before-login" component={Pricing} />
-        <Route exact path="/coming-soon" component={ComingSoon} />
-        <Route exact path="/privacy-policy" component={PrivacyPolicy} />
-        <Route exact path="/team" component={Team} />
-        <Route exact path="/service-details" component={ServiceDetails} />
-        <Route exact path="/blog-main" component={BlogGrid} />
-        <Route exact path="/blog-details" component={BlogDetails} />
-        <Route exact path="/services-one" component={ServicesOne} />
-        <Route exact path="/services-two" component={ServicesTwo} />
-        <Route exact path="/services-three" component={ServicesThree} />
-        <Route exact path="/blog-left-sidebar" component={BlogLeftSidebar} />
-        <Route exact path="/blog-right-sidebar" component={BlogRightSidebar} />
+        <Route exact path="/" render={(props) => renderComponent(Index, props)} />
+        <Route exact path="/sign-in" render={(props) => renderComponent(SignIn, props)} />
+        <Route exact path="/sign-up" render={(props) => renderComponent(SignUp, props)} />
+        <Route exact path="/forgot-password" render={(props) => renderComponent(ForgotPassword, props)} />
+        <Route exact path="/contact" render={(props) => renderComponent(Contact, props)} />
+        <Route exact path="/about" render={(props) => renderComponent(About, props)} />
+        <Route exact path="/frequently-asked-questions" render={(props) => renderComponent(FAQ, props)} />
+        <Route exact path="/testimonials" render={(props) => renderComponent(Testimonials, props)} />
+        <Route exact path="/pricing-before-login" render={(props) => renderComponent(Pricing, props)} />
+        <Route exact path="/coming-soon" render={(props) => renderComponent(ComingSoon, props)} />
+        <Route exact path="/privacy-policy" render={(props) => renderComponent(PrivacyPolicy, props)} />
+        <Route exact path="/team" render={(props) => renderComponent(Team, props)} />
+        <Route exact path="/service-details" render={(props) => renderComponent(ServiceDetails, props)} />
+        <Route exact path="/blog-main" render={(props) => renderComponent(BlogGrid, props)} />
+        <Route exact path="/blog-details" render={(props) => renderComponent(BlogDetails, props)} />
+        <Route exact path="/services-one" render={(props) => renderComponent(ServicesOne, props)} />
+        <Route exact path="/services-two" render={(props) => renderComponent(ServicesTwo, props)} />
+        <Route exact path="/services-three" render={(props) => renderComponent(ServicesThree, props)} />
+        <Route exact path="/blog-left-sidebar" render={(props) => renderComponent(BlogLeftSidebar, props)} />
+        <Route exact path="/blog-right-sidebar" render={(props) => renderComponent(BlogRightSidebar, props)} />
         <App>
           <TransitionGroup>
-            {routes.map(({ path, Component }) => (
-                <ProtectedRoute key={path} exact path={`${process.env.PUBLIC_URL}${path}`}>
-                    {({ match }) => (
-                        <CSSTransition 
-                        in={match != null}
-                        timeout={100}
-                        classNames={anim} 
-                        unmountOnExit
-                        >
-                        <div>
-                          <Component />
-                        </div>
-                        </CSSTransition> 
-                    )}
-                </ProtectedRoute>
-                ))}
+            {routes.map(({ path, Component }) => renderDashboardComponents(path, Component))}
           </TransitionGroup>
         </App>
       </Switch>

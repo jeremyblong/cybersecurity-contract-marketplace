@@ -11,7 +11,7 @@ const FAQ = () => {
             <Navbar />
 
             <PageBanner 
-                pageTitle="FAQ" 
+                pageTitle="FAQ - Frequently Asked Question(s)" 
                 homePageUrl="/" 
                 homePageText="Home" 
                 activePageText="FAQ" 

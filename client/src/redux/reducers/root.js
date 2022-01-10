@@ -4,11 +4,13 @@ import Customizer from '../customizer/reducer';
 import listingData from "./employer/listings/listingData.js";
 import softwareListingSale from "./hackers/createSoftwareListing/createNewSoftwareListingSale.js";
 import changeGlobalStyles from "./universal/index.js";
+import applicationDetails from "./hackers/applyToEmployerListing/applicationInfo.js";
 
 export default combineReducers({
 	auth,
 	Customizer,
 	listingData,
 	softwareListingSale,
-	changeGlobalStyles
+	changeGlobalStyles,
+	applicationDetails
 });

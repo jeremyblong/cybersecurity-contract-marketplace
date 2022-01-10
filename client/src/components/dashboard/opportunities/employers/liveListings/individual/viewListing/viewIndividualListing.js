@@ -659,6 +659,18 @@ const ViewIndividualJobListingHelper = ({ userData }) => {
                             </ul>
                         </div>
                         <div className="follow">
+                            <Row style={{ paddingTop: "17.5px", paddingBottom: "17.5px" }}>
+                                <Col sm="12" md="12" lg="12" xl="12">
+                                    {userData.accountType === "hackers" ? <Button style={{ width: "100%", fontWeight: "bold" }} className={"btn-square btn-air-success"} onClick={() => {
+                                        // apply logic (hackers ONLY)...
+                                        if (userData.accountType === "hackers") {
+                                            handleHackerApplyLogic(data);
+                                        } else {
+                                            NotificationManager.error("You do NOT have proper account privileges, This option is ONLY availiable to 'hackers'.", "ONLY hacker's are allowed to use this link!", 4500);
+                                        }
+                                    }} outline color={"success-2x"}>Apply to this listing (As a hacker)</Button> : null}
+                                </Col>
+                            </Row>
                             <Row>
                                 <Col sm="12" lg="6" xl="6" md="6" className="centered-both-ways">
                                     <Card className="custom-card-top-bar">
@@ -721,7 +733,7 @@ const ViewIndividualJobListingHelper = ({ userData }) => {
                             </Row>
                             <Row style={{ paddingTop: "17.5px", paddingBottom: "17.5px" }}>
                                 <Col sm="12" md="12" lg="12" xl="12">
-                                    {userData.accountType === "hackers" ? <Button style={{ width: "100%" }} className={"btn-pill btn-air-success"} onClick={() => {
+                                    {userData.accountType === "hackers" ? <Button style={{ width: "100%", fontWeight: "bold" }} className={"btn-square btn-air-success"} onClick={() => {
                                         // apply logic (hackers ONLY)...
                                         if (userData.accountType === "hackers") {
                                             handleHackerApplyLogic(data);

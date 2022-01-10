@@ -35,11 +35,19 @@ This files table contents are outlined below>>>>>
 ** - Nice select Area
 ******************************************* /*
 
+/* POPOVER GLOBAL STYLES START */
+.popover {
+  max-width: 450px !important;
+}
+/* POPOVER GLOBAL STYLES END */
 /* MODAL STYLES START (SLIDE UP FROM BOTTOM MODAL/PANE) START */
 .react-modal-sheet-content {
     background-color: #f8f8f8;
 }
 /* CUSTOM BUTTON STYLING START - ENTIRE APPLICATION */
+#maxed-zindex {
+  z-index: 99999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999 !important;
+}
 a:hover {
   cursor: pointer !important;
 }

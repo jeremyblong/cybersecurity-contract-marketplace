@@ -15,8 +15,10 @@ import { DateRangePicker } from 'react-date-range';
 import { useForm, Controller } from 'react-hook-form';
 import MainHooksCustomHelpers from "./helpers/reactHookFormHelpers.js";
 import Tour from 'reactour';
+import LoadingBar from 'react-top-loading-bar';
+import { saveApplicationDetailsProgress } from "../../../../../redux/actions/hackers/applyToEmployerListing/applicationInfo.js";
 
-const { TimelineHelper, SheetPaneSubmittingDataHelper, HelperRadioButtons, renderMountedLogic, handleDeletionLink, handleLinkAddition } = helpers;
+const { TimelineHelper, SheetPaneSubmittingDataHelper, HelperRadioButtons, renderMountedLogic, handleDeletionLink, handleLinkAddition, SheetDisplayFilesFileManagerHelper } = helpers;
 
 const urlEnteredLinkData = MainHooksCustomHelpers().urlEnteredLinkData;
 const coverLetterChecks = MainHooksCustomHelpers().coverLetterChecks;
@@ -33,7 +35,7 @@ const tourStepsOptions = [
 ];
 
 
-const ApplyAsHackerEmployerListingHelper = ({ userData, shiftCoreStyles, location }) => {
+const ApplyAsHackerEmployerListingHelper = ({ userData, shiftCoreStyles, location, saveApplicationDetailsProgress, previous }) => {
     
     // ref's
     const physicalOrDigitalOrBothGeneratedRef = useRef(null);
@@ -42,6 +44,7 @@ const ApplyAsHackerEmployerListingHelper = ({ userData, shiftCoreStyles, locatio
     const { id } = useParams();
     // initialize state items...
     const [ alreadyAdded, setAlreadyAddedState ] = useState(null);
+    const [ filesSheetOpen, setFileSheetOpenState ] = useState(false);
     const [ linkInput, setLinkInput ] = useState(""); 
     const [ isTourOpen, setIsTourOpenState ] = useState(false);
     const [ disabledDays, setDisabledDaysState ] = useState([]);
@@ -49,6 +52,7 @@ const ApplyAsHackerEmployerListingHelper = ({ userData, shiftCoreStyles, locatio
     const [ sheetIsOpen, setSheetOpenState ] = useState(false);
     const [ currentUserData, setCurrentUserData ] = useState(null);
     const [ ready, setReadyGlobal ] = useState(false);
+    const [ progress, setProgress ] = useState(0);
     const [ listingReady, setListingReady ] = useState(false);
     const [ listingData, setListingData ] = useState(null);
     const [ dateRanges, setDateRanges ] = useState(null);
@@ -168,7 +172,7 @@ const ApplyAsHackerEmployerListingHelper = ({ userData, shiftCoreStyles, locatio
         scrollToTourWrapper.current.scrollIntoView();
         // alter slightly to account for top-NAV
         setTimeout(() => {
-            window.scrollBy(0, -150);
+            window.scrollBy(0, -175);
         }, 750);
         // lock after appropriate position change
         setTimeout(() => {
@@ -195,11 +199,33 @@ const ApplyAsHackerEmployerListingHelper = ({ userData, shiftCoreStyles, locatio
     const onFormSubmit = (values, valuesTwo) => {
         console.log("values and valuesTwo", values, valuesTwo);
     }
+    const handleFinalSubmissionFiles = () => {
+        // DISABLE clicking background
+        shiftCoreStyles(true);
+        // set sheet open
+        setFileSheetOpenState(true);
+        // lock after appropriate position change
+        setTimeout(() => {
+            // select MAIN-WRAPPER div class
+            const select = document.querySelector(".enact-nonclick");
+            // finally - disable while pane is open!
+            disableBodyScroll(select);
+        }, 450);
+    }
     // log values to debug
-    console.log("gatheredValues", gatheredValues, "errors", errors, "scrollToTourWrapper", scrollToTourWrapper);
+    console.log("gatheredValues", gatheredValues, "errors", errors);
     return (
         <Fragment>
+            <LoadingBar
+                color='#51bb25'
+                height={7}
+                progress={progress}
+                onLoaderFinished={() => {
+                    setProgress(0);
+                }}
+            />
             <SheetPaneSubmittingDataHelper ready={ready} shiftCoreStyles={shiftCoreStyles} alreadyAdded={alreadyAdded} currentUserData={currentUserData} clearAllBodyScrollLocks={clearAllBodyScrollLocks} userData={userData} sheetIsOpen={sheetIsOpen} setSheetOpenState={setSheetOpenState} renderSentence={renderSentence} />
+            <SheetDisplayFilesFileManagerHelper previous={previous} saveApplicationDetailsProgress={saveApplicationDetailsProgress} setProgress={setProgress} filesSheetOpen={filesSheetOpen} setFileSheetOpenState={setFileSheetOpenState} shiftCoreStyles={shiftCoreStyles} clearAllBodyScrollLocks={clearAllBodyScrollLocks} />
             <Breadcrumb passedClassname={"custom-breadcrumb-class"} parent={`Apply & Work To Earn ${process.env.REACT_APP_CRYPTO_TOKEN_NAME} to cashout for REAL ($$$-USD)`} title={"Review job requirements & details + apply to position/listing!"} />
             <Tour
                 steps={tourStepsOptions}
@@ -216,7 +242,7 @@ const ApplyAsHackerEmployerListingHelper = ({ userData, shiftCoreStyles, locatio
                             <Label for="radio-redirect"></Label>
                         </div>
                         <Media className="media-body-customized-fixed" body>
-                            <h6 className="mt-0 mega-title-badge">Are you ready to submit your application?! <span className="badge badge-info pull-right digits">{"SHOW ME HOW TO SUBMIT APP!"}</span></h6>
+                            <h6 className="mt-0 mega-title-badge custom-mega-title-badge">Are you ready to submit your application?! <span className="badge badge-info pull-right digits custom-pull-right-digits">{"SHOW ME HOW TO SUBMIT APP!"}</span></h6>
                             <p>Are you <strong>READY TO SUBMIT YOUR APPLICATION</strong> to this employer and submit your 'completed/filled-out' information? Click the button below to be directed to the <strong>'Submit Application'</strong> button to proceed forwards...</p>
                             <hr />
                             <div className="natural-sm-spacer" />
@@ -291,13 +317,6 @@ const ApplyAsHackerEmployerListingHelper = ({ userData, shiftCoreStyles, locatio
                                                 />
                                                 {errors.physicalOrDigitalOrBoth ? <span className="span-tooltip">{errors.physicalOrDigitalOrBoth.message}</span> : null}
                                             </FormGroup>
-                                            <FormGroup>
-                                                <Label className="heavy-label">{approachToSuccessfullyHackCo.label}</Label>
-                                                <Input {...approachToSuccessfullyHackCo.check(setError, register, clearErrors, "technicalApproachToHack")} placeholder={approachToSuccessfullyHackCo.placeholder} onChange={(e) => {
-                                                    return approachToSuccessfullyHackCo.onChange(e, "technicalApproachToHack", setValue);
-                                                }} name={approachToSuccessfullyHackCo.name} type="textarea" className="form-control input-air-primary" rows={"3"} />
-                                                {errors.technicalApproachToHack ? <span className="span-tooltip">{errors.technicalApproachToHack.message}</span> : null}
-                                            </FormGroup>
                                         </Col>
                                         <Col md="6" lg="6" xl="6" sm="12">
                                             <FormGroup>
@@ -307,6 +326,29 @@ const ApplyAsHackerEmployerListingHelper = ({ userData, shiftCoreStyles, locatio
                                                 }} name={messageToEmployerChecks.name} type="textarea" className="form-control input-air-primary" rows={"4"} />
                                                 {errors.messageToEmployer ? <span className="span-tooltip">{errors.messageToEmployer.message}</span> : null}
                                             </FormGroup>
+                                            <FormGroup>
+                                                <Label className="heavy-label">{approachToSuccessfullyHackCo.label}</Label>
+                                                <Input {...approachToSuccessfullyHackCo.check(setError, register, clearErrors, "technicalApproachToHack")} placeholder={approachToSuccessfullyHackCo.placeholder} onChange={(e) => {
+                                                    return approachToSuccessfullyHackCo.onChange(e, "technicalApproachToHack", setValue);
+                                                }} name={approachToSuccessfullyHackCo.name} type="textarea" className="form-control input-air-primary" rows={"3"} />
+                                                {errors.technicalApproachToHack ? <span className="span-tooltip">{errors.technicalApproachToHack.message}</span> : null}
+                                            </FormGroup>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col sm="12" md="12" lg="12" xl="12">
+                                            <Card className="custom-card-inner custom-card-bottom-across">
+                                                <CardHeader className="b-l-info">
+                                                    <h5><strong>Attachments</strong> to be <strong>sent</strong> to the employer of this listing</h5>
+                                                    <p style={{ paddingTop: "7.5px" }}>These attachments can be anything from a "Cover Letter" or "Resume" & these files will be sent <strong>directly</strong> to the employer for consideration of your application for this listing or job/gig.</p>
+                                                </CardHeader>
+                                                <CardBody>
+                                                    <Button style={{ width: "100%" }} className={"btn-square btn-air-success"} onClick={() => {
+                                                        // open pane slider up from bottom
+                                                        handleFinalSubmissionFiles() 
+                                                    }} outline color="success-2x">Upload & Manage Attachments (To-be sent directly to employer)</Button>
+                                                </CardBody>
+                                            </Card>
                                         </Col>
                                     </Row>
                                 </CardBody>
@@ -449,7 +491,8 @@ const ApplyAsHackerEmployerListingHelper = ({ userData, shiftCoreStyles, locatio
 }
 const mapStateToProps = (state) => {
     return {
-        userData: state.auth.data
+        userData: state.auth.data,
+        previous: _.has(state.applicationDetails, "applicationDetails") ? state.applicationDetails.applicationDetails : {}
     }
 }
-export default connect(mapStateToProps, { shiftCoreStyles })(withRouter(ApplyAsHackerEmployerListingHelper));
+export default connect(mapStateToProps, { shiftCoreStyles, saveApplicationDetailsProgress })(withRouter(ApplyAsHackerEmployerListingHelper));
