@@ -22,13 +22,14 @@ import { Modal } from 'react-responsive-modal';
 import { renderProfilePicVideo } from "./helpers/profilePicVideo/displayPicOrVideo.js";
 import moment from "moment";
 import { NotificationManager } from 'react-notifications';
+import { saveApplicationDetailsProgress } from "../../../../../../../redux/actions/hackers/applyToEmployerListing/applicationInfo.js";
 
 
 const Map = ReactMapboxGl({
     accessToken: process.env.REACT_APP_MAPBOX_TOKEN
 });
 
-const ViewIndividualJobListingHelper = ({ userData }) => {
+const ViewIndividualJobListingHelper = ({ userData, saveApplicationDetailsProgress }) => {
     
     const passedData = useLocation();
     const history = useHistory();
@@ -294,6 +295,7 @@ const ViewIndividualJobListingHelper = ({ userData }) => {
                                                         {userData.accountType === "hackers" ? <Button onClick={() => {
                                                             // apply logic (hackers ONLY)...
                                                             if (userData.accountType === "hackers") {
+                                                                saveApplicationDetailsProgress({});
                                                                 handleHackerApplyLogic(data);
                                                             } else {
                                                                 NotificationManager.error("You do NOT have proper account privileges, This option is ONLY availiable to 'hackers'.", "ONLY hacker's are allowed to use this link!", 4500);
@@ -588,7 +590,9 @@ const ViewIndividualJobListingHelper = ({ userData }) => {
     const handleHackerApplyLogic = (data) => {
         console.log("handleHackerApplyLogic clicked.");
 
-        history.push(`/hacker/apply/employer/listing/${data.uniqueId}`, { listingData: data });
+        setTimeout(() => {
+            history.push(`/hacker/apply/employer/listing/${data.uniqueId}`, { listingData: data });
+        },  500);
     }
     const renderHeaderConditionally = () => {
         
@@ -664,6 +668,7 @@ const ViewIndividualJobListingHelper = ({ userData }) => {
                                     {userData.accountType === "hackers" ? <Button style={{ width: "100%", fontWeight: "bold" }} className={"btn-square btn-air-success"} onClick={() => {
                                         // apply logic (hackers ONLY)...
                                         if (userData.accountType === "hackers") {
+                                            saveApplicationDetailsProgress({});
                                             handleHackerApplyLogic(data);
                                         } else {
                                             NotificationManager.error("You do NOT have proper account privileges, This option is ONLY availiable to 'hackers'.", "ONLY hacker's are allowed to use this link!", 4500);
@@ -736,6 +741,7 @@ const ViewIndividualJobListingHelper = ({ userData }) => {
                                     {userData.accountType === "hackers" ? <Button style={{ width: "100%", fontWeight: "bold" }} className={"btn-square btn-air-success"} onClick={() => {
                                         // apply logic (hackers ONLY)...
                                         if (userData.accountType === "hackers") {
+                                            saveApplicationDetailsProgress({});
                                             handleHackerApplyLogic(data);
                                         } else {
                                             NotificationManager.error("You do NOT have proper account privileges, This option is ONLY availiable to 'hackers'.", "ONLY hacker's are allowed to use this link!", 4500);
@@ -795,4 +801,4 @@ const mapStateToProps = (state) => {
         userData: state.auth.data
     }
 }
-export default connect(mapStateToProps, {})(ViewIndividualJobListingHelper);
+export default connect(mapStateToProps, { saveApplicationDetailsProgress })(ViewIndividualJobListingHelper);

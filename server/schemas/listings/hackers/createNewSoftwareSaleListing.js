@@ -24,6 +24,9 @@ const NewSoftwareForSaleListingCreate = new Schema({
     description: {
         type: String
     },
+    previouslyAppliedJobs: {
+        type: Array
+    },
     hashtags: {
         type: Array
     },

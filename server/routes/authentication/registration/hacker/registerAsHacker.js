@@ -38,7 +38,8 @@ router.post("/", async (req, res) => {
       followingHackers: [],
       followingCompanies: [],
       experiencePoints: 0,
-      rankLevel: 1
+      rankLevel: 1,
+      previouslyAppliedJobs: []
     }), password, async (err, user) => {
       if (err) {
 

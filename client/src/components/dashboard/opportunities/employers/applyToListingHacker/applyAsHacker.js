@@ -17,14 +17,20 @@ import MainHooksCustomHelpers from "./helpers/reactHookFormHelpers.js";
 import Tour from 'reactour';
 import LoadingBar from 'react-top-loading-bar';
 import { saveApplicationDetailsProgress } from "../../../../../redux/actions/hackers/applyToEmployerListing/applicationInfo.js";
+import { NotificationManager } from "react-notifications";
+import uuid from 'react-uuid';
+
 
 const { TimelineHelper, SheetPaneSubmittingDataHelper, HelperRadioButtons, renderMountedLogic, handleDeletionLink, handleLinkAddition, SheetDisplayFilesFileManagerHelper } = helpers;
 
+// react-hook-form helpers
 const urlEnteredLinkData = MainHooksCustomHelpers().urlEnteredLinkData;
 const coverLetterChecks = MainHooksCustomHelpers().coverLetterChecks;
 const messageToEmployerChecks = MainHooksCustomHelpers().messageToEmployerChecks;
 const physicalOrDigitalChecks = MainHooksCustomHelpers().physicalOrDigitalChecks;
 const approachToSuccessfullyHackCo = MainHooksCustomHelpers().approachToSuccessfullyHackCo;
+const participateInBettingWagers = MainHooksCustomHelpers().participateInBettingWagers;
+const tokenBidWagerAmount = MainHooksCustomHelpers().tokenBidWagerAmount;
 
 
 const tourStepsOptions = [
@@ -34,17 +40,23 @@ const tourStepsOptions = [
     }
 ];
 
+const participateInBettingWagersOptions = [
+    { label: "I'd like to PARTICIPATE! Sign me up...", value: "yes-participate", actual: true },
+    { label: "N0... - Don't Participate.", value: "dont-participate", actual: false }
+];
 
-const ApplyAsHackerEmployerListingHelper = ({ userData, shiftCoreStyles, location, saveApplicationDetailsProgress, previous }) => {
-    
+
+const ApplyAsHackerEmployerListingHelper = ({ previousFiles, userData, shiftCoreStyles, location, saveApplicationDetailsProgress, previous }) => {
     // ref's
     const physicalOrDigitalOrBothGeneratedRef = useRef(null);
+    const participateInBettingWagersRef = useRef(null);
     const scrollToTourWrapper = useRef(null);
     // get URL ID from string
     const { id } = useParams();
     // initialize state items...
     const [ alreadyAdded, setAlreadyAddedState ] = useState(null);
     const [ filesSheetOpen, setFileSheetOpenState ] = useState(false);
+    const [ showMore, setShowMoreState ] = useState(false);
     const [ linkInput, setLinkInput ] = useState(""); 
     const [ isTourOpen, setIsTourOpenState ] = useState(false);
     const [ disabledDays, setDisabledDaysState ] = useState([]);
@@ -59,7 +71,7 @@ const ApplyAsHackerEmployerListingHelper = ({ userData, shiftCoreStyles, locatio
     const [ datesReady, setDatesReady ] = useState(false);
     const [ selectedLinks, setSelectedLinks ] = useState([]);
 
-    const { register, handleSubmit, control, reset, getValues, setValue, setError, clearErrors, formState: { errors }} = useForm({
+    const { register, handleSubmit, control, reset, getValues, setValue, setError, clearErrors, watch, formState: { errors }} = useForm({
         mode: "onTouched",
         reValidateMode: "onBlur"
         // delayError: 500
@@ -68,16 +80,50 @@ const ApplyAsHackerEmployerListingHelper = ({ userData, shiftCoreStyles, locatio
     const gatheredValues = getValues();
 
     const handleDateSelection = (ranges) => {
-        // setDateRanges(ranges);
-        console.log("ranges", ranges);
+        const { startDate, endDate } = ranges.selection;
+
+        const datesAreOnSameDay = (first, second) => first.getFullYear() === second.getFullYear() && first.getMonth() === second.getMonth() && first.getDate() === second.getDate();
+
+        const gatherDayInfo = (date) => moment(date).format("MM-DD-YYYY");
+
+        if (datesAreOnSameDay(startDate, endDate)) {
+            const formattedDate = {
+                startDate,
+                endDate,
+                key: 'selection',
+                formattedStartDate: gatherDayInfo(startDate),
+                formattedEndDate: gatherDayInfo(endDate),
+                uniqueId: uuid()
+            }
+
+            if (_.has(gatheredValues, "selectedTestDates") && typeof gatheredValues.selectedTestDates !== "undefined") {
+                if (gatheredValues.selectedTestDates.length === 0) {
+                    // update state...
+                    setValue("selectedTestDates", [...gatheredValues.selectedTestDates, formattedDate], { shouldValidate: false });
+                    // clear related error data
+                    clearErrors(["selectedTestDates"]);
+                } else {
+                    if ((gatheredValues.selectedTestDates.filter(x => x.formattedStartDate === formattedDate.formattedStartDate)).length > 0) {
+                        NotificationManager.warning("You cannot select the SAME date TWICE - Please select UNIQUE dates when selecting various physical 'hack dates'...", "Date is ALREADY selected!", 4750);  
+                    } else {
+                        // update state...
+                        setValue("selectedTestDates", [...gatheredValues.selectedTestDates, formattedDate], { shouldValidate: false });
+                        // clear related error data
+                        clearErrors(["selectedTestDates"]);
+                    }
+                }
+            } 
+        }
     }
     // deconstruct redux-state items...
     const { username, firstName, lastName, registrationDate, completedJobs } = userData;
 
     // component mounted.
     useEffect(() => {
-        window.scrollTo(0, 0);
 
+        // set default unavailiable state - selectedTestDates
+        setValue("selectedTestDates", []);
+        // set global config obj's for api-requests
         const globalConfig = {
             config: {
                 params: {
@@ -127,8 +173,6 @@ const ApplyAsHackerEmployerListingHelper = ({ userData, shiftCoreStyles, locatio
     }
     // view more fields in PANE
     const viewRemainderOfIncludedFields = (alreadyIncludedArray) => {
-        console.log("alreadyIncludedArray arr... : ", alreadyIncludedArray);
-
         // already shown items *(HIGHLIGHT)*
         setAlreadyAddedState(alreadyIncludedArray);
         // shift "lock" styles to prevent scrolling and clicking
@@ -142,11 +186,6 @@ const ApplyAsHackerEmployerListingHelper = ({ userData, shiftCoreStyles, locatio
             // DISABLE body scroll entirely
             disableBodyScroll(target);
         },  500);
-    }
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-
-        setValue(name, value, { shouldValidate: true });
     }
     const showButtonOrNot = () => {
         if (!_.has(errors, "referenceLink") && !errors.referenceLink && typeof gatheredValues.referenceLink !== "undefined" && gatheredValues.referenceLink.length > 0) {
@@ -193,11 +232,119 @@ const ApplyAsHackerEmployerListingHelper = ({ userData, shiftCoreStyles, locatio
         setIsTourOpenState(false);
     }
     const onErrorMainForm = (errors, e) => {
-        console.log("errors : ", errors);
-        console.log("e : ", e);
+        console.log("errors : ", errors); // selectAttachments
+
+        if (_.has(previous, "files") && previous.files.length > 0) {
+            clearErrors(["selectAttachments"]);
+        } else {
+            setError("selectAttachments", {
+                type: "manual",
+                message: "You MUST select AT least ONE(1) attachments (CL, Resume, Image, etc...) before proceeding with the submission of this form",
+            });
+        }
+
+        if (!gatheredValues.selectedTestDates.length > 0) {
+            setError("selectedTestDates", {
+                type: "manual",
+                message: "You MUST select a calendar time to 'attempt' your 'physical' hack to try to infiltrate this employer's company. Select a date (one day MIN) to continue!",
+            });
+        } 
     }
-    const onFormSubmit = (values, valuesTwo) => {
-        console.log("values and valuesTwo", values, valuesTwo);
+
+    const onFormSubmit = (values) => {
+        console.log("values", values);
+        // deconstruct files from attached-files section-redux
+        const attachedFiles = previousFiles.applicationDetails.applicationDetails.files;
+        // deconstruct core information from bio-profile section
+        const { username, firstName, lastName, completedJobs, registrationDate, aboutMe, title, reviews, fullyVerified, points, yearsOfExperience } = currentUserData;
+        // deconstruct form-redux values on-submit
+        const { coverLetterText, messageToEmployer, participateInBettingProcess, physicalOrDigitalOrBoth, referenceLink, selectedTestDates, technicalApproachToHack } = values;
+
+        // currentUserData.every((item) => {
+            
+        // })
+
+        const myID = userData.uniqueId;
+
+        const finalResult = {
+            uniqueId: myID,
+            employerId: listingData.postedBy,
+            employerPostedJobId: listingData.uniqueId,
+            applicationData: {
+                attachedFiles,
+                coverLetterText, 
+                messageToEmployer, 
+                applicantId: userData.uniqueId,
+                responses: [],
+                hired: false,
+                applicantName: `${userData.firstName} ${userData.lastName}`,
+                likes: 0,
+                dislikes: 0,
+                applicantId: myID,
+                dateApplied: new Date(),
+                legibleDateApplied: moment(new Date()).format("MM/DD/YYYY hh:mm:ss a"),
+                participateInBettingProcess, 
+                physicalOrDigitalOrBoth, 
+                referenceLink, 
+                selectedTestDates, 
+                technicalApproachToHack, 
+                waggeredBidAmount: _.has(values, "waggeredBidAmount") ? values.waggeredBidAmount : undefined,
+                bettingOnSelfSelected: _.has(values, "waggeredBidAmount") ? true : false,
+                submittedUserData: {
+                    username, 
+                    firstName, 
+                    lastName, 
+                    completedJobs, 
+                    registrationDate, 
+                    aboutMe, 
+                    title, 
+                    reviews, 
+                    fullyVerified, 
+                    points, 
+                    yearsOfExperience 
+                }
+            }
+        };
+
+        // View ALL included fields...
+        const requiredKeys = ["username", "firstName", "lastName", "completedJobs", "registrationDate", "aboutMe", "title", "reviews", "fullyVerified", "points", "yearsOfExperience"];
+        // figure out length of requiredKeys     
+        const requiredLength = requiredKeys.length;
+        // run boolean check
+        const doesIncludeFailures = requiredKeys.map((key, i) => {
+            if (typeof currentUserData[key] !== "undefined") {
+                // includes!
+                return true;
+            } else {
+                // doesnt include & notify!
+                NotificationManager.warning(`You're missing a REQUIRED submission input field of '${key}' - please go to your bio/profile section and submit this key of '${key}' before proceeding!`, `You are MISSING a key/field of the value '${key}'...!`, 4750);
+                // return value to check at end for api-request running or not afterwards
+                return false;
+            }
+        })
+
+        if (doesIncludeFailures.includes(false)) {
+            // do nothing - NOT ready yet missing information
+
+            NotificationManager.error(`We experienced an ERROR while attempting to run our pre-upload checks & you're missing some required information...`, `MISSING data - Required BEFORE continuing!`, 4750);
+        } else {
+            // RUN FINAL REQUEST! all information is properly filled out...!
+
+            // SAVE-DATA api-request run!
+            axios.post(`${process.env.REACT_APP_BASE_URL}/apply/employer/listing/submit/live/data/last`, finalResult).then((res) => {
+                if (res.data.message === "Successfully applied to listing/employer & updated your 'hacker' account as well!") {
+                    console.log(res.data);
+
+                    NotificationManager.success("You've successfully applied to this employer's listing & we've notified them of your application!", "Successfully applied to gig/job!", 4500);
+                } else {
+                    console.log("Errorr :", res.data);
+
+                    NotificationManager.error(res.data.message, "An error occurred while attempting to apply to this listing!", 4500);
+                }
+            }).catch((err) => {
+                console.log(err);
+            })
+        }
     }
     const handleFinalSubmissionFiles = () => {
         // DISABLE clicking background
@@ -212,8 +359,7 @@ const ApplyAsHackerEmployerListingHelper = ({ userData, shiftCoreStyles, locatio
             disableBodyScroll(select);
         }, 450);
     }
-    // log values to debug
-    console.log("gatheredValues", gatheredValues, "errors", errors);
+    const watchSelectedTestDates = watch(["selectedTestDates"]);
     return (
         <Fragment>
             <LoadingBar
@@ -225,7 +371,7 @@ const ApplyAsHackerEmployerListingHelper = ({ userData, shiftCoreStyles, locatio
                 }}
             />
             <SheetPaneSubmittingDataHelper ready={ready} shiftCoreStyles={shiftCoreStyles} alreadyAdded={alreadyAdded} currentUserData={currentUserData} clearAllBodyScrollLocks={clearAllBodyScrollLocks} userData={userData} sheetIsOpen={sheetIsOpen} setSheetOpenState={setSheetOpenState} renderSentence={renderSentence} />
-            <SheetDisplayFilesFileManagerHelper previous={previous} saveApplicationDetailsProgress={saveApplicationDetailsProgress} setProgress={setProgress} filesSheetOpen={filesSheetOpen} setFileSheetOpenState={setFileSheetOpenState} shiftCoreStyles={shiftCoreStyles} clearAllBodyScrollLocks={clearAllBodyScrollLocks} />
+            <SheetDisplayFilesFileManagerHelper saveApplicationDetailsProgress={saveApplicationDetailsProgress} previousFiles={previousFiles} setProgress={setProgress} filesSheetOpen={filesSheetOpen} setFileSheetOpenState={setFileSheetOpenState} shiftCoreStyles={shiftCoreStyles} clearAllBodyScrollLocks={clearAllBodyScrollLocks} />
             <Breadcrumb passedClassname={"custom-breadcrumb-class"} parent={`Apply & Work To Earn ${process.env.REACT_APP_CRYPTO_TOKEN_NAME} to cashout for REAL ($$$-USD)`} title={"Review job requirements & details + apply to position/listing!"} />
             <Tour
                 steps={tourStepsOptions}
@@ -237,15 +383,23 @@ const ApplyAsHackerEmployerListingHelper = ({ userData, shiftCoreStyles, locatio
             <div className="absolute-position-bottom-right-fixed">
                 <Card className="redirect-fixed-bottom-right">
                     <Media className="p-20">
-                        <div className="radio radio-info mr-3">
-                            <Input checked={true} id="radio-redirect" type="radio" name="radio1" value="option1" />
-                            <Label for="radio-redirect"></Label>
-                        </div>
                         <Media className="media-body-customized-fixed" body>
-                            <h6 className="mt-0 mega-title-badge custom-mega-title-badge">Are you ready to submit your application?! <span className="badge badge-info pull-right digits custom-pull-right-digits">{"SHOW ME HOW TO SUBMIT APP!"}</span></h6>
-                            <p>Are you <strong>READY TO SUBMIT YOUR APPLICATION</strong> to this employer and submit your 'completed/filled-out' information? Click the button below to be directed to the <strong>'Submit Application'</strong> button to proceed forwards...</p>
-                            <hr />
-                            <div className="natural-sm-spacer" />
+                            {showMore === true ? <Fragment>
+                                <h6 className="mt-0 mega-title-badge custom-mega-title-badge">Are you ready to submit your application?! <span className="badge badge-info pull-right digits custom-pull-right-digits">{"SHOW ME HOW TO SUBMIT APP!"}</span></h6>
+                                <p>Are you <strong>READY TO SUBMIT YOUR APPLICATION</strong> to this employer and submit your 'completed/filled-out' information? Click the button below to be directed to the <strong>'Submit Application'</strong> button to proceed forwards...</p>
+                                <hr />
+                                <div className="natural-sm-spacer" />
+                            </Fragment> : null}
+                            <Row>
+                                <FormGroup className="m-t-15 custom-radio-ml">
+                                    <div className="checkbox checkbox-primary">
+                                        <Input onClick={() => {
+                                            setShowMoreState(!showMore);
+                                        }} checked={showMore === true ? true : false} id="checkbox-primary-show-more" type="checkbox" defaultChecked/>
+                                        <Label for="checkbox-primary-show-more">Show <strong style={{ textDecorationLine: "underline", color: "#a927f9" }}>{showMore === true ? "LESS" : "MORE"}</strong> helpful/related info...</Label>
+                                    </div>
+                                </FormGroup>
+                            </Row>
                             <Button onClick={handleDirectionChangeTour} style={{ width: "100%" }} className="btn-square btn-air-info" outline color="info-2x">Show me the 'submission' button!</Button>
                         </Media>
                     </Media>
@@ -317,6 +471,48 @@ const ApplyAsHackerEmployerListingHelper = ({ userData, shiftCoreStyles, locatio
                                                 />
                                                 {errors.physicalOrDigitalOrBoth ? <span className="span-tooltip">{errors.physicalOrDigitalOrBoth.message}</span> : null}
                                             </FormGroup>
+                                            <FormGroup>
+                                                <Label>{participateInBettingWagers.label}</Label>
+                                                <Controller
+                                                    control={control} 
+                                                    name={participateInBettingWagers.name}
+                                                    {...participateInBettingWagers.check(participateInBettingWagers.name, register)}
+                                                    render={({ field }) => (
+                                                        <Select
+                                                            {...field}
+                                                            autoBlur={true}
+                                                            defaultValue={null}
+                                                            ref={participateInBettingWagersRef}
+                                                            value={gatheredValues.participateInBettingProcess}
+                                                            placeholder={participateInBettingWagers.placeholder}
+                                                            onChange={(selectedOption) => {
+                                                                console.log("changed!!!!", selectedOption);
+
+                                                                setTimeout(() => {
+                                                                    // clear error after proper selection
+                                                                    if ((typeof selectedOption !== "undefined") && (Object.keys(selectedOption).length > 0)) {
+                                                                        // set selected value
+                                                                        setValue(participateInBettingWagers.name, selectedOption, { shouldValidate: false });
+                                                                        // clear relevant error
+                                                                        clearErrors(participateInBettingWagers.name);
+                                                                    } else {
+                                                                        // set error as nothing was selected (blank 'click-off' selection of selector)
+                                                                        setError(participateInBettingWagers.name, {
+                                                                            type: "manual",
+                                                                            message: "You haven't selected a 'betting/waggering participation status' yet however this is required before proceeding",
+                                                                        });
+                                                                    }
+                                                                }, 50);
+                                                            }}
+                                                            onMenuClose={() => {
+                                                                participateInBettingWagersRef.current.blur();
+                                                            }}
+                                                            options={participateInBettingWagersOptions}
+                                                        />
+                                                    )}
+                                                />
+                                                {errors.participateInBettingProcess ? <span className="span-tooltip">{errors.participateInBettingProcess.message}</span> : null}
+                                            </FormGroup>
                                         </Col>
                                         <Col md="6" lg="6" xl="6" sm="12">
                                             <FormGroup>
@@ -333,6 +529,13 @@ const ApplyAsHackerEmployerListingHelper = ({ userData, shiftCoreStyles, locatio
                                                 }} name={approachToSuccessfullyHackCo.name} type="textarea" className="form-control input-air-primary" rows={"3"} />
                                                 {errors.technicalApproachToHack ? <span className="span-tooltip">{errors.technicalApproachToHack.message}</span> : null}
                                             </FormGroup>
+                                            {_.has(gatheredValues, "participateInBettingProcess") && typeof gatheredValues.participateInBettingProcess !== "undefined" && gatheredValues.participateInBettingProcess.value === "yes-participate" ? <FormGroup>
+                                                <Label className="heavy-label">{tokenBidWagerAmount.label}</Label>
+                                                <Input {...tokenBidWagerAmount.check(setError, register, clearErrors, setValue, "waggeredBidAmount")} value={gatheredValues.waggeredBidAmount} placeholder={tokenBidWagerAmount.placeholder} onChange={(e) => {
+                                                    return tokenBidWagerAmount.onChange(e, "waggeredBidAmount", setValue);
+                                                }} name={tokenBidWagerAmount.name} type="number" className="form-control input-air-primary" pattern={/\d+/g} />
+                                                {errors.waggeredBidAmount ? <span className="span-tooltip">{errors.waggeredBidAmount.message}</span> : null}
+                                            </FormGroup> : null}
                                         </Col>
                                     </Row>
                                     <Row>
@@ -342,6 +545,7 @@ const ApplyAsHackerEmployerListingHelper = ({ userData, shiftCoreStyles, locatio
                                                     <h5><strong>Attachments</strong> to be <strong>sent</strong> to the employer of this listing</h5>
                                                     <p style={{ paddingTop: "7.5px" }}>These attachments can be anything from a "Cover Letter" or "Resume" & these files will be sent <strong>directly</strong> to the employer for consideration of your application for this listing or job/gig.</p>
                                                 </CardHeader>
+                                                {errors.selectAttachments ? <span className="span-tooltip">{errors.selectAttachments.message}</span> : null}
                                                 <CardBody>
                                                     <Button style={{ width: "100%" }} className={"btn-square btn-air-success"} onClick={() => {
                                                         // open pane slider up from bottom
@@ -377,7 +581,7 @@ const ApplyAsHackerEmployerListingHelper = ({ userData, shiftCoreStyles, locatio
                                             <h5 className="mb-1 listitem-header-custom">{"First Name & Last Name (Together)"}</h5><small>{"Will be submitted to employer"}</small>
                                             </div>
                                             <hr />
-                                            {renderSentence("fullName", "Full Name", `${firstName} ${lastName}`)}
+                                            {renderSentence("firstName" || "lastName", "Full Name", `${firstName} ${lastName}`)}
                                         </ListGroupItem>
                                         <ListGroupItem className="list-group-item-action flex-column align-items-start" >
                                             <div className="d-flex w-100 justify-content-between">
@@ -395,7 +599,6 @@ const ApplyAsHackerEmployerListingHelper = ({ userData, shiftCoreStyles, locatio
                                         </ListGroupItem>
                                         <ListGroupItem className="list-group-item-action flex-column align-items-start" >
                                             <Button style={{ width: "100%" }} className={"btn-square btn-air-info"} onClick={() => {
-                                                // View ALL included fields...
                                                 viewRemainderOfIncludedFields(["username", "fullName", "registrationDate", "completedJobs"]);
                                             }} outline color="info-2x">View all included fields (including above mentioned)</Button>
                                         </ListGroupItem>
@@ -437,22 +640,47 @@ const ApplyAsHackerEmployerListingHelper = ({ userData, shiftCoreStyles, locatio
                                                 </div>
                                             );
                                         })}
-                                        <Label className="heavy-label">Available dates to select (Physical 'Hack'ing Dates)</Label>
-                                        {datesReady === true ? <DateRangePicker
-                                            ranges={dateRanges}
-                                            onChange={handleDateSelection}
-                                            // onPreviewChange={(value1, value2) => {
-                                            //     console.log(value1, value2);
-                                            // }}
-                                            minDate={new Date()}
-                                            // go back MAX 2 WEEKS and start from there
-                                            // minDate={new Date(new Date.getTime() - (dayInMilli * 14))}
-                                            disabledDates={disabledDays}
-                                            scroll={{ enabled: true }}
-                                            direction={"horizontal"}
-                                            // showMonthAndYearPickers={true}
-                                            rangeColors={["#f73164", "#a927f9", "#f73164", "#a927f9", "#f73164", "#a927f9"]}
-                                        /> : null}
+                                        <Col sm="12" md="12" lg="12" xl="12">
+                                            <Label className="heavy-label">Available dates to select (Physical 'Hack'ing Dates - you may need to click a date TWICE as this calendar can be finicky)</Label>
+                                            {datesReady === true ? <DateRangePicker
+                                                ranges={dateRanges}
+                                                onChange={handleDateSelection}
+                                                onDatesChange={() => console.log("onDatesChange")}
+                                                // minDate={new Date()}
+                                                shownDate={new Date()}
+                                                className={"custom-date-range-picker"}
+                                                showMonthAndYearPickers={false}
+                                                disabledDates={disabledDays}
+                                                staticRanges={[]}
+                                                direction={"horizontal"}
+                                                showMonthArrow={true}
+                                                months={2}
+                                                showDateDisplay={false}
+                                                inputRanges={[]}
+                                                scroll={{ enabled: true }}
+                                                rangeColors={["#f73164", "#a927f9", "#f73164", "#a927f9", "#f73164", "#a927f9"]}
+                                            /> : null}
+                                        </Col>
+                                        <div className="natural-sm-spacer" />
+                                        {errors.selectedTestDates ? <span className="span-tooltip">{errors.selectedTestDates.message}</span> : null}
+                                        <Col style={{ marginTop: "17.5px" }} sm="12" md="12" lg="12" xl="12">
+                                            {typeof gatheredValues.selectedTestDates !== "undefined" && gatheredValues.selectedTestDates.length > 0 ? <Label className="heavy-label"><strong>Currently</strong> selected dates to apply "physical" hacks/hacking (<strong>CLICK DATE</strong> to disregard selected date)</Label> : null}
+                                            <ListGroup className="listgroup-mapped-dates-wrapper">
+                                                {typeof gatheredValues.selectedTestDates !== "undefined" && gatheredValues.selectedTestDates.length > 0 ? gatheredValues.selectedTestDates.map((date, idx) => {
+                                                    return <ListGroupItem key={idx} style={{ fontWeight: "bold" }} className="list-group-item-action list-item-dates-mapped" onClick={() => {
+                                                        const filtered = gatheredValues.selectedTestDates.filter((dateee, idxxxx) => {
+                                                            if (dateee.uniqueId !== date.uniqueId) {
+                                                                return true;
+                                                            }
+                                                        })
+                                                        
+                                                        console.log("filtered", filtered);
+
+                                                        setValue("selectedTestDates", filtered, { shouldValidate: false });
+                                                    }} active={idx % 2 === 0 ? true : false}>You've selected a date of...: {moment(date.startDate).format("MM/DD/YYYY")}</ListGroupItem>;
+                                                }) : null}
+                                            </ListGroup>
+                                        </Col>
                                     </Form>
                                 </CardBody>
                             </Card>
@@ -492,6 +720,19 @@ const ApplyAsHackerEmployerListingHelper = ({ userData, shiftCoreStyles, locatio
 const mapStateToProps = (state) => {
     return {
         userData: state.auth.data,
+        previousFiles: _.has(state.applicationDetails, "applicationDetails") && _.has(state.applicationDetails.applicationDetails, "files") ? {
+            applicationDetails: {
+                applicationDetails: {
+                    files: state.applicationDetails.applicationDetails.files
+                }
+            }
+        } : {
+            applicationDetails: {
+                applicationDetails: {
+                    files: []
+                }
+            }
+        },
         previous: _.has(state.applicationDetails, "applicationDetails") ? state.applicationDetails.applicationDetails : {}
     }
 }

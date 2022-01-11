@@ -1,7 +1,6 @@
 import React, { Fragment} from 'react';
 import axios from "axios";
 import { NotificationManager } from "react-notifications";
-import { confirmAlert } from 'react-confirm-alert';
 import { Row, Col, Card, CardBody, Button, CardHeader, ButtonGroup } from 'reactstrap';
 
 
@@ -131,7 +130,7 @@ const closePopoverDynamic = (i, setPopoverStates) => {
     });
 }
 // UPLOAD file via api-call to AWS-S3
-const handleFileUploadAnyType = (onSubmit, setMetaFileData, setFileReadyStatus, setCurrentUploadFileStatus, setMyFile, currentFileSelectedUpload, metaFileData, setProgress, setChecked, checked) => {
+const handleFileUploadAnyType = (onSubmit, setMetaFileData, setFileReadyStatus, setCurrentUploadFileStatus, setMyFile, currentFileSelectedUpload, metaFileData, setProgress, setChecked, checked, saveApplicationDetailsProgress, previousFiles) => {
     // upload file to aws S3
     const data = new FormData();
 
@@ -149,6 +148,10 @@ const handleFileUploadAnyType = (onSubmit, setMetaFileData, setFileReadyStatus, 
         }
     };
 
+    console.log("previousFiles API-REQUEST : ", previousFiles);
+
+    const previouslySubmitted = previousFiles.applicationDetails.applicationDetails.files;
+
     axios.post(`${process.env.REACT_APP_BASE_URL}/upload/misc/file/softare/listing/sale`, data, config).then((res) => {
         if (res.data.message === "Successfully uploaded file!") {
             console.log(res.data);
@@ -156,8 +159,8 @@ const handleFileUploadAnyType = (onSubmit, setMetaFileData, setFileReadyStatus, 
             const { file } = res.data;
 
             // update local file array state
-            setMyFile(prevState => {
-                return [...prevState, {
+            saveApplicationDetailsProgress({
+                files: [...previouslySubmitted, {
                     ...file,
                     icon: "fa fa-file",
                     customType: checked === true ? "allfiles" : calculateFileTypeSavedUploadedAlready(file.type)
@@ -192,11 +195,6 @@ const handleFilesFinalSubmission = (files, previous, saveApplicationDetailsProgr
     shiftCoreStyles(false); 
     // clear body locks from open pane
     clearAllBodyScrollLocks();
-    // save redux logic
-    saveApplicationDetailsProgress({
-        ...previous,
-        files
-    });
     // notifiy of success
     NotificationManager.success(`You've successfully 'saved' your uploaded files/folders - continue onwards with your application and good luck!`, 'Successfully uupdated/uploaded files & folders.', 4500);
     // close popover then MAIN pane

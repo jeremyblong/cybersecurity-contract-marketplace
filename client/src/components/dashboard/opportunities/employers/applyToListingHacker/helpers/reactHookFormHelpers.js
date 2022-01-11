@@ -185,6 +185,60 @@ const MainHooksCustomHelpers = () => {
         name: "physicalOrDigitalOrBoth",
         label: "Account Type (Digital/Physical-hack type)"
     }
+    const participateInBettingWagers = {
+        check: (name, register) => {
+            return (
+                {...register(name, { required: {
+                    value: true,
+                    message: "You must select a value/option (participate in betting OR not) before proceeding"
+                }})}
+            );
+        },
+        placeholder: "Select whether or not you'd like to participate in betting/gambling...",
+        name: "participateInBettingProcess",
+        label: "Would you like to participate in 'betting/waggering' on yourself to WIN more money IF you win the 'hack' or listing competition (WINNER selected by employer at end)"
+    }
+    const tokenBidWagerAmount = {
+        check: (setError, register, clearErrors, setValue, name) => {
+            return (
+                {...register(name, { required: {
+                    value: true,
+                    message: `You MUST wager anywhere from 5-100 ${process.env.REACT_APP_CRYPTO_TOKEN_NAME} IF bidding is ENABLED (participate input...)`
+                }, min: {
+                    value: 5,
+                    message: `You MUST wager/bid AT-LEAST 5 ${process.env.REACT_APP_CRYPTO_TOKEN_NAME}`
+                }, pattern: /\d+/g, max: {
+                    value: 100,
+                    message: `You may ONLY wager/bid UP-TO 100 ${process.env.REACT_APP_CRYPTO_TOKEN_NAME}`
+                }, onBlur: (e) => {
+                    // deconstruct actual value
+                    const value = e.target.value;
+                    // check if both min/max values met
+                    if ((value >= 5) && (value <= 100)) {
+                        // clear error
+                        clearErrors(name);
+                    } else {
+                        // set error
+                        setTimeout(() => {
+                            setError(name, {
+                                type: "manual",
+                                message: `You MUST wager anywhere from 5-100 ${process.env.REACT_APP_CRYPTO_TOKEN_NAME} IF bidding is ENABLED (participate input...) as well as entering ONLY NUMERIC charactors!`,
+                            });
+                        }, 50);
+                    }
+                }})}
+            );
+        },
+        onChange: (e, name, setValue) => {
+            // deconstruct actual value
+            const value = e.target.value;
+
+            setValue(name, value, { shouldValidate: true })
+        },
+        label: `Enter how many ${process.env.REACT_APP_CRYPTO_TOKEN_NAME} you'd like to wager/bid that YOU will WIN the competition & are selected as the 'winner' of this employer listing`,
+        name: "waggeredBidAmount",
+        placeholder: `Enter how many ${process.env.REACT_APP_CRYPTO_TOKEN_NAME} you'd like to wager/bet (that you WIN)`
+    }
     const approachToSuccessfullyHackCo = {
         check: (setError, register, clearErrors, name) => {
             return (
@@ -235,7 +289,9 @@ const MainHooksCustomHelpers = () => {
         coverLetterChecks,
         messageToEmployerChecks,
         physicalOrDigitalChecks,
-        approachToSuccessfullyHackCo
+        participateInBettingWagers,
+        approachToSuccessfullyHackCo,
+        tokenBidWagerAmount
     }
 }
 

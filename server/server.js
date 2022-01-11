@@ -117,6 +117,7 @@ app.use("/gather/core/anonymous/user/data", require("./routes/shared/general/use
 app.use("/gather/random/employer/accounts", require("./routes/employers/gatherRandomEmployerAccounts/gatherRandomAccounts.js"));
 app.use("/gather/random/hackers/accounts", require("./routes/hackers/gatherRandomHackerAccounts/gatherRandomAccounts.js"));
 app.use("/gather/listing/all/info", require("./routes/employers/employerListings/gatherListings/visibility/general/gatherIndividualSingularListing.js"));
+app.use("/apply/employer/listing/submit/live/data/last", require("./routes/hackers/employerListings/applyToListing/applyToListingFinalStage.js"));
 
 // ~ webhook logic STARTS here ~
 app.use("/passbase/webhook", require("./webhooks/passbase/webhook.js"));

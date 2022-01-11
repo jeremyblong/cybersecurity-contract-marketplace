@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect, useRef } from 'react';
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
-import { Edit, Video, Image, Activity, Home, Folder, Clock, Star, AlertCircle, Trash2, Database, Grid, Upload, PlusSquare } from 'react-feather';
+import { Edit, Folder, Clock, Star, Database, Upload } from 'react-feather';
 import 'react-vertical-timeline-component/style.min.css';
 import { Link, useHistory } from "react-router-dom";
 import moment from "moment";
@@ -12,7 +12,7 @@ import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import axios from "axios";
 import uuid from 'react-uuid';
 import errorImg from '../../../../../../assets/images/search-not-found.png';
-import { Hometxt, All, Recent, Starred, Recovery, Deleteds, PricingPlan, Storage } from '../../../../../../constant';
+import { Storage } from '../../../../../../constant';
 import Dropzone from 'react-dropzone-uploader';
 import FileViewer from 'react-file-viewer';
 import { NotificationManager } from "react-notifications";
@@ -531,11 +531,10 @@ const renderMountedLogic = (globalConfig, setPhysicalOrDigitalHackOptionsState, 
                         for (let d = new Date(date.startDate); d <= new Date(date.endDate); d.setDate(d.getDate() + 1)) {
                             const startOfDay = moment(new Date(d)).startOf('day').toString()
 
-                            if (!mappedSelectedDates.includes(startOfDay)) {
+                            if (!mappedSelectedDates.includes(startOfDay) && !moment(startOfDay).isBefore(new Date())) {
                                 mappedSelectedDates.push(startOfDay);
                             } 
                         }
-
                         if ((newDateArray.length - 1) === index) {
                             for (let d = minDate; d <= new Date(new Date(maxedDate).setDate(d.getDate() + 1)); d.setDate(d.getDate() + 1)) {
                                 const formatedLoopItem = moment(new Date(d)).startOf('day').toString();
@@ -597,7 +596,7 @@ const renderMountedLogic = (globalConfig, setPhysicalOrDigitalHackOptionsState, 
 
 const { handleFileDeletionUploadedFiles, handleFilesFinalSubmission, handleDotsClickExpansion, calculateFileType, bytesToSize, handleFileUploadAnyType, closePopoverDynamic, calculateWhatToShow } = sheetDisplayHelperFunctions;
 
-const SheetDisplayFilesFileManagerHelper = ({ saveApplicationDetailsProgress, previous, setProgress, filesSheetOpen, setFileSheetOpenState, shiftCoreStyles, clearAllBodyScrollLocks }) => {
+const SheetDisplayFilesFileManagerHelper = ({ previousFiles, saveApplicationDetailsProgress, previous, setProgress, filesSheetOpen, setFileSheetOpenState, shiftCoreStyles, clearAllBodyScrollLocks }) => {
 
     // create history obj for redirects
     const history = useHistory();
@@ -655,8 +654,10 @@ const SheetDisplayFilesFileManagerHelper = ({ saveApplicationDetailsProgress, pr
       setSearchTerm(event.target.value)
     };
     const handleFileChangeType = (file, closePopoverDynamic, i, setMyFile, type) => {
-        setMyFile(prevState => {
-            return prevState.map((item, idx) => {
+        // deconstruct files
+        const previous = previousFiles.applicationDetails.applicationDetails.files;
+        saveApplicationDetailsProgress({
+            files: previous.map((item, idx) => {
                 if (item.link === file.link) {
                     const duplicated = {...file};
                     duplicated["customType"] = type;
@@ -668,14 +669,15 @@ const SheetDisplayFilesFileManagerHelper = ({ saveApplicationDetailsProgress, pr
         });
         closePopoverDynamic(i, setPopoverStates);
     }
+    console.log("PREV", previousFiles);
     // eslint-disable-next-line
-    const filelist = myfile.filter((data) => {
-            if(searchTerm == null) {
-                return data
-            } else if(data.name.toLowerCase().includes(searchTerm.toLowerCase())) {
-                return data
-            }
-        }).map((file, i) => {
+    const filelist = previousFiles.applicationDetails.applicationDetails.files.filter((data) => {
+        if(searchTerm == null) {
+            return data
+        } else if(data.name.toLowerCase().includes(searchTerm.toLowerCase())) {
+            return data
+        }
+    }).map((file, i) => {
         if (currentType === "allfiles") {
             return (
                 <li className="file-box" key={i}>
@@ -858,18 +860,6 @@ const SheetDisplayFilesFileManagerHelper = ({ saveApplicationDetailsProgress, pr
             };
         }
     });
-    const handleFinalSubmissionFiles = (filesSheetOpen, setFileSheetOpenState, shiftCoreStyles, clearAllBodyScrollLocks) => {
-        console.log("ran/clicked.");
-        // save uploads to redux state
-
-
-        // allow background clicking again
-        shiftCoreStyles(false);
-        // close modal
-        setFileSheetOpenState(false);
-        // clear body-scroll locks
-        clearAllBodyScrollLocks();
-    }
     // DROPZONE Helpers
     const handleSubmit = (files, allFiles) => {
         allFiles.forEach(f => f.remove());
@@ -883,6 +873,7 @@ const SheetDisplayFilesFileManagerHelper = ({ saveApplicationDetailsProgress, pr
                     style={{ display: 'none' }}
                     type={"file"}
                     accept={accept}
+                    maxSizeBytes={100000000}
                     multiple={false}
                     className={"custom-dropzone-input-actual-input"}
                     onChange={e => {
@@ -919,7 +910,7 @@ const SheetDisplayFilesFileManagerHelper = ({ saveApplicationDetailsProgress, pr
     
                             const runSubmit = data.onSubmit;
     
-                            handleFileUploadAnyType(runSubmit, setMetaFileData, setFileReadyStatus, setCurrentUploadFileStatus, setMyFile, currentFileSelectedUpload, metaFileData, setProgress, setChecked, checked);
+                            handleFileUploadAnyType(runSubmit, setMetaFileData, setFileReadyStatus, setCurrentUploadFileStatus, setMyFile, currentFileSelectedUpload, metaFileData, setProgress, setChecked, checked, saveApplicationDetailsProgress, previousFiles);
                         }} className="btn-air-secondary" color="secondary" size="md">Submit & Upload Preview/Snapshot Images!</Button>
                     </Fragment>
                 );
@@ -960,6 +951,7 @@ const SheetDisplayFilesFileManagerHelper = ({ saveApplicationDetailsProgress, pr
         setCurrentType(type);
     }
     const calculateCurrentType = (type) => {
+        console.log("currentType", currentType, type);
         switch (type) {
             case "allfiles":
                 return "All Files (Everything)";
@@ -980,6 +972,40 @@ const SheetDisplayFilesFileManagerHelper = ({ saveApplicationDetailsProgress, pr
                 break;
         }
     }
+    const renderConditionalButtonAndPopover = (list) => {
+        if (list.length > 0) {
+            return (
+                <Fragment>
+                    <Button id={"finalSubmissionID"} style={{ width: "100%", marginLeft: "37.5px" }} outline color={"success-2x"} className="btn-square ml-1" onClick={() => {
+                        setSubmissionPopoverState(true);
+                    }}><div className="icon-button-attached"><Upload /></div>{"Upload Files & Folder's Containing Content"}</Button>
+                    <Popover placement="bottom" isOpen={submissionPopover} target={"finalSubmissionID"} toggle={() => {
+                        setSubmissionPopoverState(false);
+                    }}>
+                        <PopoverHeader>Are you sure you'd like to submit your "current uploaded" files?! <div className="popover-cancel-container" onClick={() => {
+                            setSubmissionPopoverState(false);
+                        }}><img src={require("../../../../../../assets/icons/close-64.png")} className="small-close-popover-icon" /></div></PopoverHeader>
+                        <PopoverBody>
+                            <p>You're about to save your "current" uploads to your previously filled out listing information on the main page of this page. We will save this data so when you finally "submit" your final/actual application to this employer - this data will also be <strong>automatically included</strong>. Click "Submit!" to submit your selected files & folders...</p>
+                            <hr />
+                            <Button style={{ width: "100%" }} outline color={"info-2x"} className="btn-square" onClick={() => {
+                                handleFilesFinalSubmission(myfile, previous, saveApplicationDetailsProgress, setSubmissionPopoverState, shiftCoreStyles, clearAllBodyScrollLocks, setFileSheetOpenState);
+                            }}><strong style={{ textDecorationLine: "underline" }}>{"Upload!"}</strong></Button>
+                        </PopoverBody>
+                    </Popover>
+                </Fragment>
+            );
+        } else {
+            return <Button id={"finalSubmissionID"} style={{ width: "100%", marginLeft: "37.5px" }} outline color={"danger-2x"} className="btn-square-danger ml-1" onClick={() => {
+                // clear locks related to pane
+                shiftCoreStyles(false); 
+                // clear body locks from open pane
+                clearAllBodyScrollLocks();
+                // set file sheet closed
+                setFileSheetOpenState(false);
+            }}><div className="icon-button-attached"><Upload /></div>{"Upload a file before exiting/closing..."}</Button>;
+        }
+    }
     // return sheet data (pane slide up);
     return (
         <div id="sheet-container">
@@ -987,16 +1013,11 @@ const SheetDisplayFilesFileManagerHelper = ({ saveApplicationDetailsProgress, pr
                 <Sheet.Container className="sheetcontainer">
                         <Sheet.Header className="sheetheader">
                             <Row className="custom-sm-margin">
-                                <Col sm="12" md="6" lg="6" xl="6">
-                                    <Button onClick={() => {
-                                        // run submission logic
-                                        handleFinalSubmissionFiles(filesSheetOpen, setFileSheetOpenState, shiftCoreStyles, clearAllBodyScrollLocks);
-                                    }} className="btn-square stretch-and-space-btn-left" active color="primary" size="md"><strong>Close/Exit File(s) Manager</strong> Pane & Go Back To Listing</Button>
-                                </Col>
-                                <Col sm="12" md="6" lg="6" xl="6">
-                                    <Button onClick={() => {
+                                <Col sm="12" md="12" lg="12" xl="12">
+                                    {/* <Button onClick={() => {
                                         closeModalPaneBottom();
-                                    }} className="btn-square stretch-and-space-btn-right" active color="secondary" size="md">Cancel/Close</Button>
+                                    }} className="btn-square stretch-and-space-btn-right" active color="secondary" size="md">Cancel/Close</Button> */}
+                                    {renderConditionalButtonAndPopover(filelist)}
                                 </Col>
                             </Row>
                         </Sheet.Header>
@@ -1019,12 +1040,12 @@ const SheetDisplayFilesFileManagerHelper = ({ saveApplicationDetailsProgress, pr
                                                     <div className="btn btn-light"><Clock />Resume/Cover-Letter Related</div>
                                                 </li>
                                                 <li onClick={() => {
-                                                    onFolderRegionClicked("videos-others");
+                                                    onFolderRegionClicked("videos-only");
                                                 }}>
                                                     <div className="btn btn-light"><Star />Video Related ONLY</div>
                                                 </li>
                                                 <li onClick={() => {
-                                                    onFolderRegionClicked("images-others");
+                                                    onFolderRegionClicked("images-only");
                                                 }}>
                                                     <div className="btn btn-light"><Star />Image Related ONLY</div>
                                                 </li>
@@ -1082,39 +1103,25 @@ const SheetDisplayFilesFileManagerHelper = ({ saveApplicationDetailsProgress, pr
                                         <Card>
                                             <CardHeader>
                                             <div className="media">
-                                                <Form className="form-inline">
-                                                <FormGroup>
-                                                    <i className="fa fa-search"></i>
-                                                    <Input
-                                                    className="form-control-plaintext"
-                                                    type="text"
-                                                    value={searchTerm}
-                                                    onChange={(e) => handleChange(e)}
-                                                    placeholder="Search..." />
-                                                </FormGroup>
+                                                <Form className="form-inline top-bar-input-customized">
+                                                    <FormGroup className="formgroup-custom-input-wrapper">
+                                                        <i className="fa fa-search"></i>
+                                                        <Input
+                                                            className="form-control-plaintext"
+                                                            type="text"
+                                                            style={{ minWidth: "60vw", width: "60vw" }}
+                                                            value={searchTerm}
+                                                            onChange={(e) => handleChange(e)}
+                                                            placeholder="Search through uploaded file's..."
+                                                        />
+                                                    </FormGroup>
                                                 </Form>
                                                 <div className="media-body text-right">
-                                                    <Button id={"finalSubmissionID"} style={{ width: "100%", marginLeft: "37.5px" }} outline color={"success-2x"} className="btn-square ml-1" onClick={() => {
-                                                        setSubmissionPopoverState(true);
-                                                    }}><Upload />{"Upload Files & Folder's Containing Content"}</Button>
-                                                    <Popover placement="bottom" isOpen={submissionPopover} target={"finalSubmissionID"} toggle={() => {
-                                                        setSubmissionPopoverState(false);
-                                                    }}>
-                                                        <PopoverHeader>Are you sure you'd like to submit your "current uploaded" files?! <div className="popover-cancel-container" onClick={() => {
-                                                            setSubmissionPopoverState(false);
-                                                        }}><img src={require("../../../../../../assets/icons/close-64.png")} className="small-close-popover-icon" /></div></PopoverHeader>
-                                                        <PopoverBody>
-                                                            <p>You're about to save your "current" uploads to your previously filled out listing information on the main page of this page. We will save this data so when you finally "submit" your final/actual application to this employer - this data will also be <strong>automatically included</strong>. Click "Submit!" to submit your selected files & folders...</p>
-                                                            <hr />
-                                                            <Button style={{ width: "100%" }} outline color={"info-2x"} className="btn-square" onClick={() => {
-                                                                handleFilesFinalSubmission(myfile, previous, saveApplicationDetailsProgress, setSubmissionPopoverState, shiftCoreStyles, clearAllBodyScrollLocks, setFileSheetOpenState);
-                                                            }}><strong style={{ textDecorationLine: "underline" }}>{"Upload!"}</strong></Button>
-                                                        </PopoverBody>
-                                                    </Popover>
+                                                    {/* {renderConditionalButtonAndPopover(filelist)} */}
                                                 </div>
                                             </div>
                                             </CardHeader>
-                                            {filelist.length > 0 ?
+                                            {filelist !== null ?
 
                                             <CardBody className="file-manager">
                                                 <h4 className="mb-3">{calculateCurrentType(currentType)}</h4>
