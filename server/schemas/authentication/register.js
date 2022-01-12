@@ -81,6 +81,9 @@ const UserSchema =  new Schema({
     },
     rankLevel: {
         type: Number
+    },
+    previouslyAppliedJobs: {
+        type: Array
     }
 });
 

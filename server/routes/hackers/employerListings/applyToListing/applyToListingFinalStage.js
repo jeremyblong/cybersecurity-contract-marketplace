@@ -1,6 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const { Connection } = require("../../../../mongoUtil.js");
+const { sendEmailToEmployerNotifyingOfApplicantTemplate } = require("./emailHelpers/emailFormattedHTML.js");
+const transporter = require("../../../../controllers/nodemailer/transportConfig.js");
+const _ = require("lodash");
+const config = require("config");
 
 router.post("/", (req, resppppp, next) => {
     // deconstruct passed data from front-end
@@ -21,17 +25,19 @@ router.post("/", (req, resppppp, next) => {
                 reject();
             } else {
                 console.log("result - success ONE... : ", result);
+
+                const employerEmail = result.value.email;
     
-                resolve();
+                resolve(employerEmail);
             }
         });
     });
     // UPDATE HACKER INFORMATION NOW...
-    editBothCollectionsPromise.then(() => {
+    editBothCollectionsPromise.then((employerEmail) => {
         // update HACKER information
         hackerCollection.findOneAndUpdate({ uniqueId }, { $push: {
             previouslyAppliedJobs: applicationData 
-        }}, (err, result) => {
+        }}, async (err, result) => {
             if (err) {
                 // IF FAILED update... - remove saved data from first collection update in "employers" account area
                 console.log("Err TWO", err);
@@ -55,11 +61,100 @@ router.post("/", (req, resppppp, next) => {
                 });
             } else {
                 console.log("result - success TWO... : ", result);
-                // return json to client
-                resppppp.json({
-                    message: "Successfully applied to listing/employer & updated your 'hacker' account as well!",
-                    applied: result
-                })
+
+                const hackerInfo = result.value;
+
+                const gatherIfPictureExists = _.has(hackerInfo, "profilePicsVideos") && hackerInfo.profilePicsVideos.length > 0 ? hackerInfo.profilePicsVideos : null;
+                
+                if (gatherIfPictureExists !== null) {
+                    const reversed = gatherIfPictureExists.reverse();
+
+                    for (let index = 0; index < reversed.length; index++) {
+                        const file = reversed[index];
+                        
+                        if (!file.type.includes("video")) {
+                            // FILE IS NOT a video file --- display and break loop
+
+                            // send email to notifiy employer of NEW applicant/application submitted
+                            const mailOptions = sendEmailToEmployerNotifyingOfApplicantTemplate(employerEmail, `${hackerInfo.firstName} ${hackerInfo.lastName}`, `${config.get("assetLink")}/${file.link}`); // placeholder.png
+                            // send email finally
+                            await transporter.sendMail(mailOptions, (error, info) => {
+                                if (error) {
+                                    // error
+                                    console.log("error!", error);
+
+                                    respppppppp.status(400).json({
+                                        message: "Error sending alert email!",
+                                        err: error
+                                    })
+                                } else {
+                                    // success
+                                    console.log("successfully sent email ! : ", info);
+                        
+                                    // return json to client
+                                    resppppp.status(200).json({
+                                        message: "Successfully applied to listing/employer & updated your 'hacker' account as well!",
+                                        applied: result
+                                    })
+                                }
+                            });
+
+                            break;
+                        }
+                        // check if on last iteration - already ran image check --- display "stock" photo
+                        if ((reversed.length - 1) === index) {
+                            // stock photo display
+                            
+                            // send email to notifiy employer of NEW applicant/application submitted
+                            const mailOptions = sendEmailToEmployerNotifyingOfApplicantTemplate(employerEmail, `${hackerInfo.firstName} ${hackerInfo.lastName}`, `${config.get("assetLink")}/placeholder.png`);
+                            // send email finally
+                            await transporter.sendMail(mailOptions, (error, info) => {
+                                if (error) {
+                                    // error
+                                    console.log("error!", error);
+
+                                    respppppppp.status(400).json({
+                                        message: "Error sending alert email!",
+                                        err: error
+                                    })
+                                } else {
+                                    // success
+                                    console.log("successfully sent email ! : ", info);
+                        
+                                    // return json to client
+                                    resppppp.status(200).json({
+                                        message: "Successfully applied to listing/employer & updated your 'hacker' account as well!",
+                                        applied: result
+                                    })
+                                }
+                            });
+                        }
+                    }
+                } else {
+                    // send email to notifiy employer of NEW applicant/application submitted
+                    const mailOptions = sendEmailToEmployerNotifyingOfApplicantTemplate(employerEmail, `${hackerInfo.firstName} ${hackerInfo.lastName}`, `${config.get("assetLink")}/placeholder.png`);
+                    // send email finally
+                    await transporter.sendMail(mailOptions, (error, info) => {
+                        if (error) {
+                            // error
+                            console.log("error!", error);
+
+                            respppppppp.status(400).json({
+                                message: "Error sending alert email!",
+                                err: error
+                            })
+                        } else {
+                            // success
+                            console.log("successfully sent email ! : ", info);
+
+                            // return json to client
+                            resppppp.status(200).json({
+                                message: "Successfully applied to listing/employer & updated your 'hacker' account as well!",
+                                applied: result
+                            })
+                        }
+                    });
+                }
             }
         });
     })

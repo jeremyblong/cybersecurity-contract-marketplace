@@ -1257,13 +1257,15 @@ const SheetDisplayFilesFileManagerHelper = ({ previousFiles, saveApplicationDeta
     );
 }
 
-const handleLinkAddition = (setSelectedLinks, link, clearInput) => {
+const handleLinkAddition = (setSelectedLinks, links, clearInput, setValue, linkValue) => {
     console.log("handleLinkAddition ran...");
 
-    clearInput();
+    const constructed = { urlName: linkValue.split("//")[1], url: linkValue, id: uuid() };
+
+    setValue("referenceLinks", [...links, constructed], { shouldValidate: false });
 
     setSelectedLinks(prevState => {
-        return [...prevState, { urlName: link.split("//")[1], url: link, id: uuid() }]
+        return [...prevState, constructed]
     })
 }
 export default {

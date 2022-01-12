@@ -326,6 +326,7 @@ const Rightbar = ({ authenticated, data, authentication, saveListingData, saveSo
               }}><User /><span>{Account} </span></li>
               <li><Mail /><span>{Inbox}</span></li>
               <li><FileText /><span>{Taskboard}</span></li>
+              {data.accountType === "employers" ? <li><User /><span><strong style={{ color: "blue", textDecorationLine: "underline" }}>{typeof data.applicants !== "undefined" ? data.applicants.length : "0"}</strong>{" Current Applicant(s)"}</span></li> : null}
               <li><LogIn /><span onClick={handlePreviewActivate}>{LogOut}</span></li>
             </ul>
           </li>

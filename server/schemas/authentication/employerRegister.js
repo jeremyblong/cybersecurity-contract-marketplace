@@ -15,6 +15,9 @@ const UserSchema =  new Schema({
         type: String,
         default: ""
     }, 
+    applicants: {
+        type: Array
+    },
     lastName: {
         type: String,
         default: ""

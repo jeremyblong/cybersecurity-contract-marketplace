@@ -36,7 +36,8 @@ router.post("/", async (req, res) => {
       fullyVerified: false,
       identityVerified: false,
       followingHackers: [],
-      followingCompanies: []
+      followingCompanies: [],
+      applicants: []
     }), password, async (err, user) => {
       if (err) {
           console.log(err);

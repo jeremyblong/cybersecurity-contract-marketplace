@@ -20,7 +20,7 @@ router.post("/", (req, respppppppp, next) => {
 
     const webhook = webhookHelper.decryptWebhookIfNeeded(req);
 
-    console.log("webhook active/ran in processWebhook helper function: ", webhook);
+    // console.log("webhook active/ran in processWebhook helper function: ", webhook);
 
     const configuration = {
         headers: {

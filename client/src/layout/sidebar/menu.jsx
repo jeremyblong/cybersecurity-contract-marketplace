@@ -66,7 +66,7 @@ export const MENUITEMS = [
             },
             {
                 title: 'Job Management', icon: Briefcase, type: 'sub', active: false, children: [
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'Pay On Completed Hacks', type: 'link' },
+                    { path: `${process.env.PUBLIC_URL}/view/all/general/applications/employer/recruit`, title: `View/Manage Current Applicant/Application's`, type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Manage Reviews & Past Work', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Current Hires', type: 'link' }
                 ]

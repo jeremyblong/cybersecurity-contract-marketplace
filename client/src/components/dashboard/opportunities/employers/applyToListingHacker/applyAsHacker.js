@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect, useRef } from 'react';
 import "./styles.css";
 import Breadcrumb from '../../../../../layout/breadcrumb';
-import { Container, Row, Col, Card, CardBody, Button, CardHeader, ListGroupItem, ListGroup, FormGroup, Label, Input, InputGroupAddon, Form, InputGroup, InputGroupText, Media } from 'reactstrap';
+import { Container, Row, Col, Card, CardBody, Button, CardHeader, ListGroupItem, ButtonGroup, ListGroup, FormGroup, Label, Input, InputGroupAddon, Form, InputGroup, InputGroupText, Media } from 'reactstrap';
 import helpers from "./helpers/miscFunctions.js";
 import { connect } from "react-redux";
 import moment from "moment";
@@ -9,7 +9,7 @@ import { shiftCoreStyles } from "../../../../../redux/actions/universal/index.js
 import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 import axios from 'axios';
 import _ from "lodash";
-import { Link, withRouter, useParams } from "react-router-dom";
+import { Link, withRouter, useParams, useHistory } from "react-router-dom";
 import Select from 'react-select';
 import { DateRangePicker } from 'react-date-range';
 import { useForm, Controller } from 'react-hook-form';
@@ -19,7 +19,7 @@ import LoadingBar from 'react-top-loading-bar';
 import { saveApplicationDetailsProgress } from "../../../../../redux/actions/hackers/applyToEmployerListing/applicationInfo.js";
 import { NotificationManager } from "react-notifications";
 import uuid from 'react-uuid';
-
+import { confirmAlert } from 'react-confirm-alert';
 
 const { TimelineHelper, SheetPaneSubmittingDataHelper, HelperRadioButtons, renderMountedLogic, handleDeletionLink, handleLinkAddition, SheetDisplayFilesFileManagerHelper } = helpers;
 
@@ -47,6 +47,8 @@ const participateInBettingWagersOptions = [
 
 
 const ApplyAsHackerEmployerListingHelper = ({ previousFiles, userData, shiftCoreStyles, location, saveApplicationDetailsProgress, previous }) => {
+
+    const history = useHistory();
     // ref's
     const physicalOrDigitalOrBothGeneratedRef = useRef(null);
     const participateInBettingWagersRef = useRef(null);
@@ -71,7 +73,7 @@ const ApplyAsHackerEmployerListingHelper = ({ previousFiles, userData, shiftCore
     const [ datesReady, setDatesReady ] = useState(false);
     const [ selectedLinks, setSelectedLinks ] = useState([]);
 
-    const { register, handleSubmit, control, reset, getValues, setValue, setError, clearErrors, watch, formState: { errors }} = useForm({
+    const { register, handleSubmit, control, resetField, getValues, setValue, setError, clearErrors, watch, formState: { errors }} = useForm({
         mode: "onTouched",
         reValidateMode: "onBlur"
         // delayError: 500
@@ -123,6 +125,7 @@ const ApplyAsHackerEmployerListingHelper = ({ previousFiles, userData, shiftCore
 
         // set default unavailiable state - selectedTestDates
         setValue("selectedTestDates", []);
+        setValue("referenceLinks", []);
         // set global config obj's for api-requests
         const globalConfig = {
             config: {
@@ -195,7 +198,7 @@ const ApplyAsHackerEmployerListingHelper = ({ previousFiles, userData, shiftCore
         }
     }
     const clearInput = () => {
-        setLinkInput("");
+        resetField("referenceLink");
     }
     //  TOUR related LOCK SCREEN functions - DISABLE body scrolling
     const disableBodyAndScroll = target => {
@@ -250,7 +253,6 @@ const ApplyAsHackerEmployerListingHelper = ({ previousFiles, userData, shiftCore
             });
         } 
     }
-
     const onFormSubmit = (values) => {
         console.log("values", values);
         // deconstruct files from attached-files section-redux
@@ -258,7 +260,7 @@ const ApplyAsHackerEmployerListingHelper = ({ previousFiles, userData, shiftCore
         // deconstruct core information from bio-profile section
         const { username, firstName, lastName, completedJobs, registrationDate, aboutMe, title, reviews, fullyVerified, points, yearsOfExperience } = currentUserData;
         // deconstruct form-redux values on-submit
-        const { coverLetterText, messageToEmployer, participateInBettingProcess, physicalOrDigitalOrBoth, referenceLink, selectedTestDates, technicalApproachToHack } = values;
+        const { coverLetterText, messageToEmployer, participateInBettingProcess, physicalOrDigitalOrBoth, referenceLinks, selectedTestDates, technicalApproachToHack } = values;
 
         // currentUserData.every((item) => {
             
@@ -285,10 +287,10 @@ const ApplyAsHackerEmployerListingHelper = ({ previousFiles, userData, shiftCore
                 legibleDateApplied: moment(new Date()).format("MM/DD/YYYY hh:mm:ss a"),
                 participateInBettingProcess, 
                 physicalOrDigitalOrBoth, 
-                referenceLink, 
+                referenceLinks, 
                 selectedTestDates, 
                 technicalApproachToHack, 
-                waggeredBidAmount: _.has(values, "waggeredBidAmount") ? values.waggeredBidAmount : undefined,
+                waggeredBidAmount: _.has(values, "waggeredBidAmount") ? values.waggeredBidAmount : null,
                 bettingOnSelfSelected: _.has(values, "waggeredBidAmount") ? true : false,
                 submittedUserData: {
                     username, 
@@ -335,7 +337,11 @@ const ApplyAsHackerEmployerListingHelper = ({ previousFiles, userData, shiftCore
                 if (res.data.message === "Successfully applied to listing/employer & updated your 'hacker' account as well!") {
                     console.log(res.data);
 
-                    NotificationManager.success("You've successfully applied to this employer's listing & we've notified them of your application!", "Successfully applied to gig/job!", 4500);
+                    NotificationManager.success("You've successfully applied to this employer's listing & we've notified them of your application!", "Successfully applied to gig/job!", 4000);
+
+                    setTimeout(() => {
+                        history.push("/dashboard/hacker")
+                    },  4000);
                 } else {
                     console.log("Errorr :", res.data);
 
@@ -360,6 +366,42 @@ const ApplyAsHackerEmployerListingHelper = ({ previousFiles, userData, shiftCore
         }, 450);
     }
     const watchSelectedTestDates = watch(["selectedTestDates"]);
+
+    const handlePreClick = () => {
+        confirmAlert({
+            customUI: ({ onClose }) => {
+                return (
+                    <Fragment>
+                        <Card>
+                            <CardHeader className="b-l-primary border-3 specific-edit-border-right">
+                                <h3>You are about to SUBMIT this form and APPLY for this current job listing!</h3>
+                            </CardHeader>
+                            <CardBody id="modal-button-showcase-cardbody" className="btn-group-showcase">
+                                <Row>
+                                    <Col sm="12" md="12" lg="12" xl="12">
+                                        <p className="button-group-text-above">Are you sure all of your information is correct and you'd like to apply to this listing? If so, please click "submit information & apply" to submit your application! Good luck - You got this!</p>
+                                    </Col>
+                                    <Col sm="12" md="12" lg="12" xl="12">
+                                        <hr className="secondary-hr" />
+                                        <div className="centered-button-container">
+                                            <ButtonGroup id="button-group-custom-secondary">
+                                                <Button outline color="danger" onClick={onClose}>Cancel/Close</Button>
+                                                <Button type={"submit"} outline color="success" onClick={() => {
+                                                    onClose();
+                                                }}>SUBMIT INFORMATION & APPLY</Button>
+                                            </ButtonGroup>
+                                        </div>
+                                    </Col>
+                                </Row>
+                            </CardBody>
+                        </Card>
+                    </Fragment>
+              );
+            }
+        });
+    }
+
+    console.log("current!!!!!", gatheredValues);
     return (
         <Fragment>
             <LoadingBar
@@ -407,7 +449,9 @@ const ApplyAsHackerEmployerListingHelper = ({ previousFiles, userData, shiftCore
             </div>
             <Container className="container-default" fluid={true}>
                 <Form className={`needs-validation tooltip-validation validateClass`} noValidate="" onSubmit={handleSubmit(onFormSubmit, (errors, e) => {
-                    return onErrorMainForm(errors, e);
+                    setTimeout(() => {
+                        return onErrorMainForm(errors, e);
+                    }, 250)
                 })}>
                     <Row className="customized-row-apply" style={{ paddingTop: "25px " }}>
                         <Col sm="12" md="12" lg="12" xl="12">
@@ -611,18 +655,16 @@ const ApplyAsHackerEmployerListingHelper = ({ previousFiles, userData, shiftCore
                                 <CardHeader className="b-l-info">
                                     <h5><strong>REQUIRED</strong> data to be completed/filled-out</h5>
                                 </CardHeader>
-                                <CardBody>
+                                <CardBody> 
                                     <Form>  
                                         {/* links go here... */}
                                         <FormGroup style={{ marginTop: "17.5px" }} className=" m-form__group">
                                             <Label className="heavy-label">Reference a link (blog, website, etc... made by <em style={{ textDecorationLine: "underline" }}>you</em>)</Label>
                                             <InputGroup>
                                                 <InputGroupAddon addonType="prepend"><InputGroupText className="group-addon-custom-two">{"http(s)://"}</InputGroupText></InputGroupAddon>
-                                                <Input {...urlEnteredLinkData.check(setError, register, clearErrors, setValue, errors, "referenceLink")} value={linkInput} onChange={(e) => {
-                                                    return urlEnteredLinkData.onChange(e, setError, clearErrors, setValue, setLinkInput);
-                                                }} className="form-control" type="text" name="referenceLink" placeholder={"Enter a link to your work (website, blog, etc...)"} />
+                                                <Input {...urlEnteredLinkData.check(setError, register, clearErrors, setValue, errors, "referenceLink")} onChange={(e) => urlEnteredLinkData.onChange(e, "referenceLink", setValue)} className="form-control" type="text" name="referenceLink" placeholder={"Enter a link to your work (website, blog, etc...)"} />
                                                 {showButtonOrNot() ? <InputGroupAddon onClick={() => {
-                                                    handleLinkAddition(setSelectedLinks, gatheredValues.referenceLink, clearInput);
+                                                    handleLinkAddition(setSelectedLinks, gatheredValues.referenceLinks, clearInput, setValue, gatheredValues.referenceLink);
                                                 }} addonType="append"><InputGroupText className="group-addon-custom">{"Submit"}</InputGroupText></InputGroupAddon> : null}
                                             </InputGroup>
                                             {errors.referenceLink ? <span className="span-tooltip">{errors.referenceLink.message}</span> : null}
@@ -699,7 +741,7 @@ const ApplyAsHackerEmployerListingHelper = ({ previousFiles, userData, shiftCore
                                         <div className="natural-sm-spacer" />
                                         <div className="natural-sm-spacer" />
                                         <div className="natural-sm-spacer" />
-                                        <Button style={{ width: "100%" }} type={"submit"} className="btn-square btn-air-info" outline color="info-2x">SUBMIT APPLICATION INFORMATION</Button>
+                                            <Button style={{ width: "100%" }} type={"submit"} className="btn-square btn-air-info" outline color="info-2x">SUBMIT APPLICATION INFORMATION</Button>
                                         <div className="natural-sm-spacer" />
                                         <div className="natural-sm-spacer" />
                                     </CardBody>

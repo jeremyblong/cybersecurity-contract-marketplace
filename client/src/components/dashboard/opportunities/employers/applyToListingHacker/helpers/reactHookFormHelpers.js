@@ -47,43 +47,28 @@ const MainHooksCustomHelpers = () => {
                         setValue(name, value, { shouldValidate: false });
                         // clear error after setting proper change state
                         setTimeout(() => {
+                            // clear error
                             clearErrors(name);
-                        }, 50);
+                        }, 75);
                     } else {
                         setTimeout(() => {
                             setError(name, {
                                 type: "manual",
                                 message: "You MUST enter a VALID URL including http/https and ://",
                             });
-                        }, 50)
+                        }, 75)
                     }
                 }})}
             );
         },
-        onChange: (e, setError, clearErrors, setValue, setLinkInput) => {
+        onChange: (e, name, setValue) => {
+            console.log("e name val", e, name, setValue);
             // deconstruct actual value
             const value = e.target.value;
+
+            console.log("valu", value);
             // set state without redux form
-            setLinkInput(value);
-            // created timeout variable
-            let timed;
-            // set timeout/delay span
-            clearTimeout(timed);
-            // set timeout
-            timed = setTimeout(() => {
-                // check whether legit URL
-                if (calculateWhetherURLIsLegit(value)) {
-                    // clear error (relevant);
-                    clearErrors("referenceLink");
-                    // set value
-                    setValue("referenceLink", value, { shouldValidate: false });
-                } else {
-                    setError("referenceLink", {
-                        type: "manual",
-                        message: "You MUST enter a VALID URL including http/https and ://",
-                    });
-                }
-            },  50);
+            setValue(name, value, { shouldValidate: false });
         }
     };
     const coverLetterChecks = {
@@ -91,20 +76,20 @@ const MainHooksCustomHelpers = () => {
             return (
                 {...register(name, { required: {
                     value: true,
-                    message: "You MUST enter a value for this field between 50 and 575 charactors"
+                    message: "You MUST enter a value for this field between 50 and 750 charactors"
                 }, minLength: {
                     value: 50,
                     message: "You must enter AT Least 50 characters"
                 }, maxLength: {
-                    value: 575,
-                    message: "You may ONLY enter 575 characters or less"
+                    value: 750,
+                    message: "You may ONLY enter 750 characters or less"
                 }, onBlur: (e) => {
                     // deconstruct actual value
                     const value = e.target.value;
                     // deconstruct length
                     const len = value.length;
                     // check if both min/max values met
-                    if ((len > 0) && (len >= 50) && (len <= 575)) {
+                    if ((len > 0) && (len >= 50) && (len <= 750)) {
                         // clear error
                         clearErrors(name);
                     } else {
@@ -112,7 +97,7 @@ const MainHooksCustomHelpers = () => {
                         setTimeout(() => {
                             setError(name, {
                                 type: "manual",
-                                message: "You MUST enter between 50 and 575 charectors in total for your cover letter (CV) before proceeding...",
+                                message: "You MUST enter between 50 and 750 charectors in total for your cover letter (CV) before proceeding...",
                             });
                         }, 50);
                     }
@@ -134,20 +119,20 @@ const MainHooksCustomHelpers = () => {
             return (
                 {...register(name, { required: {
                     value: true,
-                    message: "You MUST enter a value for this field between 50 and 575 charactors"
+                    message: "You MUST enter a value for this field between 50 and 750 charactors"
                 }, minLength: {
                     value: 50,
                     message: "You must enter AT Least 50 characters"
                 }, maxLength: {
-                    value: 575,
-                    message: "You may ONLY enter 575 characters or less"
+                    value: 750,
+                    message: "You may ONLY enter 750 characters or less"
                 }, onBlur: (e) => {
                     // deconstruct actual value
                     const value = e.target.value;
                     // deconstruct length
                     const len = value.length;
                     // check if both min/max values met
-                    if ((len > 0) && (len >= 50) && (len <= 575)) {
+                    if ((len > 0) && (len >= 50) && (len <= 750)) {
                         // clear error
                         clearErrors(name);
                     } else {
@@ -155,7 +140,7 @@ const MainHooksCustomHelpers = () => {
                         setTimeout(() => {
                             setError(name, {
                                 type: "manual",
-                                message: "You MUST enter between 50 and 575 charectors total while messaging employer before proceeding...",
+                                message: "You MUST enter between 50 and 750 charectors total while messaging employer before proceeding...",
                             });
                         }, 50);
                     }
@@ -244,13 +229,13 @@ const MainHooksCustomHelpers = () => {
             return (
                 {...register(name, { required: {
                     value: true,
-                    message: "You MUST enter a value for this field between 50 and 575 charactors"
+                    message: "You MUST enter a value for this field between 50 and 750 charactors"
                 }, minLength: {
                     value: 50,
                     message: "You must enter AT Least 50 characters"
                 }, maxLength: {
-                    value: 575,
-                    message: "You may ONLY enter 575 characters or less"
+                    value: 750,
+                    message: "You may ONLY enter 750 characters or less"
                 }, onBlur: (e) => {
                     console.log("blurred/");
                     // deconstruct actual value
@@ -258,7 +243,7 @@ const MainHooksCustomHelpers = () => {
                     // deconstruct length
                     const len = value.length;
                     // check if both min/max values met
-                    if ((len > 0) && (len >= 50) && (len <= 575)) {
+                    if ((len > 0) && (len >= 50) && (len <= 750)) {
                         // clear error
                         clearErrors(name);
                     } else {
@@ -266,7 +251,7 @@ const MainHooksCustomHelpers = () => {
                         setTimeout(() => {
                             setError(name, {
                                 type: "manual",
-                                message: "You MUST enter between 50 and 575 charectors total while 'describing your hack ideas' before proceeding...",
+                                message: "You MUST enter between 50 and 750 charectors total while 'describing your hack ideas' before proceeding...",
                             });
                         }, 50);
                     }
