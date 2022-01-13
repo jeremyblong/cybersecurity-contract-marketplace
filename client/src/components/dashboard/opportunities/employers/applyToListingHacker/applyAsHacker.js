@@ -267,12 +267,14 @@ const ApplyAsHackerEmployerListingHelper = ({ previousFiles, userData, shiftCore
         // })
 
         const myID = userData.uniqueId;
+        const generatedID = uuid();
 
         const finalResult = {
             uniqueId: myID,
             employerId: listingData.postedBy,
             employerPostedJobId: listingData.uniqueId,
             applicationData: {
+                generatedID,
                 attachedFiles,
                 coverLetterText, 
                 messageToEmployer, 

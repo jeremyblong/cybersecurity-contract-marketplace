@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import Breadcrumb from '../../../../../../layout/breadcrumb';
 import { Container, Button, Row, Col ,Card, Badge, CardBody, CardHeader, TabContent, TabPane, Nav, NavItem, NavLink, ListGroup, ListGroupItem, Label, FormGroup, Input, InputGroup } from 'reactstrap';
 import "./styles.css";
@@ -310,11 +310,13 @@ constructor(props) {
                     <Card>
                         <CardBody>
                             <h3 className="text-left">File Details/Preview</h3>  
-                            <FileViewer
-                                fileType={this.calculateFileType(file.type)}
-                                filePath={`${process.env.REACT_APP_ASSET_LINK}/${file.onlineID}`}
-                                onError={this.onError}
-                            />
+                            <div className="my-fileviewer-custom-wrapper">
+                                <FileViewer
+                                    fileType={this.calculateFileType(file.type)}
+                                    filePath={`${process.env.REACT_APP_ASSET_LINK}/${file.onlineID}`}
+                                    onError={this.onError}
+                                />
+                            </div>
                         </CardBody>
                         <div className="create-space">
                             <Button style={{ width: "100%" }} onClick={() => {
@@ -499,7 +501,7 @@ constructor(props) {
                                             <ListGroupItem>{typeOfHack.label}</ListGroupItem>
                                         </ListGroup>
                                         <h3 className="text-left blue-heavy-text">Location (Physical Testing Requested)</h3>
-                                        <Map
+                                        {businessAddress !== null && _.has(businessAddress, "position") ? <Map
                                             style="mapbox://styles/mapbox/streets-v9"
                                             containerStyle={{
                                                 height: '375px',
@@ -513,7 +515,7 @@ constructor(props) {
                                                 anchor="bottom">
                                                 <img src={require("../../../../../../assets/images/location.png")}/>
                                             </Marker>
-                                        </Map>
+                                        </Map> : null}
                                         <h3 style={{ paddingTop: "15px" }} className="text-left blue-heavy-text">Listing Description (General)</h3>
                                         <ReactMarkdown children={listingDescription} />
                                     </TabPane>
@@ -530,11 +532,13 @@ constructor(props) {
                                         <ListGroup>
                                             <ListGroupItem>{timespan.label}</ListGroupItem>
                                         </ListGroup> */}
+                                        {typeof ranges !== "undefined" && ranges.length > 0 ? <Fragment>
                                         <h3 style={{ paddingTop: "20px" }} className="text-left blue-heavy-text">Date Ranges Availiable To Selected Hackers</h3>
-                                        <DateRange
-                                            editableDateInputs={false}
-                                            ranges={ranges}
-                                        />
+                                            <DateRange
+                                                editableDateInputs={false}
+                                                ranges={ranges}
+                                            />
+                                        </Fragment> : null}
                                     </TabPane>
                                     <TabPane tabId="assets">
                                         <h3 className="text-left blue-heavy-text">Assets & Hackable Resources</h3>

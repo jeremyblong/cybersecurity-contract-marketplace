@@ -5,7 +5,7 @@ const config = require("config");
 const sendEmailToEmployerNotifyingOfApplicantTemplate = (employerEmail, hackerFullName, profilePictureLink) => {
     const mailOptions = {
         from: 'blongjeremy@gmail.com',
-        to: "blongjeremy@gmail.com", // employerEmail will go HERE when finished designing
+        to: employerEmail.toLowerCase().trim(), // employerEmail will go HERE when finished designing
         subject: `You've received a NEW application/applicant!`,
         html: `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
         <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">

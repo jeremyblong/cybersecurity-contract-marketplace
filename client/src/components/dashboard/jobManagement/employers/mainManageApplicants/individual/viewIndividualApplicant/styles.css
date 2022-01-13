@@ -1,0 +1,160 @@
+.custom-line-height-header {
+ 
+}
+.custom-code-addition {
+    line-height: 2.25;
+}
+.stretch-and-cover-image {
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.custom-digits-font-adjustment {
+    font-size: 0.825rem;
+    margin-top: 12.5px;
+    margin-bottom: 5.5px;
+}
+.meta-title-custom-bigger-blue {
+    text-decoration-line: underline;
+    color: #7366ff;
+}
+.meta-title-custom-bigger-secondary {
+    text-decoration-line: underline;
+    color: #f73164;
+}
+.meta-title-custom-bigger-success {
+    text-decoration-line: underline;
+    color: #51bb25;
+}
+.meta-title-custom-bigger-danger {
+    text-decoration-line: underline;
+    color: #dc3545;
+}
+.meta-title-custom-bigger-warning {
+    text-decoration-line: underline;
+    color: #d8c200;
+}
+.meta-title-custom-bigger-info {
+    text-decoration-line: underline;
+    color: #a927f9;
+}
+.add-shadow-md-custom {
+    box-shadow: 0.5rem 0.5rem 1rem rgba(0, 0, 0, 0.2015) !important;
+}
+/* slideshow file-viewer wrapper container */
+.slideshow-fileviewer-wrapper {
+
+}
+.slide-slide-custom.slick-initialized > div > div > div.slick-slide {
+    max-height: 400px !important;
+    min-height: 400px !important;
+}
+.slide-slide-custom.slick-initialized > div > div > div.slick-slide.slick-active.slick-current > div > div > div > video {
+    max-width: 100%;
+    max-height: 100%;
+    min-width: 100%;
+    min-height: 300px;
+}
+.slideshow-fileviewer-wrapper .pg-viewer-wrapper .pg-viewer {
+    /* max-width: 150px !important; */
+    min-height: 300px;
+}
+.slideshow-fileviewer-wrapper .pg-viewer-wrapper {
+    min-height: 300px !important;
+    max-width: 100% !important;
+}
+.slideshow-fileviewer-wrapper .pg-viewer-wrapper .pg-viewer #pg-photo-container img {
+    min-height: 300px;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    top: 0;
+    object-fit: contain;
+    min-width: 100%;
+    max-width: 100%;
+}
+.slideshow-fileviewer-wrapper .pg-viewer-wrapper #pg-viewer .photo-viewer-container {
+    max-width: 100%;
+    min-height: 175px !important;
+    min-width: 100%;
+    max-height: 100%;
+}
+.custom-lazy-loaded-image-slider {
+    object-fit: contain !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-height: 400px !important;
+}
+.your-msg-custom-wrapper {
+    box-shadow: 0.5rem 0.5rem 1rem rgba(0, 0, 0, 0.185) !important;
+} 
+.add-harsh-border-radius {
+    border-radius: 100px !important;
+    max-height: 75px !important;
+    min-height: 75px !important;
+    min-width: 75px !important;
+    max-width: 75px !important;
+}
+#top-right-absolute-position {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+/*  date range calendar on LEFT SIDEBAR */
+.daterange-maxed-out {
+    max-width: 100% !important;
+    max-height: 500px !important;
+}
+#strong-custom-label-date {
+    padding-bottom: 12.5px;
+    font-weight: bold;
+    text-decoration-line: underline;
+    font-size: 1rem;
+}
+.custom-social-status-picture {
+    max-height: 50px;
+    max-width: 50px;
+} 
+.custom-social-status-editted {
+    position: absolute;
+    top: 2.5px;
+    right: 0px;
+}
+.customize-active-btn {
+    font-weight: bolder;
+    box-shadow: 2px 0px 10px 5px rgba(115,102,255,0.75);
+    -webkit-box-shadow: 2px 0px 10px 5px rgba(115,102,255,0.75);
+    -moz-box-shadow: 2px 0px 10px 5px rgba(115,102,255,0.75);
+}
+.active-subbed-right {
+    margin-right: 125px;
+    margin-bottom: 22.5px;
+    text-decoration-line: underline;
+    color: #a927f9;
+}
+.active-subbed-left {
+    margin-left: 125px;
+    margin-bottom: 22.5px;
+    text-decoration-line: underline;
+    color: #a927f9;
+}
+.selected-hover-custom:hover {
+    cursor: pointer;
+}
+.min-filler-height-noncentered {
+    min-height: 125px;
+}
+.min-filler-height {
+    min-height: 125px;
+    display: -webkit-flexbox;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    justify-content: center;
+}

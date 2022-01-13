@@ -27,6 +27,7 @@ import ViewIndividualListingSoftwarePagePage from "../pages/dashboard/softwareHa
 import MainBiddingBettingPageLandingPage from "../pages/dashboard/opportunities/employers/liveListings/biddingBetting/biddingPageMain/mainBiddingPage.js";
 import ApplyAsHackerEmployerListingPage from "../pages/dashboard/opportunities/employers/applyToListingHacker/applyAsHacker.js";
 import ManageApplicantsMainPage from "../pages/dashboard/jobManagement/employers/mainManageApplicants/manageApplicantsMain.js";
+import ManageApplicationIndividualPage from "../pages/dashboard/jobManagement/employers/mainManageApplicants/individual/viewIndividualApplicant/viewIndividualInfo.js";
 
 export const routes = [
         { path:"/profile/settings/edit", Component: GeneralSettingsPage },
@@ -57,5 +58,6 @@ export const routes = [
         { path: "/software/listing/individual/page/:id", Component: ViewIndividualListingSoftwarePagePage },
         { path: "/employer/listing/betting/bidding/main/page", Component: MainBiddingBettingPageLandingPage },
         { path: "/hacker/apply/employer/listing/:id", Component: ApplyAsHackerEmployerListingPage },
-        { path: "/view/all/general/applications/employer/recruit", Component: ManageApplicantsMainPage }
+        { path: "/view/all/general/applications/employer/recruit", Component: ManageApplicantsMainPage },
+        { path: "/view/individual/application/employer/:id", Component: ManageApplicationIndividualPage }
 ];

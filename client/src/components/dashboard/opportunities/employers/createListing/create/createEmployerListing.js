@@ -341,12 +341,12 @@ const CreateJobListingMainHelper = (props) => {
 
         e.preventDefault();
 
-        const { assetArray, typeOfHack, testingDatesHackers, rulesOfEngagement, publicCompanyName, outOfScopeVulnerabilities, listingDescription, hashtags, businessAddress, requiredRankToApply, experienceAndCost, desiredSkills, maxNumberOfApplicants, disclosureVisibility, tokensRequiredToApply, listingVisibility, estimatedCompletionDate } = props.previousData;
-
         let count = 0;
 
-        if (typeof typeOfHack !== "undefined") {
-            if (typeOfHack.value === "physical-hack") {
+        if (typeof props.previousData.typeOfHack !== "undefined") {
+            if (props.previousData.typeOfHack.value === "physical-hack") {
+                const { assetArray, typeOfHack, testingDatesHackers, rulesOfEngagement, publicCompanyName, outOfScopeVulnerabilities, listingDescription, hashtags, businessAddress, requiredRankToApply, experienceAndCost, desiredSkills, maxNumberOfApplicants, disclosureVisibility, tokensRequiredToApply, listingVisibility, estimatedCompletionDate } = props.previousData;
+
                 for (const key in props.previousData) {
                     const el = props.previousData[key];
 
@@ -501,6 +501,8 @@ const CreateJobListingMainHelper = (props) => {
                     history.push("/review/employer/listing/data/payment", { jobData });
                 }
             } else {
+                const { assetArray, typeOfHack, testingDatesHackers, rulesOfEngagement, publicCompanyName, outOfScopeVulnerabilities, listingDescription, hashtags, requiredRankToApply, experienceAndCost, desiredSkills, maxNumberOfApplicants, disclosureVisibility, tokensRequiredToApply, listingVisibility, estimatedCompletionDate } = props.previousData;
+
                 for (const key in props.previousData) {
                     const el = props.previousData[key];
 

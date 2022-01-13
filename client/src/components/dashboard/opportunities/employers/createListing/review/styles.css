@@ -14,7 +14,9 @@
 }
 .customModal {
     min-width: 90vw;
+    min-height: 90vh;
     max-width: 90vw;
+    max-height: 90vh;
 }
 .stretch {
     width: 100%;
@@ -22,4 +24,18 @@
 .stretch-two {
     width: 100%;
     margin-top: 7.5px;
+}
+.my-fileviewer-custom-wrapper #pg-viewer > div > div > video {
+    max-width: 100%;
+    max-height: 100%;
+}
+.my-fileviewer-custom-wrapper #pg-photo-container > img {
+    max-width: 100%;
+    max-height: 100%;
+    min-width: 100%;
+    object-fit: contain;
+    min-height: 100%;
+}
+.my-fileviewer-custom-wrapper #pg-photo-container {
+    min-height: 85vh !important;
 }

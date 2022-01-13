@@ -200,18 +200,30 @@ const Sidebar = (props) => {
     document.querySelector(".sidebar-wrapper").className = "sidebar-wrapper close_icon"
   }
   const renderCertainPaths = (menuItem) => {
+    // USER DATA is NOT empty
     if (!_.isEmpty(props.userData)) {
+      // create new conditional route
       if (menuItem.path === "/profile/settings/edit") {
         if (props.userData.accountType === "hackers") {
           return "/profile/settings/edit";
         } else {
           return "/profile/settings/edit/employer";
         }
+        // another conditional route render
       } else if (menuItem.path === "/create/listing/software/exchange/hacker/account") {
         if (props.userData.accountType === "hackers") {
           return "/create/listing/software/exchange/hacker/account";
         } else {
           return "/unauthorized/access/restricted";
+        }
+        // another conditional route render
+      } else if (menuItem.path === "/view/all/general/applications/employer/recruit") {
+        if (props.userData.accountType === "hackers") {
+          // hacker acct
+          return "/unauthorized/access/restricted";
+        } else {
+          // employer acct
+          return "/view/all/general/applications/employer/recruit";
         }
       } else {
         return menuItem.path;

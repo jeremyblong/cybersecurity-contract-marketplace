@@ -352,7 +352,11 @@ const ViewIndividualJobListingHelper = ({ userData, saveApplicationDetailsProgre
                                                     {/* tokensRequiredToApply */}
                                                 </CardHeader>
                                                 <CardBody>
-                                                    <div className="job-description">
+                                                    {!_.has(data.businessAddress, "position") ? <div className="job-description">
+                                                        <p>This listing is a <em style={{ color: "blue", textDecorationLine: "underline" }}>{"DIGITAL hack ONLY"}</em> in which a physical hack is <em style={{ color: "blue", textDecorationLine: "underline" }}>{"NOT"}</em> required/permitted.</p>
+                                                        <hr />
+                                                        <p><em style={{ color: "blue", textDecorationLine: "underline" }}>{"IF SELECTED"}</em> by the employer of this listing - you will be testing "digital" assets such as REST API endpoints, websites or anything else "client-facing" or "accessible" to the general public - <em style={{ color: "blue", textDecorationLine: "underline" }}>{"private"}</em> testing is <em style={{ color: "blue", textDecorationLine: "underline" }}>{"NOT"}</em> permitted...</p>
+                                                    </div> : <div className="job-description">
                                                         <p>Location details are <em style={{ textDecorationLine: "underline" }}>approximate</em> and accurate/detailed address and location information will be released once hired or selected by the employer.</p>
                                                         <p>This listing/employer is located in <em style={{ color: "blue" }}>{data.businessAddress.address.municipality}, {data.businessAddress.address.countrySubdivisionName}</em> in the <em style={{ color: "blue" }}>{data.businessAddress.address.country}</em></p>
                                                         <hr />
@@ -371,7 +375,7 @@ const ViewIndividualJobListingHelper = ({ userData, saveApplicationDetailsProgre
                                                                 <img src={require("../../../../../../../assets/images/location.png")}/>
                                                             </Marker>
                                                         </Map>
-                                                    </div>
+                                                    </div>}
                                                 </CardBody>
                                             </Card>
                                         </Col>
@@ -779,11 +783,13 @@ const ViewIndividualJobListingHelper = ({ userData, saveApplicationDetailsProgre
                     <Card>
                         <CardBody>
                             <h3 className="text-left">File Details/Preview</h3>  
-                            <FileViewer
-                                fileType={calculateFileType(file.type)}
-                                filePath={`${process.env.REACT_APP_ASSET_LINK}/${file.onlineID}`}
-                                onError={onError}
-                            />
+                            <div className="my-fileviewer-custom-wrapper">
+                                <FileViewer
+                                    fileType={calculateFileType(file.type)}
+                                    filePath={`${process.env.REACT_APP_ASSET_LINK}/${file.onlineID}`}
+                                    onError={onError}
+                                />
+                            </div>
                         </CardBody>
                         <div className="create-space">
                             <Button style={{ width: "100%" }} onClick={() => {

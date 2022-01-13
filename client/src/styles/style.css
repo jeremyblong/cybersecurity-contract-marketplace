@@ -89,6 +89,15 @@ a:hover {
 .white-background {
   background-color: #fff !important;
 }
+.custom-code-redish {
+  color: #f73164 !important;
+  background-color: rgba(115, 102, 255, 0.03);
+  padding: 5px 4px;
+  border: 1.25px solid #f73164;
+  font-weight: bold;
+  margin: 1.5 4.5px;
+  border-radius: 2px;
+}
 .custom-code {
   color: #7366ff !important;
   background-color: rgba(115, 102, 255, 0.03);
