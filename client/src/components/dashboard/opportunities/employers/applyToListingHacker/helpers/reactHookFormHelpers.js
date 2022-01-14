@@ -72,7 +72,7 @@ const MainHooksCustomHelpers = () => {
         }
     };
     const coverLetterChecks = {
-        check: (setError, register, clearErrors, setValue, name) => {
+        check: (setError, register, clearErrors, name) => {
             return (
                 {...register(name, { required: {
                     value: true,

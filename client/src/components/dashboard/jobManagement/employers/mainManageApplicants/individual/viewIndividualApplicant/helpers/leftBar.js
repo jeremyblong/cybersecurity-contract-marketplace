@@ -230,56 +230,6 @@ const LeftBar = ({ applicantData, lastProfileItem, user }) => {
                     </Collapse>
                 </Card>
             </Col>
-            <Col xl="12">
-                <Card className={"add-shadow-md-custom"}>
-                    <CardHeader>
-                        <h5 className="mb-0">
-                            <Button color="link pl-0" onClick={() => setisActivity(!isActivity)}
-                                data-toggle="collapse" data-target="#collapseicon14" aria-expanded={isActivity} aria-controls="collapseicon14">{ActivityFeed}</Button>
-                        </h5>
-                    </CardHeader>
-                    <Collapse isOpen={isActivity}>
-                        <CardBody className="social-status filter-cards-view">
-                            <Media><Media className="img-50 rounded-circle m-r-15" src={ten} alt="tenImg" />
-                                <Media body>
-                                    <span className="f-w-600 d-block">{AndewJon}</span>
-                                    <p>{"Commented on Shaun Park's"} <a href="#javascript">{"Photo"}</a></p><span className="light-span">{"20 min Ago"}</span>
-                                </Media>
-                            </Media>
-                            <Media><Media className="img-50 rounded-circle m-r-15" src={three} alt="threeImg" />
-                                <Media body>
-                                    <span className="f-w-600 d-block">{JohnyWaston}</span>
-                                    <p>{"Commented on Shaun Park's"} <a href="#javascript">{"Photo"}</a></p><span className="light-span">{"1 hour Ago"}</span>
-                                </Media>
-                            </Media>
-                            <Media><Media className="img-50 rounded-circle m-r-15" src={five} alt="fiveImg" />
-                                <Media body>
-                                    <span className="f-w-600 d-block">{ComerenDiaz}</span>
-                                    <p>{"Commented on Shaun Park's"} <a href="#javascript">{"Photo"}</a></p><span className="light-span">{"1 days Ago"}</span>
-                                </Media>
-                            </Media>
-                            <Media><Media className="img-50 rounded-circle m-r-15" src={four} alt="fourImg" />
-                                <Media body>
-                                    <span className="f-w-600 d-block">{SarahLoren}</span>
-                                    <p>{"Commented on Shaun Park's"} <a href="#javascript">{"Photo"}</a></p><span className="light-span">{"2 days Ago"}</span>
-                                </Media>
-                            </Media>
-                            <Media><Media className="img-50 rounded-circle m-r-15" src={three} alt="threeImg" />
-                                <Media body>
-                                    <span className="f-w-600 d-block">{JohnyWaston}</span>
-                                    <p>{"Commented on Shaun Park's"} <a href="#javascript">{"Photo"}</a></p><span className="light-span">{"5 days Ago"}</span>
-                                </Media>
-                            </Media>
-                            <Media><Media className="img-50 rounded-circle m-r-15" src={five} alt="fiveImg" />
-                                <Media body>
-                                    <span className="f-w-600 d-block">{ComerenDiaz}</span>
-                                    <p>{"Commented on Shaun Park's"} <a href="#javascript">{"Photo"}</a></p><span className="light-span">{"6 days Ago"}</span>
-                                </Media>
-                            </Media>
-                        </CardBody>
-                    </Collapse>
-                </Card>
-            </Col>
         </Fragment>
     );
 };

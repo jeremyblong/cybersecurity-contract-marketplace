@@ -55,10 +55,11 @@ const AboutTab = ({ applicantData, lastProfileItem, user }) => {
                                     <p className={"bottom-sub-text"}>Below, you will find the available dates this hacker has choosen from the dates that you originally selected upon posting this listing so these days <strong>should</strong> align with your schedule and availability.</p>
                                     <hr />
                                     <Label id={"strong-custom-label-date"}>These are the available dates that the hacker/applicant has selected...</Label>
+                                    <p style={{ color: "red", fontWeight: "bold" }}>Pan/Click "left" and "right" arrow months to display various/current dates (will populate/start at CURRENT date)...</p>
                                     {datesReady === true ? <DateRangePicker 
                                         ranges={dates}
-                                        // minDate={new Date()}
                                         onChange={() => {}}
+                                        
                                         shownDate={new Date()}
                                         className={"custom-date-range-picker"}
                                         showMonthAndYearPickers={false}
@@ -68,7 +69,6 @@ const AboutTab = ({ applicantData, lastProfileItem, user }) => {
                                         months={2}
                                         showDateDisplay={false}
                                         inputRanges={[]}
-                                        scroll={{ enabled: true }}
                                         rangeColors={["#f73164", "#a927f9", "#f73164", "#a927f9", "#f73164", "#a927f9"]}
                                     /> : <Fragment>
                                         <SkeletonTheme baseColor="#c9c9c9" highlightColor="#444">
@@ -86,54 +86,54 @@ const AboutTab = ({ applicantData, lastProfileItem, user }) => {
                         <Col sm="12">
                             <Card className={"add-shadow-md-custom about-container-wrapper"}>
                                 <CardHeader className="social-header">
-                                    <h5><span>{"Hobbies and Interests"}</span><span className="pull-right"><MoreVertical /></span></h5>
+                                    <h5><span>CORE applicant information</span><span className="pull-right"><MoreVertical /></span></h5>
                                 </CardHeader>
                                 <CardBody>
                                     <Row className="details-about">
                                         <Col sm="6">
-                                            <div className="your-details"><span className="f-w-600">Hobbies:</span>
-                                                <p>{"I like to ride the bike to work, swimming, and working out. I also like reading design magazines, go to museums, and binge watching a good tv show while it’s raining outside."}</p>
+                                            <div className="your-details"><span className="f-w-600">Gender:</span>
+                                                <p className={"subtext-your-details"}>{user.gender.label}</p>
                                             </div>
                                         </Col>
                                         <Col sm="6">
-                                            <div className="your-details your-details-xs"><span className="f-w-600">{"Favourite Music Bands / Artists:"}</span>
-                                                <p>{"Iron Maid, DC/AC, Megablow, The Ill, Kung Fighters, System of a Revenge."}</p>
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                    <Row className="details-about">
-                                        <Col sm="6">
-                                            <div className="your-details"><span className="f-w-600">{"Favourite TV Shows:"}</span>
-                                                <p>{"Breaking Good, RedDevil, People of Interest, The Running Dead, Found, American Guy."}</p>
-                                            </div>
-                                        </Col>
-                                        <Col sm="6">
-                                            <div className="your-details your-details-xs"><span className="f-w-600">{"Favourite Books:"}</span>
-                                                <p>{"The Crime of the Century, Egiptian Mythology 101, The Scarred Wizard, Lord of the Wings, Amongst Gods, The Oracle, A Tale of Air and Water."}</p>
+                                            <div className="your-details your-details-xs"><span className="f-w-600">{"Age(in years)"}</span>
+                                                <p className={"subtext-your-details"}>{moment(new Date(user.birthdate)).fromNow(true)}</p>
                                             </div>
                                         </Col>
                                     </Row>
                                     <Row className="details-about">
                                         <Col sm="6">
-                                            <div className="your-details"><span className="f-w-600">{"Favourite Movies:"}</span>
-                                                <p>{"Idiocratic, The Scarred Wizard and the Fire Crown, Crime Squad Ferrum Man."}</p>
+                                            <div className="your-details"><span className="f-w-600">Verification Status</span>
+                                                <p className={"subtext-your-details"}>{user.fullyVerified === true ? "Fully-Verified" : "NOT-Verified...Beware."}</p>
                                             </div>
                                         </Col>
                                         <Col sm="6">
-                                            <div className="your-details your-details-xs"><span className="f-w-600">{"Favourite Writers:"}</span>
-                                                <p>{"Martin T. Georgeston, Jhonathan R. Token, Ivana Rowle, Alexandr Platt, Marcus Roth."}</p>
+                                            <div className="your-details your-details-xs"><span className="f-w-600">{"Aclaimed Year's Of Experience"}</span>
+                                                <p className={"subtext-your-details"}>{user.yearsOfExperience.label}</p>
                                             </div>
                                         </Col>
                                     </Row>
                                     <Row className="details-about">
                                         <Col sm="6">
-                                            <div className="your-details"><span className="f-w-600">{"Favourite Games:"}</span>
-                                                <p>{"The First of Us, Assassin’s Squad, Dark Assylum, NMAK16, Last Cause 4, Grand Snatch Auto."}</p>
+                                            <div className="your-details"><span className="f-w-600">Title/Typical-Job-Title</span>
+                                                <p className={"subtext-your-details"}>{user.title}</p>
                                             </div>
                                         </Col>
                                         <Col sm="6">
-                                            <div className="your-details your-details-xs"><span className="f-w-600">{"Other Interests:"}</span>
-                                                <p>{"Swimming, Surfing, Scuba Diving, Anime, Photography, Tattoos, Street Art."}</p>
+                                            <div className="your-details your-details-xs"><span className="f-w-600">Registration Date</span>
+                                                <p className={"subtext-your-details"}>{moment(new Date(user.registrationDate)).fromNow()}</p>
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                    <Row className="details-about">
+                                        <Col sm="6">
+                                            <div className="your-details"><span className="f-w-600">EXP/XP Points</span>
+                                                <p className={"subtext-your-details"}><strong style={{ color: "blue" }}>{user.points}</strong> XP Points at rank lvl <strong style={{ color: "blue" }}>{user.rankLevel}</strong></p>
+                                            </div>
+                                        </Col>
+                                        <Col sm="6">
+                                            <div className="your-details your-details-xs"><span className="f-w-600">Public Email Address (Emergencies ONLY - contact within {process.env.REACT_APP_APPLICATION_NAME})</span>
+                                                <p className={"subtext-your-details"}>{user.publicEmailAddress}</p>
                                             </div>
                                         </Col>
                                     </Row>

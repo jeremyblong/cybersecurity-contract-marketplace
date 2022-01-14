@@ -269,6 +269,37 @@ const ApplyAsHackerEmployerListingHelper = ({ previousFiles, userData, shiftCore
         const myID = userData.uniqueId;
         const generatedID = uuid();
 
+        const addApplicantData = {
+            applicantID: myID,
+            listingID: listingData.uniqueId,
+            employerId: listingData.postedBy,
+            employerPostedJobId: listingData.uniqueId,
+            userData,
+            generatedID,
+            applicationData: {
+                generatedID,
+                attachedFiles,
+                coverLetterText, 
+                messageToEmployer, 
+                applicantId: userData.uniqueId,
+                responses: [],
+                hired: false,
+                applicantName: `${userData.firstName} ${userData.lastName}`,
+                likes: 0,
+                dislikes: 0,
+                applicantId: myID,
+                dateApplied: new Date(),
+                legibleDateApplied: moment(new Date()).format("MM/DD/YYYY hh:mm:ss a"),
+                participateInBettingProcess, 
+                physicalOrDigitalOrBoth, 
+                referenceLinks, 
+                selectedTestDates, 
+                technicalApproachToHack, 
+                waggeredBidAmount: _.has(values, "waggeredBidAmount") ? values.waggeredBidAmount : null,
+                bettingOnSelfSelected: _.has(values, "waggeredBidAmount") ? true : false
+            }
+        }
+
         const finalResult = {
             uniqueId: myID,
             employerId: listingData.postedBy,
@@ -284,6 +315,8 @@ const ApplyAsHackerEmployerListingHelper = ({ previousFiles, userData, shiftCore
                 applicantName: `${userData.firstName} ${userData.lastName}`,
                 likes: 0,
                 dislikes: 0,
+                employerPostedJobId: listingData.uniqueId,
+                employerPosterId: listingData.postedBy,
                 applicantId: myID,
                 dateApplied: new Date(),
                 legibleDateApplied: moment(new Date()).format("MM/DD/YYYY hh:mm:ss a"),
@@ -337,13 +370,26 @@ const ApplyAsHackerEmployerListingHelper = ({ previousFiles, userData, shiftCore
             // SAVE-DATA api-request run!
             axios.post(`${process.env.REACT_APP_BASE_URL}/apply/employer/listing/submit/live/data/last`, finalResult).then((res) => {
                 if (res.data.message === "Successfully applied to listing/employer & updated your 'hacker' account as well!") {
-                    console.log(res.data);
 
-                    NotificationManager.success("You've successfully applied to this employer's listing & we've notified them of your application!", "Successfully applied to gig/job!", 4000);
+                    axios.post(`${process.env.REACT_APP_BASE_URL}/success/application/save/applicant/info/employerlisting`, addApplicantData).then((res) => {
+                        if (res.data.message === "Successfully updated employer listing data!") {
+                            console.log("EVERYTHING WENT WELL....!! : ", res.data);
+        
+                            NotificationManager.success("You've successfully applied to this employer's listing & we've notified them of your application!", "Successfully applied to gig/job!", 4000);
+        
+                            setTimeout(() => {
+                                history.push("/dashboard/hacker")
+                            },  4000);
+                        } else {
+                            console.log("Errorr :", res.data);
+        
+                            NotificationManager.error("Critical error has occurred while updating database - we have deleted any related information regarding this application - please make your attempt again as NO data was saved.", "NO DATA SAVED! TRY AGAIN....", 6250);
+                        }
+                    }).catch((err) => {
+                        console.log(err);
 
-                    setTimeout(() => {
-                        history.push("/dashboard/hacker")
-                    },  4000);
+                        NotificationManager.error("Critical error has occurred while updating database - we have deleted any related information regarding this application - please make your attempt again as NO data was saved.", "NO DATA SAVED! TRY AGAIN....", 6250);
+                    })
                 } else {
                     console.log("Errorr :", res.data);
 
@@ -368,40 +414,6 @@ const ApplyAsHackerEmployerListingHelper = ({ previousFiles, userData, shiftCore
         }, 450);
     }
     const watchSelectedTestDates = watch(["selectedTestDates"]);
-
-    const handlePreClick = () => {
-        confirmAlert({
-            customUI: ({ onClose }) => {
-                return (
-                    <Fragment>
-                        <Card>
-                            <CardHeader className="b-l-primary border-3 specific-edit-border-right">
-                                <h3>You are about to SUBMIT this form and APPLY for this current job listing!</h3>
-                            </CardHeader>
-                            <CardBody id="modal-button-showcase-cardbody" className="btn-group-showcase">
-                                <Row>
-                                    <Col sm="12" md="12" lg="12" xl="12">
-                                        <p className="button-group-text-above">Are you sure all of your information is correct and you'd like to apply to this listing? If so, please click "submit information & apply" to submit your application! Good luck - You got this!</p>
-                                    </Col>
-                                    <Col sm="12" md="12" lg="12" xl="12">
-                                        <hr className="secondary-hr" />
-                                        <div className="centered-button-container">
-                                            <ButtonGroup id="button-group-custom-secondary">
-                                                <Button outline color="danger" onClick={onClose}>Cancel/Close</Button>
-                                                <Button type={"submit"} outline color="success" onClick={() => {
-                                                    onClose();
-                                                }}>SUBMIT INFORMATION & APPLY</Button>
-                                            </ButtonGroup>
-                                        </div>
-                                    </Col>
-                                </Row>
-                            </CardBody>
-                        </Card>
-                    </Fragment>
-              );
-            }
-        });
-    }
 
     console.log("current!!!!!", gatheredValues);
     return (
@@ -470,10 +482,11 @@ const ApplyAsHackerEmployerListingHelper = ({ previousFiles, userData, shiftCore
                                         <Col md="6" lg="6" xl="6" sm="12">
                                             <FormGroup>
                                                 <Label className="heavy-label">{coverLetterChecks.label}</Label>
-                                                <Input {...coverLetterChecks.check(setError, register, clearErrors, setValue, "coverLetterText")} value={gatheredValues.coverLetterText} placeholder={coverLetterChecks.placeholder} onChange={(e) => {
+                                                <Input {...coverLetterChecks.check(setError, register, clearErrors, "coverLetterText")} placeholder={coverLetterChecks.placeholder} onChange={(e) => {
                                                     return coverLetterChecks.onChange(e, "coverLetterText", setValue);
-                                                }} name={coverLetterChecks.name} type="textarea" className="form-control input-air-primary" rows={"4"} />
+                                                }} name={coverLetterChecks.name} type="textarea" className="form-control input-air-primary" rows={"6"} />
                                                 {errors.coverLetterText ? <span className="span-tooltip">{errors.coverLetterText.message}</span> : null}
+                                                {/*  */}
                                             </FormGroup>
                                             <FormGroup>
                                                 <Label>{physicalOrDigitalChecks.label}</Label>
@@ -565,14 +578,14 @@ const ApplyAsHackerEmployerListingHelper = ({ previousFiles, userData, shiftCore
                                                 <Label className="heavy-label">Message To Employer (Direct to employer)</Label>
                                                 <Input {...messageToEmployerChecks.check(setError, register, clearErrors, setValue, "messageToEmployer")} placeholder={messageToEmployerChecks.placeholder} onChange={(e) => {
                                                     return messageToEmployerChecks.onChange(e, "messageToEmployer", setValue);
-                                                }} name={messageToEmployerChecks.name} type="textarea" className="form-control input-air-primary" rows={"4"} />
+                                                }} name={messageToEmployerChecks.name} type="textarea" className="form-control input-air-primary" rows={"6"} />
                                                 {errors.messageToEmployer ? <span className="span-tooltip">{errors.messageToEmployer.message}</span> : null}
                                             </FormGroup>
                                             <FormGroup>
                                                 <Label className="heavy-label">{approachToSuccessfullyHackCo.label}</Label>
                                                 <Input {...approachToSuccessfullyHackCo.check(setError, register, clearErrors, "technicalApproachToHack")} placeholder={approachToSuccessfullyHackCo.placeholder} onChange={(e) => {
                                                     return approachToSuccessfullyHackCo.onChange(e, "technicalApproachToHack", setValue);
-                                                }} name={approachToSuccessfullyHackCo.name} type="textarea" className="form-control input-air-primary" rows={"3"} />
+                                                }} name={approachToSuccessfullyHackCo.name} type="textarea" className="form-control input-air-primary" rows={"6"} />
                                                 {errors.technicalApproachToHack ? <span className="span-tooltip">{errors.technicalApproachToHack.message}</span> : null}
                                             </FormGroup>
                                             {_.has(gatheredValues, "participateInBettingProcess") && typeof gatheredValues.participateInBettingProcess !== "undefined" && gatheredValues.participateInBettingProcess.value === "yes-participate" ? <FormGroup>

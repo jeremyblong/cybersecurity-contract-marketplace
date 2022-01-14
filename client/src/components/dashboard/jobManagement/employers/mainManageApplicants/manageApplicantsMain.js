@@ -8,10 +8,12 @@ import "./styles.css";
 import { connect } from "react-redux";
 import _ from "lodash";
 import axios from "axios";
-import ReactPlayer from 'react-player';
 import ShowMoreText from "react-show-more-text";
 import moment from "moment";
 import { useHistory } from "react-router-dom";
+import helpers from "./helpers/miscFunctions.js";
+
+const { renderImageOrVideo } = helpers;
 
 const ManageApplicantsMainHelper = ({ userData }) => {
     // create redirect possiblity
@@ -129,20 +131,6 @@ const ManageApplicantsMainHelper = ({ userData }) => {
             // errors.showMessages();
         }
     };
-
-    const Updatebookmark = data => {
-        if (data !== '') {
-            seteditModal(false)
-        } else {
-            // errors.showMessages();
-        }
-    };
-
-    const editbookmarkdata = (data) => {
-        editToggle()
-        setEditrow(data);
-        // setEditImgUrl(require(`../../../../../assets/images/${data.image}`))
-    }
     const Gridbookmark = () => {
         setgridView(true)
     }
@@ -150,7 +138,9 @@ const ManageApplicantsMainHelper = ({ userData }) => {
     const Listbookmark = () => {
         setgridView(false)
     }
-    const calculateFileType = (type) => {
+    const calculateFileType = (applicant) => {
+        const type = applicant.attachedFiles[applicant.attachedFiles.length - 1].type;
+
         switch (type) {
             case "video/mp4":
                 return "mp4";
@@ -192,44 +182,6 @@ const ManageApplicantsMainHelper = ({ userData }) => {
                 break;
         }
     };
-    const calculateColorShown = (num) => {
-        switch (num) {
-            case 1:
-                return "info";
-                break;
-            case 2:
-                return "success";
-            case 3:
-                return "danger";
-            case 4:
-                return "primary";
-            case 5:
-                return "secondary";       
-            case 6:
-                return "warning";
-            default:
-                break;
-        }
-    }
-    const renderImageOrVideo = (file) => {
-        if (file.type.includes("video")) {
-            return (
-                <Fragment>
-                    <div className="ribbon-wrapper-bottom">
-                        <ReactPlayer key={file.id} controls={true} loop={true} muted={true} url={`${process.env.REACT_APP_ASSET_LINK}/${file.link}`} className="stretch-both-ways-topped" />
-                    </div>
-                </Fragment>
-            );
-        } else {
-            return (
-                <Fragment>
-                    <div className="ribbon-wrapper-bottom">
-                        <img key={file.id} src={`${process.env.REACT_APP_ASSET_LINK}/${file.link}`} className="stretch-both-ways-topped" />
-                    </div>
-                </Fragment>
-            );
-        }
-    }
     const changeExpandedState = (index) => {
         setExpandedState(prevState => {
             return {
@@ -242,8 +194,6 @@ const ManageApplicantsMainHelper = ({ userData }) => {
         history.push(`/view/individual/application/employer/${applicant.applicantId}`, { applicant });
     }
     const renderMainContentMapped = (applicant, index) => {
-        const randomPreview = applicant.attachedFiles[Math.floor(Math.random() * applicant.attachedFiles.length)];
-        const randomNumColorStyle = Math.floor(Math.random() * (6 - 1 + 1)) + 1;
         // return data...
         return (
             <Col style={{ marginBottom: "25px" }} xl="4 xl-50" md="6" sm="6" xs="6" key={index}>
@@ -251,12 +201,12 @@ const ManageApplicantsMainHelper = ({ userData }) => {
                 <Card className="card-with-border bookmark-customized-list-individual shadow shadow-showcase">
                     <div className="details-website">
                         <div className={"img-fluid-wrapper-custom"}>
-                            {calculateFileType(randomPreview.type) !== ("pdf" && "csv" && "xlsx" && "docx") ? 
-                            renderImageOrVideo(randomPreview) : <Fragment>
+                            {(calculateFileType(applicant)) !== ("pdf" && "csv" && "xlsx" && "docx") ? 
+                            renderImageOrVideo(applicant) : <Fragment>
                                 <div className="centered-both-ways icon-container-minimum-specs">
                                     <div className="custom-folder-icon-wradivper-p">
                                         <div className="ribbon-wrapper-bottom">
-                                            <i id="custom-folder-icon-second-one" className={`fa fa-folder f-36 txt-${calculateColorShown(randomNumColorStyle)}`}></i>
+                                            <i id="custom-folder-icon-second-one" className={`fa fa-folder f-36 txt-info`}></i>
                                         </div>
                                     </div>
                                 </div>

@@ -104,13 +104,7 @@ const TimelineTab = ({ applicantData, calculateFileType, renderPictureOrVideoPro
         };
     }
     useEffect(() => {
-        history.listen((location, action) => {
-            console.log("POPPED! in timelineTab.js...!", location, action);
-            // if (location.action === "POP") {
-            //     // Do your stuff
-            //     console.log("POPPED! in timelineTab.js...!", location, action);
-            // }
-        });
+        
     }, []);
 
     const bothBarsProps = {
@@ -145,7 +139,7 @@ const TimelineTab = ({ applicantData, calculateFileType, renderPictureOrVideoPro
                                         <Card className={"add-shadow-md-custom"}>
                                             <Media className="p-20">
                                             <div className="radio radio-primary mr-3">
-                                                <Input id="radio23" type="radio" name="radio1" value="option1" />
+                                                <Input disabled={true} id="radio23" type="radio" name="radio1" value={true} />
                                                 <Label for="radio23"></Label>
                                             </div>
                                             <Media body>
@@ -159,7 +153,7 @@ const TimelineTab = ({ applicantData, calculateFileType, renderPictureOrVideoPro
                                         <Card className={"add-shadow-md-custom"}>
                                             <Media className="p-20">
                                             <div className="radio radio-secondary mr-3">
-                                                <Input id="radio24" type="radio" name="radio1" value="option1" />
+                                                <Input disabled={true} id="radio24" type="radio" name="radio1" value={true} />
                                                 <Label for="radio24"></Label>
                                             </div>
                                             <Media body>
@@ -173,7 +167,7 @@ const TimelineTab = ({ applicantData, calculateFileType, renderPictureOrVideoPro
                                         <Card className={"add-shadow-md-custom"}>
                                             <Media className="p-20">
                                             <div className="radio radio-success mr-3">
-                                                <Input id="radio25" type="radio" name="radio1" value="option1" />
+                                                <Input disabled={true} id="radio25" type="radio" name="radio1" value={true} />
                                                 <Label for="radio25"></Label>
                                             </div>
                                             <Media body>
@@ -187,7 +181,7 @@ const TimelineTab = ({ applicantData, calculateFileType, renderPictureOrVideoPro
                                         <Card className={"add-shadow-md-custom"}>
                                             <Media className="p-20">
                                             <div className="radio radio-info mr-3">
-                                                <Input id="radio5" type="radio" name="radio1" value="option1" />
+                                                <Input disabled={true} id="radio5" type="radio" name="radio1" value={true} />
                                                 <Label for="radio5"></Label>
                                             </div>
                                             <Media body>
@@ -201,7 +195,7 @@ const TimelineTab = ({ applicantData, calculateFileType, renderPictureOrVideoPro
                                         <Card className={"add-shadow-md-custom mb-0"}>
                                             <Media className="p-20">
                                             <div className="radio radio-warning mr-3">
-                                                <Input id="radio26" type="radio" name="radio1" value="option1" />
+                                                <Input disabled={true} id="radio26" type="radio" name="radio1" value={true} />
                                                 <Label for="radio26"></Label>
                                             </div>
                                             <Media body>
@@ -215,7 +209,7 @@ const TimelineTab = ({ applicantData, calculateFileType, renderPictureOrVideoPro
                                         <Card className={"add-shadow-md-custom mb-0"}>
                                             <Media className="p-20">
                                             <div className="radio radio-danger mr-3">
-                                                <Input id="radio27" type="radio" name="radio1" value="option1" />
+                                                <Input disabled={true} id="radio27" type="radio" name="radio1" value={true} />
                                                 <Label for="radio27"></Label>
                                             </div>
                                             <Media body>

@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import Breadcrumb from '../../../../../../../layout/breadcrumb'
-import { Container, Row, Col, Card, Media, TabContent, TabPane, Nav, NavItem, NavLink, Button } from 'reactstrap';
+import { Container, Row, Col, Card, Media, TabContent, TabPane, Nav, NavItem, CardBody, CardHeader, ButtonGroup, Button } from 'reactstrap';
 import TimelineTab from './helpers/timelineTab.js';
 import AboutTab from './helpers/aboutTab.js';
 import FriendsTab from './helpers/friendsTab.js';
@@ -15,6 +15,8 @@ import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import { useHistory } from "react-router-dom";
 import uuid from "react-uuid";
 import moment from "moment";
+import { confirmAlert } from 'react-confirm-alert';
+
 
 const { renderPictureOrVideoProfilePic, calculateFileType } = helpers;
 
@@ -127,6 +129,44 @@ const ManageApplicationIndividualHelper = ({ location }) => {
         user,
         applicantData
     }
+    const hireDesiredUserHacker = (onClose) => {
+        console.log("hireDesiredUserHacker clicked!");
+
+        onClose();
+    }
+    const handlePreClick = () => {
+        confirmAlert({
+            customUI: ({ onClose }) => {
+                return (
+                    <Fragment>
+                        <Card>
+                            <CardHeader className="b-l-primary border-3 specific-edit-border-right">
+                                <h3>Are you <strong>sure</strong> you'd like to <strong>hire</strong> this hacker?! If so, click "confirm & hire"...</h3>
+                            </CardHeader>
+                            <CardBody id="modal-button-showcase-cardbody" className="btn-group-showcase">
+                                <Row>
+                                    <Col sm="12" md="12" lg="12" xl="12">
+                                        <p className="button-group-text-above">If you're 95% confident in this hacker and you feel you can trust them to do the job appropriately and you've vetted them thouroughly, continue onwards with the process and click "Confirm & HIRE this hacker" to <strong>HIRE</strong> this applicant/hacker & the job will <strong>OFFICIALLY BEGIN!</strong></p>
+                                    </Col>
+                                    <Col sm="12" md="12" lg="12" xl="12">
+                                        <hr className="secondary-hr" />
+                                        <div className="centered-button-container-custom-random">
+                                            <ButtonGroup id="button-group-custom-secondary">
+                                                <Button outline color="danger" onClick={onClose}>Cancel/Close</Button>
+                                                <Button type={"submit"} outline color="success" onClick={() => {
+                                                    hireDesiredUserHacker(onClose);
+                                                }}>Confirm & HIRE this hacker!</Button>
+                                            </ButtonGroup>
+                                        </div>
+                                    </Col>
+                                </Row>
+                            </CardBody>
+                        </Card>
+                    </Fragment>
+              );
+            }
+        });
+    }
     return (
         <Fragment>
             <Breadcrumb parent="Submitted Applications" title="Application/Applicant details & information" />
@@ -182,6 +222,21 @@ const ManageApplicationIndividualHelper = ({ location }) => {
                             </Card>
                         </Col>
                     </Row>
+                    <div id="absolute-bottom-right-hire-applicant-btn">
+                        <div className="inner-fixed-right-wrapper">
+                            <Row>
+                                <p className="hire-text-custom">Are you ready to hire this "hacker" & confident in your trust with this user? If so, hack away!</p>
+                            </Row>
+                            <hr />
+                            <Row>
+                                <div className="centered-both-ways">
+                                    <Button style={{ width: "95%" }} outline color={"info-2x"} className={"btn-square-info"} onClick={() => handlePreClick()}>
+                                        HIRE Applicant/Hacker!
+                                    </Button>
+                                </div>
+                            </Row>
+                        </div>
+                    </div>
                     {applicantData !== null ? <TabContent activeTab={activeTab} className="tab-content">
                         <TabPane tabId="1">
                             {userNotEmpty() ? <TimelineTab {...timelineProps} /> : renderSkelatonLoading()}
