@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useMemo } from 'react';
 import Breadcrumb from '../../../../../layout/breadcrumb'
-import { Container, Row, Col, Card, CardBody, CardHeader, Nav, NavItem, TabContent, TabPane, Modal, ModalHeader, ModalBody, Form, FormGroup, Input, Label, Button } from 'reactstrap'
+import { Container, Row, Col, Card, CardBody, CardHeader, Nav, NavItem, TabContent, TabPane, Modal, ModalHeader, ModalBody, Form, FormGroup, Input, Label, Button, Dropdown, DropdownItem, DropdownMenu, PaginationLink, Pagination, PaginationItem } from 'reactstrap'
 import { Grid, List, Link, Share2, Trash2, Tag, Edit2, Bookmark } from 'react-feather';
 import { useEffect } from 'react';
 import { AddBookmark, EditBookmark, WebUrl, Title, Description, Group, General, Save, Cancel, MyBookmark, Notification, Collection, MyBookmarks } from "../../../../../constant";
@@ -75,6 +75,9 @@ const ManageApplicantsMainHelper = ({ userData }) => {
     const [editModal, seteditModal] = useState(false)
     const [tagModal, setTagModal] = useState(false)
     const [gridView,setgridView] = useState(true);
+    const [ activeBool, showActiveJobsMapped ] = useState(false);
+    const [ uniqueJobArray, setUniqueJobArrayState ] = useState(null);
+    const [ currentSelectedMap, setCurrentSelectedMap ] = useState("");
     // ADD toggle
     const addToggle = () => { setaddModal(!addModal) }
     // EDIT toggle
@@ -96,7 +99,19 @@ const ManageApplicantsMainHelper = ({ userData }) => {
                 // log response
                 console.log(res.data);
 
-                setUserData(user);
+                const uniqueJobIDArray = [];
+
+                for (let index = 0; index < user.applicants.length; index++) {
+                    const gigID = user.applicants[index].employerPostedJobId;
+                    if (!uniqueJobIDArray.includes(gigID)) {
+                        uniqueJobIDArray.push(gigID);
+                    }
+                    // check for END of array/loop
+                    if ((user.applicants.length - 1) === index) {
+                        setUniqueJobArrayState(uniqueJobIDArray);
+                        setUserData(user);
+                    }
+                }
             } else {
                 console.log("Err", res.data);
             }
@@ -255,6 +270,12 @@ const ManageApplicantsMainHelper = ({ userData }) => {
             </Col>
         )
     }
+    const handleSelectedJobChange = (id) => {
+        console.log("handleSelectedJobChange clicked...", id);
+
+        setCurrentSelectedMap(id);
+        showActiveJobsMapped(false);
+    }
     return (
         <Fragment>
         <Breadcrumb parent="Active Applicant's" title="Applicant's for posted gigs/jobs and listing's" />
@@ -325,10 +346,24 @@ const ManageApplicantsMainHelper = ({ userData }) => {
                                 <NavItem>
                                     <span className="main-title">Created LIVE Employer Listing(s)</span>
                                 </NavItem>
-                                <NavItem>
-                                    <a  className={activeTab === '1' ? 'active' : ''} onClick={() => setActiveTab('1')}>
-                                        <span className="title">Active Jobs/Gigs ({activeGigsJobs.length})</span>
-                                    </a>
+                                <NavItem className={"customized-nav-item"}>
+                                    <CardBody className="dropdown-basic">
+                                        <Dropdown toggle={() => {}}>
+                                            <div className={"allow-full-height-dropdown"}>
+                                                <Button color={"info"} className="dropbtn customized-dropdown-btn" >Posted Active Jobs/Gigs ({activeGigsJobs.length}) <span><i className="icofont icofont-arrow-down"></i></span></Button>
+                                                <DropdownMenu id={"custom-dropdown-links"} className="dropdown-content">
+                                                    {typeof uniqueJobArray !== "undefined" && uniqueJobArray !== null && uniqueJobArray.length > 0 ? uniqueJobArray.map((link, index) => {
+                                                        return (
+                                                            <Fragment key={index}>
+                                                                <DropdownItem className={"dropdown-link-custom-header"} header>Job ID - {link}</DropdownItem>
+                                                                <DropdownItem className={"list-group-item custom-listgroup-mapped-keys"} style={{ textDecorationLine: "underline", fontWeight: 450 }} onClick={() => handleSelectedJobChange(link)}>{"View Associated Job Applicant's"}</DropdownItem>
+                                                            </Fragment>
+                                                        );
+                                                    }) : null}
+                                                </DropdownMenu>
+                                            </div>
+                                        </Dropdown>
+                                    </CardBody>
                                 </NavItem>
                                 <li>
                                     <hr />
@@ -336,10 +371,24 @@ const ManageApplicantsMainHelper = ({ userData }) => {
                                 <NavItem>
                                     <span className="main-title">Created LIVE <em>Software</em> Listing's (digital)</span>
                                 </NavItem>
-                                <NavItem>
-                                    <a href={null} className={activeTab === '2' ? 'active' : ''} onClick={() => setActiveTab('2')}>
-                                        <span className="title"> {"Software Listings"} ({0})</span>
-                                    </a>
+                                <NavItem className={"customized-nav-item"}>
+                                    <CardBody className="dropdown-basic">
+                                        <Dropdown toggle={() => {}}>
+                                            <div className={"allow-full-height-dropdown"}>
+                                                <Button color={"info"} className="dropbtn customized-dropdown-btn" >Posted Software Listing's ({[].length}) <span><i className="icofont icofont-arrow-down"></i></span></Button>
+                                                <DropdownMenu id={"custom-dropdown-links"} className="dropdown-content">
+                                                    {[].map((link, index) => {
+                                                        return (
+                                                            <Fragment key={index}>
+                                                                <DropdownItem className={"dropdown-link-custom-header"} header>Job ID - {link}</DropdownItem>
+                                                                <DropdownItem className={"list-group-item custom-listgroup-mapped-keys"} style={{ textDecorationLine: "underline", fontWeight: 450 }} onClick={() => handleSelectedJobChange(link)}>{"View Associated Job Applicant's"}</DropdownItem>
+                                                            </Fragment>
+                                                        );
+                                                    })}
+                                                </DropdownMenu>
+                                            </div>
+                                        </Dropdown>
+                                    </CardBody>
                                 </NavItem>
                                 <li>
                                     <hr />
@@ -347,10 +396,24 @@ const ManageApplicantsMainHelper = ({ userData }) => {
                                 <NavItem>
                                     <span className="main-title">Created LIVE <em>Hardware</em> Listing's (physical)</span>
                                 </NavItem>
-                                <NavItem>
-                                    <a  className={activeTab === '3' ? 'active' : ''} onClick={() => setActiveTab('3')}>
-                                        <span className="title"> {"Hardware Listings"} ({0})</span>
-                                    </a>
+                                <NavItem className={"customized-nav-item"}>
+                                    <CardBody className="dropdown-basic">
+                                        <Dropdown toggle={() => {}}>
+                                            <div className={"allow-full-height-dropdown"}>
+                                                <Button color={"info"} className="dropbtn customized-dropdown-btn" >Posted Hardware Listing's ({[].length}) <span><i className="icofont icofont-arrow-down"></i></span></Button>
+                                                <DropdownMenu id={"custom-dropdown-links"} className="dropdown-content">
+                                                    {[].map((link, index) => {
+                                                        return (
+                                                            <Fragment key={index}>
+                                                                <DropdownItem className={"dropdown-link-custom-header"} header>Job ID - {link}</DropdownItem>
+                                                                <DropdownItem className={"list-group-item custom-listgroup-mapped-keys"} style={{ textDecorationLine: "underline", fontWeight: 450 }} onClick={() => handleSelectedJobChange(link)}>{"View Associated Job Applicant's"}</DropdownItem>
+                                                            </Fragment>
+                                                        );
+                                                    })}
+                                                </DropdownMenu>
+                                            </div>
+                                        </Dropdown>
+                                    </CardBody>
                                 </NavItem>
                                 <li>
                                     <hr />
@@ -389,17 +452,21 @@ const ManageApplicantsMainHelper = ({ userData }) => {
                             <TabContent activeTab={activeTab}>
                             <TabPane tabId="1">
                                 <Card className="mb-0">
-                                <CardHeader className="d-flex">
+                                <CardHeader>
                                     <h3 style={{ textDecorationLine: "underline", color: "#a927f9" }} className="mb-0">{"Active Jobs/Gigs (Employer listings recruiting hacker's for physical/digital hack's)"}</h3>
-                                    <ul>
-                                        <li><a className="grid-bookmark-view"><Grid onClick={Gridbookmark} /></a></li>
-                                        <li><a className="list-layout-view"><List onClick={Listbookmark} /></a></li> 
-                                    </ul>
+                                    <hr />
+                                    {typeof currentSelectedMap !== "undefined" && currentSelectedMap.length > 0 ? <h6 className="custom-selected-indicator">You've selected the listing with an ID of <strong style={{ color: "blue" }}>{currentSelectedMap}</strong></h6> : <h6 className="custom-selected-indicator">You <strong style={{ color: "blue" }}> have NOT </strong> selected a listing/posted-job yet, if you'd like to see the applicant for a specific job, click the coresponding ID to view any/all applicant's for that listing/gig!</h6>}
                                 </CardHeader>
                                 <CardBody className="shadow shadow-showcase">
                                     <div className={`details-bookmark text-center ${gridView ? '' : 'list-bookmark'}`}>
                                         <Row>
-                                            {_.has(user, "applicants") && user.applicants.length > 0 ? user.applicants.map((applicant, index) => renderMainContentMapped(applicant, index)) : <div className="no-favourite"><span>You do <strong style={{ color: "blue", textDecorationLine: "underline" }}>NOT</strong> have any active listings in this category, start posting new software, hardware or employer listings to get more involved!</span></div>}
+                                            {_.has(user, "applicants") && user.applicants.length > 0 ? user.applicants.filter((applicant, idx) => {
+                                                if (_.isEqual(applicant.employerPostedJobId, currentSelectedMap)) {
+                                                    return true;
+                                                } else {
+                                                    return false;
+                                                }
+                                            }).map((applicant, index) => renderMainContentMapped(applicant, index)) : <div className="no-favourite"><span>You do <strong style={{ color: "blue", textDecorationLine: "underline" }}>NOT</strong> have any active listings in this category, start posting new software, hardware or employer listings to get more involved!</span></div>}
                                         </Row>
                                     </div>
                                 </CardBody>
@@ -536,6 +603,19 @@ const ManageApplicantsMainHelper = ({ userData }) => {
                         </Card>
                     </div>
                     </Col>
+                </Row>
+                <Row>
+                    <div className="centered-both-ways">
+                        <Pagination className="m-b-30" aria-label="Page navigation example">
+                            <ul className="pagination pagination-lg pagination-secondary">
+                                <PaginationItem><PaginationLink href={null}>{"Previous"}</PaginationLink></PaginationItem>
+                                <PaginationItem active><PaginationLink href={null}>{"1"}</PaginationLink></PaginationItem>
+                                <PaginationItem><PaginationLink href={null}>{"2"}</PaginationLink></PaginationItem>
+                                <PaginationItem><PaginationLink href={null}>{"3"}</PaginationLink></PaginationItem>
+                                <PaginationItem><PaginationLink href={null}>{"Next"}</PaginationLink></PaginationItem>
+                            </ul>
+                        </Pagination>
+                    </div>
                 </Row>
                 </div>
             </Container>

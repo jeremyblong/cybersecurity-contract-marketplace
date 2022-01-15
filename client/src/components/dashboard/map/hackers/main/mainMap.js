@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import ReactMapboxGl, { Marker } from 'react-mapbox-gl';
 import "./styles.css";
 import { withRouter } from "react-router-dom";
-import { Container, Progress, Row, Col, Card, CardHeader, CardBody, Nav, NavItem, NavLink, Button, Badge, TabContent, TabPane, ListGroup, ListGroupItem } from 'reactstrap'
+import { Container, Progress, Row, Col, Card, CardHeader, CardBody, Nav, NavItem, NavLink, Button, Badge, TabContent, TabPane, ListGroup, ListGroupItem, Pagination, PaginationItem, PaginationLink } from 'reactstrap'
 import axios from "axios";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -394,6 +394,7 @@ constructor(props) {
                                         <hr />
                                         <DateRange 
                                             showDateDisplay={false}
+                                            onChange={() => {}}
                                             ranges={datesSelectable}
                                         />
                                     </ListGroupItem>
@@ -431,7 +432,7 @@ constructor(props) {
                                     <img src={require("../../../../../assets/icons/location.png")}/>
                                 </Marker> : null}
                                 {typeof listings !== "undefined" && listings.length > 0 ? listings.map((listing, i) => {
-                                    if (listing.typeOfHack.value === "physical-hack") {
+                                    if (["physical-hack", "both-assets"].indexOf(listing.typeOfHack.value) > -1) {
                                         return (
                                             <Marker
                                                 onClick={() => {
@@ -516,6 +517,19 @@ constructor(props) {
                                 ) : null}
                             </div>
                         </Col>
+                    </Row>
+                    <Row style={{ paddingTop: "17.5px" }}>
+                        <div className="centered-both-ways">
+                            <Pagination className="m-b-30" aria-label="Page navigation example">
+                                <ul className="pagination pagination-lg pagination-secondary">
+                                    <PaginationItem><PaginationLink href={null}>{"Previous"}</PaginationLink></PaginationItem>
+                                    <PaginationItem active><PaginationLink href={null}>{"1"}</PaginationLink></PaginationItem>
+                                    <PaginationItem><PaginationLink href={null}>{"2"}</PaginationLink></PaginationItem>
+                                    <PaginationItem><PaginationLink href={null}>{"3"}</PaginationLink></PaginationItem>
+                                    <PaginationItem><PaginationLink href={null}>{"Next"}</PaginationLink></PaginationItem>
+                                </ul>
+                            </Pagination>
+                        </div>
                     </Row>
                 </Container>
             </div>

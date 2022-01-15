@@ -32,3 +32,10 @@
 .list-listview-wrapper-wrap {
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
 }
+.very-top-header {
+    font-size: 1rem !important;
+}
+.span-very-top-sub {
+    color: blue !important;
+    font-weight: bold;
+}

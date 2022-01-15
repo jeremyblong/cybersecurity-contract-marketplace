@@ -1,6 +1,6 @@
 import React, {Fragment,useState,useEffect} from 'react';
 import Breadcrumb from '../../../../../../layout/breadcrumb';
-import { Container,Row,Col,Card,CardBody,Media,Badge,Button } from 'reactstrap';
+import { Container, Row, Col, Card, CardBody, Media, Badge, Button, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import JobFilter from './helpers/filter/filterJobs.js';
 import { Link, useHistory }  from 'react-router-dom';
 import axios from 'axios';
@@ -92,6 +92,19 @@ const LiveEmployerListingsHelper = ({ userData }) => {
                             })}
                         </Row>
                     </Col>
+                </Row>
+                <Row>
+                    <div className="centered-both-ways">
+                        <Pagination className="m-b-30" aria-label="Page navigation example">
+                            <ul className="pagination pagination-lg pagination-secondary">
+                                <PaginationItem><PaginationLink href={null}>{"Previous"}</PaginationLink></PaginationItem>
+                                <PaginationItem active><PaginationLink href={null}>{"1"}</PaginationLink></PaginationItem>
+                                <PaginationItem><PaginationLink href={null}>{"2"}</PaginationLink></PaginationItem>
+                                <PaginationItem><PaginationLink href={null}>{"3"}</PaginationLink></PaginationItem>
+                                <PaginationItem><PaginationLink href={null}>{"Next"}</PaginationLink></PaginationItem>
+                            </ul>
+                        </Pagination>
+                    </div>
                 </Row>
             </Container>
         </Fragment>

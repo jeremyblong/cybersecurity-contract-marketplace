@@ -167,7 +167,7 @@ const CreateJobListingMainHelper = (props) => {
         });
     }
     const renderBusinessLocationPortion = () => {
-        if (_.has(props.previousData, "typeOfHack") && typeOfHack !== null && typeOfHack.value === "physical-hack") {
+        if (_.has(props.previousData, "typeOfHack") && typeOfHack !== null && ["physical-hack", "both-assets"].indexOf(typeOfHack.value) > -1) {
             return (
                 <Fragment>
                     <h6 className="mb-0">Location - Physical Hacking (Only Provided To <strong>SELECTED/HIRED</strong> Applicants)</h6>
@@ -186,7 +186,7 @@ const CreateJobListingMainHelper = (props) => {
         }
     }
     const renderPhysicalHackingDates = () => {
-        if (_.has(props.previousData, "typeOfHack") && typeOfHack !== null && typeOfHack.value === "physical-hack") {
+        if (_.has(props.previousData, "typeOfHack") && typeOfHack !== null && ["physical-hack", "both-assets"].indexOf(typeOfHack.value) > -1) {
             return (
                 <Fragment>
                     <Label htmlFor="exampleFormControlInput1">Dates Availiable To Hackers To Test Physical Assets:<span className="font-danger">*</span></Label>
@@ -349,8 +349,6 @@ const CreateJobListingMainHelper = (props) => {
 
                 for (const key in props.previousData) {
                     const el = props.previousData[key];
-
-                    console.log("physical - ", key, el);
         
                     switch (key) {
                         case "testingDatesHackers":

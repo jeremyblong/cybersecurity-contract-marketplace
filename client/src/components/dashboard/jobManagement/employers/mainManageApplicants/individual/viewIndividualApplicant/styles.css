@@ -196,3 +196,9 @@
 #modal-button-showcase-cardbody {
     min-width: 100%;
 }
+.min-width-height {
+    min-width: 55px;
+    min-height: 55px;
+    max-height: 55px;
+    max-width: 55px;
+}

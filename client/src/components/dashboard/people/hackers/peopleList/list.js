@@ -1,6 +1,6 @@
 import React, { Fragment,useState,useEffect } from 'react';
 import Breadcrumb from '../../../../../layout/breadcrumb';
-import { Container, Row, Col, Card, CardHeader, CardFooter, Media } from 'reactstrap';
+import { Container, Row, Col, Card, CardHeader, CardFooter, Media, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import _ from "lodash";
 import moment from "moment";
@@ -90,6 +90,19 @@ const UsersCardsListHelper = (props) => {
                             </Col>
                         );
                     })}
+                    <Row style={{ paddingTop: "17.5px" }}>
+                        <div className="centered-both-ways">
+                            <Pagination className="m-b-30" aria-label="Page navigation example">
+                                <ul className="pagination pagination-lg pagination-secondary">
+                                    <PaginationItem><PaginationLink href={null}>{"Previous"}</PaginationLink></PaginationItem>
+                                    <PaginationItem active><PaginationLink href={null}>{"1"}</PaginationLink></PaginationItem>
+                                    <PaginationItem><PaginationLink href={null}>{"2"}</PaginationLink></PaginationItem>
+                                    <PaginationItem><PaginationLink href={null}>{"3"}</PaginationLink></PaginationItem>
+                                    <PaginationItem><PaginationLink href={null}>{"Next"}</PaginationLink></PaginationItem>
+                                </ul>
+                            </Pagination>
+                        </div>
+                    </Row>
                 </Fragment>
             );
         } else {

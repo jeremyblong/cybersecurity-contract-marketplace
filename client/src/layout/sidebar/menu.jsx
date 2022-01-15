@@ -103,7 +103,8 @@ export const MENUITEMS = [
                 title: 'Knowledge Expansion', icon: Home, type: 'sub', active: false, children: [
                     { path: `${process.env.PUBLIC_URL}/course/learning/list/main`, title: 'Courses', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Professional Seminars', type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'Live Hacking-Streams', type: 'link' },
+                    { path: `${process.env.PUBLIC_URL}/view/all/live/streams/general`, title: 'Live Hacking-Streams', type: 'link' },
+                    { path: `${process.env.PUBLIC_URL}/create/new/live/stream/hackers`, title: 'Create New Hacking Live Stream', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Chat Rooms', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Tutorial Videos', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Blogging/Blogs', type: 'link' }

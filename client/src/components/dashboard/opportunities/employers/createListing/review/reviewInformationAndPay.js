@@ -273,7 +273,7 @@ constructor(props) {
             if (res.data.message === "Successfully posted a new employer listing!") {
                 console.log(res.data);
 
-                this.props.history.push("/dashboard");
+                this.props.history.push("/dashboard/employer");
             } else {
                 console.log("err", res.data);
             }

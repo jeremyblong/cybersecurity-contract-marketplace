@@ -140,7 +140,7 @@ const AboutTab = ({ applicantData, lastProfileItem, user }) => {
                                 </CardBody>
                             </Card>
                         </Col>
-                        <Col sm="12">
+                        {/* <Col sm="12">
                             <Card>
                                 <CardHeader className="social-header">
                                     <h5><span>{"Education and Employement"}</span><span className="pull-right"><MoreVertical /></span></h5>
@@ -190,7 +190,7 @@ const AboutTab = ({ applicantData, lastProfileItem, user }) => {
                                     </Row>
                                 </CardBody>
                             </Card>
-                        </Col>
+                        </Col> */}
                     </Row>
                 </Col>
                 <div className="col-xl-3 xl-100 box-col-12">

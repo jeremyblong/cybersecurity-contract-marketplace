@@ -607,11 +607,6 @@ const ViewIndividualJobListingHelper = ({ userData, saveApplicationDetailsProgre
                     <Card className="card hovercard text-center">
                         <CardHeader id="override-cardheader">
                             {_.has(employerInfo, "profileBannerImage") ? <img src={`${process.env.REACT_APP_ASSET_LINK}/${employerInfo.profileBannerImage.link}`} id="banner-photo-cover-all" /> : <img src={require('../../../../../../../assets/images/banner/2.jpg')} id="banner-photo-cover-all" />}
-                            <img src={require('../../../../../../../assets/icons/edit-image.png')} onClick={() => {
-                                this.setState({
-                                    isOpen: true
-                                })
-                            }} className="absolute-img-top-right" />
                         </CardHeader>
                         <div className="user-image">
                         <div className="avatar">
@@ -625,12 +620,12 @@ const ViewIndividualJobListingHelper = ({ userData, saveApplicationDetailsProgre
                             <Row >
                                 <Col md="6">
                                 <div className="ttl-info text-left">
-                                    <h6><i className="fa fa-envelope mr-2"></i>Email</h6><span>Enter some random BS here...</span>
+                                    <h6 className={"very-top-header"}>Experience & Cost-To-Post</h6><span className={"span-very-top-sub"}>{data.experienceAndCost.label}</span>
                                 </div>
                                 </Col>
                                 <Col md="6">
                                 <div className="ttl-info text-left ttl-sm-mb-0">
-                                    <h6><i className="fa fa-calendar"></i> DOB</h6><span>Enter some random BS here...</span>
+                                    <h6 className={"very-top-header"}>MAX Number Of Applicants</h6><span className={"span-very-top-sub"}>{data.maxNumberOfApplicants.label}</span>
                                 </div>
                                 </Col>
                             </Row>
@@ -645,12 +640,12 @@ const ViewIndividualJobListingHelper = ({ userData, saveApplicationDetailsProgre
                             <Row>
                                 <Col md="6">
                                 <div className="ttl-info text-left ttl-xs-mt">
-                                    <h6><i className="fa fa-phone"></i> Contact Us</h6><span>Enter some random BS here...</span>
+                                    <h6 className={"very-top-header"}>{process.env.REACT_APP_CRYPTO_TOKEN_NAME} Tokens Required/Apply</h6><span className={"span-very-top-sub"}>{data.tokensRequiredToApply.label}</span>
                                 </div>
                                 </Col>
                                 <Col md="6">
                                 <div className="ttl-info text-left ttl-sm-mb-0">
-                                    <h6><i className="fa fa-location-arrow"></i> Location</h6><span>Enter some random BS here...</span>
+                                    <h6 className={"very-top-header"}>Posted Date/Time-Ago</h6><span className={"span-very-top-sub"}>Posted {moment(data.systemDate).fromNow()}</span>
                                 </div>
                                 </Col>
                             </Row>

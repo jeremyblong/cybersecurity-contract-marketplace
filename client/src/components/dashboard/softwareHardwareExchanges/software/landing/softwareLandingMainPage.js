@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import Breadcrumb from '../../../../../layout/breadcrumb';
 import { connect } from 'react-redux';
-import { Container, Row, Col, Card, CardHeader, CardBody, Button, ListGroup, Form, FormGroup, Input, Media } from 'reactstrap';
+import { Container, Row, Col, Card, CardHeader, CardBody, Button, ListGroup, Form, FormGroup, Input, Media, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import { Grid, List } from 'react-feather';
 import { Link, useHistory } from 'react-router-dom';
 import errorImg from '../../../../../assets/images/search-not-found.png';
@@ -495,6 +495,19 @@ const SoftwareLandingMainHelper = (props) => {
                 }
             </div>
             </div>
+            <Row style={{ paddingTop: "17.5px" }}>
+                <div className="centered-both-ways">
+                    <Pagination className="m-b-30" aria-label="Page navigation example">
+                        <ul className="pagination pagination-lg pagination-secondary">
+                            <PaginationItem><PaginationLink href={null}>{"Previous"}</PaginationLink></PaginationItem>
+                            <PaginationItem active><PaginationLink href={null}>{"1"}</PaginationLink></PaginationItem>
+                            <PaginationItem><PaginationLink href={null}>{"2"}</PaginationLink></PaginationItem>
+                            <PaginationItem><PaginationLink href={null}>{"3"}</PaginationLink></PaginationItem>
+                            <PaginationItem><PaginationLink href={null}>{"Next"}</PaginationLink></PaginationItem>
+                        </ul>
+                    </Pagination>
+                </div>
+            </Row>
         </Container>
         </Fragment>
     );

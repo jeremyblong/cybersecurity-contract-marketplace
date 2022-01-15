@@ -19,5 +19,7 @@
     "baseServerURL": "http://localhost:5000",
     "assetLink": "https://cybersecurity-platform.s3.amazonaws.com",
     "applicationName": "CyberHunt Cybersecurity Marketplace",
-    "cryptoTokenName": "Cyphron Token's"
+    "cryptoTokenName": "Cyphron Token's",
+    "muxAccessTokenID": "f4e738f7-f76e-4b3d-bf83-77f13cb102de",
+    "muxSecretKey": "UiMAtR7mGIBZTsRiQRHDOavWoZF9+w3maarENNAKakZ/2LIdiy17vviMCnBtboPYevmt5FDVTcj"
 }

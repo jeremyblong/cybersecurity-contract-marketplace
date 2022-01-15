@@ -119,7 +119,7 @@ const LeftBar = ({ applicantData, lastProfileItem, user }) => {
                     </CardHeader>
                     <Collapse isOpen={testingDatesOpen}>
                         <CardBody className="socialprofile filter-cards-view">
-                            <Media><Media className="img-50 img-fluid m-r-20 rounded-circle" src={(typeof lastProfileItem !== "undefined" && _.has(lastProfileItem, "link")) ? `${process.env.REACT_APP_ASSET_LINK}/${lastProfileItem.link}` : profileLogoPlaceholder} alt="" />
+                            <Media><Media className="img-50 img-fluid m-r-20 rounded-circle min-width-height" src={(typeof lastProfileItem !== "undefined" && _.has(lastProfileItem, "link")) ? `${process.env.REACT_APP_ASSET_LINK}/${lastProfileItem.link}` : profileLogoPlaceholder} alt="" />
                                 <Media body>
                                     <h6 className="font-primary f-w-600">{applicantData.applicantName}</h6><span className="d-block"><span><i className="fa fa-bell-o"> </i><span className="px-2">FOLLOWERS <span style={{ color: "white" }} className="badge badge-pill badge-info">{(Math.floor(Math.random() * 750) + 1)}</span></span></span></span><span className="d-block"><span><i className="fa fa-bell-o"></i><span className="px-2">FOLLOWING <span style={{ color: "white" }} className="badge badge-pill badge-info">{(Math.floor(Math.random() * 750) + 1)}</span></span></span></span>
                                 </Media>

@@ -568,15 +568,16 @@ const renderMountedLogic = (globalConfig, setPhysicalOrDigitalHackOptionsState, 
                     console.log("maxDate", maxDate);
                     console.log("minDate", minDate);
                 })
+            console.log("listing.typeOfHack.value", listing.typeOfHack.value);
             // update physicalOrDigitalHackOptions options 
             switch (listing.typeOfHack.value) {
                 case "physical-hack":
                     setPhysicalOrDigitalHackOptionsState([{ label: "BOTH (Digital/Physical hack's) Hack Type's", value: "both-assets", isDisabled: true }, { label: "Digital/Internet-Hack ONLY", value: "digital-internet-hack", isDisabled: true }, { label: "Physical-Hack ONLY", value: "physical-hack" }]);
                     break;
-                case "":
+                case "digital-internet-hack":
                     setPhysicalOrDigitalHackOptionsState([{ label: "BOTH (Digital/Physical hack's) Hack Type's", value: "both-assets", isDisabled: true }, { label: "Digital/Internet-Hack ONLY", value: "digital-internet-hack" }, { isDisabled: true, label: "Physical-Hack ONLY", value: "physical-hack" }]);
                     break;
-                case "":
+                case "both-assets":
                     setPhysicalOrDigitalHackOptionsState([{ label: "BOTH (Digital/Physical hack's) Hack Type's", value: "both-assets" }, { isDisabled: true, label: "Digital/Internet-Hack ONLY", value: "digital-internet-hack" }, { isDisabled: true, label: "Physical-Hack ONLY", value: "physical-hack" }]);
                     break;
                 default:
