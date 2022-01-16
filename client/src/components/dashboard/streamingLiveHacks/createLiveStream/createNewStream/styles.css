@@ -8,3 +8,48 @@
 .streaming-video {
 
 }
+.before-text-streamkey {
+    font-weight: 450;
+    color: #dc3545;
+}
+#no-border-button-custom {
+    border: none !important;
+}
+#no-border-button-custom:hover {
+    border: 2px dotted default !important;
+    background-color: transparent !important;
+    color: black !important;
+}
+.custom-tab-pane-streaming {
+    min-height: 100%;
+}
+.mega-title-custom-streaming {
+    font-size: 1.15rem;
+    text-decoration-line: underline;
+    font-weight: 450;
+    color: #f73164;
+    margin-top: 22.5px;
+    margin-bottom: 22.5px !important;
+} 
+.custom-digits-streaming {
+    margin-top: 5px;
+    margin-bottom: 7.5px;
+}
+.mega-title-badge-streaming-custom {
+    font-size: 0.915rem !important;
+}
+.shadow-showcase-custom {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+.streaming-start-form-wrapper {
+    margin-top: 50px;
+}
+.custom-col-streaming-one {
+    /* shouldnt need to do anything w/this */
+}
+.custom-col-streaming-two label {
+    margin-bottom: 20px;
+}
+.custom-col-streaming-three label {
+    margin-bottom: 30px;
+}
