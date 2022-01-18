@@ -53,3 +53,15 @@
 .custom-col-streaming-three label {
     margin-bottom: 30px;
 }
+.shadow-medium-custom {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+.custom-tag-streaming {
+    background-color: #f73164 !important;
+    font-size: 0.775rem;
+    margin-top: 10px !important;
+}
+.custom-tag-streaming:hover {
+    background-color: #a927f9 !important;
+    font-size: 0.775rem;
+}

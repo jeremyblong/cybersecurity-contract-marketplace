@@ -5,13 +5,17 @@ import { Database, Grid, Upload, Code } from 'react-feather';
 import axios from "axios";
 import "./styles.css";
 import _ from "lodash";
+import { connect } from "react-redux";
 import { NotificationManager } from "react-notifications";
 import { useForm, Controller } from 'react-hook-form';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import hookFormHelpers from "./helpers/helperFunctions.js";
 import Select from "react-select";
 import nonFormHelpers from "./helpers/nonFormHelpers.js";
-
+import ReactHlsPlayer from 'react-hls-player';
+import { saveStreamPreFilledData } from "../../../../../redux/actions/streaming/creation/createNewStreamData.js";
+import { useHistory } from "react-router-dom";
+import uuid from "react-uuid";
 
 // redux-form-hook helpers
 const handleSubcategoryCheckerChange = hookFormHelpers().handleSubcategoryCheckerChange; 
@@ -23,28 +27,32 @@ const { HashtagHelper, languageList } = nonFormHelpers;
 
 
 const subcategoryOptions = [
-    { value: 'malware-related', label: 'Malware Related Codes' },
-    { value: 'phishing', label: 'Phishing' },
-    { value: "cross-site-scripting-xss", label: "Cross Site Scripting (XSS)" },
-    { value: "denial-of-service", label: "Denial Of Service (DDoS)" },
-    { value: "session-hijacking-man-in-middle", label: "Session Hijacking & Man-In-Middle Attacks" },
-    { value: "macro-malware-in-documents", label: "Macro-Malware In Documents" },
-    { value: "iot-attack", label: "IoT Attack" },
+    { value: 'spear-phishing-attacks', label: 'Spear Phishing Attacks' },
+    { value: 'phishing', label: 'Phishing Related' },
+    { value: "ransomware", label: "Ransomware Related" },
+    { value: "drive-by-attack", label: "Drive-by Attack" },
+    { value: "trojan-horses", label: "Trojan Horses" },
+    { value: "password-attack", label: "Password Attack" },
+    { value: "phone-call-text-related", label: "Phone-Call/Text-Related" },
+    { value: "eavesdropping-attack", label: "Eavesdropping Attack" },
     { value: "clickjacking-ui-redress", label: "Clickjacking/UI Redress" },
     { value: "dns-spoofing", label: "DNS Spoofing" },
     { value: "watering-hole-attack", label: "Watering Hole Attack" },
     { value: "keylogger-attack", label: "Keylogger Attack" },
     { value: "bruteforce-attack", label: "Brute-Force Attack" },
     { value: "dictionary-attack", label: "Dictionary Attack" },
-    // easy/lazy BELOW
     { value: "credential-reuse", label: "Credential Reuse" },
     { value: 'sql-injection-attack', label: 'SQL Injection Attack' },
     { value: "fake-wap", label: "Fake WAP" },
     { value: "bait-and-switch", label: "Bait & Switch" },
     { value: "browser-locker", label: "Browser Locker" },
-    // easy/lazy ABOVE
+    { value: "birthday-attack", label: "Birthday attack" },
+    { value: "insider-threat", label: "Insider Threat" },
+    { value: "ai-powered-attack", label: "AI-Powered Attacks" }
 ];
-const CreateNewLiveStreamAsHackerHelper = ({  }) => {
+const CreateNewLiveStreamAsHackerHelper = ({ saveStreamPreFilledData, userData }) => {
+    // create history redirect abliity
+    const history = useHistory();
     // refs initialization
     const subCategoryRefSelector = useRef(null);
     const codingLanguageSelectRef = useRef(null);
@@ -52,6 +60,7 @@ const CreateNewLiveStreamAsHackerHelper = ({  }) => {
     const [searchTerm, setSearchTerm] = useState("");
     const [ tabbedPaneActive, setTabbedPaneActive ] = useState("1");
     const [ streamKey, setStreamKey ] = useState(null);
+    const [ hideStream, setStreamHidden ] = useState(true);
     const [ streamInfo, setStreamInfo ] = useState(null);
     const [ playbackStream, setPlaybackStream ] = useState(null);
     const [ visibility, setVisibility ] = useState(null);
@@ -181,7 +190,7 @@ const CreateNewLiveStreamAsHackerHelper = ({  }) => {
         watch(["mainDescription", "streamHashtags", "subCategory", "listingTitle", ])
         return (
             <Fragment>
-                <Card>
+                <Card className={"shadow-medium-custom"}>
                     <CardHeader className="b-l-primary border-3">
                         <h5>You have <strong>not</strong> officially started/initalized your live stream yet...Manage your settings BEFORE going live using the options below</h5>
                     </CardHeader>
@@ -350,7 +359,7 @@ const CreateNewLiveStreamAsHackerHelper = ({  }) => {
                                             {errors.mainDescription ? <span className="span-tooltip">{errors.mainDescription.message}</span> : null}
                                         </Col>
                                     </div>
-                                    <Button style={{ width: "100%", marginTop: "17.5px" }} outline className={"btn-square-info"} color="info-2x">{"Submit Data & Start a live stream!"}</Button>
+                                    <Button style={{ width: "100%", marginTop: "17.5px" }} outline className={"btn-square-info"} color="info-2x">{"Submit Data & REQUEST Streaming Key/Data!"}</Button>
                                 </Form>
                             </TabPane>
                         </TabContent>
@@ -360,7 +369,89 @@ const CreateNewLiveStreamAsHackerHelper = ({  }) => {
             </Fragment>
         );
     }
+    const handleFinalSubmissionAfterStreamStart = () => {
+        console.log("handleFinalSubmissionAfterStreamStart clicked.");
+
+        // gather form values
+        const currentValues = getValues();
+        // redux-hook-form values completed!
+        const { mainDescription, streamHashtags, subCategory, listingTitle, codingLanguage } = currentValues;
+        // assign MAIN category
+        const mainCategory = selectedMainCategory;
+        // visibility 
+        const streamVisibility = visibility;
+
+        const timeoutCount = 5500;
+
+        const handleNotificationClick = (timeout) => {
+            clearTimeout(timeout);
+            history.push(`/view/all/live/streams/general`);
+        }
+
+        if (streamInfo !== null) {
+            const streamInformationCustomized = {
+                streamVisibility,
+                streamMainCategory: mainCategory,
+                streamMainDescription: mainDescription, 
+                streamHashtags, 
+                streamSubCategory: subCategory, 
+                listingTitle, 
+                streamCodingLanguage: codingLanguage,
+                id: uuid()
+            };
+
+            const config = {
+                streamID: streamInfo.id,
+                streamInformationCustomized,
+                posterID: userData.uniqueId,
+                posterName: `${userData.firstName} ${userData.lastName}`,
+                posterUsername: userData.username,
+                streamKey
+            };
+
+            axios.post(`${process.env.REACT_APP_BASE_URL}/check/live/stream/active`, config).then((res) => {
+                if (res.data.message === "STREAM IS ACTIVATED & LIVE!") {
+                    // render checks for completed (fully) form data and stream started...
+                    if ((typeof codingLanguage !== "undefined" && Object.keys(codingLanguage).length > 0) && (typeof listingTitle !== "undefined" && (listingTitle.length >= 15 && listingTitle.length <= 75)) && (typeof mainDescription !== "undefined" && (mainDescription.length >= 50 && mainDescription.length <= 1000)) && (typeof streamHashtags !== "undefined" && streamHashtags.length >= 5) && (typeof subCategory !== "undefined" && Object.keys(subCategory).length > 0) && (typeof streamVisibility !== "undefined" && streamVisibility !== null)) {
+                        // make sure user selects a MAIN CATEGORY before proceeding...
+                        if (selectedMainCategory === "none-selected") {
+                            // THROW WARNING Notification
+                            NotificationManager.warning("You have COMPLETED 'most' of the required data for this listing, however you forgot to select a 'Main Category' for your stream (top-left selection button's) - please select this value before proceeding & you'll be all set!", "LAST STEP - Select a 'MAIN Category'!", 5250);
+                        } else {
+                            // SUCCESS ! - use redux to save data for next "Review" page...
+                            saveStreamPreFilledData(streamInformationCustomized)  
+    
+                            const timeout = setTimeout(() => {
+                                history.push(`/view/all/live/streams/general`);
+                            }, timeoutCount);
+    
+                            NotificationManager.success(`Successfully saved your data & you will now be redirect to your LIVE stream in 5 seconds or click me to immediately redirect!`, "SUCCESSFULLY INITIATED LIVE STREAM!", timeoutCount, () => {
+                                handleNotificationClick(timeout);
+                            });
+                        }
+                    } else {
+                        // THROW ERROR Notification
+                        NotificationManager.error("You MUST complete the required data in 'visibility' & 'general settings' before attempting to proceed and start your live stream...", "ALL required data is NOT provided yet!", 5250);
+                    }
+                } else if (res.data.message === "Stream is currently IDLE - NOT live yet...") {
+                    NotificationManager.warning("Your stream is currently in an 'IDLE' state which means you have NOT offically started the live stream yet - you still need to connect w/your STREAM-KEY & SERVER URL (via broadcasting software)", "Stream is NOT live yet!", 5000);
+                } else {
+                    console.log("STREAM NOT ACTIVE.... : ", res.data);
+    
+                    NotificationManager.error("We've determined that your stream is in fact NOT live YET, You must START your stream & verify you can view it on this page before proceeding to the 'review page'...", "Stream is NOT live yet!", 5000);
+                }
+            }).catch((err) => {
+                console.log(err);
+    
+                NotificationManager.error("An unknown error occurred while trying to fetch your live stream & determine whether or not it's already live... Please TRY AGAIN.", "Stream is NOT live yet!", 5000);
+            })
+        } else {
+            NotificationManager.error("You MUST complete ALL of the required data in 'visibility' & 'general settings' before attempting to proceed and start your live stream...", "ALL required data is NOT provided yet!", 5250);
+        }
+    }
+    // const currentValues = getValues();
     console.log(streamKey, streamInfo);
+    // console.log("PRE-CHECKS... : ", currentValues, selectedMainCategory, visibility);
     return (
         <Fragment>
         <Breadcrumb parent="Live streaming creation" title="Create a new 'live hacking-stream' now!" />
@@ -368,7 +459,7 @@ const CreateNewLiveStreamAsHackerHelper = ({  }) => {
             <Row>
             <Col xl="3" className="box-col-6 pr-0 file-spacing">
                 <div className="file-sidebar">
-                <Card>
+                <Card className={"shadow-medium-custom"}>
                    <CardBody>   {/*  selectedMainCategory, setSelectedMainCategoryState */}
                     <h6 className="mb-3">Select a category of your live hacking stream before being able to start your stream & go public!</h6>
                     <ul>
@@ -442,7 +533,7 @@ const CreateNewLiveStreamAsHackerHelper = ({  }) => {
             </Col>
             <Col xl="9" md="12" className="box-col-12">
                 <div className="file-content">
-                    <Card>
+                    <Card className={"shadow-medium-custom"}>
                         <CardHeader className="b-l-secondary border-3">
                             <h5>Live Streaming Key</h5>
                             <p style={{ marginTop: "7.5px" }}>{streamKey === null ? "You can't create a 'stream-key' YET because you need to configure your listing first & fill out the required data before proceeding..." : "This will allow you to <strong>START</strong> your live stream (enter your copied 'stream key' to start stream)"}</p>
@@ -451,21 +542,50 @@ const CreateNewLiveStreamAsHackerHelper = ({  }) => {
                             {streamKey === null ? <p className="before-text-streamkey">Once you "start" your live stream process by clicking "Start a live stream!" above to initialize your "stream key" to go to the next-step of the process of starting and initalizing a publically viewable live stream... However, <strong>FIRST</strong> you <strong>must</strong> complete the "visibility" & "general-settings" details before proceeding forward.</p> : <div>
                                 <p>Your stream key is below, Click the button below to <strong>"Copy"</strong> the stream key to your clipboard.</p>
                                 <hr />
-                                <Button id={"no-border-button-custom"} style={{ width: "100%" }} outline color={"secondary-2x"} className="btn-squared-secondary ml-1" onClick={() => navigator.clipboard.writeText(streamKey)}>{`Copy your STREAM KEY ~ ${streamKey}`}</Button>
+                                <Button id={"no-border-button-custom"} style={{ width: "100%" }} outline color={"secondary-2x"} className="btn-squared-secondary ml-1" onClick={() => {
+                                    navigator.clipboard.writeText(streamKey);
+
+                                    NotificationManager.info("Successfully copied 'Stream Key' to 'Clipboard' & it is now ready to be pasted!", 'COPIED STREAM KEY TO CLIPBOARD!', 4750);
+                                }}>{`Copy your STREAM KEY ~ ${streamKey}`}</Button>
                                 <hr />
-                                <Button id={"no-border-button-custom"} style={{ width: "100%" }} outline color={"primary-2x"} className="btn-squared-primary ml-1" onClick={() => navigator.clipboard.writeText("rtmps://global-live.mux.com:443/app")}>{`Copy Server URL ~ rtmps://global-live.mux.com:443/app`}</Button>
+                                <Button id={"no-border-button-custom"} style={{ width: "100%" }} outline color={"primary-2x"} className="btn-squared-primary ml-1" onClick={() => {
+                                    navigator.clipboard.writeText("rtmps://global-live.mux.com:443/app");
+
+                                    NotificationManager.info("Successfully copied 'Server URL' to 'Clipboard' & it is now ready to be pasted!", 'COPIED SERVER URL TO CLIPBOARD!', 4750);
+                                }}>{`Copy Server URL ~ rtmps://global-live.mux.com:443/app`}</Button>
                             </div>}
                         </CardBody>
                     </Card>
-                    <Card>
+                    {/* conditional render BELOW */}
+                    <Card className={"shadow-medium-custom"} style={{ marginBottom: "37.5px" }}>
+                        <CardBody> 
+                            <Row>
+                                <Col sm="12" lg="12" xl="12" md="12">
+                                    <div className={"centered-both-ways"}>
+                                        <Button style={{ width: "100%" }} outline color={"secondary-2x"} className="btn-squared-secondary ml-1" onClick={handleFinalSubmissionAfterStreamStart}>Submit Stream & Go LIVE/PUBLIC! (All pre-work is done)</Button>
+                                    </div>
+                                </Col>
+                            </Row>
+                        </CardBody>
+                    </Card>
+                    {/* conditional render ABOVE*/}
+                    <Card className={"shadow-medium-custom"}>
 
                         <CardBody className="custom-cardbody-streaming-start">
                             <h4 className="mb-3">Upload/start a new LIVE stream (live streams of live hack's)</h4>
                             <h6>Start a stream of a LIVE <strong>AUTHORIZED</strong> hack (digital asset's <strong>ONLY</strong>) and <strong>EARN MONEY</strong> via "Gifts", "Kudo's" and other various incentives/prizes while hacking away! You'll earn more money if you have more followers/viewers so try to grow your audience!</h6>
                             <hr />
-                            {playbackStream !== null ? <video className={"streaming-video-wrapper"} controls muted>
-                                <source className={"streaming-video"} src={playbackStream} type="video/mp4"></source>
-                            </video> : renderBeforeReadyLogic()}
+                            {streamKey !== null ? <Button style={{ width: "100%", marginBottom: "22.5px" }} outline color={"success-2x"} className="btn-squared-success ml-1" onClick={() => {
+                                setStreamHidden(!hideStream);
+                            }}>{hideStream === false ? "Hide Stream & Reload Stream..." : "Show Stream & Reload Stream!"}</Button> : null}
+                            {playbackStream !== null && hideStream === false ? <ReactHlsPlayer
+                                src={playbackStream}
+                                autoPlay={true}
+                                controls={true}
+                                width="100%"
+                                height="auto"
+                            /> : null}
+                            {playbackStream !== null ? null : renderBeforeReadyLogic()}
                         </CardBody>
                     </Card>
                 </div>
@@ -476,5 +596,9 @@ const CreateNewLiveStreamAsHackerHelper = ({  }) => {
         </Fragment>
     );
 }
-
-export default CreateNewLiveStreamAsHackerHelper;
+const mapStateToProps = (state) => {
+    return {
+        userData: state.auth.data
+    }
+}
+export default connect(mapStateToProps, { saveStreamPreFilledData })(CreateNewLiveStreamAsHackerHelper);

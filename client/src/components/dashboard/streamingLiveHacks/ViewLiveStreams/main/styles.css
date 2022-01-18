@@ -1,0 +1,19 @@
+.create-custom-row-streaming-preview li { 
+    max-width: 33.3333% !important;
+}
+.lower-bar-streaming li {
+    min-width: 50%;
+}
+.lower-bar-streaming {
+   
+}
+.blog-bottom-details {
+    padding: 2.5px;
+}
+.black-bold-title {
+    font-weight: bold !important;
+    color: black !important;
+}
+.main-details-black {
+    color: black !important;
+}

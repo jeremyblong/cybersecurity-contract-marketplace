@@ -1,0 +1,17 @@
+.ribbon-wrapped-streaming-card {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1825) !important;
+    height: 100%;
+    border-radius: 30px;
+}
+.streaming-chat-card-wrapper {
+    
+}
+.streaming-chat-card-body {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1825) !important;
+    height: 100%;
+    border-radius: 30px;
+}
+.custom-streaming-player {
+    box-shadow: 0px 3px 23px 2.75px #4b0974 !important;
+    height: 100%;
+}

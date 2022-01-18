@@ -10,10 +10,10 @@ router.get("/", async (req, res, next) => {
 
     const result = await Video.LiveStreams.create({
         playback_policy: 'public',
-        new_asset_settings: { playback_policy: 'public' }
+        new_asset_settings: { 
+            playback_policy: 'public'
+        }
     }); 
-
-    console.log("result", result);
 
     if (result) {
         res.json({

@@ -1,0 +1,27 @@
+.like-dislike-row div {
+   flex-direction: row;
+   flex: row;
+   padding-right: 2.5px;
+   padding-left: 2.5px;
+   position: relative;
+   display: inline-block;
+}
+.forced-row-stats table {
+    min-width: 50%;
+    flex-direction: row;
+   flex: row;
+   position: relative;
+   display: inline-block;
+}
+.stream-tags-header {
+    text-decoration-line: underline;
+}
+.stream-tag {
+    font-size: 0.85rem;
+}
+.review-total-text {
+    padding-left: 15px;
+}
+.stretch-third-button {
+    width: 32.666666%;
+}

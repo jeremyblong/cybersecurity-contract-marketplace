@@ -16,11 +16,11 @@ import { useHistory } from "react-router-dom";
 import uuid from "react-uuid";
 import moment from "moment";
 import { confirmAlert } from 'react-confirm-alert';
-
+import { connect } from "react-redux";
 
 const { renderPictureOrVideoProfilePic, calculateFileType } = helpers;
 
-const ManageApplicationIndividualHelper = ({ location }) => {
+const ManageApplicationIndividualHelper = ({ location, employerData }) => {
 
     // history object creation
     const history = useHistory();
@@ -35,11 +35,7 @@ const ManageApplicationIndividualHelper = ({ location }) => {
     const [ lastProfileItem, setLastProfilePictureItemState ] = useState(null);
 
     useEffect(() => {
-
-        // window.onpopstate = () => {
-        //     console.log("ONPOPSTATE ran...!");
-        // }
-
+        // configuration for api-request
         const config = {
             params: {
                 uniqueId: id
@@ -131,6 +127,25 @@ const ManageApplicationIndividualHelper = ({ location }) => {
     }
     const hireDesiredUserHacker = (onClose) => {
         console.log("hireDesiredUserHacker clicked!");
+        
+        const config = {
+            params: {
+                applicantID: user.uniqueId,
+                entireApplicantInfo: user,
+                employerID: employerData.uniqueId,
+                entireEmployerInfo: employerData,
+                listingInfo: null
+            }
+        };
+        axios.get(`${process.env.REACT_APP_BASE_URL}/hired/applicant/listing/start/process`, config).then((res) => {
+            if (res.data.message === "Successfully hired applicant for position/listing!") {
+                console.log(res.data);
+            } else {
+                console.log("Err", res.data);
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
 
         onClose();
     }
@@ -256,5 +271,9 @@ const ManageApplicationIndividualHelper = ({ location }) => {
         </Fragment>
     );
 };
-
-export default withRouter(ManageApplicationIndividualHelper);
+const mapStateToProps = (state) => {
+    return {
+        employerData: state.auth.data
+    }
+}
+export default connect(mapStateToProps, { })(withRouter(ManageApplicationIndividualHelper));

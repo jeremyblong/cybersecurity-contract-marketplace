@@ -30,6 +30,7 @@ import ManageApplicantsMainPage from "../pages/dashboard/jobManagement/employers
 import ManageApplicationIndividualPage from "../pages/dashboard/jobManagement/employers/mainManageApplicants/individual/viewIndividualApplicant/viewIndividualInfo.js";
 import ViewAllLiveStreamsMainPage from "../pages/dashboard/streamingLiveHacks/ViewLiveStreams/main/viewMainLiveStreamsAll.js";
 import CreateNewLiveStreamAsHackerPage from "../pages/dashboard/streamingLiveHacks/createLiveStream/createNewStream/createNewLiveStreamMain.js";
+import ViewIndividualLiveStreamPage from "../pages/dashboard/streamingLiveHacks/ViewLiveStreams/individualStream/viewIndividualStream.js";
 
 export const routes = [
         { path:"/profile/settings/edit", Component: GeneralSettingsPage },
@@ -63,5 +64,6 @@ export const routes = [
         { path: "/view/all/general/applications/employer/recruit", Component: ManageApplicantsMainPage },
         { path: "/view/individual/application/employer/:id", Component: ManageApplicationIndividualPage },
         { path: "/view/all/live/streams/general", Component: ViewAllLiveStreamsMainPage },
-        { path: "/create/new/live/stream/hackers", Component: CreateNewLiveStreamAsHackerPage }
+        { path: "/create/new/live/stream/hackers", Component: CreateNewLiveStreamAsHackerPage },
+        { path: "/live/streaming/view/individual/info", Component: ViewIndividualLiveStreamPage }
 ];

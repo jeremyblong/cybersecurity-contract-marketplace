@@ -121,6 +121,8 @@ app.use("/apply/employer/listing/submit/live/data/last", require("./routes/hacke
 app.use("/hired/applicant/listing/start/process", require("./routes/employers/employerListings/hireApplicant/hireApplicantNow.js"));
 app.use("/success/application/save/applicant/info/employerlisting", require("./routes/hackers/employerListings/applyToListing/updatePublicListingData/updateMainPublicDataApplicantInfo.js"));
 app.use("/create/live/stream/stream/key", require("./routes/liveStreaming/createNewLiveStream/createNewStream/createStreamKey.js"));
+app.use("/check/live/stream/active", require("./routes/liveStreaming/createNewLiveStream/checkActiveAndSave/checkIfStreamActiveAndSave.js"));
+app.use("/gather/live/streams/all", require("./routes/liveStreaming/manageLiveStreams/gatherStreams/gatherLiveStreams.js"));
 
 // ~ webhook logic STARTS here ~
 app.use("/passbase/webhook", require("./webhooks/passbase/webhook.js"));

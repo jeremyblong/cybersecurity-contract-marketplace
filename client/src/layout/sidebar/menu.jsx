@@ -96,8 +96,8 @@ export const MENUITEMS = [
         ]
     },
     {
-        menutitle:"Learning",
-        menucontent:"Learning & knowledge expansion",
+        menutitle:"Learning & Streaming",
+        menucontent:"Learning & LIVE Streams",
         Items:[
             {
                 title: 'Knowledge Expansion', icon: Home, type: 'sub', active: false, children: [

@@ -49,6 +49,7 @@
     "react-dropzone-uploader": "^2.11.0",
     "react-feather": "^2.0.8",
     "react-file-viewer": "^1.2.1",
+    "react-hls-player": "^3.0.7",
     "react-hook-form": "^7.22.2",
     "react-image-crop": "^9.0.5",
     "react-image-gallery": "^1.2.7",

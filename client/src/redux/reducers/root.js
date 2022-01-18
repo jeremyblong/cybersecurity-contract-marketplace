@@ -5,6 +5,7 @@ import listingData from "./employer/listings/listingData.js";
 import softwareListingSale from "./hackers/createSoftwareListing/createNewSoftwareListingSale.js";
 import changeGlobalStyles from "./universal/index.js";
 import applicationDetails from "./hackers/applyToEmployerListing/applicationInfo.js";
+import streamingData from "./streaming/hackers/creation/createNewStreamData.js";
 
 export default combineReducers({
 	auth,
@@ -12,5 +13,6 @@ export default combineReducers({
 	listingData,
 	softwareListingSale,
 	changeGlobalStyles,
-	applicationDetails
+	applicationDetails,
+	streamingData
 });

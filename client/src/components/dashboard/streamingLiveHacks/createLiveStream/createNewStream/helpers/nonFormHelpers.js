@@ -93,7 +93,7 @@ class HashtagLiveStreamHelper extends Component {
                                 tagInput: 'tagInputClass',
                                 tagInputField: 'form-control',
                                 selected: 'selectedClass',
-                                tag: 'badge badge-primary',
+                                tag: 'badge badge-primary custom-tag-streaming',
                                 remove: 'removeClass',
                                 suggestions: 'suggestionsClass',
                                 activeSuggestion: 'activeSuggestionClass'

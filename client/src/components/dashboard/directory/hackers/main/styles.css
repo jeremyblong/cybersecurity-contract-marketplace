@@ -15,12 +15,12 @@
     width: 50%;
     margin: 0 auto;
     max-width: 100%;
-    z-index: 99999999 !important;
+    z-index: 1 !important;
     position: relative;
 }
 .custom-player video {
     border-radius: 80% !important;
-    z-index: 99999999 !important;
+    z-index: 1 !important;
 }
 .background-fill {
     background-color: lightgrey !important;
@@ -30,7 +30,7 @@
     width: 50%;
     margin: 0 auto;
     max-width: 150px;
-    z-index: 99999999 !important;
+    z-index: 1 !important;
     position: relative;
     border: 7px solid white;
 }
