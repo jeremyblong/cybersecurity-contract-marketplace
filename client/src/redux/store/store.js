@@ -2,14 +2,21 @@ import allReducers from "../reducers/root.js";
 import reduxThunk from "redux-thunk";
 import { createStore, applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk";
-import { persistStore, persistReducer } from 'redux-persist';
+import { persistStore, persistReducer, createTransform } from 'redux-persist';
 // import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import storage from 'redux-persist/lib/storage';
 import promiseMiddleware from 'redux-promise';
+import { stringify, parse } from 'flatted';
+
+const transformCircular = createTransform(
+    (inboundState, key) => stringify(inboundState),
+    (outboundState, key) => parse(outboundState),
+)
 
 const persistConfig = {
  key: 'primary',
- storage: storage
+ storage: storage,
+ transforms: [transformCircular]
 };
 
 const pReducer = persistReducer(persistConfig, allReducers);

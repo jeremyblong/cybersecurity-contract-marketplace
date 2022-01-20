@@ -9,9 +9,9 @@
 .forced-row-stats table {
     min-width: 50%;
     flex-direction: row;
-   flex: row;
-   position: relative;
-   display: inline-block;
+    flex: row;
+    position: relative;
+    display: inline-block;
 }
 .stream-tags-header {
     text-decoration-line: underline;

@@ -9,8 +9,8 @@ import {
   setLanguage,
   translate,
 } from 'react-switch-lang';
-
-import {English,Deutsch,Español,Français,Português,简体中文,Notification,DeliveryProcessing,OrderComplete,TicketsGenerated,DeliveryComplete,CheckAllNotification,ViewAll,MessageBox,EricaHughes,KoriThomas,Admin,Account,Inbox,Taskboard,LogOut,AinChavez,CheckOut,ShopingBag,OrderTotal,GoToShopingBag} from '../../constant'
+import { saveSendbirdInitialData } from "../../redux/actions/messaging/initialization/initSBLogic.js";
+import { English, Deutsch, Español, Français, Português, 简体中文, Notification, DeliveryProcessing, OrderComplete, TicketsGenerated, DeliveryComplete, CheckAllNotification, ViewAll, MessageBox, EricaHughes, KoriThomas, Admin, Account, Inbox, Taskboard, LogOut, AinChavez, CheckOut, ShopingBag, OrderTotal, GoToShopingBag } from '../../constant'
 import { connect } from "react-redux";
 import _ from "lodash";
 import axios from "axios";
@@ -20,7 +20,7 @@ import { useHistory } from "react-router-dom";
 import { confirmAlert } from 'react-confirm-alert';
 import { saveListingData } from "../../redux/actions/employer/listings/listingData.js";
 import { saveSoftwareListingInfo } from "../../redux/actions/hackers/createSoftwareListing/createNewSoftwareListingSale.js";
-
+// language imports...
 import en from '../../assets/i18n/en.json';
 import es from '../../assets/i18n/es.json';
 import pt from '../../assets/i18n/pt.json';
@@ -29,12 +29,13 @@ import du from '../../assets/i18n/du.json';
 import cn from '../../assets/i18n/cn.json';
 import ae from '../../assets/i18n/ae.json';
 import { InputGroup, InputGroupAddon, Button } from 'reactstrap';
-
+// translation logic...
 setTranslations({ en, es, pt, fr, du, cn, ae });
 setDefaultLanguage('en');
 setLanguageCookie();
 
-const Rightbar = ({ authenticated, data, authentication, saveListingData, saveSoftwareListingInfo }) => {   
+// actual component starts...
+const Rightbar = ({ authenticated, data, authentication, saveListingData, saveSoftwareListingInfo, saveSendbirdInitialData }) => {   
   const history = useHistory();
    
   const [searchresponsive, setSearchresponsive] = useState(false)
@@ -123,6 +124,7 @@ const Rightbar = ({ authenticated, data, authentication, saveListingData, saveSo
 
             authentication({});
             saveListingData({});
+            saveSendbirdInitialData({});
             saveSoftwareListingInfo({});
         } else {
             console.log("err", res.data);
@@ -343,4 +345,4 @@ const mapStateToProps = (state) => {
       authenticated: (_.has(state.auth, "data") && Object.keys(state.auth.data).length > 0) ? true : false
   }
 }
-export default connect(mapStateToProps, { authentication, saveListingData, saveSoftwareListingInfo })(translate(Rightbar));
+export default connect(mapStateToProps, { authentication, saveListingData, saveSoftwareListingInfo, saveSendbirdInitialData })(translate(Rightbar));

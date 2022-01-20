@@ -27,6 +27,7 @@ import 'react-image-crop/dist/ReactCrop.css';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "react-image-gallery/styles/css/image-gallery.css";
+import 'emoji-mart/css/emoji-mart.css';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 // components & other various imported functionality/components
 import React, { Fragment, useState, useEffect } from 'react';
@@ -66,6 +67,7 @@ import ServicesTwo from "./pages/services-two.js";
 import ServicesThree from "./pages/services-three.js";
 import BlogLeftSidebar from "./pages/blog-left-sidebar.js";
 import BlogRightSidebar from "./pages/blog-right-sidebar.js";
+import MountingLogicRedux from "./mountingLogicRedux.js";
 
 require('dotenv').config();
 
@@ -162,6 +164,7 @@ const Root = (props) =>  {
   return(
     <Fragment>
       <Provider store={store}>
+      <MountingLogicRedux props={props} />
       <RecoilRoot>
       <NotificationContainer />
       <BrowserRouter>
@@ -198,6 +201,7 @@ const Root = (props) =>  {
     </Fragment>
   )
 }
+
 ReactDOM.render(<Root/>,
   document.getElementById('root')
 );

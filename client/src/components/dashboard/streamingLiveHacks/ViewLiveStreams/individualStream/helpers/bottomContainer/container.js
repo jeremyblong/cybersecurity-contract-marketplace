@@ -33,25 +33,7 @@ const BottomContainerHelper = ({ streamData, userData }) => {
                     <Nav tabs className="border-tab">
                         <NavItem  id="myTab" role="tablist">
                             <NavLink href="#" className={activeTab === '1' ? 'active' : ''} onClick={() => setActiveTab('1')}>
-                                TAB ONE
-                            </NavLink>
-                            <div className="material-border"></div>
-                        </NavItem>
-                        <NavItem  id="myTab" role="tablist">
-                            <NavLink href="#"  className={activeTab === '2' ? 'active' : ''} onClick={() => setActiveTab('2')}>
-                                TAB TWO
-                            </NavLink>
-                            <div className="material-border"></div>
-                        </NavItem>
-                        <NavItem  id="myTab" role="tablist">
-                            <NavLink href="#"  className={activeTab === '3' ? 'active' : ''} onClick={() => setActiveTab('3')}>
-                                TAB THREE
-                            </NavLink>
-                            <div className="material-border"></div>
-                        </NavItem>
-                        <NavItem   id="myTab" role="tablist">
-                            <NavLink href="#"  className={activeTab === '4' ? 'active' : ''} onClick={() => setActiveTab('4')}>
-                                TAB FOUR
+                                STREAM DETAIL'S
                             </NavLink>
                             <div className="material-border"></div>
                         </NavItem>
@@ -63,17 +45,6 @@ const BottomContainerHelper = ({ streamData, userData }) => {
                                     <div className="product-page-details">
                                         <h3>{streamData.listingTitle}</h3>
                                     </div>
-                                    <div className="product-price f-28">
-                                        {symbol}{singleItem.price}
-                                        <del>{symbol}{singleItem.discountPrice}</del>
-                                    </div>
-                                    <ul className="product-color m-t-15">
-                                        <li className="bg-primary"></li>
-                                        <li className="bg-secondary"></li>
-                                        <li className="bg-success"></li>
-                                        <li className="bg-info"></li>
-                                        <li className="bg-warning"></li>
-                                    </ul>
                                     <hr />
                                     <h5 className={"stream-tags-header"}>Stream Hashtags/tags (relevant tags also searchable on main display pages)</h5>
                                     {typeof streamData.streamHashtags !== "undefined" && streamData.streamHashtags.length > 0 ? streamData.streamHashtags.map((tag, index) => {
@@ -178,7 +149,7 @@ const BottomContainerHelper = ({ streamData, userData }) => {
                                     </Row>
                                     <hr/>
                                     <div className="m-t-15">
-                                        <Button color="success" className="m-r-10 stretch-third-button" onClick={() => {}} >
+                                        <Button color="info" className="m-r-10 stretch-third-button" onClick={() => {}} >
                                             <i className="fa fa-shopping-basket mr-1"></i>Submit Tip/Reward
                                         </Button>
                                         <Button color="danger" className="m-r-10 stretch-third-button" onClick={() => {}}>
@@ -188,6 +159,10 @@ const BottomContainerHelper = ({ streamData, userData }) => {
                                             <i className="fa fa-heart mr-1"></i>Private Message This Streamer
                                         </Button>
                                     </div>
+                                        <hr />
+                                        <Button style={{ width: "100%", color: "white" }} color="success-2x" className={"btn-squared btn-success"} outline onClick={() => {}}>
+                                            <i className="fa fa-heart mr-1"></i>SEND This Streamer <strong>{process.env.REACT_APP_CRYPTO_TOKEN_NAME}</strong> ~ ($$$)
+                                        </Button>
                                 </CardBody>
                             </Card>
                         </TabPane> : null}

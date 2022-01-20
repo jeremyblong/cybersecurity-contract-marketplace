@@ -203,11 +203,11 @@ const  ViewIndividualLiveStreamHelper = ({ location, information })  => {
                                                     </div>
                                                 </div>
                                                 <ul className="list-inline float-left float-sm-right chat-menu-icons">
-                                                    <li className="list-inline-item"><a href="#javascript"><i className="icon-search"></i></a></li>
-                                                    <li className="list-inline-item"><a href="#javascript"><i className="icon-clip"></i></a></li>
-                                                    <li className="list-inline-item"><a href="#javascript"><i className="icon-headphone-alt"></i></a></li>
-                                                    <li className="list-inline-item"><a href="#javascript"><i className="icon-video-camera"></i></a></li>
-                                                    <li className="list-inline-item toogle-bar" onClick={() => chatMenuToggle()}><a href="#javascript"><i className="icon-menu"></i></a></li>
+                                                    <li className="list-inline-item"><a href={null}><i className="icon-search"></i></a></li>
+                                                    <li className="list-inline-item"><a href={null}><i className="icon-clip"></i></a></li>
+                                                    <li className="list-inline-item"><a href={null}><i className="icon-headphone-alt"></i></a></li>
+                                                    <li className="list-inline-item"><a href={null}><i className="icon-video-camera"></i></a></li>
+                                                    <li className="list-inline-item toogle-bar" onClick={() => chatMenuToggle()}><a href={null}><i className="icon-menu"></i></a></li>
                                                 </ul>
                                             </div>
                                             <div className="chat-history chat-msg-box custom-scrollbar" >

@@ -1,0 +1,72 @@
+.subject-title {
+    font-weight: bold;
+    text-align: center;
+    color: #f73164;
+    text-decoration-line: underline;
+}
+.message-data-time-custom-left {
+    min-width: 100% !important;
+    padding-bottom: 12.5px;
+    color: #7366ff !important;
+    font-weight: 450;
+}
+.message-data-time-custom-right {
+    min-width: 100% !important;
+    padding-bottom: 12.5px;
+    color: #7366ff !important;
+    font-weight: 450;
+}
+.add-hover-message-convo:hover {
+    cursor: pointer;
+}
+.add-hover-message-convo-individual:hover {
+    cursor: pointer;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1995);
+    font-weight: 500;
+}
+.checkbox-custom-group-change {
+    float: right;
+    margin-top: -10px;
+}
+.custom-msg-about {
+    width: 100% !important;
+}
+.status.custom-chat-row > div > label {
+    margin-right: -7.5px;
+}
+.emoji-mart emoji-mart-light {
+    min-width: 600px !important;
+}
+.typing-animation {
+    max-width: 70px;
+    max-height: 50px;
+    min-width: 70px;
+    z-index: 0 !important;
+    min-height: 50px;
+}
+.typing-indicator-wrapper {
+    position: absolute;
+    left: 65px;
+    bottom: 75px;
+    z-index: 0 !important;
+}
+.emoji-mart-preview {
+    z-index: 9 !important;
+    background-color: white;
+}
+.delivery-status-wrapper-left {
+    position: absolute;
+    right: 3.5px;
+    bottom: 3.5px;
+} 
+.delivery-confirmation-left {
+    color: #f73164;
+}
+.delivery-status-wrapper-right {
+    position: absolute;
+    left: 3.5px;
+    bottom: 3.5px;
+} 
+.delivery-confirmation-right {
+    color: #f73164;
+}

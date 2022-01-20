@@ -23,7 +23,7 @@ import { renderProfilePicVideo } from "./helpers/profilePicVideo/displayPicOrVid
 import moment from "moment";
 import { NotificationManager } from 'react-notifications';
 import { saveApplicationDetailsProgress } from "../../../../../../../redux/actions/hackers/applyToEmployerListing/applicationInfo.js";
-
+import MessagingPanePrivateHelper from "./helpers/messagingPane/messagingHelper.js";
 
 const Map = ReactMapboxGl({
     accessToken: process.env.REACT_APP_MAPBOX_TOKEN
@@ -33,12 +33,13 @@ const ViewIndividualJobListingHelper = ({ userData, saveApplicationDetailsProgre
     
     const passedData = useLocation();
     const history = useHistory();
-
+    
     const [ data, setData ] = useState(null);
     const [ ready, setReady ] = useState(false);
     const [ fileModal, setFileModal ] = useState(false);
     const [ file, setFile ] = useState(null);
     const [ employerInfo, setEmployerInfo ] = useState(null);
+    const [ messagePaneOpen, setMessagePaneState ] = useState(false);
 
     const [JobData,setJobData] = useState([{
         badgeType: "primary",
@@ -652,6 +653,11 @@ const ViewIndividualJobListingHelper = ({ userData, saveApplicationDetailsProgre
                             </Col>
                         </Row>
                         <hr />
+                        <Row style={{ paddingTop: "17.5px", paddingBottom: "17.5px" }}>
+                            <Col sm="12" md="12" lg="12" xl="12">
+                                <Button style={{ width: "100%" }} className={"btn-square btn-air-info"} onClick={() => setMessagePaneState(true)} outline color={"info-2x"}><strong>Private</strong> Message This User</Button>
+                            </Col>
+                        </Row>
                         <div className="social-media step4" data-intro="This is your Social details">
                             <ul className="list-inline">
                             <li className="list-inline-item"><a href={null}><i className="fa fa-facebook"></i></a></li>
@@ -664,7 +670,7 @@ const ViewIndividualJobListingHelper = ({ userData, saveApplicationDetailsProgre
                         <div className="follow">
                             <Row style={{ paddingTop: "17.5px", paddingBottom: "17.5px" }}>
                                 <Col sm="12" md="12" lg="12" xl="12">
-                                    {userData.accountType === "hackers" ? <Button style={{ width: "100%", fontWeight: "bold" }} className={"btn-square btn-air-success"} onClick={() => {
+                                    {userData.accountType === "hackers" ? <Button style={{ width: "100%" }} className={"btn-square btn-air-success"} onClick={() => {
                                         // apply logic (hackers ONLY)...
                                         if (userData.accountType === "hackers") {
                                             saveApplicationDetailsProgress({});
@@ -737,7 +743,7 @@ const ViewIndividualJobListingHelper = ({ userData, saveApplicationDetailsProgre
                             </Row>
                             <Row style={{ paddingTop: "17.5px", paddingBottom: "17.5px" }}>
                                 <Col sm="12" md="12" lg="12" xl="12">
-                                    {userData.accountType === "hackers" ? <Button style={{ width: "100%", fontWeight: "bold" }} className={"btn-square btn-air-success"} onClick={() => {
+                                    {userData.accountType === "hackers" ? <Button style={{ width: "100%" }} className={"btn-square btn-air-success"} onClick={() => {
                                         // apply logic (hackers ONLY)...
                                         if (userData.accountType === "hackers") {
                                             saveApplicationDetailsProgress({});
@@ -769,6 +775,7 @@ const ViewIndividualJobListingHelper = ({ userData, saveApplicationDetailsProgre
                     {renderContent()}
                 </Row>
             </Container>
+            <MessagingPanePrivateHelper employerID={employerInfo !== null ? employerInfo.uniqueId : null} employerName={employerInfo !== null ? `${employerInfo.firstName} ${employerInfo.lastName}` : "Unknown - Loading..."} messagePaneOpen={messagePaneOpen} setMessagePaneState={setMessagePaneState} />
             {file !== null ? <Modal open={fileModal} onClose={() => {
                 setFileModal(false);
             }} classNames={{

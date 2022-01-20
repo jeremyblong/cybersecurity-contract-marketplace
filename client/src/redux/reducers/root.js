@@ -6,6 +6,7 @@ import softwareListingSale from "./hackers/createSoftwareListing/createNewSoftwa
 import changeGlobalStyles from "./universal/index.js";
 import applicationDetails from "./hackers/applyToEmployerListing/applicationInfo.js";
 import streamingData from "./streaming/hackers/creation/createNewStreamData.js";
+import sendbirdInitData from "./messaging/initialization/initReducer.js";
 
 export default combineReducers({
 	auth,
@@ -14,5 +15,6 @@ export default combineReducers({
 	softwareListingSale,
 	changeGlobalStyles,
 	applicationDetails,
-	streamingData
+	streamingData,
+	sendbirdInitData
 });
