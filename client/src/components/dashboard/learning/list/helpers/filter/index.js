@@ -1,10 +1,13 @@
 import React, { Fragment, useState } from 'react';
 import { Collapse } from 'reactstrap';
 import { Search } from 'react-feather';
-import {Row,Col,Card,CardHeader,CardBody,Media,Input,Label,Button} from 'reactstrap'
-import { FindCourse,Categories,Accounting,Design,Development,Management,Duration,Status,Price,AllCourses,PaidCourses,Filter,Progress,Completed,WebDevelopment,UXDevelopment,CourseBy,FrontendDevelopment,BackendDevelopment,FreeCourses,Registration,UIDesign,UserExperience,BusinessAnalyst,UXDesign,InterfaceDesign,UpcomingCourses } from "../../../../../../constant";
+import { Row, Col, Card, CardHeader, CardBody, Media, Input, Label, Button } from 'reactstrap'
+import { FindCourse, Categories, Accounting, Design, Development, Management, Duration, Status, Price, AllCourses, PaidCourses, Filter, Progress, Completed, WebDevelopment, UXDevelopment, CourseBy, FrontendDevelopment, BackendDevelopment, FreeCourses, Registration, UIDesign, UserExperience, BusinessAnalyst, UXDesign, InterfaceDesign, UpcomingCourses } from "../../../../../../constant";
+import { useHistory } from "react-router-dom";
 
 const LearningFilterHelper = () => {
+    const history = useHistory();
+
     const [isFilter, setIsFilter] = useState(true);
     const [isDesign, setIsDesign] = useState(true);
     const [isDevelopment, setIsDevelopment] = useState(true);
@@ -19,6 +22,10 @@ const LearningFilterHelper = () => {
                                     <h5 className="mb-0">
                                         <Button color="link pl-0" data-toggle="collapse" onClick={() => setIsFilter(!isFilter)}
                                             data-target="#collapseicon" aria-expanded={isFilter} aria-controls="collapseicon">{FindCourse}</Button>
+                                        <hr />
+                                        <Button color={"info-2x"} className={"btn-square btn-outline-info text-center"} onClick={() => {
+                                            history.push("/learning/courses/creation/new/course");
+                                        }}>Upload Your OWN Course/Content</Button>
                                     </h5>
                                 </CardHeader>
                                 <Collapse isOpen={isFilter}>

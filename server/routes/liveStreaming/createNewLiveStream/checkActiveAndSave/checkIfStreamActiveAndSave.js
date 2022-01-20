@@ -8,7 +8,7 @@ const NewLiveStream = require("../../../../schemas/liveStreams/createNewStream/n
 
 router.post("/", async (req, res, next) => {
    // deconstruct new stream info
-    const { streamID, streamInformationCustomized, posterID, posterUsername, posterName, streamKey } = req.body;
+    const { streamID, streamInformationCustomized, posterID, posterUsername, posterName, streamKey, channelUrl } = req.body;
 
     // create OBJ to be saved to mongodb...
     const objToBeSaved = {
@@ -23,7 +23,8 @@ router.post("/", async (req, res, next) => {
         views: 0,
         posterUsername, 
         posterName,
-        streamkey: streamKey
+        streamkey: streamKey,
+        channelUrl
     };
     // configuration for MUX
     const configuration = {

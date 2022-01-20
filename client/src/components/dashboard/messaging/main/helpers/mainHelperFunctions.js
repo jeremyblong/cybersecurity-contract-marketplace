@@ -1,5 +1,5 @@
 import React,{ Fragment, useState, Component } from 'react';
-import { Media, Popover, PopoverHeader, PopoverBody } from 'reactstrap';
+import { Media, Popover, PopoverHeader, PopoverBody, ListGroup, ListGroupItem } from 'reactstrap';
 import moment from "moment";
 import start_conversion from '../../../../../assets/images/start-conversion.jpg';
 
@@ -70,6 +70,8 @@ const handleListItemClickPrivateChannel = (item, SBData, setChannelState, setMes
             groupChannel.markAsDelivered();
 
             setChannelState(groupChannel);
+
+            groupChannel.markAsRead();
 
             // Pass the params as an argument to the `getMessagesByTimestamp()` method.
             groupChannel.getMessagesByTimestamp(TIMESTAMP, params, (messages, error) => {
@@ -187,19 +189,31 @@ constructor (props) {
         const { messageList, channel, userData } = this.props;
         return (
             <Fragment>
-                <ul>
+                <ul className={"ul-messages-custom"}>
                     {messageList.length > 0 ? messageList.map((item, index) => {
-                        console.log("`popoverCustom${channel.url}${index}`", this.state[`popoverCustom${channel.url}${index}`]);
                         {/* const participators = allMembers.chats.find(x => x.id === item.sender); */}
                         return (
                             <li key={index} className="clearfix">
                                 <div id={`popoverCustom${channel.url}${index}`} onClick={() => this.handleMessageClickPopover(item, index)} className={`message add-hover-message-convo-individual my-message ${item._sender.userId !== userData.uniqueId ? '' : 'float-right'}`}>
-                                    <Popover isOpen={this.state[`popoverCustom${channel.url}${index}`]} toggle={() => this.closeMessagePopover(item, index)} placement="bottom" target={`popoverCustom${channel.url}${index}`}>
-                                        <PopoverHeader>Popover Title</PopoverHeader>
-                                        <PopoverBody>Sed posuere consectetur est at lobortis. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum.</PopoverBody>
+                                    <Popover className={"custom-chat-popover"} isOpen={this.state[`popoverCustom${channel.url}${index}`]} toggle={() => this.closeMessagePopover(item, index)} placement="bottom" target={`popoverCustom${channel.url}${index}`}>
+                                        <div onMouseLeave={() => {
+                                            console.log("mouse LEFT.");
+
+                                            this.closeMessagePopover(item, index)
+                                        }}>
+                                            <PopoverHeader> ~ Message Actions/Modification's ~ </PopoverHeader>
+                                            <PopoverBody>
+                                                <ListGroup>
+                                                    <ListGroupItem className="list-group-item-action custom-message-action-listgroup" onClick={() => null} active>{"DELETE This Message (Permanently Remove)"}</ListGroupItem>
+                                                    <ListGroupItem className="list-group-item-action custom-message-action-listgroup" onClick={() => null}>{"PIN This Message (Note MSG As IMPORTANT)"}</ListGroupItem>
+                                                    <ListGroupItem className="list-group-item-action custom-message-action-listgroup" onClick={() => null} active>{"MARK As Read (Show You've Seen It)"}</ListGroupItem>
+                                                    <ListGroupItem className="list-group-item-action custom-message-action-listgroup" onClick={() => null}>{"ADD Extra Data To Existing MSG (MODIFY Message)"}</ListGroupItem>
+                                                </ListGroup>
+                                            </PopoverBody>
+                                        </div>
                                     </Popover>
                                     <Media src={item._sender.plainProfileUrl}
-                                        className={`rounded-circle ${item._sender.userId !== userData.uniqueId ? 'float-left' : 'float-right'} chat-user-img img-30`} alt="" />
+                                        className={`rounded-circle ${item._sender.userId !== userData.uniqueId ? 'float-left' : 'float-right'} custom-chat-user-image chat-user-img img-30`} alt="" />
                                     <div className="message-data text-right">
                                         <span className={item._sender.userId !== userData.uniqueId ? "message-data-time message-data-time-custom-left float-left" : "message-data-time message-data-time-custom-right float-right"}>{moment(item.createdAt).format("MM/DD/YYYY, h:mm:ss a")} by {item._sender.nickname}</span>
                                     </div>

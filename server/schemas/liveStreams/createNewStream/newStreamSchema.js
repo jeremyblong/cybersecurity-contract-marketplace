@@ -39,6 +39,9 @@ const NewLiveStreamSchema = new Schema({
     streamkey: {
         type: String
     },
+    channelUrl: {
+        type: String
+    },
     currentViewers: {
         type: Number
     },

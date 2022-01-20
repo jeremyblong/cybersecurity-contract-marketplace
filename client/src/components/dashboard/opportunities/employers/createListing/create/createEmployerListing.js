@@ -1,7 +1,7 @@
-import React, {Fragment, useEffect, useState} from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import Breadcrumb from '../../../../../../layout/breadcrumb';
 import one from '../../../../../../assets/images/job-search/1.jpg';
-import {Container,Row,Col,Card,CardBody,Media,Button,Form,FormGroup,Label,Input,InputGroup,InputGroupAddon,ListGroup,ListGroupItem,InputGroupText,Popover,PopoverBody,PopoverHeader} from 'reactstrap';
+import { Container, Row, Col, Card, CardBody, Media, Button, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, ListGroup, ListGroupItem, Popover, PopoverBody, PopoverHeader } from 'reactstrap';
 import Select from 'react-select';
 import uuid from "react-uuid";
 import _ from "lodash";
@@ -29,7 +29,6 @@ import { NotificationManager } from 'react-notifications';
 import axios from "axios";
 import LoadingBar from 'react-top-loading-bar';
 import { useHistory } from "react-router-dom";
-import { addDays } from 'date-fns';
 
 
 const CreateJobListingMainHelper = (props) => {

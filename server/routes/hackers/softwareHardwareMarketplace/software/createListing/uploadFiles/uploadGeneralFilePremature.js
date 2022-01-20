@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const { v4: uuidv4 } = require('uuid');
-const { Connection } = require("../../../../../../mongoUtil.js");
 const config = require("config");
 const aws = require('aws-sdk');
 const multer = require('multer');

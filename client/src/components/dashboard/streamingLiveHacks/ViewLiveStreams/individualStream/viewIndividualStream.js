@@ -14,13 +14,57 @@ import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import { NotificationManager } from "react-notifications";
 import "./styles.css";
 import axios from "axios";
-import ReactPlayer from "react-player";
+import messagingHelpers from "./helpers/displayMessages/displayMessages.js";
 import _ from "lodash";
+import typingIndicator from "../../../../../assets/gifs/typing-white.gif";
 
-const  ViewIndividualLiveStreamHelper = ({ location, information })  => {
+
+const { RenderMessagListStreaming } = messagingHelpers;
+
+const renderProfilePictureOrVideo = (arr) => {
+    // last image will be rendered
+    const reversed = arr.reverse();
+
+    for (let index = 0; index < reversed.length; index++) {
+        const item = reversed[index];
+        if (item.type.includes("image")) {
+            return <Media src={`${process.env.REACT_APP_ASSET_LINK}/${item.link}`} className="rounded-circle" alt="" />;
+        }
+    };
+}
+const RenderLiveStreamPlayer = React.memo(({ videoUrl }) => {
+    console.log("videoUrl", videoUrl);
+    useEffect(() => {
+      return false;
+    }, [])
+    return (
+        <Fragment>
+            <Card style={{ height: "100%" }} className="ribbon-wrapper">
+                <CardBody className={"ribbon-wrapped-streaming-card"}>
+                    <div className="ribbon ribbon-clip ribbon-info">LIVE FEED!</div>
+                    {videoUrl !== null ? <ReactHlsPlayer 
+                        className={"custom-streaming-player"}
+                        src={videoUrl}
+                        autoPlay={true}
+                        controls={true}
+                        width="100%"
+                        height="95%"
+                    /> : <SkeletonTheme baseColor="#d4d4d4" highlightColor="#8f8f8f">
+                        <p>
+                            <Skeleton containerClassName={"stretch-bars"} count={30} />
+                        </p>
+                    </SkeletonTheme>}
+                </CardBody>
+            </Card>
+        </Fragment>
+    );
+});
+
+const  ViewIndividualLiveStreamHelper = ({ location, information, SBData })  => {
     // create history obj for redirects
     const history = useHistory();
     const [ state, setState ] = useState({ nav1: null, nav2: null });
+    const [ userCount, setUserCount ] = useState(0);
     const [ streamData, setStreamData ] = useState(null);
     // eslint-disable-next-line
     const generated = uuid();
@@ -43,43 +87,108 @@ const  ViewIndividualLiveStreamHelper = ({ location, information })  => {
     const [ menuToggle, setMenuToggle ] = useState(false);
     const [ videoUrl, setVideoUrlState ] = useState(null);
     const [ userData, setUserData ] = useState(null);
+    const [ channel, setChannelData ] = useState(null);
+    const [ userList, setUserListState ] = useState([]);
+    const [ messages, setMessagesState ] = useState([]);
     // chat end
     const slider1 = useRef();
     const slider2 = useRef();
 
+    useEffect(() => () => {
+        console.log("Unmounted....");
+
+        const CHANNEL_URL = location.state.stream.channelUrl;
+
+        SBData.OpenChannel.getChannel(CHANNEL_URL, (openChannel, error) => {
+            if (error) {
+                // Handle error.
+                console.log("error getting channel to LEAVE group...:", error);
+            } else {
+                openChannel.exit((response, error) => {
+                    if (error) {
+                        // Handle error.
+                        console.log("Error EXITING stream (attempting to exit) ...: ", error);
+                    } else {
+                        console.log("EXIT channel SUCCESS!", response);
+                    }
+                });
+            }
+        });
+    }, []);
+
     useEffect(() => {
 
-        setVideoUrlState(`https://stream.mux.com/${location.state.stream.playback_id}.m3u8`);
-        setStreamData(location.state.stream);
+        if (_.has(location.state, "stream") && typeof location.state.stream !== "undefined") {
+            setVideoUrlState(`https://stream.mux.com/${location.state.stream.playback_id}.m3u8`);
+            setStreamData(location.state.stream);
 
-        const configuration = {
-            params: {
-                uniqueId: information.uniqueId
+            const configuration = {
+                params: {
+                    uniqueId: information.uniqueId
+                }
             }
-        }
 
-        axios.get(`${process.env.REACT_APP_BASE_URL}/gather/core/anonymous/user/data`, configuration).then((res) => {
-            if (res.data.message === "Successfully gathered core user information!") {
-                console.log(res.data);
+            axios.get(`${process.env.REACT_APP_BASE_URL}/gather/core/anonymous/user/data`, configuration).then((res) => {
+                if (res.data.message === "Successfully gathered core user information!") {
+                    console.log(res.data);
 
-                const { user } = res.data;
+                    const { user } = res.data;
 
-                setUserData(user);
-            } else {
-                console.log("Err", res.data);
+                    const CHANNEL_URL = location.state.stream.channelUrl;
+
+                    SBData.OpenChannel.getChannel(CHANNEL_URL, (openChannel, error) => {
+                        if (error) {
+                            // Handle error.
+                            console.log("error GETTING channel...:", error);
+                        }
+
+                        const listQuery = openChannel.createPreviousMessageListQuery();
+                        listQuery.limit = 100;
+                        listQuery.reverse = true;
+                        listQuery.customType = "public";
+
+                        // Retrieving previous messages.
+                        listQuery.load((messageList, error) => {
+                            if (error) {
+                                // Handle error.
+                                console.log("error gathering old messages...:", error);
+                            } else {
+                                setMessagesState(messageList);
+                            }
+                        });
+                    
+                        // Call the instance method of the result object in the "openChannel" parameter of the callback function.
+                        openChannel.enter((response, error) => {
+                            if (error) {
+                                // Handle error.
+                                console.log("error entering channel...:", error);
+                            } else {
+                                console.log("successfully entered channel...", response);
+
+                                setChannelData(openChannel);
+
+                                setUserData(user);
+                            }
+                        });
+                    });
+                } else {
+                    console.log("Err", res.data);
+
+                    NotificationManager.error("Error while gathering user data for this listing - some data will NOT be complete...", "Could NOT gather user!", 5000);
+                }
+            }).catch((err) => {
+                console.log(err);
 
                 NotificationManager.error("Error while gathering user data for this listing - some data will NOT be complete...", "Could NOT gather user!", 5000);
-            }
-        }).catch((err) => {
-            console.log(err);
+            })
 
-            NotificationManager.error("Error while gathering user data for this listing - some data will NOT be complete...", "Could NOT gather user!", 5000);
-        })
-
-        setState({
-            nav1: slider1.current,
-            nav2: slider2.current
-          });
+            setState({
+                nav1: slider1.current,
+                nav2: slider2.current
+            });
+        } else {
+            history.push("/view/all/live/streams/general")
+        }
       } , []);
 
     const toggleEmojiPicker = () => {
@@ -95,96 +204,89 @@ const  ViewIndividualLiveStreamHelper = ({ location, information })  => {
     const handleMessageChange = (message) => {
         setMessageInput(message)
     }
+    const renderSendbirdLiveCommands = () => {
+        const channelHandler = new SBData.ChannelHandler();
 
+        channelHandler.onUserEntered = (openChannel, user) => {
+            console.log("onUserEntered entered", openChannel, user);
+            // update current count...
+            setUserCount(openChannel.participantCount);
+             // update current user list...
+            setUserListState(prevState => {
+                return [...prevState, user];
+            });
+        };
+        channelHandler.onUserExited = (openChannel, user) => {
+            console.log("onUserExited exited", openChannel, user);
+            // update current count...
+            setUserCount(openChannel.participantCount);
+            // update current user list...
+            setUserListState(prevState => {
+                return prevState.filter((item, idx) => {
+                    if (item.userId !== user.userId) {
+                        return true;
+                    }
+                })
+            });
+        };
+        channelHandler.onMessageReceived = (channelRecieved, message) => {
+            console.log("message recieved~! : ", channelRecieved, message);
+
+            if (channel !== null && channelRecieved.url === channel.url) {
+                setMessagesState(prevState => {
+                    return [message, ...prevState]
+                })
+            } 
+        };
+        if (_.has(location.state, "stream")) {
+            const CHANNEL_URL = location.state.stream.channelUrl;
+
+            SBData.addChannelHandler(CHANNEL_URL, channelHandler);
+        }
+    }
     const handleMessagePress = (e) => {
         if (e.key === "Enter" || e === "send") {
 
-            var container = document.querySelector(".chat-history");
-            setTimeout(function () {
-                container.scrollBy({ top: 200, behavior: 'smooth' });
-            }, 310)
-
-            let currentUserId = currentUser.id;
-            let selectedUserId = selectedUser.id;
-            let selectedUserName = selectedUser.name;
-           
-            if (messageInput.length > 0) {
-
-                setMessageInput('');
-                setTimeout(() => {
-                    const replyMessage = "Hey This is " + selectedUserName + ", Sorry I busy right now, I will text you later";
-                    if (selectedUser.online === true)
-                        document.querySelector(".status-circle").classList.add('online');
-                        selectedUser.online = true;
-
-                }, 5000);
-            }
         }
     }
-
     const chatMenuToggle = () => {
         setMenuToggle(!menuToggle)
     }
-    const selectedChat = (allMembers && chats && selectedUser) ? chats.find(x => x.users.includes(currentUser.id) && x.users.includes(selectedUser.id)) : null;
+    const handleOpenMessageSend = () => {
+        const params = new SBData.UserMessageParams();
 
-    const renderLiveStreamPlayer = () => {
-        if (videoUrl !== null) {
-            return (
-                <Fragment>
-                    <Card style={{ height: "100%" }} className="ribbon-wrapper">
-                        <CardBody className={"ribbon-wrapped-streaming-card"}>
-                            <div className="ribbon ribbon-clip ribbon-info">LIVE FEED!</div>
-                            <ReactHlsPlayer 
-                                className={"custom-streaming-player"}
-                                src={videoUrl}
-                                autoPlay={true}
-                                controls={true}
-                                width="100%"
-                                height="95%"
-                            />
-                        </CardBody>
-                    </Card>
-                </Fragment>
-            );
-        } else {
-            return (
-                <Fragment>
-                    <SkeletonTheme baseColor="#d4d4d4" highlightColor="#8f8f8f">
-                        <p>
-                            <Skeleton containerClassName={"stretch-bars"} count={30} />
-                        </p>
-                    </SkeletonTheme>
-                </Fragment>
-            );
-        }
-    }
-    const renderProfilePictureOrVideo = (last) => {
-        // last image will be rendered
-        if (!last.type.includes("video")) {
-            return (
-                <Fragment>
-                    <Media src={`${process.env.REACT_APP_ASSET_LINK}/${last.link}`} className="rounded-circle" alt="" />
-                </Fragment>
-            );
-        } else {
-            return (
-                <Fragment>
-                    <ReactPlayer playing={true} loop={true} muted={true} width={"100%"} wrapper={"div"} url={`${process.env.REACT_APP_ASSET_LINK}/${last.link}`} className="rounded-circle media media-body" alt="" />
-                </Fragment>
-            );
-        }
+        params.message = messageInput;
+        params.translationTargetLanguages = ['en'];   // French and German
+        params.pushNotificationDeliveryOption = 'default';  // Either 'default' or 'suppress'
+
+        channel.sendUserMessage(params, (userMessage, error) => {
+            if (error) {
+                // Handle error.
+                console.log("error sending message...:", error);
+            } else {
+                const messageId = userMessage.messageId;
+
+                console.log("successfully sent msg!", messageId, userMessage);
+
+                setMessagesState(prevState => {
+                    return [userMessage, ...prevState]
+                })
+                setMessageInput("");
+            }
+        });
     }
     console.log("userData", userData);
     return (
         <Fragment>
             <Breadcrumb parent="Live Streaming" title="Individual Live Stream (Currently LIVE)"/>
             <Container fluid={true}>
+                {renderSendbirdLiveCommands()}
                 <Row>
                     <Col>
                     <Card>
                         <Row className="product-page-main">
                             <Col sm="12" md="12" lg="7" xl="7">
-                                {renderLiveStreamPlayer()}
+                                <RenderLiveStreamPlayer videoUrl={videoUrl} />
                             </Col>
                             <Col sm="12" md="12" lg="5" xl="5 xl-100">
                                 <Card className={"streaming-chat-card-wrapper"}>
@@ -193,13 +295,13 @@ const  ViewIndividualLiveStreamHelper = ({ location, information })  => {
                                         <Col className="pr-0 chat-right-aside">
                                             <div className="chat">
                                             <div className="chat-header clearfix">
-                                                {renderProfilePictureOrVideo(_.has(userData, "profilePicsVideos") && userData.profilePicsVideos.length > 0 ? userData.profilePicsVideos[userData.profilePicsVideos.length - 1] : <Media src={"../../../../../assets/images/placeholder.png"} className="rounded-circle" alt="" />)}
+                                                {renderProfilePictureOrVideo(_.has(userData, "profilePicsVideos") && userData.profilePicsVideos.length > 0 ? userData.profilePicsVideos : <Media src={"../../../../../assets/images/placeholder.png"} className="rounded-circle" alt="" />)}
                                                 <div className="about">
                                                     <div className="name">
                                                         Streamed by <strong style={{ textDecorationLine: "underline" }}>{`${userData.firstName} ${userData.lastName}`}</strong>
                                                     </div>
                                                     <div className="status digits" >
-                                                        {true ? 'online' : selectedUser.lastSeenDate}
+                                                        {true ? 'online' : selectedUser.lastSeenDate} w/<strong style={{ color: "blue", textDecorationLine: "underline" }}>{userCount}</strong> Current Viewer's
                                                     </div>
                                                 </div>
                                                 <ul className="list-inline float-left float-sm-right chat-menu-icons">
@@ -211,27 +313,7 @@ const  ViewIndividualLiveStreamHelper = ({ location, information })  => {
                                                 </ul>
                                             </div>
                                             <div className="chat-history chat-msg-box custom-scrollbar" >
-                                                <ul>
-                                                    {typeof selectedChat !== "undefined" && selectedChat.messages.length > 0 ? selectedChat.messages.map((item, index) => {
-                                                        const participators = allMembers.chats.find(x => x.id === item.sender);
-                                                        return (
-                                                            <li key={index} className="clearfix">
-                                                                <div className={`message my-message ${item.sender !== currentUser.id ? '' : 'float-right'}`}>
-                                                                    <Media src={selectedUser.image}
-                                                                        className={`rounded-circle ${item.sender !== currentUser.id ? 'float-left' : 'float-right'} chat-user-img img-30`} alt="" />
-                                                                    <div className="message-data text-right">
-                                                                        <span className="message-data-time">{item.time}</span>
-                                                                    </div>
-                                                                    {item.text}
-                                                                </div>
-                                                            </li>
-                                                        );
-                                                    }) :
-                                                        <div>
-                                                            <Media className="img-fluid" src={start_conversion} alt="start conversion " />
-                                                        </div>
-                                                    }
-                                                </ul>
+                                                <RenderMessagListStreaming userData={information} messageList={messages} channel={channel} userData={userData} />
                                             </div>
                                             <div className="chat-message clearfix">
                                                 <Row>
@@ -254,17 +336,22 @@ const  ViewIndividualLiveStreamHelper = ({ location, information })  => {
                                                             className="form-control input-txt-bx"
                                                             placeholder="Type a message......"
                                                             value={messageInput}
-                                                            onKeyPress={(e) => handleMessagePress(e)}
+                                                            onKeyPress={(e) => {
+                                                                handleMessagePress(e)
+                                                            }}
                                                             onChange={(e) => handleMessageChange(e.target.value)}
                                                         />
                                                         <InputGroupAddon addonType="append">
-                                                            <Button color="primary" onClick={() => handleMessagePress('send')} >{Send}</Button>
+                                                            <Button color="primary" onClick={() => handleOpenMessageSend()} >{Send}</Button>
                                                         </InputGroupAddon>
                                                     </InputGroup>
                                                 </Col>
                                                 </Row>
                                             </div>
                                             </div>
+                                            {/* {typingStatus === true ? <div className={"typing-indicator-wrapper"}>
+                                                <img src={typingIndicator} className={"typing-animation"} />
+                                            </div> : null} */}
                                         </Col>
                                     </Row>
                                 </CardBody> : null}
@@ -272,7 +359,7 @@ const  ViewIndividualLiveStreamHelper = ({ location, information })  => {
                         </Col>
                     </Row>
                 </Card>
-                <BottomContainerHelper userData={userData} streamData={streamData} /></Col>
+                <BottomContainerHelper channel={channel} userData={userData} streamData={streamData} /></Col>
                 </Row>
             </Container>
         </Fragment>
@@ -280,7 +367,8 @@ const  ViewIndividualLiveStreamHelper = ({ location, information })  => {
 }
 const mapStateToProps = (state) => {
     return {
-        information: state.auth.data
+        information: state.auth.data,
+        SBData: state.sendbirdInitData.sendbirdInitData
     }
 }
 export default connect(mapStateToProps, {  })(withRouter(ViewIndividualLiveStreamHelper));

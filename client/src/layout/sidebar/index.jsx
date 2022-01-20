@@ -225,6 +225,14 @@ const Sidebar = (props) => {
           // employer acct
           return "/view/all/general/applications/employer/recruit";
         }
+      } else if (menuItem.path === "/create/new/live/stream/hackers") {
+        if (props.userData.accountType === "hackers") {
+          // hacker acct
+          return "/create/new/live/stream/hackers";
+        } else {
+          // employer acct
+          return "/unauthorized/access/restricted";
+        }
       } else {
         return menuItem.path;
       }

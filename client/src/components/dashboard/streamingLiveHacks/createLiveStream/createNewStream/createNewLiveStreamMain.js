@@ -50,7 +50,7 @@ const subcategoryOptions = [
     { value: "insider-threat", label: "Insider Threat" },
     { value: "ai-powered-attack", label: "AI-Powered Attacks" }
 ];
-const CreateNewLiveStreamAsHackerHelper = ({ saveStreamPreFilledData, userData }) => {
+const CreateNewLiveStreamAsHackerHelper = ({ saveStreamPreFilledData, userData, SBData }) => {
     // create history redirect abliity
     const history = useHistory();
     // refs initialization
@@ -369,6 +369,17 @@ const CreateNewLiveStreamAsHackerHelper = ({ saveStreamPreFilledData, userData }
             </Fragment>
         );
     }
+    const calculateLatestImage = (user) => {
+        const reversed = user.profilePicsVideos.reverse();
+    
+        for (let index = 0; index < reversed.length; index++) {
+            const item = reversed[index];
+            if (item.type.includes("image")) {
+                return `${process.env.REACT_APP_ASSET_LINK}/${item.link}`;
+                break;
+            }
+        };
+    }
     const handleFinalSubmissionAfterStreamStart = () => {
         console.log("handleFinalSubmissionAfterStreamStart clicked.");
 
@@ -399,52 +410,74 @@ const CreateNewLiveStreamAsHackerHelper = ({ saveStreamPreFilledData, userData }
                 streamCodingLanguage: codingLanguage,
                 id: uuid()
             };
+            // create variables for params below...
+            const coverURL = calculateLatestImage(userData);
+            const title = `Live Stream - ${streamInformationCustomized.id} - by ${userData.firstName} ${userData.lastName}`;
 
-            const config = {
-                streamID: streamInfo.id,
-                streamInformationCustomized,
-                posterID: userData.uniqueId,
-                posterName: `${userData.firstName} ${userData.lastName}`,
-                posterUsername: userData.username,
-                streamKey
-            };
+            const params = new SBData.OpenChannelParams();
+            // params logic
+            params.name = title;
+            params.coverUrlOrImage = coverURL;
+            params.operatorUserIds = [userData.uniqueId]; // Or .operators(Array<User>)
+            // params.data = DATA;
+            params.customType = "public";
 
-            axios.post(`${process.env.REACT_APP_BASE_URL}/check/live/stream/active`, config).then((res) => {
-                if (res.data.message === "STREAM IS ACTIVATED & LIVE!") {
-                    // render checks for completed (fully) form data and stream started...
-                    if ((typeof codingLanguage !== "undefined" && Object.keys(codingLanguage).length > 0) && (typeof listingTitle !== "undefined" && (listingTitle.length >= 15 && listingTitle.length <= 75)) && (typeof mainDescription !== "undefined" && (mainDescription.length >= 50 && mainDescription.length <= 1000)) && (typeof streamHashtags !== "undefined" && streamHashtags.length >= 5) && (typeof subCategory !== "undefined" && Object.keys(subCategory).length > 0) && (typeof streamVisibility !== "undefined" && streamVisibility !== null)) {
-                        // make sure user selects a MAIN CATEGORY before proceeding...
-                        if (selectedMainCategory === "none-selected") {
-                            // THROW WARNING Notification
-                            NotificationManager.warning("You have COMPLETED 'most' of the required data for this listing, however you forgot to select a 'Main Category' for your stream (top-left selection button's) - please select this value before proceeding & you'll be all set!", "LAST STEP - Select a 'MAIN Category'!", 5250);
-                        } else {
-                            // SUCCESS ! - use redux to save data for next "Review" page...
-                            saveStreamPreFilledData(streamInformationCustomized)  
-    
-                            const timeout = setTimeout(() => {
-                                history.push(`/view/all/live/streams/general`);
-                            }, timeoutCount);
-    
-                            NotificationManager.success(`Successfully saved your data & you will now be redirect to your LIVE stream in 5 seconds or click me to immediately redirect!`, "SUCCESSFULLY INITIATED LIVE STREAM!", timeoutCount, () => {
-                                handleNotificationClick(timeout);
-                            });
-                        }
-                    } else {
-                        // THROW ERROR Notification
-                        NotificationManager.error("You MUST complete the required data in 'visibility' & 'general settings' before attempting to proceed and start your live stream...", "ALL required data is NOT provided yet!", 5250);
-                    }
-                } else if (res.data.message === "Stream is currently IDLE - NOT live yet...") {
-                    NotificationManager.warning("Your stream is currently in an 'IDLE' state which means you have NOT offically started the live stream yet - you still need to connect w/your STREAM-KEY & SERVER URL (via broadcasting software)", "Stream is NOT live yet!", 5000);
+            SBData.OpenChannel.createChannel(params, (openChannel, error) => {
+                if (error) {
+                    // Handle error.
+                    console.log("error OpenChannel.createChannel - ", error);
                 } else {
-                    console.log("STREAM NOT ACTIVE.... : ", res.data);
-    
-                    NotificationManager.error("We've determined that your stream is in fact NOT live YET, You must START your stream & verify you can view it on this page before proceeding to the 'review page'...", "Stream is NOT live yet!", 5000);
+                    const channelUrl = openChannel.url;
+                    
+                    console.log("channel OPEN - : ", openChannel, channelUrl);
+
+                    const config = {
+                        streamID: streamInfo.id,
+                        streamInformationCustomized,
+                        posterID: userData.uniqueId,
+                        posterName: `${userData.firstName} ${userData.lastName}`,
+                        posterUsername: userData.username,
+                        streamKey,
+                        channelUrl: channelUrl
+                    };
+                    axios.post(`${process.env.REACT_APP_BASE_URL}/check/live/stream/active`, config).then((res) => {
+                        if (res.data.message === "STREAM IS ACTIVATED & LIVE!") {
+                            // render checks for completed (fully) form data and stream started...
+                            if ((typeof codingLanguage !== "undefined" && Object.keys(codingLanguage).length > 0) && (typeof listingTitle !== "undefined" && (listingTitle.length >= 15 && listingTitle.length <= 75)) && (typeof mainDescription !== "undefined" && (mainDescription.length >= 50 && mainDescription.length <= 1000)) && (typeof streamHashtags !== "undefined" && streamHashtags.length >= 5) && (typeof subCategory !== "undefined" && Object.keys(subCategory).length > 0) && (typeof streamVisibility !== "undefined" && streamVisibility !== null)) {
+                                // make sure user selects a MAIN CATEGORY before proceeding...
+                                if (selectedMainCategory === "none-selected") {
+                                    // THROW WARNING Notification
+                                    NotificationManager.warning("You have COMPLETED 'most' of the required data for this listing, however you forgot to select a 'Main Category' for your stream (top-left selection button's) - please select this value before proceeding & you'll be all set!", "LAST STEP - Select a 'MAIN Category'!", 5250);
+                                } else {
+                                    // SUCCESS ! - use redux to save data for next "Review" page...
+                                    saveStreamPreFilledData(streamInformationCustomized) 
+            
+                                    const timeout = setTimeout(() => {
+                                        history.push(`/view/all/live/streams/general`);
+                                    }, timeoutCount);
+            
+                                    NotificationManager.success(`Successfully saved your data & you will now be redirect to your LIVE stream in 5 seconds or click me to immediately redirect!`, "SUCCESSFULLY INITIATED LIVE STREAM!", timeoutCount, () => {
+                                        handleNotificationClick(timeout);
+                                    });
+                                }
+                            } else {
+                                // THROW ERROR Notification
+                                NotificationManager.error("You MUST complete the required data in 'visibility' & 'general settings' before attempting to proceed and start your live stream...", "ALL required data is NOT provided yet!", 5250);
+                            }
+                        } else if (res.data.message === "Stream is currently IDLE - NOT live yet...") {
+                            NotificationManager.warning("Your stream is currently in an 'IDLE' state which means you have NOT offically started the live stream yet - you still need to connect w/your STREAM-KEY & SERVER URL (via broadcasting software)", "Stream is NOT live yet!", 5000);
+                        } else {
+                            console.log("STREAM NOT ACTIVE.... : ", res.data);
+            
+                            NotificationManager.error("We've determined that your stream is in fact NOT live YET, You must START your stream & verify you can view it on this page before proceeding to the 'review page'...", "Stream is NOT live yet!", 5000);
+                        }
+                    }).catch((err) => {
+                        console.log(err);
+            
+                        NotificationManager.error("An unknown error occurred while trying to fetch your live stream & determine whether or not it's already live... Please TRY AGAIN.", "Stream is NOT live yet!", 5000);
+                    })
                 }
-            }).catch((err) => {
-                console.log(err);
-    
-                NotificationManager.error("An unknown error occurred while trying to fetch your live stream & determine whether or not it's already live... Please TRY AGAIN.", "Stream is NOT live yet!", 5000);
-            })
+            });
         } else {
             NotificationManager.error("You MUST complete ALL of the required data in 'visibility' & 'general settings' before attempting to proceed and start your live stream...", "ALL required data is NOT provided yet!", 5250);
         }
@@ -598,7 +631,8 @@ const CreateNewLiveStreamAsHackerHelper = ({ saveStreamPreFilledData, userData }
 }
 const mapStateToProps = (state) => {
     return {
-        userData: state.auth.data
+        userData: state.auth.data,
+        SBData: state.sendbirdInitData.sendbirdInitData
     }
 }
 export default connect(mapStateToProps, { saveStreamPreFilledData })(CreateNewLiveStreamAsHackerHelper);

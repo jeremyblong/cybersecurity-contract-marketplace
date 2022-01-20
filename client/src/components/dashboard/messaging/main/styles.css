@@ -19,9 +19,14 @@
 .add-hover-message-convo:hover {
     cursor: pointer;
 }
+.add-hover-message-convo-individual {
+    background-color: #fff !important;
+    border-radius: 20px !important;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.20) !important;
+}
 .add-hover-message-convo-individual:hover {
     cursor: pointer;
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1995);
+    box-shadow: 0 0.5rem 1rem rgba(129, 18, 18, 0.475) !important;
     font-weight: 500;
 }
 .checkbox-custom-group-change {
@@ -56,17 +61,39 @@
 }
 .delivery-status-wrapper-left {
     position: absolute;
-    right: 3.5px;
-    bottom: 3.5px;
+    left: 3.5px;
+    bottom: -32.5px;
 } 
 .delivery-confirmation-left {
-    color: #f73164;
+    color: black;
+    font-weight: 450;
 }
 .delivery-status-wrapper-right {
     position: absolute;
-    left: 3.5px;
-    bottom: 3.5px;
+    right: 3.5px;
+    bottom: -32.5px;
 } 
 .delivery-confirmation-right {
-    color: #f73164;
+    color: black;
+    font-weight: 450;
+    /* position: absolute !important;
+    top: 0px;
+    bottom: 5px;
+    right: 7.5px; */
+}
+.custom-message-action-listgroup:hover {
+    cursor: pointer !important;
+}   
+.custom-chat-popover .popover {
+    min-width: 425px !important;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.55) !important;
+}
+.custom-chat-popover .popover ul li {
+    text-align: center !important;
+}
+.custom-chat-popover .popover .popover-header {
+    text-align: center !important;
+    font-weight: 425 !important;
+    font-size: 1.225rem;
+    text-decoration-line: underline;
 }

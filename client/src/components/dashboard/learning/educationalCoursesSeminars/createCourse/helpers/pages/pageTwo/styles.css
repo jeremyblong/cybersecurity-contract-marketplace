@@ -1,0 +1,21 @@
+.min-height-input-courses {
+    min-height: 43px !important;
+}
+.make-digits-larger-courses {
+    font-size: 1rem;
+    position: absolute;
+    right: 27.5px;
+    top: 27.5px;
+}
+.customized-course-lead {
+    margin-top: 20px;
+    font-size: 1rem;
+}
+.custom-ordered-list-courses li {
+    color: #7366ff;
+    padding: 22.5px;
+    font-weight: 450 !important;
+}
+#hover-a-uploading:hover {
+    cursor: pointer;
+}

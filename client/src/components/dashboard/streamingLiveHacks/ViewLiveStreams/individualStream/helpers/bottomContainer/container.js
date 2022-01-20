@@ -5,19 +5,12 @@ import Ratings from 'react-ratings-declarative';
 import "./styles.css";
 import moment from "moment";
 
-const BottomContainerHelper = ({ streamData, userData }) => {
+const BottomContainerHelper = ({ streamData, userData, channel }) => {
 
     console.log("streamData", streamData)
 
     const [activeTab, setActiveTab] = useState('1');
-    const symbol = "$";
     const [ rating, setRating ] = useState(4);
-    const singleItem = {
-        variants: ["", "", "", "", "", "", "", ""],
-        discountPrice: "450",
-        price: "575",
-        stock: "11"
-    };
     const changeRating = (newRating) => {
         setRating(newRating)
     }
@@ -44,6 +37,7 @@ const BottomContainerHelper = ({ streamData, userData }) => {
                                 <CardBody>
                                     <div className="product-page-details">
                                         <h3>{streamData.listingTitle}</h3>
+                                        <h5 className="text-second">{channel !== null ? channel.name : "Loading/Unknown..."}</h5>
                                     </div>
                                     <hr />
                                     <h5 className={"stream-tags-header"}>Stream Hashtags/tags (relevant tags also searchable on main display pages)</h5>

@@ -6,8 +6,9 @@ import { Container,Row, Col, Card, Media, Button, Popover, PopoverHeader, Popove
 import axios from 'axios';
 import "./styles.css";
 import _ from 'lodash';
+import { connect } from "react-redux";
 
-const ViewAllLiveStreamsMainHelper = (props) => {
+const ViewAllLiveStreamsMainHelper = ({ userData, SBData }) => {
  
     const history = useHistory();
 
@@ -257,5 +258,10 @@ const ViewAllLiveStreamsMainHelper = (props) => {
         </Fragment>
     );
 };
-
-export default ViewAllLiveStreamsMainHelper;
+const mapStateToProps = (state) => {
+    return {
+        userData: state.auth.data,
+        SBData: state.sendbirdInitData.sendbirdInitData
+    }
+}
+export default connect(mapStateToProps, { })(ViewAllLiveStreamsMainHelper);

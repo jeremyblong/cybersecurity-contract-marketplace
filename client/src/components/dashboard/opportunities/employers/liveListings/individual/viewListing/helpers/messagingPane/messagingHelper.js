@@ -89,28 +89,6 @@ const MessagingPanePrivateHelper = ({ messagePaneOpen, setMessagePaneState, empl
                     }
                 });
 
-                // groupChannel.enter((response, errorrrr) => {
-                //     if (errorrrr) {
-                //         // Handle errorrrr.
-                //         console.log("groupChannel ENTER errorrrr...", errorrrr);
-                //     } else {
-                //         console.log("response ENTERED CHANNEL :", response);
-
-                        // const sendMsgParams = new SBData.UserMessageParams();
-                        // sendMsgParams.message = formData.message;
-
-                        // groupChannel.sendUserMessage(sendMsgParams, (message, errorrrr) => {
-                        //     if (errorrrr) {
-                        //         // Handle error.
-                        //         console.log("sendUserMessage err :", errorrrr);
-                        //     } else {
-                        //         // close pane! success on all requests...!
-                        //         setMessagePaneState(false);
-                        //     }
-                        // });
-                //     }
-                // });
-
                 console.log("openChannel - channelUrl: ", groupChannel, channelUrl);
             }
         });
