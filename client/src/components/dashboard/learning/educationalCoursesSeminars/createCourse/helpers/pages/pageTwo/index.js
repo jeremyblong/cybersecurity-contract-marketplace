@@ -1,18 +1,25 @@
 import React, { Fragment, useRef, useState } from "react";
 import "./styles.css";
 import { connect } from "react-redux";
-import Dropzone from 'react-dropzone-uploader';
 import helpers from "./helpers/miscFunctions.js";
-import { Button, Row, Col, Card, CardBody, FormGroup, Label, Input, Media, InputGroup, InputGroupAddon, InputGroupText } from 'reactstrap';
-import FileViewer from 'react-file-viewer';
+import { Button, Row, Col, Card, CardBody, FormGroup, Label, Input, Media, InputGroup, InputGroupAddon, InputGroupText, ListGroup, ListGroupItem } from 'reactstrap';
 import Tour from 'reactour';
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
+import { updateCourseInformationData } from "../../../../../../../../redux/actions/courses/createNewCourse/index.js";
+import _ from "lodash";
+import ReactDragListView from "react-drag-listview";
+import uuid from "react-uuid";
+import moment from "moment";
+import SheetHelperPaneUploadCourseContent from "./helpers/paneSheet.js";
+import { shiftCoreStyles } from "../../../../../../../../redux/actions/universal/index.js";
+import { Modal } from 'react-responsive-modal';
+import { confirmAlert } from 'react-confirm-alert';
+import ModalMoreInformationGuiadanceHelper from "./helpers/moreInformationModal.js";
 
 const { 
-    renderCustomButtonDropzone,
-    onSubmitHelper,
-    calculateFileType
+    handleDeletionConfirmationOpen
 } = helpers;
+
 
 const steps = [
     {
@@ -21,19 +28,16 @@ const steps = [
     }
 ]
 
-const CreateNewCoursePageTwo = ({ setProgress }) => {
-
-    const dropzoneRef = useRef(null);
+const CreateNewCoursePageTwo = ({ setProgress, updateCourseInformationData, courseData, shiftCoreStyles }) => {
     const scrollToTourWrapper = useRef(null);
     // state initialization
-    const [fileReady, setFileReadyStatus] = useState(false);
-    const [currentFileSelectedUpload, setCurrentUploadFileStatus] = useState(null);
-    const [filePathData, setCurrentFilePathData] = useState(null);
-    const [fileMetaData, setMetaFileData] = useState(null);
-    const [ changeOptions, setChangeOptions ] = useState(null);
     const [ subtitle, setSubTitleValue ] = useState("");
     const [ stepOpen, setStepOpenState ] = useState(false);
     const [ modalOpen, setModalState ] = useState(false);
+    const [ courseContent, setCourseContentList ] = useState([]); 
+    const [ isOpen, setIsOpen ] = useState(false);
+    const [ selectedCourseContent, setCourseContentState ] = useState(null);
+    const [ isOpenModal, setIsOpenModalState ] = useState(false);
 
     const disableBodyAndScroll = target => {
         disableBodyScroll(target);        
@@ -41,53 +45,6 @@ const CreateNewCoursePageTwo = ({ setProgress }) => {
     // enable body!
     const enableBody = target => clearAllBodyScrollLocks();
 
-    const CustomInputHelper = ({ accept, onFiles }) => {
-
-        const text = "Drop a file OR select to browse local data";
-    
-        return (
-            <label className="custom-input-dropzone-copy" style={{ backgroundColor: '#007bff', color: '#fff', cursor: 'pointer', padding: 15, borderRadius: 3 }}>
-                {text}
-                <input
-                    style={{ display: 'none' }}
-                    type="file"
-                    accept={accept}
-                    multiple={false}
-                    className={"custom-dropzone-input-actual-input"}
-                    onChange={e => {
-                        const file = e.target.files[0];
-                        // set current file path to convert to readable URL later
-                        setCurrentFilePathData(URL.createObjectURL(file));
-                        // set status update for current file
-                        setCurrentUploadFileStatus(file);
-                        // mark file as READY 
-                        setFileReadyStatus(true);
-                        // update "Dropzone" component state (NOT this react component state).
-                        onFiles([file])
-                    }}
-                />
-            </label>
-        );
-    }
-    const renderPreviewOfFile = (data) => {
-
-        const file = data.fileWithMeta.file;
-        // return preview data via FileViewer (to not exclude documents such as .docx and such...);
-        if (fileReady === true) {
-            return (
-                <div className="filereader-preview-dropzone">
-                    <FileViewer
-                        fileType={calculateFileType(file.type)}
-                        filePath={filePathData}
-                        onError={(err) => console.log("fileviewer error - ", err)}
-                        key={file.id}
-                    />
-                </div>
-            );
-        } else {
-            return null;
-        }
-    }
     const handleTourActivate = () => {
         console.log("handleTourActivate ran...");
 
@@ -102,8 +59,77 @@ const CreateNewCoursePageTwo = ({ setProgress }) => {
         }, 750)
     }
     const handleSubAddition = () => {
-        console.log("handleSubAddition ran...")
+        console.log("handleSubAddition ran...");
+
+        if (typeof courseData !== "undefined" && courseData.length > 0) {
+            console.log("already exists...!");
+            
+            const createdDate = new Date();
+
+            const addNew = {
+                id: uuid(),
+                dateTimeAdded: createdDate,
+                video: null,
+                sectionTitle: subtitle,
+                formattedDate: moment(createdDate).format("MM/DD/YYYY hh:mm:ss a")
+            };
+            updateCourseInformationData([...courseData, addNew]);
+            setSubTitleValue("");
+        } else {
+            console.log("doesnt exist...");
+
+            const createdDate = new Date();
+
+            const newState = [{
+                id: uuid(),
+                dateTimeAdded: createdDate,
+                video: null,
+                sectionTitle: subtitle,
+                formattedDate: moment(createdDate).format("MM/DD/YYYY hh:mm:ss a")
+            }];
+            updateCourseInformationData(newState);
+
+            setSubTitleValue("");
+        }
     }
+    const dragProps = {
+        onDragEnd(fromIndex, toIndex) {
+            const data = [...courseData];
+            const item = data.splice(fromIndex, 1)[0];
+            data.splice(toIndex, 0, item);
+            console.log(data);
+            updateCourseInformationData(data)
+        },
+        nodeSelector: 'li',
+        handleSelector: 'a'
+    };
+    const showConfirmAlert = (selected) => {
+        confirmAlert({
+            title: "You're about to delete this section/chunk",
+            message: "Are you SURE you'd like to delete this section/chunk from your course material & content? If so, please proceed by clicking 'Yes, Delete!' to delete this item from your course content!",
+            buttons: [
+              {
+                label: 'Yes, Delete!',
+                onClick: () => {
+                    // Delete
+                    const filtered = courseData.filter((section, index) => {
+                        if (section.id !== selected.id) {
+                            return true;
+                        }
+                    });
+                    updateCourseInformationData(filtered);
+                }
+              },
+              {
+                label: 'No, Cancel',
+                onClick: () => {
+                    // do nothing
+                }
+              }
+            ]
+        });
+    }
+    
     return (
         <Fragment>
             <Tour
@@ -115,6 +141,13 @@ const CreateNewCoursePageTwo = ({ setProgress }) => {
                     setStepOpenState(false);
                 }} 
             />
+            <Modal classNames={{
+                overlay: 'course-content-overlay-modal',
+                modal: 'course-content-modal',
+            }} open={isOpenModal} onClose={() => setIsOpenModalState(false)} center>
+                <ModalMoreInformationGuiadanceHelper setIsOpenModalState={setIsOpenModalState} />
+            </Modal>
+            <SheetHelperPaneUploadCourseContent setCourseContentState={setCourseContentState} selectedCourseContent={selectedCourseContent} disableBodyScroll={disableBodyScroll} clearAllBodyScrollLocks={clearAllBodyScrollLocks} setProgress={setProgress} isOpen={isOpen} setIsOpen={setIsOpen} />
             <Row>
             <Col sm="12" md="12" lg="12" xl="12">
                     <Card>
@@ -130,7 +163,7 @@ const CreateNewCoursePageTwo = ({ setProgress }) => {
                                             <h6 className="mt-0 mega-title-badge">Confused on how to upload 'Course-Content'?<span className="badge badge-info pull-right digits make-digits-larger-courses">{"Need Clarification/Help on how to upload new content?"}</span></h6>
                                             <p>{"Are you unsure of 'what' or 'how' to upload course content & most of all organize the data in a manner that makes sense? We will guide you through the process but you can find a very detailed overview/guide by clicking the button just below this text...Click it to find out more!"}</p>
                                             <hr />
-                                            <Button outline style={{ width: "100%" }} onClick={() => handleSubAddition()} className="btn-square-secondary" color="secondary" size="md">Get help, guidance OR clarification on uploading course's!</Button>
+                                            <Button outline style={{ width: "100%" }} onClick={() => setIsOpenModalState(true)} className="btn-square-secondary" color="secondary" size="md">Get help, guidance OR clarification on uploading course's!</Button>
                                             <p className="customized-course-lead">Basically, you will need to select the <strong>core</strong> details for your new course (which you've already done on page 1) and secondly (now) you will need to upload <strong>ONE (1) VIDEO</strong> per each added item in the list you generate/create below with the input/form & button to submit them. Simply, enter a "part" name and upload a video for that cooresponding part!</p>
                                         </Media>
                                     </Media>
@@ -142,6 +175,9 @@ const CreateNewCoursePageTwo = ({ setProgress }) => {
                                 <li>Upload a video to the cooresponding HIGHLIGHTED region and this new video will be attached to the highlighted segment (will replace any existing video/content if already exists)</li>
                                 <li>That's it! Proceed with your other course content...</li>
                             </ol>
+                            <div className={"absolute-positioned-button-clear-redux"}>
+                                <Button id={"absolute-redux-clear-button"} onClick={() => handleDeletionConfirmationOpen()} className="btn-square-danger" color="danger" size="md">Clear ENTIRE Already Filled Course Data</Button>
+                            </div>
                         </CardBody>
                     </Card>
                 </Col>
@@ -150,36 +186,6 @@ const CreateNewCoursePageTwo = ({ setProgress }) => {
                 <Col sm="12" md="12" lg="12" xl="12">
                     <Card>
                         <CardBody>
-                            <Row>
-                                <Dropzone
-                                    ref={dropzoneRef}
-                                    PreviewComponent={(data) => renderPreviewOfFile(data)}
-                                    maxFiles={1}
-                                    autoUpload={true}
-                                    onChangeStatus={(functions) => {
-                                        setChangeOptions(functions);
-                                    }}
-                                    submitButtonDisabled={false}
-                                    InputComponent={CustomInputHelper}
-                                    getFilesFromEvent={null}
-                                    onSubmit={onSubmitHelper}
-                                    accept="video/*"
-                                    SubmitButtonComponent={(data) => {
-                                        return (
-                                            <div className="absolutely-position-submit-btn">
-                                                {renderCustomButtonDropzone(data, setMetaFileData, currentFileSelectedUpload, fileMetaData, fileReady, setFileReadyStatus, setProgress, setCurrentUploadFileStatus)}
-                                            </div>
-                                        );
-                                    }}
-                                    multiple={false}
-                                    canCancel={false}
-                                    styles={{
-                                        dropzone: { height: 350 },
-                                        dropzoneActive: { borderColor: 'green' },
-                                    }}
-                                />
-                            </Row>
-                            <hr />
                             <Row style={{ paddingTop: "12.5px" }}>
                                 <Col sm="12" md="12" lg="12" xl="12">
                                     <FormGroup className="m-form__group">
@@ -192,6 +198,37 @@ const CreateNewCoursePageTwo = ({ setProgress }) => {
                                     </FormGroup>
                                 </Col>
                             </Row>
+                            <ReactDragListView {...dragProps}>
+                                <ul>
+                                    {courseData.map((item, index) => {
+                                        return (
+                                            <Fragment key={index}>
+                                                <ListGroupItem className="d-flex justify-content-between align-items-center">
+                                                    <div id="left-chunk-course">
+                                                        <img onClick={() => showConfirmAlert(item)} src={require("../../../../../../../../assets/icons/delete.png")} className={"view-more-icon"} />
+                                                        <img onClick={() => {
+                                                            setCourseContentState(item);
+                                                            // DISABLE clicking background
+                                                            shiftCoreStyles(true);
+                                                            // set modal sheet pane OPEN/true
+                                                            setIsOpen(true);
+                                                            // lock after appropriate position change
+                                                            setTimeout(() => {
+                                                                // LOCK page
+                                                                const select = document.querySelector(".enact-nonclick");
+
+                                                                disableBodyScroll(select);
+                                                            }, 500)
+                                                        }} src={require("../../../../../../../../assets/icons/view.png")} className={"view-more-icon"} />
+                                                    </div>
+                                                        <p className={"custom-strong-list-item"}>{item.sectionTitle}</p>
+                                                    <a className="badge badge-secondary counter digits make-digits-larger-course-draggable">{"Use me to drag this item"}</a>
+                                                </ListGroupItem>
+                                            </Fragment>
+                                        );
+                                    })}
+                                </ul>
+                            </ReactDragListView>
                         </CardBody>
                     </Card>
                 </Col>
@@ -201,7 +238,8 @@ const CreateNewCoursePageTwo = ({ setProgress }) => {
 }
 const mapStateToProps = (state) => {
     return {
-        userData: state.auth.data
+        userData: state.auth.data,
+        courseData: _.has(state.courseData, "courseData") ? state.courseData.courseData : []
     }
 }
-export default connect(mapStateToProps, { })(CreateNewCoursePageTwo);
+export default connect(mapStateToProps, { updateCourseInformationData, shiftCoreStyles })(CreateNewCoursePageTwo);

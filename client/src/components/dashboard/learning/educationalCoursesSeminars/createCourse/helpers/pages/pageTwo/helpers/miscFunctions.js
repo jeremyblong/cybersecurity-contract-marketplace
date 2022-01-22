@@ -2,58 +2,70 @@ import React, { Fragment } from "react";
 import { Button } from 'reactstrap';
 import axios from "axios";
 import { NotificationManager } from 'react-notifications';
+import { updateCourseInformationData } from "../../../../../../../../../redux/actions/courses/createNewCourse/index.js";
+import { confirmAlert } from 'react-confirm-alert';
 
-const handleSubmit = (runSubmit, currentFileSelectedUpload, fileMetaData, setProgress, setMetaFileData, setFileReadyStatus, setCurrentUploadFileStatus) => {
 
-    console.log("submitted!", currentFileSelectedUpload, fileMetaData);
+const handleSubmit = (runSubmit, currentFileSelectedUpload, fileMetaData, setProgress, setShowInitialState, setVideoFileState, setLoadedState, alreadyExisted, setCurrentFilePathData) => {
 
-    //  conditional check for... (!_.has(previouslySavedSoftwareData, "uploadedPublicFiles")) || (previouslySavedSoftwareData.uploadedPublicFiles.length <= 10) redux logic
+    const data = new FormData();
 
-    if (true) {
-        const data = new FormData();
+    data.append("file", currentFileSelectedUpload);
+    data.append("meta", fileMetaData);
 
-        data.append("file", currentFileSelectedUpload);
-        data.append("meta", fileMetaData);
+    const config = {
+        onUploadProgress: (progressEvent) => {
+            let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
 
-        const config = {
-            onUploadProgress: (progressEvent) => {
-                let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+            setProgress(percentCompleted);
+        },
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    };
 
-                setProgress(percentCompleted);
-            },
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        };
+    axios.post(`${process.env.REACT_APP_BASE_URL}/upload/misc/file/softare/listing/sale`, data, config).then((res) => {
+        if (res.data.message === "Successfully uploaded file!") {
+            console.log(res.data);
 
-        axios.post(`${process.env.REACT_APP_BASE_URL}/upload/misc/file/softare/listing/sale`, data, config).then((res) => {
-            if (res.data.message === "Successfully uploaded file!") {
-                console.log(res.data);
+            const { file } = res.data;
 
-                const { file } = res.data;
+            // save file to redux state...
 
-                // save file to redux state...
-
-                NotificationManager.success(`We've successfully uploaded your file! Please proceed filling out your information or add more files.`, 'Successfully uploaded file!', 4500);
-
-                setMetaFileData(null);
-                setFileReadyStatus(false);
-                setCurrentUploadFileStatus(null);
-
-                runSubmit();
+            if (alreadyExisted === true) {
+                const configuration = {
+                    method: 'get',
+                    url: `${process.env.REACT_APP_ASSET_LINK}/${file.link}`,
+                    responseType: 'blob'
+                };
+    
+                axios(configuration).then((response) => {
+                    // create fileready
+                    const fileeee = new File([response.data], file.name); 
+                    // set current file path to convert to readable URL later
+                    setCurrentFilePathData(URL.createObjectURL(fileeee));
+                    setVideoFileState(file);
+                    setShowInitialState(false);
+                    setLoadedState(true);
+                })
             } else {
-                console.log("Err", res.data);
+                setVideoFileState(file);
+                setShowInitialState(false);
+                setLoadedState(true);   
             }
-        }).catch((err) => {
-            console.log(err);
-        })
-    } else {
-        // here!
-        NotificationManager.error(`You're only allowed to upload 10 (TEN) files TOTAL. If you'd like to upload different files - remove/delete a previously uploaded file.`, "Too many uploads!", 4500);
-    }
+
+            NotificationManager.success(`We've successfully uploaded your file! Please proceed filling out your information or add more files.`, 'Successfully uploaded file!', 4500);
+
+            runSubmit();
+        } else {
+            console.log("Err", res.data);
+        }
+    }).catch((err) => {
+        console.log(err);
+    })
 };
 
-const renderCustomButtonDropzone = (data, setMetaFileData, currentFileSelectedUpload, fileMetaData, fileReady, setFileReadyStatus, setProgress, setCurrentUploadFileStatus) => {
+const renderCustomButtonDropzone = (data, setMetaFileData, currentFileSelectedUpload, fileMetaData, fileReady, setFileReadyStatus, setProgress, setVideoFileState, setShowInitialState, setLoadedState, alreadyExisted, setCurrentFilePathData) => {
 
     const { meta } = data.files[0];
 
@@ -63,7 +75,7 @@ const renderCustomButtonDropzone = (data, setMetaFileData, currentFileSelectedUp
         if (fileReady === true) {
             return (
                 <Fragment>
-                    <Button style={{ marginTop: "25px" }} onClick={(e) => {
+                    <Button style={{ marginTop: "7.5px" }} onClick={(e) => {
                         e.preventDefault();
                         // file meta data for next action
                         setMetaFileData(meta);
@@ -72,20 +84,43 @@ const renderCustomButtonDropzone = (data, setMetaFileData, currentFileSelectedUp
 
                         const runSubmit = data.onSubmit;
 
-                        handleSubmit(runSubmit, currentFileSelectedUpload, fileMetaData, setProgress, setMetaFileData, setFileReadyStatus, setCurrentUploadFileStatus);
-                    }} className="btn-air-secondary" color="secondary" size="md">Submit & Upload New File!</Button>
+                        handleSubmit(runSubmit, currentFileSelectedUpload, fileMetaData, setProgress, setShowInitialState, setVideoFileState, setLoadedState, alreadyExisted, setCurrentFilePathData);
+                    }} className="btn-air-info" color="info" size="md">Submit & Upload New File!</Button>
                 </Fragment>
             );
         } else {
             return (
                 <Fragment>
-                    <Button style={{ marginTop: "25px" }} onClick={() => {
+                    <Button style={{ marginTop: "7.5px" }} onClick={() => {
                         NotificationManager.warning(`File is NOT ready to upload yet! Please wait for the preparation steps to complete before submitting.`, 'Still preparing!', 4500);
                     }} className="btn-air-light" color="light" size="md">Submit & Upload New File!</Button>
                 </Fragment>
             );
         }
     }
+}
+const handleDeletionConfirmationOpen = () => {
+    const defaultState = [{
+        sections: []
+    }];
+    confirmAlert({
+        title: 'Clear/Delete ALL Items?',
+        message: "Are you SURE you'd like to clear your ENTIRE 'Course Content' already filled out information? This will start a clear-slate and you will start from the beginning. You can also save this data to your account before deleting so please consider that as well.",
+        buttons: [
+          {
+            label: 'Yes, CLEAR!',
+            onClick: () => {
+                updateCourseInformationData(defaultState);
+            }
+          },
+          {
+            label: 'No, CANCEL',
+            onClick: () => {
+                // do nothing.
+            }
+          }
+        ]
+    });
 }
 const calculateFileType = (type) => {
     switch (type) {
@@ -138,5 +173,6 @@ export default {
     renderCustomButtonDropzone,
     handleSubmit,
     onSubmitHelper,
-    calculateFileType
+    calculateFileType,
+    handleDeletionConfirmationOpen
 };

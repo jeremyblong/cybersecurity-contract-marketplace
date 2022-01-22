@@ -29,7 +29,7 @@ const EducationalCoursesCreationHelper = ({  }) => {
     return (
         <Fragment>
             <LoadingBar
-                color={'#f73164'}
+                color={'#51bb25'}
                 height={9}
                 progress={progress}
                 onLoaderFinished={() => {
