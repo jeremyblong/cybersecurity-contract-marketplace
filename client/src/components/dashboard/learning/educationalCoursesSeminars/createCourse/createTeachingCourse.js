@@ -11,16 +11,17 @@ import LoadingBar from 'react-top-loading-bar';
 
 const EducationalCoursesCreationHelper = ({  }) => {
     const [progress, setProgress] = useState(0);
+    const [ overallProgress, setOverallProgress ] = useState(0);
 
     const renderCurrentPage = () => {
-        const page = 2;
+        const page = 1;
 
         switch (page) {
             case 1:
-                return <CreateNewCoursePageOne />;
+                return <CreateNewCoursePageOne overallProgress={overallProgress} setOverallProgress={setOverallProgress} />;
                 break;
             case 2: 
-                return <CreateNewCoursePageTwo setProgress={setProgress} />
+                return <CreateNewCoursePageTwo overallProgress={overallProgress} setOverallProgress={setOverallProgress} setProgress={setProgress} />
                 break;
             default:
                 break;

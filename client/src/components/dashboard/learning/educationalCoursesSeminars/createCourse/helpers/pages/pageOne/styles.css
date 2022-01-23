@@ -1,0 +1,39 @@
+.course-custom-title {
+
+}
+.h5-custom-course {
+    text-decoration-line: underline;
+    font-weight: bold;
+}
+.important-course-link {
+    color: #f73164;
+    text-decoration-line: underline;
+}
+.counter-addon-transparent .input-group-text { 
+    background-color: #fff !important;
+    max-height: 95%;
+}
+.counter-addon-transparent {
+    border: none !important;
+}
+.no-right-border-input {
+    border-right: none !important;
+    border: 2px solid lightgrey !important;
+    padding: 17.5px 10px;
+}
+.float-right-absolute button {
+    float: right !important;
+}
+.course-creation-progress-bar {
+    border-top-right-radius: 35px;
+    border-top-left-radius: 35px;
+    width: 95.25%;
+}
+.centered-horizontally-course {
+    display: flex;
+    justify-content: center
+}
+.position-above-bar-percentage {
+    position: absolute;
+    top: 35px;
+}

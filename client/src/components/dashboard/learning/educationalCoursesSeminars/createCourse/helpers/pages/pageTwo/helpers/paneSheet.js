@@ -22,10 +22,10 @@ const { renderCustomButtonDropzone, onSubmitHelper, calculateFileType } = helper
 const SheetHelperPaneUploadCourseContent = ({ isOpen, setIsOpen, setProgress, shiftCoreStyles, disableBodyScroll, clearAllBodyScrollLocks, courseData, updateCourseInformationData, selectedCourseContent, setCourseContentState }) => {
     const dropzoneRef = useRef(null);
     const [ changeOptions, setChangeOptions ] = useState(null);
-    const [fileReady, setFileReadyStatus] = useState(false);
-    const [currentFileSelectedUpload, setCurrentUploadFileStatus] = useState(null);
-    const [filePathData, setCurrentFilePathData] = useState(null);
-    const [fileMetaData, setMetaFileData] = useState(null);
+    const [ fileReady, setFileReadyStatus ] = useState(false);
+    const [ currentFileSelectedUpload, setCurrentUploadFileStatus ] = useState(null);
+    const [ filePathData, setCurrentFilePathData ] = useState(null);
+    const [ fileMetaData, setMetaFileData ] = useState(null);
     const [ description, setDescription ] = useState("");
     const [ showInitial, setShowInitialState ] = useState(true);
     const [ videoFile, setVideoFileState ] = useState(null);

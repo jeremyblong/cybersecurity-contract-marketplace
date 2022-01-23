@@ -1,26 +1,80 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useMemo, useEffect, useRef } from "react";
 import Dropzone from 'react-dropzone-uploader';
-import { Row, Col, Card, CardBody, Form, FormGroup, Label, Input, Button } from 'reactstrap';
-import DatePicker from "react-datepicker";
+import { Row, Col, Card, CardBody, Form, FormGroup, Label, Input, Button, InputGroup, InputGroupText, InputGroupAddon, Progress } from 'reactstrap';
 import { useForm, Controller } from 'react-hook-form';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
-import { ProjectTitle, ClientName, ProjectRate, ProjectStatus, ProgressLevel, ProjectSize, Small, Medium, Big, StartingDate, EndingDate, EnterSomeDetails, UploadProjectFile, Add, Cancel, Done, Doing, Maps } from '../../../../../../../../constant';
+import { ProgressLevel, UploadProjectFile } from '../../../../../../../../constant';
+import reduxFormHelpers from "./helpers/reduxFormHelpers.js";
+import optionHelper from "./helpers/options/options.js";
+import Select from "react-select";
+import helperFunctions from "./helpers/helperFunctions/index.js";
+import SimpleMDE from "react-simplemde-editor";
+import "./styles.css";
+import uuid from "react-uuid";
+import { Plus } from "react-feather";
+import { NotificationManager } from "react-notifications";
+
+const courseTitle = reduxFormHelpers().courseTitle;
+const courseCategory = reduxFormHelpers().courseCategory;
+const descriptionChecks = reduxFormHelpers().descriptionChecks;
+const pricing = reduxFormHelpers().pricing;
+const objectiveChecks = reduxFormHelpers().objectiveChecks;
+const courseDesignedForChecks = reduxFormHelpers().courseDesignedForChecks;
+const prerequisitesChecks = reduxFormHelpers().prerequisitesChecks;
+
+const { courseCategoryOptions, pricingOptions } = optionHelper;
+
+const { CourseCreationHashtagHelper } = helperFunctions;
 
 
+const CreateNewCoursePageOne = ({ overallProgress, setOverallProgress }) => {
+    // create ref's local
+    const courseCategoryGeneratedRef = useRef(null);
+    const pricingGeneratedRef = useRef(null);
+    const customHashtagsRef = useRef(null);
 
-const CreateNewCoursePageOne = () => {
-    const { register, handleSubmit, control, reset, setValue, setError, clearErrors, formState: { errors }} = useForm({
+    // state initialization
+    const [ objectives, setObjectiveState ] = useState([
+        {
+            partCount0: "",
+            id: uuid()
+        }, {
+            partCount1: "",
+            id: uuid()
+        }, {
+            partCount2: "",
+            id: uuid()
+        }, {
+            partCount3: "",
+            id: uuid()
+        }
+    ]);
+    const [ requirements, setRequirements ] = useState([
+        {
+            partCount0: "",
+            id: uuid()
+        }
+    ]);
+    const [ courseContentConcepts, setCourseContentConcepts ] = useState([
+        {
+            partCount0: "",
+            id: uuid()
+        }
+    ]);
+    useEffect(() => {
+        setOverallProgress(25);
+    }, []);
+    // state init
+    const [ hashtags, setHashtags ] = useState([]);
+    const [ wordCount, setWordCount ] = useState(0);
+    // redux form logic
+    const { register, handleSubmit, control, reset, getValues, setValue, setError, clearErrors, formState: { errors }} = useForm({
         mode: "onTouched",
         reValidateMode: "onBlur"
     });
-
-    const getUploadParams = ({ meta }) => { 
-        return { 
-          url: 'https://httpbin.org/post' 
-        }
-    }
-    
+    // collect redux-hook-form values
+    const currentValues = getValues();
 
     // called every time a file's `status` changes
     const handleChangeStatus = ({ meta, file }, status) => {
@@ -33,10 +87,22 @@ const CreateNewCoursePageOne = () => {
     const onSubmission = (e, data) => {
         console.log("onSubmission ran...", e, data);
     }
+    const calculateWordCountOnBlur = (data) => {
+        const wordCount = data.split(" ").length;
+
+        setWordCount(wordCount);
+    }
+    const autofocusNoSpellcheckerOptions = useMemo(() => {
+        return {
+          autofocus: false,
+          spellChecker: false,
+        };
+    }, []);
     return (
         <Fragment>
+            <div className={"centered-horizontally-course"}><div className={"position-above-bar-percentage"}><h1>{overallProgress}% Complete</h1></div><Progress className={"course-creation-progress-bar"} animated color="info" value={overallProgress} /></div>
             <Row>
-                <Col sm="12">
+                <Col sm="12" md="12" lg="12" xl="12">
                     <Card>
                         <CardBody>
                             <Form className="theme-form" onSubmit={handleSubmit(onSubmission, (e, errors) => {
@@ -44,108 +110,279 @@ const CreateNewCoursePageOne = () => {
                             })}>
                             <Row>
                                 <Col>
-                                <FormGroup>
-                                    <Label>{ProjectTitle}</Label>
-                                    <Input className="form-control" type="text"  name="title" placeholder="Project name *" />
-                                </FormGroup>
+                                    <FormGroup>
+                                        <Label>{courseTitle.label}</Label>
+                                        <Input {...courseTitle.check(setError, register)} className="form-control" type={courseTitle.type} name={courseTitle.name} placeholder={courseTitle.placeholder} onChange={(e) => courseTitle.onChange(e, setValue)} value={currentValues.courseTitle} />
+                                        {errors.courseTitle ? <span className="span-tooltip">{errors.courseTitle.message}</span> : null}
+                                    </FormGroup>
                                 </Col>
                             </Row>
                             <Row>
-                                <Col>
-                                <FormGroup>
-                                    <Label>{ClientName}</Label>
-                                    <Input className="form-control" type="text" name="client_name" placeholder="Name client or company name"/>
-                                </FormGroup>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col sm="4">
-                                <FormGroup>
-                                    <Label>{ProjectRate}</Label>
-                                    <Input className="form-control" type="number" name="rate" defaultValue="10" placeholder="Enter project Rate"/>
-                                </FormGroup>
-                                </Col>
-                                <Col sm="4">
-                                <FormGroup>
-                                    <Label>{ProgressLevel}</Label>
-                                    <Input type="select"  name="progress_level" className="form-control digits">
-                                        <option value="25">{"25"}</option>
-                                        <option value="50">{"50"}</option>
-                                        <option value="70">{"70"}</option>
-                                        <option value="100">{"100"}</option>
-                                    </Input>
-                                </FormGroup>
-                                </Col>
-                                <Col sm="4">
-                                <FormGroup>
-                                    <Label>{ProjectStatus}</Label>
-                                    <Input type="select" name="status" placeholder="Select Status" className="form-control digits">
-                                        <option value="Done">{Done}</option>
-                                        <option value="Doing">{Doing}</option>
-                                    </Input>
-                                </FormGroup>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col sm="4">
-                                <FormGroup>
-                                    <Label>{ProjectSize}</Label>
-                                    <select className="form-control digits">
-                                    <option>{Small}</option>
-                                    <option>{Medium}</option>
-                                    <option>{Big}</option>
-                                    </select>
-                                </FormGroup>
-                                </Col>
-                                <Col sm="4">
-                                <FormGroup>
-                                    <Label>{StartingDate}</Label>
-                                    <DatePicker className="datepicker-here form-control"  selected={null} onChange={null} />
-                                </FormGroup>
-                                </Col>
-                                <Col sm="4">
-                                <FormGroup>
-                                    <Label>{EndingDate}</Label>
-                                    <DatePicker className="datepicker-here form-control"  selected={null} endDate={null} onChange={null} />
-                                </FormGroup>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col>
-                                <FormGroup>
-                                    <Label>{EnterSomeDetails}</Label>
-                                    <Input  type="textarea" className="form-control" name="description" rows="3"/>
-                                    <span style={{ color: "red" }}>{errors.description && 'Some Details is required'}</span>
-                                </FormGroup>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col>
-                                <FormGroup>
-                                    <Label>{UploadProjectFile}</Label>
-                                        <Dropzone
-                                            getUploadParams={getUploadParams}
-                                            onChangeStatus={handleChangeStatus}
-                                            maxFiles={1}
-                                            multiple={false}
-                                            canCancel={false}
-                                            inputContent="Drop A File"
-                                            styles={{
-                                                dropzone: { width: '100%', height: 50 },
-                                                dropzoneActive: { borderColor: 'green' },
-                                            }}
+                                <Col sm="6" md="6" lg="6" xl="6">
+                                    <FormGroup>
+                                        <Label>{courseCategory.label}</Label>
+                                        <Controller
+                                            control={control}
+                                            name={courseCategory.name}
+                                            {...courseCategory.check(setError, register, clearErrors)}
+                                            render={({ field }) => (
+                                                <Select
+                                                    {...field}
+                                                    ref={courseCategoryGeneratedRef}
+                                                    autoBlur={true}
+                                                    placeholder={courseCategory.placeholder}
+                                                    defaultValue={null}
+                                                    onMenuClose={() => {
+                                                        courseCategoryGeneratedRef.current.blur();
+                                                    }}
+                                                    value={currentValues.courseCategory}
+                                                    onChange={(selectedOption) => courseCategory.onChange(selectedOption, setValue, clearErrors)}
+                                                    options={courseCategoryOptions}
+                                                />
+                                            )}
                                         />
-                                </FormGroup>
+                                        {errors.courseCategory ? <span className="span-tooltip">{errors.courseCategory.message}</span> : null}
+                                    </FormGroup>
+                                </Col>
+                                <Col sm="6" md="6" lg="6" xl="6">
+                                    <FormGroup>
+                                        <Label>{pricing.label}</Label>
+                                        <Controller
+                                            control={control}
+                                            name={pricing.name}
+                                            {...pricing.check(setError, register, clearErrors)}
+                                            render={({ field }) => (
+                                                <Select
+                                                    {...field}
+                                                    ref={pricingGeneratedRef}
+                                                    autoBlur={true}
+                                                    placeholder={pricing.placeholder}
+                                                    defaultValue={null}
+                                                    onMenuClose={() => {
+                                                        pricingGeneratedRef.current.blur();
+                                                    }}
+                                                    value={currentValues.pricing}
+                                                    onChange={(selectedOption) => pricing.onChange(selectedOption, setValue, clearErrors)}
+                                                    options={pricingOptions}
+                                                />
+                                            )}
+                                        />
+                                        {errors.pricing ? <span className="span-tooltip">{errors.pricing.message}</span> : null}
+                                    </FormGroup>
                                 </Col>
                             </Row>
                             <Row>
+                                <Col sm="12" md="12" lg="12" xl="12">
+                                    <CourseCreationHashtagHelper customHashtagsRef={customHashtagsRef} setHashtags={setHashtags} hashtags={hashtags} setError={setError} register={register} values={currentValues} errors={errors} setValue={setValue} clearErrors={clearErrors} control={control} />
+                                </Col>
+                            </Row>
+                            <Row style={{ paddingTop: "20px" }}>
+                                <Col sm="12" md="12" lg="12" xl="12">
+                                <Label>Enter a description for your listing (markdown is accepted - use the attached buttons to customize the way your content looks)</Label>
+                                    <Controller
+                                        control={control}
+                                        name={descriptionChecks.name}
+                                        value={currentValues.description}
+                                        {...descriptionChecks.check(clearErrors, register, setError, currentValues, wordCount)}
+                                        render={({ field: { ref, onChange, value, ...field }}) => (
+                                            <Fragment>
+                                                <SimpleMDE
+                                                    ref={ref}
+                                                    {...field}
+                                                    placeholder={descriptionChecks.placeholder}
+                                                    name={descriptionChecks.name}
+                                                    onFocus={() => {
+                                                        clearErrors("description");
+                                                    }}
+                                                    onBlur={() => descriptionChecks.onBlur(clearErrors, setError, currentValues, wordCount)}
+                                                    id="editor_container"
+                                                    onChange={(value) => {
+                                                        onChange(value);
+                                                        // return value for hook-form logic
+                                                        return value;
+                                                    }}
+                                                    value={value}
+                                                    options={autofocusNoSpellcheckerOptions}
+                                                />
+                                                {errors.description ? <span className="span-tooltip">{errors.description.message}</span> : null}
+                                            </Fragment>
+                                        )}
+                                    />
+                                </Col>
+                            </Row>
+                            <hr />
+                            <Row>
+                                <Col sm="12" md="12" lg="12" xl="12">
+                                    <h4 className={"course-custom-title"}>The following descriptions will be publicly visible on your Course Landing Page and will have a direct impact on your course performance. These descriptions will help learners decide if your course is right for them.</h4>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col sm="12" md="12" lg="12" xl="12">
+                                    <p className={"couse-create-p"}>The following descriptions will be publicly visible on your Course Landing Page and will have a direct impact on your course performance. These descriptions will help learners decide if your course is right for them.</p>
+                                    <h5 className={"h5-custom-course"}>What will students learn in your course?</h5>
+                                    You must enter at least 4 learning <a href={""} className={"important-course-link"}>objectives or outcomes</a> that learners can expect to achieve after completing your course.
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col sm="12" md="12" lg="12" xl="12">
+                                    {objectives.map((objective, index) => {
+                                        return (
+                                            <Fragment>
+                                                <FormGroup style={{ paddingTop: "17.5px" }}>
+                                                    <InputGroup>
+                                                        <Input {...objectiveChecks.check(register, `objective${index}`)} onChange={(e) => {
+                                                            // value
+                                                            const value = e.target.value;
+                                                            // create shallow array copy
+                                                            const newArr = [...objectives];
+                                                            // create new object w/changes
+                                                            const newObj = { [`partCount${index}`]: value, id: objective.id };
+                                                            // replace item
+                                                            newArr[index] = newObj;
+                                                            // render onChange logic
+                                                            objectiveChecks.onChange(setValue, `objective${index}`, value);
+                                                            // update relevant state
+                                                            setObjectiveState(newArr);
+
+                                                        }} value={currentValues[`partCount${index}`]} name={`objective${index}`} className="form-control no-right-border-input" type="text" placeholder={objectiveChecks.placeholder}/>
+                                                        <InputGroupAddon className={"counter-addon-transparent"} addonType="append"><InputGroupText>{typeof currentValues[`objective${index}`] !== "undefined" ? 160 - currentValues[`objective${index}`].length : 160}</InputGroupText></InputGroupAddon>
+                                                    </InputGroup>
+                                                    {errors[`objective${index}`] ? <span className="span-tooltip">{errors[`objective${index}`].message}</span> : null}
+                                                    <hr />
+                                                </FormGroup>
+                                            </Fragment>
+                                        );
+                                    })}
+                                </Col>
+                            </Row>
+                            <Row>
+                                <div className={"float-right-absolute"}>
+                                    <Button onClick={() => {
+                                        if (objectives.length <= 5) {
+                                            setObjectiveState(prevState => {
+                                                return [...prevState, { [`partOne${objectives.length}`]: "", id: uuid() }]
+                                            })
+                                        } else {
+                                            NotificationManager.warning("Error - You cannot enter TOO many inputs as there is a MAXIMUM of 6 TOTAL inputs/fields...Please use your existing fields.", "Too many fields/inputs!", 4500);
+                                        }
+                                    }} outline color={"primary-2x"} className={"btn-square primary"} style={{ width: "35%", border: "none" }}><Plus style={{ fontSize: 35, marginBottom: "-7.5px" }} /> Add Another Field</Button>
+                                </div>
+                            </Row>
+                            <Row>
+                                <Col sm="12" md="12" lg="12" xl="12">
+                                    <h4 className={"course-custom-title"}>What are the requirements or prerequisites for taking your course?</h4>
+                                </Col>
+                            </Row>
+                            <Row style={{ marginBottom: "25px" }}>
+                                <Col sm="12" md="12" lg="12" xl="12">
+                                    <p className={"couse-create-p"}>List the required skills, experience, tools or equipment learners should have prior to taking your course. <br /> If there are no requirements, use this space as an opportunity to lower the barrier for beginners.</p>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col sm="12" md="12" lg="12" xl="12">
+                                    {requirements.map((requirement, index) => {
+                                        return (
+                                            <Fragment>
+                                                <FormGroup style={{ paddingTop: "17.5px" }}>
+                                                    <InputGroup>
+                                                        <Input {...prerequisitesChecks.check(register, `requirement${index}`)} onChange={(e) => {
+                                                            // value from input
+                                                            const value = e.target.value;
+                                                            // shallow copy
+                                                            const newArr = [...requirements];
+                                                            // new data obj
+                                                            const newObj = { [`partCount${index}`]: value, id: requirement.id };
+                                                            // replace item
+                                                            newArr[index] = newObj;
+                                                            // render onChange logic
+                                                            prerequisitesChecks.onChange(setValue, `requirement${index}`, value);
+                                                            // update the main state
+                                                            setRequirements(newArr);
+
+                                                        }} value={currentValues[`partCount${index}`]} name={`requirement${index}`} className="form-control no-right-border-input" type="text" placeholder={prerequisitesChecks.placeholder}/>
+                                                        <InputGroupAddon className={"counter-addon-transparent"} addonType="append"><InputGroupText>{typeof currentValues[`requirement${index}`] !== "undefined" ? 160 - currentValues[`requirement${index}`].length : 160}</InputGroupText></InputGroupAddon>
+                                                    </InputGroup>
+                                                    {errors[`requirement${index}`] ? <span className="span-tooltip">{errors[`requirement${index}`].message}</span> : null}
+                                                    <hr />
+                                                </FormGroup>
+                                            </Fragment>
+                                        );
+                                    })}
+                                </Col>
+                            </Row>
+                            <Row>
+                                <div className={"float-right-absolute"}>
+                                    <Button onClick={() => {
+                                        if (requirements.length <= 2) {
+                                            setRequirements(prevState => {
+                                                return [...prevState, { [`partOne${requirements.length}`]: "", id: uuid() }]
+                                            })
+                                        } else {
+                                            NotificationManager.warning("Error - You cannot enter TOO many inputs as there is a MAXIMUM of 3 TOTAL inputs for this field...Please use your existing fields.", "Too many field's!", 4500);
+                                        }
+                                    }} outline color={"primary-2x"} className={"btn-square primary"} style={{ width: "35%", border: "none" }}><Plus style={{ fontSize: 35, marginBottom: "-7.5px" }} /> Add Another Field</Button>
+                                </div>
+                            </Row>
+                            <Row>
+                                <Col sm="12" md="12" lg="12" xl="12">
+                                    <h4 className={"course-custom-title"}>Who is this course for?</h4>
+                                </Col>
+                            </Row>
+                            <Row style={{ marginBottom: "25px" }}>
+                                <Col sm="12" md="12" lg="12" xl="12">
+                                    <p className={"couse-create-p"}>Write a clear description of the intended learners for your course who will find your course content valuable. <br /> This will help you attract the right learners to your course.</p>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col sm="12" md="12" lg="12" xl="12">
+                                    {courseContentConcepts.map((concept, index) => {
+                                        return (
+                                            <Fragment>
+                                                <FormGroup style={{ paddingTop: "17.5px" }}>
+                                                    <InputGroup>
+                                                        <Input {...courseDesignedForChecks.check(register, `concept${index}`)} onChange={(e) => {
+                                                            // value from input
+                                                            const value = e.target.value;
+                                                            // shallow copy
+                                                            const newArr = [...courseContentConcepts];
+                                                            // new data obj
+                                                            const newObj = { [`partCount${index}`]: value, id: concept.id };
+                                                            // replace item
+                                                            newArr[index] = newObj;
+                                                            // onchange handler
+                                                            courseDesignedForChecks.onChange(setValue, `concept${index}`, value);
+                                                            // update the main state
+                                                            setCourseContentConcepts(newArr);
+
+                                                        }} value={currentValues[`partCount${index}`]} className="form-control no-right-border-input" type="text" placeholder={courseDesignedForChecks.placeholder}/>
+                                                        <InputGroupAddon className={"counter-addon-transparent"} addonType="append"><InputGroupText>{typeof currentValues[`concept${index}`] !== "undefined" ? 160 - currentValues[`concept${index}`].length : 160}</InputGroupText></InputGroupAddon>
+                                                    </InputGroup>
+                                                    {errors[`concept${index}`] ? <span className="span-tooltip">{errors[`concept${index}`].message}</span> : null}
+                                                    <hr />
+                                                </FormGroup>
+                                            </Fragment>
+                                        );
+                                    })}
+                                </Col>
+                            </Row>
+                            <Row>
+                                <div className={"float-right-absolute"}>
+                                    <Button onClick={() => {
+                                        if (courseContentConcepts.length <= 2) {
+                                            setCourseContentConcepts(prevState => {
+                                                return [...prevState, { [`partOne${courseContentConcepts.length}`]: "", id: uuid() }]
+                                            })
+                                        } else {
+                                            NotificationManager.warning("Error - You cannot enter TOO many inputs as there is a MAXIMUM of 3 TOTAL inputs for this field...Please use your existing fields.", "Too many field's!", "Too many field's!", 4500);
+                                        }
+                                    }} outline color={"primary-2x"} className={"btn-square primary"} style={{ width: "35%", border: "none" }}><Plus style={{ fontSize: 35, marginBottom: "-7.5px" }} /> Add Another Field</Button>
+                                </div>
+                            </Row>
+                            <Row style={{ marginTop: "42.5px" }}>
                                 <Col>
-                                <FormGroup className="mb-0">
-                                    <Button color="success" className="mr-3">{Add}</Button>
-                                    <Link to={`${process.env.PUBLIC_URL}/app/project/project-list`}>
-                                    <Button color="danger">{Cancel}</Button>
-                                    </Link>
-                                </FormGroup>
+                                    <FormGroup className="mb-0">
+                                        <Button style={{ width: "100%" }} color="info-2x" outline className={"btn-square-info"} className="mr-3">Submit & Continue w/Process</Button>
+                                    </FormGroup>
                                 </Col>
                             </Row>
                             </Form>
