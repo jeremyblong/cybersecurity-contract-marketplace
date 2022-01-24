@@ -8,6 +8,7 @@ import CreateNewCoursePageOne from "./helpers/pages/pageOne/index.js";
 import CreateNewCoursePageTwo from "./helpers/pages/pageTwo/index.js";
 import LoadingBar from 'react-top-loading-bar';
 import _ from "lodash";
+import CreateNewCoursePageThree from "./helpers/pages/pageThree/index.js";
 
 const EducationalCoursesCreationHelper = ({ courseData }) => {
     const [progress, setProgress] = useState(0);
@@ -22,6 +23,9 @@ const EducationalCoursesCreationHelper = ({ courseData }) => {
                 break;
             case 2: 
                 return <CreateNewCoursePageTwo overallProgress={overallProgress} setOverallProgress={setOverallProgress} setProgress={setProgress} />
+                break;
+            case 3:
+                return <CreateNewCoursePageThree overallProgress={overallProgress} setOverallProgress={setOverallProgress} setProgress={setProgress} />
                 break;
             default:
                 break;

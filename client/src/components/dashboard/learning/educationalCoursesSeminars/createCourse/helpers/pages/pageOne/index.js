@@ -82,7 +82,7 @@ const CreateNewCoursePageOne = ({ overallProgress, setOverallProgress, updateCou
     const renderErrorsFormUploadContent = (e, errors) => {
         console.log("renderErrorsFormUploadContent ran...", e, errors);
     }
-    const onSubmission = (e, data) => {
+    const onSubmission = (data, e) => {
         console.log("onSubmission ran...", e, data);
 
         const { objective0, objective1, objective2, objective3, concept0, courseCategory, courseHashtags, courseTitle, description, pricing, requirement0 } = data;
@@ -209,7 +209,12 @@ const CreateNewCoursePageOne = ({ overallProgress, setOverallProgress, updateCou
     console.log("CURRENT VALUES! :", currentValues, currentValues.length);
     return (
         <Fragment>
-            <div className={"centered-horizontally-course"}><div className={"position-above-bar-percentage"}><h1>{overallProgress}% Complete</h1></div><Progress className={"course-creation-progress-bar"} animated color="info" value={overallProgress} /></div>
+            <div className={"centered-horizontally-course"}>
+                <div className={"position-above-bar-percentage"}>
+                    <h1>{overallProgress}% Complete</h1>
+                </div>
+                <Progress className={"course-creation-progress-bar"} animated color="info" value={overallProgress} />
+            </div>
             <Row>
                 <Col sm="12" md="12" lg="12" xl="12">
                     <Card>

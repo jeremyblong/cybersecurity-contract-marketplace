@@ -1,0 +1,8 @@
+.specifics-card {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+.specifics-card .card-header-customized-specifics {
+    border-left: 5px solid #7366ff !important;
+    border-bottom: 1px solid #7366ff;
+    margin-left: -12.5px !important;
+}

@@ -2,7 +2,7 @@ import React, { Fragment, useState, useRef, useEffect } from 'react';
 import Sheet from 'react-modal-sheet';
 import helpers from "./miscFunctions.js";
 import FileViewer from 'react-file-viewer';
-import { Button, Row, Col, Card, CardBody, FormGroup, Label, Input, Media, InputGroup, InputGroupAddon, InputGroupText, ListGroup, ListGroupItem } from 'reactstrap';
+import { Button, Row, Col, Card, CardBody, FormGroup, Label, Input, Progress, InputGroup, InputGroupAddon, InputGroupText, ListGroup, ListGroupItem } from 'reactstrap';
 import Dropzone from 'react-dropzone-uploader';
 import _ from "lodash";
 import { connect } from "react-redux";
@@ -14,12 +14,12 @@ import { updateCourseInformationData } from "../../../../../../../../../redux/ac
 import { NotificationManager } from 'react-notifications';
 import axios from "axios";
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
-
+import "../styles.css";
 
 const { renderCustomButtonDropzone, onSubmitHelper, calculateFileType } = helpers;
 
 
-const SheetHelperPaneUploadCourseContent = ({ isOpen, setIsOpen, setProgress, shiftCoreStyles, disableBodyScroll, clearAllBodyScrollLocks, courseData, updateCourseInformationData, selectedCourseContent, setCourseContentState }) => {
+const SheetHelperPaneUploadCourseContent = ({ isOpen, setIsOpen, setProgress, shiftCoreStyles, disableBodyScroll, clearAllBodyScrollLocks, courseData, updateCourseInformationData, selectedCourseContent, setCourseContentState, coursesArray }) => {
     const dropzoneRef = useRef(null);
     const [ changeOptions, setChangeOptions ] = useState(null);
     const [ fileReady, setFileReadyStatus ] = useState(false);
@@ -31,6 +31,8 @@ const SheetHelperPaneUploadCourseContent = ({ isOpen, setIsOpen, setProgress, sh
     const [ videoFile, setVideoFileState ] = useState(null);
     const [ loaded, setLoadedState ] = useState(false);
     const [ alreadyExisted, alreadyExistedState ] = useState(false);
+    const [ videoLoadingProgress, setVideoLoadingProgressState ] = useState(0);
+    const [ cancelToken, setCancelToken ] = useState(null);
 
     const renderPreviewOfFile = (data) => {
 
@@ -52,19 +54,33 @@ const SheetHelperPaneUploadCourseContent = ({ isOpen, setIsOpen, setProgress, sh
         }
     }
     useEffect(() => {
-        console.log("mounted/useeffect ran... sheet!", selectedCourseContent)
+        console.log("mounted/useeffect ran... sheet!", selectedCourseContent);
         // check if previously already updated
+
+        const futureRequest = axios.CancelToken.source();
+
+        // conditional checks
         if (selectedCourseContent !== null && selectedCourseContent.video !== null && _.has(selectedCourseContent, "video") && Object.keys(selectedCourseContent.video).length > 0) {
             console.log("main chunk");
             setDescription(selectedCourseContent.description);
 
+            // check if rendering from previous upload
+            alreadyExistedState(true);
+
             const configuration = {
                 method: 'get',
                 url: `${process.env.REACT_APP_ASSET_LINK}/${selectedCourseContent.video.link}`,
-                responseType: 'blob'
+                responseType: 'blob',
+                onDownloadProgress: (progressEvent) => {
+                    let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+        
+                    setVideoLoadingProgressState(percentCompleted);
+                },
+                cancelToken: futureRequest.token
             };
 
             axios(configuration).then((response) => {
+                console.log("response", response);
                 // create fileready
                 const file = new File([response.data], selectedCourseContent.video.name); 
                 // set current file path to convert to readable URL later
@@ -75,11 +91,19 @@ const SheetHelperPaneUploadCourseContent = ({ isOpen, setIsOpen, setProgress, sh
                 // setFileReadyStatus(true);
                 // mark pane READY to display content
                 setLoadedState(true);
-                // check if rendering from previous upload
-                alreadyExistedState(true);
+            }).catch((error) => {
+                console.log("error api request...:", error);
             })
         }  else {
             console.log("second chunk")
+        }
+
+        return () => {
+            console.log("unmounting!!!!!!");
+
+            futureRequest.cancel();
+
+            setVideoLoadingProgressState(0);
         }
         // update local component state to reflect already-made changes
     }, [isOpen])
@@ -124,7 +148,7 @@ const SheetHelperPaneUploadCourseContent = ({ isOpen, setIsOpen, setProgress, sh
         if (videoFile !== null) {
             if (typeof description !== "undefined" && (description.length >= 25 && description.length <= 750)) {
                 // mock a copy of redux state
-                const shallowCopy = [...courseData];
+                const shallowCopy = [...coursesArray];
                 // newly created obj with desc and video info data
                 const newlyAddedData = {
                     description,
@@ -153,7 +177,12 @@ const SheetHelperPaneUploadCourseContent = ({ isOpen, setIsOpen, setProgress, sh
                 // replace matching item
                 shallowCopy[updatedStateIndex] = combinedPreviousPlusNew;
                 // update redux state
-                updateCourseInformationData(shallowCopy);
+                updateCourseInformationData({
+                    ...courseData,
+                    pageTwoData: {
+                        courseContentSections: shallowCopy
+                    }
+                });
                 // close modal
                 closeModalRelated();
 
@@ -166,6 +195,8 @@ const SheetHelperPaneUploadCourseContent = ({ isOpen, setIsOpen, setProgress, sh
         }
     }
     const closeModalRelated = () => {
+        // set state back to default
+        alreadyExistedState(false);
         // clear video logic
         setCourseContentState(null);
         // image upload logic CLEAR existing state
@@ -189,6 +220,9 @@ const SheetHelperPaneUploadCourseContent = ({ isOpen, setIsOpen, setProgress, sh
         // clear scroll locks as PANE is closed now...
         clearAllBodyScrollLocks();
     }
+    const onBufferEnded = () => {
+        setVideoLoadingProgressState(0);
+    }
     const renderPreChecks = () => {
         if (loaded === true) {
             // ready to display live content
@@ -201,7 +235,7 @@ const SheetHelperPaneUploadCourseContent = ({ isOpen, setIsOpen, setProgress, sh
             } else {
                 return (
                     <Fragment>
-                        <ReactPlayer controls={true} playIcon={true} playing={false} loop={false} volume={1} width={"100%"} height={"100%"} url={filePathData} />
+                        <ReactPlayer onBufferEnd={onBufferEnded} progressInterval={1000} controls={true} playIcon={true} playing={false} loop={false} volume={1} width={"100%"} height={"100%"} url={filePathData} />
                     </Fragment>
                 );   
             }
@@ -209,15 +243,22 @@ const SheetHelperPaneUploadCourseContent = ({ isOpen, setIsOpen, setProgress, sh
             // still loading display skelaton
             return (
                 <div className={"absolutely-positied-loading-courses"}>
+                    {alreadyExisted === true ? <div className={"video-loading-wrapper-bar"}>
+                        <div className={"position-above-bar-percentage-video"}>
+                            <h6>Downloading video...<strong style={{ color: "#f73164", fontSize: "1.75rem", textDecorationLine: "underline" }}>{videoLoadingProgress}%</strong> of video loaded/complete...</h6>
+                        </div>
+                        <Progress className={"course-creation-progress-bar-video"} animated color="secondary" value={videoLoadingProgress} />
+                    </div> : null}
                     <SkeletonTheme baseColor="#d4d4d4" highlightColor="#8f8f8f">
                         <p>
-                            <Skeleton containerClassName={"custom-loading-courses"} count={12} />
+                            <Skeleton containerClassName={"custom-loading-courses"} count={8} />
                         </p>
                     </SkeletonTheme>
                 </div>
             );
         }
     }
+    console.log("cancelToken", cancelToken);
     return (
         <Fragment>
             <div id="sheet-container">
@@ -315,10 +356,8 @@ const SheetHelperPaneUploadCourseContent = ({ isOpen, setIsOpen, setProgress, sh
 const mapStateToProps = (state) => {
     return {
         userData: state.auth.data,
-        courseData: _.has(state.courseData, "courseData") ? state.courseData.courseData : []
+        courseData: _.has(state.courseData, "courseData") ? state.courseData.courseData : [],
+        coursesArray: (_.has(state.courseData, "courseData") && _.has(state.courseData.courseData, "pageTwoData") && _.has(state.courseData.courseData.pageTwoData, "courseContentSections")) ? state.courseData.courseData.pageTwoData.courseContentSections : []
     }
 }
 export default connect(mapStateToProps, { shiftCoreStyles, updateCourseInformationData })(SheetHelperPaneUploadCourseContent);
-
-// <h5>Upload any supporting files (if any/applicable)</h5>
-// <p style={{ paddingTop: "7.5px" }} className={"top-title-course-help"}>These files will be <strong style={{ color: "#f73164" }}>fully-downloadable (on purpose)</strong> so viewer's/students will be able to download course content to <strong>follow along</strong> with you during your pre-recorded videos/seminars!</p>
