@@ -29,13 +29,15 @@ import du from '../../assets/i18n/du.json';
 import cn from '../../assets/i18n/cn.json';
 import ae from '../../assets/i18n/ae.json';
 import { InputGroup, InputGroupAddon, Button } from 'reactstrap';
+import { updateCourseInformationData } from "../../redux/actions/courses/createNewCourse/index.js";
+
 // translation logic...
 setTranslations({ en, es, pt, fr, du, cn, ae });
 setDefaultLanguage('en');
 setLanguageCookie();
 
 // actual component starts...
-const Rightbar = ({ authenticated, data, authentication, saveListingData, saveSoftwareListingInfo, saveSendbirdInitialData }) => {   
+const Rightbar = ({ authenticated, data, authentication, saveListingData, saveSoftwareListingInfo, saveSendbirdInitialData, updateCourseInformationData }) => {   
   const history = useHistory();
    
   const [searchresponsive, setSearchresponsive] = useState(false)
@@ -124,6 +126,7 @@ const Rightbar = ({ authenticated, data, authentication, saveListingData, saveSo
 
             authentication({});
             saveListingData({});
+            updateCourseInformationData({});
             saveSendbirdInitialData({});
             saveSoftwareListingInfo({});
         } else {
@@ -345,4 +348,4 @@ const mapStateToProps = (state) => {
       authenticated: (_.has(state.auth, "data") && Object.keys(state.auth.data).length > 0) ? true : false
   }
 }
-export default connect(mapStateToProps, { authentication, saveListingData, saveSoftwareListingInfo, saveSendbirdInitialData })(translate(Rightbar));
+export default connect(mapStateToProps, { authentication, saveListingData, saveSoftwareListingInfo, saveSendbirdInitialData, updateCourseInformationData })(translate(Rightbar));

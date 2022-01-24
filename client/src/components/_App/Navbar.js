@@ -12,8 +12,10 @@ import { confirmAlert } from 'react-confirm-alert';
 import { saveListingData } from "../../redux/actions/employer/listings/listingData.js";
 import { saveSoftwareListingInfo } from "../../redux/actions/hackers/createSoftwareListing/createNewSoftwareListingSale.js";
 import { saveSendbirdInitialData } from "../../redux/actions/messaging/initialization/initSBLogic.js";
+import { updateCourseInformationData } from "../../redux/actions/courses/createNewCourse/index.js";
 
-const Navbar = ({ data, authenticated, authentication, saveListingData, saveSoftwareListingInfo, saveSendbirdInitialData }) => {
+
+const Navbar = ({ data, authenticated, authentication, saveListingData, saveSoftwareListingInfo, saveSendbirdInitialData, updateCourseInformationData }) => {
 
     const history = useHistory();
 
@@ -54,6 +56,7 @@ const Navbar = ({ data, authenticated, authentication, saveListingData, saveSoft
                 setTimeout(() => {
                     authentication({});
                     saveListingData({});
+                    updateCourseInformationData({});
                     saveSendbirdInitialData({});
                     saveSoftwareListingInfo({});
 
@@ -369,4 +372,4 @@ const mapStateToProps = (state) => {
         authenticated: (_.has(state.auth, "data") && Object.keys(state.auth.data).length > 0) ? true : false
     }
 }
-export default connect(mapStateToProps, { authentication, saveListingData, saveSoftwareListingInfo, saveSendbirdInitialData })(Navbar);
+export default connect(mapStateToProps, { authentication, saveListingData, saveSoftwareListingInfo, updateCourseInformationData, saveSendbirdInitialData })(Navbar);

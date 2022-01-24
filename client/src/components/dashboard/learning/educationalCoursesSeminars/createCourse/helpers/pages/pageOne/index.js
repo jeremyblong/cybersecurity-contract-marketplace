@@ -12,8 +12,10 @@ import helperFunctions from "./helpers/helperFunctions/index.js";
 import SimpleMDE from "react-simplemde-editor";
 import "./styles.css";
 import uuid from "react-uuid";
-import { Plus } from "react-feather";
+import { Plus, Trash } from "react-feather";
 import { NotificationManager } from "react-notifications";
+import { updateCourseInformationData } from "../../../../../../../../redux/actions/courses/createNewCourse/index.js";
+import _ from "lodash";
 
 const courseTitle = reduxFormHelpers().courseTitle;
 const courseCategory = reduxFormHelpers().courseCategory;
@@ -28,11 +30,12 @@ const { courseCategoryOptions, pricingOptions } = optionHelper;
 const { CourseCreationHashtagHelper } = helperFunctions;
 
 
-const CreateNewCoursePageOne = ({ overallProgress, setOverallProgress }) => {
+const CreateNewCoursePageOne = ({ overallProgress, setOverallProgress, updateCourseInformationData }) => {
     // create ref's local
     const courseCategoryGeneratedRef = useRef(null);
     const pricingGeneratedRef = useRef(null);
     const customHashtagsRef = useRef(null);
+    let cursor = useRef(null);
 
     // state initialization
     const [ objectives, setObjectiveState ] = useState([
@@ -69,28 +72,58 @@ const CreateNewCoursePageOne = ({ overallProgress, setOverallProgress }) => {
     const [ hashtags, setHashtags ] = useState([]);
     const [ wordCount, setWordCount ] = useState(0);
     // redux form logic
-    const { register, handleSubmit, control, reset, getValues, setValue, setError, clearErrors, formState: { errors }} = useForm({
+    const { register, handleSubmit, control, resetField, unregister, getValues, array, setValue, setError, clearErrors, formState: { errors }} = useForm({
         mode: "onTouched",
         reValidateMode: "onBlur"
     });
     // collect redux-hook-form values
     const currentValues = getValues();
 
-    // called every time a file's `status` changes
-    const handleChangeStatus = ({ meta, file }, status) => {
-        console.log("handleChangeStatus ran...", meta, file, status);
-    }
-
     const renderErrorsFormUploadContent = (e, errors) => {
         console.log("renderErrorsFormUploadContent ran...", e, errors);
     }
     const onSubmission = (e, data) => {
         console.log("onSubmission ran...", e, data);
-    }
-    const calculateWordCountOnBlur = (data) => {
-        const wordCount = data.split(" ").length;
 
-        setWordCount(wordCount);
+        const { objective0, objective1, objective2, objective3, concept0, courseCategory, courseHashtags, courseTitle, description, pricing, requirement0 } = data;
+
+        // LEFT OUT ~ concept1, concept2
+
+        const whatStudentsWillLearn = {
+            objective0: typeof objective0 !== "undefined" ? objective0 : null,
+            objective1: typeof objective1 !== "undefined" ? objective1 : null,
+            objective2: typeof objective2 !== "undefined" ? objective2 : null,
+            objective3: typeof objective3 !== "undefined" ? objective3 : null,
+            objective4: typeof data.objective4 !== "undefined" ? data.objective4 : null,
+            objective5: typeof data.objective5 !== "undefined" ? data.objective5 : null
+        };
+        const mainData = {
+            courseTitle,
+            courseCategory,
+            courseHashtags,
+            pricing,
+            description
+        };
+        const requirementOrPreReqs = {
+            requirement0: typeof requirement0 !== "undefined" ? requirement0 : null,
+            requirement1: typeof data.requirement1 !== "undefined" ? data.requirement1 : null,
+            requirement2: typeof data.requirement2 !== "undefined" ? data.requirement2 : null
+        }
+        const whoIsThisCourseFor = {
+            concept0: typeof concept0 !== "undefined" ? concept0 : null,
+            concept1: typeof data.concept1 !== "undefined" ? data.concept1 : null,
+            concept2: typeof data.concept2 !== "undefined" ? data.concept2 : null
+        }
+
+        updateCourseInformationData({
+            currentPage: 2,
+            pageOneData: {
+                whatStudentsWillLearn,
+                mainData,
+                requirementOrPreReqs,
+                whoIsThisCourseFor
+            }
+        });
     }
     const autofocusNoSpellcheckerOptions = useMemo(() => {
         return {
@@ -98,6 +131,82 @@ const CreateNewCoursePageOne = ({ overallProgress, setOverallProgress }) => {
           spellChecker: false,
         };
     }, []);
+
+    const handleDeletionRow = (item, index, type, reduxType) => {
+        console.log("index main -:", index);
+        // objective requirements concepts
+        if (type === "objective") {
+            
+            const relevant = getValues(["objective0", "objective1", "objective2", "objective3", "objective4", "objective5"]);
+            
+            setObjectiveState(prevState => {
+                // loop thru array
+                for (let idxxxx = index; idxxxx < relevant.length; idxxxx++) {
+                    const val = relevant[idxxxx];
+
+                    if (typeof val === "undefined") {
+                        unregister(["objective0", "objective1", "objective2", "objective3", "objective4", "objective5"])
+                    } else {
+                        setValue(`objective${idxxxx - 1}`, val, { shouldValidate: true });
+                    }
+                }
+                return prevState.filter((x => {
+                    if (x.id === item.id) {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }));
+            });
+        } else if (type === "requirements") {
+
+            const relevant = getValues(["requirement0", "requirement1", "requirement2"]);
+            
+            setRequirements(prevState => {
+                // loop thru array
+                for (let idxxxx = index; idxxxx < relevant.length; idxxxx++) {
+                    const val = relevant[idxxxx];
+
+                    if (typeof val === "undefined") {
+                        unregister(["requirement0", "requirement1", "requirement2"])
+                    } else {
+                        setValue(`requirement${idxxxx - 1}`, val, { shouldValidate: true });
+                    }
+                }
+                return prevState.filter((x => {
+                    if (x.id === item.id) {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }));
+            });
+        } else if (type === "concepts") {
+
+            const relevant = getValues(["concept0", "concept1", "concept2"]);
+            
+            setCourseContentConcepts(prevState => {
+                // loop thru array
+                for (let idxxxx = index; idxxxx < relevant.length; idxxxx++) {
+                    const val = relevant[idxxxx];
+
+                    if (typeof val === "undefined") {
+                        unregister(["concept0", "concept1", "concept2"])
+                    } else {
+                        setValue(`concept${idxxxx - 1}`, val, { shouldValidate: true });
+                    }
+                }
+                return prevState.filter((x => {
+                    if (x.id === item.id) {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }));
+            });
+        }
+    }
+    console.log("CURRENT VALUES! :", currentValues, currentValues.length);
     return (
         <Fragment>
             <div className={"centered-horizontally-course"}><div className={"position-above-bar-percentage"}><h1>{overallProgress}% Complete</h1></div><Progress className={"course-creation-progress-bar"} animated color="info" value={overallProgress} /></div>
@@ -112,7 +221,15 @@ const CreateNewCoursePageOne = ({ overallProgress, setOverallProgress }) => {
                                 <Col>
                                     <FormGroup>
                                         <Label>{courseTitle.label}</Label>
-                                        <Input {...courseTitle.check(setError, register)} className="form-control" type={courseTitle.type} name={courseTitle.name} placeholder={courseTitle.placeholder} onChange={(e) => courseTitle.onChange(e, setValue)} value={currentValues.courseTitle} />
+                                        <Input {...courseTitle.check(setError, register)} autoFocus={true} ref={cursor} className="form-control" type={courseTitle.type} name={courseTitle.name} placeholder={courseTitle.placeholder} onChange={(e) => {
+                                            courseTitle.onChange(e, setValue);
+                                            const caret = e.target.selectionStart;
+                                            const element = e.target;
+                                            window.requestAnimationFrame(() => {
+                                                element.selectionStart = caret
+                                                element.selectionEnd = caret
+                                            })
+                                        }} value={currentValues.courseTitle} />
                                         {errors.courseTitle ? <span className="span-tooltip">{errors.courseTitle.message}</span> : null}
                                     </FormGroup>
                                 </Col>
@@ -227,9 +344,15 @@ const CreateNewCoursePageOne = ({ overallProgress, setOverallProgress }) => {
                                 <Col sm="12" md="12" lg="12" xl="12">
                                     {objectives.map((objective, index) => {
                                         return (
-                                            <Fragment>
+                                            <Fragment key={index}>
                                                 <FormGroup style={{ paddingTop: "17.5px" }}>
                                                     <InputGroup>
+                                                        <InputGroupAddon onClick={() => {
+                                                            // reset input (recalculate order)
+                                                            resetField(`objective${index}`);
+                                                            // make changes to state (redux-hook-form)
+                                                            handleDeletionRow(objective, index, "objective");
+                                                        }} addonType="prepend"><InputGroupText style={{ backgroundColor: "#dc3545" }}><Trash style={{ color: "white" }} /></InputGroupText></InputGroupAddon>
                                                         <Input {...objectiveChecks.check(register, `objective${index}`)} onChange={(e) => {
                                                             // value
                                                             const value = e.target.value;
@@ -243,8 +366,14 @@ const CreateNewCoursePageOne = ({ overallProgress, setOverallProgress }) => {
                                                             objectiveChecks.onChange(setValue, `objective${index}`, value);
                                                             // update relevant state
                                                             setObjectiveState(newArr);
-
-                                                        }} value={currentValues[`partCount${index}`]} name={`objective${index}`} className="form-control no-right-border-input" type="text" placeholder={objectiveChecks.placeholder}/>
+                                                            // logic to KEEP current cursor position
+                                                            const caret = e.target.selectionStart;
+                                                            const element = e.target;
+                                                            window.requestAnimationFrame(() => {
+                                                                element.selectionStart = caret
+                                                                element.selectionEnd = caret
+                                                            })
+                                                        }} value={currentValues[`objective${index}`]} name={`objective${index}`} className="form-control no-right-border-input" type="text" placeholder={objectiveChecks.placeholder}/>
                                                         <InputGroupAddon className={"counter-addon-transparent"} addonType="append"><InputGroupText>{typeof currentValues[`objective${index}`] !== "undefined" ? 160 - currentValues[`objective${index}`].length : 160}</InputGroupText></InputGroupAddon>
                                                     </InputGroup>
                                                     {errors[`objective${index}`] ? <span className="span-tooltip">{errors[`objective${index}`].message}</span> : null}
@@ -282,9 +411,15 @@ const CreateNewCoursePageOne = ({ overallProgress, setOverallProgress }) => {
                                 <Col sm="12" md="12" lg="12" xl="12">
                                     {requirements.map((requirement, index) => {
                                         return (
-                                            <Fragment>
+                                            <Fragment key={index}>
                                                 <FormGroup style={{ paddingTop: "17.5px" }}>
                                                     <InputGroup>
+                                                        <InputGroupAddon onClick={() => {
+                                                            // reset input (recalculate order)
+                                                            resetField(`requirement${index}`);
+                                                            // make changes to state (redux-hook-form)
+                                                            handleDeletionRow(requirement, index, "requirements")
+                                                        }} addonType="prepend"><InputGroupText style={{ backgroundColor: "#dc3545" }}><Trash style={{ color: "white" }} /></InputGroupText></InputGroupAddon>
                                                         <Input {...prerequisitesChecks.check(register, `requirement${index}`)} onChange={(e) => {
                                                             // value from input
                                                             const value = e.target.value;
@@ -298,8 +433,14 @@ const CreateNewCoursePageOne = ({ overallProgress, setOverallProgress }) => {
                                                             prerequisitesChecks.onChange(setValue, `requirement${index}`, value);
                                                             // update the main state
                                                             setRequirements(newArr);
-
-                                                        }} value={currentValues[`partCount${index}`]} name={`requirement${index}`} className="form-control no-right-border-input" type="text" placeholder={prerequisitesChecks.placeholder}/>
+                                                            // logic to KEEP current cursor position
+                                                            const caret = e.target.selectionStart;
+                                                            const element = e.target;
+                                                            window.requestAnimationFrame(() => {
+                                                                element.selectionStart = caret
+                                                                element.selectionEnd = caret
+                                                            })
+                                                        }} value={currentValues[`requirement${index}`]} name={`requirement${index}`} className="form-control no-right-border-input" type="text" placeholder={prerequisitesChecks.placeholder}/>
                                                         <InputGroupAddon className={"counter-addon-transparent"} addonType="append"><InputGroupText>{typeof currentValues[`requirement${index}`] !== "undefined" ? 160 - currentValues[`requirement${index}`].length : 160}</InputGroupText></InputGroupAddon>
                                                     </InputGroup>
                                                     {errors[`requirement${index}`] ? <span className="span-tooltip">{errors[`requirement${index}`].message}</span> : null}
@@ -336,10 +477,17 @@ const CreateNewCoursePageOne = ({ overallProgress, setOverallProgress }) => {
                             <Row>
                                 <Col sm="12" md="12" lg="12" xl="12">
                                     {courseContentConcepts.map((concept, index) => {
+                                        console.log("currentValues[`partCount${index}`]", currentValues[`partCount${index}`], concept);
                                         return (
-                                            <Fragment>
+                                            <Fragment key={index}>
                                                 <FormGroup style={{ paddingTop: "17.5px" }}>
                                                     <InputGroup>
+                                                        <InputGroupAddon onClick={() => {
+                                                            // reset input (recalculate order)
+                                                            resetField(`concept${index}`);
+                                                            // make changes to state (redux-hook-form)
+                                                            handleDeletionRow(concept, index, "concepts", `concept${index}`, currentValues[`concept${index}`]);
+                                                        }} addonType="prepend"><InputGroupText style={{ backgroundColor: "#dc3545" }}><Trash style={{ color: "white" }} /></InputGroupText></InputGroupAddon>
                                                         <Input {...courseDesignedForChecks.check(register, `concept${index}`)} onChange={(e) => {
                                                             // value from input
                                                             const value = e.target.value;
@@ -353,8 +501,14 @@ const CreateNewCoursePageOne = ({ overallProgress, setOverallProgress }) => {
                                                             courseDesignedForChecks.onChange(setValue, `concept${index}`, value);
                                                             // update the main state
                                                             setCourseContentConcepts(newArr);
-
-                                                        }} value={currentValues[`partCount${index}`]} className="form-control no-right-border-input" type="text" placeholder={courseDesignedForChecks.placeholder}/>
+                                                            // logic to KEEP current cursor position
+                                                            const caret = e.target.selectionStart;
+                                                            const element = e.target;
+                                                            window.requestAnimationFrame(() => {
+                                                                element.selectionStart = caret
+                                                                element.selectionEnd = caret
+                                                            })
+                                                        }} value={currentValues[`concept${index}`]} className="form-control no-right-border-input" type="text" placeholder={courseDesignedForChecks.placeholder}/>
                                                         <InputGroupAddon className={"counter-addon-transparent"} addonType="append"><InputGroupText>{typeof currentValues[`concept${index}`] !== "undefined" ? 160 - currentValues[`concept${index}`].length : 160}</InputGroupText></InputGroupAddon>
                                                     </InputGroup>
                                                     {errors[`concept${index}`] ? <span className="span-tooltip">{errors[`concept${index}`].message}</span> : null}
@@ -395,7 +549,8 @@ const CreateNewCoursePageOne = ({ overallProgress, setOverallProgress }) => {
 }
 const mapStateToProps = (state) => {
     return {
-        userData: state.auth.data
+        userData: state.auth.data,
+        courseData: _.has(state.courseData, "courseData") ? state.courseData.courseData : null
     }
 }
-export default connect(mapStateToProps, { })(withRouter(CreateNewCoursePageOne));
+export default connect(mapStateToProps, { updateCourseInformationData })(withRouter(CreateNewCoursePageOne));

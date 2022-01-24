@@ -7,14 +7,14 @@ import helpers from "./helpers/miscFunctions.js";
 import CreateNewCoursePageOne from "./helpers/pages/pageOne/index.js";
 import CreateNewCoursePageTwo from "./helpers/pages/pageTwo/index.js";
 import LoadingBar from 'react-top-loading-bar';
+import _ from "lodash";
 
-
-const EducationalCoursesCreationHelper = ({  }) => {
+const EducationalCoursesCreationHelper = ({ courseData }) => {
     const [progress, setProgress] = useState(0);
     const [ overallProgress, setOverallProgress ] = useState(0);
 
     const renderCurrentPage = () => {
-        const page = 1;
+        const page = courseData.currentPage;
 
         switch (page) {
             case 1:
@@ -27,6 +27,31 @@ const EducationalCoursesCreationHelper = ({  }) => {
                 break;
         }
     }
+    const calculateProgress = () => {
+        switch (courseData.currentPage) {
+            case 1:
+                return 20;
+                break;
+            case 2:
+                return 40;
+                break;
+            case 3:
+                return 60;
+                break;
+            case 4:
+                return 80;
+                break;
+            case 5:
+                return 100;
+                break;
+            default:
+                return 0;
+                break;
+        }
+    }
+    useEffect(() => {
+        setOverallProgress(calculateProgress())
+    }, [courseData.currentPage]);
     return (
         <Fragment>
             <LoadingBar
@@ -46,7 +71,10 @@ const EducationalCoursesCreationHelper = ({  }) => {
 }
 const mapStateToProps = (state) => {
     return {
-        userData: state.auth.data
+        userData: state.auth.data,
+        courseData: _.has(state.courseData, "courseData") && Object.keys(state.courseData.courseData).length > 0 ? state.courseData.courseData : {
+            currentPage: 1
+        }
     }
 }
 export default connect(mapStateToProps, {  })(EducationalCoursesCreationHelper);
