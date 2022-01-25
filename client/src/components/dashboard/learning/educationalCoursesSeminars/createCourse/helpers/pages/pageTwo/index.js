@@ -142,10 +142,17 @@ const CreateNewCoursePageTwo = ({ setProgress, updateCourseInformationData, cour
     const handleSubmission = () => {
         console.log("handleSubmission ran...!");
 
-        updateCourseInformationData({
-            ...courseData,
-            currentPage: 3
-        })
+        if (courseData.makingEdits === true) {
+            updateCourseInformationData({
+                ...courseData,
+                currentPage: 4
+            })
+        } else {
+            updateCourseInformationData({
+                ...courseData,
+                currentPage: 3
+            })   
+        }
     }
     return (
         <Fragment>

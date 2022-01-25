@@ -6,3 +6,26 @@
     border-bottom: 1px solid #7366ff;
     margin-left: -12.5px !important;
 }
+@media only screen and (max-width: 1500px) {
+    .controlled-select-course {
+        margin-top: 20px;
+    }
+}
+.overlay-boxshadow-courses-page-three {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    width: 95%;
+    padding: 27.5px;
+    z-index: 1 !important;
+    margin: 7.5px;
+    border: 2.25px solid black;
+    height: 200px;
+    position: absolute;
+    width: 0 auto;
+}
+.adjust-height-upon-upload {
+    min-height: 100% !important;
+}
+.card-upload-courses {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+

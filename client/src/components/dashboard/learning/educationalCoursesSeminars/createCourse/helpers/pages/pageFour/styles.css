@@ -1,0 +1,53 @@
+.override-widget-picture-course {
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+    z-index: 1 !important;
+}
+.custom-cal-date-course {
+    background-color: black !important;
+    z-index: 2 !important;
+}
+.custom-cal-date-course h5 {
+    color: white;
+}
+#strong-banner {
+    color: black !important;
+    font-weight: 550 !important;
+    padding: 3.5px 10px;
+    top: 0px;
+    border-radius: 10px;
+    background-color: white;
+}
+.custom-h5-listitem-course {
+    text-decoration-line: underline;
+}
+.custom-h5-listitem-course-active {
+    color: white;
+    text-decoration-line: underline;
+}
+.maxed-height-markdown-course {
+    max-height: 275px;
+    overflow-y: scroll;   
+}
+.customized-course-text {
+    font-weight: 450;
+    font-size: 0.90rem;
+}
+.course-hashtags-tag {
+    font-size: 0.85rem;
+}
+.cutoff-right-slightly {
+    margin-right: 100px;
+}
+.right-side-box-course {
+    position: absolute;
+    right: 0px;
+    top: 25px;
+} 
+.edit-existing-icon {
+    max-width: 65px;
+    max-height: 65px;
+    min-height: 65px;
+    min-width: 65px;
+}

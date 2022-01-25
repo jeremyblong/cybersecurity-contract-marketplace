@@ -123,6 +123,8 @@ app.use("/success/application/save/applicant/info/employerlisting", require("./r
 app.use("/create/live/stream/stream/key", require("./routes/liveStreaming/createNewLiveStream/createNewStream/createStreamKey.js"));
 app.use("/check/live/stream/active", require("./routes/liveStreaming/createNewLiveStream/checkActiveAndSave/checkIfStreamActiveAndSave.js"));
 app.use("/gather/live/streams/all", require("./routes/liveStreaming/manageLiveStreams/gatherStreams/gatherLiveStreams.js"));
+app.use("/upload/misc/file", require("./routes/shared/files/uploadMiscFile.js"));
+
 
 // ~ webhook logic STARTS here ~
 app.use("/passbase/webhook", require("./webhooks/passbase/webhook.js"));

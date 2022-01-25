@@ -3,12 +3,12 @@ import "./styles.css";
 import Breadcrumb from '../../../../../layout/breadcrumb';
 import { Container, Row, Col, Card, CardBody, CardHeader, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { connect } from 'react-redux';
-import helpers from "./helpers/miscFunctions.js";
 import CreateNewCoursePageOne from "./helpers/pages/pageOne/index.js";
 import CreateNewCoursePageTwo from "./helpers/pages/pageTwo/index.js";
 import LoadingBar from 'react-top-loading-bar';
 import _ from "lodash";
 import CreateNewCoursePageThree from "./helpers/pages/pageThree/index.js";
+import CreateNewCourseOverviewReview from "./helpers/pages/pageFour/review.js";
 
 const EducationalCoursesCreationHelper = ({ courseData }) => {
     const [progress, setProgress] = useState(0);
@@ -27,6 +27,9 @@ const EducationalCoursesCreationHelper = ({ courseData }) => {
             case 3:
                 return <CreateNewCoursePageThree overallProgress={overallProgress} setOverallProgress={setOverallProgress} setProgress={setProgress} />
                 break;
+            case 4:
+                return <CreateNewCourseOverviewReview overallProgress={overallProgress} setOverallProgress={setOverallProgress} setProgress={setProgress} />
+                break;
             default:
                 break;
         }
@@ -34,18 +37,15 @@ const EducationalCoursesCreationHelper = ({ courseData }) => {
     const calculateProgress = () => {
         switch (courseData.currentPage) {
             case 1:
-                return 20;
+                return 25;
                 break;
             case 2:
-                return 40;
+                return 50;
                 break;
             case 3:
-                return 60;
+                return 75;
                 break;
             case 4:
-                return 80;
-                break;
-            case 5:
                 return 100;
                 break;
             default:

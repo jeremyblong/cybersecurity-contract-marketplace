@@ -117,6 +117,7 @@ const CreateNewCoursePageOne = ({ overallProgress, setOverallProgress, updateCou
 
         updateCourseInformationData({
             currentPage: 2,
+            makingEdits: false,
             pageOneData: {
                 whatStudentsWillLearn,
                 mainData,
