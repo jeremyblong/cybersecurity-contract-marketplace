@@ -42,8 +42,6 @@ router.get("/", (req, resppppp, next) => {
                             
                             for (let idx = 0; idx < stillActiveStreams.length; idx++) {
                                 const activeStream = stillActiveStreams[idx];
-                                console.log("stream", stream);
-                                console.log("activeStream", activeStream);
 
                                 if (stream.streamkey === activeStream.stream_key) {
                                     newlyCreatedFinalArray.push({

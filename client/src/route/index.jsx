@@ -32,6 +32,7 @@ import ViewAllLiveStreamsMainPage from "../pages/dashboard/streamingLiveHacks/Vi
 import CreateNewLiveStreamAsHackerPage from "../pages/dashboard/streamingLiveHacks/createLiveStream/createNewStream/createNewLiveStreamMain.js";
 import ViewIndividualLiveStreamPage from "../pages/dashboard/streamingLiveHacks/ViewLiveStreams/individualStream/viewIndividualStream.js";
 import EducationalCoursesCreationPage from "../pages/dashboard/learning/educationalCoursesSeminars/createCourse/createTeachingCourse.js";
+import LearningEducationCoursePage from "../pages/dashboard/learning/educationalCoursesSeminars/viewCourses/individual.js";
 
 export const routes = [
         { path:"/profile/settings/edit", Component: GeneralSettingsPage },
@@ -67,5 +68,6 @@ export const routes = [
         { path: "/view/all/live/streams/general", Component: ViewAllLiveStreamsMainPage },
         { path: "/create/new/live/stream/hackers", Component: CreateNewLiveStreamAsHackerPage },
         { path: "/live/streaming/view/individual/info", Component: ViewIndividualLiveStreamPage },
-        { path: "/learning/courses/creation/new/course", Component: EducationalCoursesCreationPage }
+        { path: "/learning/courses/creation/new/course", Component: EducationalCoursesCreationPage },
+        { path: "/view/individual/course/information/:id", Component: LearningEducationCoursePage }
 ];

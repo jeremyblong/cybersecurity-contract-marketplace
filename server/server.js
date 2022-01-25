@@ -124,7 +124,9 @@ app.use("/create/live/stream/stream/key", require("./routes/liveStreaming/create
 app.use("/check/live/stream/active", require("./routes/liveStreaming/createNewLiveStream/checkActiveAndSave/checkIfStreamActiveAndSave.js"));
 app.use("/gather/live/streams/all", require("./routes/liveStreaming/manageLiveStreams/gatherStreams/gatherLiveStreams.js"));
 app.use("/upload/misc/file", require("./routes/shared/files/uploadMiscFile.js"));
-
+app.use("/upload/new/course/for/sale/hacker", require("./routes/hackers/learningTeachingCourses/createNewCourse/createAndSubmitCourseReview.js"));
+app.use("/gather/courses/all/learning", require("./routes/hackers/learningTeachingCourses/retrieveMultipleCourses/gatherMultipleCoursesNotExist.js"));
+app.use("/gather/individual/course/data", require("./routes/hackers/learningTeachingCourses/retrieveLiveCourseData/individualCourse/gatherCourseDataById.js"));
 
 // ~ webhook logic STARTS here ~
 app.use("/passbase/webhook", require("./webhooks/passbase/webhook.js"));

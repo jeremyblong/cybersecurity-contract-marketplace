@@ -227,7 +227,7 @@ const CreateNewCoursePageOne = ({ overallProgress, setOverallProgress, updateCou
                                 <Col>
                                     <FormGroup>
                                         <Label>{courseTitle.label}</Label>
-                                        <Input {...courseTitle.check(setError, register)} autoFocus={true} ref={cursor} className="form-control" type={courseTitle.type} name={courseTitle.name} placeholder={courseTitle.placeholder} onChange={(e) => {
+                                        <Input {...courseTitle.check(setError, register)} ref={cursor} className="form-control" type={courseTitle.type} name={courseTitle.name} placeholder={courseTitle.placeholder} onChange={(e) => {
                                             courseTitle.onChange(e, setValue);
                                             const caret = e.target.selectionStart;
                                             const element = e.target;

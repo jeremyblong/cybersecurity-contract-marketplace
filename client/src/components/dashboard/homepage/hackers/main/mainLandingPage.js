@@ -14,9 +14,12 @@ import { connect } from "react-redux";
 import { authentication } from "../../../../../redux/actions/authentication/auth.js";
 import { NotificationManager } from 'react-notifications';
 import "../../styles.css";
+import { useHistory } from 'react-router-dom';
 
 
 const MainLandingPageHackerHelper = ({ authentication, userData }) => {
+
+  const history = useHistory();
 
   const [daytimes,setDayTimes] = useState();
   const [ locationError, setLocationErr ] = useState("");
@@ -34,56 +37,62 @@ const MainLandingPageHackerHelper = ({ authentication, userData }) => {
 
   useEffect(() => {
 
+    if (userData.accountType === "employers") {
+      history.replace("/dashboard/employer");
+    }
+
     if ("geolocation" in navigator) {
         console.log("Available");
 
-        navigator.geolocation.getCurrentPosition((position) => {
-            console.log("Latitude is :", position.coords.latitude);
-            //
-            console.log("Longitude is :", position.coords.longitude);
+        if (userData.accountType === "hackers") {
+            navigator.geolocation.getCurrentPosition((position) => {
+              console.log("Latitude is :", position.coords.latitude);
+              //
+              console.log("Longitude is :", position.coords.longitude);
 
-            const location = {
-                longitude: position.coords.longitude,
-                latitude: position.coords.latitude
-            };
+              const location = {
+                  longitude: position.coords.longitude,
+                  latitude: position.coords.latitude
+              };
 
-            const { uniqueId } = userData;
+              const { uniqueId } = userData;
 
-            axios.post(`${process.env.REACT_APP_BASE_URL}/save/user/geolocation`, {
-                accountType: "hackers",
-                location,
-                id: uniqueId
-            }).then((res) => {
-                if (res.data.message === "Successfully saved location data to account!") {
-                    console.log(res.data);
+              axios.post(`${process.env.REACT_APP_BASE_URL}/save/user/geolocation`, {
+                  accountType: "hackers",
+                  location,
+                  id: uniqueId
+              }).then((res) => {
+                  if (res.data.message === "Successfully saved location data to account!") {
+                      console.log(res.data);
 
-                    const { user } = res.data;
+                      const { user } = res.data;
 
-                    console.log("user", user.value);
+                      console.log("user", user.value);
 
-                    if (user.value !== null) {
-                        authentication(user.value);
+                      if (user.value !== null) {
+                          authentication(user.value);
 
-                        NotificationManager.success(`We've successfully updated your location so you have a better tailored user experience with our location-based services.`, 'Updated your location!', 3500);
-                    }
+                          // NotificationManager.success(`We've successfully updated your location so you have a better tailored user experience with our location-based services.`, 'Updated your location!', 3500);
+                      }
 
-                    NotificationManager.success(`We've successfully updated your location so you have a better tailored user experience with our location-based services.`, 'Updated your location!', 3500);
-                } else {
-                    console.log("err", res.data);
+                      // NotificationManager.success(`We've successfully updated your location so you have a better tailored user experience with our location-based services.`, 'Updated your location!', 3500);
+                  } else {
+                      console.log("err", res.data);
 
-                    NotificationManager.error(`We've encountered an error updating your current location for our location-based services...`, 'Error updating location!', 3500);
-                }
-            }).catch((err) => {
-                console.log(err);
-            });
-        }, (error) => {
-            console.log("error gathering location - : ", error.message);
+                      NotificationManager.error(`We've encountered an error updating your current location for our location-based services...`, 'Error updating location!', 3500);
+                  }
+              }).catch((err) => {
+                  console.log(err);
+              });
+          }, (error) => {
+              console.log("error gathering location - : ", error.message);
 
-            if (error.message === "User denied geolocation prompt") {
+              if (error.message === "User denied geolocation prompt") {
 
-                setLocationErr(error.message);
-            }
-        });
+                  setLocationErr(error.message);
+              }
+          });
+        }
       } else {
         console.log("Not Available");
     }

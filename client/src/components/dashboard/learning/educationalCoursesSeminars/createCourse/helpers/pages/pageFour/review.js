@@ -9,19 +9,20 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { updateCourseInformationData } from "../../../../../../../../redux/actions/courses/createNewCourse/index.js";
 import axios from "axios";
+import { confirmAlert } from 'react-confirm-alert';
+import { NotificationManager } from "react-notifications";
+import { useHistory } from "react-router-dom";
 
 const CreateNewCourseOverviewReview = ({ overallProgress, setOverallProgress, setProgress, courseData, userData, updateCourseInformationData }) => {
+
+    const history = useHistory();
 
     const [ isOpen, setIsOpenState ] = useState(false);
     const [ selectedItem, setSelectedItem ] = useState(null);
 
     const { pageOneData, pageTwoData, pageThreeData } = courseData;
 
-    console.log("CreateNewCourseOverviewReview courseData - : ", courseData);
-
     const handlePostingAndFinalDataSubmission = () => {
-        console.log("handlePostingAndFinalDataSubmission ran...!");
-
         const configuration = {
             courseData,
             id: userData.uniqueId
@@ -30,6 +31,17 @@ const CreateNewCourseOverviewReview = ({ overallProgress, setOverallProgress, se
         axios.post(`${process.env.REACT_APP_BASE_URL}/upload/new/course/for/sale/hacker`, configuration).then((res) => {
             if (res.data.message === "Successfully posted new course for sale!") {
                 console.log(res.data);
+
+                setTimeout(() => {
+                    history.push("/course/learning/list/main");
+
+                    updateCourseInformationData({
+                        currentPage: 1,
+                        makingEdits: false
+                    });
+                }, 4500);
+
+                NotificationManager.success("You've successfully submited your course for 'review' and you will be notified upon approval or denial of your application! Good luck & stay tuned!", "Successfully submited course for review!", 4500);
             } else {
                 console.log("Err", res.data);
             }
@@ -425,7 +437,24 @@ const CreateNewCourseOverviewReview = ({ overallProgress, setOverallProgress, se
                             <CardBody>
                                 <Row>
                                     <Col sm="12" md="12" lg="12" xl="12">
-                                        <Button onClick={handlePostingAndFinalDataSubmission} className={"btn-square-info"} color={"info-2x"} outline style={{ width: "100%" }}>Submit & Post Course For Sale!</Button>
+                                        <Button onClick={() => {
+                                            confirmAlert({
+                                                title: `Are you sure you're ready to 'Submit' your course?`,
+                                                message: `Are you sure you're ready to submit your course for review and make it live to the public? If you select 'YES, Post it!', your listing/course will automatically be submitted for review & once approved will go live - You'll receive a notification once approved or denied.`,
+                                                buttons: [
+                                                    {
+                                                        label: 'YES, Post it!',
+                                                        onClick: () => handlePostingAndFinalDataSubmission()
+                                                    },
+                                                    {
+                                                        label: "No, Don't post it...",
+                                                        onClick: () => {
+                                                            
+                                                        }
+                                                    }
+                                                ]
+                                            });
+                                        }} className={"btn-square-info"} color={"info-2x"} outline style={{ width: "100%" }}>Submit & Post Course For Sale!</Button>
                                     </Col>
                                 </Row>
                             </CardBody>

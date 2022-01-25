@@ -39,6 +39,22 @@ This files table contents are outlined below>>>>>
 .popover {
   max-width: 450px !important;
 }
+.centered-horizontally-custom {
+  display: flex;
+  justify-content: center
+}
+.text-secondary-custom {
+  color: #f73164 !important;
+  font-weight: 500 !important;
+  font-size: 0.85rem !important;
+  text-decoration-line: underline;
+}
+.text-primary-custom {
+  color: #7366ff !important;
+  font-weight: 500 !important;
+  font-size: 0.85rem !important;
+  text-decoration-line: underline;
+}
 /* POPOVER GLOBAL STYLES END */
 /* MODAL STYLES START (SLIDE UP FROM BOTTOM MODAL/PANE) START */
 .react-modal-sheet-content {

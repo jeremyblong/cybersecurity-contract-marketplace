@@ -1,0 +1,7 @@
+.li-left-bar-course {
+    border-right: 2px solid blue;
+    padding-right: 22.5px !important;
+}
+.li-left-bar-course-eliminate-border {
+    border-right: 2px solid blue !important;
+}
