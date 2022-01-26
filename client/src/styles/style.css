@@ -43,6 +43,9 @@ This files table contents are outlined below>>>>>
   display: flex;
   justify-content: center
 }
+.underline {
+  text-decoration-line: underline !important;
+}
 .text-secondary-custom {
   color: #f73164 !important;
   font-weight: 500 !important;

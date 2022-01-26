@@ -1,17 +1,18 @@
 import React, { Fragment, useState } from 'react';
 import { Collapse } from 'reactstrap';
-import { Search } from 'react-feather';
 import { Row, Col, Card, CardHeader, CardBody, Media, Input, Label, Button } from 'reactstrap'
-import { FindCourse, Categories, Accounting, Design, Development, Management, Duration, Status, Price, AllCourses, PaidCourses, Filter, Progress, Completed, WebDevelopment, UXDevelopment, CourseBy, FrontendDevelopment, BackendDevelopment, FreeCourses, Registration, UIDesign, UserExperience, BusinessAnalyst, UXDesign, InterfaceDesign, UpcomingCourses } from "../../../../../../constant";
+import { WebDevelopment, UXDevelopment, CourseBy, BusinessAnalyst, UpcomingCourses } from "../../../../../../constant";
 import { connect } from "react-redux";
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 
-const LearningEducationCourseFilterHelper = ({ userData }) => {
+const LearningEducationCourseFilterHelper = ({ userData, courseData }) => {
     const [isFilter, setIsFilter] = useState(true);
     const [isDesign, setIsDesign] = useState(true);
     const [isDevelopment, setIsDevelopment] = useState(true);
-    return (
-        <Fragment>
-            <Col xl="3 xl-40">
+
+    const renderContentConditionally = () => {
+        if (courseData !== null) {
+            return (
                 <div className="default-according style-1 faq-accordion job-accordion" id="accordionoc">
                     <Row>
                         <Col xl="12">
@@ -19,83 +20,20 @@ const LearningEducationCourseFilterHelper = ({ userData }) => {
                                 <CardHeader>
                                     <h5 className="mb-0">
                                         <Button color="link pl-0" data-toggle="collapse" onClick={() => setIsFilter(!isFilter)}
-                                            data-target="#collapseicon" aria-expanded={isFilter} aria-controls="collapseicon">{FindCourse}</Button>
+                                            data-target="#collapseicon" aria-expanded={isFilter} aria-controls="collapseicon">React To This Course</Button>
                                     </h5>
                                 </CardHeader>
                                 <Collapse isOpen={isFilter}>
                                     <div className="collapse show" id="collapseicon" aria-labelledby="collapseicon" data-parent="#accordion">
                                         <CardBody className="filter-cards-view animate-chk">
-                                            <div className="job-filter">
-                                                <div className="faq-form">
-                                                    <Input className="form-control" type="text" placeholder="Search.." />
-                                                    <Search className="search-icon"/>
-                                                </div>
-                                            </div>
-                                            <div className="checkbox-animated">
-                                                <div className="learning-header"><span className="f-w-600">{Categories}</span></div>
-                                                <Label className="d-block" htmlFor="chk-ani">
-                                                    <Input className="checkbox_animated" id="chk-ani" type="checkbox" />
-                                                    {Accounting}
-                                                </Label>
-                                                <Label className="d-block" htmlFor="chk-ani0">
-                                                    <Input className="checkbox_animated" id="chk-ani0" type="checkbox" />
-                                                    {Design}
-                                                </Label>
-                                                <Label className="d-block" htmlFor="chk-ani1">
-                                                    <Input className="checkbox_animated" id="chk-ani1" type="checkbox" />
-                                                    {Development}
-                                                </Label>
-                                                <Label className="d-block" htmlFor="chk-ani2">
-                                                    <Input className="checkbox_animated" id="chk-ani2" type="checkbox" />
-                                                    {Management}
-                                                </Label>
-                                            </div>
                                             <div className="checkbox-animated mt-0">
-                                                <div className="learning-header"><span className="f-w-600">{Duration}</span></div>
-                                                <Label className="d-block" htmlFor="chk-ani6">
-                                                    <Input className="checkbox_animated" id="chk-ani6" type="checkbox" />
-                                                    {"0-50 hours"}
-                                                </Label>
-                                                <Label className="d-block" htmlFor="chk-ani7">
-                                                    <Input className="checkbox_animated" id="chk-ani7" type="checkbox" />
-                                                    {"50-100 hours"}
-                                                </Label>
-                                                <Label className="d-block" htmlFor="chk-ani8">
-                                                    <Input className="checkbox_animated" id="chk-ani8" type="checkbox" />
-                                                    {"100+ hours"}
-                                                </Label>
+                                                <Label className={"heavy-label-course"}>Like this course</Label>
+                                                    <Button className={"btn-square-success"} color={"success-2x"} outline style={{ width: "100%" }}>LIKE This Course</Button>
+                                                <Label className={"heavy-label-course"}>Dislike this course</Label>
+                                                    <Button className={"btn-square-danger"} color={"danger-2x"} outline style={{ width: "100%" }}>DISLIKE This Course</Button>
+                                                <Label className={"heavy-label-course"}>Bookmark this course</Label>
+                                                    <Button className={"btn-square-info"} color={"info-2x"} outline style={{ width: "100%" }}>Bookmark This Course</Button>
                                             </div>
-                                            <div className="checkbox-animated mt-0">
-                                                <div className="learning-header"><span className="f-w-600">{Price}</span></div>
-                                                <Label className="d-block" htmlFor="edo-ani">
-                                                    <Input className="radio_animated" id="edo-ani" type="radio" name="rdo-ani" defaultChecked="" />
-                                                    {AllCourses}
-                                                </Label>
-                                                <Label className="d-block" htmlFor="edo-ani1">
-                                                    <Input className="radio_animated" id="edo-ani1" type="radio" name="rdo-ani" defaultChecked="" />
-                                                    {PaidCourses}
-                                                    </Label>
-                                                <Label className="d-block" htmlFor="edo-ani2">
-                                                    <Input className="radio_animated" id="edo-ani2" type="radio" name="rdo-ani" defaultChecked="" />
-                                                    {FreeCourses}
-                                                </Label>
-                                            </div>
-                                            <div className="checkbox-animated mt-0">
-                                                <div className="learning-header"><span className="f-w-600">{Status}</span></div>
-                                                <Label className="d-block" htmlFor="chk-ani3">
-                                                    <Input className="checkbox_animated" id="chk-ani3" type="checkbox" />
-                                                    {Registration}
-                                                </Label>
-                                                <Label className="d-block" htmlFor="chk-ani4">
-                                                    <Input className="checkbox_animated" id="chk-ani4" type="checkbox" />
-                                                    {Progress}
-                                                </Label>
-                                                <Label className="d-block" htmlFor="chk-ani5">
-                                                    <Input className="checkbox_animated" id="chk-ani5" type="checkbox" />
-                                                    {Completed}
-                                                </Label>
-                                            </div>
-                                            <Button color="primary text-center">{Filter}</Button>
                                         </CardBody>
                                     </div>
                                 </Collapse>
@@ -106,26 +44,25 @@ const LearningEducationCourseFilterHelper = ({ userData }) => {
                                 <CardHeader>
                                     <h5 className="mb-0">
                                         <Button color="link pl-0" onClick={() => setIsDesign(!isDesign)}
-                                            data-toggle="collapse" data-target="#collapseicon1" aria-expanded={isDesign} aria-controls="collapseicon1">{Categories}</Button>
+                                            data-toggle="collapse" data-target="#collapseicon1" aria-expanded={isDesign} aria-controls="collapseicon1">Core Course Data</Button>
                                     </h5>
                                 </CardHeader>
                                 <Collapse isOpen={isDesign}>
                                     <div className="collapse show" id="collapseicon1" aria-labelledby="collapseicon1" data-parent="#accordion">
-                                        <div className="categories">
-                                            <div className="learning-header"><span className="f-w-600">{Design}</span></div>
-                                            <ul>
-                                                <li><a href="#javascript">{UIDesign} </a><span className="badge badge-primary pull-right">{"28"}</span></li>
-                                                <li><a href="#javascript">{UXDesign} </a><span className="badge badge-primary pull-right">{"35"}</span></li>
-                                                <li><a href="#javascript">{InterfaceDesign} </a><span className="badge badge-primary pull-right">{"17"}</span></li>
-                                                <li><a href="#javascript">{UserExperience} </a><span className="badge badge-primary pull-right">{"26"}</span></li>
-                                            </ul>
-                                        </div>
-                                        <div className="categories pt-0">
-                                            <div className="learning-header"><span className="f-w-600">{Development}</span></div>
-                                            <ul>
-                                                <li><a href="#javascript">{FrontendDevelopment}</a><span className="badge badge-primary pull-right">{"48"}</span></li>
-                                                <li><a href="#javascript">{BackendDevelopment}</a><span className="badge badge-primary pull-right">{"19"}</span></li>
-                                            </ul>
+                                        <div className={"cushion-course"}>
+                                            <hr />
+                                            <h4 className={"color-secondary underline"}>Category</h4>
+                                            <div className="learning-header"><span className="f-w-600">{courseData.mainData.pageOneData.mainData.courseCategory.label}</span></div>
+                                            <hr />
+                                            <h4 className={"color-secondary underline"}>Pricing/Purchase Amount</h4>
+                                            <div className="learning-header"><span className="f-w-600">{courseData.mainData.pageOneData.mainData.pricing.label}</span></div>
+                                            <hr />
+                                            <h4 className={"color-secondary underline"}>Advised Skill-Level</h4>
+                                            <div className="learning-header"><span className="f-w-600">{courseData.mainData.pageThreeData.skillLevel.label}</span></div>
+                                            <hr />
+                                            <h4 className={"color-secondary underline"}>Primary Language Used</h4>
+                                            <div className="learning-header"><span className="f-w-600">{courseData.mainData.pageThreeData.primaryLanguageUsed.label}</span></div>
+                                            <hr />
                                         </div>
                                     </div>
                                 </Collapse>
@@ -166,6 +103,23 @@ const LearningEducationCourseFilterHelper = ({ userData }) => {
                         </Col>
                     </Row>
                 </div>
+            );
+        } else {
+            return (
+                <Fragment>
+                    <SkeletonTheme baseColor="#c9c9c9" highlightColor="#444">
+                        <p>
+                            <Skeleton count={70} />
+                        </p>
+                    </SkeletonTheme>
+                </Fragment>
+            );
+        }
+    }
+    return (
+        <Fragment>
+            <Col xl="3 xl-40">
+                {renderContentConditionally()}
             </Col>
         </Fragment>
     );

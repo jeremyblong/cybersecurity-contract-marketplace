@@ -5,3 +5,66 @@
 .li-left-bar-course-eliminate-border {
     border-right: 2px solid blue !important;
 }
+.heavy-label-course {
+    margin-top: 17.5px;
+    font-weight: bold;
+    text-decoration-line: underline;
+}
+.heavy-label-course-two {
+    margin-top: 10px;
+    font-size: 1.375rem;
+    margin-bottom: 0px;
+    color: #f73164;
+    font-weight: bold;
+    text-decoration-line: underline;
+}
+.pill-badge-custom-course {
+    font-size: 0.875rem;
+    margin-top: 10px;
+}
+.cushion-course {
+    margin: 22.5px;
+}
+.color-secondary {
+    color: #f73164 !important;
+    font-size: 1.375rem;
+}
+.heavy-accordion-title {
+    font-size: 1.175rem !important;
+    padding: 7.5px 12.5px;
+    font-weight: 500;
+    background-color: #ecf3fa;
+    color: black;
+    width: 100%;
+    float: left !important;
+}
+.icon-maxed-accordion-section {
+    max-width: 32.5px;
+    color: white;
+    margin-right: 25px;
+    max-height: 32.5px;
+}
+.accordion-header-courses {
+    min-width: 100%;
+    min-height: 100% !important;
+}
+.accordion-wrapper-course {
+    width: 100%;
+    min-height: 55px;
+    min-width: 100%;
+}
+.accordion-wrapper-wrapper {
+   
+}
+.accordion-paragraph-course {
+    margin-top: 7.5px !important;
+}
+.accordion {
+    margin-bottom: 100px !important;
+}
+.content-section-main-course {
+    padding: 50px 12.5px 12.5px 12.5px;
+}
+.position-bottom-right-course-absolute {
+    float: right;
+}
