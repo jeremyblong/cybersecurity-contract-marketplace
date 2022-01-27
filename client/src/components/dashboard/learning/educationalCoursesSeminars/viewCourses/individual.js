@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState, useRef } from 'react';
 import Breadcrumb from '../../../../../layout/breadcrumb'
 import LearningEducationCourseFilterHelper from "./helpers/filter.js";
-import { Container, Row, Col, Media, Label, Badge } from 'reactstrap';
+import { Container, Row, Col, Media, Label, Badge, ListGroup, ListGroupItem, Card, CardBody, CardHeader } from 'reactstrap';
 import { connect } from "react-redux";
 import axios from "axios";
 import { useParams } from "react-router-dom";
@@ -17,6 +17,10 @@ import {
   AccordionItemButton,
   AccordionItemPanel,
 } from 'react-accessible-accordion';
+import { Modal } from 'react-responsive-modal';
+import ReactPlayer from 'react-player';
+import CommentsIndividualCourseHelper from "./helpers/comments/renderCommentSection.js";
+import { NotificationManager } from 'react-notifications';
 
 
 const LearningEducationCourseHelper = ({ userData, location }) => {
@@ -26,12 +30,19 @@ const LearningEducationCourseHelper = ({ userData, location }) => {
   const [ courseData, setCourseData ] = useState(null);
   const [ user, setUserData ] = useState(null);
   const [ duration, setVideoDuration ] = useState(0);
+  const [ modalDemoVideo, updateModalDemoVideo ] = useState(false);
+  const [ viewsModal, openViewsModal ] = useState(false);
+  const [ totalViewsList, setTotalViewsList ] = useState([]);
+  const [ likes, setLikes ] = useState(0);
+  const [ dislikes, setDislikes ] = useState(0);
 
   // mounted logic - fetch course data from ID from params
   useEffect(() => {
     const configuration = {
       params: {
-        id: params.id
+        id: params.id,
+        signedInUserID: userData.uniqueId,
+        fullName: `${userData.firstName} ${userData.lastName}`
       }
     }
     axios.get(`${process.env.REACT_APP_BASE_URL}/gather/individual/course/data`, configuration).then((res) => {
@@ -39,6 +50,12 @@ const LearningEducationCourseHelper = ({ userData, location }) => {
             console.log(res.data);
             // successful request
             const { course } = res.data;
+            // update course view count details
+            setTotalViewsList(course.viewedByList);
+            // set likes
+            setLikes(course.likes);
+            // set dislikes
+            setDislikes(course.dislikes);
             // configuration for next api-request
             const config = {
               params: {
@@ -67,6 +84,63 @@ const LearningEducationCourseHelper = ({ userData, location }) => {
     });
   }, []);
 
+  const handleAdditionalCourseLike = () => {
+    console.log("handleAdditionalCourseLike clicked.");
+
+    const config = {
+      courseID: courseData.id,
+      signedInUserID: userData.uniqueId,
+      fullName: `${userData.firstName} ${userData.lastName}`
+    }
+    axios.post(`${process.env.REACT_APP_BASE_URL}/add/like/course/learning/unique`, config).then((res) => {
+        if (res.data.message === "Successfully liked this post!") {
+          console.log(res.data);
+
+          setLikes(likes + 1);
+
+          NotificationManager.success("Successfully liked this post, We've added one to the count of this course's total 'like' count...", "Added to like count!", 4750);
+
+        } else if (res.data.message === "Removed a like from this post/course!") {
+
+          setLikes(likes - 1);
+
+          NotificationManager.warning("Removed/Revoked a 'like' from this course/listing, You already liked this post previously so we've removed you're existing response - like it again to add your 'like' back!", "Revoked/Removed like from count!", 4750);
+        } else {
+            console.log("err", res.data);
+        }
+    }).catch((err) => {
+        console.log(err);
+    })
+  }
+  const handleCouseDislike = () => {
+    console.log("handleCouseDislike clicked.");
+
+    const config = {
+      courseID: courseData.id,
+      signedInUserID: userData.uniqueId,
+      fullName: `${userData.firstName} ${userData.lastName}`
+    }
+    axios.post(`${process.env.REACT_APP_BASE_URL}/add/dislike/course/learning/unique`, config).then((res) => {
+        if (res.data.message === "Successfully disliked this post!") {
+          console.log(res.data);
+
+          setDislikes(dislikes + 1);
+
+          NotificationManager.success("Successfully disliked this post, We've added one to the count of this course's total 'dislike' count...", "Added to dislike count!", 4750);
+
+        } else if (res.data.message === "Removed a dislike from this post/course!") {
+
+          setDislikes(dislikes - 1);
+
+          NotificationManager.warning("Removed/Revoked a 'dislike' from this course/listing, You already disliked this post previously so we've removed you're existing response - dislike it again to add your 'dislike' back!", "Revoked/Removed dislike from count!", 4750);
+        } else {
+            console.log("err", res.data);
+        }
+    }).catch((err) => {
+        console.log(err);
+    })
+  }
+
   const formatFileSize = (bytes) => {
     const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
     if (bytes == 0) return '0 Byte';
@@ -87,17 +161,70 @@ const LearningEducationCourseHelper = ({ userData, location }) => {
     video.src = `${process.env.REACT_APP_ASSET_LINK}/${matchedValue.video.link}`;
     video.preload = "metadata";
     video.addEventListener("loadedmetadata", function() {
-      setVideoDuration(video.duration);
+      setVideoDuration(Math.round(video.duration));
     });
   }
-
+  const calculateMin = (minutes) => {
+    return (minutes / 60).toFixed(2);
+  }
   console.log("courseData fetched...:", courseData);
 
   const renderMainContentConditionally = () => {
     if (courseData !== null & user !== null) {
       const bannerImageFull = `${process.env.REACT_APP_ASSET_LINK}/${courseData.mainData.pageThreeData.homepageImage.link}`;
+      const promoDemoVideoFull = `${process.env.REACT_APP_ASSET_LINK}/${courseData.mainData.pageThreeData.promotionalDemoFile.link}`
       return (
         <Fragment>
+          <Modal open={modalDemoVideo} onClose={() => updateModalDemoVideo(false)} center>
+            <Container fluid={false}>
+              <Row>
+                  <Col sm="12" md="12" lg="12" xl="12">
+                    <Card className="card-absolute add-shadow-course-card">
+                        <CardHeader className="bg-secondary">
+                            <h5 className={"modal-card-header-course"}>Promotional/Demo Video Viewing</h5>
+                        </CardHeader>
+                        <CardBody>
+                          <h4 className={"viewing-modal-demo-video-custom"}><strong style={{ textDecorationLine: "underline" }}>Viewing demo/promo video</strong>! This video <strong style={{ color: "#f73164", textDecorationLine: "underline" }}>should</strong> give you a rough idea of what you'll be purchasing if you decide to purchase this course, the video should sum-up the topics included...</h4>
+                          <hr />
+                          <ReactPlayer progressInterval={1000} controls={true} playIcon={true} playing={false} loop={false} volume={1} width={"100%"} height={"100%"} url={promoDemoVideoFull} />
+                        </CardBody>
+                    </Card>
+                </Col>
+              </Row>
+            </Container>
+          </Modal>
+          <Modal classNames={{
+            modal: 'viewsModalList',
+          }} open={viewsModal} onClose={() => openViewsModal(false)} center>
+            <Container fluid={false}>
+              <Row>
+                  <Col sm="12" md="12" lg="12" xl="12">
+                    <Card className="card-absolute add-shadow-course-card">
+                        <CardHeader className="bg-secondary">
+                            <h5 className={"modal-card-header-course"}>Course View(ing) Log Details</h5>
+                        </CardHeader>
+                        <CardBody>
+                          <h4 className={"viewing-modal-demo-video-custom"}>Below is a list of people/user's that've previously viewed this specific course. Each view is unique & cannot be duplicated - check out who's viewed this course below...!</h4>
+                          <hr />
+                          <ListGroup className="list-group-flush maxed-list-views-course">
+                            {typeof totalViewsList !== "undefined" && totalViewsList.length > 0 ? totalViewsList.map((view, indexx) => {
+                              return (
+                                <Fragment>
+                                  <ListGroupItem>{view.viewerName}</ListGroupItem>
+                                </Fragment>
+                              );
+                            }) : <Fragment>
+                              <hr />
+                                <h4 className={"viewing-modal-demo-video-custom"}>This course/listing does NOT have any current views... Try viewing this after this course has some active unique views!</h4>
+                              <hr />
+                            </Fragment>}
+                          </ListGroup>
+                        </CardBody>
+                    </Card>
+                </Col>
+              </Row>
+            </Container>
+          </Modal>
           <Col xl="9 xl-60">
               <div className="blog-single">
                 <div className="blog-box blog-details">
@@ -106,12 +233,13 @@ const LearningEducationCourseHelper = ({ userData, location }) => {
                     <ul className="blog-social">
                       <li className={"li-left-bar-course-eliminate-border digits"}>Posted {moment(courseData.date).fromNow()}</li>
                       <li className={"li-left-bar-course digits"}><i className="icofont icofont-user"></i>Posted by {user.firstName} <span>{user.lastName} </span></li>
-                      <li className={"li-left-bar-course digits"}><i className="icofont icofont-thumbs-up"></i>{courseData.likes}<span>{" people like this"}</span></li>
-                      <li className={"li-left-bar-course digits"}><i className="icofont icofont-thumbs-down"></i>{courseData.dislikes}<span>{" people dislike this"}</span></li>
+                      <li className={"li-left-bar-course digits"}><i className="icofont icofont-thumbs-up"></i>{likes}<span>{" people like this"}</span></li>
+                      <li className={"li-left-bar-course digits"}><i className="icofont icofont-thumbs-down"></i>{dislikes}<span>{" people dislike this"}</span></li>
                       <li className={"li-left-bar-course digits"}><i className="icofont icofont-ui-chat"></i>{`Purchased ${courseData.purchased.length} time(s)`}</li>
                     </ul>
-                    <h3 className={"heavy-label-course-two"}>Course Title</h3>
-                    <h4>{courseData.mainData.pageOneData.mainData.courseTitle}</h4>
+                    <h3 className={"heavy-label-course-two"}>Course Title & Sub-title</h3>
+                    <h4>Title: {courseData.mainData.pageOneData.mainData.courseTitle}</h4>
+                    <h4>Sub: {courseData.mainData.pageThreeData.subtitle}</h4>
                     <h3 style={{ marginBottom: "20px" }} className={"heavy-label-course-two"}>Course Content</h3>
                     <div className={"accordion-wrapper-wrapper"}>
                       <Accordion onChange={(values) => accordionValuesChanged(values)}>
@@ -141,7 +269,7 @@ const LearningEducationCourseHelper = ({ userData, location }) => {
                                           <Col sm="12" md="6" lg="6" xl="6">
                                             <div className={"position-bottom-right-course-absolute"}>
                                               <span className="f-w-600 custom-head-in-panel">Video Duration</span>
-                                              <p className={"accordion-paragraph-course"}>{duration.toFixed(2)}</p>
+                                              <p className={"accordion-paragraph-course"}>{calculateMin(Math.round(duration))} Minute(s)</p>
                                             </div>
                                           </Col>
                                         </Row>
@@ -153,6 +281,37 @@ const LearningEducationCourseHelper = ({ userData, location }) => {
                         })}
                       </Accordion>
                     </div>
+                    <hr />
+                    <div style={{ marginBottom: "17.5px" }} className="d-flex w-100 justify-content-between">
+                      <h5 className="mb-1">{"What are the requirements or prerequisites for taking your course?"}</h5>
+                    </div>
+                    <ListGroup>
+                      {courseData.mainData.pageOneData.requirementOrPreReqs.requirement0 !== null ? <ListGroupItem>{courseData.mainData.pageOneData.requirementOrPreReqs.requirement0}</ListGroupItem> : null}
+                      {courseData.mainData.pageOneData.requirementOrPreReqs.requirement1 !== null ? <ListGroupItem>{courseData.mainData.pageOneData.requirementOrPreReqs.requirement1}</ListGroupItem> : null}
+                      {courseData.mainData.pageOneData.requirementOrPreReqs.requirement2 !== null ? <ListGroupItem>{courseData.mainData.pageOneData.requirementOrPreReqs.requirement2}</ListGroupItem> : null}
+                    </ListGroup>
+                    <hr />
+                    <div style={{ marginBottom: "17.5px" }} className="d-flex w-100 justify-content-between">
+                      <h5 className="mb-1">{"What will students learn in your course?"}</h5>
+                    </div>
+                    <ListGroup>
+                      {courseData.mainData.pageOneData.whatStudentsWillLearn.objective0 !== null ? <ListGroupItem>{courseData.mainData.pageOneData.whatStudentsWillLearn.objective0}</ListGroupItem> : null}
+                      {courseData.mainData.pageOneData.whatStudentsWillLearn.objective1 !== null ? <ListGroupItem>{courseData.mainData.pageOneData.whatStudentsWillLearn.objective1}</ListGroupItem> : null}
+                      {courseData.mainData.pageOneData.whatStudentsWillLearn.objective2 !== null ? <ListGroupItem>{courseData.mainData.pageOneData.whatStudentsWillLearn.objective2}</ListGroupItem> : null}
+                      {courseData.mainData.pageOneData.whatStudentsWillLearn.objective3 !== null ? <ListGroupItem>{courseData.mainData.pageOneData.whatStudentsWillLearn.objective3}</ListGroupItem> : null}
+                      {courseData.mainData.pageOneData.whatStudentsWillLearn.objective4 !== null ? <ListGroupItem>{courseData.mainData.pageOneData.whatStudentsWillLearn.objective4}</ListGroupItem> : null}
+                      {courseData.mainData.pageOneData.whatStudentsWillLearn.objective5 !== null ? <ListGroupItem>{courseData.mainData.pageOneData.whatStudentsWillLearn.objective5}</ListGroupItem> : null}
+                    </ListGroup>
+                    <hr />
+                    <div style={{ marginBottom: "17.5px" }} className="d-flex w-100 justify-content-between">
+                      <h5 className="mb-1">{"Who is this course for?"}</h5>
+                    </div>
+                    <ListGroup>
+                      {courseData.mainData.pageOneData.whoIsThisCourseFor.concept0 !== null ? <ListGroupItem>{courseData.mainData.pageOneData.whoIsThisCourseFor.concept0}</ListGroupItem> : null}
+                      {courseData.mainData.pageOneData.whoIsThisCourseFor.concept1 !== null ? <ListGroupItem>{courseData.mainData.pageOneData.whoIsThisCourseFor.concept1}</ListGroupItem> : null}
+                      {courseData.mainData.pageOneData.whoIsThisCourseFor.concept2 !== null ? <ListGroupItem>{courseData.mainData.pageOneData.whoIsThisCourseFor.concept2}</ListGroupItem> : null}
+                    </ListGroup>
+                    <hr />
                     <h3 className={"heavy-label-course-two"}>Relevant Hashtags/Tags</h3>
                     {courseData.mainData.pageOneData.mainData.courseHashtags.map((tag, index) => {
                       return (
@@ -161,70 +320,14 @@ const LearningEducationCourseHelper = ({ userData, location }) => {
                         </Fragment>
                       );
                     })}
+                    <hr />
                     <div className="single-blog-content-top">
                       <h3 className={"heavy-label-course-two"}>Description</h3>
                       <ReactMarkdown children={courseData.mainData.pageOneData.mainData.description} remarkPlugins={[remarkGfm]} className="custom-p-course" />
                     </div>
                   </div>
                 </div>
-                <section className="comment-box">
-                  <h4>Comment</h4>
-                  <hr/>
-                  <ul>
-                    <li>
-                      <Media className="align-self-center"><Media className="align-self-center" src={require("../../../../../assets/images/blog/comment.jpg")} alt=""/>
-                        <Media body>
-                          <Row>
-                            <Col md="4 xl-100">
-                              <h6 className="mt-0">Name goes here<span> {"( Designer )"}</span></h6>
-                            </Col>
-                            <Col md="8 xl-100">
-                              <ul className="comment-social float-left float-md-right learning-comment">
-                                <li className="digits"><i className="icofont icofont-thumbs-up"></i>{"02 Hits"}</li>
-                                <li className="digits"><i className="icofont icofont-ui-chat"></i>{"598 Comments"}</li>
-                              </ul>
-                            </Col>
-                          </Row>
-                          <p>{"There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text."}</p>
-                        </Media>
-                      </Media>
-                    </li>
-                    <li>
-                      <ul>
-                        <li>
-                          <Media><Media className="align-self-center" src={require("../../../../../assets/images/blog/9.jpg")} alt=""/>
-                            <Media body>
-                              <Row>
-                                <Col xl="12">
-                                  <h6 className="mt-0">Name goes here<span> {"( Designer )"}</span></h6>
-                                </Col>
-                              </Row>
-                              <p>{"There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text."}</p>
-                            </Media>
-                          </Media>
-                        </li>
-                      </ul>
-                    </li>
-                    <li>
-                      <Media><Media className="align-self-center" src={require("../../../../../assets/images/blog/4.jpg")} alt=""/>
-                        <Media body>
-                          <Row>
-                            <Col md="4 xl-100">
-                              <h6 className="mt-0">Name goes here<span> {"( Designer )"}</span></h6>
-                            </Col>
-                            <Col md="8 xl-100">
-                              <ul className="comment-social float-left float-md-right learning-comment">
-                                <li className="digits"><i className="icofont icofont-thumbs-up"></i>{"02 Hits"}</li>
-                                <li className="digits"><i className="icofont icofont-ui-chat"></i>{"598 Comments"}</li>
-                              </ul>
-                            </Col>
-                          </Row>
-                          <p>{"There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text."}</p>
-                        </Media>
-                      </Media>
-                    </li>
-                  </ul>
-                </section>
+                <CommentsIndividualCourseHelper courseData={courseData} />
               </div>
             </Col>
         </Fragment>
@@ -250,7 +353,7 @@ const LearningEducationCourseHelper = ({ userData, location }) => {
           <Container fluid={true}>
           <Row>
             {renderMainContentConditionally()}
-            <LearningEducationCourseFilterHelper courseData={courseData} />
+            <LearningEducationCourseFilterHelper handleCouseDislike={handleCouseDislike} handleAdditionalCourseLike={handleAdditionalCourseLike} setTotalViewsList={setTotalViewsList} openViewsModal={openViewsModal} updateModalDemoVideo={updateModalDemoVideo}  courseData={courseData} />
         </Row>
         </Container>
       </Fragment>

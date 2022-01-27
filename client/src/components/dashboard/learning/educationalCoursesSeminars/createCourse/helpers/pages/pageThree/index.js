@@ -66,7 +66,6 @@ const CreateNewCoursePageThree = ({ userData, courseData, overallProgress, setOv
 
             setValue(key, element, { shouldValidate: true });
 
-            console.log("element & key", element, key);
         }
     }, [] );
 

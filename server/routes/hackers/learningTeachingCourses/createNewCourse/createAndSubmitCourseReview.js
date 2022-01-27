@@ -35,6 +35,7 @@ router.post("/", (req, resppppp, next) => {
                 date: new Date(),
                 dateString: moment(new Date()).format("MM/DD/YYYY hh:mm:ss a"),
                 comments: [],
+                viewedByList: [],
                 likes: 0,
                 likedBy: [],
                 dislikedBy: [],

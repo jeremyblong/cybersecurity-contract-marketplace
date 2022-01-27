@@ -68,3 +68,21 @@
 .position-bottom-right-course-absolute {
     float: right;
 }
+.modal-card-header-course {
+    color: white;
+    font-weight: 525;
+} 
+.viewing-modal-demo-video-custom {
+
+}
+.add-shadow-course-card {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.395);
+    margin: 32.5px;
+}
+.maxed-list-views-course {
+    max-height: 65vh !important;
+    overflow-y: scroll !important;
+}
+.viewsModalList {
+    min-width: 50vw;
+}

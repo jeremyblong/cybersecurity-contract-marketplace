@@ -24,6 +24,9 @@ const CourseDataListingCreation = new Schema({
     viewedBy: {
         type: Array
     },
+    viewedByList: {
+        type: Array
+    },
     comments: {
         type: Array
     },

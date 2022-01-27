@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect } from "react";
 import "./styles.css";
 import Breadcrumb from '../../../../../layout/breadcrumb';
-import { Container, Row, Col, Card, CardBody, CardHeader, Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import { Container } from 'reactstrap';
 import { connect } from 'react-redux';
 import CreateNewCoursePageOne from "./helpers/pages/pageOne/index.js";
 import CreateNewCoursePageTwo from "./helpers/pages/pageTwo/index.js";
