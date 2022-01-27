@@ -12,6 +12,8 @@ import Sheet from 'react-modal-sheet';
 import moment from "moment";
 import Calendar from 'react-calendar';
 import { DateRange } from 'react-date-range';
+import { authentication } from "../../../../../redux/actions/authentication/auth.js";
+import { NotificationManager } from 'react-notifications';
 
 const Map = ReactMapboxGl({
     accessToken: process.env.REACT_APP_MAPBOX_TOKEN
@@ -139,6 +141,63 @@ constructor(props) {
         })
     }
     componentDidMount() {
+        const { userData } = this.props;
+        // check if geolocation is availiable...
+        if ("geolocation" in navigator) {
+            console.log("Available");
+            // check if hacker account
+            if (userData.accountType === "hackers") {
+                navigator.geolocation.getCurrentPosition((position) => {
+                    // latitude logging
+                    console.log("Latitude is :", position.coords.latitude);
+                    // longitiude logging
+                    console.log("Longitude is :", position.coords.longitude);
+
+                    const location = {
+                        longitude: position.coords.longitude,
+                        latitude: position.coords.latitude
+                    };
+
+                    const { uniqueId } = userData;
+
+                    axios.post(`${process.env.REACT_APP_BASE_URL}/save/user/geolocation`, {
+                        accountType: "hackers",
+                        location,
+                        id: uniqueId
+                    }).then((res) => {
+                        if (res.data.message === "Successfully saved location data to account!") {
+                            console.log(res.data);
+
+                            const { user } = res.data;
+
+                            console.log("user", user.value);
+
+                            if (user.value !== null) {
+                                authentication(user.value);
+
+                                // NotificationManager.success(`We've successfully updated your location so you have a better tailored user experience with our location-based services.`, 'Updated your location!', 3500);
+                            }
+
+                            // NotificationManager.success(`We've successfully updated your location so you have a better tailored user experience with our location-based services.`, 'Updated your location!', 3500);
+                        } else {
+                            console.log("err", res.data);
+
+                            NotificationManager.error(`We've encountered an error updating your current location for our location-based services...`, 'Error updating location!', 3500);
+                        }
+                    }).catch((err) => {
+                        console.log(err);
+                    });
+                }, (error) => {
+                    console.log("error gathering location - : ", error.message);
+
+                    if (error.message === "User denied geolocation prompt") {
+
+                        console.log("User denied geolocation prompt...");
+                    }
+                });
+            }
+        };
+
         axios.get(`${process.env.REACT_APP_BASE_URL}/gather/employer/listings/general`).then((res) => {
             if (res.data.message === "Gathered general employer listings!") {
                 console.log(res.data);
@@ -195,8 +254,6 @@ constructor(props) {
     }
     render() {
         const { individual, listings, verticleTab, datesSelectable } = this.state;
-
-        console.log("mainMap state", this.state);
         return (
             <div>
                 {individual !== null ? <Sheet isOpen={this.state.isOpen} onClose={() => {
@@ -440,6 +497,7 @@ constructor(props) {
 
                                                     this.handlePreviewPreperation(listing);
                                                 }}
+                                                key={i}
                                                 style={{ maxWidth: "45px", maxHeight: "45px" }}
                                                 coordinates={[listing.businessAddress.position.lon, listing.businessAddress.position.lat]}
                                                 anchor="bottom">
@@ -541,4 +599,4 @@ const mapStateToProps = (state) => {
         userData: state.auth.data
     }
 }
-export default connect(mapStateToProps, { })(withRouter(MainMapViewEmployerJobsHelper));
+export default connect(mapStateToProps, { authentication })(withRouter(MainMapViewEmployerJobsHelper));

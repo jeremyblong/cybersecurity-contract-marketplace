@@ -6,6 +6,27 @@ const EmployerListingSchema = new Schema({
     assetArray: {
         type: Array
     }, 
+    comments: {
+        type: Array
+    },
+    likedBy: {
+        type: Array
+    },
+    likes: {
+        type: Number
+    },
+    dislikedBy: {
+        type: Array
+    },
+    dislikes: {
+        type: Number
+    },
+    totalViews: {
+        type: Number
+    },
+    viewedBy: {
+        type: Array
+    },
     typeOfHack: {
         type: Object
     }, 

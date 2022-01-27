@@ -1,10 +1,10 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import Breadcrumb from '../../../../../../../layout/breadcrumb';
-import { Container,Row,Col,Card,CardBody,Media,Button,Badge,CardHeader,Input,InputGroup,ListGroupItem,ListGroup,FormGroup,Label } from 'reactstrap';
+import { Container, Row, Col, Card, CardBody, Media, Button, Badge, CardHeader, Input, InputGroup, ListGroupItem, ListGroup, FormGroup, Label } from 'reactstrap';
 import one from '../../../../../../../assets/images/job-search/1.jpg';
 import two from '../../../../../../../assets/images/job-search/6.jpg';
 import { useLocation, useHistory }  from 'react-router-dom';
-import { Share,SimilarJobs,SeniorUXDesigner } from "../../../../../../../constant";
+import { Share, SimilarJobs, SeniorUXDesigner } from "../../../../../../../constant";
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -24,6 +24,7 @@ import moment from "moment";
 import { NotificationManager } from 'react-notifications';
 import { saveApplicationDetailsProgress } from "../../../../../../../redux/actions/hackers/applyToEmployerListing/applicationInfo.js";
 import MessagingPanePrivateHelper from "./helpers/messagingPane/messagingHelper.js";
+import RenderCommentsEmployerListingHelper from "./helpers/comments/renderComments.js";
 
 const Map = ReactMapboxGl({
     accessToken: process.env.REACT_APP_MAPBOX_TOKEN
@@ -208,6 +209,8 @@ const ViewIndividualJobListingHelper = ({ userData, saveApplicationDetailsProgre
             })
         };
     }, []);
+
+    console.log("{DATA} :", data);
 
     const onError = (err, other) => {
         console.log("ERRRRR:", err, other);
@@ -518,6 +521,8 @@ const ViewIndividualJobListingHelper = ({ userData, saveApplicationDetailsProgre
                                         <h6 className="blue-text-listing">Out-Of-Scope Vulnerabilities</h6>
                                         <ReactMarkdown className="markdown-listing-individual-container" children={data.outOfScopeVulnerabilities} remarkPlugins={[remarkGfm]} />
                                     </div>
+
+                                    <RenderCommentsEmployerListingHelper data={data} userData={userData} />
                                     
                                     <div className="job-description">
                                         <Button color="primary mr-1"><span><i className="fa fa-check"></i></span> {"Save this job"}</Button>

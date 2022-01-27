@@ -323,7 +323,7 @@ const MessagingMainHelper = ({ SBData, userData }) =>  {
             {renderChatMessagingChangesConditionally()}
             <Row>
               <Col sm="12" className="call-chat-sidebar">
-                <Card>
+                <Card className={"add-shadow-chat-card"}>
                   <CardBody className="chat-body">
                     <div className="chat-box">
                       <div className="chat-left-aside">
@@ -363,7 +363,7 @@ const MessagingMainHelper = ({ SBData, userData }) =>  {
                 </Card>
               </Col>
               <Col className="call-chat-body">
-                <Card>
+                <Card className={"add-shadow-chat-card"}>
                   <CardBody className="p-0">
                     <Row className="chat-box">
                       <Col className="pr-0 chat-right-aside">

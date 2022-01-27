@@ -15,7 +15,14 @@ router.post("/", (req, resppppp, next) => {
         postedDate: moment(new Date()).format("MM/DD/YYYY hh:mm:ss a"),
         systemDate: Date.now(),
         applicants: [],
-        uniqueId: uuidv4()
+        uniqueId: uuidv4(),
+        comments: [],
+        likedBy: [],
+        likes: 0,
+        dislikedBy: [],
+        dislikes: 0,
+        totalViews: 0,
+        viewedBy: []
     });
 
     newListing.save((err, result) => {

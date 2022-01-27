@@ -8,6 +8,7 @@ import axios from "axios";
 import { authentication } from "../redux/actions/authentication/auth.js";
 import { connect } from "react-redux";
 import Switch from "react-switch";
+import { withRouter } from "react-router-dom";
 
 
 class SignUp extends Component {
@@ -235,4 +236,4 @@ constructor (props) {
     }
 }
 
-export default connect(null, { authentication })(SignUp);
+export default connect(null, { authentication })(withRouter(SignUp));

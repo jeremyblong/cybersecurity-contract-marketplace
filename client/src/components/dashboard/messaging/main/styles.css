@@ -22,12 +22,11 @@
 .add-hover-message-convo-individual {
     background-color: #fff !important;
     border-radius: 20px !important;
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.20) !important;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
 }
 .add-hover-message-convo-individual:hover {
     cursor: pointer;
-    box-shadow: 0 0.5rem 1rem rgba(129, 18, 18, 0.475) !important;
-    font-weight: 500;
+    box-shadow: 0 0.5rem 1rem rgba(129, 18, 18, 0.175) !important;
 }
 .checkbox-custom-group-change {
     float: right;

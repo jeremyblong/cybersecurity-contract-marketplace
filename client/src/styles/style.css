@@ -98,6 +98,9 @@ a:hover {
   background-color: #51bb25;
   margin-top: 25px;
 }
+.badge {
+  margin-top: 10px !important;
+}
 .natural-sm-spacer {
   padding-top: 5.75px;
   padding-bottom: 5.75px;

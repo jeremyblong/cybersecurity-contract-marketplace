@@ -1,0 +1,27 @@
+.active-tabbed-pagination {
+    background-color: black !important;
+}
+.container-classname-pagination-custom { 
+    background-color: lightgrey !important;
+    border: 1.50px dotted black !important;
+}
+.pagination-custom-link {
+    /* background-color: lightgrey !important; */
+}
+.active-tabbed-pagination a {
+    color: #fff !important;
+    font-weight: bold !important;
+    background-color: black !important;
+}
+.customized-pagination-page-item .page-link {
+    color: black !important;
+    font-weight: bold !important;
+}
+.customized-next-pagination {
+
+} 
+.pagination-next-link-classname {
+    background-color: #7366ff !important; 
+    color: #fff !important;
+    font-weight: bold !important;
+}

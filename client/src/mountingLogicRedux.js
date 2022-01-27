@@ -31,38 +31,22 @@ constructor(props) {
         // deconstruct
         const { authenticated, accountData, SBData, saveSendbirdInitialData } = this.props;
         // reverse array to get MOST recent array item
-        const reversed = accountData.profilePicsVideos.reverse();
+        if (typeof accountData.profilePicsVideos !== "undefined" && accountData.profilePicsVideos.length > 0) {
+            const reversed = accountData.profilePicsVideos.reverse();
 
-        console.log("SBData", SBData);
+            console.log("SBData", SBData);
 
-        if (SBData !== null && SBData.currentUser !== null) {
-            for (let index = 0; index < reversed.length; index++) {
-                const item = reversed[index];
-                // check if image
-                if (item.type.includes("image")) {
-                    // create SB (sendbird) core-obj-data
-                    const sb = returnSendbirdObj(authenticated);
-                    // data to be given to sendbird
-                    const fullName = `${accountData.firstName} ${accountData.lastName}`;
-                    const profilePicture = `${process.env.REACT_APP_ASSET_LINK}/${item.link}`;
-                   // update profile information - SENDBIRD related...
-                    sb.updateCurrentUserInfo(fullName, profilePicture, (response, error) => {
-                        if (error) {
-                            // Handle error.
-                            console.log("error while updating to lastest info!", error);
-                        } else {
-                            console.log("SUCCESSFULLY updated profile sendbird information!", response);
-                        }
-                    });
-                    break;
-                } else {
-                    if ((reversed.length - 1) === index) {
+            if (SBData !== null && SBData.currentUser !== null) {
+                for (let index = 0; index < reversed.length; index++) {
+                    const item = reversed[index];
+                    // check if image
+                    if (item.type.includes("image")) {
                         // create SB (sendbird) core-obj-data
                         const sb = returnSendbirdObj(authenticated);
                         // data to be given to sendbird
                         const fullName = `${accountData.firstName} ${accountData.lastName}`;
-                        const profilePicture = `${process.env.REACT_APP_PLACEHOLDER_IMAGE}`;
-                        // update profile information - SENDBIRD related...
+                        const profilePicture = `${process.env.REACT_APP_ASSET_LINK}/${item.link}`;
+                    // update profile information - SENDBIRD related...
                         sb.updateCurrentUserInfo(fullName, profilePicture, (response, error) => {
                             if (error) {
                                 // Handle error.
@@ -71,12 +55,51 @@ constructor(props) {
                                 console.log("SUCCESSFULLY updated profile sendbird information!", response);
                             }
                         });
-                        // looped thru array of images/videos and couldnt find a picture file
+                        break;
+                    } else {
+                        if ((reversed.length - 1) === index) {
+                            // create SB (sendbird) core-obj-data
+                            const sb = returnSendbirdObj(authenticated);
+                            // data to be given to sendbird
+                            const fullName = `${accountData.firstName} ${accountData.lastName}`;
+                            const profilePicture = `${process.env.REACT_APP_PLACEHOLDER_IMAGE}`;
+                            // update profile information - SENDBIRD related...
+                            sb.updateCurrentUserInfo(fullName, profilePicture, (response, error) => {
+                                if (error) {
+                                    // Handle error.
+                                    console.log("error while updating to lastest info!", error);
+                                } else {
+                                    console.log("SUCCESSFULLY updated profile sendbird information!", response);
+                                }
+                            });
+                            // looped thru array of images/videos and couldnt find a picture file
+                        }
                     }
                 }
+            } else {
+                saveSendbirdInitialData(returnSendbirdObj(true))
             }
         } else {
-            saveSendbirdInitialData(returnSendbirdObj(true))
+            console.log("SBData", SBData);
+
+            if (SBData !== null && SBData.currentUser !== null) {
+                // create SB (sendbird) core-obj-data
+                const sb = returnSendbirdObj(authenticated);
+                // data to be given to sendbird
+                const fullName = `${accountData.firstName} ${accountData.lastName}`;
+                const profilePicture = `${process.env.REACT_APP_PLACEHOLDER_IMAGE}`;
+                // update profile information - SENDBIRD related...
+                sb.updateCurrentUserInfo(fullName, profilePicture, (response, error) => {
+                    if (error) {
+                        // Handle error.
+                        console.log("error while updating to lastest info!", error);
+                    } else {
+                        console.log("SUCCESSFULLY updated profile sendbird information!", response);
+                    }
+                });
+            } else {
+                saveSendbirdInitialData(returnSendbirdObj(true))
+            }
         }
     }
     render () {

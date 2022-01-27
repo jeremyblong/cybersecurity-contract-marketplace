@@ -131,6 +131,8 @@ app.use("/post/comment/course/individual/listing", require("./routes/hackers/lea
 app.use("/respond/emoji/comment/course/learning", require("./routes/hackers/learningTeachingCourses/retrieveLiveCourseData/comments/reactToComment/reactToMainComment.js"));
 app.use("/add/like/course/learning/unique", require("./routes/hackers/learningTeachingCourses/reactToCourse/likes/addLikeIfNonExistent.js"));
 app.use("/add/dislike/course/learning/unique", require("./routes/hackers/learningTeachingCourses/reactToCourse/dislikes/addDislikeIfNonExistent.js"));
+app.use("/post/comment/employer/live/listing", require("./routes/hackers/employerListings/comments/postNewComment/postComment.js")); 
+app.use("/respond/emoji/comment/employer/listing", require("./routes/employers/employerListings/commentsAndMore/reactWithEmoji/reactEmojiEmployerListing.js"));
 
 // ~ webhook logic STARTS here ~
 app.use("/passbase/webhook", require("./webhooks/passbase/webhook.js"));
@@ -177,3 +179,7 @@ app.listen(PORT, () => {
 
 	console.log(`app listening on port ${PORT}!`);
 });
+
+
+// NEED TO DO BEFORE PRODUCTION //
+// 1. Change hardwired email to dynamic variable email in routes/authentication/login/emailAlert/alertViaEmailOfAuth.js "to" recipient

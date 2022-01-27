@@ -8,7 +8,7 @@ import Knob from "knob";
 import { Currentlysale, Marketvalue } from '../../chartsData/apex-charts-data'
 import { smallchart1data, smallchart1option, smallchart2data, smallchart2option, smallchart3data, smallchart3option, smallchart4data, smallchart4option } from '../../chartsData/chartist-charts-data'
 import { Send, Clock } from 'react-feather';
-import {Dashboard,Summary,NewsUpdate,Appointment,Notification,MarketValue,Chat,New,Tomorrow,Yesterday,Daily,Weekly,Monthly,Store,Online,ReferralEarning,CashBalance,SalesForcasting,Purchase,Sales,SalesReturn,PurchaseRet,PurchaseOrderValue,ProductOrderValue,Pending,Yearly,Hot,Today,VenterLoren,Done,JohnLoren,Year,Month,Day,RightNow} from '../../../../../constant'
+import { Dashboard, Summary, NewsUpdate, Appointment, Notification, MarketValue, Chat, New, Tomorrow, Yesterday, Daily, Weekly, Monthly, Store, Online, ReferralEarning, CashBalance, SalesForcasting, Purchase, Sales, SalesReturn, PurchaseRet, PurchaseOrderValue, ProductOrderValue, Pending, Yearly, Hot, Today, VenterLoren, Done, JohnLoren, Year, Month, Day, RightNow } from '../../../../../constant'
 import axios from "axios";
 import { connect } from "react-redux";
 import { authentication } from "../../../../../redux/actions/authentication/auth.js";
@@ -72,7 +72,7 @@ const MainLandingPageHackerHelper = ({ authentication, userData }) => {
                       if (user.value !== null) {
                           authentication(user.value);
 
-                          // NotificationManager.success(`We've successfully updated your location so you have a better tailored user experience with our location-based services.`, 'Updated your location!', 3500);
+                          NotificationManager.success(`We've successfully updated your location so you have a better tailored user experience with our location-based services.`, 'Updated your location!', 3500);
                       }
 
                       // NotificationManager.success(`We've successfully updated your location so you have a better tailored user experience with our location-based services.`, 'Updated your location!', 3500);

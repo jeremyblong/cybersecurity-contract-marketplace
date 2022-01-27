@@ -189,7 +189,7 @@ constructor (props) {
         const { messageList, channel, userData } = this.props;
         return (
             <Fragment>
-                <ul className={"ul-messages-custom"}>
+                <ul className={"ul-messages-custom-reinvented"}>
                     {messageList.length > 0 ? messageList.map((item, index) => {
                         {/* const participators = allMembers.chats.find(x => x.id === item.sender); */}
                         return (

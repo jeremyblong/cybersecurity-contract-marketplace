@@ -9,9 +9,12 @@ import ReactPlayer from "react-player";
 import helpers from "./helpers/helperFunctions.js";
 import { NotificationManager } from 'react-notifications';
 import uuid from "react-uuid";
+import PaginationEmployerListingHelper from "../../../../../universal/pagination/paginationHelper.js";
+
 
 const checkMessageMeetsCritera = MainHooksCourseIndividualCustomHelpers().checkMessageMeetsCritera;
-
+// pagination settings and/or setup
+const itemsPerPage = 5;
 
 const { RenderPopoverEmojiLogic, RenderEmojiLogic } = helpers;
 
@@ -24,10 +27,22 @@ const CommentsIndividualCourseHelper = ({ courseData, userData }) => {
 
     const [ comments, setCommentsState ] = useState([]);
     const [ popover, setPopoverState ] = useState({}); 
+    const [ currentPage, setCurrentPage ] = useState(0);
+    const [ pageCount, setPageCount ] = useState(0);
+    const [ itemOffset, setItemOffset ] = useState(0);
+
+    // render EVERY CHANGE to pagination
+    useEffect(() => {
+        const endOffset = itemOffset + itemsPerPage;
+
+        setPageCount(Math.ceil(courseData.comments.length / itemsPerPage));
+
+        setCommentsState(courseData.comments.slice(itemOffset, endOffset));
+        
+    }, [itemOffset, itemsPerPage]);
 
     useEffect(() => {
-        setCommentsState(courseData.comments);
-        
+        // create comment popover state's
         setPopoverState(() => {
             const newObjCount = {};
             const comments = courseData.comments;
@@ -35,7 +50,7 @@ const CommentsIndividualCourseHelper = ({ courseData, userData }) => {
             for (const keyyy in comments) {
                 newObjCount[`comment${keyyy}`] = false;
             }
-            setPopoverState(newObjCount);
+            return newObjCount;
         })
     }, []);
 
@@ -228,6 +243,11 @@ const CommentsIndividualCourseHelper = ({ courseData, userData }) => {
                     }) : null}
                 </ul>
             </section>
+            <Row style={{ marginTop: "27.5px", marginBottom: "55px" }}>
+                <div className="centered-both-ways">
+                    <PaginationEmployerListingHelper itemsPerPage={itemsPerPage} setItemOffset={setItemOffset} loopingData={courseData.comments} setPageCount={setPageCount} pageCount={pageCount} currentPage={currentPage} setCurrentPage={setCurrentPage} />
+                </div>
+            </Row>
         </Fragment>
     );
 }

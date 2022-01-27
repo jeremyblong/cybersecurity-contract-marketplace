@@ -5,7 +5,8 @@ const passport = require("passport");
 const { Connection } = require("../../../mongoUtil.js");
 const { decrypt } = require("../../../crypto.js");
 const { ObjectID } = require("mongodb");
-
+const { sendAlertUponSuccessfulAuthenticationLogin } = require("./emailAlert/alertViaEmailOfAuth.js");
+const transporter = require("../../../controllers/nodemailer/transportConfig.js");
 
 router.post("/", (req, resppppp, next) => {
 
@@ -22,14 +23,13 @@ router.post("/", (req, resppppp, next) => {
             } else {
                 const { 
                     password,
-                    usernameOrEmail 
+                    usernameOrEmail,
+                    userDeviceData
                 } = req.body;
             
                 const trimLowercaseIdentifier = usernameOrEmail.toLowerCase().trim();
             
                 const collection = Connection.db.db("db").collection("employers");
-            
-                console.log("ran")
             
                 collection.findOne({ $or: [{
                     username: trimLowercaseIdentifier
@@ -51,14 +51,30 @@ router.post("/", (req, resppppp, next) => {
             
                             user.refreshToken.push({ refreshToken, _id: new ObjectID() });
             
-                            collection.save(user, (err, result) => {
+                            collection.save(user, async (err, result) => {
                                 if (err) {
                                     console.log(err);
                                 } else {
-            
-                                    resppppp.cookie("refreshToken", refreshToken, COOKIE_OPTIONS);
+
+                                    const mailOptions = sendAlertUponSuccessfulAuthenticationLogin(userDeviceData, user.email);
+                        
+                                    await transporter.sendMail(mailOptions, (errrrrrrrror, info) => {
+                                        if (errrrrrrrror) {
+                                            // errrrrrrrror
+                                            console.log("errrrrrrrror!", errrrrrrrror);
+
+                                            resppppp.cookie("refreshToken", refreshToken, COOKIE_OPTIONS);
                             
-                                    resppppp.json({ success: true, token, message: "Successfully logged in!", data: user });
+                                            resppppp.json({ success: true, token, message: "Successfully logged in!", data: user });
+                                        } else {
+                                            // success
+                                            console.log("successfully sent email ! : ", info);
+                                
+                                            resppppp.cookie("refreshToken", refreshToken, COOKIE_OPTIONS);
+                            
+                                            resppppp.json({ success: true, token, message: "Successfully logged in!", data: user });
+                                        }
+                                    });
                                 }
                             })
                         } else {

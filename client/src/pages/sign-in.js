@@ -8,6 +8,7 @@ import { NotificationManager } from 'react-notifications';
 import axios from "axios";
 import { authentication } from "../redux/actions/authentication/auth.js";
 import { connect } from "react-redux";
+import { deviceDetect, isBrowser, isMobile } from 'react-device-detect';
 
 const SignIn = ({ authentication }) => {
 
@@ -27,45 +28,131 @@ const SignIn = ({ authentication }) => {
             switchType("You're logging in as - 'Company/Employer'");
         }
     }
+    
     const handleSubmission = (e) => {
         e.preventDefault();
 
         console.log("submitted.");
 
+        const detectDeviceInfo = deviceDetect();
+
         const { password, usernameOrEmail } = data;
-        
-        axios.post(`${process.env.REACT_APP_BASE_URL}/login/${checked === true ? "hacker" : "employer"}`, {
-            accountType: checked === true ? "hackers" : "employers",
-            password,
-            usernameOrEmail,
-            username: usernameOrEmail
-        }, {
-            withCredentials: true
-        }).then((res) => {
-            if (res.data.message === "Successfully logged in!") {
-                console.log("success!", res.data);
 
-                NotificationManager.success('Successful authentication! You will be logged-in momentarily...', 'Successfully authenticated!', 3000);
+        if (isBrowser === true) {
+            // computer, laptop, etc.. is being used.
+            axios.get("https://ipapi.co/json/").then((responseeee) => {
 
-                setTimeout(() => {
-                    // do authentication - registration redux logic
-                    authentication(res.data.data);
+                const { country, city, ip, region, postal, timezone, version } = responseeee.data;
 
-                    if (res.data.data.accountType === "employers") {
-                        history.push("/dashboard/employer");
-                    } else {
-                        history.push("/dashboard/hacker");
+                const userDeviceData = {
+                    ...detectDeviceInfo,
+                    isBrowser: true,
+                    IPRelatedInformation: {
+                        country, 
+                        city, 
+                        ip, 
+                        region, 
+                        postal, 
+                        timezone, 
+                        version
                     }
-                }, 3000);
-            } else {
+                };
+                axios.post(`${process.env.REACT_APP_BASE_URL}/login/${checked === true ? "hacker" : "employer"}`, {
+                    accountType: checked === true ? "hackers" : "employers",
+                    password,
+                    usernameOrEmail,
+                    username: usernameOrEmail,
+                    userDeviceData
+                }, {
+                    withCredentials: true
+                }).then((res) => {
+                    if (res.data.message === "Successfully logged in!") {
+                        console.log("success!", res.data);
+        
+                        NotificationManager.success('Successful authentication! You will be logged-in momentarily...', 'Successfully authenticated!', 3000);
+        
+                        setTimeout(() => {
+                            // do authentication - registration redux logic
+                            authentication(res.data.data);
+        
+                            if (res.data.data.accountType === "employers") {
+                                history.push("/dashboard/employer");
+                            } else {
+                                history.push("/dashboard/hacker");
+                            }
+                        }, 3000);
+                    } else {
+        
+                        console.log("err", res.data);
+                        
+                        NotificationManager.error(res.data.message, 'ERROR LOGGING-IN!.', 3500);
+                    }
+                }).catch((err) => {
+                    console.log(err);
+                })
+            }).catch((errorrrrrrr) => {
+                console.log("errrror fetching IP address information.", errorrrrrrr);
 
-                console.log("err", res.data);
+                NotificationManager.error("Error fetching device/IP information - CANNOT sign-in until this information is collected - please try again (not related to password/email).", 'ERROR LOGGING-IN!.', 3500);
+            })
+        } else if (isMobile === true) {
+            // mobile device is being used.
+            axios.get("https://ipapi.co/json/").then((responseeee) => {
+
+                const { country, city, ip, region, postal, timezone, version } = responseeee.data;
+
+                const userDeviceData = {
+                    ...detectDeviceInfo,
+                    isBrowser: false,
+                    IPRelatedInformation: {
+                        country, 
+                        city, 
+                        ip, 
+                        region, 
+                        postal, 
+                        timezone, 
+                        version
+                    }
+                };
+                axios.post(`${process.env.REACT_APP_BASE_URL}/login/${checked === true ? "hacker" : "employer"}`, {
+                    accountType: checked === true ? "hackers" : "employers",
+                    password,
+                    usernameOrEmail,
+                    username: usernameOrEmail,
+                    userDeviceData
+                }, {
+                    withCredentials: true
+                }).then((res) => {
+                    if (res.data.message === "Successfully logged in!") {
+                        console.log("success!", res.data);
+        
+                        NotificationManager.success('Successful authentication! You will be logged-in momentarily...', 'Successfully authenticated!', 3000);
+        
+                        setTimeout(() => {
+                            // do authentication - registration redux logic
+                            authentication(res.data.data);
+        
+                            if (res.data.data.accountType === "employers") {
+                                history.push("/dashboard/employer");
+                            } else {
+                                history.push("/dashboard/hacker");
+                            }
+                        }, 3000);
+                    } else {
+        
+                        console.log("err", res.data);
+                        
+                        NotificationManager.error(res.data.message, 'ERROR LOGGING-IN!.', 3500);
+                    }
+                }).catch((err) => {
+                    console.log(err);
+                })
+            }).catch((errorrrrrrr) => {
+                console.log("errrror fetching IP address information.", errorrrrrrr);
                 
-                NotificationManager.error(res.data.message, 'ERROR LOGGING-IN!.', 3500);
-            }
-        }).catch((err) => {
-            console.log(err);
-        })
+                NotificationManager.error("Error fetching device/IP information - CANNOT sign-in until this information is collected - please try again (not related to password/email).", 'ERROR LOGGING-IN!.', 3500);
+            })
+        }
     }
     const handleInputChange = (e) => {
         const { name, value } = e.target;

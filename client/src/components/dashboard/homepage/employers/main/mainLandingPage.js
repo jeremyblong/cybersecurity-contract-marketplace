@@ -58,7 +58,7 @@ const MainLandingPageEmployerHelper = ({ authentication, userData }) => {
               const { uniqueId } = userData;
 
               axios.post(`${process.env.REACT_APP_BASE_URL}/save/user/geolocation`, {
-                  accountType: "hackers",
+                  accountType: "employers",
                   location,
                   id: uniqueId
               }).then((res) => {
@@ -72,7 +72,7 @@ const MainLandingPageEmployerHelper = ({ authentication, userData }) => {
                       if (user.value !== null) {
                           authentication(user.value);
 
-                          // NotificationManager.success(`We've successfully updated your location so you have a better tailored user experience with our location-based services.`, 'Updated your location!', 3500);
+                          NotificationManager.success(`We've successfully updated your location so you have a better tailored user experience with our location-based services.`, 'Updated your location!', 3500);
                       }
 
                       // NotificationManager.success(`We've successfully updated your location so you have a better tailored user experience with our location-based services.`, 'Updated your location!', 3500);
