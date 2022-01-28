@@ -16,6 +16,16 @@ export const MENUITEMS = [
                 ]
             },
             {
+                title: `Manage Application's, Job Data & Other Related`, icon: Home, type: 'sub', active: false, children: [
+                    { path: `${process.env.PUBLIC_URL}/already/applied/jobs/hacker/account`, title: `Already Applied Job's`, type: 'link' },
+                    { path: `${process.env.PUBLIC_URL}/`, title: `Notification's`, type: 'link' },
+                    { path: `${process.env.PUBLIC_URL}/`, title: `ACTIVE Jobs You Employed On`, type: 'link' },
+                    { path: `${process.env.PUBLIC_URL}/`, title: 'NOT-DEFINED-YET', type: 'link' },
+                    { path: `${process.env.PUBLIC_URL}/`, title: 'NOT-DEFINED-YET', type: 'link' },
+                    { path: `${process.env.PUBLIC_URL}/`, title: 'NOT-DEFINED-YET', type: 'link' }
+                ]
+            },
+            {
                 title: 'Competition/Compete', icon: Activity, type: 'sub', active: false, children: [
                     { path: `${process.env.PUBLIC_URL}/`, title: "Play CTF's", type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Gamble/Bet Rank', type: 'link' },
@@ -26,7 +36,7 @@ export const MENUITEMS = [
             {
                 title: "Purchase", icon: ShoppingCart, type: "sub", active: false, children: [
                     { path: `${process.env.PUBLIC_URL}/`, title: "Purchase 'Connects/Tokens'", type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/`, title: "Buy 'Profile Boosts'", type: 'link' },
+                    { path: `${process.env.PUBLIC_URL}/purchase/various/boosts/hacker/account`, title: "Buy 'Profile Boosts'", type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Buy Tickets - Restricted Events', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/memberships/selection`, title: 'Subscribe To Membership', type: 'link' }
                 ]
@@ -68,7 +78,7 @@ export const MENUITEMS = [
                 title: 'Job Management', icon: Briefcase, type: 'sub', active: false, children: [
                     { path: `${process.env.PUBLIC_URL}/view/all/general/applications/employer/recruit`, title: `View/Manage Current Applicant/Application's`, type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Manage Reviews & Past Work', type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'Current Hires', type: 'link' }
+                    { path: `${process.env.PUBLIC_URL}/employer/view/hired/applicants/active`, title: 'Current Hires', type: 'link' }
                 ]
             },
             {
@@ -108,7 +118,7 @@ export const MENUITEMS = [
                     { path: `${process.env.PUBLIC_URL}/create/new/live/stream/hackers`, title: 'Create New Hacking Live Stream', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Chat Rooms', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Tutorial Videos', type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'Blogging/Blogs', type: 'link' }
+                    { path: `${process.env.PUBLIC_URL}/blogging/main/page/display/all`, title: 'Blogging/Blogs', type: 'link' }
                 ]
             }
         ]          

@@ -12,6 +12,9 @@ const EmployerListingSchema = new Schema({
     likedBy: {
         type: Array
     },
+    applicantIDArray: {
+        type: Array
+    },
     likes: {
         type: Number
     },

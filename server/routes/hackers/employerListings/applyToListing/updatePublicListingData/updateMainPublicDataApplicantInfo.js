@@ -63,38 +63,43 @@ router.post("/", (req, resppppp, next) => {
         }
     }
     // select employerlistings collection
-    listingsCollection.findOne({ uniqueId: listingID }, { $push: {
-        applicants: applicantObj
-    }}).then((listing) => {
-        if (!listing) {
+    listingsCollection.findOneAndUpdate({ uniqueId: listingID }, { $push: {
+        applicants: applicantObj,
+        applicantIDArray: applicantID
+    }}, (err, listing) => {
+        if (err) {
+            console.log("error critical updating data...:", err);
+            
+            console.log(err);
 
-            const pulledEmployer = employerCollection.findOneAndUpdate({ uniqueId: employerId }, { $pull: { applicants: { generatedID }}}).then(() => console.log("done")).catch((err) => console.log(err));
-            const pulledHacker = hackerCollection.findOneAndUpdate({ uniqueId: applicantID }, { $pull: { previouslyAppliedJobs: { generatedID }}}).then(() => console.log("done")).catch((err) => console.log(err));
+            employerCollection.findOneAndUpdate({ uniqueId: employerId }, { $pull: { applicants: { generatedID }}}).then(() => console.log("done")).catch((err) => console.log(err));
+            hackerCollection.findOneAndUpdate({ uniqueId: applicantID }, { $pull: { previouslyAppliedJobs: { generatedID }}}).then(() => console.log("done")).catch((err) => console.log(err));
 
             console.log("listing does NOT exist or could not be found.");
 
             resppppp.json({
-                message: "listing does NOT exist or could not be found."
+                message: "Unknown error.",
+                err
             })
         } else {
-            console.log("listing", listing);
-        
-            resppppp.json({
-                message: "Successfully updated employer listing data!"
-            })
+            if (!listing) {
+
+                employerCollection.findOneAndUpdate({ uniqueId: employerId }, { $pull: { applicants: { generatedID }}}).then(() => console.log("done")).catch((err) => console.log(err));
+                hackerCollection.findOneAndUpdate({ uniqueId: applicantID }, { $pull: { previouslyAppliedJobs: { generatedID }}}).then(() => console.log("done")).catch((err) => console.log(err));
+    
+                console.log("listing does NOT exist or could not be found.");
+    
+                resppppp.json({
+                    message: "listing does NOT exist or could not be found."
+                })
+            } else {
+                console.log("listing", listing);
+            
+                resppppp.json({
+                    message: "Successfully updated employer listing data!"
+                })
+            }
         }
-    }).catch((err) => {
-        console.log(err);
-
-        const pulledEmployer = employerCollection.findOneAndUpdate({ uniqueId: employerId }, { $pull: { applicants: { generatedID }}}).then(() => console.log("done")).catch((err) => console.log(err));
-        const pulledHacker = hackerCollection.findOneAndUpdate({ uniqueId: applicantID }, { $pull: { previouslyAppliedJobs: { generatedID }}}).then(() => console.log("done")).catch((err) => console.log(err));
-
-        console.log("listing does NOT exist or could not be found.");
-
-        resppppp.json({
-            message: "Unknown error.",
-            err
-        })
     })
 });
 

@@ -33,6 +33,10 @@ import CreateNewLiveStreamAsHackerPage from "../pages/dashboard/streamingLiveHac
 import ViewIndividualLiveStreamPage from "../pages/dashboard/streamingLiveHacks/ViewLiveStreams/individualStream/viewIndividualStream.js";
 import EducationalCoursesCreationPage from "../pages/dashboard/learning/educationalCoursesSeminars/createCourse/createTeachingCourse.js";
 import LearningEducationCoursePage from "../pages/dashboard/learning/educationalCoursesSeminars/viewCourses/individual.js";
+import BlogsMainHomepageViewPage from "../pages/dashboard/blogging/viewAll/viewMainBlogs.js";
+import MainPurchaseVariousBooostsPage from "../pages/dashboard/boosts/hackers/purchaseVarietyBoosts/selectBoostProfileOptions.js";
+import ViewHiredHackersPage from "../pages/dashboard/jobManagement/employers/manageHiredHackers/viewHackers/viewHackersHired.js";
+import ViewAlreadyAppliedJobsHackerPage from "../pages/dashboard/jobManagement/hackers/alreadyApplied/viewAllAlreadyApplied.js";
 
 export const routes = [
         { path:"/profile/settings/edit", Component: GeneralSettingsPage },
@@ -69,5 +73,9 @@ export const routes = [
         { path: "/create/new/live/stream/hackers", Component: CreateNewLiveStreamAsHackerPage },
         { path: "/live/streaming/view/individual/info", Component: ViewIndividualLiveStreamPage },
         { path: "/learning/courses/creation/new/course", Component: EducationalCoursesCreationPage },
-        { path: "/view/individual/course/information/:id", Component: LearningEducationCoursePage }
+        { path: "/view/individual/course/information/:id", Component: LearningEducationCoursePage },
+        { path: "/blogging/main/page/display/all", Component: BlogsMainHomepageViewPage },
+        { path: "/purchase/various/boosts/hacker/account", Component: MainPurchaseVariousBooostsPage },
+        { path: "/employer/view/hired/applicants/active", Component: ViewHiredHackersPage },
+        { path: "/already/applied/jobs/hacker/account", Component: ViewAlreadyAppliedJobsHackerPage }
 ];

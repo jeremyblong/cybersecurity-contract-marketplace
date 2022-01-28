@@ -210,8 +210,6 @@ const ViewIndividualJobListingHelper = ({ userData, saveApplicationDetailsProgre
         };
     }, []);
 
-    console.log("{DATA} :", data);
-
     const onError = (err, other) => {
         console.log("ERRRRR:", err, other);
     }
@@ -604,6 +602,21 @@ const ViewIndividualJobListingHelper = ({ userData, saveApplicationDetailsProgre
             history.push(`/hacker/apply/employer/listing/${data.uniqueId}`, { listingData: data });
         },  500);
     }
+    const checkAccountTypeAndAlreadyApplied = () => {
+        if (typeof passedData.state !== "undefined" && _.has(passedData.state, "listing")) {
+            if (userData.accountType === "hackers") {
+                if (passedData.state.listing.applicantIDArray.includes(userData.uniqueId)) {
+                    return false;
+                } else {
+                    return true;
+                }   
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
     const renderHeaderConditionally = () => {
         
         if (ready === true) {
@@ -675,7 +688,7 @@ const ViewIndividualJobListingHelper = ({ userData, saveApplicationDetailsProgre
                         <div className="follow">
                             <Row style={{ paddingTop: "17.5px", paddingBottom: "17.5px" }}>
                                 <Col sm="12" md="12" lg="12" xl="12">
-                                    {userData.accountType === "hackers" ? <Button style={{ width: "100%" }} className={"btn-square btn-air-success"} onClick={() => {
+                                    {checkAccountTypeAndAlreadyApplied() ? <Button style={{ width: "100%" }} className={"btn-square btn-air-success"} onClick={() => {
                                         // apply logic (hackers ONLY)...
                                         if (userData.accountType === "hackers") {
                                             saveApplicationDetailsProgress({});
@@ -748,7 +761,7 @@ const ViewIndividualJobListingHelper = ({ userData, saveApplicationDetailsProgre
                             </Row>
                             <Row style={{ paddingTop: "17.5px", paddingBottom: "17.5px" }}>
                                 <Col sm="12" md="12" lg="12" xl="12">
-                                    {userData.accountType === "hackers" ? <Button style={{ width: "100%" }} className={"btn-square btn-air-success"} onClick={() => {
+                                    {checkAccountTypeAndAlreadyApplied() ? <Button style={{ width: "100%" }} className={"btn-square btn-air-success"} onClick={() => {
                                         // apply logic (hackers ONLY)...
                                         if (userData.accountType === "hackers") {
                                             saveApplicationDetailsProgress({});
@@ -767,7 +780,6 @@ const ViewIndividualJobListingHelper = ({ userData, saveApplicationDetailsProgre
             );
         } 
     }
-    console.log("employerInfo", employerInfo);
     return (
         <Fragment>
             <Breadcrumb parent="Active Hacking Opportunities" title="Individual Job Details"/>

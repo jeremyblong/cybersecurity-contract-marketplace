@@ -133,6 +133,12 @@ app.use("/add/like/course/learning/unique", require("./routes/hackers/learningTe
 app.use("/add/dislike/course/learning/unique", require("./routes/hackers/learningTeachingCourses/reactToCourse/dislikes/addDislikeIfNonExistent.js"));
 app.use("/post/comment/employer/live/listing", require("./routes/hackers/employerListings/comments/postNewComment/postComment.js")); 
 app.use("/respond/emoji/comment/employer/listing", require("./routes/employers/employerListings/commentsAndMore/reactWithEmoji/reactEmojiEmployerListing.js"));
+app.use("/notify/other/users/denial/application/process", require("./routes/employers/notificationRelated/applicants/notifyOfNotBeingPicked.js"));
+app.use("/notify/other/user/approval/application/process", require("./routes/employers/notificationRelated/applicants/selected/notifiyOfBeingAcceptedWork.js"));
+app.use("/gather/listing/all/info/deduct/one/count", require("./routes/employers/employerListings/modifyListing/fetchListingAndRemoveOneRequiredCount.js"));
+app.use("/gather/active/jobs/employer/account", require("./routes/employers/hiredHackers/gatherAllHired/gatherAllHiredHackers.js"));
+app.use("/gather/active/applied/jobs/hacker/account", require("./routes/hackers/appliedGigsAsHacker/gatherApplications/gatherPreviousApplications/gatherAllPreviousApplications.js"));
+ 
 
 // ~ webhook logic STARTS here ~
 app.use("/passbase/webhook", require("./webhooks/passbase/webhook.js"));

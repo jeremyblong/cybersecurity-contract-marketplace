@@ -103,9 +103,6 @@ const TimelineTab = ({ applicantData, calculateFileType, renderPictureOrVideoPro
                 break;
         };
     }
-    useEffect(() => {
-        
-    }, []);
 
     const bothBarsProps = {
         user,
@@ -138,84 +135,60 @@ const TimelineTab = ({ applicantData, calculateFileType, renderPictureOrVideoPro
                                     <Col sm="6">
                                         <Card className={"add-shadow-md-custom"}>
                                             <Media className="p-20">
-                                            <div className="radio radio-primary mr-3">
-                                                <Input disabled={true} id="radio23" type="radio" name="radio1" value={true} />
-                                                <Label for="radio23"></Label>
-                                            </div>
-                                            <Media body>
-                                                <h6 className="mt-0 mega-title-badge meta-title-custom-bigger-blue"># of attached file(s)<span className="badge badge-primary pull-right digits custom-digits-font-adjustment">{`${applicantData.attachedFiles.length} file(s)`}</span></h6>
-                                                <p>This applicant has attached <strong style={{ textDecorationLine: "underline" }}>{applicantData.attachedFiles.length} file's</strong> that you should view as they we're intentionally included in this application.</p>
-                                            </Media>
+                                                <Media body>
+                                                    <h6 className="mt-0 mega-title-badge meta-title-custom-bigger-blue"># of attached file(s)<span className="badge badge-primary pull-right digits custom-digits-font-adjustment">{`${applicantData.attachedFiles.length} file(s)`}</span></h6>
+                                                    <p>This applicant has attached <strong style={{ textDecorationLine: "underline" }}>{applicantData.attachedFiles.length} file's</strong> that you should view as they we're intentionally included in this application.</p>
+                                                </Media>
                                             </Media>
                                         </Card>
                                     </Col>
                                     <Col sm="6">
                                         <Card className={"add-shadow-md-custom"}>
                                             <Media className="p-20">
-                                            <div className="radio radio-secondary mr-3">
-                                                <Input disabled={true} id="radio24" type="radio" name="radio1" value={true} />
-                                                <Label for="radio24"></Label>
-                                            </div>
-                                            <Media body>
-                                                <h6 className="mt-0 mega-title-badge meta-title-custom-bigger-secondary">Applicant placed wager/bid on <strong>self</strong><span className="badge badge-secondary pull-right digits custom-digits-font-adjustment">{applicantData.bettingOnSelfSelected === true ? "TRUE - Betting on SELF" : "FALSE - NOT betting on self"}</span></h6>
-                                                <p>{`This applicant placed a ${Number(applicantData.waggeredBidAmount).toFixed(2)} ${process.env.REACT_APP_CRYPTO_TOKEN_NAME} wager/bet on`}<strong>'themselves'</strong>{` to WIN this listing - if this user wins, they will win ${Number(applicantData.waggeredBidAmount)} more tokens than the standard reward's...`}</p>
-                                            </Media>
+                                                <Media body>
+                                                    <h6 className="mt-0 mega-title-badge meta-title-custom-bigger-secondary">Applicant placed wager/bid on <strong>self</strong><span className="badge badge-secondary pull-right digits custom-digits-font-adjustment">{applicantData.bettingOnSelfSelected === true ? "TRUE - Betting on SELF" : "FALSE - NOT betting on self"}</span></h6>
+                                                    <p>{`This applicant placed a ${Number(applicantData.waggeredBidAmount).toFixed(2)} ${process.env.REACT_APP_CRYPTO_TOKEN_NAME} wager/bet on`}<strong>'themselves'</strong>{` to WIN this listing - if this user wins, they will win ${Number(applicantData.waggeredBidAmount)} more tokens than the standard reward's...`}</p>
+                                                </Media>
                                             </Media>
                                         </Card>
                                     </Col>
                                     <Col sm="6">
                                         <Card className={"add-shadow-md-custom"}>
                                             <Media className="p-20">
-                                            <div className="radio radio-success mr-3">
-                                                <Input disabled={true} id="radio25" type="radio" name="radio1" value={true} />
-                                                <Label for="radio25"></Label>
-                                            </div>
-                                            <Media body>
-                                                <h6 className="mt-0 mega-title-badge meta-title-custom-bigger-success">{applicantData.referenceLinks.length} Reference Links Incl. <span className="badge badge-success pull-right digits custom-digits-font-adjustment">{`${applicantData.referenceLinks.length} LINKS INCLUDED`}</span></h6>
-                                                <p>This user has included <strong style={{ textDecorationLine: "underline" }}>{applicantData.referenceLinks.length} reference links</strong>. These can be anything useful regarding evaluating this applicant. These links can be anything from github to portfolio links to other misc content...</p>
-                                            </Media>
+                                                <Media body>
+                                                    <h6 className="mt-0 mega-title-badge meta-title-custom-bigger-success">{applicantData.referenceLinks.length} Reference Links Incl. <span className="badge badge-success pull-right digits custom-digits-font-adjustment">{`${applicantData.referenceLinks.length} LINKS INCLUDED`}</span></h6>
+                                                    <p>This user has included <strong style={{ textDecorationLine: "underline" }}>{applicantData.referenceLinks.length} reference links</strong>. These can be anything useful regarding evaluating this applicant. These links can be anything from github to portfolio links to other misc content...</p>
+                                                </Media>
                                             </Media>
                                         </Card>
                                     </Col>
                                     <Col sm="6">
                                         <Card className={"add-shadow-md-custom"}>
                                             <Media className="p-20">
-                                            <div className="radio radio-info mr-3">
-                                                <Input disabled={true} id="radio5" type="radio" name="radio1" value={true} />
-                                                <Label for="radio5"></Label>
-                                            </div>
-                                            <Media body>
-                                                <h6 className="mt-0 mega-title-badge meta-title-custom-bigger-info">Number(#) of current reviews <span className="badge badge-info pull-right digits custom-digits-font-adjustment">{`${applicantData.submittedUserData.reviews.length} TOTAL REVIEWS/COMPLETED JOBS`}</span></h6>
-                                                <p>This applicant has a grand total of <strong style={{ textDecorationLine: "underline" }}>{applicantData.submittedUserData.reviews.length} total reviews/completed-gigs</strong> - if you'd like to check these reviews out... Visit the "Review Page" at the top of this page!</p>
-                                            </Media>
+                                                <Media body>
+                                                    <h6 className="mt-0 mega-title-badge meta-title-custom-bigger-info">Number(#) of current reviews <span className="badge badge-info pull-right digits custom-digits-font-adjustment">{`${applicantData.submittedUserData.reviews.length} TOTAL REVIEWS/COMPLETED JOBS`}</span></h6>
+                                                    <p>This applicant has a grand total of <strong style={{ textDecorationLine: "underline" }}>{applicantData.submittedUserData.reviews.length} total reviews/completed-gigs</strong> - if you'd like to check these reviews out... Visit the "Review Page" at the top of this page!</p>
+                                                </Media>
                                             </Media>
                                         </Card>
                                     </Col>
                                     <Col sm="6">
                                         <Card className={"add-shadow-md-custom mb-0"}>
                                             <Media className="p-20">
-                                            <div className="radio radio-warning mr-3">
-                                                <Input disabled={true} id="radio26" type="radio" name="radio1" value={true} />
-                                                <Label for="radio26"></Label>
-                                            </div>
-                                            <Media body>
-                                                <h6 className="mt-0 mega-title-badge meta-title-custom-bigger-warning">Year's of combined experience in cybersecurity<span className="badge badge-warning pull-right digits custom-digits-font-adjustment">{applicantData.submittedUserData.yearsOfExperience.label}</span></h6>
-                                                <p>This applicant has approximately <strong>{applicantData.submittedUserData.yearsOfExperience.label}</strong> of combined experience in hacking or the cybersecurity space. This is submitted on behalf of the applicant themselves and this value is <strong>NOT verified</strong> - if you have any doubts of the experience of this user/applicant - look more into their background/history.</p>
-                                            </Media>
+                                                <Media body>
+                                                    <h6 className="mt-0 mega-title-badge meta-title-custom-bigger-warning">Year's of combined experience in cybersecurity<span className="badge badge-warning pull-right digits custom-digits-font-adjustment">{applicantData.submittedUserData.yearsOfExperience.label}</span></h6>
+                                                    <p>This applicant has approximately <strong>{applicantData.submittedUserData.yearsOfExperience.label}</strong> of combined experience in hacking or the cybersecurity space. This is submitted on behalf of the applicant themselves and this value is <strong>NOT verified</strong> - if you have any doubts of the experience of this user/applicant - look more into their background/history.</p>
+                                                </Media>
                                             </Media>
                                         </Card>
                                     </Col>
                                     <Col sm="6">
                                         <Card className={"add-shadow-md-custom mb-0"}>
                                             <Media className="p-20">
-                                            <div className="radio radio-danger mr-3">
-                                                <Input disabled={true} id="radio27" type="radio" name="radio1" value={true} />
-                                                <Label for="radio27"></Label>
-                                            </div>
-                                            <Media body>
-                                                <h6 className="mt-0 mega-title-badge meta-title-custom-bigger-danger">EXP/XP - Experience Points<span className="badge badge-danger pull-right digits custom-digits-font-adjustment">{applicantData.submittedUserData.points} EXP/XP POINTS</span></h6>
-                                                <p>This applicant has a combined total of {applicantData.submittedUserData.points} experience/ranking points at the time of applying. There are approximately 50 LEVEL'S/RANKS within our {process.env.REACT_APP_APPLICATION_NAME} application. Each 1000 points equates to ONE level/rank. This <strong>user's rank</strong> is <strong>{calculateRank(applicantData.submittedUserData.points)}</strong></p>
-                                            </Media>
+                                                <Media body>
+                                                    <h6 className="mt-0 mega-title-badge meta-title-custom-bigger-danger">EXP/XP - Experience Points<span className="badge badge-danger pull-right digits custom-digits-font-adjustment">{applicantData.submittedUserData.points} EXP/XP POINTS</span></h6>
+                                                    <p>This applicant has a combined total of {applicantData.submittedUserData.points} experience/ranking points at the time of applying. There are approximately 50 LEVEL'S/RANKS within our {process.env.REACT_APP_APPLICATION_NAME} application. Each 1000 points equates to ONE level/rank. This <strong>user's rank</strong> is <strong>{calculateRank(applicantData.submittedUserData.points)}</strong></p>
+                                                </Media>
                                             </Media>
                                         </Card>
                                     </Col>

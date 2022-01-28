@@ -22,7 +22,8 @@ router.post("/", (req, resppppp, next) => {
         dislikedBy: [],
         dislikes: 0,
         totalViews: 0,
-        viewedBy: []
+        viewedBy: [],
+        applicantIDArray: []
     });
 
     newListing.save((err, result) => {

@@ -5,7 +5,6 @@ import TimelineTab from './helpers/timelineTab.js';
 import AboutTab from './helpers/aboutTab.js';
 import FriendsTab from './helpers/friendsTab.js';
 import PhotosTab from './helpers/photosTab.js';
-import { Timline, Friends, About, Photos } from "../../../../../../../constant";
 import { useParams, withRouter } from 'react-router-dom';
 import axios from 'axios';
 import helpers from "./helpers/functions/helperFunctions.js";
@@ -17,6 +16,7 @@ import uuid from "react-uuid";
 import moment from "moment";
 import { confirmAlert } from 'react-confirm-alert';
 import { connect } from "react-redux";
+import { NotificationManager } from 'react-notifications';
 
 const { renderPictureOrVideoProfilePic, calculateFileType } = helpers;
 
@@ -129,19 +129,25 @@ const ManageApplicationIndividualHelper = ({ location, employerData }) => {
         console.log("hireDesiredUserHacker clicked!");
         
         const config = {
-            params: {
-                applicantID: user.uniqueId,
-                entireApplicantInfo: user,
-                employerID: employerData.uniqueId,
-                entireEmployerInfo: employerData,
-                listingInfo: null
-            }
+            applicantID: user.uniqueId,
+            entireApplicantInfo: user,
+            employerID: employerData.uniqueId,
+            entireEmployerInfo: employerData,
+            applicantData,
         };
-        axios.get(`${process.env.REACT_APP_BASE_URL}/hired/applicant/listing/start/process`, config).then((res) => {
+        axios.post(`${process.env.REACT_APP_BASE_URL}/hired/applicant/listing/start/process`, config).then((res) => {
             if (res.data.message === "Successfully hired applicant for position/listing!") {
                 console.log(res.data);
+
+                setTimeout(() => {
+                    history.push("/employer/view/hired/applicants/active");
+                }, 4750);
+
+                NotificationManager.success("Successfully HIRED this applicant, They have been added to your 'active jobs' and you will now be able to see this job there...", "Successfully HIRED applicant - Redirecting Momentarily!", 4750);
             } else {
                 console.log("Err", res.data);
+
+                NotificationManager.error("Critical error occurred while attempting to update database information and/or listing information, please try again & contact support if the problem persists...", "Error occurred while attempting to update data!", 4750);
             }
         }).catch((err) => {
             console.log(err);
@@ -225,6 +231,10 @@ const ManageApplicationIndividualHelper = ({ location, employerData }) => {
                                             </Button>
                                         </NavItem>
                                     </Nav>
+                                    <Button style={{ width: "75%" }} outline color={"success-2x"} className={'btn-square-success'} onClick={() => handlePreClick()}>
+                                        HIRE This Applicant...
+                                    </Button>
+                                    <hr />
                                     {activeTab === '1' ? <Fragment>
                                         <hr />
                                         <h4 className={"active-subbed-left text-left"}>Active Tab (Currently-Selected)</h4>

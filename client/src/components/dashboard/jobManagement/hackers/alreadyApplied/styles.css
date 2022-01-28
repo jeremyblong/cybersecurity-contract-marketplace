@@ -1,0 +1,16 @@
+.already-applied-card-wrapper {
+
+}
+.override-cal-img-application {
+    background-image: url(../../../../../assets/images/application.jpg) !important;
+    background-repeat: no-repeat !important;
+    max-width: 100% !important;
+    max-height: 200px !important;
+    background-size: contain !important;
+}
+.custom-sub-application-text {
+    font-size: 0.875rem;
+}
+.slightly-larger-sub-application-text {
+    font-size: 1.25rem;
+}
