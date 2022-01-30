@@ -1,0 +1,25 @@
+.customized-row-profile-hacker-pics { 
+    display: inline !important;
+}
+.customized-row-profile-hacker-pics li { 
+    display: inline !important;
+    float: left !important;
+    max-height: 105px !important;
+    max-width: 105px !important;
+}
+.customized-row-profile-hacker-pics li:hover { 
+    display: inline !important;
+    float: left !important;
+    max-height: 105px !important;
+    max-width: 105px !important;
+}
+.customized-row-profile-hacker-pics li video { 
+    max-height: 105px !important;
+    height: 105px !important;
+    width: 105px !important;
+    max-width: 105px !important;
+    object-fit: cover !important;
+}
+.gallery-spacer-hacker-profile {
+    margin-left: 10px !important;
+}

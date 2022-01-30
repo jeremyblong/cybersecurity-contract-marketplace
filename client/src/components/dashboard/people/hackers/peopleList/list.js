@@ -7,14 +7,37 @@ import moment from "moment";
 import { Button } from "reactstrap";
 import axios from "axios";
 import helpers from "./helpers/helperFunctions.js";
+import PaginationEmployerListingHelper from "../../../universal/pagination/paginationHelper.js";
+import { useHistory } from 'react-router-dom';
+
+
+// pagination logic
+const itemsPerPage = 6;
 
 const { renderProfilePicVideo } = helpers;
 
 const UsersCardsListHelper = (props) => {
+
+    const history = useHistory();
     
     // initialize state 
     const [ hackers, setHackers ] = useState([]);
     const [ ready, setReady ] = useState(false);
+    const [ currentPage, setCurrentPage ] = useState(0);
+    const [ pageCount, setPageCount ] = useState(0);
+    const [ itemOffset, setItemOffset ] = useState(0);
+    const [ permenantData, setPermenantDataState ] = useState([]);
+
+    useEffect(() => {
+
+        const endOffset = itemOffset + itemsPerPage;
+
+        setPageCount(Math.ceil(permenantData.length / itemsPerPage));
+
+        setHackers(permenantData.slice(itemOffset, endOffset));
+        
+    }, [itemOffset, itemsPerPage]);
+
     // run upon load...
     useEffect(() => {
         const configuration = {
@@ -28,7 +51,12 @@ const UsersCardsListHelper = (props) => {
 
                 const { hackers } = res.data;
 
-                setHackers(hackers);
+                setPageCount(Math.ceil(hackers.length / itemsPerPage));
+
+                const endOffset = itemOffset + itemsPerPage;
+
+                setPermenantDataState(hackers);
+                setHackers(hackers.slice(itemOffset, endOffset));
                 setReady(true);
             } else {
                 console.log("errr inside...:", res.data);
@@ -37,6 +65,12 @@ const UsersCardsListHelper = (props) => {
             console.log(err);
         })
     }, [])
+
+    const redirectToHackersProfile = (hackerID) => {
+        console.log("redirectToHackersProfile ran...");
+
+        history.push(`/hacker/profile/individual/view/${hackerID}`);
+    }
 
     const renderContentMain = () => {
         if (ready === true) {
@@ -66,7 +100,7 @@ const UsersCardsListHelper = (props) => {
                                     <h4>{`${hacker.firstName} ${hacker.lastName}`}</h4>
                                     <h6>{hacker.fullyVerified === true ? "FULLY-VERIFIED!" : "Un-Verified."}</h6>
                                     <hr />
-                                    <Button style={{ width: "90%" }} className="btn-pill btn-air-info" outline color="info-2x">View/Visit Company Profile</Button>
+                                    <Button onClick={() => redirectToHackersProfile(hacker.uniqueId)} style={{ width: "90%" }} className="btn-pill btn-air-info" outline color="info-2x">View/Visit "Hacker/Contractor" Profile</Button>
                                     <hr />
                                 </div>
                                 <CardFooter className="row">
@@ -90,17 +124,9 @@ const UsersCardsListHelper = (props) => {
                             </Col>
                         );
                     })}
-                    <Row style={{ paddingTop: "17.5px" }}>
+                    <Row style={{ marginTop: "50px", marginBottom: "75px" }}>
                         <div className="centered-both-ways">
-                            <Pagination className="m-b-30" aria-label="Page navigation example">
-                                <ul className="pagination pagination-lg pagination-secondary">
-                                    <PaginationItem><PaginationLink href={null}>{"Previous"}</PaginationLink></PaginationItem>
-                                    <PaginationItem active><PaginationLink href={null}>{"1"}</PaginationLink></PaginationItem>
-                                    <PaginationItem><PaginationLink href={null}>{"2"}</PaginationLink></PaginationItem>
-                                    <PaginationItem><PaginationLink href={null}>{"3"}</PaginationLink></PaginationItem>
-                                    <PaginationItem><PaginationLink href={null}>{"Next"}</PaginationLink></PaginationItem>
-                                </ul>
-                            </Pagination>
+                            <PaginationEmployerListingHelper itemsPerPage={itemsPerPage} setItemOffset={setItemOffset} loopingData={permenantData} setPageCount={setPageCount} pageCount={pageCount} currentPage={currentPage} setCurrentPage={setCurrentPage} />
                         </div>
                     </Row>
                 </Fragment>

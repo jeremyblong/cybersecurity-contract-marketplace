@@ -1,15 +1,15 @@
-import React, { Fragment,useState,useEffect } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { Row, Col, Card, CardHeader, CardFooter, Media } from 'reactstrap';
 import axios from 'axios'
-import {Follower,Following,TotalPost} from '../../../../../constant'
+import { Follower, Following, TotalPost} from '../../../../../constant'
 
 
-const FriendsTab = () => {
+const FriendsTab = ({ user }) => {
 
     const [cards,setCards] = useState([])
 
     useEffect(() => {
-        axios.get(`${process.env.PUBLIC_URL}/api/usercard.json`).then(res => setCards(res.data))
+        // axios.get(`${process.env.PUBLIC_URL}/api/usercard.json`).then(res => setCards(res.data))
       },[])
 
     return (
@@ -25,11 +25,11 @@ const FriendsTab = () => {
                             <Media body className="rounded-circle" src={require(`../../../../../assets/images/${cardItem.avatar}`)} alt="" />
                         </div>
                         <ul className="card-social">
-                            <li><a href="#javascript"><i className="fa fa-facebook"></i></a></li>
-                            <li><a href="#javascript"><i className="fa fa-google-plus"></i></a></li>
-                            <li><a href="#javascript"><i className="fa fa-twitter"></i></a></li>
-                            <li><a href="#javascript"><i className="fa fa-instagram"></i></a></li>
-                            <li><a href="#javascript"><i className="fa fa-rss"></i></a></li>
+                            <li><a href={null}><i className="fa fa-facebook"></i></a></li>
+                            <li><a href={null}><i className="fa fa-google-plus"></i></a></li>
+                            <li><a href={null}><i className="fa fa-twitter"></i></a></li>
+                            <li><a href={null}><i className="fa fa-instagram"></i></a></li>
+                            <li><a href={null}><i className="fa fa-rss"></i></a></li>
                         </ul>
                         <div className="text-center profile-details">
                             <h4>{cardItem.name}</h4>

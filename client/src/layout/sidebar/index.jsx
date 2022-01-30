@@ -233,6 +233,22 @@ const Sidebar = (props) => {
           // employer acct
           return "/unauthorized/access/restricted";
         }
+      } else if (menuItem.path === "/employer/view/hired/applicants/active") {
+        if (props.userData.accountType === "hackers") {
+          // hacker acct
+          return "/unauthorized/access/restricted";
+        } else {
+          // employer acct
+          return "/employer/view/hired/applicants/active";
+        }
+      } else if (menuItem.path === "/already/applied/jobs/hacker/account") {
+        if (props.userData.accountType === "employers") {
+          // hacker acct
+          return "/unauthorized/access/restricted";
+        } else {
+          // employer acct
+          return "/already/applied/jobs/hacker/account";
+        }
       } else {
         return menuItem.path;
       }

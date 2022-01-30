@@ -5,8 +5,13 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { Container, Row, Col, Card, Media, TabContent, TabPane, Nav, NavItem, NavLink, CardBody, CardHeader, ButtonGroup, Button } from 'reactstrap';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+import { useHistory } from "react-router-dom";
+import moment from "moment";
+import ReactPlayer from "react-player";
 
 const ViewHiredHackersHelper = ({ userData }) => {
+
+    const history = useHistory();
 
     const [ hackers, setHackersData ] = useState([]);
     const [ activeTab, setActiveTab ] = useState("1");
@@ -34,53 +39,48 @@ const ViewHiredHackersHelper = ({ userData }) => {
 
     console.log("hired hackers state --- :", hackers);
 
+    const viewApplicantProfile = (hackerID) => {
+
+        // history.push(`/view/individual/employer/listing/public/${hackerID}`);
+    }
+    const manageHiredApplicant = (applicantID) => {
+        console.log("manageHiredApplicant clicked...:", applicantID);
+    }
+
     const renderConditionalUponLoad = () => {
         if (typeof hackers !== "undefined" && hackers.length > 0) {
             return hackers.map((hacker, index) => {
                 console.log("HACKER...:", hacker);
-                // return (
-                //     <Col md="6" lg="6" xl="4" className="box-col-6" key={index}>
-                //         <Card className="custom-card">
-                //         <CardHeader className="card-header-banner-custom">
-                //             <Media body className="img-fluid banner-banner-custom" src={bannerImage} alt="banner-image-display" />
-                //         </CardHeader>
-                //         <div className="card-profile customized-card-profile">
-                //             {renderProfilePicVideo(profilePicture)}
-                //         </div>
-                //         <ul className="card-social">
-                //             <li><a href={null}><i className="fa fa-facebook"></i></a></li>
-                //             <li><a href={null}><i className="fa fa-google-plus"></i></a></li>
-                //             <li><a href={null}><i className="fa fa-twitter"></i></a></li>
-                //             <li><a href={null}><i className="fa fa-instagram"></i></a></li>
-                //             <li><a href={null}><i className="fa fa-rss"></i></a></li>
-                //         </ul>
-                //         <div className="text-center profile-details">
-                //             <h4>{`${hacker.firstName} ${hacker.lastName}`}</h4>
-                //             <h6>{hacker.fullyVerified === true ? "FULLY-VERIFIED!" : "Un-Verified."}</h6>
-                //             <hr />
-                //             <Button style={{ width: "90%" }} className="btn-pill btn-air-info" outline color="info-2x">View/Visit Company Profile</Button>
-                //             <hr />
-                //         </div>
-                //         <CardFooter className="row">
-                //             <Col sm="4 col-4">
-                //                 <h6>Successful/Completed Jobs</h6>
-                //                 <h3 className="counter">{hacker.completedJobs} Jobs/Gigs Completed</h3>
-                //             </Col>
-                //             {hacker.reviews.length > 0 ? <Col sm="4 col-4">
-                //                 <h6>Review Count</h6>
-                //                 <h3><span className="counter">{hacker.reviews.length} Reviews (Total)</span></h3>
-                //             </Col> : <Col sm="4 col-4">
-                //                 <h6>Experience</h6>
-                //                 <h3><span className="counter">{hacker.points} XP-Experience Points</span></h3>
-                //             </Col>}
-                //             <Col sm="4 col-4">
-                //                 <h6>Registration</h6>
-                //                 <h3><span className="counter">Registered {moment(hacker.registrationDate).fromNow()}</span></h3>
-                //             </Col>
-                //         </CardFooter>
-                //         </Card>
-                //     </Col>
-                // );
+                return (
+                    <Col md="6" lg="4" xl="4" key={index}>
+                        <Card className="height-equal already-applied-card-wrapper">
+                            <div className="calender-widget">
+                                <div className="cal-img hired-video-wrapper">
+                                    <ReactPlayer playing={true} loop={true} muted={true} width={"100%"} height={"100%"} wrapper={"div"} url={require("../../../../../../assets/video/hired-video.mp4")} className="stretch-both-ways-hired-video" />
+                                </div>
+                                <div className="cal-desc text-center card-body">
+                                    <h6 className="f-w-600">{`Applied approx. ${moment(hacker.dateApplied).fromNow()}`}</h6>
+                                    <h4 className={"f-w-500"}><strong style={{ textDecorationLine: "underline" }}>Physical OR Digital Hack OR Both?</strong> {hacker.physicalOrDigitalOrBoth.label}</h4>
+                                    <p className="text-muted mt-3 mb-0"><strong style={{ textDecorationLine: "underline" }}>Message To Employer:</strong> {hacker.messageToEmployer}</p>
+                                    <hr />
+                                    <h5 className={"f-w-500"}><strong style={{ textDecorationLine: "underline" }}>Job ID:</strong> {hacker.employerPostedJobId}</h5>
+                                    <hr />
+                                    {hacker.bettingOnSelfSelected === true ? <Fragment>
+                                        <div className="cal-desc text-center">
+                                            <h6 className="f-w-600 slightly-larger-sub-application-text" style={{ textDecorationLine: "underline" }}>{"Betting/Wagered Information..."}</h6>
+                                            <p className="custom-sub-application-text color-text-secondary-hacker">{hacker.bettingOnSelfSelected === true ? `SELF-BET (Waggering ${Number(hacker.waggeredBidAmount).toFixed(2)} ${process.env.REACT_APP_CRYPTO_TOKEN_NAME} on "self" winning) - Betting in favor of themselves winning this hack!` : "NOT SELF-BETTING, OPTED-OUT AND/OR N/A."}</p>
+                                        </div>
+                                        <hr />
+                                    </Fragment> : null}
+                                    <Button onClick={() => viewApplicantProfile(hacker.applicantId)} className={"btn-square-info"} color={"info-2x"} style={{ width: "100%", marginTop: "17.5px", marginBottom: "17.5px" }} outline>View/Visit This Hacker's Profile</Button>
+                                    <hr />
+                                    <Button onClick={() => manageHiredApplicant(hacker.applicantId)} className={"btn-square-secondary"} color={"secondary-2x"} style={{ width: "100%", marginTop: "17.5px", marginBottom: "17.5px" }} outline>Manage This Employee/Contractor</Button>
+                                </div>
+                                
+                            </div>
+                        </Card>
+                    </Col>
+                );
             })
         } else {
             return (

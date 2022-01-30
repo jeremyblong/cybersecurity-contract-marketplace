@@ -138,7 +138,7 @@ app.use("/notify/other/user/approval/application/process", require("./routes/emp
 app.use("/gather/listing/all/info/deduct/one/count", require("./routes/employers/employerListings/modifyListing/fetchListingAndRemoveOneRequiredCount.js"));
 app.use("/gather/active/jobs/employer/account", require("./routes/employers/hiredHackers/gatherAllHired/gatherAllHiredHackers.js"));
 app.use("/gather/active/applied/jobs/hacker/account", require("./routes/hackers/appliedGigsAsHacker/gatherApplications/gatherPreviousApplications/gatherAllPreviousApplications.js"));
- 
+app.use("/react/hacker/profile/file/history", require("./routes/hackers/profile/publicProfile/reactToProfileFile/reactToProfilePicVideoEmoji.js"));
 
 // ~ webhook logic STARTS here ~
 app.use("/passbase/webhook", require("./webhooks/passbase/webhook.js"));

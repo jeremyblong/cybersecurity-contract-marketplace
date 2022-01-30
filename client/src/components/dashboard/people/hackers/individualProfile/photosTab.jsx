@@ -1,12 +1,12 @@
 import React, { Fragment ,useState,useEffect } from 'react';
-import {Col,Row,Card,CardBody,Media} from 'reactstrap'
+import { Col, Row, Card, CardBody, Media } from 'reactstrap'
 import Lightbox from "react-image-lightbox";
 import axios from 'axios'
 import { PortfolioTitle } from "../../../../../constant";
 
 
 
-const PhotosTab = () => {
+const PhotosTab = ({ user }) => {
 
     const [images,setImage] = useState([]) 
     const [smallImages,setsmallImages] = useState([])   

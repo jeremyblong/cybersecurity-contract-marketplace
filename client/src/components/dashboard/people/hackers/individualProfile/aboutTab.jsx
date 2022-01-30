@@ -9,10 +9,9 @@ import four from "../../../../../assets/images/user/4.jpg";
 import { MoreVertical, ThumbsUp, UserPlus, MessageSquare } from 'react-feather';
 import RightBar from './bars/rightBar.jsx';
 import LeftBar from './bars/leftBar.jsx';
-import {AddFriend,ActivityLog,AnnaMull,DionCast,KarleneLex,WaiSchalk,Hobbies,VellaChism, JasonBorne, } from "../../../../../constant";
 
 
-const AboutTab = () => {
+const AboutTab = ({ user }) => {
 
     return (
         <Fragment>
@@ -20,7 +19,7 @@ const AboutTab = () => {
                 <Col xl="3 xl-40 box-col-4" lg="12" md="5">
                     <div className="default-according style-1 faq-accordion job-accordion" id="accordionoc2">
                         <Row>
-                            <LeftBar />
+                            <LeftBar user={user} />
                         </Row>
                     </div>
                 </Col>
@@ -29,51 +28,51 @@ const AboutTab = () => {
                         <Col sm="12">
                             <Card>
                                 <CardHeader>
-                                    <h5>{"Pepole You May Know"}</h5>
+                                    <h5>{"People You May Know"}</h5>
                                 </CardHeader>
                                 <CardBody className="avatar-showcase">
                                     <div className="pepole-knows">
                                         <ul>
                                             <li>
                                                 <div className="add-friend text-center">
-                                                    <Media body className="img-60 img-fluid rounded-circle" alt="twoImg" src={two} /><span className="d-block f-w-600">{JasonBorne}</span>
-                                                    <Button color="primary" size="xs">{AddFriend}</Button>
+                                                    <Media body className="img-60 img-fluid rounded-circle" alt="twoImg" src={two} /><span className="d-block f-w-600">Jason Borne</span>
+                                                    <Button color="primary" size="xs">View Their Profile</Button>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div className="add-friend text-center">
-                                                    <Media body className="img-60 img-fluid rounded-circle" alt="threeImg" src={three} /><span className="d-block f-w-600">{AnnaMull}</span>
-                                                    <Button color="primary" size="xs">{AddFriend}</Button>
+                                                    <Media body className="img-60 img-fluid rounded-circle" alt="threeImg" src={three} /><span className="d-block f-w-600">Anna Mull</span>
+                                                    <Button color="primary" size="xs">View Their Profile</Button>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div className="add-friend text-center">
-                                                    <Media body className="img-60 img-fluid rounded-circle" alt="threeImg" src={three} /><span className="d-block f-w-600">{DionCast}</span>
-                                                    <Button color="primary" size="xs">{AddFriend}</Button>
+                                                    <Media body className="img-60 img-fluid rounded-circle" alt="threeImg" src={three} /><span className="d-block f-w-600">Dion Casto</span>
+                                                    <Button color="primary" size="xs">View Their Profile</Button>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div className="add-friend text-center">
-                                                    <Media body className="img-60 img-fluid rounded-circle" alt="four" src={four} /><span className="d-block f-w-600">{KarleneLex}</span>
-                                                    <Button color="primary" size="xs">{AddFriend}</Button>
+                                                    <Media body className="img-60 img-fluid rounded-circle" alt="four" src={four} /><span className="d-block f-w-600">Karlen Lexon</span>
+                                                    <Button color="primary" size="xs">View Their Profile</Button>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div className="add-friend text-center">
-                                                    <Media body className="img-60 img-fluid rounded-circle" alt="eightImg" src={eight} /><span className="d-block f-w-600">{VellaChism}</span>
-                                                    <Button color="primary" size="xs">{AddFriend}</Button>
+                                                    <Media body className="img-60 img-fluid rounded-circle" alt="eightImg" src={eight} /><span className="d-block f-w-600">Vella Chism</span>
+                                                    <Button color="primary" size="xs">View Their Profile</Button>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div className="add-friend text-center">
-                                                    <Media body className="img-60 img-fluid rounded-circle" alt="tenImg" src={ten} /><span className="d-block f-w-600">{WaiSchalk}</span>
-                                                    <Button color="primary" size="xs">{AddFriend}</Button>
+                                                    <Media body className="img-60 img-fluid rounded-circle" alt="tenImg" src={ten} /><span className="d-block f-w-600">Wai Chalko</span>
+                                                    <Button color="primary" size="xs">View Their Profile</Button>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div className="add-friend text-center">
-                                                    <Media body className="img-60 img-fluid rounded-circle" alt="" src={fourteen} /><span className="d-block f-w-600">{KarleneLex}</span>
-                                                    <Button color="primary" size="xs">{AddFriend}</Button>
+                                                    <Media body className="img-60 img-fluid rounded-circle" alt="" src={fourteen} /><span className="d-block f-w-600">Adam Sandler</span>
+                                                    <Button color="primary" size="xs">View Their Profile</Button>
                                                 </div>
                                             </li>
                                         </ul>
@@ -89,7 +88,7 @@ const AboutTab = () => {
                                 <CardBody>
                                     <Row className="details-about">
                                         <Col sm="6">
-                                            <div className="your-details"><span className="f-w-600">{Hobbies}:</span>
+                                            <div className="your-details"><span className="f-w-600">Hobbies/Interests:</span>
                                                 <p>{"I like to ride the bike to work, swimming, and working out. I also like reading design magazines, go to museums, and binge watching a good tv show while it’s raining outside."}</p>
                                             </div>
                                         </Col>
@@ -200,48 +199,48 @@ const AboutTab = () => {
                                             <li>
                                                 <div className="add-friend text-center">
                                                     <Media body className="img-60 img-fluid rounded-circle" alt="" src={two} />
-                                                    <span className="d-block f-w-600">{JasonBorne}</span>
-                                                    <Button color="primary" size="xs">{AddFriend}</Button>
+                                                    <span className="d-block f-w-600">Jason Borne</span>
+                                                    <Button color="primary" size="xs">View Their Profile</Button>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div className="add-friend text-center">
                                                     <Media body className="img-60 img-fluid rounded-circle" alt="" src={three} />
-                                                    <span className="d-block f-w-600">{AnnaMull}</span>
-                                                    <Button color="primary" size="xs">{AddFriend}</Button>
+                                                    <span className="d-block f-w-600">Anna Mullie</span>
+                                                    <Button color="primary" size="xs">View Their Profile</Button>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div className="add-friend text-center">
                                                     <Media body className="img-60 img-fluid rounded-circle" alt="" src={three} />
-                                                    <span className="d-block f-w-600">{DionCast}</span>
-                                                    <Button color="primary" size="xs">{AddFriend}</Button>
+                                                    <span className="d-block f-w-600">Dillion Castlow</span>
+                                                    <Button color="primary" size="xs">View Their Profile</Button>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div className="add-friend text-center">
                                                     <Media body className="img-60 img-fluid rounded-circle" alt="" src={four} />
-                                                    <span className="d-block f-w-600">{KarleneLex}</span>
-                                                    <Button color="primary" size="xs">{AddFriend}</Button>
+                                                    <span className="d-block f-w-600">Karlen Darlee</span>
+                                                    <Button color="primary" size="xs">View Their Profile</Button>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div className="add-friend text-center"><Media body className="img-60 img-fluid rounded-circle" alt="" src={eight} />
-                                                    <span className="d-block f-w-600">{VellaChism}</span>
-                                                    <Button color="primary" size="xs">{AddFriend}</Button>
+                                                    <span className="d-block f-w-600">Vella Bella</span>
+                                                    <Button color="primary" size="xs">View Their Profile</Button>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div className="add-friend text-center"><Media body className="img-60 img-fluid rounded-circle" alt="" src={ten} />
-                                                    <span className="d-block f-w-600">{WaiSchalk}</span>
-                                                    <Button color="primary" size="xs">{AddFriend}</Button>
+                                                    <span className="d-block f-w-600">Wakiem Smith</span>
+                                                    <Button color="primary" size="xs">View Their Profile</Button>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div className="add-friend text-center">
                                                     <Media body className="img-60 img-fluid rounded-circle" alt="fourteenImg" src={fourteen} />
-                                                    <span className="d-block f-w-600">{KarleneLex}</span>
-                                                    <Button color="primary" size="xs">{AddFriend}</Button>
+                                                    <span className="d-block f-w-600">George Adam</span>
+                                                    <Button color="primary" size="xs">View Their Profile</Button>
                                                 </div>
                                             </li>
                                         </ul>
@@ -252,7 +251,7 @@ const AboutTab = () => {
                         <Col sm="12">
                             <Card>
                                 <CardHeader>
-                                    <h5>{ActivityLog}</h5>
+                                    <h5>Activity Log</h5>
                                 </CardHeader>
                                 <CardBody>
                                     <div className="activity-log">
@@ -301,7 +300,7 @@ const AboutTab = () => {
                 <div className="col-xl-3 xl-100 box-col-12">
                     <div className="default-according style-1 faq-accordion job-accordion" id="accordionoc3">
                         <Row>
-                            <RightBar />
+                            <RightBar user={user} />
                         </Row>
                     </div>
                 </div>

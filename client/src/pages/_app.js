@@ -18,6 +18,7 @@ import { store, persistor } from "../redux/store/store.js";
 import { Provider, PersistGate } from "react-redux";
 import { shiftCoreStyles } from "../redux/actions/universal/index.js";
 
+
 class MyApp extends App {
 constructor(props) {
     super(props);

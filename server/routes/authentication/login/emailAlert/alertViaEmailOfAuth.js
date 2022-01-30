@@ -5,7 +5,7 @@ const sendAlertUponSuccessfulAuthenticationLogin = (userDeviceData, email) => {
     const mailOptions = {
         from: 'blongjeremy@gmail.com',
         to: "blongjeremy@gmail.com", // NEED TO REPLACE WITH email VARIABLE
-        subject: 'CyberHunt Verification Completed!',
+        subject: 'New Log-in From Unknown Device!',
         html: `<table class="body-wrap" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; width: 100%; background-color: #f6f6f6; margin: 0;" bgcolor="#f6f6f6">
             <tbody>
                 <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">

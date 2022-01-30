@@ -68,6 +68,7 @@ import ServicesThree from "./pages/services-three.js";
 import BlogLeftSidebar from "./pages/blog-left-sidebar.js";
 import BlogRightSidebar from "./pages/blog-right-sidebar.js";
 import MountingLogicRedux from "./mountingLogicRedux.js";
+import SimpleReactLightbox from 'simple-react-lightbox';
 
 require('dotenv').config();
 
@@ -165,6 +166,7 @@ const Root = (props) =>  {
     <Fragment>
       <Provider store={store}>
       <MountingLogicRedux props={props} />
+      <SimpleReactLightbox>
       <RecoilRoot>
       <NotificationContainer />
       <BrowserRouter>
@@ -197,6 +199,7 @@ const Root = (props) =>  {
       </Switch>
       </BrowserRouter>
       </RecoilRoot>
+      </SimpleReactLightbox>
       </Provider>
     </Fragment>
   )

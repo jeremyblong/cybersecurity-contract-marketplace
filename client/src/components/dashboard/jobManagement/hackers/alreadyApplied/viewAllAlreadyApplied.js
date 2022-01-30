@@ -7,6 +7,11 @@ import { Container, Row, Col, Card, Media, TabContent, TabPane, Nav, NavItem, Na
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import moment from "moment";
 import { useHistory } from "react-router-dom";
+import ReactPlayer from "react-player";
+import PaginationEmployerListingHelper from "../../../universal/pagination/paginationHelper.js";
+
+// pagination logic
+const itemsPerPage = 6;
 
 const ViewAlreadyAppliedJobsHackerHelper = ({ userData }) => {
 
@@ -14,6 +19,24 @@ const ViewAlreadyAppliedJobsHackerHelper = ({ userData }) => {
 
     const [ applications, setApplicationData ] = useState([]);
     const [ activeTab, setActiveTab ] = useState("1");
+    const [ currentPage, setCurrentPage ] = useState(0);
+    const [ pageCount, setPageCount ] = useState(0);
+    const [ itemOffset, setItemOffset ] = useState(0);
+    const [ permenantData, setPermenantDataState ] = useState([]);
+
+    useEffect(() => {
+
+        console.log("change occurred.");
+
+        const endOffset = itemOffset + itemsPerPage;
+
+        console.log("END offset", endOffset);
+
+        setPageCount(Math.ceil(permenantData.length / itemsPerPage));
+
+        setApplicationData(permenantData.slice(itemOffset, endOffset));
+        
+    }, [itemOffset, itemsPerPage]);
 
     useEffect(() => {
         const configuration = {
@@ -27,7 +50,12 @@ const ViewAlreadyAppliedJobsHackerHelper = ({ userData }) => {
                 
                 const { applications } = res.data;
 
-                setApplicationData(applications);
+                setPageCount(Math.ceil(applications.length / itemsPerPage));
+
+                const endOffset = itemOffset + itemsPerPage;
+
+                setPermenantDataState(applications);
+                setApplicationData(applications.slice(itemOffset, endOffset));
             } else {
                 console.log("ERROR gathering active/hired applications...:", res.data);
             }
@@ -75,9 +103,8 @@ const ViewAlreadyAppliedJobsHackerHelper = ({ userData }) => {
                                 <Col md="6" lg="4" xl="4" key={index}>
                                     <Card className="height-equal already-applied-card-wrapper">
                                         <div className="calender-widget">
-                                            <div className="cal-img override-cal-img-application"></div>
-                                            <div className="cal-date">
-                                                <h5>{"25"}<br />{"APRIL"}</h5>
+                                            <div className="cal-img hired-video-wrapper">
+                                                <ReactPlayer playing={true} loop={true} muted={true} width={"100%"} height={"100%"} wrapper={"div"} url={require("../../../../../assets/video/previously-applied.mp4")} className="stretch-both-ways-hired-video" />
                                             </div>
                                             <div className="cal-desc text-center card-body">
                                                 <h6 className="f-w-600">{`Applied approx. ${moment(application.dateApplied).fromNow()}`}</h6>
@@ -124,13 +151,13 @@ const ViewAlreadyAppliedJobsHackerHelper = ({ userData }) => {
                     <Col sm="12 sm-100" md="12 md-100" lg="12 lg-100" xl="12 xl-100">
                         <Card>
                             <CardHeader>
-                                <h5>Active <strong>HIRED</strong> workers/hacker's that're still pending and actively employed.</h5>
+                                <h5 className={"maxed-width-header-applied"} style={{ marginRight: "100px" }}>Already <strong>APPLIED</strong> to "Jobs" or "employer listings" that you've already submitted your information for, this are pending applications & will change as changes occur.</h5>
                             </CardHeader>
                             <CardBody className="tabbed-card">
-                                <Nav  className="nav-pills nav-secondary">
+                                <Nav className="nav-pills nav-secondary push-content-left">
                                     <NavItem>
                                         <NavLink className={activeTab === '1' ? 'active' : ''} onClick={() => setActiveTab('1')}>
-                                            <i className="icofont icofont-ui-home"></i> Employer Listing(s) Hired  
+                                            <i className="icofont icofont-ui-home"></i> Previously Applied Jobs  
                                         </NavLink>
                                     </NavItem>
                                 </Nav>
@@ -139,6 +166,13 @@ const ViewAlreadyAppliedJobsHackerHelper = ({ userData }) => {
                                         {renderConditionalUponLoad()}
                                     </TabPane>
                                 </TabContent>
+                            </CardBody>
+                            <CardBody className={"already-applied-cardbody-paginate"}>
+                                <Row>
+                                    <div className="centered-both-ways">
+                                        <PaginationEmployerListingHelper itemsPerPage={itemsPerPage} setItemOffset={setItemOffset} loopingData={permenantData} setPageCount={setPageCount} pageCount={pageCount} currentPage={currentPage} setCurrentPage={setCurrentPage} />
+                                    </div>
+                                </Row>
                             </CardBody>
                         </Card>
                     </Col>

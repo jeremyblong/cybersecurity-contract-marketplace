@@ -7,13 +7,34 @@ import _ from "lodash";
 import moment from "moment";
 import helpers from "./helpers/miscFunctions.js";
 import "./styles.css";
+import uuid from 'react-uuid';
+import PaginationEmployerListingHelper from "../../../universal/pagination/paginationHelper.js";
+
 
 const { renderProfilePicVideo } = helpers;
+
+
+// pagination logic
+const itemsPerPage = 6;
 
 const UsersCardsEmployersAccountsHelper = (props) => {
     // initialize state
     const [ employers, setEmployers ] = useState([]);
     const [ ready, setReady ] = useState(false);
+    const [ currentPage, setCurrentPage ] = useState(0);
+    const [ pageCount, setPageCount ] = useState(0);
+    const [ itemOffset, setItemOffset ] = useState(0);
+    const [ permenantData, setPermenantDataState ] = useState([]);
+
+    useEffect(() => {
+
+        const endOffset = itemOffset + itemsPerPage;
+
+        setPageCount(Math.ceil(permenantData.length / itemsPerPage));
+
+        setEmployers(permenantData.slice(itemOffset, endOffset));
+        
+    }, [itemOffset, itemsPerPage]);
 
     useEffect(() => {
         const configuration = {
@@ -27,7 +48,12 @@ const UsersCardsEmployersAccountsHelper = (props) => {
 
                 const { employers } = res.data;
 
-                setEmployers(employers);
+                setPageCount(Math.ceil(employers.length / itemsPerPage));
+
+                const endOffset = itemOffset + itemsPerPage;
+
+                setPermenantDataState(employers);
+                setEmployers(employers.slice(itemOffset, endOffset));
                 setReady(true);
             } else {
                 console.log("errr inside...:", res.data);
@@ -43,7 +69,7 @@ const UsersCardsEmployersAccountsHelper = (props) => {
                 <Fragment>
                     {employers.map((employer, i) => {
                         const bannerImage = _.has(employer, "profileBannerImage") ? `${process.env.REACT_APP_ASSET_LINK}/${employer.profileBannerImage.link}` : require(`../../../../../assets/images/other-images/img-cropper.jpg`);
-                        const profilePicture = _.has(employer, "profilePicsVideos") && employer.profilePicsVideos.length > 0 ? employer.profilePicsVideos[employer.profilePicsVideos.length - 1] : require(`../../../../../assets/images/avtar/4.jpg`);
+                        const profilePicture = _.has(employer, "profilePicsVideos") && employer.profilePicsVideos.length > 0 ? employer.profilePicsVideos[employer.profilePicsVideos.length - 1] : null;
                         
                         return (
                             <Col md="6" lg="6" xl="4" className="box-col-6" key={i}>
@@ -89,17 +115,9 @@ const UsersCardsEmployersAccountsHelper = (props) => {
                             </Col>
                         );
                     })}
-                    <Row style={{ paddingTop: "17.5px" }}>
+                    <Row style={{ marginTop: "50px", marginBottom: "75px" }}>
                         <div className="centered-both-ways">
-                            <Pagination className="m-b-30" aria-label="Page navigation example">
-                                <ul className="pagination pagination-lg pagination-secondary">
-                                    <PaginationItem><PaginationLink href={null}>{"Previous"}</PaginationLink></PaginationItem>
-                                    <PaginationItem active><PaginationLink href={null}>{"1"}</PaginationLink></PaginationItem>
-                                    <PaginationItem><PaginationLink href={null}>{"2"}</PaginationLink></PaginationItem>
-                                    <PaginationItem><PaginationLink href={null}>{"3"}</PaginationLink></PaginationItem>
-                                    <PaginationItem><PaginationLink href={null}>{"Next"}</PaginationLink></PaginationItem>
-                                </ul>
-                            </Pagination>
+                            <PaginationEmployerListingHelper itemsPerPage={itemsPerPage} setItemOffset={setItemOffset} loopingData={permenantData} setPageCount={setPageCount} pageCount={pageCount} currentPage={currentPage} setCurrentPage={setCurrentPage} />
                         </div>
                     </Row>
                 </Fragment>

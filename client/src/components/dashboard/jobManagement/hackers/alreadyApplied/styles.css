@@ -14,3 +14,10 @@
 .slightly-larger-sub-application-text {
     font-size: 1.25rem;
 }
+.already-applied-cardbody-paginate {
+    margin: 0px !important;
+    padding: 0px !important;
+}
+.maxed-width-header-applied {
+    max-width: 80%;
+}

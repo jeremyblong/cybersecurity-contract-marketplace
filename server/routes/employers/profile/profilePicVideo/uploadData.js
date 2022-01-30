@@ -63,7 +63,16 @@ router.post("/", upload.single('file'), (req, resppppp, next) => {
                     link: generatedIDImage,
                     type: mimetype,
                     name: name,
-                    dataType: mimetype.includes("video") ? "video" : "image"
+                    dataType: mimetype.includes("video") ? "video" : "image",
+                    reactions: {
+                        partying: 0,
+                        screaming: 0,
+                        steaming: 0,
+                        sunglasses: 0,
+                        tearsOfJoy: 0,
+                        vomitting: 0
+                    },
+                    alreadyReacted: []
                 }
         
                 collection.findOneAndUpdate({ uniqueId }, { $push: { "profilePicsVideos": compoundedFile }}, (err, user) => {
@@ -94,7 +103,16 @@ router.post("/", upload.single('file'), (req, resppppp, next) => {
             link: key,
             type: mimetype,
             name: originalname,
-            dataType: mimetype.includes("video") ? "video" : "image"
+            dataType: mimetype.includes("video") ? "video" : "image",
+            reactions: {
+                partying: 0,
+                screaming: 0,
+                steaming: 0,
+                sunglasses: 0,
+                tearsOfJoy: 0,
+                vomitting: 0
+            },
+            alreadyReacted: []
         }
 
         collection.findOneAndUpdate({ uniqueId }, { $push: { "profilePicsVideos": compoundedFile }}, (err, user) => {

@@ -1,5 +1,5 @@
 import React, { Fragment ,useState} from 'react';
-import {Col,Card,CardHeader,CardBody,Button,Media,Form,FormGroup,Input ,Collapse, UncontrolledTooltip } from 'reactstrap';
+import { Col, Card, CardHeader, CardBody, Button, Media, Form, FormGroup, Input, Collapse, UncontrolledTooltip } from 'reactstrap';
 import one from "../../../../../../assets/images/user/1.jpg";
 import three from "../../../../../../assets/images/user/3.jpg";
 import five from "../../../../../../assets/images/user/5.jpg";
@@ -11,11 +11,14 @@ import ten from "../../../../../../assets/images/user/10.jpg";
 import six from "../../../../../../assets/images/user/6.jpg";
 import fourteen from "../../../../../../assets/images/user/14.png";
 import four from "../../../../../../assets/images/user/4.jpg";
+import helpers from "./helpers/leftBarHelperFunctions.js";
 
-import {MyProfile,BuckyBarnes,JasonBorne,SarahLoren,AndewJon,JohnyWaston,JohnyWilliam,ComerenDiaz,MyPage,View,MutualFriends,ActivityFeed,Messages,Likes,Notification } from "../../../../../../constant";
+import { BuckyBarnes, JasonBorne, SarahLoren, AndewJon, JohnyWaston, JohnyWilliam, ComerenDiaz, MyPage, View, MutualFriends, ActivityFeed, Messages, Likes, Notification } from "../../../../../../constant";
+
+const {  } = helpers;
 
 
-const LeftBar = () => {
+const LeftBar = ({ user }) => {
 
     const [isProfile, setisProfile] = useState(true);
     const [isMutual, setisMutual] = useState(true);
@@ -30,7 +33,7 @@ const LeftBar = () => {
                         <h5 className="mb-0">
                             <Button color="link pl-0" onClick={() => setisProfile(!isProfile)}
                                 data-toggle="collapse" data-target="#collapseicon5" aria-expanded={isProfile} aria-controls="collapseicon5"
-                                >{MyProfile}
+                                >Core Profile Information
                             </Button>
                         </h5>
                     </CardHeader>
@@ -38,7 +41,7 @@ const LeftBar = () => {
                         <CardBody className="socialprofile filter-cards-view">
                             <Media><Media className="img-50 img-fluid m-r-20 rounded-circle" src={one} alt="" />
                                 <Media body>
-                                    <h6 className="font-primary f-w-600">{MyPage}</h6><span className="d-block"><span><i className="fa fa-comments-o"> </i><span className="px-2">{Messages}<span className="badge badge-pill badge-light">{"9"}</span></span></span></span><span className="d-block"><span><i className="fa fa-bell-o"></i><span className="px-2">{Notification}<span className="badge badge-pill badge-light">{"9"}</span></span></span></span>
+                                    <h6 className="font-primary f-w-600">{}</h6><span className="d-block"><span><i className="fa fa-comments-o"> </i><span className="px-2">{Messages}<span className="badge badge-pill badge-light">{"9"}</span></span></span></span><span className="d-block"><span><i className="fa fa-bell-o"></i><span className="px-2">{Notification}<span className="badge badge-pill badge-light">{"9"}</span></span></span></span>
                                 </Media>
                             </Media>
                             <div className="social-btngroup d-flex">

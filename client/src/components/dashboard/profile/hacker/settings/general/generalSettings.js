@@ -21,6 +21,7 @@ import {
     options
 } from "./helpers/options/selectionOptions.js";
 import ReactPlayer from 'react-player';
+import "./styles.css";
 
 const GeneralSettingsHelper = ({ userData, authentication }) => {
     const [ yearsOfExperience, setYearsOfExperience ] = useState(null);
@@ -234,7 +235,18 @@ const GeneralSettingsHelper = ({ userData, authentication }) => {
                 }} className="img-70 rounded-circle hover-rounded-circle" alt="" src={`${process.env.REACT_APP_ASSET_LINK}/${avatar.link}`} />
             );
         } else if (avatar.dataType === "video") {
-            return <ReactPlayer playing={true} muted={true} style={{ maxWidth: "75px", maxHeight: "75px" }} url={`${process.env.REACT_APP_ASSET_LINK}/${avatar.link}`} />;
+            return (
+                <div onClick={() => {
+                    setPane(prevState => {
+                        return {
+                            ...prevState,
+                            isPaneOpen: true
+                        }
+                    })
+                }} className={"hover-rounded-circle-video"}>
+                    <ReactPlayer playing={true} muted={true} style={{ maxWidth: "75px", maxHeight: "75px" }} url={`${process.env.REACT_APP_ASSET_LINK}/${avatar.link}`} />
+                </div>
+            );
         } else {
             return (
                 <Media onClick={() => {

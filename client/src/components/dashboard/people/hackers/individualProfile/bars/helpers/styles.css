@@ -1,0 +1,86 @@
+.profile-pic-video-sidebar-custom, .profile-pic-video-sidebar-custom img, .profile-pic-video-sidebar-custom video {
+    /* max-width: 32.5% !important; */
+    max-height: 105px !important;
+    min-width: 100% !important;
+    min-height: 105px !important;
+    display: inline !important;
+}
+/* lightbox logic START... */
+.caption-thumbnail-custom-hacker-profile {
+
+}
+/* lightbox logic END */
+.hackerProfileLightboxDisplayOverlay {
+    background-color: rgba(115, 102, 255, 0.5);
+} 
+.min-cal-img-height {
+    min-height: 42.5vh !important;
+}
+.full-height-widget-profile {
+    min-height: 82.5vh !important;
+    height: 80vh !important;
+    height: 100% !important;
+    padding: 17.5px;
+}
+.gif-animated-card-pic-related:hover {
+    background-color: black;
+    border-radius: 10px;
+    cursor: pointer;
+}
+/* emoji container */
+.evenly-space-emojis-reactions {
+    
+}
+/* more gif/emoji related */
+.gif-animated-card-pic-related {
+
+}
+.profile-pictures-slider-pane {
+    min-height: 80vh;
+    padding: 27.5px;
+}
+.full-height-profile-images {
+    min-height: 100%;
+    margin: 22.5px;
+    border: 2.25px dotted black !important;
+    box-shadow: 0px 0px 17.5px 6px rgba(8, 21, 66, 0.425) !important;
+}
+.add-shadow-profile-picture-card {
+    box-shadow: 0px 0px 17.5px 6px rgba(8, 21, 66, 0.195) !important;
+    height: 100%;
+}
+.min-cal-img-height img {
+    height: 100% !important;
+}
+.hacker-gallery-modal-pic {
+    object-fit: cover !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+.min-cal-img-height {
+    min-height: 100% !important;
+}
+#full-height-row-hacker-profile-imgs {
+    /* row containing other elements */
+}
+.min-height-col-inner-profile {
+    min-height: 100% !important;
+}
+.hackerProfileLightboxDisplayModal {
+    min-width: 90vw;
+    min-height: 92.5vh;
+    margin: 0px !important;
+    padding: 0px !important;
+    max-width: 90vw;
+    border: 2.5px dotted white;
+    max-height: 92.5vh;
+}
+.spacing-col-profile-hacker {
+    /* padding: 17.5px; */
+}
+.modal-container-hacker-profile-maxed {
+    min-width: 85vw;
+    min-height: 85vh;
+    max-width: 85vw;
+    max-height: 85vh;
+}

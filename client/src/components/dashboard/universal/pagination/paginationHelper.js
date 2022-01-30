@@ -36,7 +36,6 @@ const PaginationEmployerListingHelper = ({ itemsPerPage, loopingData, currentPag
                 hrefBuilder={(page, pageCount, selected) =>
                     page >= 1 && page <= pageCount ? `/page/${page}` : '#'
                 }
-                renderOnZeroPageCount={false}
                 hrefAllControls
                 forcePage={currentPage}
                 onClick={(clickEvent) => handlePageClick(clickEvent)}

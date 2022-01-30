@@ -1,6 +1,12 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect, useRef } from 'react';
 import { Col, Card, CardHeader, CardBody, Button, Media, Collapse } from 'reactstrap';
-
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+import helpers from "./helpers/rightBarHelperFunctions.js";
+import { ProfileIntro, BuckyBarnes, JasonBorne, SarahLoren, AndewJon, AddFriend, ComerenDiaz, Friends , Follower, Following } from "../../../../../../constant";
+import _ from 'lodash';
+import moment from "moment";
+import "./styles.css";
+import { connect } from "react-redux";
 import one from "../../../../../../assets/images/user/1.jpg";
 import three from "../../../../../../assets/images/user/3.jpg";
 import five from "../../../../../../assets/images/user/5.jpg";
@@ -13,29 +19,25 @@ import six from "../../../../../../assets/images/user/6.jpg";
 import fourteen from "../../../../../../assets/images/user/14.png";
 import four from "../../../../../../assets/images/user/4.jpg";
 
-import post9 from "../../../../../../assets/images/social-app/post-9.png";
-import post8 from "../../../../../../assets/images/social-app/post-8.png";
-import post7 from "../../../../../../assets/images/social-app/post-7.png";
-import post6 from "../../../../../../assets/images/social-app/post-6.png";
-import post5 from "../../../../../../assets/images/social-app/post-5.png";
-import post4 from "../../../../../../assets/images/social-app/post-4.png";
-import post3 from "../../../../../../assets/images/social-app/post-3.png";
-import post2 from "../../../../../../assets/images/social-app/post-2.png";
-import post1 from "../../../../../../assets/images/social-app/post-1.png";
 
-import {ProfileIntro,SocialNetworks,Dribbble,BuckyBarnes,JasonBorne,SarahLoren,AndewJon,AddFriend,ComerenDiaz,Friends ,Facebooks,Twitters,AboutMe,FavouriteMusicBands,Follower,Following,LatestPhotos } from "../../../../../../constant";
+const { renderPictureOrVideoLast, RenderGalleryModalHackerProfileHelper } = helpers;
 
-const RightBar = () => {
+const RightBar = ({ user, userData }) => {
+    // relevant ref's creation
+    const galleryRef = useRef(null);
     const [isIntro, setisIntro] = useState(true);
     const [isFollowers, setisFollowers] = useState(true);
     const [isFollowings, setisFollowings] = useState(true);
     const [isPhotos, setisPhotos] = useState(true);
     const [isFriends, setisFriends] = useState(true);
+    const [ isOpen, onCloseModal ] = useState(false);
+    const [ modalIndexSelected, setSelectedModalIndex ] = useState(0);
+    const [ currentlySelected, setSelectedCurrently ] = useState(null);
 
-    return (
-        <Fragment>
-            <Col xl="12 xl-50 box-col-6">
-                <Card>
+    const renderCoreInformationConditionally = () => {
+        if (user !== null) {
+            return (
+                <Fragment>
                     <CardHeader>
                         <h5 className="mb-0">
                             <Button color="link pl-0" onClick={() => setisIntro(!isIntro)}
@@ -43,23 +45,72 @@ const RightBar = () => {
                         </h5>
                     </CardHeader>
                     <Collapse isOpen={isIntro}>
-                        <CardBody className="filter-cards-view"><span className="f-w-600">{AboutMe} :</span>
-                            <p>
-                                {"Hi, I’m elana, I’m 30 and I work as a"}
-                                {"web Designer for the “Daydreams”"}
-                                {"Agency in Pier 56."}
-                            </p><span className="f-w-600">{"Favourite TV shows"} :</span>
-                            <p>{"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim modi dolor ut maiores recusandae voluptas quod ea error cupiditate libero."}</p><span className="f-w-600">{FavouriteMusicBands} :</span>
-                            <p>{"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim modi dolor ut maiores recusandae voluptas quod ea error cupiditate libero."}</p>
-                            <div className="social-network theme-form"><span className="f-w-600">{SocialNetworks}</span>
-                                <Button color="social-btn btn-fb mb-2 text-center"><i className="fa fa-facebook m-r-5"></i>{Facebooks}</Button>
-                                <Button color="social-btn btn-twitter mb-2 text-center"><i className="fa fa-twitter m-r-5"></i>{Twitters}</Button>
-                                <Button color="social-btn btn-google text-center"><i className="fa fa-dribbble m-r-5"></i>{Dribbble}</Button>
+                        <CardBody className="filter-cards-view"><span className="f-w-600">About This User :</span>
+                            <p>{_.has(user, "aboutMe") ? user.aboutMe : "No Bio - Has NOT been completed/filled-out yet..."}</p><span className="f-w-600">{"Birthdate/Born"} :</span>
+                            <p>{_.has(user, "birthdate") ? `Born ${moment(user.birthdate).fromNow()} and/or on ${moment(new Date()).format("MM/DD/YYYY")}` : "No birthdate provided/completed currently..."}</p><span className="f-w-600">Rank/Level :</span>
+                            <p>{_.has(user, "rankLevel") ? `Ranked Level ${user.rankLevel} on our ${process.env.REACT_APP_APPLICATION_NAME}'s platform` : "Unknown Rank/Level..."}</p>
+                            <span className="f-w-600">Total Completed Jobs :</span><p>This hacker has completed <strong style={{ color: "#7366ff", textDecorationLine: "underline" }}>{user.completedJobs}</strong> total gigs/jobs</p>
+                            <div className="social-network theme-form"><span className="f-w-600">Hacker's Social Network's</span>
+                                <Button color="social-btn btn-fb mb-2 text-center"><i className="fa fa-facebook m-r-5"></i>Facebook</Button>
+                                <Button color="social-btn btn-twitter mb-2 text-center"><i className="fa fa-twitter m-r-5"></i>Twitter</Button>
+                                <Button color="social-btn btn-google text-center"><i className="fa fa-dribbble m-r-5"></i>Dribble</Button>
+                                <Button style={{ marginTop: "7.5px" }} color="social-btn btn-info text-center"><i className="fa fa-github m-r-5"></i>GitHub</Button>
                             </div>
                         </CardBody>
                     </Collapse>
+                </Fragment>
+            );
+        } else {
+            return (
+                <Fragment>
+                    <SkeletonTheme baseColor="#c9c9c9" highlightColor="#444">
+                        <p>
+                            <Skeleton count={60} />
+                        </p>
+                    </SkeletonTheme>
+                </Fragment>
+            );
+        }
+    }
+
+    const pastProfileDisplayItemsConditional = () => {
+        if (user !== null) {
+            return (
+                <Fragment>
+                    <div className={"gallery-spacer-hacker-profile"}>
+                        <ul className="text-center customized-row-profile-hacker-pics">
+                            {typeof user.profilePicsVideos !== "undefined" && user.profilePicsVideos.length > 0 ? user.profilePicsVideos.map((file, index) => {
+                                return (
+                                    <Fragment key={index}>
+                                        {renderPictureOrVideoLast(file, index, onCloseModal, setSelectedModalIndex, galleryRef, setSelectedCurrently)}
+                                    </Fragment>
+                                );
+                            }) : null}
+                        </ul>
+                    </div>
+                </Fragment>
+            );
+        } else {
+            return (
+                <Fragment>
+                    <SkeletonTheme baseColor="#c9c9c9" highlightColor="#444">
+                        <p>
+                            <Skeleton count={10} />
+                        </p>
+                    </SkeletonTheme>
+                </Fragment>
+            );
+        }
+    }
+
+    return (
+        <Fragment>
+            <Col xl="12 xl-50 box-col-6">
+                <Card>
+                    {renderCoreInformationConditionally()}
                 </Card>
             </Col>
+            {user !== null ? <RenderGalleryModalHackerProfileHelper setSelectedCurrently={setSelectedCurrently} currentlySelected={currentlySelected} userData={userData} galleryRef={galleryRef} modalIndexSelected={modalIndexSelected} setSelectedModalIndex={setSelectedModalIndex} onCloseModal={onCloseModal} isOpen={isOpen} user={user} /> : null}
             <Col xl="12 xl-50 box-col-6">
                 <Card>
                     <CardHeader>
@@ -72,23 +123,23 @@ const RightBar = () => {
                         <CardBody className="social-list filter-cards-view">
                             <Media>
                                 <img className="img-50 img-fluid m-r-20 rounded-circle" alt="twoImg" src={two} />
-                                <Media body><span className="d-block">{BuckyBarnes}</span><a href="#javascript">{AddFriend}</a></Media>
+                                <Media body><span className="d-block">{BuckyBarnes}</span><a href={null}>{AddFriend}</a></Media>
                             </Media>
                             <Media>
                                 <img className="img-50 img-fluid m-r-20 rounded-circle" alt="threeImg" src={three} />
-                                <Media body><span className="d-block">{SarahLoren}</span><a href="#javascript">{AddFriend}</a></Media>
+                                <Media body><span className="d-block">{SarahLoren}</span><a href={null}>{AddFriend}</a></Media>
                             </Media>
                             <Media>
                                 <img className="img-50 img-fluid m-r-20 rounded-circle" alt="threeImg" src={three} />
-                                <Media body><span className="d-block">{JasonBorne}</span><a href="#javascript">{AddFriend}</a></Media>
+                                <Media body><span className="d-block">{JasonBorne}</span><a href={null}>{AddFriend}</a></Media>
                             </Media>
                             <Media>
                                 <img className="img-50 img-fluid m-r-20 rounded-circle" alt="tenImg" src={ten} />
-                                <Media body><span className="d-block">{ComerenDiaz}</span><a href="#javascript">{AddFriend}</a></Media>
+                                <Media body><span className="d-block">{ComerenDiaz}</span><a href={null}>{AddFriend}</a></Media>
                             </Media>
                             <Media>
                                 <img className="img-50 img-fluid m-r-20 rounded-circle" alt="elevenImg" src={eleven} />
-                                <Media body><span className="d-block">{AndewJon}</span><a href="#javascript">{AddFriend}</a></Media>
+                                <Media body><span className="d-block">{AndewJon}</span><a href={null}>{AddFriend}</a></Media>
                             </Media>
                         </CardBody>
                     </Collapse>
@@ -106,23 +157,23 @@ const RightBar = () => {
                         <CardBody className="social-list filter-cards-view">
                             <Media>
                                 <img className="img-50 img-fluid m-r-20 rounded-circle" alt="" src={three} />
-                                <Media body><span className="d-block">{SarahLoren}</span><a href="#javascript">{AddFriend}</a></Media>
+                                <Media body><span className="d-block">{SarahLoren}</span><a href={null}>{AddFriend}</a></Media>
                             </Media>
                             <Media>
                                 <img className="img-50 img-fluid m-r-20 rounded-circle" alt="" src={two} />
-                                <Media body><span className="d-block">{BuckyBarnes}</span><a href="#javascript">{AddFriend}</a></Media>
+                                <Media body><span className="d-block">{BuckyBarnes}</span><a href={null}>{AddFriend}</a></Media>
                             </Media>
                             <Media>
                                 <img className="img-50 img-fluid m-r-20 rounded-circle" alt="ten" src={ten} />
-                                <Media body><span className="d-block">{ComerenDiaz}</span><a href="#javascript">{AddFriend}</a></Media>
+                                <Media body><span className="d-block">{ComerenDiaz}</span><a href={null}>{AddFriend}</a></Media>
                             </Media>
                             <Media>
                                 <img className="img-50 img-fluid m-r-20 rounded-circle" alt="threeImg" src={three} />
-                                <Media body><span className="d-block">{JasonBorne}</span><a href="#javascript">{AddFriend}</a></Media>
+                                <Media body><span className="d-block">{JasonBorne}</span><a href={null}>{AddFriend}</a></Media>
                             </Media>
                             <Media>
                                 <img className="img-50 img-fluid m-r-20 rounded-circle" alt="elevenImg" src={eleven} />
-                                <Media body><span className="d-block">{AndewJon}</span><a href="#javascript">{AddFriend}</a></Media>
+                                <Media body><span className="d-block">{AndewJon}</span><a href={null}>{AddFriend}</a></Media>
                             </Media>
                         </CardBody>
                     </Collapse>
@@ -133,58 +184,12 @@ const RightBar = () => {
                     <CardHeader>
                         <h5 className="mb-0">
                             <Button color="link pl-0" onClick={() => setisPhotos(!isPhotos)}
-                                data-toggle="collapse" data-target="#collapseicon9" aria-expanded={isPhotos} aria-controls="collapseicon9">{LatestPhotos}</Button>
+                                data-toggle="collapse" data-target="#collapseicon9" aria-expanded={isPhotos} aria-controls="collapseicon9">Latest Profile Picture's/Video's</Button>
                         </h5>
                     </CardHeader>
                     <Collapse isOpen={isPhotos}>
                         <CardBody className="photos filter-cards-view px-0">
-                            <ul className="text-center">
-                                <li>
-                                    <div className="latest-post">
-                                        <img className="img-fluid" alt="post1" src={post1} />
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="latest-post">
-                                        <img className="img-fluid" alt="post2" src={post2} />
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="latest-post">
-                                        <img className="img-fluid" alt="post3" src={post3} />
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="latest-post">
-                                        <img className="img-fluid" alt="post4" src={post4} />
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="latest-post">
-                                        <img className="img-fluid" alt="post5" src={post5} />
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="latest-post">
-                                        <img className="img-fluid" alt="post6" src={post6} />
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="latest-post">
-                                        <img className="img-fluid" alt="post7" src={post7} />
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="latest-post">
-                                        <img className="img-fluid" alt="post8" src={post8} />
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="latest-post">
-                                        <img className="img-fluid" alt="post9" src={post9} />
-                                    </div>
-                                </li>
-                            </ul>
+                            {pastProfileDisplayItemsConditional()}
                         </CardBody>
                     </Collapse>
                 </Card>
@@ -199,18 +204,18 @@ const RightBar = () => {
                     </CardHeader>
                     <Collapse isOpen={isFriends}>
                         <CardBody className="avatar-showcase filter-cards-view">
-                            <div className="d-inline-block friend-pic"><Media body className="img-50 rounded-circle" src={three} alt="#javascript" /></div>
-                            <div className="d-inline-block friend-pic"><Media body className="img-50 rounded-circle" src={five} alt="#javascript" /></div>
-                            <div className="d-inline-block friend-pic"><Media body className="img-50 rounded-circle" src={one} alt="#javascript" /></div>
-                            <div className="d-inline-block friend-pic"><Media body className="img-50 rounded-circle" src={two} alt="#javascript" /></div>
-                            <div className="d-inline-block friend-pic"><Media body className="img-50 rounded-circle" src={three} alt="#javascript" /></div>
-                            <div className="d-inline-block friend-pic"><Media body className="img-50 rounded-circle" src={six} alt="#javascript" /></div>
-                            <div className="d-inline-block friend-pic"><Media body className="img-50 rounded-circle" src={ten} alt="#javascript" /></div>
-                            <div className="d-inline-block friend-pic"><Media body className="img-50 rounded-circle" src={fourteen} alt="#javascript" /></div>
-                            <div className="d-inline-block friend-pic"><Media body className="img-50 rounded-circle" src={one} alt="#javascript" /></div>
-                            <div className="d-inline-block friend-pic"><Media body className="img-50 rounded-circle" src={four} alt="#javascript" /></div>
-                            <div className="d-inline-block friend-pic"><Media body className="img-50 rounded-circle" src={eleven} alt="#javascript" /></div>
-                            <div className="d-inline-block friend-pic"><Media body className="img-50 rounded-circle" src={eight} alt="#javascript" /></div>
+                            <div className="d-inline-block friend-pic"><Media body className="img-50 rounded-circle" src={three} alt={null} /></div>
+                            <div className="d-inline-block friend-pic"><Media body className="img-50 rounded-circle" src={five} alt={null} /></div>
+                            <div className="d-inline-block friend-pic"><Media body className="img-50 rounded-circle" src={one} alt={null} /></div>
+                            <div className="d-inline-block friend-pic"><Media body className="img-50 rounded-circle" src={two} alt={null} /></div>
+                            <div className="d-inline-block friend-pic"><Media body className="img-50 rounded-circle" src={three} alt={null} /></div>
+                            <div className="d-inline-block friend-pic"><Media body className="img-50 rounded-circle" src={six} alt={null} /></div>
+                            <div className="d-inline-block friend-pic"><Media body className="img-50 rounded-circle" src={ten} alt={null} /></div>
+                            <div className="d-inline-block friend-pic"><Media body className="img-50 rounded-circle" src={fourteen} alt={null} /></div>
+                            <div className="d-inline-block friend-pic"><Media body className="img-50 rounded-circle" src={one} alt={null} /></div>
+                            <div className="d-inline-block friend-pic"><Media body className="img-50 rounded-circle" src={four} alt={null} /></div>
+                            <div className="d-inline-block friend-pic"><Media body className="img-50 rounded-circle" src={eleven} alt={null} /></div>
+                            <div className="d-inline-block friend-pic"><Media body className="img-50 rounded-circle" src={eight} alt={null} /></div>
                         </CardBody>
                     </Collapse>
                 </Card>
@@ -221,5 +226,9 @@ const RightBar = () => {
         </Fragment>
     );
 };
-
-export default RightBar;
+const mapStateToProps = (state) => {
+    return {
+        userData: state.auth.data
+    }
+}
+export default connect(mapStateToProps, {  })(RightBar);

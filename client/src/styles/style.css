@@ -34,7 +34,11 @@ This files table contents are outlined below>>>>>
 ** - Section Title Area Style
 ** - Nice select Area
 ******************************************* /*
-
+/* lightbox logic globablly START */
+.SRLThumbnailsContainer {
+  margin-bottom: 12.5px;
+}
+/* lightbox logic global END */
 /* POPOVER GLOBAL STYLES START */
 .popover {
   max-width: 450px !important;
