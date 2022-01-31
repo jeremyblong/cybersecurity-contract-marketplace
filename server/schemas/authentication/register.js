@@ -15,6 +15,15 @@ const UserSchema =  new Schema({
         type: String,
         default: ""
     }, 
+    recentlyViewedProfileIDSOnly: {
+        type: Array
+    },
+    recentlyViewedProfileViews: {
+        type: Array
+    },
+    totalUniqueViews: {
+        type: Number
+    },
     lastName: {
         type: String,
         default: ""

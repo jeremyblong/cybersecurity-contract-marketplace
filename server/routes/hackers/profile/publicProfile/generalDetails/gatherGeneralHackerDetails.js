@@ -2,9 +2,14 @@ const express = require("express");
 const router = express.Router();
 const { Connection } = require("../../../../../mongoUtil.js");
 
-router.get("/", (req, resppppp, next) => {
+router.post("/", (req, resppppp, next) => {
     
-    const { userID } = req.query;
+    const { 
+        userID,
+        result, 
+        modified,
+        signedinUserID
+    } = req.body;
 
     const collection = Connection.db.db("db").collection("hackers");
 
@@ -18,10 +23,38 @@ router.get("/", (req, resppppp, next) => {
         } else {
             console.log("user", user);
 
-            resppppp.json({
-                message: "Gathered user's data!",
-                user
-            })
+            if (modified === true) {
+                // user has NOT alredy viewed this person's profile
+                user.recentlyViewedProfileViews.push(result);
+                // increase view count...
+                user.totalUniqueViews += 1;
+                // save this newly added data
+                collection.save(user, (savingError, result) => {
+                    if (savingError) {
+                        console.log("error saving...:", savingError);
+
+                        resppppp.json({
+                            message: "Error saving data to database - check error code.",
+                            err: savingError
+                        })
+                    } else {
+                        console.log("SUCCESSFULLY saved!");
+                        // return response
+                        resppppp.json({
+                            message: "Gathered & updated the required data (IF applicable)...",
+                            user,
+                            modified
+                        })
+                    }
+                })
+            } else {
+                // user has ALREADY viewed this person's profile
+                resppppp.json({
+                    message: "Gathered & updated the required data (IF applicable)...",
+                    user,
+                    modified
+                })   
+            }
         }
     }).catch((err) => {
         console.log(err);

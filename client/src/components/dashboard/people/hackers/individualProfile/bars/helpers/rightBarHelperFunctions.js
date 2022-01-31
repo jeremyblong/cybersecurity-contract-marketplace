@@ -1,12 +1,11 @@
 import React, { Fragment, useState, useEffect } from "react";
-import ReactDOM from 'react-dom';
 import ReactPlayer from "react-player";
 import _ from "lodash";
 import "./styles.css";
 import { Modal } from 'react-responsive-modal';
 import { NotificationManager } from "react-notifications";
 import Slider from "react-slick";
-import { Container, Col, Card, Row, CardBody, CardHeader, ListGroupItem, ListGroup } from "reactstrap";
+import { Container, Col, Card, Row, CardBody, Media, CardHeader, ListGroupItem, ListGroup } from "reactstrap";
 import moment from "moment";
 import axios from "axios";
 
@@ -89,20 +88,52 @@ const renderPictureOrVideoLast = (file, index, onCloseModal, setSelectedModalInd
         );
     } 
 }
-const renderModalImageOrVideo = (file) => {
+const renderPictureOrVideoContentBreakBlock = (file) => {
     if (file !== null && _.has(file, "link")) {
         if (file.type.includes("video")) {
             // video logic
             return (
                 <Fragment>
-                    <ReactPlayer controls={true} playing={true} loop={true} muted={false} width={"100%"} className={"hacker-gallery-modal-pic"} wrapper={"div"} url={file.src} />
+                    <Card>
+                        <ReactPlayer playing={true} loop={true} controls={false} muted={false} width={"100%"} className={"img-fluid"} wrapper={"div"} url={`${process.env.REACT_APP_ASSET_LINK}/${file.link}`} />
+                    </Card>
                 </Fragment>
             );
         } else {
             // image logic
             return (
                 <Fragment>
-                    <img src={file.src} className={"hacker-gallery-modal-pic"} />
+                    <Card>
+                        <Media className="img-fluid" src={`${process.env.REACT_APP_ASSET_LINK}/${file.link}`} alt="" />
+                    </Card>
+                </Fragment>
+            );
+        }  
+    } else {
+        // image logic - DEFAULT.
+        return (
+            <Fragment>
+                <Card>
+                    <Media className="img-fluid" src={process.env.REACT_APP_PLACEHOLDER_IMAGE} alt="" />
+                </Card>
+            </Fragment>
+        );
+    } 
+}
+const renderModalImageOrVideo = (file) => {
+    if (file !== null && _.has(file, "link")) {
+        if (file.type.includes("video")) {
+            // video logic
+            return (
+                <Fragment>
+                    <ReactPlayer controls={true} playing={true} loop={true} muted={false} width={"100%"} className={"hacker-gallery-modal-pic"} wrapper={"div"} url={`${process.env.REACT_APP_ASSET_LINK}/${file.link}`} />
+                </Fragment>
+            );
+        } else {
+            // image logic
+            return (
+                <Fragment>
+                    <img src={`${process.env.REACT_APP_ASSET_LINK}/${file.link}`} className={"hacker-gallery-modal-pic"} />
                 </Fragment>
             );
         }  
@@ -127,32 +158,16 @@ const RenderGalleryModalHackerProfileHelper = ({ currentlySelected, setSelectedC
                 if (idx + 1 === row.length) {
                     // Last one.
                     let result = {
-                        src: `${process.env.REACT_APP_ASSET_LINK}/${el.link}`,
-                        type: el.type,
-                        core: el,
-                        caption: `You're viewing the ${el.name} file...`,
-                        autoplay: false,
-                        showControls: true,
-                        thumbnail: `${process.env.REACT_APP_ASSET_LINK}/${el.link}`,
-                        link: el.link,
-                        className: "caption-thumbnail-custom-hacker-profile",
-                        date: el.systemDate
+                        ...el,
+                        caption: `You're viewing the ${el.name} file...`
                     };
                     // return constructed obj for lightbox
                     return result;
                 } else {
                     // Not last one.
                     let resultNotLast = {
-                        src: `${process.env.REACT_APP_ASSET_LINK}/${el.link}`,
-                        type: el.type,
-                        core: el,
-                        caption: `You're viewing the ${el.name} file...`,
-                        autoplay: false,
-                        showControls: true,
-                        thumbnail: `${process.env.REACT_APP_ASSET_LINK}/${el.link}`,
-                        link: el.link,
-                        className: "caption-thumbnail-custom-hacker-profile",
-                        date: el.systemDate
+                        ...el,
+                        caption: `You're viewing the ${el.name} file...`
                     }
                     // return constructed obj for lightbox
                     return resultNotLast;
@@ -179,9 +194,28 @@ const RenderGalleryModalHackerProfileHelper = ({ currentlySelected, setSelectedC
             if (res.data.message === "Successfully reacted to file!") {
                 console.log(res.data);
 
+                const { selectedItem } = res.data;
+
+                setPicturesArr(prevState => {
+                    const copy = [...prevState];
+                    const matchingIndex = copy.findIndex(x => x.id === selectedItem.id);
+                    copy[matchingIndex] = selectedItem;
+                    return copy;
+                });
+
                 NotificationManager.success("Successfully REACTED to this file & the updates are now live and active - If you ever want to change this response... Simply like the post again and it will remove your existing response.", "Successfully responded to picture/video!", 4750);
 
             } else if (res.data.message === "You've already PREVIOUSLY reacted to this post! We are revoking/removing your previous response to allow for a new response - please try your action again!") {
+                console.log(res.data);
+
+                const { selectedItem } = res.data;
+
+                setPicturesArr(prevState => {
+                    const copy = [...prevState];
+                    const matchingIndex = copy.findIndex(x => x.id === selectedItem.id);
+                    copy[matchingIndex] = selectedItem;
+                    return copy;
+                });
                 
                 NotificationManager.warning(res.data.message, "You've already reacted to this post!", 4750);
             } else {
@@ -192,9 +226,10 @@ const RenderGalleryModalHackerProfileHelper = ({ currentlySelected, setSelectedC
         })
     } 
     const afterChangeOccurred = (index) => {
+        console.log("picturesArr[index] :", picturesArr[index]);
         setSelectedCurrently(picturesArr[index]);
     }
-    console.log("inner component currentlySelected", currentlySelected);
+    console.log("inner component currentlySelected & picturesArr", currentlySelected, picturesArr);
     return (
         <Fragment>
             <Modal classNames={{
@@ -236,7 +271,7 @@ const RenderGalleryModalHackerProfileHelper = ({ currentlySelected, setSelectedC
                                                             <Row>
                                                                 <Col sm="12" md="12" lg="12" xl="12">
                                                                     <Card style={{ marginTop: "17.5px" }} className={"add-shadow-profile-picture-card"}>
-                                                                        <CardHeader className="b-l-primary border-3">
+                                                                        <CardHeader className="b-l-primary border-3 profile-picture-card-header-custom">
                                                                             <Row>
                                                                                 <Col sm="12" md="7" lg="7" xl="7">
                                                                                     <h5>Like's/Dislikes & Responses - React to this image!</h5>
@@ -244,13 +279,32 @@ const RenderGalleryModalHackerProfileHelper = ({ currentlySelected, setSelectedC
                                                                                     <p>React to this <strong>specific image/video</strong> if you feel compelled! This will notify the "Owner/Poster" of your reaction.</p>
                                                                                 </Col>
                                                                                 <Col sm="12" md="5" lg="5" xl="5">
+                                                                                    <h3 className={"emoji-reactions-title-profile"}>Previous responses from other user's</h3>
                                                                                     <div className={"evenly-space-emojis-reactions centered-both-ways"}>
-                                                                                        <img onClick={() => reactWithEmojiToFile("sunglasses")} src={require("../../../../../../../assets/gifs/sunglasses.gif")} className={"gif-animated-card-pic-related"} />
-                                                                                        <img onClick={() => reactWithEmojiToFile("steaming")} src={require("../../../../../../../assets/gifs/steaming.gif")} className={"gif-animated-card-pic-related"} />
-                                                                                        <img onClick={() => reactWithEmojiToFile("tearsOfJoy")} src={require("../../../../../../../assets/gifs/tearsOfJoy.gif")} className={"gif-animated-card-pic-related"} />
-                                                                                        <img onClick={() => reactWithEmojiToFile("vomitting")} src={require("../../../../../../../assets/gifs/vomitting.gif")} className={"gif-animated-card-pic-related"} />
-                                                                                        <img onClick={() => reactWithEmojiToFile("partying")} src={require("../../../../../../../assets/gifs/partying.gif")} className={"gif-animated-card-pic-related"} />
-                                                                                        <img onClick={() => reactWithEmojiToFile("screaming")} src={require("../../../../../../../assets/gifs/screaming.gif")} className={"gif-animated-card-pic-related"} />
+                                                                                        <div className={"number-above-emoji-wrapper"}>
+                                                                                            <h2 className={"center-like-count-profile-hacker"}>{file.reactions["sunglasses"]}</h2>
+                                                                                            <img onClick={() => reactWithEmojiToFile("sunglasses")} src={require("../../../../../../../assets/gifs/sunglasses.gif")} className={"gif-animated-card-pic-related"} />
+                                                                                        </div>
+                                                                                        <div className={"number-above-emoji-wrapper"}>
+                                                                                            <h2 className={"center-like-count-profile-hacker"}>{file.reactions["steaming"]}</h2>
+                                                                                            <img onClick={() => reactWithEmojiToFile("steaming")} src={require("../../../../../../../assets/gifs/steaming.gif")} className={"gif-animated-card-pic-related"} />
+                                                                                        </div>
+                                                                                        <div className={"number-above-emoji-wrapper"}>
+                                                                                            <h2 className={"center-like-count-profile-hacker"}>{file.reactions["tearsOfJoy"]}</h2>
+                                                                                            <img onClick={() => reactWithEmojiToFile("tearsOfJoy")} src={require("../../../../../../../assets/gifs/tearsOfJoy.gif")} className={"gif-animated-card-pic-related"} />
+                                                                                        </div>
+                                                                                        <div className={"number-above-emoji-wrapper"}>
+                                                                                            <h2 className={"center-like-count-profile-hacker"}>{file.reactions["vomitting"]}</h2>
+                                                                                            <img onClick={() => reactWithEmojiToFile("vomitting")} src={require("../../../../../../../assets/gifs/vomitting.gif")} className={"gif-animated-card-pic-related"} />
+                                                                                        </div>
+                                                                                        <div className={"number-above-emoji-wrapper"}>
+                                                                                            <h2 className={"center-like-count-profile-hacker"}>{file.reactions["partying"]}</h2>
+                                                                                            <img onClick={() => reactWithEmojiToFile("partying")} src={require("../../../../../../../assets/gifs/partying.gif")} className={"gif-animated-card-pic-related"} />
+                                                                                        </div>
+                                                                                        <div className={"number-above-emoji-wrapper"}>
+                                                                                            <h2 className={"center-like-count-profile-hacker"}>{file.reactions["screaming"]}</h2>
+                                                                                            <img onClick={() => reactWithEmojiToFile("screaming")} src={require("../../../../../../../assets/gifs/screaming.gif")} className={"gif-animated-card-pic-related"} />
+                                                                                        </div>
                                                                                     </div>
                                                                                 </Col>
                                                                             </Row>
@@ -275,5 +329,6 @@ const RenderGalleryModalHackerProfileHelper = ({ currentlySelected, setSelectedC
 }
 export default {
     renderPictureOrVideoLast,
-    RenderGalleryModalHackerProfileHelper
+    RenderGalleryModalHackerProfileHelper,
+    renderPictureOrVideoContentBreakBlock
 };

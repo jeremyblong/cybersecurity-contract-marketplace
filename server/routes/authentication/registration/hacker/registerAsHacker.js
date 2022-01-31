@@ -39,7 +39,12 @@ router.post("/", async (req, res) => {
       followingCompanies: [],
       experiencePoints: 0,
       rankLevel: 1,
-      previouslyAppliedJobs: []
+      previouslyAppliedJobs: [],
+      recentlyViewedProfileViews: [],
+      recentlyViewedProfileIDSOnly: [],
+      totalUniqueViews: 0,
+      bookmarkedProfiles: [],
+      profileLovesHearts: []
     }), password, async (err, user) => {
       if (err) {
 

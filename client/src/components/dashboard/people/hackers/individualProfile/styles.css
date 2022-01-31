@@ -10,3 +10,10 @@
 .core-top-hacker-profile-info {
     margin-top: 17.5px;
 }
+.custom-hacker-profile-ribbon:hover {
+    background-color: red;
+    cursor: pointer;
+}
+#banner-photo-cover-all {
+
+}

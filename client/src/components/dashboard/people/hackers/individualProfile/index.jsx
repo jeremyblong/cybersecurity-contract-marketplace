@@ -9,8 +9,9 @@ import axios from "axios";
 import { withRouter } from "react-router-dom";
 import _ from "lodash";
 import { renderProfilePicVideo } from "./helpers/misc/index.js";
-import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+import { connect } from "react-redux";
 import "./styles.css";
+import NotificationManager from 'react-notifications/lib/NotificationManager';
 
 class ProfileHackerIndividualHelper extends Component {
 constructor(props) {
@@ -24,26 +25,84 @@ constructor(props) {
     componentDidMount() {
         const userID = this.props.match.params.id;
 
-        console.log("userID params... :", userID);
+        const { userData } = this.props;
 
-        axios.get(`${process.env.REACT_APP_BASE_URL}/gather/hacker/profile/details`, {
-            params: {
-                userID
+        const apiRequestPromise = new Promise((resolve, reject) => {
+    
+            const configuration = {
+                viewingHackerAccountID: userID,
+                signedinUserID: userData.uniqueId,
+                signedinLastProfileFile: typeof userData.profilePicsVideos !== "undefined" && userData.profilePicsVideos.length > 0 ? userData.profilePicsVideos[userData.profilePicsVideos.length - 1] : null,
+                signedinUserNameFull: `${userData.firstName} ${userData.lastName}`,
+                signedinMemberSince: userData.registrationDate,
+                accountType: userData.accountType
             }
-        }).then((res) => {
-            if (res.data.message === "Gathered user's data!") {
-                console.log(res.data);
+            axios.post(`${process.env.REACT_APP_BASE_URL}/update/hacker/view/account/details/new/view`, configuration).then((res) => {
+                if (res.data.message === "Found user & modified/marked view in DB!") {
+                    console.log(res.data);
+    
+                    const { result, modified } = res.data;
 
-                const { user } = res.data;
+                    if (modified === true) {
+                        resolve({
+                            modified: true,
+                            result
+                        });
+                    } else {
+                        resolve({
+                            modified: false,
+                            result
+                        });
+                    }
+                } else {
+                    console.log("err", res.data);
+                    
+                    reject(res.data);
+                }
+            }).catch((err) => {
+                console.log(err);
 
-                this.setState({
-                    user
-                })
-            } else {
-                console.log("err", res.data);
+                reject(err);
+            })
+        })
+
+        apiRequestPromise.then((passedData) => {
+            console.log("passedData", passedData.modified, passedData.result);
+
+            const configgg = {
+                userID,
+                result: passedData.result, 
+                modified: passedData.modified,
+                signedinUserID: userData.uniqueId
             }
+
+            axios.post(`${process.env.REACT_APP_BASE_URL}/gather/hacker/profile/details`, configgg).then((res) => {
+                if (res.data.message === "Gathered & updated the required data (IF applicable)...") {
+                    console.log(res.data);
+    
+                    const { user, modified } = res.data;
+    
+                    if (modified === false) {
+                        this.setState({
+                            user
+                        }, () => {
+                            NotificationManager.info("You've ALREADY viewed this hacker's profile so we left the users profile data untouched - ONLY on first view will your information be documented and displayed...", "Already viewed this hacker's profile!", 4750);
+                        })
+                    } else {
+                        this.setState({
+                            user
+                        })
+                    }
+                } else {
+                    console.log("err", res.data);
+
+                    NotificationManager.error("An unknown error occurred while attempting to fetch this user's data/information...", "Error occurred while fetching user's data!", 4750);
+                }
+            }).catch((err) => {
+                console.log(err);
+            })
         }).catch((err) => {
-            console.log(err);
+            NotificationManager.error("An error occurred while attempting to fetch this hacker's user profile data, please try reloading the page & contact support if this issue persists...", "Error gathering user's data!", 4500);
         })
     }
     renderConditionalNavigationalTabs = () => {
@@ -101,8 +160,94 @@ constructor(props) {
             );
         } 
     }
+    bookmarkThisHackerProfile = () => {
+        console.log("bookmarkThisHackerProfile ran - heart this profile.");
+
+        const userID = this.props.match.params.id;
+
+        const { userData } = this.props;
+
+        const config = {
+            hackerID: userID,
+            signedinUserID: userData.uniqueId,
+            signedinUserAccountType: userData.accountType
+        }
+
+        axios.post(`${process.env.REACT_APP_BASE_URL}/bookmark/hacker/profile/either/account/type`, config).then((res) => {
+            if (res.data.message === "Successfully 'hearted' this hacker's profile!") {
+                console.log("successfully bookmarked profile...:", res.data);
+
+                NotificationManager.success("You've successfully bookmarked this user's profile and it will now show up in your 'Bookmarked Profile's' page...", "Successfully bookmarked this profile!", 4750);
+
+            } else if (res.data.message === "You've ALREADY bookmarked this user's profile...") {
+                console.log("already bookmarked - do nothing...:", res.data);
+
+                NotificationManager.warning("You've ALREADY bookmarked this user's profile & it is already in your 'Bookmarked Profile's' page/list...", "Already bookmarked this user's profile!", 4750);
+            } else {
+                console.log("err", res.data);
+
+                NotificationManager.error("An unknown error has occurred while attempting to bookmark and/or make these changes...", "Error occurred while making changes!", 4750);
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
+    }
+    handleOnlyProfileHeart = () => {
+        const userID = this.props.match.params.id;
+
+        const { userData } = this.props;
+
+        const config = {
+            hackerID: userID,
+            signedinUserID: userData.uniqueId,
+            signedinUserAccountType: userData.accountType,
+            fullName: `${userData.firstName} ${userData.lastName}`
+        }
+
+        axios.post(`${process.env.REACT_APP_BASE_URL}/heart/profile/hacker/bookmark`, config).then((res) => {
+            if (res.data.message === "Successfully 'reacted/hearted' this person's profile & the changes are now active and should reflect any additional responses appropriately!") {
+                console.log("Successfully 'hearted' profile...:", res.data);
+
+                const { activeHearts } = res.data;
+
+                const userClone = {
+                    ...this.state.user,
+                    profileLovesHearts: activeHearts
+                }
+
+                this.setState({
+                    user: userClone
+                }, () => {
+                    NotificationManager.success(res.data.message, "Successfully 'hearted/reacted' to this hacker's profile!", 4750);
+                })
+
+            } else if (res.data.message === "You've already 'hearted' or 'liked' this person's profile - We automatically 'un-like' a profile if you like it and have already responded with a like...") {
+                console.log("You've already 'hearted' or 'liked' this person's profile...:", res.data);
+
+                const { activeHearts } = res.data;
+
+                const userClone = {
+                    ...this.state.user,
+                    profileLovesHearts: activeHearts
+                }
+
+                this.setState({
+                    user: userClone
+                }, () => {
+                    NotificationManager.warning(res.data.message, "Already 'hearted' this user's profile - removed previous reaction!", 4750);
+                })
+            } else {
+                console.log("err", res.data);
+
+                NotificationManager.error("An unknown error occurred while attempting to 'react' to this person's profile, please try again or contact support if the problem persists...", "Error occurred - unknown.", 4750)
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
+    }
     render () {
         const { user } = this.state;
+
         return (
             <Fragment>
                 <Breadcrumb parent="Profile's" title="Individual Hacker Profile" />
@@ -110,8 +255,9 @@ constructor(props) {
                     <div className="user-profile social-app-profile">
                         <Row>
                             <Col sm="12">
-                                <Card className="hovercard text-center">
+                                <Card className="hovercard text-center ribbon-wrapper-right">
                                     <CardHeader className="cardheader socialheader" id="override-cardheader">
+                                        <div onClick={this.bookmarkThisHackerProfile} className="ribbon ribbon-clip-right ribbon-right ribbon-info custom-hacker-profile-ribbon"><i className="fa fa-heart"></i> Bookmark This Profile?</div>
                                         {_.has(user, "profileBannerImage") ? <img src={`${process.env.REACT_APP_ASSET_LINK}/${user.profileBannerImage.link}`} id="banner-photo-cover-all" /> : <img src={require('../../../../../assets/images/banner/2.jpg')} id="banner-photo-cover-all" />}
                                     </CardHeader>
                                     <div className="user-image">
@@ -121,7 +267,7 @@ constructor(props) {
                                         
                                         {/* <div className="icon-wrapper"><i className="icofont icofont-pencil-alt-5"></i></div> */}
                                         <ul className="share-icons">
-                                            <li><a className="social-icon bg-primary" href={null}><i className="fa fa-smile-o"></i></a></li>
+                                            <li onClick={this.handleOnlyProfileHeart}><a className="social-icon bg-primary" href={null}><i className="fa fa-heart"></i></a></li>
                                             <li><a className="social-icon bg-secondary" href={null}><i className="fa fa-wechat"></i></a></li>
                                             <li><a className="social-icon bg-warning" href={null}><i className="fa fa-share-alt"></i></a></li>
                                         </ul>
@@ -152,5 +298,9 @@ constructor(props) {
         );
     }
 };
-
-export default withRouter(ProfileHackerIndividualHelper);
+const mapStateToProps = (state) => {
+    return {
+        userData: state.auth.data
+    }
+}
+export default connect(mapStateToProps, {})(withRouter(ProfileHackerIndividualHelper));

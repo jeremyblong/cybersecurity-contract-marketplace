@@ -27,7 +27,7 @@ router.post("/", (req, resppppp, next) => {
             })
         } else {
             // find which item matches currently selected item
-            const matchingIndex = user.profilePicsVideos.findIndex((item) => item.id === reactedHackerFile.core.id);
+            const matchingIndex = user.profilePicsVideos.findIndex((item) => item.id === reactedHackerFile.id);
             // pull "out" matching item...
             const selectedItem = user.profilePicsVideos[matchingIndex];
             // check if this user has ALREADY Reacted to this particular post/image/video
@@ -54,7 +54,8 @@ router.post("/", (req, resppppp, next) => {
                         console.log("Successfully saved!", result);  
                         
                         resppppp.json({
-                            message: "You've already PREVIOUSLY reacted to this post! We are revoking/removing your previous response to allow for a new response - please try your action again!"
+                            message: "You've already PREVIOUSLY reacted to this post! We are revoking/removing your previous response to allow for a new response - please try your action again!",
+                            selectedItem
                         })
                     }
                 })
@@ -85,7 +86,8 @@ router.post("/", (req, resppppp, next) => {
                         console.log("Successfully saved!", result);  
                         
                         resppppp.json({
-                            message: "Successfully reacted to file!"
+                            message: "Successfully reacted to file!",
+                            selectedItem
                         })
                     }
                 })

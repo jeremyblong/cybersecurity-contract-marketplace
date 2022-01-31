@@ -16,11 +16,23 @@
 .min-cal-img-height {
     min-height: 42.5vh !important;
 }
+.number-above-emoji-wrapper {
+    flex-direction: column;
+}
+.center-like-count-profile-hacker {
+    text-align: center;
+}
 .full-height-widget-profile {
     min-height: 82.5vh !important;
     height: 80vh !important;
     height: 100% !important;
     padding: 17.5px;
+}
+.emoji-reactions-title-profile {
+    text-decoration-line: underline;
+    font-weight: 525;
+    color: #f73164;
+    text-align: center;
 }
 .gif-animated-card-pic-related:hover {
     background-color: black;
@@ -31,6 +43,9 @@
 .evenly-space-emojis-reactions {
     
 }
+.at-least-min-height-profile-pic {
+    min-height: 50px !important;
+}
 /* more gif/emoji related */
 .gif-animated-card-pic-related {
 
@@ -38,6 +53,9 @@
 .profile-pictures-slider-pane {
     min-height: 80vh;
     padding: 27.5px;
+}
+.profile-picture-card-header-custom {
+    min-height: 100% !important;
 }
 .full-height-profile-images {
     min-height: 100%;

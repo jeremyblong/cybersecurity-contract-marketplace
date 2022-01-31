@@ -2,25 +2,17 @@ import React, { Fragment, useState, useEffect, useRef } from 'react';
 import { Col, Card, CardHeader, CardBody, Button, Media, Collapse } from 'reactstrap';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import helpers from "./helpers/rightBarHelperFunctions.js";
-import { ProfileIntro, BuckyBarnes, JasonBorne, SarahLoren, AndewJon, AddFriend, ComerenDiaz, Friends , Follower, Following } from "../../../../../../constant";
 import _ from 'lodash';
 import moment from "moment";
 import "./styles.css";
 import { connect } from "react-redux";
-import one from "../../../../../../assets/images/user/1.jpg";
 import three from "../../../../../../assets/images/user/3.jpg";
-import five from "../../../../../../assets/images/user/5.jpg";
 import two from "../../../../../../assets/images/user/2.png";
-import eight from "../../../../../../assets/images/user/8.jpg";
 import eleven from "../../../../../../assets/images/user/11.png";
-import timeline4 from "../../../../../../assets/images/social-app/timeline-4.png";
 import ten from "../../../../../../assets/images/user/10.jpg";
-import six from "../../../../../../assets/images/user/6.jpg";
-import fourteen from "../../../../../../assets/images/user/14.png";
-import four from "../../../../../../assets/images/user/4.jpg";
 
 
-const { renderPictureOrVideoLast, RenderGalleryModalHackerProfileHelper } = helpers;
+const { renderPictureOrVideoLast, RenderGalleryModalHackerProfileHelper, renderPictureOrVideoContentBreakBlock } = helpers;
 
 const RightBar = ({ user, userData }) => {
     // relevant ref's creation
@@ -41,7 +33,7 @@ const RightBar = ({ user, userData }) => {
                     <CardHeader>
                         <h5 className="mb-0">
                             <Button color="link pl-0" onClick={() => setisIntro(!isIntro)}
-                                data-toggle="collapse" data-target="#collapseicon7" aria-expanded={isIntro} aria-controls="collapseicon7">{ProfileIntro}</Button>
+                                data-toggle="collapse" data-target="#collapseicon7" aria-expanded={isIntro} aria-controls="collapseicon7">Profile Introduction</Button>
                         </h5>
                     </CardHeader>
                     <Collapse isOpen={isIntro}>
@@ -102,7 +94,7 @@ const RightBar = ({ user, userData }) => {
             );
         }
     }
-
+    const lastImageBoxed = (user !== null && typeof user.profilePicsVideos !== "undefined" && user.profilePicsVideos.length > 0) ? user.profilePicsVideos[user.profilePicsVideos.length - 1] : null;
     return (
         <Fragment>
             <Col xl="12 xl-50 box-col-6">
@@ -116,30 +108,30 @@ const RightBar = ({ user, userData }) => {
                     <CardHeader>
                         <h5 className="mb-0">
                             <Button color="link pl-0" onClick={() => setisFollowers(!isFollowers)}
-                                data-toggle="collapse" data-target="#collapseicon8" aria-expanded={isFollowers} aria-controls="collapseicon8">{Follower}</Button>
+                                data-toggle="collapse" data-target="#collapseicon8" aria-expanded={isFollowers} aria-controls="collapseicon8">Top Employer's this user is following</Button>
                         </h5>
                     </CardHeader>
                     <Collapse isOpen={isFollowers}>
                         <CardBody className="social-list filter-cards-view">
                             <Media>
                                 <img className="img-50 img-fluid m-r-20 rounded-circle" alt="twoImg" src={two} />
-                                <Media body><span className="d-block">{BuckyBarnes}</span><a href={null}>{AddFriend}</a></Media>
+                                <Media body><span className="d-block">First Name & Last Name</span><a href={null}>Add/Follow This User</a></Media>
                             </Media>
                             <Media>
                                 <img className="img-50 img-fluid m-r-20 rounded-circle" alt="threeImg" src={three} />
-                                <Media body><span className="d-block">{SarahLoren}</span><a href={null}>{AddFriend}</a></Media>
+                                <Media body><span className="d-block">First Name & Last Name</span><a href={null}>Add/Follow This User</a></Media>
                             </Media>
                             <Media>
                                 <img className="img-50 img-fluid m-r-20 rounded-circle" alt="threeImg" src={three} />
-                                <Media body><span className="d-block">{JasonBorne}</span><a href={null}>{AddFriend}</a></Media>
+                                <Media body><span className="d-block">First Name & Last Name</span><a href={null}>Add/Follow This User</a></Media>
                             </Media>
                             <Media>
                                 <img className="img-50 img-fluid m-r-20 rounded-circle" alt="tenImg" src={ten} />
-                                <Media body><span className="d-block">{ComerenDiaz}</span><a href={null}>{AddFriend}</a></Media>
+                                <Media body><span className="d-block">First Name & Last Name</span><a href={null}>Add/Follow This User</a></Media>
                             </Media>
                             <Media>
                                 <img className="img-50 img-fluid m-r-20 rounded-circle" alt="elevenImg" src={eleven} />
-                                <Media body><span className="d-block">{AndewJon}</span><a href={null}>{AddFriend}</a></Media>
+                                <Media body><span className="d-block">First Name & Last Name</span><a href={null}>Add/Follow This User</a></Media>
                             </Media>
                         </CardBody>
                     </Collapse>
@@ -150,30 +142,30 @@ const RightBar = ({ user, userData }) => {
                     <CardHeader>
                         <h5 className="mb-0">
                             <Button color="link pl-0" onClick={() => setisFollowings(!isFollowings)}
-                                data-toggle="collapse" data-target="#collapseicon11" aria-expanded={isFollowings} aria-controls="collapseicon11">{Following}</Button>
+                                data-toggle="collapse" data-target="#collapseicon11" aria-expanded={isFollowings} aria-controls="collapseicon11">Top Hacker's this user is following</Button>
                         </h5>
                     </CardHeader>
                     <Collapse isOpen={isFollowings}>
                         <CardBody className="social-list filter-cards-view">
                             <Media>
                                 <img className="img-50 img-fluid m-r-20 rounded-circle" alt="" src={three} />
-                                <Media body><span className="d-block">{SarahLoren}</span><a href={null}>{AddFriend}</a></Media>
+                                <Media body><span className="d-block">First Name & Last Name</span><a href={null}>Add/Follow This User</a></Media>
                             </Media>
                             <Media>
                                 <img className="img-50 img-fluid m-r-20 rounded-circle" alt="" src={two} />
-                                <Media body><span className="d-block">{BuckyBarnes}</span><a href={null}>{AddFriend}</a></Media>
+                                <Media body><span className="d-block">First Name & Last Name</span><a href={null}>Add/Follow This User</a></Media>
                             </Media>
                             <Media>
                                 <img className="img-50 img-fluid m-r-20 rounded-circle" alt="ten" src={ten} />
-                                <Media body><span className="d-block">{ComerenDiaz}</span><a href={null}>{AddFriend}</a></Media>
+                                <Media body><span className="d-block">First Name & Last Name</span><a href={null}>Add/Follow This User</a></Media>
                             </Media>
                             <Media>
                                 <img className="img-50 img-fluid m-r-20 rounded-circle" alt="threeImg" src={three} />
-                                <Media body><span className="d-block">{JasonBorne}</span><a href={null}>{AddFriend}</a></Media>
+                                <Media body><span className="d-block">First Name & Last Name</span><a href={null}>Add/Follow This User</a></Media>
                             </Media>
                             <Media>
                                 <img className="img-50 img-fluid m-r-20 rounded-circle" alt="elevenImg" src={eleven} />
-                                <Media body><span className="d-block">{AndewJon}</span><a href={null}>{AddFriend}</a></Media>
+                                <Media body><span className="d-block">First Name & Last Name</span><a href={null}>Add/Follow This User</a></Media>
                             </Media>
                         </CardBody>
                     </Collapse>
@@ -194,7 +186,7 @@ const RightBar = ({ user, userData }) => {
                     </Collapse>
                 </Card>
             </Col>
-            <Col xl="12 xl-50 box-col-6">
+            {/* <Col xl="12 xl-50 box-col-6">
                 <Card>
                     <CardHeader>
                         <h5 className="mb-0">
@@ -219,9 +211,9 @@ const RightBar = ({ user, userData }) => {
                         </CardBody>
                     </Collapse>
                 </Card>
-            </Col>
+            </Col> */}
             <Col xl="12 xl-50 box-col-6">
-                <Card><Media className="img-fluid" src={timeline4} alt="" /></Card>
+                {renderPictureOrVideoContentBreakBlock(lastImageBoxed)}
             </Col>
         </Fragment>
     );

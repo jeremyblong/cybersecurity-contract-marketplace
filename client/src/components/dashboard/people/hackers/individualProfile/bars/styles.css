@@ -23,3 +23,14 @@
 .gallery-spacer-hacker-profile {
     margin-left: 10px !important;
 }
+.member-since-header-text {
+    text-align: center;
+    font-size: 1rem;
+    margin-bottom: 17.5px;
+    text-decoration-line: underline;
+    color: #f73164;
+}
+.following-text-profile-hacker-larger {
+    font-size: 0.925rem;
+    font-weight: 475;
+}

@@ -8,6 +8,7 @@ import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import { useHistory } from "react-router-dom";
 import moment from "moment";
 import ReactPlayer from "react-player";
+import ShowMoreText from "react-show-more-text";
 
 const ViewHiredHackersHelper = ({ userData }) => {
 
@@ -24,7 +25,6 @@ const ViewHiredHackersHelper = ({ userData }) => {
         }
         axios.get(`${process.env.REACT_APP_BASE_URL}/gather/active/jobs/employer/account`, configuration).then((res) => {
             if (res.data.message === "Successfully gathered active/hired hackers!") {
-                console.log("Successfully gathered active/hired hackers!", res.data);
                 
                 const { hackers } = res.data;
 
@@ -37,11 +37,9 @@ const ViewHiredHackersHelper = ({ userData }) => {
         })
     }, []);
 
-    console.log("hired hackers state --- :", hackers);
-
     const viewApplicantProfile = (hackerID) => {
 
-        // history.push(`/view/individual/employer/listing/public/${hackerID}`);
+        history.push(`/hacker/profile/individual/view/${hackerID}`);
     }
     const manageHiredApplicant = (applicantID) => {
         console.log("manageHiredApplicant clicked...:", applicantID);
@@ -50,7 +48,6 @@ const ViewHiredHackersHelper = ({ userData }) => {
     const renderConditionalUponLoad = () => {
         if (typeof hackers !== "undefined" && hackers.length > 0) {
             return hackers.map((hacker, index) => {
-                console.log("HACKER...:", hacker);
                 return (
                     <Col md="6" lg="4" xl="4" key={index}>
                         <Card className="height-equal already-applied-card-wrapper">

@@ -6,16 +6,15 @@ import five from "../../../../../../assets/images/user/5.jpg";
 import two from "../../../../../../assets/images/user/2.png";
 import eight from "../../../../../../assets/images/user/8.jpg";
 import eleven from "../../../../../../assets/images/user/11.png";
-import timeline3 from "../../../../../../assets/images/social-app/timeline-3.png";
+import moment from "moment";
 import ten from "../../../../../../assets/images/user/10.jpg";
-import six from "../../../../../../assets/images/user/6.jpg";
-import fourteen from "../../../../../../assets/images/user/14.png";
 import four from "../../../../../../assets/images/user/4.jpg";
 import helpers from "./helpers/leftBarHelperFunctions.js";
+import ReactPlayer from "react-player";
+import { View, ActivityFeed, Likes } from "../../../../../../constant";
+import "./styles.css";
 
-import { BuckyBarnes, JasonBorne, SarahLoren, AndewJon, JohnyWaston, JohnyWilliam, ComerenDiaz, MyPage, View, MutualFriends, ActivityFeed, Messages, Likes, Notification } from "../../../../../../constant";
-
-const {  } = helpers;
+const { renderPictureOrVideoContentBreakBlock, renderPicOrVideoProfileOrNot } = helpers;
 
 
 const LeftBar = ({ user }) => {
@@ -23,7 +22,9 @@ const LeftBar = ({ user }) => {
     const [isProfile, setisProfile] = useState(true);
     const [isMutual, setisMutual] = useState(true);
     const [isActivity, setisActivity] = useState(true);
+    const [ viewType, setViewType ] = useState("likesAndHearts");
 
+    const lastImageBoxed = (user !== null && typeof user.profilePicsVideos !== "undefined" && user.profilePicsVideos.length > 0) ? user.profilePicsVideos[user.profilePicsVideos.length - 1] : null;
     
     return (
         <Fragment>
@@ -39,55 +40,57 @@ const LeftBar = ({ user }) => {
                     </CardHeader>
                     <Collapse isOpen={isProfile}>
                         <CardBody className="socialprofile filter-cards-view">
-                            <Media><Media className="img-50 img-fluid m-r-20 rounded-circle" src={one} alt="" />
+                            {user !== null ? <Media><Media className="img-50 img-fluid m-r-20 rounded-circle" src={one} alt="" />
                                 <Media body>
-                                    <h6 className="font-primary f-w-600">{}</h6><span className="d-block"><span><i className="fa fa-comments-o"> </i><span className="px-2">{Messages}<span className="badge badge-pill badge-light">{"9"}</span></span></span></span><span className="d-block"><span><i className="fa fa-bell-o"></i><span className="px-2">{Notification}<span className="badge badge-pill badge-light">{"9"}</span></span></span></span>
+                                    <h6 className="font-primary f-w-600">{`${user.firstName} ${user.lastName}`}</h6><span className="d-block">Member Since {moment(user.registrationDate).fromNow()}<br /><span><i className="fa fa-comments-o"> </i><span className="px-2 following-text-profile-hacker-larger">Following...  <span style={{ color: "#fff" }} className="badge badge-pill badge-secondary">{user.followingHackers.length} Hacker's</span></span></span></span><span className="d-block"><span><i className="fa fa-bell-o"></i><span className="px-2 following-text-profile-hacker-larger">Following..  <span style={{ color: "#fff" }} className="badge badge-pill badge-info">{user.followingCompanies.length} Employer's</span></span></span></span>
                                 </Media>
-                            </Media>
+                            </Media> : null}
                             <div className="social-btngroup d-flex">
-                                <Button color="primary text-center" type="button">{Likes}</Button>
-                                <Button color="light text-center" type="button">{View}</Button>
+                                <Button onClick={() => setViewType("likesAndHearts")} color={viewType !== "likesAndHearts" ? "light text-center" : "info text-center"} type="button">Page Saves/Hearts</Button>
+                                <Button onClick={() => setViewType("views")} color={viewType !== "likesAndHearts" ? "info text-center" : "light text-center"} type="button">Total Page View's</Button>
                             </div>
-                            <div className="likes-profile text-center">
-                                <h5><span><i className="fa fa-heart font-danger"></i> {"884"}</span></h5>
-                            </div>
+                            {viewType === "likesAndHearts" ? <div className="likes-profile text-center">
+                                <h5><span><i className="fa fa-heart font-danger"></i> {user !== null ? user.profileLovesHearts.length : 0} Page Heart's</span></h5>
+                            </div> : <div className="likes-profile text-center">
+                                <h5><span><i className="fa fa-eye font-danger"></i> {user !== null ? user.totalUniqueViews : 0} Total Page View's</span></h5>
+                            </div>}
                             <div className="text-center">{"35 New Likes This Week"}</div>
                             <div className="customers text-center social-group">
                                 <ul>
                                     <li className="d-inline-block">
                                         <Media className="img-40 rounded-circle" src={three} alt="ThirdImg" id="UncontrolledTooltipExample"/>
                                         <UncontrolledTooltip placement="top" target="UncontrolledTooltipExample">
-                                            {JohnyWaston}
+                                            Random Person
                                         </UncontrolledTooltip>
                                     </li>
                                     <li className="d-inline-block">
                                         <Media className="img-40 rounded-circle" src={five} alt="FifthImg" id="UncontrolledTooltipExample1" />
                                         <UncontrolledTooltip placement="top" target="UncontrolledTooltipExample1">
-                                            {AndewJon}
+                                            Random Person
                                         </UncontrolledTooltip>
                                     </li>
                                     <li className="d-inline-block">
                                         <Media className="img-40 rounded-circle" src={one} alt="FirstImg" id="UncontrolledTooltipExample2" />
                                         <UncontrolledTooltip placement="top" target="UncontrolledTooltipExample2">
-                                            {ComerenDiaz}
+                                            Random Person
                                         </UncontrolledTooltip>
                                     </li>
                                     <li className="d-inline-block">
                                         <Media className="img-40 rounded-circle" src={two} alt="secondImg" id="UncontrolledTooltipExample3" />
                                         <UncontrolledTooltip placement="top" target="UncontrolledTooltipExample3">
-                                            {BuckyBarnes}
+                                            Random Person
                                         </UncontrolledTooltip>
                                     </li>
                                     <li className="d-inline-block">
                                         <Media className="img-40 rounded-circle" src={eight} alt="eightImg" id="UncontrolledTooltipExample4" />
                                         <UncontrolledTooltip placement="top" target="UncontrolledTooltipExample4">
-                                            {JasonBorne}
+                                            Random Person
                                         </UncontrolledTooltip>
                                     </li>
                                     <li className="d-inline-block">
                                         <Media className="img-40 rounded-circle" src={eleven} alt="elevenImg" id="UncontrolledTooltipExample5" />
                                         <UncontrolledTooltip placement="top" target="UncontrolledTooltipExample5">
-                                            {ComerenDiaz}
+                                            Random Person
                                         </UncontrolledTooltip>
                                     </li>
                                 </ul>
@@ -97,121 +100,37 @@ const LeftBar = ({ user }) => {
                 </Card>
             </Col>
             <Col xl="12">
-                <Card><Media className="img-fluid" alt="" src={timeline3} /></Card>
+                {renderPictureOrVideoContentBreakBlock(lastImageBoxed)}
             </Col>
             <Col xl="12">
                 <Card>
                     <CardHeader>
                         <h5 className="mb-0">
                             <Button color="link pl-0" onClick={() => setisMutual(!isMutual)}
-                                data-toggle="collapse" data-target="#collapseicon6" aria-expanded={isMutual} aria-controls="collapseicon6">{MutualFriends}</Button>
+                                data-toggle="collapse" data-target="#collapseicon6" aria-expanded={isMutual} aria-controls="collapseicon6">Recently Viewed This Profile Too</Button>
                         </h5>
                     </CardHeader>
                     <Collapse isOpen={isMutual}>
                         <CardBody className="social-status filter-cards-view">
                             <Form>
                                 <FormGroup className="m-0">
-                                    <Input className="form-control-social" type="search" placeholder="Search Contacts.." />
+                                    <Input className="form-control-social" type="search" placeholder="Search recent viewer's..." />
                                 </FormGroup>
-                            </Form>
-                            <Media>
-                                <img  className="img-50 rounded-circle m-r-15" src={two} alt="twoImg" />
-                                <div className="social-status social-online"></div>
-                                <Media body>
-                                    <span className="f-w-600 d-block">{BuckyBarnes}</span><span className="d-block">{"winter@gmail.com"}</span>
-                                </Media>
-                            </Media>
-                            <Media>
-                                <img className="img-50 rounded-circle m-r-15" src={ten} alt="TenImg" />
-                                <div className="social-status social-busy"></div>
-                                <Media body>
-                                    <span className="f-w-600 d-block">{SarahLoren}</span><span className="d-block">{"barnes@gmail.com"}</span>
-                                </Media>
-                            </Media>
-                            <Media>
-                                <img className="img-50 rounded-circle m-r-15" src={six} alt="sixImg" />
-                                <div className="social-status social-offline"></div>
-                                <Media body>
-                                    <span className="f-w-600 d-block">{JasonBorne}</span><span className="d-block">{"jasonb@gmail.com"}</span>
-                                </Media>
-                            </Media>
-                            <Media>
-                                <img className="img-50 rounded-circle m-r-15" src={eight} alt="eightImg" />
-                                <div className="social-status social-offline"></div>
-                                <Media body>
-                                    <span className="f-w-600 d-block">{ComerenDiaz}</span><span className="d-block">{"comere@gmail.com"}</span>
-                                </Media>
-                            </Media>
-                            <Media>
-                                <img className="img-50 rounded-circle m-r-15" src={fourteen} alt="fourteenImg" />
-                                <div className="social-status social-online"></div>
-                                <Media body>
-                                    <span className="f-w-600 d-block">{AndewJon}</span><span className="d-block">{"andrewj@gmail.com"}</span>
-                                </Media>
-                            </Media>
-                            <Media>
-                                <img className="img-50 rounded-circle m-r-15" src={four} alt="fourImg" />
-                                <div className="social-status social-busy"></div>
-                                <Media body>
-                                    <span className="f-w-600 d-block">{JohnyWaston}</span><span className="d-block">{"johny@gmail.com"}</span>
-                                </Media>
-                            </Media>
-                            <Media>
-                                <img className="img-50 rounded-circle m-r-15" src={three} alt="threeImg" />
-                                <div className="social-status social-offline"></div>
-                                <Media body>
-                                    <span className="f-w-600 d-block">{JohnyWilliam}</span><span className="d-block">{"johnyw@gmail.com"}</span>
-                                </Media>
-                            </Media>
-                            <Media>
-                                <img className="img-50 rounded-circle m-r-15" src={two} alt="twoImg" />
-                                <div className="social-status social-online"></div>
-                                <Media body>
-                                    <span className="f-w-600 d-block">{BuckyBarnes}</span><span className="d-block">{"winter@gmail.com"}</span>
-                                </Media>
-                            </Media>
-                            <Media>
-                                <img className="img-50 rounded-circle m-r-15" src={ten} alt="" />
-                                <div className="social-status social-busy"></div>
-                                <Media body>
-                                    <span className="f-w-600 d-block">{SarahLoren}</span><span className="d-block">{"barnes@gmail.com"}</span>
-                                </Media>
-                            </Media>
-                            <Media>
-                                <img className="img-50 rounded-circle m-r-15" src={six} alt="sixImg" />
-                                <div className="social-status social-offline"></div>
-                                <Media body>
-                                    <span className="f-w-600 d-block">{JasonBorne}</span><span className="d-block">{"jasonb@gmail.com"}</span>
-                                </Media>
-                            </Media>
-                            <Media>
-                                <img className="img-50 rounded-circle m-r-15" src={eight} alt="eightImg" />
-                                <div className="social-status social-offline"></div>
-                                <Media body>
-                                    <span className="f-w-600 d-block">{ComerenDiaz}</span><span className="d-block">{"comere@gmail.com"}</span>
-                                </Media>
-                            </Media>
-                            <Media>
-                                <img className="img-50 rounded-circle m-r-15" src={fourteen} alt="fourteenImg" />
-                                <div className="social-status social-online"></div>
-                                <Media body>
-                                    <span className="f-w-600 d-block">{AndewJon}</span><span className="d-block">{"andrewj@gmail.com"}</span>
-                                </Media>
-                            </Media>
-                            <Media>
-                                <img className="img-50 rounded-circle m-r-15" src={four} alt="fourImg" />
-                                <div className="social-status social-busy"></div>
-                                <Media body>
-                                    <span className="f-w-600 d-block">{JohnyWaston}</span><span className="d-block">{"johny@gmail.com"}</span>
-                                </Media>
-                            </Media>
-                            <Media>
-                                <img className="img-50 rounded-circle m-r-15" src={three} alt="threeImg" />
-                                <div className="social-status social-offline"></div>
-                                <Media body>
-                                    <span className="f-w-600 d-block">{JohnyWilliam}</span><span className="d-block">{"johnyw@gmail.com"}</span>
-                                </Media>
-                            </Media>
+                            </Form>  {/* social status's === social-busy social-online social-offline  */}
+                            <h4 className={"member-since-header-text"}>Recent Profile Views & Visit's</h4>
+                            {(user !== null && typeof user.recentlyViewedProfileViews !== "undefined" && user.recentlyViewedProfileViews.length > 0) ? user.recentlyViewedProfileViews.slice(0, 10).map((visit, idx) => {
+                                return (
+                                    <Fragment>
+                                        <Media>
+                                            {renderPicOrVideoProfileOrNot(visit)}
+                                            <div className="social-status social-online"></div>
+                                            <Media body>
+                                                <span className="f-w-600 d-block">{visit.viewerName}</span><span className="d-block">Member Since: {moment(visit.memberSince).format("MM/DD/YYYY")} <br />{visit.accountType === "hackers" ? "Hacker Account" : "Employer Account"}</span>
+                                            </Media>
+                                        </Media>
+                                    </Fragment>
+                                );
+                            }) : null}
                         </CardBody>
                     </Collapse>
                 </Card>
@@ -228,37 +147,37 @@ const LeftBar = ({ user }) => {
                         <CardBody className="social-status filter-cards-view">
                             <Media><Media className="img-50 rounded-circle m-r-15" src={ten} alt="tenImg" />
                                 <Media body>
-                                    <span className="f-w-600 d-block">{AndewJon}</span>
+                                    <span className="f-w-600 d-block">Random Person</span>
                                     <p>{"Commented on Shaun Park's"} <a href="#javascript">{"Photo"}</a></p><span className="light-span">{"20 min Ago"}</span>
                                 </Media>
                             </Media>
                             <Media><Media className="img-50 rounded-circle m-r-15" src={three} alt="threeImg" />
                                 <Media body>
-                                    <span className="f-w-600 d-block">{JohnyWaston}</span>
+                                    <span className="f-w-600 d-block">Random Person</span>
                                     <p>{"Commented on Shaun Park's"} <a href="#javascript">{"Photo"}</a></p><span className="light-span">{"1 hour Ago"}</span>
                                 </Media>
                             </Media>
                             <Media><Media className="img-50 rounded-circle m-r-15" src={five} alt="fiveImg" />
                                 <Media body>
-                                    <span className="f-w-600 d-block">{ComerenDiaz}</span>
+                                    <span className="f-w-600 d-block">Random Person</span>
                                     <p>{"Commented on Shaun Park's"} <a href="#javascript">{"Photo"}</a></p><span className="light-span">{"1 days Ago"}</span>
                                 </Media>
                             </Media>
                             <Media><Media className="img-50 rounded-circle m-r-15" src={four} alt="fourImg" />
                                 <Media body>
-                                    <span className="f-w-600 d-block">{SarahLoren}</span>
+                                    <span className="f-w-600 d-block">Random Person</span>
                                     <p>{"Commented on Shaun Park's"} <a href="#javascript">{"Photo"}</a></p><span className="light-span">{"2 days Ago"}</span>
                                 </Media>
                             </Media>
                             <Media><Media className="img-50 rounded-circle m-r-15" src={three} alt="threeImg" />
                                 <Media body>
-                                    <span className="f-w-600 d-block">{JohnyWaston}</span>
+                                    <span className="f-w-600 d-block">Random Person</span>
                                     <p>{"Commented on Shaun Park's"} <a href="#javascript">{"Photo"}</a></p><span className="light-span">{"5 days Ago"}</span>
                                 </Media>
                             </Media>
                             <Media><Media className="img-50 rounded-circle m-r-15" src={five} alt="fiveImg" />
                                 <Media body>
-                                    <span className="f-w-600 d-block">{ComerenDiaz}</span>
+                                    <span className="f-w-600 d-block">Random Person</span>
                                     <p>{"Commented on Shaun Park's"} <a href="#javascript">{"Photo"}</a></p><span className="light-span">{"6 days Ago"}</span>
                                 </Media>
                             </Media>
