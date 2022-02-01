@@ -26,6 +26,9 @@ const UserSchema =  new Schema({
         type: String,
         default: ""
     }, 
+    currentlyFollowedBy: {
+        type: Array
+    },
     username: {
         type: String,
         default: ""

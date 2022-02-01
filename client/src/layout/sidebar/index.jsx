@@ -249,6 +249,22 @@ const Sidebar = (props) => {
           // employer acct
           return "/already/applied/jobs/hacker/account";
         }
+      } else if (menuItem.path === "/view/as/hacker/bookmarked/profiles/employer/accounts" || menuItem.path === "/view/as/hacker/view/bookmarked/profiles/hacker/accounts") {
+        if (props.userData.accountType === "employers") {
+          // hacker acct
+          return "/unauthorized/access/restricted";
+        } else {
+          // employer acct
+          return menuItem.path;
+        }
+      } else if (menuItem.path === "/view/as/employer/view/bookmarked/profiles/employer/accounts" || menuItem.path === "/view/as/employer/view/bookmarked/profiles/hacker/accounts") {
+        if (props.userData.accountType === "hackers") {
+          // hacker acct
+          return "/unauthorized/access/restricted";
+        } else {
+          // employer acct
+          return menuItem.path;
+        }
       } else {
         return menuItem.path;
       }

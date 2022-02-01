@@ -11,7 +11,7 @@ import RightBar from './bars/rightBar.jsx';
 import LeftBar from './bars/leftBar.jsx';
 
 
-const AboutTab = ({ user }) => {
+const AboutTab = ({ user, isOpen, onCloseModal, onOpenModal, setSelectedCurrently, modalIndexSelected, setSelectedModalIndex }) => {
 
     return (
         <Fragment>
@@ -296,11 +296,11 @@ const AboutTab = ({ user }) => {
                             </Card>
                         </Col>
                     </Row>
-                </Col>
+                </Col> 
                 <div className="col-xl-3 xl-100 box-col-12">
                     <div className="default-according style-1 faq-accordion job-accordion" id="accordionoc3">
                         <Row>
-                            <RightBar user={user} />
+                            <RightBar modalIndexSelected={modalIndexSelected} setSelectedModalIndex={setSelectedModalIndex} setSelectedCurrently={setSelectedCurrently} onOpenModal={onOpenModal} isOpen={isOpen} onCloseModal={onCloseModal} user={user} />
                         </Row>
                     </div>
                 </div>

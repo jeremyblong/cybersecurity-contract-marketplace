@@ -124,23 +124,27 @@ export const MENUITEMS = [
         ]          
     },
     {
-        menutitle:"Monitization & Extra Income",
-        menucontent:"Monitize your knowledge & earn extra money",
+        menutitle:"Hacker General Management",
+        menucontent:"General Management Options For Hacker Account's",
         Items:[
             {
-                title: 'Raise Support', icon: Headphones, type: 'sub',active: false, children: [
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'Ecommerce', type: 'link' }
+                title: "Bookmarked, Saved & Hearted/Liked Profile's", icon: User, type: 'sub',active: false, children: [
+                    { path: `${process.env.PUBLIC_URL}/view/as/hacker/bookmarked/profiles/employer/accounts`, title: "Bookmarked Employer Account's", type: 'link' },
+                    { path: `${process.env.PUBLIC_URL}/view/as/hacker/view/bookmarked/profiles/hacker/accounts`, title: "Bookmarked Hacker Account's", type: 'link' },
+                    { path: `${process.env.PUBLIC_URL}/`, title: `'Hearted/Liked' Profile's`, type: 'link' }
                 ]
             }
         ]          
     },
     {
-        menutitle:"Competitive Games",
-        menucontent:"Compete with fellow hackers & earn money!",
+        menutitle:"Employer General Management",
+        menucontent:"General Management Options For Employer Account's",
         Items:[
             {
-                title: 'Raise Support', icon: Headphones, type: 'sub',active: false, children: [
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'Ecommerce', type: 'link' }
+                title: "Bookmarked, Saved & Hearted/Liked Profile's", icon: User, type: 'sub',active: false, children: [
+                    { path: `${process.env.PUBLIC_URL}/view/as/employer/view/bookmarked/profiles/employer/accounts`, title: "Bookmarked Employer Account's", type: 'link' },
+                    { path: `${process.env.PUBLIC_URL}/view/as/employer/view/bookmarked/profiles/hacker/accounts`, title: "Bookmarked Hacker Account's", type: 'link' },
+                    { path: `${process.env.PUBLIC_URL}/`, title: `'Hearted/Liked' Profile's`, type: 'link' }
                 ]
             }
         ]          

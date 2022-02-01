@@ -5,6 +5,7 @@ import './styles/boxicons.min.css';
 import './styles/flaticon.css';
 import '../node_modules/react-modal-video/css/modal-video.min.css';
 import 'react-accessible-accordion/dist/fancy-example.css';
+import './styles/customGlobalStyles.css';
 import './styles/style.css';
 import './styles/responsive.css';
 import 'react-phone-number-input/style.css'
@@ -69,6 +70,8 @@ import BlogLeftSidebar from "./pages/blog-left-sidebar.js";
 import BlogRightSidebar from "./pages/blog-right-sidebar.js";
 import MountingLogicRedux from "./mountingLogicRedux.js";
 import SimpleReactLightbox from 'simple-react-lightbox';
+import UnauthorizedAccessPage from "./pages/dashboard/unauthorized/unauthorizedAccess.js";
+
 
 require('dotenv').config();
 
@@ -139,7 +142,34 @@ const Root = (props) =>  {
     }, 225);
     return <Component props={props} />
   }
+  const renderBasedOnAccountType = (path, Component) => {
+    const accountData = store.getState().auth.data;
+
+    console.log("renderBasedOnAccountType accountData :", accountData);
+
+    const employerNOTAllowedRoutes = ["/profile/settings/edit", "/create/listing/software/exchange/hacker/account", "/create/new/live/stream/hackers", "/already/applied/jobs/hacker/account", "/view/as/hacker/bookmarked/profiles/employer/accounts", "/view/as/hacker/view/bookmarked/profiles/hacker/accounts", "/dashboard/hacker"];
+    const hackersNOTAllowedRoutes = ["/profile/settings/edit/employer", "/view/all/general/applications/employer/recruit", "/employer/view/hired/applicants/active", "/view/as/employer/view/bookmarked/profiles/employer/accounts", "/view/as/employer/view/bookmarked/profiles/hacker/accounts", "/dashboard/employer", "/employer/profile/main/display/personal"];
+
+    if (accountData.accountType === "employers") {
+      // employer(s) authenticated acct.
+      if (employerNOTAllowedRoutes.includes(path)) {
+        // employer NOT allowed includes this path so render "Unauthenticated Route"
+        return <UnauthorizedAccessPage />;
+      } else {
+        return <Component />;
+      }
+    } else {
+      // hacker(s) authenticated acct.
+      if (hackersNOTAllowedRoutes.includes(path)) {
+        // hacker NOT allowed includes this path so render "Unauthenticated Route"
+        return <UnauthorizedAccessPage />;
+      } else {
+        return <Component />;
+      }
+    }
+  }
   const renderDashboardComponents = (path, Component) => {
+    console.log("PATH & COMPONENT: ", path, Component);
     return (
       <ProtectedRoute key={path} exact path={`${process.env.PUBLIC_URL}${path}`}>
         {({ match }) => {
@@ -154,7 +184,7 @@ const Root = (props) =>  {
               unmountOnExit
             >
               <div>
-                <Component />
+                {renderBasedOnAccountType(path, Component)}
               </div>
             </CSSTransition> 
           );

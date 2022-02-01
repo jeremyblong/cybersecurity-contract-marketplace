@@ -1,6 +1,6 @@
 import React, { Fragment, Component } from 'react';
 import Breadcrumb from '../../../../../layout/breadcrumb'
-import { Container, Row, Col, Card, Media, TabContent, TabPane, Nav, NavItem, NavLink, CardHeader } from 'reactstrap';
+import { Container, Row, Col, Card, Media, TabContent, TabPane, Nav, NavItem, NavLink, CardHeader, Button } from 'reactstrap';
 import TimelineTab from './timelineTab';
 import AboutTab from './aboutTab';
 import FriendsTab from './friendsTab';
@@ -12,6 +12,10 @@ import { renderProfilePicVideo } from "./helpers/misc/index.js";
 import { connect } from "react-redux";
 import "./styles.css";
 import NotificationManager from 'react-notifications/lib/NotificationManager';
+import helpers from "./bars/helpers/rightBarHelperFunctions.js";
+import { confirmAlert } from 'react-confirm-alert';
+
+const { RenderGalleryModalHackerProfileHelper } = helpers;
 
 class ProfileHackerIndividualHelper extends Component {
 constructor(props) {
@@ -19,8 +23,13 @@ constructor(props) {
 
     this.state = {
         activeTab: "1",
-        user: null
+        user: null,
+        isOpen: false,
+        currentlySelected: null,
+        modalIndexSelected: 0
     }
+
+    this.passedCustomGalleryRef = React.createRef(null);
 }
     componentDidMount() {
         const userID = this.props.match.params.id;
@@ -245,23 +254,112 @@ constructor(props) {
             console.log(err);
         })
     }
-    render () {
+    handleProfilePicVideoClickedMain = () => {
+        console.log("handleProfilePicVideoClickedMain ran/clicked.");
+    }
+    onCloseModal = () => {
+        this.setState({
+            isOpen: false
+        })
+    }
+    onOpenModal = () => {
+        this.setState({
+            isOpen: true
+        })
+    }
+    setSelectedCurrently = (data) => {
+        this.setState({
+            currentlySelected: data
+        })
+    }
+    setSelectedModalIndex = (data) => {
+        this.setState({
+            modalIndexSelected: data
+        })
+    }
+    initiateFollowingOfHacker = () => {
+        console.log("initiate following of hacker.");
+
+        const userID = this.props.match.params.id;
+
+        const { userData } = this.props;
+
         const { user } = this.state;
 
+        // api-request configuration data
+        const config = {
+            hackerID: userID,
+            signedinUserID: userData.uniqueId,
+            signedinUserAccountType: userData.accountType,
+            modifyingUserAccountType: user.accountType,
+            signedinFullName: `${userData.firstName} ${userData.lastName}`,
+            followerUsername: userData.username,
+            followerJobTitle: _.has(userData, "title") ? userData.title : null
+        };
+        // run request api
+        axios.post(`${process.env.REACT_APP_BASE_URL}/start/following/hacker/account`, config).then((res) => {
+            if (res.data.message === "Successfully started following this hacker!") {
+                console.log("successfully bookmarked profile...:", res.data);
+
+                NotificationManager.success(`You've successfully STARTED FOLLOWING the user '${user.firstName} ${user.lastName}'. This user is a 'hacker/contractor', congrats on your new connection!`, 4750);
+
+            } else if (res.data.message === "You've ALREADY followed this user's profile...") {
+                console.log("already bookmarked - do nothing...:", res.data);
+
+                NotificationManager.warning(`You've ALREADY followed ${user.firstName} ${user.lastName}, NO ACTION was taken as we require user's to manage their following/followed user's from the following management page.`, `You're already following the hacker '${user.firstName} ${user.lastName}'!`, 4750);
+            } else {
+                console.log("err", res.data);
+
+                NotificationManager.error("An unknown error has occurred while attempting to follow this user and/or make these changes...", "Error occurred while making changes!", 4750);
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
+    }
+    startFollowingThisHacker = () => {
+        console.log("startFollowingThisHacker start following this hacker....");
+
+        confirmAlert({
+            title: `You're about to start following this user...`,
+            message: `Are you sure you'd like to start "following" this user? Once you follow someone, if you wish to "un-follow" them then you'll have to go to your "manage follower's" page & you can unfollow from there. This user will recieve a notification telling them about their new follower!`,
+            buttons: [
+              {
+                label: 'Yes, Follow this user!',
+                onClick: () => {
+                    // START FOLLOWING HACKER
+                    this.initiateFollowingOfHacker();
+                }
+              },
+              {
+                label: 'No, Cancel!',
+                onClick: () => {
+                    // DO NOTHING.
+                }
+              }
+            ]
+        });
+    }
+    render () {
+        const { user, currentlySelected, isOpen, modalIndexSelected } = this.state;
+        const { userData } = this.props;
         return (
             <Fragment>
                 <Breadcrumb parent="Profile's" title="Individual Hacker Profile" />
+                {user !== null ? <RenderGalleryModalHackerProfileHelper passedCustomGalleryRef={this.passedCustomGalleryRef} setSelectedCurrently={this.setSelectedCurrently} currentlySelected={currentlySelected} userData={userData} modalIndexSelected={modalIndexSelected} setSelectedModalIndex={this.setSelectedModalIndex} onCloseModal={this.onCloseModal} isOpen={isOpen} user={user} /> : null}
                 <Container fluid={true}>
                     <div className="user-profile social-app-profile">
                         <Row>
                             <Col sm="12">
                                 <Card className="hovercard text-center ribbon-wrapper-right">
                                     <CardHeader className="cardheader socialheader" id="override-cardheader">
+                                        <div className={"absolute-banner-hacker-account-positioned"}>
+                                            <Button onClick={this.startFollowingThisHacker} style={{ marginTop: "7.5px" }} color={"secondary"} className="btn-square-secondary text-center"><i className="fa fa-follow m-r-5"></i>Start "Following" This Hacker</Button>
+                                        </div>
                                         <div onClick={this.bookmarkThisHackerProfile} className="ribbon ribbon-clip-right ribbon-right ribbon-info custom-hacker-profile-ribbon"><i className="fa fa-heart"></i> Bookmark This Profile?</div>
                                         {_.has(user, "profileBannerImage") ? <img src={`${process.env.REACT_APP_ASSET_LINK}/${user.profileBannerImage.link}`} id="banner-photo-cover-all" /> : <img src={require('../../../../../assets/images/banner/2.jpg')} id="banner-photo-cover-all" />}
                                     </CardHeader>
                                     <div className="user-image">
-                                        <div className="avatar">
+                                        <div onClick={() => this.handleProfilePicVideoClickedMain()} className="avatar">
                                             {user !== null ? renderProfilePicVideo(user.profilePicsVideos) : <Media body alt="user" src={require("../../../../../assets/images/user/1.jpg")} />}
                                         </div>
                                         
@@ -280,16 +378,16 @@ constructor(props) {
                         </Row>
                         <TabContent activeTab={this.state.activeTab} className="tab-content">
                             <TabPane tabId="1">
-                                <TimelineTab user={user} />
+                                <TimelineTab setSelectedCurrently={this.setSelectedCurrently} currentlySelected={currentlySelected} modalIndexSelected={modalIndexSelected} setSelectedModalIndex={this.setSelectedModalIndex} user={user} onOpenModal={this.onOpenModal} isOpen={this.state.isOpen} onCloseModal={this.onCloseModal} />
                             </TabPane>
                             <TabPane tabId="2">
-                                <AboutTab user={user}  />
+                                <AboutTab setSelectedCurrently={this.setSelectedCurrently} currentlySelected={currentlySelected} modalIndexSelected={modalIndexSelected} setSelectedModalIndex={this.setSelectedModalIndex} user={user} onOpenModal={this.onOpenModal} isOpen={this.state.isOpen} onCloseModal={this.onCloseModal} />
                             </TabPane>
                             <TabPane tabId="3">
-                                <FriendsTab user={user}  />
+                                <FriendsTab user={user} onOpenModal={this.onOpenModal} isOpen={this.state.isOpen} onCloseModal={this.onCloseModal} />
                             </TabPane>
                             <TabPane tabId="4">
-                                <PhotosTab user={user}  />
+                                <PhotosTab user={user} onOpenModal={this.onOpenModal} isOpen={this.state.isOpen} onCloseModal={this.onCloseModal} />
                             </TabPane>
                         </TabContent>
                     </div>

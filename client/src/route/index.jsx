@@ -37,6 +37,10 @@ import BlogsMainHomepageViewPage from "../pages/dashboard/blogging/viewAll/viewM
 import MainPurchaseVariousBooostsPage from "../pages/dashboard/boosts/hackers/purchaseVarietyBoosts/selectBoostProfileOptions.js";
 import ViewHiredHackersPage from "../pages/dashboard/jobManagement/employers/manageHiredHackers/viewHackers/viewHackersHired.js";
 import ViewAlreadyAppliedJobsHackerPage from "../pages/dashboard/jobManagement/hackers/alreadyApplied/viewAllAlreadyApplied.js";
+import BookmarkedEmployerAccountsAsEmployerPage from "../pages/dashboard/bookmarked/employers/bookmarkedEmployerAccounts/bookmarkedEmployerAccountsMain.js";
+import BookmarkedHackerAccountsAsEmployerPage from "../pages/dashboard/bookmarked/employers/bookmarkedHackerAccounts/bookmarkedHackerAccountsMain.js";
+import BookmarkedHackerAccountsAsHackerPage from "../pages/dashboard/bookmarked/hackers/bookmarkedHackerAccounts/bookmarkedHackerAccountsMain.js";
+import BookmarkedEmployerAccountsAsHackerPage from "../pages/dashboard/bookmarked/hackers/bookmarkedEmployerAccounts/bookmarkedEmployerAccountsMain.js";
 
 export const routes = [
         { path:"/profile/settings/edit", Component: GeneralSettingsPage },
@@ -77,5 +81,9 @@ export const routes = [
         { path: "/blogging/main/page/display/all", Component: BlogsMainHomepageViewPage },
         { path: "/purchase/various/boosts/hacker/account", Component: MainPurchaseVariousBooostsPage },
         { path: "/employer/view/hired/applicants/active", Component: ViewHiredHackersPage },
-        { path: "/already/applied/jobs/hacker/account", Component: ViewAlreadyAppliedJobsHackerPage }
-];
+        { path: "/already/applied/jobs/hacker/account", Component: ViewAlreadyAppliedJobsHackerPage },
+        { path: "/view/as/employer/view/bookmarked/profiles/hacker/accounts", Component: BookmarkedHackerAccountsAsEmployerPage },
+        { path: "/view/as/employer/view/bookmarked/profiles/employer/accounts", Component: BookmarkedEmployerAccountsAsEmployerPage },
+        { path: "/view/as/hacker/view/bookmarked/profiles/hacker/accounts", Component: BookmarkedHackerAccountsAsHackerPage },
+        { path: "/view/as/hacker/bookmarked/profiles/employer/accounts", Component: BookmarkedEmployerAccountsAsHackerPage }
+]; 

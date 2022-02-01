@@ -39,7 +39,8 @@ router.post("/", async (req, res) => {
       followingCompanies: [],
       applicants: [],
       bookmarkedProfiles: [],
-      profileLovesHearts: []
+      profileLovesHearts: [],
+      currentlyFollowedBy: []
     }), password, async (err, user) => {
       if (err) {
           console.log(err);

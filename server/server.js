@@ -142,6 +142,9 @@ app.use("/react/hacker/profile/file/history", require("./routes/hackers/profile/
 app.use("/update/hacker/view/account/details/new/view", require("./routes/hackers/profile/publicProfile/markProfileView/markProfileAsViewedCurrentUser.js"));
 app.use("/bookmark/hacker/profile/either/account/type", require("./routes/hackers/profile/publicProfile/bookmarkProfile/bookmarkHackerProfile.js"));
 app.use("/heart/profile/hacker/bookmark", require("./routes/hackers/profile/publicProfile/heartProfileHacker/heartLoveHackerProfile.js"));
+app.use("/gather/bookmarked/accounts/both/as/employer", require("./routes/employers/bookmarkedProfiles/gatherBothAccountTypesDynamically.js"));
+app.use("/gather/bookmarked/accounts/both/as/hacker", require("./routes/hackers/bookmarkedProfiles/gatherBothAccountTypesDynamic.js"));
+app.use("/start/following/hacker/account", require("./routes/hackers/profile/publicProfile/followHackerUser/startFollowingThisHackerUser.js"));
 
 // ~ webhook logic STARTS here ~
 app.use("/passbase/webhook", require("./webhooks/passbase/webhook.js"));

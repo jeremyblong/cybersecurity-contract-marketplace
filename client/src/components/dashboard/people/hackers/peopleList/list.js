@@ -1,10 +1,9 @@
 import React, { Fragment,useState,useEffect } from 'react';
 import Breadcrumb from '../../../../../layout/breadcrumb';
-import { Container, Row, Col, Card, CardHeader, CardFooter, Media, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
+import { Container, Row, Col, Card, CardHeader, CardFooter, Media, Button } from 'reactstrap';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import _ from "lodash";
 import moment from "moment";
-import { Button } from "reactstrap";
 import axios from "axios";
 import helpers from "./helpers/helperFunctions.js";
 import PaginationEmployerListingHelper from "../../../universal/pagination/paginationHelper.js";

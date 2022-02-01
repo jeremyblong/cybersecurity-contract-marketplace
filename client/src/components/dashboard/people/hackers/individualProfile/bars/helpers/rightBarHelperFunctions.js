@@ -17,23 +17,22 @@ const settings = {
     slidesToScroll: 1
 };
 
-const renderPictureOrVideoLast = (file, index, onCloseModal, setSelectedModalIndex, galleryRef, setSelectedCurrently) => {
+const RenderPictureOrVideoLast = ({ file, index, setSelectedModalIndex, galleryRef, setSelectedCurrently, onOpenModal }) => {
+
     if (file !== null && _.has(file, "link")) {
         if (file.type.includes("video")) {
             // video logic
             return (
                 <Fragment>
-                    <li onClick={() => {
+                    <li onClick={async () => {
                         // set current index for modal
                         setSelectedModalIndex(index);
                         // set currently selected item
                         setSelectedCurrently(file);
                         // open modal and display
-                        onCloseModal(true);
-                        // go to appropriate/selected slide...
                         setTimeout(() => {
-                            galleryRef.current.slickGoTo(index);
-                        }, 375)
+                            onOpenModal();
+                        }, 500);
                     }}>
                         <div className="latest-post profile-pic-video-sidebar-custom">
                             <ReactPlayer playing={true} loop={true} controls={false} muted={false} width={"100%"} className={"img-fluid"} wrapper={"div"} url={`${process.env.REACT_APP_ASSET_LINK}/${file.link}`} />
@@ -45,17 +44,15 @@ const renderPictureOrVideoLast = (file, index, onCloseModal, setSelectedModalInd
             // image logic
             return (
                 <Fragment>
-                    <li onClick={() => {
+                    <li onClick={async () => {
                         // set current index for modal
                         setSelectedModalIndex(index);
                         // set currently selected item
                         setSelectedCurrently(file);
                         // open modal and display
-                        onCloseModal(true);
-                        // go to appropriate/selected slide...
                         setTimeout(() => {
-                            galleryRef.current.slickGoTo(index);
-                        }, 375)
+                            onOpenModal();
+                        }, 500);
                     }}>
                         <div className="latest-post profile-pic-video-sidebar-custom">
                             <img className="img-fluid" alt="post1" src={`${process.env.REACT_APP_ASSET_LINK}/${file.link}`} />
@@ -68,17 +65,15 @@ const renderPictureOrVideoLast = (file, index, onCloseModal, setSelectedModalInd
         // image logic - DEFAULT.
         return (
             <Fragment>
-                <li onClick={() => {
+                <li onClick={async () => {
                     // set current index for modal
                     setSelectedModalIndex(index);
                     // set currently selected item
                     setSelectedCurrently(file);
                     // open modal and display
-                    onCloseModal(true);
-                    // go to appropriate/selected slide...
                     setTimeout(() => {
-                        galleryRef.current.slickGoTo(index);
-                    }, 375)
+                        onOpenModal();
+                    }, 500);
                 }}>
                     <div className="latest-post profile-pic-video-sidebar-custom">
                         <img className="img-fluid" alt="post1" src={process.env.REACT_APP_PLACEHOLDER_IMAGE} />
@@ -146,7 +141,7 @@ const renderModalImageOrVideo = (file) => {
         );
     } 
 }
-const RenderGalleryModalHackerProfileHelper = ({ currentlySelected, setSelectedCurrently, onCloseModal, userData, user, isOpen, galleryRef }) => {
+const RenderGalleryModalHackerProfileHelper = ({ passedCustomGalleryRef, modalIndexSelected, currentlySelected, setSelectedCurrently, onCloseModal, userData, user, isOpen }) => {
 
     const [ picturesArr, setPicturesArr ] = useState([]);
 
@@ -229,18 +224,25 @@ const RenderGalleryModalHackerProfileHelper = ({ currentlySelected, setSelectedC
         console.log("picturesArr[index] :", picturesArr[index]);
         setSelectedCurrently(picturesArr[index]);
     }
-    console.log("inner component currentlySelected & picturesArr", currentlySelected, picturesArr);
+    const initializedSlider = () => {
+        console.log("slide INITIALIZED...!");
+
+        setTimeout(() => {
+            passedCustomGalleryRef.current.slickGoTo(modalIndexSelected, false);
+        },  550);
+    }
+    console.log("checking for ref related data...:", passedCustomGalleryRef);
     return (
         <Fragment>
             <Modal classNames={{
                 overlay: 'hackerProfileLightboxDisplayOverlay',
                 modal: 'hackerProfileLightboxDisplayModal',
-            }} open={isOpen} onClose={() => onCloseModal(false)} center>
+            }} open={isOpen} onClose={() => onCloseModal()} center>
                 <Container className={"modal-container-hacker-profile-maxed"} fluid={true}>
                     <Row>
                         <div className={"centered-both-ways"}>
                             <Col className={"spacing-col-profile-hacker"} sm="12" md="12" lg="12" xl="12">
-                                <Slider afterChange={afterChangeOccurred} ref={galleryRef} className={"profile-pictures-slider-pane"} {...settings}>
+                                <Slider onInit={initializedSlider} afterChange={afterChangeOccurred} className={"profile-pictures-slider-pane"} {...settings} ref={passedCustomGalleryRef}>
                                     {typeof picturesArr !== "undefined" && picturesArr.length > 0 ? picturesArr.map((file, idxxx) => {
                                         return (
                                             <Fragment key={idxxx}>
@@ -328,7 +330,7 @@ const RenderGalleryModalHackerProfileHelper = ({ currentlySelected, setSelectedC
     );
 }
 export default {
-    renderPictureOrVideoLast,
+    RenderPictureOrVideoLast,
     RenderGalleryModalHackerProfileHelper,
     renderPictureOrVideoContentBreakBlock
 };

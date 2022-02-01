@@ -12,19 +12,15 @@ import eleven from "../../../../../../assets/images/user/11.png";
 import ten from "../../../../../../assets/images/user/10.jpg";
 
 
-const { renderPictureOrVideoLast, RenderGalleryModalHackerProfileHelper, renderPictureOrVideoContentBreakBlock } = helpers;
+const { RenderPictureOrVideoLast, renderPictureOrVideoContentBreakBlock } = helpers;
 
-const RightBar = ({ user, userData }) => {
+const RightBar = ({ user, modalIndexSelected, setSelectedModalIndex, onCloseModal, onOpenModal, setSelectedCurrently }) => {
     // relevant ref's creation
     const galleryRef = useRef(null);
     const [isIntro, setisIntro] = useState(true);
     const [isFollowers, setisFollowers] = useState(true);
     const [isFollowings, setisFollowings] = useState(true);
     const [isPhotos, setisPhotos] = useState(true);
-    const [isFriends, setisFriends] = useState(true);
-    const [ isOpen, onCloseModal ] = useState(false);
-    const [ modalIndexSelected, setSelectedModalIndex ] = useState(0);
-    const [ currentlySelected, setSelectedCurrently ] = useState(null);
 
     const renderCoreInformationConditionally = () => {
         if (user !== null) {
@@ -47,6 +43,7 @@ const RightBar = ({ user, userData }) => {
                                 <Button color="social-btn btn-twitter mb-2 text-center"><i className="fa fa-twitter m-r-5"></i>Twitter</Button>
                                 <Button color="social-btn btn-google text-center"><i className="fa fa-dribbble m-r-5"></i>Dribble</Button>
                                 <Button style={{ marginTop: "7.5px" }} color="social-btn btn-info text-center"><i className="fa fa-github m-r-5"></i>GitHub</Button>
+                                <Button style={{ marginTop: "7.5px" }} color="social-btn btn-secondary text-center"><i className="fa fa-linkedin m-r-5"></i>Linked-In</Button>
                             </div>
                         </CardBody>
                     </Collapse>
@@ -74,7 +71,7 @@ const RightBar = ({ user, userData }) => {
                             {typeof user.profilePicsVideos !== "undefined" && user.profilePicsVideos.length > 0 ? user.profilePicsVideos.map((file, index) => {
                                 return (
                                     <Fragment key={index}>
-                                        {renderPictureOrVideoLast(file, index, onCloseModal, setSelectedModalIndex, galleryRef, setSelectedCurrently)}
+                                        <RenderPictureOrVideoLast modalIndexSelected={modalIndexSelected} file={file} index={index} onCloseModal={onCloseModal} setSelectedModalIndex={setSelectedModalIndex} galleryRef={galleryRef} setSelectedCurrently={setSelectedCurrently} onOpenModal={onOpenModal} />
                                     </Fragment>
                                 );
                             }) : null}
@@ -102,7 +99,6 @@ const RightBar = ({ user, userData }) => {
                     {renderCoreInformationConditionally()}
                 </Card>
             </Col>
-            {user !== null ? <RenderGalleryModalHackerProfileHelper setSelectedCurrently={setSelectedCurrently} currentlySelected={currentlySelected} userData={userData} galleryRef={galleryRef} modalIndexSelected={modalIndexSelected} setSelectedModalIndex={setSelectedModalIndex} onCloseModal={onCloseModal} isOpen={isOpen} user={user} /> : null}
             <Col xl="12 xl-50 box-col-6">
                 <Card>
                     <CardHeader>

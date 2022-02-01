@@ -117,7 +117,7 @@ const LeftBar = ({ user }) => {
                                     <Input className="form-control-social" type="search" placeholder="Search recent viewer's..." />
                                 </FormGroup>
                             </Form>  {/* social status's === social-busy social-online social-offline  */}
-                            <h4 className={"member-since-header-text"}>Recent Profile Views & Visit's</h4>
+                            <h4 className={"member-since-header-text"}>Recent <strong>Unique</strong> Profile Views & Visit's</h4>
                             {(user !== null && typeof user.recentlyViewedProfileViews !== "undefined" && user.recentlyViewedProfileViews.length > 0) ? user.recentlyViewedProfileViews.slice(0, 10).map((visit, idx) => {
                                 return (
                                     <Fragment>

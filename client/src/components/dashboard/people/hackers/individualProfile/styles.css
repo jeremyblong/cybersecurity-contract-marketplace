@@ -17,3 +17,8 @@
 #banner-photo-cover-all {
 
 }
+.absolute-banner-hacker-account-positioned {
+    position: absolute;
+    top: 20px;
+    left: 25px;
+}

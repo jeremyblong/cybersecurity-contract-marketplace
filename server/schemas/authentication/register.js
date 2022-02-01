@@ -24,6 +24,9 @@ const UserSchema =  new Schema({
     totalUniqueViews: {
         type: Number
     },
+    currentlyFollowedBy: {
+        type: Array
+    },
     lastName: {
         type: String,
         default: ""
