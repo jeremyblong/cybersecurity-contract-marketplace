@@ -147,7 +147,7 @@ const Root = (props) =>  {
 
     console.log("renderBasedOnAccountType accountData :", accountData);
 
-    const employerNOTAllowedRoutes = ["/profile/settings/edit", "/create/listing/software/exchange/hacker/account", "/create/new/live/stream/hackers", "/already/applied/jobs/hacker/account", "/view/as/hacker/bookmarked/profiles/employer/accounts", "/view/as/hacker/view/bookmarked/profiles/hacker/accounts", "/dashboard/hacker"];
+    const employerNOTAllowedRoutes = ["/profile/settings/edit", "/create/listing/software/exchange/hacker/account", "/create/new/live/stream/hackers", "/already/applied/jobs/hacker/account", "/view/as/hacker/bookmarked/profiles/employer/accounts", "/view/as/hacker/view/bookmarked/profiles/hacker/accounts", "/dashboard/hacker", "/create/new/post/hacker/profile/main/data"];
     const hackersNOTAllowedRoutes = ["/profile/settings/edit/employer", "/view/all/general/applications/employer/recruit", "/employer/view/hired/applicants/active", "/view/as/employer/view/bookmarked/profiles/employer/accounts", "/view/as/employer/view/bookmarked/profiles/hacker/accounts", "/dashboard/employer", "/employer/profile/main/display/personal"];
 
     if (accountData.accountType === "employers") {

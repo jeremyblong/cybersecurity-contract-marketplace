@@ -11,7 +11,6 @@ router.post("/", (req, resppppp, next) => {
         hackerID,
         signedinUserID,
         signedinUserAccountType,
-        // modifyingUserAccountType,
         signedinFullName,
         followerUsername,
         followerJobTitle
@@ -204,12 +203,88 @@ router.post("/", (req, resppppp, next) => {
                     }
                 })
             } else {
-                // ALREADY exists!
-                console.log("already following...");
+                const findMatchIndex = hacker.currentlyFollowedBy.findIndex((follower) => follower.followerID === signedinUserID);
+                
+                hacker.currentlyFollowedBy.splice(findMatchIndex, 1);
 
-                resppppp.json({
-                    message: "You've ALREADY followed this user's profile...",
-                    hacker
+                const actionPromise = new Promise(async (resolve, reject) => {
+                    // do other logic to signed-in account now...
+                    if (signedinUserAccountType === "hackers") {
+
+                        const hackerChanges = await hackerCollection.findOne({ uniqueId: signedinUserID });
+
+                        if (hackerChanges !== null) {
+                            const followingIndex = hackerChanges.followingHackers.findIndex((follower) => follower.followerID === signedinUserID);
+
+                            hackerChanges.followingHackers.splice(followingIndex, 1);
+
+                            hackerCollection.save(hackerChanges, (errrrrrrr, result) => {
+                                if (errrrrrrr) {
+                                    console.log("undo previous changes because of failure failed.");
+
+                                    resolve(false);
+                                } else {
+                                    console.log("Successfully rewound saved data after failure.");
+
+                                    resolve(true);
+                                }
+                            })
+                        } else {
+                            // NO match found.
+                            resolve(false);
+                        }
+                    } else {
+                        
+                        const employerChanges = await employerCollection.findOne({ uniqueId: signedinUserID });
+
+                        if (employerChanges !== null) {
+                            const followingIndex = employerChanges.followingHackers.findIndex((follower) => follower.followerID === signedinUserID);
+
+                            employerChanges.followingHackers.splice(followingIndex, 1);
+
+                            employerCollection.save(employerChanges, (errrrrrrr, result) => {
+                                if (errrrrrrr) {
+                                    console.log("undo previous changes because of failure failed.");
+
+                                    resolve(false);
+                                } else {
+                                    console.log("Successfully rewound saved data after failure.");
+
+                                    resolve(true);
+                                }
+                            })
+                        } else {
+                            // NO match found.
+                            resolve(false);
+                        }
+                    }
+                })
+
+                actionPromise.then((succeeded) => {
+                    if (succeeded === true) {
+                        hackerCollection.save(hacker, (erorrrrrr, resulllllt) => {
+                            if (erorrrrrr) {
+                                console.log("erorrrrrr saving initial first hacker data :", erorrrrrr);
+                                
+                                resppppp.json({
+                                    message: "Unknown error has occurring during the 'new follow' process...",
+                                    err
+                                })
+                            } else {
+                                console.log("resulllllt", resulllllt);
+        
+                                resppppp.json({
+                                    message: "You've ALREADY followed this user's profile...",
+                                    hacker
+                                })
+                            }
+                        });
+                    } else {
+                        resppppp.json({
+                            message: "Unknown error has occurring during the 'new follow' process...",
+                            err
+                        })
+                    }
                 })
             }
         }

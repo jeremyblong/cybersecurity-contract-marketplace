@@ -30,6 +30,7 @@ import cn from '../../assets/i18n/cn.json';
 import ae from '../../assets/i18n/ae.json';
 import { InputGroup, InputGroupAddon, Button } from 'reactstrap';
 import { updateCourseInformationData } from "../../redux/actions/courses/createNewCourse/index.js";
+import "./styles.css";
 
 // translation logic...
 setTranslations({ en, es, pt, fr, du, cn, ae });
@@ -329,8 +330,12 @@ const Rightbar = ({ authenticated, data, authentication, saveListingData, saveSo
                   history.push("/hacker/profile/main/display/personal");
                 }
               }}><User /><span>{Account} </span></li>
+              {data.accountType === "hackers" ? <li className={"row-wrap"} onClick={() => {
+                history.push(`/hacker/profile/individual/view/${data.uniqueId}`);
+              }}><FileText /><span className={"row-wrap"}>View Public H&shy;acker-Account</span></li> : <li className={"row-wrap"} onClick={() => {
+                console.log("do nothing yet...");
+              }}><FileText /><span className={"row-wrap"}>View Public E&shy;mployer-Account</span></li>}
               <li><Mail /><span>{Inbox}</span></li>
-              <li><FileText /><span>{Taskboard}</span></li>
               {data.accountType === "employers" ? <li><User /><span><strong style={{ color: "blue", textDecorationLine: "underline" }}>{typeof data.applicants !== "undefined" ? data.applicants.length : "0"}</strong>{" Current Applicant(s)"}</span></li> : null}
               <li><LogIn /><span onClick={handlePreviewActivate}>{LogOut}</span></li>
             </ul>

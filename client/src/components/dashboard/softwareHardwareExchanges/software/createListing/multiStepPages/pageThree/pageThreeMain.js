@@ -15,7 +15,7 @@ import axios from 'axios';
 import LoadingBar from 'react-top-loading-bar';
 import helperFunctions from "./helpers/slideUpPane/pane.js";
 import Tour from 'reactour';
-import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
+import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 import functionsHelperMain from "./helpers/reactHookFormHelpers/helpers.js";
 
 

@@ -22,3 +22,19 @@
     top: 20px;
     left: 25px;
 }
+.posting-sub-header-new-content {
+    margin-top: 5px;
+}
+.maxed-both-ways-not-found {
+    min-width: 100%;
+    width: 100%;
+    min-height: 100%;
+    height: 100%;
+}
+.maxed-both-ways-not-found {
+    border: 2.75px dotted black;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.20);
+}
+.add-shadow-general-card-profile {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.20) !important;
+}

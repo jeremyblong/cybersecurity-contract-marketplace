@@ -26,7 +26,7 @@ const AboutTab = ({ user, isOpen, onCloseModal, onOpenModal, setSelectedCurrentl
                 <Col xl="6 xl-60 box-col-8" lg="12" md="7">
                     <Row>
                         <Col sm="12">
-                            <Card>
+                            <Card className={"add-shadow-general-card-profile"}>
                                 <CardHeader>
                                     <h5>{"People You May Know"}</h5>
                                 </CardHeader>
@@ -81,7 +81,7 @@ const AboutTab = ({ user, isOpen, onCloseModal, onOpenModal, setSelectedCurrentl
                             </Card>
                         </Col>
                         <Col sm="12">
-                            <Card>
+                            <Card className={"add-shadow-general-card-profile"}>
                                 <CardHeader className="social-header">
                                     <h5><span>{"Hobbies and Interests"}</span><span className="pull-right"><MoreVertical /></span></h5>
                                 </CardHeader>
@@ -138,7 +138,7 @@ const AboutTab = ({ user, isOpen, onCloseModal, onOpenModal, setSelectedCurrentl
                             </Card>
                         </Col>
                         <Col sm="12">
-                            <Card>
+                            <Card className={"add-shadow-general-card-profile"}>
                                 <CardHeader className="social-header">
                                     <h5><span>{"Education and Employement"}</span><span className="pull-right"><MoreVertical /></span></h5>
                                 </CardHeader>
@@ -189,7 +189,7 @@ const AboutTab = ({ user, isOpen, onCloseModal, onOpenModal, setSelectedCurrentl
                             </Card>
                         </Col>
                         <Col sm="12">
-                            <Card>
+                            <Card className={"add-shadow-general-card-profile"}>
                                 <CardHeader>
                                     <h5>{"Viewed Your Profile"}</h5>
                                 </CardHeader>
@@ -249,7 +249,7 @@ const AboutTab = ({ user, isOpen, onCloseModal, onOpenModal, setSelectedCurrentl
                             </Card>
                         </Col>
                         <Col sm="12">
-                            <Card>
+                            <Card className={"add-shadow-general-card-profile"}>
                                 <CardHeader>
                                     <h5>Activity Log</h5>
                                 </CardHeader>

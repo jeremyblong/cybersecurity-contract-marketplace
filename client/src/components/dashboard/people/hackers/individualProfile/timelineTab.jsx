@@ -1,24 +1,50 @@
-import React, { Fragment } from 'react';
-import { Row, Col, Card, CardBody, Button, Media, InputGroup, InputGroupAddon, Input } from 'reactstrap';
-import one from "../../../../../assets/images/user/1.jpg";
-import three from "../../../../../assets/images/user/3.jpg";
-import two from "../../../../../assets/images/user/2.png";
-import timeline1 from "../../../../../assets/images/social-app/timeline-1.png";
-import timeline2 from "../../../../../assets/images/social-app/timeline-2.png";
-import { MoreVertical } from 'react-feather';
+import React, { Fragment, useState, useEffect } from 'react';
+import { Row, Col, Card, CardBody, Button } from 'reactstrap';
 import LeftBar from './bars/leftBar.jsx';
 import RightBar from './bars/rightBar.jsx';
-import { JasonBorne, IssaBell, MoreCommnets } from "../../../../../constant";
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+import { connect } from "react-redux";
+import { useHistory } from 'react-router-dom';
+import helpers from "./helpers/misc/index.js";
+import ViewPostFileContentHelper from "./helpers/viewPostFileContents/viewContent.js";
 
+const { TimelinePostsMappedHelper } = helpers;
 
-const TimelineTab = ({ user, onCloseModal, isOpen, onOpenModal, setSelectedCurrently, setSelectedModalIndex, modalIndexSelected }) => {
+const TimelineTab = ({ user, onCloseModal, isOpen, onOpenModal, setSelectedCurrently, setSelectedModalIndex, modalIndexSelected, userData }) => {
 
+    const history = useHistory();
+
+    // console.log("MY USER:", user);
+
+    const [ popover, setPopoverState ] = useState({}); 
+    const [ isPostPaneOpen, setPostPaneOpenState ] = useState(false);
+    const [ selectedPost, setSelectedPost ] = useState(null);
+    const [ selectedIndex, setSelectedIndex ] = useState(0);
+
+    // render ONLY ONCE
+    useEffect(() => {
+        setPopoverState(() => {
+            const newObjCount = {};
+            const posts = user.profilePosts;
+            // reassign state items in preperation for future state changes...
+            for (const keyyy in posts) {
+                newObjCount[`post${keyyy}`] = false;
+            }
+            return newObjCount;
+        })
+    }, []);
+
+    const postNewContentStart = () => {
+        console.log("postNewContentStart clicked/ran.");
+
+        history.push("/create/new/post/hacker/profile/main/data");
+    }
 
     const renderConditionalContent = () => {
         if (user !== null) {
             return (
                 <Fragment>
+                    {selectedPost !== null ? <ViewPostFileContentHelper setSelectedPost={setSelectedPost} setSelectedIndex={setSelectedIndex} selectedIndex={selectedIndex} userData={userData} user={user} selectedPost={selectedPost} isPostPaneOpen={isPostPaneOpen} setPostPaneOpenState={setPostPaneOpenState} /> : null}
                     <Col xl="3 xl-40 box-col-4" lg="12" md="5">
                         <div className="default-according style-1 faq-accordion job-accordion" id="accordionoc4">
                             <Row>
@@ -27,131 +53,28 @@ const TimelineTab = ({ user, onCloseModal, isOpen, onOpenModal, setSelectedCurre
                         </div>
                     </Col>
                     <Col xl="6 xl-60 box-col-8" lg="12" md="7">
+                        {user.uniqueId === userData.uniqueId ? <Row>
+                            <Card>
+                                <CardBody>
+                                    <h4 className={"poster-image-video-content-header"}>Upload a new post and/or content to your main feed!</h4>
+                                    <p className={"posting-sub-header-new-content"}>This can be <strong>ANYTHING</strong> from images to videos to educational content to general updates (ONLY you can see this portion of content)...</p>
+                                    <hr />
+                                    <Button onClick={postNewContentStart} style={{ width: "100%" }} outline color={"info"} className="btn-square-info text-center"><i className="fa fa-follow m-r-5"></i>Post New Content!</Button>
+                                </CardBody>
+                            </Card>
+                        </Row> : null}
                         <Row>
-                            <Col sm="12">
-                                <Card>
-                                    <CardBody>
-                                        <div className="new-users-social">
-                                            <Media>
-                                                <Media className="rounded-circle image-radius m-r-15" src={one} alt="" />
-                                                <Media body>
-                                                    <h6 className="mb-0 f-w-700">{`${user.firstName} ${user.lastName}`}</h6>
-                                                    <p>{"January, 12,2019"}</p>
-                                                </Media><span className="pull-right mt-0"><MoreVertical /></span>
-                                            </Media>
-                                        </div>
-                                        <Media className="img-fluid" alt="" src={timeline1} />
-                                        <div className="timeline-content">
-                                            <p>
-                                                {"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse sed urna in justo euismod condimentum. Fusce placerat enim et odio molestie sagittis."}
-                                            </p>
-                                            <div className="like-content"><span><i className="fa fa-heart font-danger"></i></span><span className="pull-right comment-number"><span>{"20"} </span><span><i className="fa fa-share-alt mr-0"></i></span></span><span className="pull-right comment-number"><span>{"10"} </span><span><i className="fa fa-comments-o"></i></span></span></div>
-                                            <div className="social-chat">
-                                                <div className="your-msg">
-                                                    <Media>
-                                                        <Media className="img-50 img-fluid m-r-20 rounded-circle" alt="" src={one} />
-                                                        <Media body><span className="f-w-600">Jason Borne <span>{"1 Year Ago"} <i className="fa fa-reply font-primary"></i></span></span>
-                                                            <p>{"we are doing dance and singing songs, please vote our post which is very good for all young peoples"}</p>
-                                                        </Media>
-                                                    </Media>
-                                                </div>
-                                                <div className="other-msg">
-                                                    <Media>
-                                                        <Media className="img-50 img-fluid m-r-20 rounded-circle" alt="" src={two} />
-                                                        <Media body><span className="f-w-600">Alexandria <span>{"1 Month Ago"} <i className="fa fa-reply font-primary"></i></span></span>
-                                                            <p>{"ohh yeah very good car and its features i will surely vote for it"} </p>
-                                                        </Media>
-                                                    </Media>
-                                                </div>
-                                                <div className="other-msg">
-                                                    <Media>
-                                                        <Media className="img-50 img-fluid m-r-20 rounded-circle" alt="" src={three} />
-                                                        <Media body><span className="f-w-600">Olivia John <span>{"15 Days Ago"} <i className="fa fa-reply font-primary"></i></span></span>
-                                                            <p>{"ohh yeah very good car and its features i will surely vote for it"} </p>
-                                                        </Media>
-                                                    </Media>
-                                                </div>
-                                                <div className="your-msg">
-                                                    <Media>
-                                                        <Media className="img-50 img-fluid m-r-20 rounded-circle" alt="" src={one} />
-                                                        <Media body><span className="f-w-600">Issabella <span>{"1 Year Ago"} <i className="fa fa-reply font-primary"></i></span></span>
-                                                            <p>{"we are doing dance and singing songs, please vote our post which is very good for all young peoples"}</p>
-                                                        </Media>
-                                                    </Media>
-                                                </div>
-                                                <div className="text-center"><a href="#javascript">More Comments</a></div>
-                                            </div>
-                                            <div className="comments-box">
-                                                <Media>
-                                                    <Media className="img-50 img-fluid m-r-20 rounded-circle" alt="" src={one} />
-                                                    <Media body>
-                                                        <InputGroup className="text-box">
-                                                            <Input className="form-control input-txt-bx" type="text" name="message-to-send" placeholder="Post Your commnets" />
-                                                            <InputGroupAddon addonType="append">
-                                                                <Button color="transparent"><i className="fa fa-smile-o">  </i></Button>
-                                                            </InputGroupAddon>
-                                                        </InputGroup>
-                                                    </Media>
-                                                </Media>
-                                            </div>
-                                        </div>
-                                    </CardBody>
-                                </Card>
-                            </Col>
-                            <Col sm="12">
-                                <Card>
-                                    <CardBody>
-                                        <div className="new-users-social">
-                                            <Media>
-                                                <Media className="rounded-circle image-radius m-r-15" src={one} alt="" />
-                                                <Media body>
-                                                    <h6 className="mb-0 f-w-700">{`${user.firstName} ${user.lastName}`}</h6>
-                                                    <p>{"January, 12,2019"}</p>
-                                                </Media><span className="pull-right mt-0"><MoreVertical /></span>
-                                            </Media>
-                                        </div>
-                                        <Media className="img-fluid" alt="" src={timeline2} />
-                                        <div className="timeline-content">
-                                            <p>
-                                                {"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse sed urna in justo euismod condimentum. Fusce placerat enim et odio molestie sagittis."}
-                                            </p>
-                                            <div className="like-content"><span><i className="fa fa-heart font-danger"></i></span><span className="pull-right comment-number"><span>{"20"} </span><span><i className="fa fa-share-alt mr-0"></i></span></span><span className="pull-right comment-number"><span>{"10"} </span><span><i className="fa fa-comments-o"></i></span></span></div>
-                                            <div className="social-chat">
-                                                <div className="your-msg">
-                                                    <Media>
-                                                        <Media className="img-50 img-fluid m-r-20 rounded-circle" alt="" src={one} />
-                                                        <Media body><span className="f-w-600">{JasonBorne} <span>{"1 Year Ago"} <i className="fa fa-reply font-primary"></i></span></span>
-                                                            <p>{"we are doing dance and singing songs, please vote our post which is very good for all young peoples"}</p>
-                                                        </Media>
-                                                    </Media>
-                                                </div>
-                                                <div className="your-msg">
-                                                    <Media>
-                                                        <Media className="img-50 img-fluid m-r-20 rounded-circle" alt="" src={one} />
-                                                        <Media body><span className="f-w-600">{IssaBell} <span>{"1 Year Ago"} <i className="fa fa-reply font-primary"></i></span></span>
-                                                            <p>{"we are doing dance and singing songs, please vote our post which is very good for all young peoples"}</p>
-                                                        </Media>
-                                                    </Media>
-                                                </div>
-                                                <div className="text-center"><a href="#javascript">{MoreCommnets}</a></div>
-                                            </div>
-                                            <div className="comments-box">
-                                                <Media>
-                                                    <Media className="img-50 img-fluid m-r-20 rounded-circle" alt="" src={one} />
-                                                    <Media body>
-                                                        <InputGroup className="text-box">
-                                                            <Input className="form-control input-txt-bx" type="text" name="message-to-send" placeholder="Post Your commnets" />
-                                                            <InputGroupAddon addonType="append">
-                                                                <Button color="transparent"><i className="fa fa-smile-o">  </i></Button>
-                                                            </InputGroupAddon>
-                                                        </InputGroup>
-                                                    </Media>
-                                                </Media>
-                                            </div>
-                                        </div>
-                                    </CardBody>
-                                </Card>
-                            </Col>
+                            {typeof user.profilePosts !== "undefined" && user.profilePosts.length > 0 ? user.profilePosts.map((post, index) => {
+                                const popoverIDTarget = `post${index}`;
+                                return <TimelinePostsMappedHelper setSelectedIndex={setSelectedIndex} selectedIndex={selectedIndex} isPostPaneOpen={isPostPaneOpen} setPostPaneOpenState={setPostPaneOpenState} setSelectedPost={setSelectedPost} user={user} setPopoverState={setPopoverState} popoverIDTarget={popoverIDTarget} popover={popover} userData={userData} index={index} post={post} />;
+                            }) : <Fragment>
+                                <Row style={{ marginBottom: "17.5px" }}><img src={require("../../../../../assets/images/boxbg.jpg")} className={"maxed-both-ways-not-found"} /></Row>
+                                <Row style={{ marginBottom: "17.5px" }}><img src={require("../../../../../assets/images/boxbg.jpg")} className={"maxed-both-ways-not-found"} /></Row>
+                                <Row style={{ marginBottom: "17.5px" }}><img src={require("../../../../../assets/images/boxbg.jpg")} className={"maxed-both-ways-not-found"} /></Row>
+                                <Row style={{ marginBottom: "17.5px" }}><img src={require("../../../../../assets/images/boxbg.jpg")} className={"maxed-both-ways-not-found"} /></Row>
+                                <Row style={{ marginBottom: "17.5px" }}><img src={require("../../../../../assets/images/boxbg.jpg")} className={"maxed-both-ways-not-found"} /></Row>
+                                <Row style={{ marginBottom: "17.5px" }}><img src={require("../../../../../assets/images/boxbg.jpg")} className={"maxed-both-ways-not-found"} /></Row>
+                            </Fragment>}
                         </Row>
                     </Col>
                     <Col xl="3 xl-100 box-col-12">
@@ -183,5 +106,9 @@ const TimelineTab = ({ user, onCloseModal, isOpen, onOpenModal, setSelectedCurre
         </Fragment>
     );
 };
-
-export default TimelineTab;
+const mapStateToProps = (state) => {
+    return {
+        userData: state.auth.data
+    }
+}
+export default connect(mapStateToProps, {})(TimelineTab);

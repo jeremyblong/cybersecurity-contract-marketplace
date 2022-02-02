@@ -8,12 +8,14 @@ import PhotosTab from './photosTab';
 import axios from "axios";
 import { withRouter } from "react-router-dom";
 import _ from "lodash";
-import { renderProfilePicVideo } from "./helpers/misc/index.js";
+import otherHelpers from "./helpers/misc/index.js";
 import { connect } from "react-redux";
 import "./styles.css";
 import NotificationManager from 'react-notifications/lib/NotificationManager';
 import helpers from "./bars/helpers/rightBarHelperFunctions.js";
 import { confirmAlert } from 'react-confirm-alert';
+
+const { renderProfilePicVideo } = otherHelpers;
 
 const { RenderGalleryModalHackerProfileHelper } = helpers;
 
@@ -255,7 +257,15 @@ constructor(props) {
         })
     }
     handleProfilePicVideoClickedMain = () => {
-        console.log("handleProfilePicVideoClickedMain ran/clicked.");
+        const { user } = this.state;
+        // deselect last item...
+        const lastItem = user.profilePicsVideos !== "undefined" && user.profilePicsVideos.length > 0 ? user.profilePicsVideos.length - 1 : null;
+        // set first item to display initially
+        if (lastItem !== null) {
+            this.setSelectedModalIndex(lastItem);
+            // open modal after data is set
+            this.onOpenModal();
+        }
     }
     onCloseModal = () => {
         this.setState({
@@ -350,7 +360,7 @@ constructor(props) {
                     <div className="user-profile social-app-profile">
                         <Row>
                             <Col sm="12">
-                                <Card className="hovercard text-center ribbon-wrapper-right">
+                                <Card className="hovercard text-center ribbon-wrapper-right add-shadow-general-card-profile">
                                     <CardHeader className="cardheader socialheader" id="override-cardheader">
                                         <div className={"absolute-banner-hacker-account-positioned"}>
                                             <Button onClick={this.startFollowingThisHacker} style={{ marginTop: "7.5px" }} color={"secondary"} className="btn-square-secondary text-center"><i className="fa fa-follow m-r-5"></i>Start "Following" This Hacker</Button>
@@ -377,18 +387,20 @@ constructor(props) {
                             </Col>
                         </Row>
                         <TabContent activeTab={this.state.activeTab} className="tab-content">
-                            <TabPane tabId="1">
-                                <TimelineTab setSelectedCurrently={this.setSelectedCurrently} currentlySelected={currentlySelected} modalIndexSelected={modalIndexSelected} setSelectedModalIndex={this.setSelectedModalIndex} user={user} onOpenModal={this.onOpenModal} isOpen={this.state.isOpen} onCloseModal={this.onCloseModal} />
-                            </TabPane>
-                            <TabPane tabId="2">
-                                <AboutTab setSelectedCurrently={this.setSelectedCurrently} currentlySelected={currentlySelected} modalIndexSelected={modalIndexSelected} setSelectedModalIndex={this.setSelectedModalIndex} user={user} onOpenModal={this.onOpenModal} isOpen={this.state.isOpen} onCloseModal={this.onCloseModal} />
-                            </TabPane>
-                            <TabPane tabId="3">
-                                <FriendsTab user={user} onOpenModal={this.onOpenModal} isOpen={this.state.isOpen} onCloseModal={this.onCloseModal} />
-                            </TabPane>
-                            <TabPane tabId="4">
-                                <PhotosTab user={user} onOpenModal={this.onOpenModal} isOpen={this.state.isOpen} onCloseModal={this.onCloseModal} />
-                            </TabPane>
+                            {user !== null ? <Fragment>
+                                <TabPane tabId="1">
+                                    <TimelineTab setSelectedCurrently={this.setSelectedCurrently} currentlySelected={currentlySelected} modalIndexSelected={modalIndexSelected} setSelectedModalIndex={this.setSelectedModalIndex} user={user} onOpenModal={this.onOpenModal} isOpen={this.state.isOpen} onCloseModal={this.onCloseModal} />
+                                </TabPane>
+                                <TabPane tabId="2">
+                                    <AboutTab setSelectedCurrently={this.setSelectedCurrently} currentlySelected={currentlySelected} modalIndexSelected={modalIndexSelected} setSelectedModalIndex={this.setSelectedModalIndex} user={user} onOpenModal={this.onOpenModal} isOpen={this.state.isOpen} onCloseModal={this.onCloseModal} />
+                                </TabPane>
+                                <TabPane tabId="3">
+                                    <FriendsTab user={user} onOpenModal={this.onOpenModal} isOpen={this.state.isOpen} onCloseModal={this.onCloseModal} />
+                                </TabPane>
+                                <TabPane tabId="4">
+                                    <PhotosTab user={user} onOpenModal={this.onOpenModal} isOpen={this.state.isOpen} onCloseModal={this.onCloseModal} />
+                                </TabPane>
+                            </Fragment> : null}
                         </TabContent>
                     </div>
                 </Container>

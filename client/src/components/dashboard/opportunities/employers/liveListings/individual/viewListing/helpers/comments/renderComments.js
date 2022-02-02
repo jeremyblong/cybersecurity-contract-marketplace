@@ -1,8 +1,8 @@
 import React, { Fragment, useState, useEffect, useRef } from 'react';
 import "../../styles.css";
-import { Row, Col, Media, Input, Label, Button, Form, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
+import { Row, Col, Media, Input, Label, Button, Form } from 'reactstrap';
 import axios from 'axios';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import MainHooksCourseIndividualCustomHelpers from "./helpers/reduxFormHelpers.js";
 import ReactPlayer from "react-player";
 import helpers from "./helpers/helperFunctions.js";

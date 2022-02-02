@@ -1,0 +1,71 @@
+.emoji-response-post {
+    float: left;
+}
+.custom-like-response-zone {
+    margin-top: 40px;
+}
+.post-title-main {
+    font-weight: 500;
+    color: black !important;
+}
+.image-render-col-custom {
+    margin: 0px !important;
+    max-height: 350px;
+    background-color: rgba(173, 173, 173, 0.185);
+    padding: 3.5px !important;
+}
+/* normal image - actual image element/css */
+.post-image-resized {
+    object-fit: cover !important;
+    max-height: 100% !important;
+    min-height: 100% !important;
+    min-width: 100% !important;
+}
+/* normal image WRAPPER - image wrapper or container */
+.align-post-content-picture {
+    max-height: 200px !important;
+    height: 100%;
+    width: 100%;
+    display: -webkit-flexbox;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    justify-content: center;
+}
+.maxed-out-post-video-custom video, .maxed-out-post-video-custom, .maxed-out-post-video-custom-wrapper {
+    min-height: 100% !important;
+    height: 100% !important;
+    min-width: 100% !important;
+}
+/* posting video wrapper/container outter */
+.maxed-out-post-video-custom-wrapper {
+
+}
+.post-image-resized:hover {
+    cursor: pointer !important;
+}
+.maxed-out-post-video-custom:hover {
+    cursor: pointer !important;
+}
+/* bottom row similar */
+.maxed-out-post-video-custom-wrapper-bottom {
+    max-height: 200px !important;
+    min-height: 100% !important;
+    height: 100% !important;
+    width: 100% !important;
+    min-width: 100% !important;
+}
+.align-post-content-picture-bottom-item {
+    max-height: 200px !important;
+    min-height: 100% !important;
+    height: 100% !important;
+    width: 100% !important;
+    min-width: 100% !important;
+}
+.align-post-content-picture-bottom-item img {
+    object-fit: cover !important;
+}

@@ -89,7 +89,7 @@ const renderPictureOrVideoContentBreakBlock = (file) => {
             // video logic
             return (
                 <Fragment>
-                    <Card>
+                    <Card className={"add-shadow-general-card-profile"}>
                         <ReactPlayer playing={true} loop={true} controls={false} muted={false} width={"100%"} className={"img-fluid"} wrapper={"div"} url={`${process.env.REACT_APP_ASSET_LINK}/${file.link}`} />
                     </Card>
                 </Fragment>
@@ -98,7 +98,7 @@ const renderPictureOrVideoContentBreakBlock = (file) => {
             // image logic
             return (
                 <Fragment>
-                    <Card>
+                    <Card className={"add-shadow-general-card-profile"}>
                         <Media className="img-fluid" src={`${process.env.REACT_APP_ASSET_LINK}/${file.link}`} alt="" />
                     </Card>
                 </Fragment>
@@ -108,7 +108,7 @@ const renderPictureOrVideoContentBreakBlock = (file) => {
         // image logic - DEFAULT.
         return (
             <Fragment>
-                <Card>
+                <Card className={"add-shadow-general-card-profile"}>
                     <Media className="img-fluid" src={process.env.REACT_APP_PLACEHOLDER_IMAGE} alt="" />
                 </Card>
             </Fragment>

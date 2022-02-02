@@ -95,12 +95,12 @@ const RightBar = ({ user, modalIndexSelected, setSelectedModalIndex, onCloseModa
     return (
         <Fragment>
             <Col xl="12 xl-50 box-col-6">
-                <Card>
+                <Card className={"add-shadow-general-card-profile"}>
                     {renderCoreInformationConditionally()}
                 </Card>
             </Col>
             <Col xl="12 xl-50 box-col-6">
-                <Card>
+                <Card className={"add-shadow-general-card-profile"}>
                     <CardHeader>
                         <h5 className="mb-0">
                             <Button color="link pl-0" onClick={() => setisFollowers(!isFollowers)}
@@ -134,7 +134,7 @@ const RightBar = ({ user, modalIndexSelected, setSelectedModalIndex, onCloseModa
                 </Card>
             </Col>
             <Col xl="12 xl-50 box-col-6">
-                <Card>
+                <Card className={"add-shadow-general-card-profile"}>
                     <CardHeader>
                         <h5 className="mb-0">
                             <Button color="link pl-0" onClick={() => setisFollowings(!isFollowings)}
@@ -168,7 +168,7 @@ const RightBar = ({ user, modalIndexSelected, setSelectedModalIndex, onCloseModa
                 </Card>
             </Col>
             <Col xl="12 xl-50 box-col-6">
-                <Card>
+                <Card className={"add-shadow-general-card-profile"}>
                     <CardHeader>
                         <h5 className="mb-0">
                             <Button color="link pl-0" onClick={() => setisPhotos(!isPhotos)}

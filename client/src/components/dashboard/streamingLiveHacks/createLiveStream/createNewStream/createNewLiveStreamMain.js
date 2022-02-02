@@ -8,7 +8,6 @@ import _ from "lodash";
 import { connect } from "react-redux";
 import { NotificationManager } from "react-notifications";
 import { useForm, Controller } from 'react-hook-form';
-import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import hookFormHelpers from "./helpers/helperFunctions.js";
 import Select from "react-select";
 import nonFormHelpers from "./helpers/nonFormHelpers.js";

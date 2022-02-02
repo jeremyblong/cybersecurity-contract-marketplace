@@ -29,7 +29,7 @@ const LeftBar = ({ user }) => {
     return (
         <Fragment>
             <Col xl="12">
-                <Card>
+                <Card className={"add-shadow-general-card-profile"}>
                     <CardHeader>
                         <h5 className="mb-0">
                             <Button color="link pl-0" onClick={() => setisProfile(!isProfile)}
@@ -103,7 +103,7 @@ const LeftBar = ({ user }) => {
                 {renderPictureOrVideoContentBreakBlock(lastImageBoxed)}
             </Col>
             <Col xl="12">
-                <Card>
+                <Card className={"add-shadow-general-card-profile"}>
                     <CardHeader>
                         <h5 className="mb-0">
                             <Button color="link pl-0" onClick={() => setisMutual(!isMutual)}
@@ -120,7 +120,7 @@ const LeftBar = ({ user }) => {
                             <h4 className={"member-since-header-text"}>Recent <strong>Unique</strong> Profile Views & Visit's</h4>
                             {(user !== null && typeof user.recentlyViewedProfileViews !== "undefined" && user.recentlyViewedProfileViews.length > 0) ? user.recentlyViewedProfileViews.slice(0, 10).map((visit, idx) => {
                                 return (
-                                    <Fragment>
+                                    <Fragment key={idx}>
                                         <Media>
                                             {renderPicOrVideoProfileOrNot(visit)}
                                             <div className="social-status social-online"></div>
@@ -136,7 +136,7 @@ const LeftBar = ({ user }) => {
                 </Card>
             </Col>
             <Col xl="12">
-                <Card>
+                <Card className={"add-shadow-general-card-profile"}>
                     <CardHeader>
                         <h5 className="mb-0">
                             <Button color="link pl-0" onClick={() => setisActivity(!isActivity)}

@@ -24,6 +24,9 @@ const UserSchema =  new Schema({
     totalUniqueViews: {
         type: Number
     },
+    profilePosts: {
+        type: Array
+    },
     currentlyFollowedBy: {
         type: Array
     },

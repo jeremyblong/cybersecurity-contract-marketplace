@@ -145,6 +145,8 @@ app.use("/heart/profile/hacker/bookmark", require("./routes/hackers/profile/publ
 app.use("/gather/bookmarked/accounts/both/as/employer", require("./routes/employers/bookmarkedProfiles/gatherBothAccountTypesDynamically.js"));
 app.use("/gather/bookmarked/accounts/both/as/hacker", require("./routes/hackers/bookmarkedProfiles/gatherBothAccountTypesDynamic.js"));
 app.use("/start/following/hacker/account", require("./routes/hackers/profile/publicProfile/followHackerUser/startFollowingThisHackerUser.js"));
+app.use("/upload/new/wall/profile/post/hacker/account", require("./routes/hackers/profile/uploadNewPost/uploadNewMainProfilePost.js"));
+app.use("/react/posting/hacker/profile/individual", require("./routes/hackers/profile/publicProfile/postingLogicAndInteractions/reactWithEmojiSpecificPost/reactWithEmojiToPost.js"));
 
 // ~ webhook logic STARTS here ~
 app.use("/passbase/webhook", require("./webhooks/passbase/webhook.js"));

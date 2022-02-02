@@ -45,7 +45,8 @@ router.post("/", async (req, res) => {
       totalUniqueViews: 0,
       bookmarkedProfiles: [],
       profileLovesHearts: [],
-      currentlyFollowedBy: []
+      currentlyFollowedBy: [],
+      profilePosts: []
     }), password, async (err, user) => {
       if (err) {
 

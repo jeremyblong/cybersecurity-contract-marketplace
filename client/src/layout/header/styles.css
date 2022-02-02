@@ -1,0 +1,12 @@
+.row-wrap {
+   
+}
+.row-wrap span {
+    word-wrap: break-word;
+    flex-wrap: nowrap;
+    -moz-hyphens: manual;
+    -ms-hyphens: manual;
+    hyphens: manual;
+    word-break: break-all;
+    flex-wrap: wrap;
+}

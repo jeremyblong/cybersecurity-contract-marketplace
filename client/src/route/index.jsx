@@ -41,6 +41,7 @@ import BookmarkedEmployerAccountsAsEmployerPage from "../pages/dashboard/bookmar
 import BookmarkedHackerAccountsAsEmployerPage from "../pages/dashboard/bookmarked/employers/bookmarkedHackerAccounts/bookmarkedHackerAccountsMain.js";
 import BookmarkedHackerAccountsAsHackerPage from "../pages/dashboard/bookmarked/hackers/bookmarkedHackerAccounts/bookmarkedHackerAccountsMain.js";
 import BookmarkedEmployerAccountsAsHackerPage from "../pages/dashboard/bookmarked/hackers/bookmarkedEmployerAccounts/bookmarkedEmployerAccountsMain.js";
+import CreateNewHackerProfileContentPostPage from "../pages/dashboard/people/hackers/individualProfile/wallData/postNewWallData/createNewWallData.js";
 
 export const routes = [
         { path:"/profile/settings/edit", Component: GeneralSettingsPage },
@@ -85,5 +86,6 @@ export const routes = [
         { path: "/view/as/employer/view/bookmarked/profiles/hacker/accounts", Component: BookmarkedHackerAccountsAsEmployerPage },
         { path: "/view/as/employer/view/bookmarked/profiles/employer/accounts", Component: BookmarkedEmployerAccountsAsEmployerPage },
         { path: "/view/as/hacker/view/bookmarked/profiles/hacker/accounts", Component: BookmarkedHackerAccountsAsHackerPage },
-        { path: "/view/as/hacker/bookmarked/profiles/employer/accounts", Component: BookmarkedEmployerAccountsAsHackerPage }
+        { path: "/view/as/hacker/bookmarked/profiles/employer/accounts", Component: BookmarkedEmployerAccountsAsHackerPage },
+        { path: "/create/new/post/hacker/profile/main/data", Component: CreateNewHackerProfileContentPostPage }
 ]; 
