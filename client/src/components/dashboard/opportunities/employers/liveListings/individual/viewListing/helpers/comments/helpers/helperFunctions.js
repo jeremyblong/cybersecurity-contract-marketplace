@@ -21,8 +21,6 @@ const RenderEmojiLogic = ({ reactions, comments }) => {
         setReady(true);
     }, []);
 
-    console.log("emojiData inner component ./:", emojiData);
-
     useEffect( () => () => {
         console.log("emojiData update or unmount", reactions, comments);
 

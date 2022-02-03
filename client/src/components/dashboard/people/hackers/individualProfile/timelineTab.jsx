@@ -7,6 +7,8 @@ import { connect } from "react-redux";
 import { useHistory } from 'react-router-dom';
 import helpers from "./helpers/misc/index.js";
 import ViewPostFileContentHelper from "./helpers/viewPostFileContents/viewContent.js";
+import _ from "lodash";
+import uuid from 'react-uuid';
 
 const { TimelinePostsMappedHelper } = helpers;
 
@@ -20,6 +22,8 @@ const TimelineTab = ({ user, onCloseModal, isOpen, onOpenModal, setSelectedCurre
     const [ isPostPaneOpen, setPostPaneOpenState ] = useState(false);
     const [ selectedPost, setSelectedPost ] = useState(null);
     const [ selectedIndex, setSelectedIndex ] = useState(0);
+    const [ comments, setCommentsState ] = useState([]);
+    const [ profilePosts, setProfilePosts ] = useState([]);
 
     // render ONLY ONCE
     useEffect(() => {
@@ -32,6 +36,7 @@ const TimelineTab = ({ user, onCloseModal, isOpen, onOpenModal, setSelectedCurre
             }
             return newObjCount;
         })
+        setProfilePosts(user.profilePosts);
     }, []);
 
     const postNewContentStart = () => {
@@ -39,12 +44,19 @@ const TimelineTab = ({ user, onCloseModal, isOpen, onOpenModal, setSelectedCurre
 
         history.push("/create/new/post/hacker/profile/main/data");
     }
-
+    const countReactions = (reactions) => {
+        let count = 0;
+        for (const key in reactions) {
+            const el = reactions[key];
+            count += el;
+        }
+        return count;
+    }
     const renderConditionalContent = () => {
         if (user !== null) {
             return (
                 <Fragment>
-                    {selectedPost !== null ? <ViewPostFileContentHelper setSelectedPost={setSelectedPost} setSelectedIndex={setSelectedIndex} selectedIndex={selectedIndex} userData={userData} user={user} selectedPost={selectedPost} isPostPaneOpen={isPostPaneOpen} setPostPaneOpenState={setPostPaneOpenState} /> : null}
+                    {selectedPost !== null ? <ViewPostFileContentHelper setProfilePosts={setProfilePosts} comments={comments} setCommentsState={setCommentsState} setSelectedPost={setSelectedPost} setSelectedIndex={setSelectedIndex} selectedIndex={selectedIndex} userData={userData} user={user} selectedPost={selectedPost} isPostPaneOpen={isPostPaneOpen} setPostPaneOpenState={setPostPaneOpenState} /> : null}
                     <Col xl="3 xl-40 box-col-4" lg="12" md="5">
                         <div className="default-according style-1 faq-accordion job-accordion" id="accordionoc4">
                             <Row>
@@ -64,9 +76,9 @@ const TimelineTab = ({ user, onCloseModal, isOpen, onOpenModal, setSelectedCurre
                             </Card>
                         </Row> : null}
                         <Row>
-                            {typeof user.profilePosts !== "undefined" && user.profilePosts.length > 0 ? user.profilePosts.map((post, index) => {
+                            {typeof profilePosts !== "undefined" && profilePosts.length > 0 ? profilePosts.map((post, index) => {
                                 const popoverIDTarget = `post${index}`;
-                                return <TimelinePostsMappedHelper setSelectedIndex={setSelectedIndex} selectedIndex={selectedIndex} isPostPaneOpen={isPostPaneOpen} setPostPaneOpenState={setPostPaneOpenState} setSelectedPost={setSelectedPost} user={user} setPopoverState={setPopoverState} popoverIDTarget={popoverIDTarget} popover={popover} userData={userData} index={index} post={post} />;
+                                return <TimelinePostsMappedHelper key={`${post.uniqueId}-${countReactions(post.reactions)}-${post.comments.length}`} setProfilePosts={setProfilePosts} comments={post.comments} setCommentsState={setCommentsState} setSelectedIndex={setSelectedIndex} selectedIndex={selectedIndex} isPostPaneOpen={isPostPaneOpen} setPostPaneOpenState={setPostPaneOpenState} setSelectedPost={setSelectedPost} user={user} setPopoverState={setPopoverState} popoverIDTarget={popoverIDTarget} popover={popover} userData={userData} index={`${post.uniqueId}-${countReactions(post.reactions)}-${post.comments.length}`} post={post} />;
                             }) : <Fragment>
                                 <Row style={{ marginBottom: "17.5px" }}><img src={require("../../../../../assets/images/boxbg.jpg")} className={"maxed-both-ways-not-found"} /></Row>
                                 <Row style={{ marginBottom: "17.5px" }}><img src={require("../../../../../assets/images/boxbg.jpg")} className={"maxed-both-ways-not-found"} /></Row>

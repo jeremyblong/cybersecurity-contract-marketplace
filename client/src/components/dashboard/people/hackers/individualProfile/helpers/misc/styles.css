@@ -21,6 +21,13 @@
     min-height: 100% !important;
     min-width: 100% !important;
 }
+.emoji-already-existant-profile-wall {
+    min-height: 55px;
+    min-width: 55px;
+    max-height: 55px;
+    max-width: 55px;
+    margin-left: 0px !important;
+}
 /* normal image WRAPPER - image wrapper or container */
 .align-post-content-picture {
     max-height: 200px !important;
@@ -40,6 +47,32 @@
     min-height: 100% !important;
     height: 100% !important;
     min-width: 100% !important;
+}
+.min-50-50-video {
+    min-width: 62.5px;
+    background-color: lightgrey;
+    min-height: 62.5px;
+    max-height: 62.5px;
+    max-width: 62.5px;
+    width: 62.5px;
+    border-radius: 15px !important;
+    height: 62.5px;
+}
+.custom-profile-comments-row-override {
+ 
+}
+.min-50-50-image {
+    min-width: 50px !important;
+    min-height: 50px !important;
+    max-width: 50px !important;
+    max-height: 50px !important;
+}
+#create-spacer-comment-box-profile-individual {
+    min-width: 100% !important;
+}
+.your-msg-custom-profile-mapped {
+    /* min-width: 700px !important;
+    margin-left: -100px !important; */
 }
 /* posting video wrapper/container outter */
 .maxed-out-post-video-custom-wrapper {

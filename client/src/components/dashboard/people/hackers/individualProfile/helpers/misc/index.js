@@ -1,57 +1,63 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { Row, Col, Card, CardBody, Button, Media, Input, InputGroup, InputGroupAddon, Popover, PopoverBody, PopoverHeader } from 'reactstrap';
+import { Row, Col, Card, CardBody, Button, Media, Input, InputGroup, InputGroupAddon, Popover, PopoverBody, PopoverHeader, Form, Tooltip } from 'reactstrap';
 import moment from "moment";
 import ReactPlayer from 'react-player';
 import { MoreVertical } from "react-feather";
-import one from '../../../../../../../assets/images/job-search/1.jpg';
 import two from '../../../../../../../assets/images/job-search/6.jpg';
-import timeline1 from "../../../../../../../assets/images/social-app/timeline-1.png";
 import "./styles.css";
+import { Picker } from 'emoji-mart';
+import axios from "axios";
+import { useForm } from 'react-hook-form';
+import { NotificationManager } from 'react-notifications';
+import CommentsIndividualPostHelper from "../viewPostFileContents/helpers/renderComments/otherHelpers/reactHookForm.js";
+import helpers from "./miscHelpers/helpers.js";
 
-const renderProfilePicVideo = (picOrVideoArray) => {
-    // check conditional item to render
-    if (typeof picOrVideoArray !== "undefined" && picOrVideoArray.length > 0) {
-        // select last element (most recent)
-        const last = picOrVideoArray[picOrVideoArray.length - 1];
 
-        if (last.dataType === "video") {
-            // video logic
-            return (
-                <Media className="custom-media-chunk" body>
-                    <ReactPlayer playing={true} loop={true} muted={true} width={"300px"} height={"300px"} className={"profile-picture-account media-body"} wrapper={"div"} url={`${process.env.REACT_APP_ASSET_LINK}/${last.link}`} />
-                </Media>
-            );
-        } else if (last.dataType === "image") {
-            // image logic
-            return <Media body alt="profile-picture" src={`${process.env.REACT_APP_ASSET_LINK}/${last.link}`} data-intro="This is Profile image" />;
-        }   
-    } else {
-        return <Media body alt="profile-picture" src={require('../../../../../../../assets/images/user/7.jpg')} data-intro="This is Profile image" />;
-    }
-}
-const renderProfilePicVideoPost = (picOrVideoArray) => {
-    // check conditional item to render
-    if (typeof picOrVideoArray !== "undefined" && picOrVideoArray.length > 0) {
-        // select last element (most recent)
-        const last = picOrVideoArray[picOrVideoArray.length - 1];
+const {
+    renderProfilePicVideo, 
+    renderProfilePicVideoPost, 
+    renderCustomCommentImageVideo, 
+    RenderEmojiLogic
+} = helpers;
 
-        if (last.dataType === "video") {
-            // video logic
-            return (
-                <Media className="rounded-circle image-radius m-r-15">
-                    <ReactPlayer playing={true} loop={true} muted={true} width={"58px"} height={"58px"} className={"rounded-circle image-radius m-r-15"} wrapper={"div"} url={`${process.env.REACT_APP_ASSET_LINK}/${last.link}`} />
-                </Media>
-            );
-        } else if (last.dataType === "image") {
-            // image logic
-            return <Media className="rounded-circle image-radius m-r-15" alt="profile-picture" src={`${process.env.REACT_APP_ASSET_LINK}/${last.link}`} data-intro="This is Profile image" />;
-        }   
-    } else {
-        return <Media className="rounded-circle image-radius m-r-15" alt="profile-picture" src={require('../../../../../../../assets/images/user/7.jpg')} data-intro="This is Profile image" />;
-    }
-}
-const handleRespondEmoji = (emojiName, comment, closePopover, targetAndPopState) => {
+
+const homepageCheckMessageMeetsCritera = CommentsIndividualPostHelper().homepageCheckMessageMeetsCritera;
+
+
+const handleRespondEmoji = (emojiName, relatedPost, closePopover, targetAndPopState, userData, user, setProfilePosts) => {
     console.log("emojiName", emojiName);
+
+    const config = {
+        reaction: emojiName,
+        reactorID: userData.uniqueId,
+        posterID: user.uniqueId, 
+        relatedPostID: relatedPost.uniqueId
+    }
+
+    axios.post(`${process.env.REACT_APP_BASE_URL}/react/posting/hacker/profile/individual/specific/post/main/mapped`, config).then((res) => {
+        if (res.data.message === "Successfully reacted to post!") {
+            console.log(res.data);
+
+            const { posts } = res.data;
+
+            NotificationManager.success("You've successfully reacted with an emoji to this user's specific post! If you'd like to remove this reaction, simply react with any of the emoji's again & it'll revoke your response.", "Successfully reacted to post!", 4750);
+
+            setProfilePosts(posts);
+
+        } else if (res.data.message === "Successfully REMOVED reaction to post!") {
+            const { posts } = res.data;
+
+            setProfilePosts(posts);
+
+            NotificationManager.info("We've successfully REMOVED your previous reaction as you've already reacted to this post, if you didn't mean to remove this reaction, simply react with same emoji again...", "Successfully removed previous reaction!", 4750);
+        } else {
+            console.log("Err", res.data);
+
+            NotificationManager.error("An error occurred while attempting to react to this specific post with the appropriate emoji, Try again & contact support if the issue persists.", "Error reacting to post!", 4750);
+        }
+    }).catch((err) => {
+        console.log(err);
+    })
 
     // const configuration = {
     //     emojiName,
@@ -137,10 +143,30 @@ const renderGridImageOrVideo = (file, bottom, setSelectedPost, post, setPostPane
             </Fragment>
         );
     } else {
-        console.log("NEITHER MATCH.")
+        console.log("NEITHER MATCH.");
+
+        // image logic
+        return (
+            <Fragment>
+                <div className={bottom === true ? "align-post-content-picture-bottom-item" : "align-post-content-picture"}>
+                    <Media onClick={() => {
+                        setSelectedIndex(index);
+                        // set the selected modal/pane post
+                        setSelectedPost({
+                            ...post,
+                            files: post.uploadedRelevantFiles
+                        });
+                        // delay so selectedPost loads before/prior then display
+                        setTimeout(() => {
+                            setPostPaneOpenState(true);
+                        }, 375);
+                    }} className="post-image-resized" alt="post-picture" src={require("../../../../../../../assets/images/cannot-display-file.png")} />
+                </div>
+            </Fragment>
+        );
     }
 }
-const RenderCertainImageDisplay = ({ setSelectedIndex, selectedIndex, isPostPaneOpen, setPostPaneOpenState, files, setSelectedPost, post }) => {
+const RenderCertainImageDisplay = ({ setSelectedIndex, setPostPaneOpenState, files, setSelectedPost, post }) => {
     switch (files.length) {
         case 0:
             return null;
@@ -148,7 +174,7 @@ const RenderCertainImageDisplay = ({ setSelectedIndex, selectedIndex, isPostPane
         case 1:
             return (
                 <Fragment>
-                    <Media className="img-fluid" alt="" src={timeline1} />
+                    {renderGridImageOrVideo(files[0], false, setSelectedPost, post, setPostPaneOpenState, 0, setSelectedIndex)}
                 </Fragment>
             );
             break;
@@ -157,10 +183,10 @@ const RenderCertainImageDisplay = ({ setSelectedIndex, selectedIndex, isPostPane
                 <Fragment>
                     <Row>
                         <Col className={"image-render-col-custom"} sm="12" md="6" lg="6" xl="6">
-                            <Media className="img-fluid" alt="" src={timeline1} />
+                            {renderGridImageOrVideo(files[0], false, setSelectedPost, post, setPostPaneOpenState, 0, setSelectedIndex)}
                         </Col>
                         <Col className={"image-render-col-custom"} sm="12" md="6" lg="6" xl="6">
-                            <Media className="img-fluid" alt="" src={timeline1} />
+                            {renderGridImageOrVideo(files[1], false, setSelectedPost, post, setPostPaneOpenState, 0, setSelectedIndex)}
                         </Col>
                     </Row>
                 </Fragment>
@@ -171,15 +197,15 @@ const RenderCertainImageDisplay = ({ setSelectedIndex, selectedIndex, isPostPane
                 <Fragment>
                     <Row>
                         <Col className={"image-render-col-custom"} sm="12" md="12" lg="12" xl="12">
-                            <Media className="img-fluid" alt="" src={timeline1} />
+                            {renderGridImageOrVideo(files[0], false, setSelectedPost, post, setPostPaneOpenState, 0, setSelectedIndex)}
                         </Col>
                     </Row>
                     <Row style={{ paddingTop: "3px" }}>
                         <Col className={"image-render-col-custom"} sm="12" md="6" lg="6" xl="6">
-                            <Media className="img-fluid" alt="" src={timeline1} />
+                            {renderGridImageOrVideo(files[1], true, setSelectedPost, post, setPostPaneOpenState, 0, setSelectedIndex)}
                         </Col>
                         <Col className={"image-render-col-custom"} sm="12" md="6" lg="6" xl="6">
-                            <Media className="img-fluid" alt="" src={timeline1} />
+                            {renderGridImageOrVideo(files[2], true, setSelectedPost, post, setPostPaneOpenState, 0, setSelectedIndex)}
                         </Col>
                     </Row>
                 </Fragment>
@@ -190,18 +216,18 @@ const RenderCertainImageDisplay = ({ setSelectedIndex, selectedIndex, isPostPane
                 <Fragment>
                     <Row>
                         <Col className={"image-render-col-custom"} sm="12" md="6" lg="6" xl="6">
-                            <Media className="img-fluid" alt="" src={timeline1} />
+                            {renderGridImageOrVideo(files[0], false, setSelectedPost, post, setPostPaneOpenState, 0, setSelectedIndex)}
                         </Col>
                         <Col className={"image-render-col-custom"} sm="12" md="6" lg="6" xl="6">
-                            <Media className="img-fluid" alt="" src={timeline1} />
+                            {renderGridImageOrVideo(files[1], false, setSelectedPost, post, setPostPaneOpenState, 0, setSelectedIndex)}
                         </Col>
                     </Row>
                     <Row style={{ paddingTop: "3px" }}>
                         <Col className={"image-render-col-custom"} sm="12" md="6" lg="6" xl="6">
-                            <Media className="img-fluid" alt="" src={timeline1} />
+                            {renderGridImageOrVideo(files[2], true, setSelectedPost, post, setPostPaneOpenState, 0, setSelectedIndex)}
                         </Col>
                         <Col className={"image-render-col-custom"} sm="12" md="6" lg="6" xl="6">
-                            <Media className="img-fluid" alt="" src={timeline1} />
+                            {renderGridImageOrVideo(files[3], true, setSelectedPost, post, setPostPaneOpenState, 0, setSelectedIndex)}
                         </Col>
                     </Row>
                 </Fragment>
@@ -238,8 +264,27 @@ const RenderCertainImageDisplay = ({ setSelectedIndex, selectedIndex, isPostPane
             break;
     }
 }
-const TimelinePostsMappedHelper = ({ setSelectedIndex, selectedIndex, isPostPaneOpen, setPostPaneOpenState, setSelectedPost, post, index, user, userData, setPopoverState, popover, popoverIDTarget }) => {
+const TimelinePostsMappedHelper = ({ setProfilePosts, comments, setCommentsState, setSelectedIndex, setPostPaneOpenState, setSelectedPost, post, index, user, userData, setPopoverState, popover, popoverIDTarget }) => {
     // post.uploadedRelevantFiles.length
+    const [ showEmojiPicker, setShowEmojiPicker ] = useState(false);
+    const [ previewOpen, setPreviewState ] = useState(false);
+
+    const { register, handleSubmit, getValues, setValue, setError, clearErrors, formState: { errors }} = useForm({
+        mode: "onTouched",
+        reValidateMode: "onBlur"
+    });
+
+    const currentValues = getValues();
+
+    useEffect(() => {
+        setCommentsState(post.comments);
+    }, []);
+
+    useEffect(() => {
+        console.log("post.comments update");
+
+        setCommentsState(post.comments);
+    }, [post.comments]);
     
     const openPopoverPane = () => {
 
@@ -250,8 +295,56 @@ const TimelinePostsMappedHelper = ({ setSelectedIndex, selectedIndex, isPostPane
             }
         });
     }
+    const addEmoji = (emoji) =>  {
+        const text = `${currentValues.homepageComment}${emoji.native}`;
+        // close picker
+        setShowEmojiPicker(false);
+        // update homepageComment string value
+        setValue("homepageComment", text, { shouldValidate: false });
+    }
+    const renderFormErrors = (errors) => {
+        console.log("renderFormErrors", errors);
+    }
+    const onSubmitForm = (formData) => {
+        console.log("onSubmitForm submitted form properly...!:", formData);
+
+        setPreviewState(false);
+
+        const { homepageComment } = formData;
+
+        const configuration = {
+            id: userData.uniqueId,
+            specificPostId: post.uniqueId,
+            profileID: user.uniqueId,
+            comment: homepageComment,
+            firstName: userData.firstName,
+            lastName: userData.lastName,
+            accountType: userData.accountType,
+            mostRecentProfilePicVideo: typeof userData.profilePicsVideos !== "undefined" && userData.profilePicsVideos.length > 0 ? userData.profilePicsVideos[userData.profilePicsVideos.length - 1] : null
+        }
+
+        axios.post(`${process.env.REACT_APP_BASE_URL}/post/new/comment/hacker/timeline/profile/individual`, configuration).then((res) => {
+            if (res.data.message === "Successfully posted comment!") {
+                console.log(res.data);
+
+                const { updatedComments } = res.data;
+
+                setValue("homepageComment", "", { shouldValidate: false });
+
+                setCommentsState(updatedComments);
+
+                NotificationManager.success("Successfully posted your desired comment, we've successfully updated this listing data & notified the owner of these changes!", "Successfully posted a new comment!", 4750);
+
+            } else {
+                console.log("Err", res.data);
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
+    }
     return (
         <Fragment key={index}>
+        <Form onSubmit={handleSubmit(onSubmitForm, (errors) => renderFormErrors(errors))}>
             <Col sm="12">
                 <Card className={"add-shadow-general-card-profile"}>
                     <CardBody>
@@ -269,7 +362,7 @@ const TimelinePostsMappedHelper = ({ setSelectedIndex, selectedIndex, isPostPane
                                 {post.title}
                             </p>
                         </div>
-                        <RenderCertainImageDisplay setSelectedIndex={setSelectedIndex} selectedIndex={selectedIndex} isPostPaneOpen={isPostPaneOpen} setPostPaneOpenState={setPostPaneOpenState} post={post} setSelectedPost={setSelectedPost} files={post.uploadedRelevantFiles} />
+                        <RenderCertainImageDisplay setSelectedIndex={setSelectedIndex} setPostPaneOpenState={setPostPaneOpenState} post={post} setSelectedPost={setSelectedPost} files={post.uploadedRelevantFiles} />
                         <div className="timeline-content">
                             <p>
                                 {post.description}
@@ -277,7 +370,19 @@ const TimelinePostsMappedHelper = ({ setSelectedIndex, selectedIndex, isPostPane
                             <div className={"emoji-response-post"}>
                                 <img onClick={() => openPopoverPane()} id={`post${index}`} src={require("../../../../../../../assets/gifs/thoughts.gif")} className={"emoji-response-icon"} />
                             </div>
-                            <RenderPopoverEmojiLogicMainPostings index={index} handleRespondEmoji={handleRespondEmoji} userData={userData} reactions={post.reactions} setPopoverState={setPopoverState} popoverState={popover} targetAndPopState={popoverIDTarget} />
+                            <div style={{ paddingTop: "17.5px" }} className="text-center"><a onClick={() => {
+                                // setSelectedIndex(index);
+                                setSelectedPost({
+                                    ...post,
+                                    files: post.uploadedRelevantFiles,
+                                    index
+                                });
+                                // set slight delay to allow previous logic to load
+                                setTimeout(() => {
+                                    setPostPaneOpenState(true)
+                                }, 375)
+                            }}>More Details/Comments & Complete Information</a></div>
+                            <RenderPopoverEmojiLogicMainPostings setProfilePosts={setProfilePosts} user={user} index={index} handleRespondEmoji={handleRespondEmoji} userData={userData} relatedPost={post} reactions={post.reactions} setPopoverState={setPopoverState} popoverState={popover} targetAndPopState={popoverIDTarget} />
                             <div className="like-content custom-like-response-zone"><span onClick={() => {
                                 setSelectedPost({
                                     ...post,
@@ -298,61 +403,109 @@ const TimelinePostsMappedHelper = ({ setSelectedIndex, selectedIndex, isPostPane
                                 setTimeout(() => {
                                     setPostPaneOpenState(true)
                                 }, 375)
-                            }}><i className="fa fa-share-alt mr-0"></i></span></span><span className="pull-right comment-number"><span>{post.comments.length} </span><span><i className="fa fa-comments-o"></i></span></span></div>
-                            <div className="social-chat">
-                                {post.comments.map((comment, idxxxxxx) => {
-                                    return (
-                                        <Fragment key={idxxxxxx}>
-                                            <div onClick={() => {
-                                                setSelectedPost({
-                                                    ...post,
-                                                    files: post.uploadedRelevantFiles,
-                                                    index
-                                                });
-                                                // set slight delay to allow previous logic to load
-                                                setTimeout(() => {
-                                                    setPostPaneOpenState(true)
-                                                }, 375)
-                                            }} className="your-msg">
-                                                <Media>
-                                                    <Media className="img-50 img-fluid m-r-20 rounded-circle" alt="" src={one} />
-                                                    <Media body><span className="f-w-600">{comment.poster} <span> {moment(comment.date).fromNow()} <i className="fa fa-reply font-primary"></i></span></span>
-                                                        <p>{comment.comment}</p>
+                            }}><i className="fa fa-share-alt mr-0"></i></span></span><span className="pull-right comment-number"><span>{comments.length} </span><span><i className="fa fa-comments-o"></i></span></span></div>
+                            <Row>
+                                <RenderEmojiLogic reactions={post.reactions} comments={comments} />
+                            </Row>
+                            <Row id={"create-spacer-comment-box-profile-individual"}>
+                                <div className="comments-box">
+                                    <Media>
+                                        <Media onClick={() => {
+                                            setSelectedPost({
+                                                ...post,
+                                                files: post.uploadedRelevantFiles,
+                                                index
+                                            });
+                                            // set slight delay to allow previous logic to load
+                                            setTimeout(() => {
+                                                setPostPaneOpenState(true)
+                                            }, 375)
+                                        }} className="img-50 img-fluid m-r-20" alt="" src={require("../../../../../../../assets/gifs/typing-black.gif")} />
+                                        <Media body>
+                                            <InputGroup className="text-box">
+                                                <Input {...homepageCheckMessageMeetsCritera.check(setError, register, clearErrors, "homepageComment")} onChange={(e) => {
+
+                                                    homepageCheckMessageMeetsCritera.onChange(e, "homepageComment", setValue);
+
+                                                    const caret = e.target.selectionStart;
+                                                    const element = e.target;
+                                                    window.requestAnimationFrame(() => {
+                                                        element.selectionStart = caret
+                                                        element.selectionEnd = caret
+                                                    })
+                                                }} value={currentValues.homepageComment} name={"homepageComment"} className={"form-control input-txt-bx write-comment-post"} type={"text"} placeholder={homepageCheckMessageMeetsCritera.placeholder} />
+                                                <Tooltip placement={"top"} isOpen={previewOpen} target={"inputPreviewText"} toggle={() => setPreviewState(prevState => !prevState)}>
+                                                    {currentValues.homepageComment}
+                                                </Tooltip>
+                                                <InputGroupAddon id={"inputPreviewText"} onMouseEnter={() => setPreviewState(prevState => !prevState)} style={{ marginLeft: "17.5px" }} addonType="append">
+                                                    <Button type={"submit"} className={"btn-square-secondary"} color={"secondary"}>Submit Comment!</Button>
+                                                </InputGroupAddon>
+                                                <InputGroupAddon addonType="append">
+                                                    <i onClick={() => setShowEmojiPicker(!showEmojiPicker)} className="fa fa-smile-o fa-3x restyle-emoji-activator-icon" aria-hidden="true"></i>
+                                                    {showEmojiPicker === true ? (
+                                                            <Picker style={{ position: "absolute", right: "40px", top: "-375px" }} set="apple" emojiSize={30} onSelect={addEmoji} />
+                                                    ) : null}
+                                                </InputGroupAddon>
+                                            </InputGroup>
+                                            {errors.homepageComment ? <span style={{ marginTop: "3.5px" }} className="span-tooltip">{errors.homepageComment.message}</span> : null}
+                                        </Media>
+                                    </Media>
+                                </div>
+                            </Row>
+                        </div>
+                        <Row className={"custom-profile-comments-row-override"}>
+                            <Col sm="12" md="12" lg="12" xl="12">
+                                <div className="social-chat">
+                                    {comments.slice(0, 4).map((comment, idxxxxxx) => {
+                                        return (
+                                            <Fragment key={idxxxxxx}>
+                                                <div onClick={() => {
+                                                    setSelectedPost({
+                                                        ...post,
+                                                        files: post.uploadedRelevantFiles,
+                                                        index
+                                                    });
+                                                    // set slight delay to allow previous logic to load
+                                                    setTimeout(() => {
+                                                        setPostPaneOpenState(true)
+                                                    }, 375)
+                                                }} className="your-msg your-msg-custom-profile-mapped">
+                                                    <Media>
+                                                        {renderCustomCommentImageVideo(comment.posterPicOrVideo)}
+                                                        <Media body><span className="f-w-600">{comment.posterName} <span> {moment(comment.date).fromNow()} <i className="fa fa-reply font-primary"></i></span></span>
+                                                            <p>{comment.commentText}</p>
+                                                        </Media>
                                                     </Media>
-                                                </Media>
-                                            </div>
-                                            {comment.subcomments.map((subcomment, idx) => {
-                                                return (
-                                                    <Fragment onClick={() => {
-                                                        setSelectedPost({
-                                                            ...post,
-                                                            files: post.uploadedRelevantFiles,
-                                                            index
-                                                        });
-                                                        // set slight delay to allow previous logic to load
-                                                        setTimeout(() => {
-                                                            setPostPaneOpenState(true)
-                                                        }, 375)
-                                                    }} key={idx}>
-                                                        <div className="other-msg">
-                                                            <Media>
-                                                                <Media className="img-50 img-fluid m-r-20 rounded-circle" alt="" src={two} />
-                                                                <Media body><span className="f-w-600">{subcomment.poster} <span> {moment(subcomment.date).fromNow()} <i className="fa fa-reply font-primary"></i></span></span>
-                                                                    <p>{subcomment.comment} </p>
+                                                </div>
+                                                {comment.subComments.map((subcomment, idx) => {
+                                                    return (
+                                                        <Fragment onClick={() => {
+                                                            setSelectedPost({
+                                                                ...post,
+                                                                files: post.uploadedRelevantFiles,
+                                                                index
+                                                            });
+                                                            // set slight delay to allow previous logic to load
+                                                            setTimeout(() => {
+                                                                setPostPaneOpenState(true)
+                                                            }, 375)
+                                                        }} key={idx}>
+                                                            <div className="other-msg">
+                                                                <Media>
+                                                                    <Media className="img-50 img-fluid m-r-20 rounded-circle" alt="" src={two} />
+                                                                    <Media body><span className="f-w-600">{subcomment.poster} <span> {moment(subcomment.date).fromNow()} <i className="fa fa-reply font-primary"></i></span></span>
+                                                                        <p>{subcomment.comment} </p>
+                                                                    </Media>
                                                                 </Media>
-                                                            </Media>
-                                                        </div>
-                                                    </Fragment>
-                                                );
-                                            })}
-                                        </Fragment>
-                                    );
-                                })}
-                                <div className="text-center"><a onClick={() => setPostPaneOpenState(true)}>More Comments</a></div>
-                            </div>
-                            <div className="comments-box">
-                                <Media>
-                                    <Media onClick={() => {
+                                                            </div>
+                                                        </Fragment>
+                                                    );
+                                                })}
+                                            </Fragment>
+                                        );
+                                    })}
+                                    <div className="text-center"><a onClick={() => {
+                                        // setSelectedIndex(index);
                                         setSelectedPost({
                                             ...post,
                                             files: post.uploadedRelevantFiles,
@@ -362,36 +515,19 @@ const TimelinePostsMappedHelper = ({ setSelectedIndex, selectedIndex, isPostPane
                                         setTimeout(() => {
                                             setPostPaneOpenState(true)
                                         }, 375)
-                                    }} className="img-50 img-fluid m-r-20" alt="" src={require("../../../../../../../assets/gifs/typing-black.gif")} />
-                                    <Media body>
-                                        <InputGroup className="text-box">
-                                            <Input onFocus={() => {
-                                                setSelectedPost({
-                                                    ...post,
-                                                    files: post.uploadedRelevantFiles,
-                                                    index
-                                                });
-                                                // set slight delay to allow previous logic to load
-                                                setTimeout(() => {
-                                                    setPostPaneOpenState(true)
-                                                }, 375)
-                                            }} className="form-control input-txt-bx write-comment-post" type="text" name="message-to-send" placeholder="Post Your Comment(s)" />
-                                            <InputGroupAddon addonType="append">
-                                                <Button color="transparent"><i className="fa fa-smile-o">  </i></Button>
-                                            </InputGroupAddon>
-                                        </InputGroup>
-                                    </Media>
-                                </Media>
-                            </div>
-                        </div>
+                                    }}>More Details/Comments & Complete Information</a></div>
+                                </div>
+                            </Col>
+                        </Row>
                     </CardBody>
                 </Card>
             </Col>
+            </Form>
         </Fragment>
     );
 }
 
-const RenderPopoverEmojiLogicMainPostings = ({ index, reactions, targetAndPopState, setPopoverState, popoverState, handleRespondEmoji }) => {
+const RenderPopoverEmojiLogicMainPostings = ({ setProfilePosts, user, relatedPost, userData, index, reactions, targetAndPopState, setPopoverState, popoverState, handleRespondEmoji }) => {
 
     const [stateCount, setStateCount] = useState(0);
     const [ready, setReady] = useState(false);
@@ -433,32 +569,32 @@ const RenderPopoverEmojiLogicMainPostings = ({ index, reactions, targetAndPopSta
                             }} className={"mouse-exit-close-popover-emojis"}>
                                 <Row>
                                     <Col className={"course-emoji-col"} sm="2" md="2" lg="2" xl="2">
-                                        <div onClick={() => handleRespondEmoji("sunglasses", closePopover, targetAndPopState)} className={"emoji-wrapper-course"}>
+                                        <div onClick={() => handleRespondEmoji("sunglasses", relatedPost, closePopover, targetAndPopState, userData, user, setProfilePosts)} className={"emoji-wrapper-course"}>
                                             <img className={"custom-course-emoji-render"} src={require("../../../../../../../assets/gifs/sunglasses.gif")} />
                                         </div>
                                     </Col>
                                     <Col className={"course-emoji-col"} sm="2" md="2" lg="2" xl="2">
-                                        <div onClick={() => handleRespondEmoji("steaming", closePopover, targetAndPopState)} className={"emoji-wrapper-course"}>
+                                        <div onClick={() => handleRespondEmoji("steaming", relatedPost, closePopover, targetAndPopState, userData, user, setProfilePosts)} className={"emoji-wrapper-course"}>
                                             <img className={"custom-course-emoji-render"} src={require("../../../../../../../assets/gifs/steaming.gif")} />
                                         </div>
                                     </Col>
                                     <Col className={"course-emoji-col"} sm="2" md="2" lg="2" xl="2">
-                                        <div onClick={() => handleRespondEmoji("tearsOfJoy", closePopover, targetAndPopState)} className={"emoji-wrapper-course"}>
+                                        <div onClick={() => handleRespondEmoji("tearsOfJoy", relatedPost, closePopover, targetAndPopState, userData, user, setProfilePosts)} className={"emoji-wrapper-course"}>
                                             <img className={"custom-course-emoji-render"} src={require("../../../../../../../assets/gifs/tearsOfJoy.gif")} />
                                         </div>
                                     </Col>
                                     <Col className={"course-emoji-col"} sm="2" md="2" lg="2" xl="2">
-                                        <div onClick={() => handleRespondEmoji("vomitting", closePopover, targetAndPopState)} className={"emoji-wrapper-course"}>
+                                        <div onClick={() => handleRespondEmoji("vomitting", relatedPost, closePopover, targetAndPopState, userData, user, setProfilePosts)} className={"emoji-wrapper-course"}>
                                             <img className={"custom-course-emoji-render"} src={require("../../../../../../../assets/gifs/vomitting.gif")} />
                                         </div>
                                     </Col>
                                     <Col className={"course-emoji-col"} sm="2" md="2" lg="2" xl="2">
-                                        <div onClick={() => handleRespondEmoji("partying", closePopover, targetAndPopState)} className={"emoji-wrapper-course"}>
+                                        <div onClick={() => handleRespondEmoji("partying", relatedPost, closePopover, targetAndPopState, userData, user, setProfilePosts)} className={"emoji-wrapper-course"}>
                                             <img className={"custom-course-emoji-render"} src={require("../../../../../../../assets/gifs/partying.gif")} />
                                         </div>
                                     </Col>
                                     <Col className={"course-emoji-col"} sm="2" md="2" lg="2" xl="2">
-                                        <div onClick={() => handleRespondEmoji("screaming", closePopover, targetAndPopState)} className={"emoji-wrapper-course"}>
+                                        <div onClick={() => handleRespondEmoji("screaming", relatedPost, closePopover, targetAndPopState, userData, user, setProfilePosts)} className={"emoji-wrapper-course"}>
                                             <img className={"custom-course-emoji-render"} src={require("../../../../../../../assets/gifs/screaming.gif")} />
                                         </div>
                                     </Col>
