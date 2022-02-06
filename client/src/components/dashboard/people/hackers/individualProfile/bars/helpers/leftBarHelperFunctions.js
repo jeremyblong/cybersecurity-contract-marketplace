@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment } from "react";
 import ReactPlayer from "react-player";
 import _ from "lodash";
 import "./styles.css";

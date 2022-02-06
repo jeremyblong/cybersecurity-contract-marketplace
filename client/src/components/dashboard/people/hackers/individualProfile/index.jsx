@@ -28,7 +28,8 @@ constructor(props) {
         user: null,
         isOpen: false,
         currentlySelected: null,
-        modalIndexSelected: 0
+        modalIndexSelected: 0,
+        permenantData: []
     }
 
     this.passedCustomGalleryRef = React.createRef(null);
@@ -92,6 +93,8 @@ constructor(props) {
                     console.log(res.data);
     
                     const { user, modified } = res.data;
+
+                    this.setPermenantDataState(user.recentlyViewedProfileViews);
     
                     if (modified === false) {
                         this.setState({
@@ -304,7 +307,8 @@ constructor(props) {
             modifyingUserAccountType: user.accountType,
             signedinFullName: `${userData.firstName} ${userData.lastName}`,
             followerUsername: userData.username,
-            followerJobTitle: _.has(userData, "title") ? userData.title : null
+            followerJobTitle: _.has(userData, "title") ? userData.title : null,
+            latestProfilePicVideo: typeof userData.profilePicsVideos !== "undefined" && userData.profilePicsVideos.length > 0 ? userData.profilePicsVideos[userData.profilePicsVideos.length - 1] : null
         };
         // run request api
         axios.post(`${process.env.REACT_APP_BASE_URL}/start/following/hacker/account`, config).then((res) => {
@@ -349,6 +353,11 @@ constructor(props) {
             ]
         });
     }
+    setPermenantDataState = (data) => {
+        this.setState({
+            permenantData: data
+        })
+    }
     render () {
         const { user, currentlySelected, isOpen, modalIndexSelected } = this.state;
         const { userData } = this.props;
@@ -392,7 +401,7 @@ constructor(props) {
                                     <TimelineTab setSelectedCurrently={this.setSelectedCurrently} currentlySelected={currentlySelected} modalIndexSelected={modalIndexSelected} setSelectedModalIndex={this.setSelectedModalIndex} user={user} onOpenModal={this.onOpenModal} isOpen={this.state.isOpen} onCloseModal={this.onCloseModal} />
                                 </TabPane>
                                 <TabPane tabId="2">
-                                    <AboutTab setSelectedCurrently={this.setSelectedCurrently} currentlySelected={currentlySelected} modalIndexSelected={modalIndexSelected} setSelectedModalIndex={this.setSelectedModalIndex} user={user} onOpenModal={this.onOpenModal} isOpen={this.state.isOpen} onCloseModal={this.onCloseModal} />
+                                    <AboutTab setPermenantDataState={this.setPermenantDataState} permenantData={this.state.permenantData} setSelectedCurrently={this.setSelectedCurrently} currentlySelected={currentlySelected} modalIndexSelected={modalIndexSelected} setSelectedModalIndex={this.setSelectedModalIndex} user={user} onOpenModal={this.onOpenModal} isOpen={this.state.isOpen} onCloseModal={this.onCloseModal} />
                                 </TabPane>
                                 <TabPane tabId="3">
                                     <FriendsTab user={user} onOpenModal={this.onOpenModal} isOpen={this.state.isOpen} onCloseModal={this.onCloseModal} />

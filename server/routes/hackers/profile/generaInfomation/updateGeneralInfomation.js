@@ -60,6 +60,8 @@ router.post("/", (req, resppppp, next) => {
                 }
             }
 
+            console.log("THIS IS WHAT THE USER LOOKS LIKE...:", user);
+
             collection.save(user, (err, result) => {
                 if (err) {
                     console.log(err);

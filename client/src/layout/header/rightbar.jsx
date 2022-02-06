@@ -31,6 +31,7 @@ import ae from '../../assets/i18n/ae.json';
 import { InputGroup, InputGroupAddon, Button } from 'reactstrap';
 import { updateCourseInformationData } from "../../redux/actions/courses/createNewCourse/index.js";
 import "./styles.css";
+import ReactPlayer from "react-player";
 
 // translation logic...
 setTranslations({ en, es, pt, fr, du, cn, ae });
@@ -164,6 +165,21 @@ const Rightbar = ({ authenticated, data, authentication, saveListingData, saveSo
       return "Employer";
     }
   }
+  const renderProfilePicVideo = (last) => {
+
+    if (last !== null && _.has(last, "link")) {
+        if (last.type.includes("video")) {
+            // video logic
+            return <ReactPlayer playing={true} loop={true} muted={true} controls={false} width={"100%"} className={"b-r-10 topbar-right-video-profile"} wrapper={"div"} url={`${process.env.REACT_APP_ASSET_LINK}/${last.link}`} />;
+        } else {
+            // image logic
+            return <img className="b-r-10 blue-medium-border-addition" src={`${process.env.REACT_APP_ASSET_LINK}/${last.link}`} alt="" />;
+        }    
+    } else {
+        // image logic
+        return <img className="b-r-10 blue-medium-border-addition" src={process.env.REACT_APP_PLACEHOLDER_IMAGE} alt="" />;
+    } 
+  }
   return (
     <Fragment>
       <div className="nav-right col-8 pull-right right-header p-0">
@@ -219,7 +235,7 @@ const Rightbar = ({ authenticated, data, authentication, saveListingData, saveSo
             <div className="cart-box" onClick={() => setCartDropDown(!cartDropdown)}><ShoppingCart/><span className="badge badge-pill badge-primary">{"2"}</span></div>
             <ul className={`cart-dropdown onhover-show-div ${cartDropdown ? "active" : ""}`}>
               <li>
-                <h6 className="mb-0 f-20">{ShopingBag}</h6><ShoppingCart/>
+                <h6 className="mb-0 f-20">Shopping Cart</h6><ShoppingCart/>
               </li>
               <li className="mt-0">
                 <div className="media" ><img className="img-fluid rounded-circle mr-3 img-60" src={require("../../assets//images/ecommerce/01.jpg")} alt=""/>
@@ -313,7 +329,7 @@ const Rightbar = ({ authenticated, data, authentication, saveListingData, saveSo
           <li className="maximize"><a className="text-dark" href={null} onClick={goFull}><Minimize /></a></li>
           <li className="profile-nav onhover-dropdown p-0">
             <div className="media profile-media">
-              <img className="b-r-10" src={man} alt="" />
+              {typeof data.profilePicsVideos !== "undefined" && data.profilePicsVideos.length > 0 ? renderProfilePicVideo(data.profilePicsVideos[data.profilePicsVideos.length - 1]) : <img className="b-r-10" src={man} alt="" />}
               <div className="media-body"><span>{authenticated === true ? `${data.firstName} ${data.lastName}` : "Un-authenticated"}</span>
                 <p className="mb-0 font-roboto">{authenticated === true ? renderAccountType(data.accountType) : "Un-authenticated"}<i className="middle fa fa-angle-down"></i></p>
               </div>
@@ -335,7 +351,9 @@ const Rightbar = ({ authenticated, data, authentication, saveListingData, saveSo
               }}><FileText /><span className={"row-wrap"}>View Public H&shy;acker-Account</span></li> : <li className={"row-wrap"} onClick={() => {
                 console.log("do nothing yet...");
               }}><FileText /><span className={"row-wrap"}>View Public E&shy;mployer-Account</span></li>}
-              <li><Mail /><span>{Inbox}</span></li>
+              <li onClick={() => {
+                history.push("/messaging/main");
+              }}><Mail /><span>{Inbox}</span></li>
               {data.accountType === "employers" ? <li><User /><span><strong style={{ color: "blue", textDecorationLine: "underline" }}>{typeof data.applicants !== "undefined" ? data.applicants.length : "0"}</strong>{" Current Applicant(s)"}</span></li> : null}
               <li><LogIn /><span onClick={handlePreviewActivate}>{LogOut}</span></li>
             </ul>

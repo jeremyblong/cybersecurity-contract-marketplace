@@ -124,6 +124,21 @@ export const MENUITEMS = [
         ]          
     },
     {
+        menutitle:`FREE VPN Access (Subscriber's)`,
+        menucontent:"FREE VPN Access (BOTH Employer's & Hacker Accounts)",
+        Items:[
+            {
+                title: 'Set-up VPN service - initial installation', icon: Headphones, type: 'sub',active: false, children: [
+                    { path: `${process.env.PUBLIC_URL}/vpn/download/core/files/setup`, title: "Download CORE Required File's (Step ONE)", type: 'link' },
+                    { path: `${process.env.PUBLIC_URL}/`, title: 'Set-up account VPN access & Activation (Step TWO)', type: 'link' },
+                    { path: `${process.env.PUBLIC_URL}/`, title: 'Power VPN On/Off (Step Three)', type: 'link' },
+                    { path: `${process.env.PUBLIC_URL}/`, title: `VPN Setting's (Any Point After Activation)`, type: 'link' },
+                    { path: `${process.env.PUBLIC_URL}/`, title: `Check VPN Activity, Speed & Functionality`, type: 'link' }
+                ]
+            }
+        ]          
+    },
+    {
         menutitle:"Hacker General Management",
         menucontent:"General Management Options For Hacker Account's",
         Items:[
@@ -145,39 +160,6 @@ export const MENUITEMS = [
                     { path: `${process.env.PUBLIC_URL}/view/as/employer/view/bookmarked/profiles/employer/accounts`, title: "Bookmarked Employer Account's", type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/view/as/employer/view/bookmarked/profiles/hacker/accounts`, title: "Bookmarked Hacker Account's", type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/`, title: `'Hearted/Liked' Profile's`, type: 'link' }
-                ]
-            }
-        ]          
-    },
-    {
-        menutitle:"Full-Time Employment",
-        menucontent:"Jobs & full time employment opportunities",
-        Items:[
-            {
-                title: 'Raise Support', icon: Headphones, type: 'sub',active: false, children: [
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'Ecommerce', type: 'link' }
-                ]
-            }
-        ]          
-    },
-    {
-        menutitle:"Buy, Sell & Trade Gear",
-        menucontent:"Buy, Sell and Trade Hacking Gear",
-        Items:[
-            {
-                title: 'Raise Support', icon: Headphones, type: 'sub',active: false, children: [
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'Ecommerce', type: 'link' }
-                ]
-            }
-        ]          
-    },
-    {
-        menutitle:"Profile",
-        menucontent:"Settings & General Profile Content",
-        Items:[
-            {
-                title: 'Raise Support', icon: Headphones, type: 'sub',active: false, children: [
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'Ecommerce', type: 'link' }
                 ]
             }
         ]          

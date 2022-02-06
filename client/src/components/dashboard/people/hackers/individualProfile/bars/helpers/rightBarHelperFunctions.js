@@ -115,6 +115,32 @@ const renderPictureOrVideoContentBreakBlock = (file) => {
         );
     } 
 }
+const renderPicOrVideoFollowingHackers = (file) => {
+    if (file !== null && _.has(file, "link")) {
+        if (file.type.includes("video")) {
+            // video logic
+            return (
+                <Fragment>
+                    <ReactPlayer playing={true} loop={true} controls={false} muted={false} width={"100%"} className={"img-50 img-fluid m-r-20 rounded-circle maxed-out-following-video"} wrapper={"div"} url={`${process.env.REACT_APP_ASSET_LINK}/${file.link}`} />
+                </Fragment>
+            );
+        } else {
+            // image logic
+            return (
+                <Fragment>
+                    <img className="img-50 img-fluid m-r-20 rounded-circle min-height-maxed-profile-follower" alt="profile-pic-mapped" src={`${process.env.REACT_APP_ASSET_LINK}/${file.link}`} />
+                </Fragment>
+            );
+        }  
+    } else {
+        // image logic - DEFAULT.
+        return (
+            <Fragment>
+                <img className="img-50 img-fluid m-r-20 rounded-circle min-height-maxed-profile-follower" alt="profile-pic-mapped" src={process.env.REACT_APP_PLACEHOLDER_IMAGE} />
+            </Fragment>
+        );
+    } 
+}
 const renderModalImageOrVideo = (file) => {
     if (file !== null && _.has(file, "link")) {
         if (file.type.includes("video")) {
@@ -332,5 +358,6 @@ const RenderGalleryModalHackerProfileHelper = ({ passedCustomGalleryRef, modalIn
 export default {
     RenderPictureOrVideoLast,
     RenderGalleryModalHackerProfileHelper,
-    renderPictureOrVideoContentBreakBlock
+    renderPictureOrVideoContentBreakBlock,
+    renderPicOrVideoFollowingHackers
 };

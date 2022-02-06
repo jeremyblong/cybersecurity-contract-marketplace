@@ -13,7 +13,8 @@ router.post("/", (req, resppppp, next) => {
         signedinUserAccountType,
         signedinFullName,
         followerUsername,
-        followerJobTitle
+        followerJobTitle,
+        latestProfilePicVideo
     } = req.body;
 
     const hackerCollection = Connection.db.db("db").collection("hackers");
@@ -38,6 +39,7 @@ router.post("/", (req, resppppp, next) => {
                 date: new Date(),
                 followerUsername,
                 followerJobTitle: followerJobTitle !== null ? followerJobTitle : null,
+                latestProfilePicVideo,
                 dateString: moment(new Date()).format("MM/DD/YYYY hh:mm:ss a")
             };
             const newFollowAdditionSignedinUser = {
@@ -47,6 +49,7 @@ router.post("/", (req, resppppp, next) => {
                 followingAccountType: "hackers",
                 date: new Date(),
                 followingUsername: hacker.username,
+                latestProfilePicVideo: typeof hacker.profilePicsVideos !== "undefined" && hacker.profilePicsVideos.length > 0 ? hacker.profilePicsVideos[hacker.profilePicsVideos.length - 1] : null,
                 followingJobTitle: typeof hacker.title !== "undefined" && hacker.title !== null ? hacker.title : null,
                 dateString: moment(new Date()).format("MM/DD/YYYY hh:mm:ss a")
             }

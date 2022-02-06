@@ -1,0 +1,38 @@
+.maxed-out-rounded-circle {
+    min-width: 150px;
+    max-width: 150px;
+    min-height: 150px;
+    max-height: 150px;
+}
+.searching-addon-list-people-left {
+    background-color: #fff;
+    padding: 2.5px 12.5px;
+    border-top: 1px solid #ced4da;
+    border-bottom: 1px solid #ced4da;
+    border-left: 1px solid #ced4da;
+} 
+.searching-addon-list-people-right {
+    background-color: #fff;
+    padding: 2.5px 12.5px;
+    border-top: 1px solid #ced4da;
+    border-bottom: 1px solid #ced4da;
+    border-right: 1px solid #ced4da;
+} 
+.searching-addon-list-people-right:hover {
+    cursor: pointer;
+    background-color: rgba(228, 228, 228, 0.459);
+}
+.custom-search-bar-people {
+   
+}
+.border-bottom-search-addition {
+
+}
+.input-wrapper-people-list {
+    
+}
+.card-shadow-custom {
+    border-bottom: 2.75px solid #7366ff !important;
+}
+
+/* 1px solid #ced4da */

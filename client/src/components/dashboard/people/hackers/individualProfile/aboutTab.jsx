@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { Row, Col, Card, CardHeader, CardBody, Button, Media } from 'reactstrap';
 import three from "../../../../../assets/images/user/3.jpg";
 import two from "../../../../../assets/images/user/2.png";
@@ -9,10 +9,41 @@ import four from "../../../../../assets/images/user/4.jpg";
 import { MoreVertical, ThumbsUp, UserPlus, MessageSquare } from 'react-feather';
 import RightBar from './bars/rightBar.jsx';
 import LeftBar from './bars/leftBar.jsx';
+import helpers from "./helpers/aboutSectionHelpers/helpers.js";
+import PaginationGeneralHelper from "../../../universal/pagination/miscMainPagination.js";
+import { useHistory } from 'react-router-dom';
+import NotificationManager from 'react-notifications';
+
+const { renderPicOrVideoProfileOrNotViewed } = helpers;
+
+const itemsPerPage = 20;
+
+const AboutTab = ({ setPermenantDataState, permenantData, user, isOpen, onCloseModal, onOpenModal, setSelectedCurrently, modalIndexSelected, setSelectedModalIndex }) => {
+    const [ currentPage, setCurrentPage ] = useState(0);
+    const [ itemOffset, setItemOffset ] = useState(0);
+    const [ pageCount, setPageCount ] = useState(0);
+    const [ alreadyViewed, setAlreadyViewedState ] = useState([]);
+
+    const history = useHistory();
+
+    useEffect(() => {
+
+        const endOffset = itemOffset + itemsPerPage;
+
+        setPageCount(Math.ceil(permenantData.length / itemsPerPage));
+
+        setAlreadyViewedState(permenantData.slice(itemOffset, endOffset));
+        
+    }, [itemOffset, itemsPerPage]);
 
 
-const AboutTab = ({ user, isOpen, onCloseModal, onOpenModal, setSelectedCurrently, modalIndexSelected, setSelectedModalIndex }) => {
-
+    const redirectToHackerOrEmployerViewed = (accountType, hackerID) => {
+        if (accountType === "hackers") {
+            history.push(`/hacker/profile/individual/view/${hackerID}`);
+        } else {
+            NotificationManager.error("Have not wired up this logic (Employer profile's) yet!!", "NOT WIRED UP YET!", 4500);
+        }
+    }
     return (
         <Fragment>
             <Row>
@@ -191,59 +222,31 @@ const AboutTab = ({ user, isOpen, onCloseModal, onOpenModal, setSelectedCurrentl
                         <Col sm="12">
                             <Card className={"add-shadow-general-card-profile"}>
                                 <CardHeader>
-                                    <h5>{"Viewed Your Profile"}</h5>
+                                    <h5>{"People Who've Viewed This Profile"}</h5>
                                 </CardHeader>
                                 <CardBody className="avatar-showcase">
                                     <div className="pepole-knows">
                                         <ul>
-                                            <li>
-                                                <div className="add-friend text-center">
-                                                    <Media body className="img-60 img-fluid rounded-circle" alt="" src={two} />
-                                                    <span className="d-block f-w-600">Jason Borne</span>
-                                                    <Button color="primary" size="xs">View Their Profile</Button>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div className="add-friend text-center">
-                                                    <Media body className="img-60 img-fluid rounded-circle" alt="" src={three} />
-                                                    <span className="d-block f-w-600">Anna Mullie</span>
-                                                    <Button color="primary" size="xs">View Their Profile</Button>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div className="add-friend text-center">
-                                                    <Media body className="img-60 img-fluid rounded-circle" alt="" src={three} />
-                                                    <span className="d-block f-w-600">Dillion Castlow</span>
-                                                    <Button color="primary" size="xs">View Their Profile</Button>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div className="add-friend text-center">
-                                                    <Media body className="img-60 img-fluid rounded-circle" alt="" src={four} />
-                                                    <span className="d-block f-w-600">Karlen Darlee</span>
-                                                    <Button color="primary" size="xs">View Their Profile</Button>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div className="add-friend text-center"><Media body className="img-60 img-fluid rounded-circle" alt="" src={eight} />
-                                                    <span className="d-block f-w-600">Vella Bella</span>
-                                                    <Button color="primary" size="xs">View Their Profile</Button>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div className="add-friend text-center"><Media body className="img-60 img-fluid rounded-circle" alt="" src={ten} />
-                                                    <span className="d-block f-w-600">Wakiem Smith</span>
-                                                    <Button color="primary" size="xs">View Their Profile</Button>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div className="add-friend text-center">
-                                                    <Media body className="img-60 img-fluid rounded-circle" alt="fourteenImg" src={fourteen} />
-                                                    <span className="d-block f-w-600">George Adam</span>
-                                                    <Button color="primary" size="xs">View Their Profile</Button>
-                                                </div>
-                                            </li>
+                                            {(user !== null && typeof alreadyViewed !== "undefined" && alreadyViewed.length > 0) ? alreadyViewed.map((visit, idx) => {
+                                                return (
+                                                    <Fragment key={idx}>
+                                                        <li className={"people-know-li-item"}>
+                                                            <div className="add-friend text-center center-viewed-content">
+                                                                {renderPicOrVideoProfileOrNotViewed(visit)}
+                                                                <span style={{ paddingTop: "3.5px" }} className="d-block f-w-600">{visit.viewerName}</span>
+                                                                <span className={"d-block"}>{visit.accountType === "hackers" ? "Hacker Account" : "Employer Account"}</span>
+                                                                <Button onClick={() => {
+                                                                    redirectToHackerOrEmployerViewed(visit.accountType, visit.viewedBy);
+                                                                }} color="primary" size="xs">~ View Profile ~</Button>
+                                                            </div>
+                                                        </li>
+                                                    </Fragment>
+                                                );
+                                            }) : null}
                                         </ul>
+                                    </div>
+                                    <div style={{ marginTop: "17.5px" }} className={"centered-both-ways"}>
+                                        <PaginationGeneralHelper itemsPerPage={itemsPerPage} pageCount={pageCount} currentPage={currentPage} setItemOffset={setItemOffset} setCurrentPage={setCurrentPage} loopingData={permenantData} />
                                     </div>
                                 </CardBody>
                             </Card>

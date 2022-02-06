@@ -167,7 +167,6 @@ const LearningEducationCourseHelper = ({ userData, location }) => {
   const calculateMin = (minutes) => {
     return (minutes / 60).toFixed(2);
   }
-  console.log("courseData fetched...:", courseData);
 
   const renderMainContentConditionally = () => {
     if (courseData !== null & user !== null) {

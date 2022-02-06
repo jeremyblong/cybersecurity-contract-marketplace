@@ -1,0 +1,19 @@
+.card-manage-hacker-margin {
+    margin-top: 5px;
+    box-shadow: 0 0.25rem 1.5rem rgba(0, 0, 0, 0.248);
+}
+.static-top-widget-custom-hired {
+    min-height: 200px;
+}
+.counter-custom-hired-account {
+    position: absolute;
+    bottom: 35px;
+    text-decoration-line: underline;
+    font-weight: 525;
+    left: 32.5px;
+    right: 5px;
+}
+.bordered-shadowed-card {
+    box-shadow: 0 0.25rem 1.5rem rgba(0, 0, 0, 0.248);
+    min-height: 225px;
+}

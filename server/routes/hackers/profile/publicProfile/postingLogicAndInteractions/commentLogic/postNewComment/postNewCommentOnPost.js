@@ -61,10 +61,14 @@ router.post("/", (req, resppppp, next) => {
 
             const newlyCreatedCommentArray = profilePostsVariable[matchingIndex].comments;
 
+            const matchingPost = profilePostsVariable[matchingIndex];
+
             resppppp.json({
                 message: "Successfully posted comment!",
                 updatedComments: newlyCreatedCommentArray,
-                posts: result.value.profilePosts
+                posts: result.value.profilePosts,
+                post: matchingPost,
+                index: matchingIndex
             })
         }
     });

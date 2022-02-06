@@ -1,6 +1,6 @@
 import React, { Fragment,useState,useEffect } from 'react';
 import Breadcrumb from '../../../../../layout/breadcrumb';
-import { Container, Row, Col, Card, CardHeader, CardFooter, Media, Button } from 'reactstrap';
+import { Container, Row, Col, Card, CardHeader, CardFooter, Media, Button, FormGroup, Label, InputGroup, InputGroupAddon, Input } from 'reactstrap';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import _ from "lodash";
 import moment from "moment";
@@ -8,7 +8,7 @@ import axios from "axios";
 import helpers from "./helpers/helperFunctions.js";
 import PaginationEmployerListingHelper from "../../../universal/pagination/paginationHelper.js";
 import { useHistory } from 'react-router-dom';
-
+import "./helpers/styles.css";
 
 // pagination logic
 const itemsPerPage = 6;
@@ -26,6 +26,7 @@ const UsersCardsListHelper = (props) => {
     const [ pageCount, setPageCount ] = useState(0);
     const [ itemOffset, setItemOffset ] = useState(0);
     const [ permenantData, setPermenantDataState ] = useState([]);
+    const [ searchText, setSearchText ] = useState("");
 
     useEffect(() => {
 
@@ -75,7 +76,7 @@ const UsersCardsListHelper = (props) => {
         if (ready === true) {
             return (
                 <Fragment>
-                    {hackers.map((hacker, i) => {
+                    {hackers.filter((hacker) => `${hacker.firstName} ${hacker.lastName}`.includes(searchText)).map((hacker, i) => {
                         const bannerImage = _.has(hacker, "profileBannerImage") ? `${process.env.REACT_APP_ASSET_LINK}/${hacker.profileBannerImage.link}` : require(`../../../../../assets/images/other-images/img-cropper.jpg`);
                         const profilePicture = _.has(hacker, "profilePicsVideos") && hacker.profilePicsVideos.length > 0 ? hacker.profilePicsVideos[hacker.profilePicsVideos.length - 1] : require(`../../../../../assets/images/avtar/4.jpg`);
                         
@@ -146,6 +147,27 @@ const UsersCardsListHelper = (props) => {
         <Fragment>
         <Breadcrumb parent="Users" title="Hacker Accounts" />
             <Container fluid={true}>
+                <Row>
+                    <Col sm="12" md="12" lg="12" xl="12">
+                        <Card className={"card-shadow-custom"}>
+                            <CardHeader className="b-l-primary border-3 border-bottom-search-addition">
+                                <FormGroup className=" mb-0 input-wrapper-people-list">
+                                    <Label>Search for hacker's by 'first' & 'last' name</Label>
+                                    <InputGroup className="mb-3">
+                                        <Input placeholder={"Search for any user's with either their first name or last name, or you can search for them both..."} onChange={(e) => {
+                                            const value = e.target.value;
+
+                                            setSearchText(value);
+                                        }} value={searchText} className="form-control custom-search-bar-people" type="text" aria-label=""/>
+                                        {typeof searchText !== "undefined" && searchText.length > 0 ? <InputGroupAddon onClick={() => {
+                                            setSearchText("");
+                                        }} className={"searching-addon-list-people-right"} addonType="append"><i class="fa fa-times-circle fa-2x" aria-hidden="true"></i></InputGroupAddon> : null}
+                                    </InputGroup>
+                                </FormGroup>
+                            </CardHeader>
+                        </Card>
+                    </Col>
+                </Row>
                 <Row>
                     {renderContentMain()}
                 </Row>

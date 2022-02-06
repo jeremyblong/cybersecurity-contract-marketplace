@@ -103,20 +103,22 @@ const ViewPostFileContentHelper = ({ setProfilePosts, comments, setCommentsState
             if (res.data.message === "Successfully reacted to post!") {
                 console.log(res.data);
 
-                const { post } = res.data;
+                const { post, index } = res.data;
 
                 NotificationManager.success("You've successfully reacted with an emoji to this user's specific post! If you'd like to remove this reaction, simply react with any of the emoji's again & it'll revoke your response.", "Successfully reacted to post!", 4750);
 
                 setSelectedPost({
                     ...post,
-                    files: post.uploadedRelevantFiles
+                    files: post.uploadedRelevantFiles,
+                    index
                 });
             } else if (res.data.message === "Successfully REMOVED reaction to post!") {
-                const { post } = res.data;
+                const { post, index } = res.data;
 
                 setSelectedPost({
                     ...post,
-                    files: post.uploadedRelevantFiles
+                    files: post.uploadedRelevantFiles,
+                    index
                 });
 
                 NotificationManager.info("We've successfully REMOVED your previous reaction as you've already reacted to this post, if you didn't mean to remove this reaction, simply react with same emoji again...", "Successfully removed previous reaction!", 4750);
@@ -166,13 +168,17 @@ const ViewPostFileContentHelper = ({ setProfilePosts, comments, setCommentsState
             if (res.data.message === "Successfully posted comment!") {
                 console.log(res.data);
 
-                const { updatedComments, posts } = res.data;
+                const { updatedComments, posts, index, post } = res.data;
 
                 setValue("comment", "", { shouldValidate: false });
 
                 // setProfilePosts(posts);
 
-                setCommentsState(updatedComments);
+                setSelectedPost({
+                    ...post,
+                    files: post.uploadedRelevantFiles,
+                    index
+                });
 
                 NotificationManager.success("Successfully posted your desired comment, we've successfully updated this listing data & notified the owner of these changes!", "Successfully posted a new comment!", 4750);
 

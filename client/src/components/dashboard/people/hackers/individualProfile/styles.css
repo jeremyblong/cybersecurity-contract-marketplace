@@ -38,3 +38,26 @@
 .add-shadow-general-card-profile {
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.20) !important;
 }
+.previously-viewed-image-video {
+    max-height: 60px !important;
+    max-width: 60px !important;
+    min-height: 60px !important;
+    min-width: 60px !important;
+}
+.previously-viewed-image-video-video, .previously-viewed-image-video-video video {
+    max-height: 60px !important;
+    max-width: 60px !important;
+    min-height: 60px !important;
+    width: 100%;
+    margin-right: 21px !important;
+    margin: 0 auto;
+    min-width: 60px !important;
+    border-radius: 50% !important;
+    background-color: #d7e2e9 !important;
+}
+.center-viewed-content {
+    margin-right: 0px !important;
+}
+.people-know-li-item {
+    margin-right: 15px !important;
+}

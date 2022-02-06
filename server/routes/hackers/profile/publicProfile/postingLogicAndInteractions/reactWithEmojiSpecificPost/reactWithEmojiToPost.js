@@ -55,7 +55,8 @@ router.post("/", (req, resppppp, next) => {
                         // return final response/confirmation
                         resppppp.json({
                             message: "Successfully reacted to post!",
-                            post: selectedPost
+                            post: selectedPost,
+                            index: findMatchingPostIndex
                         })
                     }
                 })
@@ -82,7 +83,8 @@ router.post("/", (req, resppppp, next) => {
                         // return final response/confirmation
                         resppppp.json({
                             message: "Successfully REMOVED reaction to post!",
-                            post: selectedPost
+                            post: selectedPost,
+                            index: findMatchingPostIndex
                         })
                     }
                 })

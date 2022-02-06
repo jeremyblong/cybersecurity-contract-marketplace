@@ -2,6 +2,7 @@ import React, { Fragment } from "react";
 import { Media } from "reactstrap";
 import ReactPlayer from "react-player";
 import _ from "lodash";
+import "./styles.css";
 
 const renderProfilePicVideo = (last) => {
 
@@ -15,11 +16,11 @@ const renderProfilePicVideo = (last) => {
             );
         } else {
             // image logic
-            return <Media className="rounded-circle" body alt="profile-picture-sub" src={`${process.env.REACT_APP_ASSET_LINK}/${last.link}`} data-intro="This is Profile image" />;
+            return <Media className="rounded-circle maxed-out-rounded-circle" body alt="profile-picture-sub" src={`${process.env.REACT_APP_ASSET_LINK}/${last.link}`} data-intro="This is Profile image" />;
         }    
     } else {
         // image logic
-        return <Media className="rounded-circle" body alt="profile-picture-sub" src={process.env.REACT_APP_PLACEHOLDER_IMAGE} data-intro="This is Profile image" />;
+        return <Media className="rounded-circle maxed-out-rounded-circle" body alt="profile-picture-sub" src={process.env.REACT_APP_PLACEHOLDER_IMAGE} data-intro="This is Profile image" />;
     } 
 }
 

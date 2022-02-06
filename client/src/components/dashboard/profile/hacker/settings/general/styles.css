@@ -1,3 +1,24 @@
 .hover-rounded-circle-video:hover {
     border: 3px solid #7366ff;
 }
+.hover-rounded-circle {
+    max-width: 70px;
+    max-height: 70px;
+    border-radius: 45px;
+}
+/* this one below */
+.set-min-card-height-profile-edit-hacker {
+    min-height: 92.5vh;
+    max-height: 92.5vh;
+    overflow-y: scroll;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.375);
+}
+.create-white-space {
+    white-space: pre-line;
+}
+.convert-text-header {
+    color: white;
+}
+.add-custom-shadow-profile-card {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.375);
+}

@@ -42,6 +42,8 @@ import BookmarkedHackerAccountsAsEmployerPage from "../pages/dashboard/bookmarke
 import BookmarkedHackerAccountsAsHackerPage from "../pages/dashboard/bookmarked/hackers/bookmarkedHackerAccounts/bookmarkedHackerAccountsMain.js";
 import BookmarkedEmployerAccountsAsHackerPage from "../pages/dashboard/bookmarked/hackers/bookmarkedEmployerAccounts/bookmarkedEmployerAccountsMain.js";
 import CreateNewHackerProfileContentPostPage from "../pages/dashboard/people/hackers/individualProfile/wallData/postNewWallData/createNewWallData.js";
+import ManageIndividualHackerAlreadyHiredPage from "../pages/dashboard/jobManagement/employers/manageHiredHackers/manage/manageIndividualHacker/manageHacker.js";
+import DownloadSetupCoreVPNDataInformationPage from "../pages/dashboard/VPNLogic/downloadCoreVpnData/downloadSetupCoreDataMain.js";
 
 export const routes = [
         { path:"/profile/settings/edit", Component: GeneralSettingsPage },
@@ -87,5 +89,7 @@ export const routes = [
         { path: "/view/as/employer/view/bookmarked/profiles/employer/accounts", Component: BookmarkedEmployerAccountsAsEmployerPage },
         { path: "/view/as/hacker/view/bookmarked/profiles/hacker/accounts", Component: BookmarkedHackerAccountsAsHackerPage },
         { path: "/view/as/hacker/bookmarked/profiles/employer/accounts", Component: BookmarkedEmployerAccountsAsHackerPage },
-        { path: "/create/new/post/hacker/profile/main/data", Component: CreateNewHackerProfileContentPostPage }
+        { path: "/create/new/post/hacker/profile/main/data", Component: CreateNewHackerProfileContentPostPage },
+        { path: "/manage/individual/hacker/already/hired/:id", Component: ManageIndividualHackerAlreadyHiredPage },
+        { path: "/vpn/download/core/files/setup", Component: DownloadSetupCoreVPNDataInformationPage }
 ]; 

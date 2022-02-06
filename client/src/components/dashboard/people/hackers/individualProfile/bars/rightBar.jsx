@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect, useRef } from 'react';
-import { Col, Card, CardHeader, CardBody, Button, Media, Collapse } from 'reactstrap';
+import { Col, Card, CardHeader, CardBody, Button, Media, Collapse, Row } from 'reactstrap';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import helpers from "./helpers/rightBarHelperFunctions.js";
 import _ from 'lodash';
@@ -10,11 +10,14 @@ import three from "../../../../../../assets/images/user/3.jpg";
 import two from "../../../../../../assets/images/user/2.png";
 import eleven from "../../../../../../assets/images/user/11.png";
 import ten from "../../../../../../assets/images/user/10.jpg";
+import { useHistory } from 'react-router-dom';
 
 
-const { RenderPictureOrVideoLast, renderPictureOrVideoContentBreakBlock } = helpers;
+const { RenderPictureOrVideoLast, renderPictureOrVideoContentBreakBlock, renderPicOrVideoFollowingHackers } = helpers;
 
 const RightBar = ({ user, modalIndexSelected, setSelectedModalIndex, onCloseModal, onOpenModal, setSelectedCurrently }) => {
+    // create history obj
+    const history = useHistory();
     // relevant ref's creation
     const galleryRef = useRef(null);
     const [isIntro, setisIntro] = useState(true);
@@ -91,6 +94,9 @@ const RightBar = ({ user, modalIndexSelected, setSelectedModalIndex, onCloseModa
             );
         }
     }
+    const redirectToFollowingHacker = (hackerID) => {
+        history.push(`/hacker/profile/individual/view/${hackerID}`);
+    }
     const lastImageBoxed = (user !== null && typeof user.profilePicsVideos !== "undefined" && user.profilePicsVideos.length > 0) ? user.profilePicsVideos[user.profilePicsVideos.length - 1] : null;
     return (
         <Fragment>
@@ -109,26 +115,28 @@ const RightBar = ({ user, modalIndexSelected, setSelectedModalIndex, onCloseModa
                     </CardHeader>
                     <Collapse isOpen={isFollowers}>
                         <CardBody className="social-list filter-cards-view">
-                            <Media>
-                                <img className="img-50 img-fluid m-r-20 rounded-circle" alt="twoImg" src={two} />
-                                <Media body><span className="d-block">First Name & Last Name</span><a href={null}>Add/Follow This User</a></Media>
-                            </Media>
-                            <Media>
-                                <img className="img-50 img-fluid m-r-20 rounded-circle" alt="threeImg" src={three} />
-                                <Media body><span className="d-block">First Name & Last Name</span><a href={null}>Add/Follow This User</a></Media>
-                            </Media>
-                            <Media>
-                                <img className="img-50 img-fluid m-r-20 rounded-circle" alt="threeImg" src={three} />
-                                <Media body><span className="d-block">First Name & Last Name</span><a href={null}>Add/Follow This User</a></Media>
-                            </Media>
-                            <Media>
-                                <img className="img-50 img-fluid m-r-20 rounded-circle" alt="tenImg" src={ten} />
-                                <Media body><span className="d-block">First Name & Last Name</span><a href={null}>Add/Follow This User</a></Media>
-                            </Media>
-                            <Media>
-                                <img className="img-50 img-fluid m-r-20 rounded-circle" alt="elevenImg" src={eleven} />
-                                <Media body><span className="d-block">First Name & Last Name</span><a href={null}>Add/Follow This User</a></Media>
-                            </Media>
+                            {typeof user.followingCompanies !== "undefined" && user.followingCompanies.length > 0 ? user.followingCompanies.map((employer, index) => {
+                                return (
+                                    <Media key={index}>
+                                        {renderPicOrVideoFollowingHackers(employer.latestProfilePicVideo)}
+                                        <Media body><span className="d-block">{employer.followingFullName}</span><a onClick={() => redirectToFollowingHacker(employer.followingID)} href={null}>View {employer.followingUsername}'s profile</a></Media>
+                                    </Media>
+                                );
+                            }) : <Fragment>
+                                <Row>
+                                    <Col sm="12" md="12" lg="12" xl="12">
+                                        <div className={"centered-both-ways"}>
+                                            <h3 className={"no-results-following-header"}>No results found with this criteria...</h3>
+                                        </div>
+                                    </Col>
+                                    <hr />
+                                    <Col sm="12" md="12" lg="12" xl="12">
+                                        <div className={"centered-both-ways"}>
+                                            <img src={require("../../../../../../assets/images/dashboard/folder1.png")} className={"no-results-following-image"} />
+                                        </div>
+                                    </Col>
+                                </Row>
+                            </Fragment>}
                         </CardBody>
                     </Collapse>
                 </Card>
@@ -143,26 +151,28 @@ const RightBar = ({ user, modalIndexSelected, setSelectedModalIndex, onCloseModa
                     </CardHeader>
                     <Collapse isOpen={isFollowings}>
                         <CardBody className="social-list filter-cards-view">
-                            <Media>
-                                <img className="img-50 img-fluid m-r-20 rounded-circle" alt="" src={three} />
-                                <Media body><span className="d-block">First Name & Last Name</span><a href={null}>Add/Follow This User</a></Media>
-                            </Media>
-                            <Media>
-                                <img className="img-50 img-fluid m-r-20 rounded-circle" alt="" src={two} />
-                                <Media body><span className="d-block">First Name & Last Name</span><a href={null}>Add/Follow This User</a></Media>
-                            </Media>
-                            <Media>
-                                <img className="img-50 img-fluid m-r-20 rounded-circle" alt="ten" src={ten} />
-                                <Media body><span className="d-block">First Name & Last Name</span><a href={null}>Add/Follow This User</a></Media>
-                            </Media>
-                            <Media>
-                                <img className="img-50 img-fluid m-r-20 rounded-circle" alt="threeImg" src={three} />
-                                <Media body><span className="d-block">First Name & Last Name</span><a href={null}>Add/Follow This User</a></Media>
-                            </Media>
-                            <Media>
-                                <img className="img-50 img-fluid m-r-20 rounded-circle" alt="elevenImg" src={eleven} />
-                                <Media body><span className="d-block">First Name & Last Name</span><a href={null}>Add/Follow This User</a></Media>
-                            </Media>
+                            {typeof user.followingHackers !== "undefined" && user.followingHackers.length > 0 ? user.followingHackers.map((hacker, index) => {
+                                return (
+                                    <Media key={index}>
+                                        {renderPicOrVideoFollowingHackers(hacker.latestProfilePicVideo)}
+                                        <Media body><span className="d-block">{hacker.followingFullName}</span><a onClick={() => redirectToFollowingHacker(hacker.followingID)} href={null}>View {hacker.followingUsername}'s profile</a></Media>
+                                    </Media>
+                                );
+                            }) : <Fragment>
+                                <Row>
+                                    <Col sm="12" md="12" lg="12" xl="12">
+                                        <div className={"centered-both-ways"}>
+                                            <h3 className={"no-results-following-header"}>No results found with this criteria...</h3>
+                                        </div>
+                                    </Col>
+                                    <hr />
+                                    <Col sm="12" md="12" lg="12" xl="12">
+                                        <div className={"centered-both-ways"}>
+                                            <img src={require("../../../../../../assets/images/dashboard/folder1.png")} className={"no-results-following-image"} />
+                                        </div>
+                                    </Col>
+                                </Row>
+                            </Fragment>}
                         </CardBody>
                     </Collapse>
                 </Card>

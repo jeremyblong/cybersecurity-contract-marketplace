@@ -297,3 +297,6 @@ a:hover {
     align-content: center;
 }
 /* admin/dashboard/authenticated - END */
+.logo_long_top_left {
+    max-width: 82.5% !important;
+}

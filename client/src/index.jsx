@@ -148,22 +148,31 @@ const Root = (props) =>  {
     const employerNOTAllowedRoutes = ["/profile/settings/edit", "/create/listing/software/exchange/hacker/account", "/create/new/live/stream/hackers", "/already/applied/jobs/hacker/account", "/view/as/hacker/bookmarked/profiles/employer/accounts", "/view/as/hacker/view/bookmarked/profiles/hacker/accounts", "/dashboard/hacker", "/create/new/post/hacker/profile/main/data"];
     const hackersNOTAllowedRoutes = ["/profile/settings/edit/employer", "/view/all/general/applications/employer/recruit", "/employer/view/hired/applicants/active", "/view/as/employer/view/bookmarked/profiles/employer/accounts", "/view/as/employer/view/bookmarked/profiles/hacker/accounts", "/dashboard/employer", "/employer/profile/main/display/personal"];
 
-    if (accountData.accountType === "employers") {
-      // employer(s) authenticated acct.
-      if (employerNOTAllowedRoutes.includes(path)) {
-        // employer NOT allowed includes this path so render "Unauthenticated Route"
-        return <UnauthorizedAccessPage />;
-      } else {
-        return <Component />;
-      }
+    if (path === "/hacker/profile/individual/view/:id") {
+      return (
+        <Route
+          path={"/hacker/profile/individual/view/:id"}
+          render={props => <Component key={props.match.params.id} {...props} />}
+        />
+      );
     } else {
-      // hacker(s) authenticated acct.
-      if (hackersNOTAllowedRoutes.includes(path)) {
-        // hacker NOT allowed includes this path so render "Unauthenticated Route"
-        return <UnauthorizedAccessPage />;
+      if (accountData.accountType === "employers") {
+        // employer(s) authenticated acct.
+        if (employerNOTAllowedRoutes.includes(path)) {
+          // employer NOT allowed includes this path so render "Unauthenticated Route"
+          return <UnauthorizedAccessPage />;
+        } else {
+          return <Component />;
+        }
       } else {
-        return <Component />;
-      }
+        // hacker(s) authenticated acct.
+        if (hackersNOTAllowedRoutes.includes(path)) {
+          // hacker NOT allowed includes this path so render "Unauthenticated Route"
+          return <UnauthorizedAccessPage />;
+        } else {
+          return <Component />;
+        }
+      } 
     }
   }
   const renderDashboardComponents = (path, Component) => {

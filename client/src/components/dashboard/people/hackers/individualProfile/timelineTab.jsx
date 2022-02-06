@@ -56,7 +56,7 @@ const TimelineTab = ({ user, onCloseModal, isOpen, onOpenModal, setSelectedCurre
         if (user !== null) {
             return (
                 <Fragment>
-                    {selectedPost !== null ? <ViewPostFileContentHelper setProfilePosts={setProfilePosts} comments={comments} setCommentsState={setCommentsState} setSelectedPost={setSelectedPost} setSelectedIndex={setSelectedIndex} selectedIndex={selectedIndex} userData={userData} user={user} selectedPost={selectedPost} isPostPaneOpen={isPostPaneOpen} setPostPaneOpenState={setPostPaneOpenState} /> : null}
+                    {selectedPost !== null ? <ViewPostFileContentHelper setProfilePosts={setProfilePosts} comments={selectedPost.comments} setCommentsState={setCommentsState} setSelectedPost={setSelectedPost} setSelectedIndex={setSelectedIndex} selectedIndex={selectedIndex} userData={userData} user={user} selectedPost={selectedPost} isPostPaneOpen={isPostPaneOpen} setPostPaneOpenState={setPostPaneOpenState} /> : null}
                     <Col xl="3 xl-40 box-col-4" lg="12" md="5">
                         <div className="default-according style-1 faq-accordion job-accordion" id="accordionoc4">
                             <Row>
