@@ -1,4 +1,4 @@
-import {Home,Bell,Headphones,ShoppingCart,Activity,Monitor, Grid,Cpu,Briefcase,User,Command,CreditCard} from 'react-feather';
+import { Home, Bell, Headphones, ShoppingCart, Activity, Monitor,  Grid, Cpu, Briefcase, User, Command, CreditCard, DollarSign } from 'react-feather';
 
 export const MENUITEMS = [
     {
@@ -124,16 +124,16 @@ export const MENUITEMS = [
         ]          
     },
     {
-        menutitle:`FREE VPN Access (Subscriber's)`,
-        menucontent:"FREE VPN Access (BOTH Employer's & Hacker Accounts)",
+        menutitle:`Gambling/Betting`,
+        menucontent:"Gambling/Betting On Live Active Hack's & More...",
         Items:[
             {
-                title: 'Set-up VPN service - initial installation', icon: Headphones, type: 'sub',active: false, children: [
-                    { path: `${process.env.PUBLIC_URL}/vpn/download/core/files/setup`, title: "Download CORE Required File's (Step ONE)", type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'Set-up account VPN access & Activation (Step TWO)', type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'Power VPN On/Off (Step Three)', type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/`, title: `VPN Setting's (Any Point After Activation)`, type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/`, title: `Check VPN Activity, Speed & Functionality`, type: 'link' }
+                title: `Explore Ways To Bet/Gamble`, icon: DollarSign, type: 'sub',active: false, children: [
+                    { path: `${process.env.PUBLIC_URL}/view/bettable/listings/main`, title: "View all possible listing's to bid/bet on", type: 'link' }
+                    // { path: `${process.env.PUBLIC_URL}/`, title: 'Set-up account VPN access & Activation (Step TWO)', type: 'link' },
+                    // { path: `${process.env.PUBLIC_URL}/`, title: 'Power VPN On/Off (Step Three)', type: 'link' },
+                    // { path: `${process.env.PUBLIC_URL}/`, title: `VPN Setting's (Any Point After Activation)`, type: 'link' },
+                    // { path: `${process.env.PUBLIC_URL}/`, title: `Check VPN Activity, Speed & Functionality`, type: 'link' }
                 ]
             }
         ]          

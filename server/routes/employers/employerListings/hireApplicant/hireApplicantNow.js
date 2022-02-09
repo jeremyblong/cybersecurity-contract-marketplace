@@ -6,7 +6,7 @@ const axios = require("axios");
 const config = require("config");
 const { v4: uuidv4 } = require('uuid');
 const moment = require("moment");
-
+const GamblingSchema = require("../../../../schemas/gamblingBetting/createNewGamblingListing.js");
 
 router.post("/", (req, resppppp, next) => {
     
@@ -21,9 +21,14 @@ router.post("/", (req, resppppp, next) => {
     // console.log("applicantData", applicantData);
 
     const employerCollection = Connection.db.db("db").collection("employers");
-    const hackerCollection = Connection.db.db("db").collection("hackers");
+    const gamblingBettingCollection = Connection.db.db("db").collection("bettinggamblinglistings");
     const listingsCollection = Connection.db.db("db").collection("employerlistings");
 
+    const addDays = (date, days) => {
+        var result = new Date(date);
+        result.setDate(result.getDate() + days);
+        return result;
+    }
 
     employerCollection.findOne({ uniqueId: employerID }).then((employer) => {
         if (!employer) {
@@ -115,6 +120,7 @@ router.post("/", (req, resppppp, next) => {
                                 } else {
                                     employer["activeHiredHackers"] = [newEmployerJob];
                                 }
+                                
                                 // save edited data...
                                 employerCollection.save(employer, async (savingError, result) => {
                                     if (savingError) {
@@ -128,10 +134,115 @@ router.post("/", (req, resppppp, next) => {
                                         const deletedItem = await listingsCollection.deleteOne({ uniqueId: applicantData.employerPostedJobId });
 
                                         if (deletedItem) {
-                                            resppppp.json({
-                                                message: "Successfully hired applicant for position/listing!",
-                                                result
-                                            })   
+
+                                            const foundUserOrNotBettingCollection = await gamblingBettingCollection.findOne({ listingIDToMatch: listing.uniqueId });
+
+                                            if (foundUserOrNotBettingCollection === null) {
+    
+                                                const newGamblingBettingSchemaData = {
+                                                    id: uuidv4(),
+                                                    date: new Date(),
+                                                    formattedDate: moment(new Date()).format("MM/DD/YYYY hh:mm:ss a"),
+                                                    listingIDToMatch: listing.uniqueId,
+                                                    hiredHackers: [{
+                                                        hackerID: applicantID,
+                                                        hackerName: applicantData.applicantName,
+                                                        betBidsList: [],
+                                                        totalBetsBids: 0,
+                                                        likes: 0,
+                                                        dislikes: 0,
+                                                        id: uuidv4(),
+                                                        participantsIDs: [],
+                                                        applicantSubmittedData: {
+                                                            attachedFiles: applicantData.attachedFiles,
+                                                            coverLetterText: applicantData.coverLetterText,
+                                                            messageToEmployer: applicantData.messageToEmployer,
+                                                            applicantId: applicantData.applicantId,
+                                                            applicantName: applicantData.applicantName,
+                                                            legibleDateApplied: applicantData.legibleDateApplied,
+                                                            participateInBettingProcess: applicantData.bettingOnSelfSelected === true ? {
+                                                                bettingOnSelf: true,
+                                                                wageredBidAmount: Number(applicantData.waggeredBidAmount)
+                                                            } : null,
+                                                            physicalOrDigitalOrBoth: applicantData.physicalOrDigitalOrBoth,
+                                                            referenceLinks: applicantData.referenceLinks,
+                                                            selectedTestDates: applicantData.selectedTestDates,
+                                                            technicalApproachToHack: applicantData.technicalApproachToHack,
+                                                            submittedUserData: applicantData.submittedUserData
+                                                        }
+                                                    }],
+                                                    originalListingData: listing,
+                                                    allBids: [],
+                                                    startDate: new Date(),
+                                                    maxedEndDate: addDays(new Date(), 21),
+                                                    hostedBy: employerID,
+                                                    activeHackers: 1
+                                                };
+    
+                                                const newSavedBidListing = new GamblingSchema(newGamblingBettingSchemaData);
+    
+                                                newSavedBidListing.save((errrrrrrr, success) => {
+                                                    if (errrrrrrr) {
+                                                        console.log("errrrrrrr", errrrrrrr);
+    
+                                                        resppppp.json({
+                                                            message: "An error occurred while attempting the newly created auction data...",
+                                                            err: errrrrrrr
+                                                        }) 
+                                                    } else {
+                                                        resppppp.json({
+                                                            message: "Successfully hired applicant for position/listing!",
+                                                            result
+                                                        }) 
+                                                    }
+                                                }) 
+                                            } else {
+                                                const newAdditionBetting = {
+                                                    hackerID: applicantID,
+                                                    hackerName: applicantData.applicantName,
+                                                    betBidsList: [],
+                                                    totalBetsBids: 0,
+                                                    likes: 0,
+                                                    dislikes: 0,
+                                                    id: uuidv4(),
+                                                    participantsIDs: [],
+                                                    applicantSubmittedData: {
+                                                        attachedFiles: applicantData.attachedFiles,
+                                                        coverLetterText: applicantData.coverLetterText,
+                                                        messageToEmployer: applicantData.messageToEmployer,
+                                                        applicantId: applicantData.applicantId,
+                                                        applicantName: applicantData.applicantName,
+                                                        legibleDateApplied: applicantData.legibleDateApplied,
+                                                        participateInBettingProcess: applicantData.bettingOnSelfSelected === true ? {
+                                                            bettingOnSelf: true,
+                                                            wageredBidAmount: Number(applicantData.waggeredBidAmount)
+                                                        } : null,
+                                                        physicalOrDigitalOrBoth: applicantData.physicalOrDigitalOrBoth,
+                                                        referenceLinks: applicantData.referenceLinks,
+                                                        selectedTestDates: applicantData.selectedTestDates,
+                                                        technicalApproachToHack: applicantData.technicalApproachToHack,
+                                                        submittedUserData: applicantData.submittedUserData
+                                                    }
+                                                };
+
+                                                gamblingBettingCollection.findOneAndUpdate({ listingIDToMatch: listing.uniqueId }, { $push: {
+                                                    hiredHackers: newAdditionBetting
+                                                }}, (errrrrrrrrrr, finale) => {
+                                                    if (errrrrrrrrrr) {
+                                                        console.log("errrrrrrrrrr", errrrrrrrrrr);
+
+                                                        resppppp.json({
+                                                            message: "An error occurred while attempting the newly created auction data...",
+                                                            err: errrrrrrrrrr
+                                                        }) 
+                                                    } else {
+                                                        resppppp.json({
+                                                            message: "Successfully hired applicant for position/listing!",
+                                                            result
+                                                        }) 
+                                                    }
+                                                });
+                                            } 
                                         }
                                     }
                                 })
@@ -198,7 +309,8 @@ router.post("/", (req, resppppp, next) => {
 
                             const configured = {
                                 listingId: applicantData.employerPostedJobId,
-                                newMaxNumberOfApplicantsObj
+                                newMaxNumberOfApplicantsObj,
+                                applicantID
                             }
 
                             axios.post(`${baseURL}/gather/listing/all/info/deduct/one/count`, configured).then((responseeee) => {
@@ -215,10 +327,115 @@ router.post("/", (req, resppppp, next) => {
                                                 err: savingError
                                             })
                                         } else {
-                                            resppppp.json({
-                                                message: "Successfully hired applicant for position/listing!",
-                                                result
-                                            })
+
+                                            const foundUserOrNotBettingCollection = await gamblingBettingCollection.findOne({ listingIDToMatch: listing.uniqueId });
+
+                                            if (foundUserOrNotBettingCollection === null) {
+    
+                                                const newGamblingBettingSchemaData = {
+                                                    id: uuidv4(),
+                                                    date: new Date(),
+                                                    formattedDate: moment(new Date()).format("MM/DD/YYYY hh:mm:ss a"),
+                                                    listingIDToMatch: listing.uniqueId,
+                                                    hiredHackers: [{
+                                                        hackerID: applicantID,
+                                                        hackerName: applicantData.applicantName,
+                                                        betBidsList: [],
+                                                        totalBetsBids: 0,
+                                                        likes: 0,
+                                                        dislikes: 0,
+                                                        id: uuidv4(),
+                                                        participantsIDs: [],
+                                                        applicantSubmittedData: {
+                                                            attachedFiles: applicantData.attachedFiles,
+                                                            coverLetterText: applicantData.coverLetterText,
+                                                            messageToEmployer: applicantData.messageToEmployer,
+                                                            applicantId: applicantData.applicantId,
+                                                            applicantName: applicantData.applicantName,
+                                                            legibleDateApplied: applicantData.legibleDateApplied,
+                                                            participateInBettingProcess: applicantData.bettingOnSelfSelected === true ? {
+                                                                bettingOnSelf: true,
+                                                                wageredBidAmount: Number(applicantData.waggeredBidAmount)
+                                                            } : null,
+                                                            physicalOrDigitalOrBoth: applicantData.physicalOrDigitalOrBoth,
+                                                            referenceLinks: applicantData.referenceLinks,
+                                                            selectedTestDates: applicantData.selectedTestDates,
+                                                            technicalApproachToHack: applicantData.technicalApproachToHack,
+                                                            submittedUserData: applicantData.submittedUserData
+                                                        }
+                                                    }],
+                                                    originalListingData: listing,
+                                                    allBids: [],
+                                                    startDate: new Date(),
+                                                    maxedEndDate: addDays(new Date(), 21),
+                                                    hostedBy: employerID,
+                                                    activeHackers: 1
+                                                };
+    
+                                                const newSavedBidListing = new GamblingSchema(newGamblingBettingSchemaData);
+    
+                                                newSavedBidListing.save((errrrrrrr, success) => {
+                                                    if (errrrrrrr) {
+                                                        console.log("errrrrrrr", errrrrrrr);
+    
+                                                        resppppp.json({
+                                                            message: "An error occurred while attempting the newly created auction data...",
+                                                            err: errrrrrrr
+                                                        }) 
+                                                    } else {
+                                                        resppppp.json({
+                                                            message: "Successfully hired applicant for position/listing!",
+                                                            result
+                                                        }) 
+                                                    }
+                                                }) 
+                                            } else {
+                                                const newAdditionBetting = {
+                                                    hackerID: applicantID,
+                                                    hackerName: applicantData.applicantName,
+                                                    betBidsList: [],
+                                                    totalBetsBids: 0,
+                                                    likes: 0,
+                                                    dislikes: 0,
+                                                    id: uuidv4(),
+                                                    participantsIDs: [],
+                                                    applicantSubmittedData: {
+                                                        attachedFiles: applicantData.attachedFiles,
+                                                        coverLetterText: applicantData.coverLetterText,
+                                                        messageToEmployer: applicantData.messageToEmployer,
+                                                        applicantId: applicantData.applicantId,
+                                                        applicantName: applicantData.applicantName,
+                                                        legibleDateApplied: applicantData.legibleDateApplied,
+                                                        participateInBettingProcess: applicantData.bettingOnSelfSelected === true ? {
+                                                            bettingOnSelf: true,
+                                                            wageredBidAmount: Number(applicantData.waggeredBidAmount)
+                                                        } : null,
+                                                        physicalOrDigitalOrBoth: applicantData.physicalOrDigitalOrBoth,
+                                                        referenceLinks: applicantData.referenceLinks,
+                                                        selectedTestDates: applicantData.selectedTestDates,
+                                                        technicalApproachToHack: applicantData.technicalApproachToHack,
+                                                        submittedUserData: applicantData.submittedUserData
+                                                    }
+                                                };
+
+                                                gamblingBettingCollection.findOneAndUpdate({ listingIDToMatch: listing.uniqueId }, { $push: {
+                                                    hiredHackers: newAdditionBetting
+                                                }}, (errrrrrrrrrr, finale) => {
+                                                    if (errrrrrrrrrr) {
+                                                        console.log("errrrrrrrrrr", errrrrrrrrrr);
+
+                                                        resppppp.json({
+                                                            message: "An error occurred while attempting the newly created auction data...",
+                                                            err: errrrrrrrrrr
+                                                        }) 
+                                                    } else {
+                                                        resppppp.json({
+                                                            message: "Successfully hired applicant for position/listing!",
+                                                            result
+                                                        }) 
+                                                    }
+                                                });
+                                            } 
                                         }
                                     })
                                 } else {

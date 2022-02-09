@@ -23,6 +23,7 @@ import {
     AccordionItemButton,
     AccordionItemPanel,
 } from 'react-accessible-accordion';
+import _  from "lodash";
 import sheetDisplayHelperFunctions from "./fileManagerHelperFunctions.js";
 
 const TimelineHelper = () => {
@@ -322,7 +323,7 @@ const SheetPaneSubmittingDataHelper = ({ ready, currentUserData, shiftCoreStyles
                                 <h5 className="mb-1 listitem-header-custom">{"Years Of Experience (Working/Employed/Freelancing)"}</h5><small>{"Will be submitted to employer"}</small>
                                 </div>
                                 <hr />
-                                {renderSentence("yearsOfExperience", "Year's Of Working Experience", currentUserData.yearsOfExperience.label)}
+                                {renderSentence("yearsOfExperience", "Year's Of Working Experience", _.has(currentUserData, "yearsOfExperience") ? currentUserData.yearsOfExperience.label : null)}
                                 {renderRibbonSuccessUnacceptable("yearsOfExperience")}
                             </ListGroupItem>
                         </ListGroup>

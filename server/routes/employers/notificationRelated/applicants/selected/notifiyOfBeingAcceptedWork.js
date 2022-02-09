@@ -40,10 +40,8 @@ router.post("/", (req, resppppp, next) => {
         id: uuidv4(),
         date: new Date(),
         dateString: moment(new Date()).format("MM/DD/YYYY hh:mm:ss a"),
-        employerPostedListingInfo: {
-            ...listingInfo
-        },
         ...applicantData,
+        employerPostedListingInfo: { ...listingInfo },
         hired: true
     }
 

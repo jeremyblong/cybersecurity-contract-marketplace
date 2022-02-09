@@ -1,22 +1,3 @@
-// const { MongoClient } = require('mongodb');
-// const config = require("config");
-// const url = config.get("mongoURI");
-// const mongoose = require("mongoose");
-
-// let _db;
-
-// module.exports = {
-//   connectToServer: async function( callback ) {
-//     await mongoose.connect(url, { useNewUrlParser: true });
-//     await MongoClient.connect(url, { useNewUrlParser: true }, ( err, db ) => {
-//       _db  = db.db('db');
-//       return callback( err );
-//     });
-//   },
-//   getDb: function() {
-//     return _db;
-//   }
-// };
 const MongoClient = require('mongodb').MongoClient;
 const config = require("config");
 const url = config.get("mongoURI");

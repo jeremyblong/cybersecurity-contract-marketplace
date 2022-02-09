@@ -21,5 +21,7 @@
     "applicationName": "CyberHunt Cybersecurity Marketplace",
     "cryptoTokenName": "Cyphron Token's",
     "muxAccessTokenID": "f4e738f7-f76e-4b3d-bf83-77f13cb102de",
-    "muxSecretKey": "UiMAtR7mGIBZTsRiQRHDOavWoZF9+w3maarENNAKakZ/2LIdiy17vviMCnBtboPYevmt5FDVTcj"
+    "muxSecretKey": "UiMAtR7mGIBZTsRiQRHDOavWoZF9+w3maarENNAKakZ/2LIdiy17vviMCnBtboPYevmt5FDVTcj",
+    "newVPNUserP12SSHKeysPassword": "FK4Yi9pHP",
+    "VPNCAKeyPassword": "mtbYk6xf8b3VHbYZ"
 }

@@ -24,7 +24,7 @@ const Sidebar = (props) => {
         if(configDB.data.settings.sidebar.type.split(' ').pop() === 'material-type' || configDB.data.settings.sidebar.type.split(' ').pop() ==='advance-layout')
           document.querySelector(".sidebar-main").className = "sidebar-main hovered"
     }else{
-      document.querySelector(".sidebar-main").className = "sidebar-main"
+      // document.querySelector(".sidebar-main").className = "sidebar-main"
     }
   }
   useEffect(() => {
