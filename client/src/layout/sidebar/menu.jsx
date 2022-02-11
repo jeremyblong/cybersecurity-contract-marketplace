@@ -18,11 +18,11 @@ export const MENUITEMS = [
             {
                 title: `Manage Application's, Job Data & Other Related`, icon: Home, type: 'sub', active: false, children: [
                     { path: `${process.env.PUBLIC_URL}/already/applied/jobs/hacker/account`, title: `Already Applied Job's`, type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/`, title: `Notification's`, type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/`, title: `ACTIVE Jobs You Employed On`, type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'NOT-DEFINED-YET', type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'NOT-DEFINED-YET', type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'NOT-DEFINED-YET', type: 'link' }
+                    { path: `${process.env.PUBLIC_URL}/`, title: `Notification's`, type: 'link' }
+                    // { path: `${process.env.PUBLIC_URL}/`, title: `ACTIVE Jobs You Employed On`, type: 'link' },
+                    // { path: `${process.env.PUBLIC_URL}/`, title: 'NOT-DEFINED-YET', type: 'link' },
+                    // { path: `${process.env.PUBLIC_URL}/`, title: 'NOT-DEFINED-YET', type: 'link' },
+                    // { path: `${process.env.PUBLIC_URL}/`, title: 'NOT-DEFINED-YET', type: 'link' }
                 ]
             },
             {
@@ -169,21 +169,43 @@ export const MENUITEMS = [
         menucontent:"Manage your account settings & more...",
         Items:[
             {
-                title: 'Raise Support', icon: Headphones, type: 'sub', active: false, children: [
-                    { path: `${process.env.PUBLIC_URL}/profile/settings/edit`, title: 'Edit Profile', type: 'link' }
+                title: 'Profile Related', icon: Headphones, type: 'sub', active: false, children: [
+                    { path: `${process.env.PUBLIC_URL}/profile/settings/edit`, title: 'Edit/Modify Profile Data', type: 'link' }
                 ]
             }
         ]          
     },
     {
-        menutitle:"Subscriptions/Upgrades",
-        menucontent:"Subscribe to memberships, purchase in-app content and more!",
+        menutitle:"Payments, Subscriptions & More",
+        menucontent:"Subscribe to memberships, purchase in-app content, add payment method's and more!",
         Items:[
             {
                 title: 'Subscriptions', icon: Bell, type: 'sub',active: false, children: [
                     { path: `${process.env.PUBLIC_URL}/memberships/selection`, title: 'Choose Subscription(s)', type: 'link' }
                 ]
+            },
+            {
+                title: 'Payment Related Actions/Options', icon: Bell, type: 'sub',active: false, children: [
+                    { path: `${process.env.PUBLIC_URL}/payment/logic/add/new/card/info`, title: 'Add A New Payment Method', type: 'link' },
+                    { path: `${process.env.PUBLIC_URL}/`, title: "Payment Main/Homepage", type: 'link' }
+                ]
             }
         ]          
-    }         
+    },
+    {
+        menutitle:"Support & Help Desk",
+        menucontent:"Need any support/helpdesk related help?",
+        Items:[
+            {
+            title: "FAQ (Frequently Asked Questions) - Hacker's", icon: Headphones, type: 'sub', active: false, children: [
+                    { path: `${process.env.PUBLIC_URL}/frequently/asked/questions/main/hacker`, title: 'Main FAQ - View Before Contacting Support', type: 'link' }
+                ]
+            },
+            {
+                title: "FAQ (Frequently Asked Questions) - Employer's", icon: Headphones, type: 'sub', active: false, children: [
+                        { path: `${process.env.PUBLIC_URL}/frequently/asked/questions/main/employer`, title: 'Main FAQ - View Before Contacting Support', type: 'link' }
+                    ]
+                }
+        ]          
+    }    
 ]

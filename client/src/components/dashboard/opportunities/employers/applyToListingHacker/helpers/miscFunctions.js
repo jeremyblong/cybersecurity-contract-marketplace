@@ -474,7 +474,7 @@ const handleDeletionLink = (link, setSelectedLinks) => {
         })
     })
 } 
-const renderMountedLogic = (globalConfig, setPhysicalOrDigitalHackOptionsState, setListingData, setDatesReady, setDateRanges, setDisabledDaysState, setListingReady) => {
+const renderMountedLogic = (setMaxDate, globalConfig, setPhysicalOrDigitalHackOptionsState, setListingData, setDatesReady, setDateRanges, setDisabledDaysState, setListingReady) => {
     // fetch user information
     axios.get(`${process.env.REACT_APP_BASE_URL}/gather/listing/all/info`, globalConfig.configuration).then((res) => {
         if (res.data.message === "Successfully gathered listing information!") {
@@ -517,6 +517,8 @@ const renderMountedLogic = (globalConfig, setPhysicalOrDigitalHackOptionsState, 
                     // min & max dates
                     const maxDate = new Date(Math.max.apply(null, endDateArray));
                     const minDate = new Date(Math.min.apply(null, startDateArray));
+
+                    setMaxDate(maxDate);
 
                     const maxedDate = moment(maxDate).startOf('day').toString();
 

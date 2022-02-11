@@ -35,6 +35,9 @@ const BettingGamblingSchema = new Schema({
     },
     activeHackers: {
         type: Number
+    },
+    totalParticipants: {
+        type: Array
     }
 });
 

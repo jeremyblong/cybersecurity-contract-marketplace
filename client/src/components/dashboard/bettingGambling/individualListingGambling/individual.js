@@ -1,12 +1,17 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect, useRef } from "react";
 import "./styles.css";
 import { Parallax } from 'react-parallax';
-import { Container, Row, Col, Button, Card, CardBody, CardHeader } from 'reactstrap';
+import { Container, Row, Col, Button, Card, CardBody, CardHeader, Media } from 'reactstrap';
 import axios from "axios";
 import { connect } from "react-redux";
 import { NotificationManager } from "react-notifications";
 import { useHistory } from "react-router-dom";
-
+import Breadcrumb from '../../../../layout/breadcrumb';
+import CustomTabsetBottomListingAuctionHelper from './helpers/bottomTabbed/bottomTabbedHelper.js';
+import Slider from 'react-slick';
+import Ratings from 'react-ratings-declarative'
+import { ProductReview,  Brand, Availability, AddToCart, BuyNow } from "../../../../constant";
+import { Truck, Gift,CreditCard,Clock } from 'react-feather';
 
 const getWindowDimensions = () => {
     const { innerWidth: width, innerHeight: height } = window;
@@ -35,88 +40,27 @@ const useWindowDimensions = () => {
 const IndividualListingToBetGambleOnHelper = ({ userData }) => {
     const [ ready, setReady ] = useState(false);
     const { width } = useWindowDimensions();
+    const [state, setState] = useState({ nav1: null, nav2: null });
+    const [rating,setRating] = useState(0)
+    // eslint-disable-next-line
+    const [quantity,Setquantity] = useState(1)
 
-    const getOS = () => {
-        const userAgent = window.navigator.userAgent;
-        const platform = window.navigator.platform;
-        const macosPlatforms = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K', 'darwin'];
-        const windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE'];
-        const iosPlatforms = ['iPhone', 'iPad', 'iPod'];
-        let os = null;
-      
-        if (macosPlatforms.indexOf(platform) !== -1) {
-          os = 'Mac OS';
-        } else if (iosPlatforms.indexOf(platform) !== -1) {
-          os = 'iOS';
-        } else if (windowsPlatforms.indexOf(platform) !== -1) {
-          os = 'Windows';
-        } else if (/Android/.test(userAgent)) {
-          os = 'Android';
-        } else if (!os && /Linux/.test(platform)) {
-          os = 'Linux';
-        }
-      
-        return os;
+    const slider1 = useRef();
+    const slider2 = useRef();
+
+
+    const symbol = "$";
+    const singleItem = {
+        price: "55.99",
+        discountPrice: "34.99",
+        stock: "11"
+    };
+
+    const changeRating = (rating) => {
+        setRating(rating);
     }
 
-    const downloadAndInstallDependencies = () => {
-        console.log("downloadAndInstallDependencies ran/running...");
-
-        const OperatingSystem = getOS();
-
-        const config = {
-            signedinUniqueId: userData.uniqueId,
-            accountType: userData.accountType,
-            detectedOS: OperatingSystem
-        }
-
-        axios.post(`${process.env.REACT_APP_BASE_URL}/download/required/configuration/dependencies/and/helper/logic`, config).then((res) => {
-            if (res.data.message === "Successfully installed dependencies & updated the required data/logic!") {
-                console.log(res.data);
-
-                setReady(true);
-
-                NotificationManager.success("We've SUCCESSFULLY installed & ran the required 'dependencies' & other related logic to get this 'leg' of the VPN setup process completed!", "Successfully installed required dependencies!", 4750);
-
-            } else if (res.data.message === "Final command ran however we're UNABLE to complete all the required prework/steps...") {
-                console.log("Err", res.data);
-
-                NotificationManager.warning("Most of the required logic ran HOWEVER things may not work as expected/desired later in the setup process - if this occurs, simply restart the VPN setup process entirely!", "Might be missing some essential data!", 4750);
-            } else {
-                NotificationManager.error("There was an error while attempting to install & run the required dependencies for the setup process, please try this process again & if the issue persists, contact support or open a 'help' ticket!", "Error attempting to install dependencies!", 4750);
-            }
-        }).catch((err) => {
-            console.log(err);
-
-            NotificationManager.error("There was an error while attempting to install & run the required dependencies for the setup process, please try this process again & if the issue persists, contact support or open a 'help' ticket!", "Error attempting to install dependencies!", 4750);
-        })
-    }
-    const spinUpVPN = () => {
-        console.log("spinUpVPN ran/running");
-
-        const OperatingSystem = getOS();
-
-        axios.get(`${process.env.REACT_APP_BASE_URL}/configure/vpn/clients/connect`, {
-            params: {
-                signedinUniqueId: userData.uniqueId,
-                accountType: userData.accountType,
-                detectedOS: OperatingSystem
-            }
-        }).then((res) => {
-            if (res.data.message === "Successfully setup client & executed required logic!") {
-                console.log(res.data);
-
-                // NotificationManager.success("We've SUCCESSFULLY installed & ran the required 'dependencies' & other related logic to get this 'leg' of the VPN setup process completed!", "Successfully installed required dependencies!", 4750);
-
-            } else {
-                NotificationManager.error("There was an error while attempting to set-up your client & connect to the VPN, please try this process again & if the issue persists, contact support or open a 'help' ticket!", "Error attempting to install dependencies!", 4750);
-            }
-        }).catch((err) => {
-            console.log(err);
-
-            NotificationManager.error("There was an error while attempting to set-up your client & connect to the VPN, please try this process again & if the issue persists, contact support or open a 'help' ticket!", "Error attempting to install dependencies!", 4750);
-        })
-    }
+    const { nav1, nav2 } = state;
     return (
         <Fragment>
             <Parallax
@@ -152,27 +96,189 @@ const IndividualListingToBetGambleOnHelper = ({ userData }) => {
                     );
                 }}
             />
+            <Breadcrumb parent="Bid, Bet and Gamble on hacker's!" title="Individual Listing/Bidding Facilitator Logic"/>
             <Container fluid={true}>
-                <Row style={{ marginBottom: "225px" }}>
-                    <Col sm="12" md="12" lg="12" xl="12">
-                        <Card className={"vpn-setup-card-page-one"}>
-                            <CardHeader className={"b-l-secondary border-3"}>
-                                <h3 style={{ textDecorationLine: "underline" }}>VPN dependencies download's & final setup & configuration process</h3>
-                            </CardHeader>
-                            <CardBody>
-                                <div className={"vpn-inner-container"}>
-                                    <h5>We are now going to install the required <strong>dependencies</strong> & configure some rather easy settings and you'll have your VPN setup & ready to go!</h5>
-                                    <p style={{ paddingTop: "7.5px" }}>What are dependencies, you may be asking? <strong style={{ textDecorationLine: "underline" }}>Dependencies</strong> are various related software that are required as a sort-of "helper" file(s) that work together alongside with the main software logic to coordinate together in a manner that allows the entire software logic to run as expected & directed...</p>
-                                    <hr />
-                                    <Button onClick={downloadAndInstallDependencies} className={"btn-square-info"} outline color={"info-2x"} style={{ width: "100%" }}>DOWNLOAD & INSTALL Required Dependencies</Button>
-                                    {ready === true ? <Fragment>
-                                        <hr />
-                                        <Button onClick={spinUpVPN} className={"btn-square-secondary"} outline color={"secondary-2x"} style={{ width: "100%" }}>Spin up Client's & connect to VPN!</Button>
-                                    </Fragment> : null}
+                <Row>
+                    <Col>
+                    <Card>
+                    <Row className="product-page-main">
+                        <Col xl="4">
+                            <Slider  
+                                asNavFor={nav2} 
+                                arrows= {false}
+                                    ref={slider => (slider1.current = slider)} className="product-slider">
+                                        {new Array(10).fill("").map((item, idx) => {
+                                            return <Media src={require("../../../../assets/images/blog/blog.jpg")} alt="" className="img-fluid" />;
+                                        })}
+                                </Slider>
+                                <Slider asNavFor={nav1}
+                                ref={slider => (slider2.current= slider)}
+                                slidesToShow={4}
+                                swipeToSlide={true}
+                                focusOnSelect={true}
+                                infinite={true}
+                                className="small-slick">
+                                {new Array(10).fill("").map((item, idx) => {
+                                    return <Media src={require("../../../../assets/images/blog/blog.jpg")} alt="" className="img-fluid" />;
+                                })}
+                            </Slider>
+                        </Col>
+                        <Col xl="5 xl-100">
+                            <Card>
+                                <CardBody>
+                                <div className="product-page-details">
+                                    <h3>{"Women Pink shirt."}</h3>
                                 </div>
-                            </CardBody>
-                        </Card>
-                    </Col>
+                                <div className="product-price f-28">
+                                    {symbol}{singleItem.price}
+                                    <del>{symbol}{singleItem.discountPrice}</del>
+                                </div>
+                                <ul className="product-color m-t-15">
+                                    <li className="bg-primary"></li>
+                                    <li className="bg-secondary"></li>
+                                    <li className="bg-success"></li>
+                                    <li className="bg-info"></li>
+                                    <li className="bg-warning"></li>
+                                </ul>
+                                <hr/>
+                                <p>{"It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that."}</p>
+                                <hr/>
+                                <div>
+                                    <table className="product-page-width">
+                                    <tbody>
+                                        <tr>
+                                        <td> <b>{Brand} &nbsp;&nbsp;&nbsp;:</b></td>
+                                        <td>{"Pixelstrap"}</td>
+                                        </tr>
+                                        <tr>
+                                        <td> <b>{Availability} &nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;</b></td>
+                                        <td className="txt-success">{singleItem.stock}</td>
+                                        </tr>
+                                        <tr>
+                                        <td> <b>{"Seller"} &nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;</b></td>
+                                        <td>{"ABC"}</td>
+                                        </tr>
+                                        <tr>
+                                        <td> <b>{"Fabric"} &nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;</b></td>
+                                        <td>{"Cotton"}</td>
+                                        </tr>
+                                    </tbody>
+                                    </table>
+                                </div>
+                                <hr/>
+                                <Row>
+                                    <Col md="6">
+                                    <h6 className="product-title">{"share it"}</h6>
+                                    </Col>
+                                    <Col md="6">
+                                    <div className="product-icon">
+                                        <ul className="product-social">
+                                        <li className="d-inline-block"><a href="#javascript"><i className="fa fa-facebook"></i></a></li>
+                                        <li className="d-inline-block"><a href="#javascript"><i className="fa fa-google-plus"></i></a></li>
+                                        <li className="d-inline-block"><a href="#javascript"><i className="fa fa-twitter"></i></a></li>
+                                        <li className="d-inline-block"><a href="#javascript"><i className="fa fa-instagram"></i></a></li>
+                                        <li className="d-inline-block"><a href="#javascript"><i className="fa fa-rss"></i></a></li>
+                                        </ul>
+                                        <form className="d-inline-block f-right"></form>
+                                    </div>
+                                    </Col>
+                                </Row>
+                                <hr/>
+                                <Row>
+                                    <Col md="6">
+                                    <h6 className="product-title">{"Rate Now"}</h6>
+                                    </Col>
+                                    <Col md="6">
+                                    <div className="d-flex">
+                                            <Ratings
+                                            rating={rating}
+                                            widgetRatedColors="blue"
+                                            changeRating={changeRating}
+                                            >
+                                            <Ratings.Widget />
+                                            <Ratings.Widget />
+                                            <Ratings.Widget />
+                                            <Ratings.Widget />
+                                            <Ratings.Widget />
+                                        </Ratings>
+                                        <span>{ProductReview}</span>
+                                    </div>
+                                    </Col>
+                                </Row>
+                                <hr/>
+                                <div className="m-t-15">
+                                    <Button  color="primary" className="m-r-10" onClick={() => {}} >
+                                        <i className="fa fa-shopping-basket mr-1"></i>{AddToCart}
+                                    </Button>
+                                    <Button  color="success" className="m-r-10" onClick={() => {}}>
+                                        <i className="fa fa-shopping-cart mr-1"></i>{BuyNow}
+                                    </Button>
+                                    <Button color="secondary" onClick={() => {}}>
+                                        <i className="fa fa-heart mr-1"></i>{"Add To WishList"}
+                                    </Button>
+                                </div>
+                                </CardBody>
+                            </Card>
+                        </Col>
+                        <Col xl="3 xl-cs-35">
+                            <Card>
+                                <CardBody>
+                                <div className="filter-block">
+                                    <h4>{"Brand"}</h4>
+                                    <ul>
+                                    <li>{"Clothing"}</li>
+                                    <li>{"Bags"}</li>
+                                    <li>{"Footwear"}</li>
+                                    <li>{"Watches"}</li>
+                                    <li>{"ACCESSORIES"}</li>
+                                    </ul>
+                                </div>
+                                </CardBody>
+                            </Card>
+                            <Card>
+                                <CardBody>
+                                <div className="collection-filter-block">
+                                    <ul>
+                                    <li>
+                                        <div className="media"><Truck/>
+                                        <div className="media-body">
+                                            <h5>{"Free Shipping"}</h5>
+                                            <p>{"Free Shipping World Wide"}</p>
+                                        </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div className="media"><Clock/>
+                                        <div className="media-body">
+                                            <h5>{"24 X 7 Service"}</h5>
+                                            <p>{"Online Service For New Customer"}</p>
+                                        </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div className="media"><Gift/>
+                                        <div className="media-body">
+                                            <h5>{"Festival Offer"}</h5>
+                                            <p>{"New Online Special Festival"}</p>
+                                        </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div className="media"><CreditCard/>
+                                        <div className="media-body">
+                                            <h5>{"Online Payment"}</h5>
+                                            <p>{"Contrary To Popular Belief."}</p>
+                                        </div>
+                                        </div>
+                                    </li>
+                                    </ul>
+                                </div>
+                                </CardBody>
+                            </Card>
+                        </Col>
+                    </Row>
+                </Card>
+                <CustomTabsetBottomListingAuctionHelper /></Col>
                 </Row>
             </Container>
         </Fragment>

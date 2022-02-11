@@ -111,3 +111,69 @@
     box-shadow: 0 0.5rem 1.5rem rgba(127, 17, 224, 0.425);
     margin-top: 50px;
 }
+.markdown-description-auction {
+    max-height: 200px;
+    border: 2px solid lightgrey;
+    padding: 12.5px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    overflow-y: scroll;
+}
+.media-body-row-auction {
+    flex-direction: row;
+    max-width: 100%;
+    overflow-x: scroll;
+}
+.media-body-row-auction .badge {
+    display: inline-block;
+}
+.tags-tag-auction-mapped {
+    position: relative !important;
+    display: inline-block !important;
+    margin: 1.75px 2.5px !important;
+    border: 1.50px solid black;
+}
+.auction-mapped-title {
+    max-width: 97.5%;
+    margin-top: 25px;
+}
+.remove-bold-restyle-auction-left-secondary {
+    font-weight: 525 !important;
+    text-decoration-line: underline;
+    color: #f73164;
+}
+.remove-bold-restyle-auction-left-info {
+    font-weight: 525 !important;
+    text-decoration-line: underline;
+    color: #a927f9;
+}
+.auction-tags-mapped-wrapper {
+    display: inline-block;
+    margin: 5px 0px 20px 27.5px;
+}
+.add-shadow-auction-wrapper-info {
+    box-shadow: 0 0.5rem 1.5rem rgba(169, 39, 249, 0.65);
+    border: 2.25px solid black;
+}
+.add-shadow-auction-wrapper-secondary {
+    box-shadow: 0 0.5rem 1.5rem rgba(247, 49, 100, 0.65); 
+    border: 2.25px solid black;
+}
+.bottom-container-auction {
+    padding-bottom: 12.5px;
+    padding-top: 22.5px;
+}
+.text-secondary-custom {
+    color: #f73164 !important;
+    font-weight: 475;
+}
+.span-betting {
+    text-decoration-line: underline;
+}
+.text-info-custom {
+    color: #a927f9 !important;
+    font-weight: 475;
+}
+.spacer-col-span-auction {
+    
+}

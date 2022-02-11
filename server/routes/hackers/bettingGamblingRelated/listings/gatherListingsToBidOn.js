@@ -4,20 +4,20 @@ const { Connection } = require("../../../../mongoUtil.js");
 
 router.get("/", (req, resppppp, next) => {
     
-    const {  } = req.query;
+    const { alreadyPooled } = req.query;
 
-    const collection = Connection.db.db("db").collection("learningteachingcourses");
+    const gamblingCollection = Connection.db.db("db").collection("bettinggamblinglistings");
 
-    collection.aggregate([{ $sample: { size: 20 } }]).toArray((err, courses) => {
+    gamblingCollection.aggregate([{ $sample: { size: 20 } }]).toArray((err, listings) => {
         if (err) {
             resppppp.json({
-                message: "An error occurred while attempting to gather courses!",
+                message: "An error occurred while attempting to gather listings!",
                 err
             })
         } else {
             resppppp.json({
                 message: "Successfully gathered avaliable listings to be bet/bid on!",
-                courses
+                listings
             })
         }
     })

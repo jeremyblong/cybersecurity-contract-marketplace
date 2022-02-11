@@ -176,7 +176,8 @@ router.post("/", (req, resppppp, next) => {
                                                     startDate: new Date(),
                                                     maxedEndDate: addDays(new Date(), 21),
                                                     hostedBy: employerID,
-                                                    activeHackers: 1
+                                                    activeHackers: 1,
+                                                    totalParticipants: []
                                                 };
     
                                                 const newSavedBidListing = new GamblingSchema(newGamblingBettingSchemaData);
@@ -369,7 +370,8 @@ router.post("/", (req, resppppp, next) => {
                                                     startDate: new Date(),
                                                     maxedEndDate: addDays(new Date(), 21),
                                                     hostedBy: employerID,
-                                                    activeHackers: 1
+                                                    activeHackers: 1,
+                                                    totalParticipants: []
                                                 };
     
                                                 const newSavedBidListing = new GamblingSchema(newGamblingBettingSchemaData);

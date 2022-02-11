@@ -1,0 +1,52 @@
+.custom-accordion-button-faq {
+    margin: 3.5px 12.5px;
+    padding: 12.5px 32.5px;
+    border: 1.75px solid darkgrey;
+    box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.175);
+    margin-bottom: 12.5px;
+}
+.help-circle-faq {
+    margin-left: 25px;
+}
+.custom-info-card-faq {
+    box-shadow: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.295);
+}
+.text-white-only-faq {
+    color: white;
+}
+.add-shadow-card-faq {
+    box-shadow: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.175) !important;
+}
+.markdown-faq-special {
+    max-height: 200px;
+    overflow-y: scroll;
+    padding: 10px;
+    margin-top: 7.5px;
+    border: 2.25px solid grey;
+    margin-bottom: 7.5px;
+    box-shadow: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.150) !important;
+}
+.set-min-height-faq-image {
+    min-height: 250px !important;
+    max-height: 250px !important;
+}
+.add-shadow-card-faq-faq-mapped {
+    box-shadow: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.175) !important;
+    min-width: 100% !important;
+    min-height: 80vh !important;
+}
+.mapped-col-faq {
+    min-width: 100% !important;
+}
+.features-box-faq-mapped {
+    min-width: 100% !important;
+}
+.features-box-faq-mapped {
+    min-height: 80vh !important;
+}
+.placeholder-content-col-faq {
+    min-width: 100% !important;
+}
+.add-shadow-normal-faq-card {
+    box-shadow: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.175) !important;
+}

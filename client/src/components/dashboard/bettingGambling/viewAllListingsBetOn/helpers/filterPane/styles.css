@@ -1,0 +1,15 @@
+.slide-up-auction-card-wrapper {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.295) !important;
+    min-height: 75vh;
+    max-height: 75vh;
+}
+.btn-push-bottom-auction {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    left: 0px;
+}
+.location-checkbox-auction-overflow { 
+    overflow-y: scroll;
+    max-height: 62.5vh;
+}

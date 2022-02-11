@@ -39,6 +39,8 @@ const CreateNewCoursePageTwo = ({ setProgress, updateCourseInformationData, cour
     const [ selectedCourseContent, setCourseContentState ] = useState(null);
     const [ isOpenModal, setIsOpenModalState ] = useState(false);
 
+    console.log("courseData", courseData);
+
     const disableBodyAndScroll = target => {
         disableBodyScroll(target);        
     };
@@ -104,11 +106,17 @@ const CreateNewCoursePageTwo = ({ setProgress, updateCourseInformationData, cour
     }
     const dragProps = {
         onDragEnd(fromIndex, toIndex) {
-            const data = [...courseData];
+            const data = [...coursesArray];
             const item = data.splice(fromIndex, 1)[0];
             data.splice(toIndex, 0, item);
             console.log(data);
-            updateCourseInformationData(data)
+
+            updateCourseInformationData({
+                ...courseData,
+                pageTwoData: {
+                    courseContentSections: data
+                }
+            });
         },
         nodeSelector: 'li',
         handleSelector: 'a'
@@ -122,12 +130,17 @@ const CreateNewCoursePageTwo = ({ setProgress, updateCourseInformationData, cour
                 label: 'Yes, Delete!',
                 onClick: () => {
                     // Delete
-                    const filtered = courseData.filter((section, index) => {
+                    const filtered = coursesArray.filter((section, index) => {
                         if (section.id !== selected.id) {
                             return true;
                         }
                     });
-                    updateCourseInformationData(filtered);
+                    updateCourseInformationData({
+                        ...courseData,
+                        pageTwoData: {
+                            courseContentSections: filtered
+                        }
+                    });
                 }
               },
               {

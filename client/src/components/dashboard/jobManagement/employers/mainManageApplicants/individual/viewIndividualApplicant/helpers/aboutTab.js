@@ -7,6 +7,7 @@ import { DateRangePicker } from 'react-date-range';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import moment from "moment";
 import "../styles.css";
+import _ from "lodash";
 
 const AboutTab = ({ applicantData, lastProfileItem, user }) => {
     const [ dates, setDates ] = useState(null);
@@ -92,7 +93,7 @@ const AboutTab = ({ applicantData, lastProfileItem, user }) => {
                                     <Row className="details-about">
                                         <Col sm="6">
                                             <div className="your-details"><span className="f-w-600">Gender:</span>
-                                                <p className={"subtext-your-details"}>{user.gender.label}</p>
+                                                <p className={"subtext-your-details"}>{_.has(user, "gender") ? user.gender.label : "Not Available."}</p>
                                             </div>
                                         </Col>
                                         <Col sm="6">

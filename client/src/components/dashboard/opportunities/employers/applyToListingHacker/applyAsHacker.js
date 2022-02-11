@@ -72,6 +72,7 @@ const ApplyAsHackerEmployerListingHelper = ({ previousFiles, userData, shiftCore
     const [ dateRanges, setDateRanges ] = useState(null);
     const [ datesReady, setDatesReady ] = useState(false);
     const [ selectedLinks, setSelectedLinks ] = useState([]);
+    const [ maxDate, setMaxDate ] = useState(null);
 
     const { register, handleSubmit, control, resetField, getValues, setValue, setError, clearErrors, watch, formState: { errors }} = useForm({
         mode: "onTouched",
@@ -139,7 +140,7 @@ const ApplyAsHackerEmployerListingHelper = ({ previousFiles, userData, shiftCore
                 }
             }
         }
-        renderMountedLogic(globalConfig, setPhysicalOrDigitalHackOptionsState, setListingData, setDatesReady, setDateRanges, setDisabledDaysState, setListingReady);
+        renderMountedLogic(setMaxDate, globalConfig, setPhysicalOrDigitalHackOptionsState, setListingData, setDatesReady, setDateRanges, setDisabledDaysState, setListingReady);
         // gather core anonymous user information
         axios.get(`${process.env.REACT_APP_BASE_URL}/gather/core/anonymous/user/data`, globalConfig.config).then((res) => {
             if (res.data.message === "Successfully gathered core user information!") {
@@ -709,6 +710,7 @@ const ApplyAsHackerEmployerListingHelper = ({ previousFiles, userData, shiftCore
                                                 showMonthAndYearPickers={false}
                                                 disabledDates={disabledDays}
                                                 staticRanges={[]}
+                                                maxDate={maxDate}
                                                 direction={"horizontal"}
                                                 showMonthArrow={true}
                                                 months={2}

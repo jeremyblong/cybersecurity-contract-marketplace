@@ -45,6 +45,9 @@ import CreateNewHackerProfileContentPostPage from "../pages/dashboard/people/hac
 import ManageIndividualHackerAlreadyHiredPage from "../pages/dashboard/jobManagement/employers/manageHiredHackers/manage/manageIndividualHacker/manageHacker.js";
 import ViewAllListingsToBeGambledOnHelper from "../pages/dashboard/VPNLogic/viewAllListingsBetOn/viewAllListingsWagerBetsOn.js";
 import IndividualListingToBetGambleOnPage from "../pages/dashboard/VPNLogic/individualListingGambling/individual.js";
+import MainFAQHackerPage from "../pages/dashboard/FAQ/hackers/mainFAQ/index.js";
+import MainFAQEmployerPage from "../pages/dashboard/FAQ/employers/mainFAQ/index.js";
+import PaymentMethodsAddNewPaymentMethodPage from "../pages/dashboard/paymentLogic/addNewPaymentMethod/addNewMethod.js";
 
 export const routes = [
         { path:"/profile/settings/edit", Component: GeneralSettingsPage },
@@ -93,5 +96,8 @@ export const routes = [
         { path: "/create/new/post/hacker/profile/main/data", Component: CreateNewHackerProfileContentPostPage },
         { path: "/manage/individual/hacker/already/hired/:id", Component: ManageIndividualHackerAlreadyHiredPage },
         { path: "/view/bettable/listings/main", Component: ViewAllListingsToBeGambledOnHelper },
-        { path: "/download/dependencies/final/step/vpn/setup", Component: IndividualListingToBetGambleOnPage }
+        { path: "/individual/betting/gambling/listing/:id", Component: IndividualListingToBetGambleOnPage }, 
+        { path: "/frequently/asked/questions/main/hacker", Component: MainFAQHackerPage },
+        { path: "/frequently/asked/questions/main/employer", Component: MainFAQEmployerPage },
+        { path: "/payment/logic/add/new/card/info", Component: PaymentMethodsAddNewPaymentMethodPage }
 ]; 

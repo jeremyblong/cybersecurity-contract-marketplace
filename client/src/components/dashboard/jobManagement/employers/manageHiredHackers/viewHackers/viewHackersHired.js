@@ -113,7 +113,9 @@ const ViewHiredHackersHelper = ({ userData }) => {
                                 </Nav>
                                 <TabContent activeTab={activeTab}>
                                     <TabPane tabId="1">
-                                        {renderConditionalUponLoad()}
+                                        <Row>
+                                            {renderConditionalUponLoad()}
+                                        </Row>
                                     </TabPane>
                                 </TabContent>
                             </CardBody>
