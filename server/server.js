@@ -152,6 +152,9 @@ app.use("/react/posting/hacker/profile/individual/specific/post/main/mapped", re
 app.use("/gather/core/user/information/related/hired/hackers", require("./routes/employers/hiredHackers/manageActiveApplicant/gatherRelevantInfo.js"));
 app.use("/gather/listings/avaliable/bid/gamble/on", require("./routes/hackers/bettingGamblingRelated/listings/gatherListingsToBidOn.js"));
 app.use("/gather/short/list/courses/for/sale", require("./routes/hackers/FAQHackers/fetchRandomCourses/fetchShortListRandomCourses.js"));
+app.use("/add/new/payment/method/hacker", require("./routes/hackers/paymentRelated/addNewPaymentMethod/addANewMethod.js"));
+app.use("/gather/existing/payment/methods/hacker", require("./routes/hackers/paymentRelated/gatherPreviousPaymentMethods/gatherCardMethods.js"));
+app.use("/delete/debit/credit/card/hacker/account", require("./routes/hackers/paymentRelated/deleteSpecificCardDebitCredit/deleteRemoveCard.js"));
 
 // ~ webhook logic STARTS here ~
 app.use("/passbase/webhook", require("./webhooks/passbase/webhook.js"));

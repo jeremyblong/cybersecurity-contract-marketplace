@@ -186,8 +186,8 @@ export const MENUITEMS = [
             },
             {
                 title: 'Payment Related Actions/Options', icon: Bell, type: 'sub',active: false, children: [
-                    { path: `${process.env.PUBLIC_URL}/payment/logic/add/new/card/info`, title: 'Add A New Payment Method', type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/`, title: "Payment Main/Homepage", type: 'link' }
+                    { path: `${process.env.PUBLIC_URL}/payment/logic/main/page/all`, title: `Payment(s) Homepage/Main`, type: 'link' }
+                    // { path: `${process.env.PUBLIC_URL}/`, title: "Payment Main/Homepage", type: 'link' }
                 ]
             }
         ]          

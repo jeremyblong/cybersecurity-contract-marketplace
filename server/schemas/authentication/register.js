@@ -18,11 +18,11 @@ const UserSchema =  new Schema({
     recentlyViewedProfileIDSOnly: {
         type: Array
     },
-    alreadyAddedUserVPNList: {
-        type: Boolean
-    },
     recentlyViewedProfileViews: {
         type: Array
+    },
+    stripeAccountDetails: {
+        type: Object
     },
     totalUniqueViews: {
         type: Number

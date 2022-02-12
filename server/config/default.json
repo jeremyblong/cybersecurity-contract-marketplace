@@ -22,6 +22,6 @@
     "cryptoTokenName": "Cyphron Token's",
     "muxAccessTokenID": "f4e738f7-f76e-4b3d-bf83-77f13cb102de",
     "muxSecretKey": "UiMAtR7mGIBZTsRiQRHDOavWoZF9+w3maarENNAKakZ/2LIdiy17vviMCnBtboPYevmt5FDVTcj",
-    "newVPNUserP12SSHKeysPassword": "FK4Yi9pHP",
-    "VPNCAKeyPassword": "mtbYk6xf8b3VHbYZ"
+    "stripePublishableKey": "pk_test_51K1aNlCq2blL6mnOH3rD7ahXrPncFgB0sgtXZxL7gMDivUgJZzFkWA6vUcbzS99yKLx8VxaWDpTc8skFgpJJ1gRe00AZxnUKAS",
+    "stripeSecretKey": "sk_test_51K1aNlCq2blL6mnO7DWimw9eNhKqmaD0Z3dTBziOGc1EnOpEx3C7hS9NiLvEPETFSuxELRpSwHd8Y6f9dhNRSqGi00PvRTqzul"
 }

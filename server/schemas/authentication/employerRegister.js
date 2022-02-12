@@ -22,6 +22,9 @@ const UserSchema =  new Schema({
         type: String,
         default: ""
     }, 
+    stripeAccountDetails: {
+        type: Object
+    },
     email: {
         type: String,
         default: ""

@@ -47,7 +47,7 @@ import ViewAllListingsToBeGambledOnHelper from "../pages/dashboard/VPNLogic/view
 import IndividualListingToBetGambleOnPage from "../pages/dashboard/VPNLogic/individualListingGambling/individual.js";
 import MainFAQHackerPage from "../pages/dashboard/FAQ/hackers/mainFAQ/index.js";
 import MainFAQEmployerPage from "../pages/dashboard/FAQ/employers/mainFAQ/index.js";
-import PaymentMethodsAddNewPaymentMethodPage from "../pages/dashboard/paymentLogic/addNewPaymentMethod/addNewMethod.js";
+import PaymentMethodsAddNewPaymentMethodPage from "../pages/dashboard/paymentLogic/mainPaymentLogic/mainPaymentPage.js";
 
 export const routes = [
         { path:"/profile/settings/edit", Component: GeneralSettingsPage },
@@ -99,5 +99,5 @@ export const routes = [
         { path: "/individual/betting/gambling/listing/:id", Component: IndividualListingToBetGambleOnPage }, 
         { path: "/frequently/asked/questions/main/hacker", Component: MainFAQHackerPage },
         { path: "/frequently/asked/questions/main/employer", Component: MainFAQEmployerPage },
-        { path: "/payment/logic/add/new/card/info", Component: PaymentMethodsAddNewPaymentMethodPage }
+        { path: "/payment/logic/main/page/all", Component: PaymentMethodsAddNewPaymentMethodPage }
 ]; 

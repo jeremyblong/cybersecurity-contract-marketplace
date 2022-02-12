@@ -1,0 +1,58 @@
+.datepicker-payment-new {
+    min-width: 100% !important;
+}
+.year-date-format {
+    min-width: 47.5% !important;
+    max-width: 47.5% !important;
+}
+.custom-payment-product-price {
+    text-decoration-line: underline;
+    color: #f73164;
+}
+.listitem-pricing-card {
+    margin-top: 12.5px;
+    border-top: 1px solid rgba(0, 0, 0, 0.125) !important;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.150);
+}
+.card-shadow-card-add {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.275);
+}
+.create-sheet-btn-margin-pricing {
+    margin: 12.5px;
+}
+.add-hover-effect-icon:hover {
+    cursor: pointer;
+}
+.bordered-bottom-too {
+    border-bottom: 1px solid #a927f9 !important;
+}
+.card-shadow-card-add-pane {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.275);
+    margin-top: 17.5px;
+    min-height: 72.5vh;
+}
+.card-pane-header {
+
+}
+.card-shadow-card-add-pane:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.125);
+}
+.view-all-card-text {
+    text-decoration-line: underline;
+    color: #7366ff;
+    font-size: 1.375rem;
+}
+.view-all-card-text:hover {
+    text-decoration-line: underline;
+    color: grey;
+    cursor: pointer;
+    font-size: 1.375rem;
+}
+.view-all-card-wrapper {
+    margin-top: 50px;
+}
+.credit-cards-placeholder {
+    min-width: 100%;
+    min-height: 375px !important;
+    object-fit: cover;
+}
