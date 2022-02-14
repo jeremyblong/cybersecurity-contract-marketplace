@@ -7,13 +7,14 @@ import axios from "axios";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { connect } from "react-redux";
-import _ from "lodash";
+import _, { findLastIndex } from "lodash";
 import Sheet from 'react-modal-sheet';
 import moment from "moment";
 import Calendar from 'react-calendar';
 import { DateRange } from 'react-date-range';
 import { authentication } from "../../../../../redux/actions/authentication/auth.js";
 import { NotificationManager } from 'react-notifications';
+import FilterMapOptionsHelper from "./filterOptions/filterListingOptions.js";
 
 const Map = ReactMapboxGl({
     accessToken: process.env.REACT_APP_MAPBOX_TOKEN
@@ -116,6 +117,7 @@ constructor(props) {
         }],
         listings: [],
         isOpen: false,
+        paneOpen: false,
         verticleTab: "1",
         individual: null,
         datesSelectable: [],
@@ -466,12 +468,37 @@ constructor(props) {
 
                     <Sheet.Backdrop />
                 </Sheet> : null}
+                <Sheet draggable={false} isOpen={this.state.paneOpen} onClose={() => {
+                    this.setState({
+                        paneOpen: false
+                    })
+                }}>
+                    <Sheet.Container>
+                        <Sheet.Header>
+                            <div style={{ margin: "12.5px" }} className="centered-both-ways">
+                                <Button onClick={() => {
+                                    this.setState({
+                                        paneOpen: false
+                                    })
+                                }} className={"btn-square-danger"} outline color={"danger-2x"} style={{ width: "100%" }}>Exit/Close This Pane</Button>
+                            </div>
+                        </Sheet.Header>
+                        <Sheet.Content>
+                            <FilterMapOptionsHelper />
+                        </Sheet.Content>
+                        </Sheet.Container>
+                    <Sheet.Backdrop />
+                </Sheet>
                 <Container fluid={true}>
-                    {/* <Row>
+                    <Row>
                         <Col md="12" lg="12" xl="12" sm="12">
-                            <Button onClick={this.handleRandomAction} style={{ width: "100%" }} color="secondary">Fire Random Action</Button>
+                            <Button onClick={() => {
+                                this.setState({
+                                    paneOpen: true
+                                })
+                            }} style={{ width: "100%", marginTop: "12.5px" }} color="secondary">Open up filter option's pane</Button>
                         </Col>
-                    </Row> */}
+                    </Row>
                     <Row style={{ paddingTop: "10px" }}>
                         <Col md="6" lg="6" sm="12">
                             <Map

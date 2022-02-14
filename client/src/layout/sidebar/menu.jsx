@@ -1,4 +1,4 @@
-import { Home, Bell, Headphones, ShoppingCart, Activity, Monitor,  Grid, Cpu, Briefcase, User, Command, CreditCard, DollarSign } from 'react-feather';
+import { Home, Bell, Headphones, ShoppingCart, Activity, Monitor,  Grid, Cpu, Briefcase, User, Command, CreditCard, Book } from 'react-feather';
 
 export const MENUITEMS = [
     {
@@ -124,12 +124,12 @@ export const MENUITEMS = [
         ]          
     },
     {
-        menutitle:`Gambling/Betting`,
-        menucontent:"Gambling/Betting On Live Active Hack's & More...",
+        menutitle:"Forum/Discussion-Board",
+        menucontent:"Seek guidance, post hacking questions & much more!",
         Items:[
             {
-                title: `Explore Ways To Bet/Gamble`, icon: DollarSign, type: 'sub',active: false, children: [
-                    { path: `${process.env.PUBLIC_URL}/view/bettable/listings/main`, title: "View all possible listing's to bid/bet on", type: 'link' }
+                title: `Main Forum Page`, icon: Book, type: 'sub',active: false, children: [
+                    { path: `${process.env.PUBLIC_URL}/forum/main/homepage`, title: "Forum Homepage/Main-Page", type: 'link' }
                     // { path: `${process.env.PUBLIC_URL}/`, title: 'Set-up account VPN access & Activation (Step TWO)', type: 'link' },
                     // { path: `${process.env.PUBLIC_URL}/`, title: 'Power VPN On/Off (Step Three)', type: 'link' },
                     // { path: `${process.env.PUBLIC_URL}/`, title: `VPN Setting's (Any Point After Activation)`, type: 'link' },

@@ -1,0 +1,249 @@
+.background-parallax-vpn-setup {
+    min-height: 600px;
+    height: 100%;
+    min-width: 100%;
+}
+.background-parallax-vpn-setup-img {
+    min-height: 65vh;
+    min-width: 100%;
+    
+    height: 100%;
+}
+@media only screen and (max-width: 1650px) {
+    .background-parallax-vpn-setup {
+        min-height: 550px;
+        height: 100%;
+        min-width: 100%;
+    }
+    .background-parallax-vpn-setup-img {
+        min-height: 67.5vh;
+        min-width: 100%;
+        height: 100%;
+    }
+}
+@media only screen and (max-width: 1300px) {
+    .background-parallax-vpn-setup {
+        min-height: 550px;
+        height: 100%;
+        min-width: 100%;
+    }
+    .background-parallax-vpn-setup-img {
+        min-height: 75vh;
+        min-width: 100%;
+        height: 100%;
+    }
+}
+.vpn-setup-card-page-one {
+    height: 100%;
+    margin-top: 65px;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.295);
+}
+/* upper text */
+.vpn-parallax-header-text {
+    color: black;
+    text-decoration-line: underline;
+    text-align: left;
+}
+/* lower text */
+.vpn-parallax-sub-text {
+    font-weight: 525;
+    font-size: 1rem;
+}
+/* main card parallax banner */
+.vpn-setup-card-parallax {
+    margin: 47.5px 75px 40px 47.5px;
+    box-shadow: 0 0rem 2rem rgba(247, 49, 100, 0.625) !important;
+}
+.vpn-inner-cardbody {
+    border: 6px solid black;
+    border-radius: 12.5px;
+}
+/* card body vpn setup */
+.cardbody-vpn-setup {
+    border-left: 2.25px solid black;
+    border-bottom: 2.25px solid black;
+    border-right: 2.25px solid black;
+}
+.vpn-setup-card-header {
+    border-right: 1.25px solid #7366ff;
+    border-top: 1.25px solid black;
+}
+.proceed-next-link {
+    color: blue;
+    margin-bottom: -50px !important;
+    margin-top: 125px;
+    font-size: 1.15rem;
+    text-decoration-line: underline;
+    padding: 5px 12.5px;
+    border-radius: 17.5px;
+}
+.proceed-next-link:hover {
+    background-color: black;
+    padding: 5px 12.5px;
+    font-size: 1.20rem;
+    text-decoration-line: underline;
+    border-radius: 17.5px;
+    color: white !important;
+}
+.min-vpn-card-body { 
+    min-height: 100%;
+}
+.add-shadow-media-custom-vpn {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.295);
+    border: 1.75px dotted black;
+}
+.loader-loading-text {
+    text-align: center;
+    text-decoration-line: underline;
+}
+.modalVPNCore {
+    min-height: 75vh;
+    min-width: 65vw;
+}
+.loading-vpn-wrapper-text {
+    margin-top: 75px;
+}
+.vpn-modal-card {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.295);
+    margin-top: 50px;
+}
+.push-bottom-btn-forum {
+    position: absolute;
+    bottom: 30px;
+    left: 15px;
+    right: 15px;
+}
+.media-wrapper-forum-card .add-shadow-media-custom-vpn {
+    min-height: 375px;
+}
+.vpn-modal-card:hover {
+    box-shadow: 0 0.5rem 1.5rem rgba(127, 17, 224, 0.425);
+    margin-top: 50px;
+}
+.markdown-description-auction {
+    max-height: 200px;
+    border: 2px solid lightgrey;
+    padding: 12.5px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    overflow-y: scroll;
+}
+.media-body-row-auction {
+    flex-direction: row;
+    max-width: 100%;
+    overflow-x: scroll;
+}
+.media-body-row-auction .badge {
+    display: inline-block;
+}
+.tags-tag-auction-mapped {
+    position: relative !important;
+    display: inline-block !important;
+    margin: 1.75px 2.5px !important;
+    border: 1.50px solid black;
+}
+.auction-mapped-title {
+    max-width: 97.5%;
+    margin-top: 25px;
+}
+.remove-bold-restyle-auction-left-secondary {
+    font-weight: 525 !important;
+    text-decoration-line: underline;
+    color: #f73164;
+}
+.remove-bold-restyle-auction-left-info {
+    font-weight: 525 !important;
+    text-decoration-line: underline;
+    color: #a927f9;
+}
+.auction-tags-mapped-wrapper {
+    display: inline-block;
+    margin: 5px 0px 20px 27.5px;
+}
+.add-shadow-auction-wrapper-info {
+    box-shadow: 0 0.5rem 1.5rem rgba(169, 39, 249, 0.65);
+    border: 2.25px solid black;
+}
+.add-shadow-auction-wrapper-secondary {
+    box-shadow: 0 0.5rem 1.5rem rgba(247, 49, 100, 0.65); 
+    border: 2.25px solid black;
+}
+.bottom-container-auction {
+    padding-bottom: 12.5px;
+    padding-top: 22.5px;
+}
+.text-secondary-custom {
+    color: #f73164 !important;
+    font-weight: 475;
+}
+.span-betting {
+    text-decoration-line: underline;
+}
+.text-info-custom {
+    color: #a927f9 !important;
+    font-weight: 475;
+}
+.justify-content-end-forum .text-muted {
+    position: absolute;
+    right: 12.5px;
+    color: #7366ff !important;
+    font-weight: 450 !important;
+}
+.react-icon-forum:hover {
+    cursor: pointer;
+}
+.minheightrow {
+    min-height: 70px;
+}
+.position-far-right-forum {
+    margin-bottom: 32.5px;
+}
+.subheader-forum-main {
+    font-weight: 425;
+    font-size: 0.925rem;
+}
+.forum-list-group-item {
+    border: 1.75px solid black;
+    margin-top: 7.5px;
+}
+.forum-title {
+    margin-right: 12.5px;
+}
+.grey-back-forum {
+    background-color: #d1d1d1;
+    padding-top: 25px;
+    padding-bottom: 25px;
+}
+.reaction-count-forum {
+    margin-left: 6.5px;
+    margin-top: 3.5px;
+} 
+.strong-header-forum:hover {
+    color: #f73164 !important;
+    cursor: pointer;
+}
+.react-up-down-forum-wrapper {
+    width: 100%;
+    margin: 0 auto;
+}
+.react-icon-forum {
+    max-height: 30px !important;
+}
+.popover-forum-group .popover .popover-inner {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.425) !important;
+}
+.popover-header-forum-wrapper {
+    background-color: #fff !important;
+}
+.popover-forum-group-image {
+    max-width: 37.5px;
+    max-height: 37.5px;
+}
+.popover-group-title {
+    margin-top: 7.5px;
+    margin-left: 12.5px;
+}
+.strong-header-forum {
+    color: black;
+    font-weight: 475;
+}

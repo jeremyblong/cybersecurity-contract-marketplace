@@ -43,11 +43,12 @@ import BookmarkedHackerAccountsAsHackerPage from "../pages/dashboard/bookmarked/
 import BookmarkedEmployerAccountsAsHackerPage from "../pages/dashboard/bookmarked/hackers/bookmarkedEmployerAccounts/bookmarkedEmployerAccountsMain.js";
 import CreateNewHackerProfileContentPostPage from "../pages/dashboard/people/hackers/individualProfile/wallData/postNewWallData/createNewWallData.js";
 import ManageIndividualHackerAlreadyHiredPage from "../pages/dashboard/jobManagement/employers/manageHiredHackers/manage/manageIndividualHacker/manageHacker.js";
-import ViewAllListingsToBeGambledOnHelper from "../pages/dashboard/VPNLogic/viewAllListingsBetOn/viewAllListingsWagerBetsOn.js";
-import IndividualListingToBetGambleOnPage from "../pages/dashboard/VPNLogic/individualListingGambling/individual.js";
+import ForumHomepageMainPage from "../pages/dashboard/forums/mainForumHomepage/mainForumHomepage.js";
+import IndividualListingToBetGambleOnPage from "../pages/dashboard/forums/individualForum/individual.js";
 import MainFAQHackerPage from "../pages/dashboard/FAQ/hackers/mainFAQ/index.js";
 import MainFAQEmployerPage from "../pages/dashboard/FAQ/employers/mainFAQ/index.js";
 import PaymentMethodsAddNewPaymentMethodPage from "../pages/dashboard/paymentLogic/mainPaymentLogic/mainPaymentPage.js";
+import CreateNewForumPostingPage from "../pages/dashboard/forums/createNewForumPost/createNewForumPost.js";
 
 export const routes = [
         { path:"/profile/settings/edit", Component: GeneralSettingsPage },
@@ -95,9 +96,10 @@ export const routes = [
         { path: "/view/as/hacker/bookmarked/profiles/employer/accounts", Component: BookmarkedEmployerAccountsAsHackerPage },
         { path: "/create/new/post/hacker/profile/main/data", Component: CreateNewHackerProfileContentPostPage },
         { path: "/manage/individual/hacker/already/hired/:id", Component: ManageIndividualHackerAlreadyHiredPage },
-        { path: "/view/bettable/listings/main", Component: ViewAllListingsToBeGambledOnHelper },
+        { path: "/forum/main/homepage", Component: ForumHomepageMainPage },
         { path: "/individual/betting/gambling/listing/:id", Component: IndividualListingToBetGambleOnPage }, 
         { path: "/frequently/asked/questions/main/hacker", Component: MainFAQHackerPage },
         { path: "/frequently/asked/questions/main/employer", Component: MainFAQEmployerPage },
-        { path: "/payment/logic/main/page/all", Component: PaymentMethodsAddNewPaymentMethodPage }
+        { path: "/payment/logic/main/page/all", Component: PaymentMethodsAddNewPaymentMethodPage },
+        { path: "/create/new/forum/post", Component: CreateNewForumPostingPage }
 ]; 

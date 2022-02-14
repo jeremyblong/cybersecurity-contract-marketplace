@@ -1,0 +1,67 @@
+.pane-create-community-card {
+    margin-top: 25px;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.225) !important;
+}
+.emphisize-redirect-forum {
+    color: #7366ff;
+}
+.emphisize-redirect-forum:hover {
+    color: #f73164;
+}
+.tabpane-forum-create-community {
+    padding: 12.5px;
+    border: 2.25px dotted black;
+}
+.invite-users-community-card {
+    margin-top: 25px;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.225) !important;
+}
+.list-row-mapped-forum {
+    flex-direction: row;
+    min-width: 100%;
+    display: flex;
+}
+.profile-pic-forum-mapped {
+    max-width: 92.5px;
+    max-height: 92.5px;
+    min-height: 92.5px;
+}
+.mapped-rounded-pic-video-forum {
+    max-width: 92.5px;
+    max-height: 92.5px;
+    border-radius: 50%;
+    background-color: rgb(224, 224, 224);
+}
+.mapped-rounded-pic-video-forum video {
+    border-radius: 50%;
+}
+.searching-addon-list-people-right:hover {
+    cursor: pointer;
+}
+.searching-addon-list-people-left:hover {
+    cursor: pointer;
+}
+.stretch-width-listgroup-inner {
+    min-width: 100% !important;
+}
+.row-mapped-image {
+    max-width: 72.5%;
+    min-height: 100%;
+    border-radius: 50%;
+}
+.searching-results-forum-users {
+    min-height: 425px;
+    z-index: 99999999 !important;
+    bottom: 100px;
+    margin-top: -15px;
+    overflow-y: scroll;
+    min-width: 100%;
+    height: 425px;
+    width: 90vw;
+    background-color: white;
+    border-left: 2.50px solid black;
+    border-right: 2.50px solid black;
+    border-bottom: 2.50px solid black;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
