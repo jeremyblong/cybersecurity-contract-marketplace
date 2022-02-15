@@ -4,13 +4,17 @@ const { Connection } = require("../../../../mongoUtil.js");
 
 router.get("/", (req, resppppp, next) => {
     
-    const { alreadyPooled } = req.query;
+    const { searchText } = req.query;
+
+    console.log("Search text", searchText);
 
     const employerCollection = Connection.db.db("db").collection("employers");
     const hackerCollection = Connection.db.db("db").collection("hackers");
 
+    const searching = searchText.toLowerCase();
+
     const promiseBoth = new Promise((resolve, reject) => {
-        employerCollection.aggregate([{ $sample: { size: 15 } }, { "$project": {
+        employerCollection.aggregate([{ $sample: { size: 20 } }, { "$project": {
             username: 1,
             firstName: 1,
             lastName: 1,
@@ -24,7 +28,11 @@ router.get("/", (req, resppppp, next) => {
             profilePicsVideos: 1,
             profileBannerImage: 1,
             currentlyFollowedBy: 1
-        }}]).toArray((err, users) => {
+        }}, {
+            "$match": {
+                $or: [ { firstName: { $regex: searching }}, { lastName: { $regex: searching }} ]
+            }
+        }]).toArray((err, users) => {
             if (err) {
                 console.log("Error occurred while gathering random users...");
 
@@ -35,7 +43,7 @@ router.get("/", (req, resppppp, next) => {
         });
     })
     promiseBoth.then((passedData) => {
-        hackerCollection.aggregate([{ $sample: { size: 15 } }, { "$project": {
+        hackerCollection.aggregate([{ $sample: { size: 20 } }, { "$project": {
             username: 1,
             firstName: 1,
             lastName: 1,
@@ -49,7 +57,11 @@ router.get("/", (req, resppppp, next) => {
             profilePicsVideos: 1,
             profileBannerImage: 1,
             currentlyFollowedBy: 1
-        }}]).toArray((err, users) => {
+        }}, {
+            "$match": {
+                $or: [ { firstName: { $regex: searching }}, { lastName: { $regex: searching }} ]
+            }
+        }]).toArray((err, users) => {
             if (err) {
                 console.log("Error occurred while gathering random users...");
             } else {

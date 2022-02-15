@@ -6,6 +6,9 @@
     color: #f73164;
     text-decoration-line: underline;
 }
+.loader-container-classname-forum {
+    z-index: 9999999999999999999999999999999999 !important;
+}
 .options-mapped-div {
     display: flex;
     min-height: 62.5px;

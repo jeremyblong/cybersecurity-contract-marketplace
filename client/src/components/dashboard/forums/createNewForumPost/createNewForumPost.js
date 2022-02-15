@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect, useRef, memo } from "react";
+import React, { Fragment, useState, useEffect, useMemo } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
 import { CardBody, CardHeader, Card, Col, Container, Label, Row, Button, Form, InputGroupAddon, Input, InputGroup, FormGroup, InputGroupText } from "reactstrap";
@@ -9,82 +9,88 @@ import { useForm, Controller } from 'react-hook-form';
 import formHelpers from "./helpers/reduxFormHelpers/helperReduxForm.js";
 import helpers from "./helpers/helperLogic.js";
 import Sheet from 'react-modal-sheet';
+import LoadingBar from 'react-top-loading-bar'
+import { NotificationManager } from "react-notifications";
+import { useHistory } from "react-router-dom";
+
 
 const { CreateACommunityForumRelatedHelper } = helpers;
 
 const mainDescriptionChecker = formHelpers().mainDescriptionChecker;
-
-const options = [{
-    label: "c/BlackHat",
-    value: "c/BlackHat",
-    memberCount: "17,556"
-}, {
-    label: "c/CryptoCurrency",
-    value: "c/CryptoCurrency",
-    memberCount: "37,875"
-}, {
-    label: "c/JavaScriptGalore",
-    value: "c/JavaScriptGalore",
-    memberCount: "106,887"
-}, {
-    label: "c/CodingCompeitions",
-    value: "c/CodingCompeitions",
-    memberCount: "90,017"
-}, {
-    label: "c/ShowerThoughts",
-    value: "c/ShowerThoughts",
-    memberCount: "45,786"
-}, {
-    label: "c/RedditThoughtsRandomized",
-    value: "c/RedditThoughtsRandomized",
-    memberCount: "7,886"
-}, {
-    label: "c/HackingTechniques",
-    value: "c/HackingTechniques",
-    memberCount: "3,677"
-}]
+const postTitleChecker = formHelpers().postTitleChecker;
+const communityChecks = formHelpers().communityChecks;
 
 const CreateNewForumPostingHelper = ({ userData }) => {
 
     const [ selectedGroup, setSelectedGroup ] = useState(null);
     const [ paneSheetOpen, openPaneSheet ] = useState(false);
+    const [ progress, setProgress ] = useState(0);
+    const [ options, setOptions ] = useState([]);
+
+    const history = useHistory();
 
     const { register, handleSubmit, control, reset, getValues, setValue, setError, clearErrors, formState: { errors }} = useForm({
         mode: "onTouched",
         reValidateMode: "onBlur"
     });
 
+    useEffect(() => {
+        const config = {
+            params: {
+                signedinID: userData.uniqueId
+            }
+        }
+
+        axios.get(`${process.env.REACT_APP_BASE_URL}/gather/related/user/groups/communities`, config).then((res) => {
+            if (res.data.message === "Successfully fetched the desired communities!") {
+                console.log(res.data);
+
+                const { communities } = res.data;
+
+                setOptions(communities);
+            } else {
+                console.log("Err", res.data);
+            }
+        }).catch((err) => {
+            console.log("Err critical", err);
+        })
+    }, [])
+
     // get form-redux values
     const currentValues = getValues();
 
     console.log("errors", errors);
 
-    const customDropdownRenderer = ({ props, state, methods }) => {
+    console.log("selectedGroup", selectedGroup);
+
+    const customDropdownRenderer = (onChange) => {
         return (
           <div>
             <div className="search-and-toggle">
               <h6 className="h6-forum-option-header">Your Communities</h6>
             </div>
             <div className="items-items">
-              {selectedGroup === null ? options.slice(0, 6).map((option, index) => {
-                  return (
-                    <div
-                        className={"options-mapped-div"}
-                        key={index}
-                        onClick={() => {
-                            console.log("clicked.");
+                {selectedGroup === null ? options.map((option, index) => {
+                    return (
+                        <div
+                            className={"options-mapped-div"}
+                            key={index}
+                            onClick={() => {
+                                console.log("clicked.");
 
-                            setSelectedGroup(option);
-                        }}>
-                        <img src={require(`../../../../assets/icons/reddit-${index + 1}.png`)} className={"community-icon-forum"} />
-                        <div className="option-list-item-wrapper-forum">
-                            <h5>{option.label}</h5>
-                            <p className="membercount-forum-option">{option.memberCount} Member's</p>
+                                onChange(option, setValue, clearErrors);
+
+                                setSelectedGroup(option);
+                            }}>
+                            <img src={`${process.env.REACT_APP_ASSET_LINK}/${option.communityMainPic.link}`} className={"community-icon-forum"} />
+                            <div className="option-list-item-wrapper-forum">
+                                <h5>{option.communityName}</h5>
+                                <p className="membercount-forum-option">{option.members.length} Member's</p>
+                            </div>
                         </div>
-                    </div>
-                  );
+                    );
                 }) : null}
-                {selectedGroup !== null ? <h4 className="selected-forum-option">You've Selected The <strong style={{ color: "#f73164", textDecorationLine: "underline" }}>{selectedGroup.label}</strong> community, <a onClick={() => setSelectedGroup(null)} href={null}><strong style={{ color: "#7366ff" }}>Click here</strong> to re-select another/different community</a></h4> : null}
+                {selectedGroup !== null ? <h4 className="selected-forum-option">You've Selected The <strong style={{ color: "#f73164", textDecorationLine: "underline" }}>{selectedGroup.communityName}</strong> community, <a onClick={() => setSelectedGroup(null)} href={null}><strong style={{ color: "#7366ff" }}>Click here</strong> to re-select another/different community</a></h4> : null}
             </div>
           </div>
         );
@@ -92,14 +98,50 @@ const CreateNewForumPostingHelper = ({ userData }) => {
     const renderFormError = (e, errors) => {
         console.log("errrror form logic...:", e, errors);
     }
-    const handleForumSubmission = (data, other) => {
-        console.log("Success!", data, other);
+    const handleForumSubmission = (data) => {
+        console.log("Success!", data);
+
+        const { communityName, mainDescription, title } = data;
+
+        const config = {
+            signedinID: userData.uniqueId,
+            communityName, 
+            mainDescription, 
+            title
+        }
+
+        axios.post(`${process.env.REACT_APP_BASE_URL}/post/new/forum/post/to/community`, config).then((res) => {
+            if (res.data.message === "Successfully posted to the desired community!") {
+                console.log(res.data);
+
+                const { updatedCommunity } = res.data;
+
+                setTimeout(() => {
+                    history.push("/forum/main/homepage");
+                }, 4500);
+
+                NotificationManager.success("Successfully posted your forum posting to the desired community & your listing/post is now LIVE!", "Successfully posted your NEW forum post!", 4750);
+
+            } else {
+                console.log("Err", res.data);
+
+                NotificationManager.error("An error occurred while attempting to post your forum posting to the desired community, please try again or contact support if the problem persists!", "Error attempting to post forum posting!", 4750);
+            }
+        }).catch((err) => {
+            console.log("Err critical", err);
+
+            NotificationManager.error("An error occurred while attempting to post your forum posting to the desired community, please try again or contact support if the problem persists!", "Error attempting to post forum posting!", 4750);
+        })
     }
-    // const getLineAndCursorCallback = (position) => {
-    //     setLineAndCursor(position);
-    // };
+    const autofocusNoSpellcheckerOptions = useMemo(() => {
+        return {
+          autofocus: false,
+          spellChecker: false,
+        }
+    }, []);
     return (
         <Fragment>
+            <LoadingBar onLoaderFinished={() => setProgress(0)} progress={progress} color={"#51bb25"} containerClassName={"loader-container-classname-forum"} height={9} />
             <Sheet draggable={false} isOpen={paneSheetOpen} onClose={() => openPaneSheet(false)}>
                 <Sheet.Container>
                     <Sheet.Header>
@@ -108,7 +150,7 @@ const CreateNewForumPostingHelper = ({ userData }) => {
                         </div>
                     </Sheet.Header>
                     <Sheet.Content>
-                        <CreateACommunityForumRelatedHelper openPaneSheet={openPaneSheet} userData={userData} />
+                        <CreateACommunityForumRelatedHelper setOptions={setOptions} setProgress={setProgress} openPaneSheet={openPaneSheet} userData={userData} />
                     </Sheet.Content>
                     </Sheet.Container>
                 <Sheet.Backdrop />
@@ -122,18 +164,20 @@ const CreateNewForumPostingHelper = ({ userData }) => {
                             </CardHeader>
                             <CardBody>
                                 <div className="position-right-create-group-btn">
-                                    <Button onClick={() => openPaneSheet(true)} className={"btn-square-secondary"} color={"secondary-2x"} outline>Create a new community (sub-thread)</Button>
+                                    <Button onClick={() => openPaneSheet(true)} className={"btn-square-secondary"} color={"secondary-2x"} style={{ width: "42.5%" }} outline>Create a new community (sub-thread)</Button>
                                 </div>
                                 <Form className="needs-validation streaming-start-form-wrapper" noValidate="" onSubmit={handleSubmit(handleForumSubmission, (e, errors) => renderFormError(e, errors))}>
-                                    <Select placeholder={"Search for a related 'community' to post in..."} dropdownRenderer={customDropdownRenderer} options={options} />
-                                    {selectedGroup !== null ? <h6 className="selected-forum-option-non-dropdown">You've selected to post in the <strong style={{ color: "#f73164", textDecorationLine: "underline" }}>{selectedGroup.label}</strong> community/group!</h6> : null}
+                                    <Select {...communityChecks.check(setError, register)} placeholder={"Search for a related 'community' to post in..."} dropdownRenderer={() => customDropdownRenderer(communityChecks.onChange)} options={options} />
+                                    {errors.communityName ? <span className="span-tooltip">{errors.communityName.message}</span> : null}
+                                    {selectedGroup !== null ? <h6 className="selected-forum-option-non-dropdown">You've selected to post in the <strong style={{ color: "#f73164", textDecorationLine: "underline" }}>{selectedGroup.communityName}</strong> community/group!</h6> : null}
                                     <hr />
                                     <FormGroup className=" m-form__group">
-                                        <Label>Post Title</Label>
+                                        <Label>{postTitleChecker.label}</Label>
                                         <InputGroup>
                                             <InputGroupAddon addonType="prepend"><InputGroupText>{"Title"}</InputGroupText></InputGroupAddon>
-                                            <Input onChange={() => {}} value={currentValues.title} name={"title"} placeholder={"Enter your post's title here..."} className="form-control" type="text" />
+                                            <Input {...postTitleChecker.check(setError, register)}  onChange={(e) => postTitleChecker.onChange(e.target.value, setValue)} value={currentValues.title} name={"title"} placeholder={postTitleChecker.placeholder} className="form-control" type="text" />
                                         </InputGroup>
+                                        {errors.title ? <span className="span-tooltip">{errors.title.message}</span> : null}
                                     </FormGroup>
                                     <Label className="create-forum-label">{mainDescriptionChecker.label}</Label>
                                     <SimpleMDE
@@ -142,10 +186,7 @@ const CreateNewForumPostingHelper = ({ userData }) => {
                                         onChange={(value) => mainDescriptionChecker.onChange(value, setValue)}
                                         value={currentValues.mainDescription}
                                         placeholder={mainDescriptionChecker.placeholder} 
-                                        options={{
-                                            autofocus: true,
-                                            spellChecker: false
-                                        }}
+                                        options={autofocusNoSpellcheckerOptions}
                                     />
                                     {errors.mainDescription ? <span className="span-tooltip">{errors.mainDescription.message}</span> : null}
                                     <Row style={{ marginTop: "27.5px" }}>

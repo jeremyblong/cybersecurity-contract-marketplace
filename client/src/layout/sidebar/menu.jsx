@@ -129,8 +129,8 @@ export const MENUITEMS = [
         Items:[
             {
                 title: `Main Forum Page`, icon: Book, type: 'sub',active: false, children: [
-                    { path: `${process.env.PUBLIC_URL}/forum/main/homepage`, title: "Forum Homepage/Main-Page", type: 'link' }
-                    // { path: `${process.env.PUBLIC_URL}/`, title: 'Set-up account VPN access & Activation (Step TWO)', type: 'link' },
+                    { path: `${process.env.PUBLIC_URL}/forum/main/homepage`, title: "Forum Homepage/Main-Page", type: 'link' },
+                    { path: `${process.env.PUBLIC_URL}/create/new/forum/post`, title: 'Create New Forum/Community', type: 'link' }
                     // { path: `${process.env.PUBLIC_URL}/`, title: 'Power VPN On/Off (Step Three)', type: 'link' },
                     // { path: `${process.env.PUBLIC_URL}/`, title: `VPN Setting's (Any Point After Activation)`, type: 'link' },
                     // { path: `${process.env.PUBLIC_URL}/`, title: `Check VPN Activity, Speed & Functionality`, type: 'link' }

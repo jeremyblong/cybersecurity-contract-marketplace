@@ -156,7 +156,10 @@ app.use("/add/new/payment/method/hacker", require("./routes/hackers/paymentRelat
 app.use("/gather/existing/payment/methods/hacker", require("./routes/hackers/paymentRelated/gatherPreviousPaymentMethods/gatherCardMethods.js"));
 app.use("/delete/debit/credit/card/hacker/account", require("./routes/hackers/paymentRelated/deleteSpecificCardDebitCredit/deleteRemoveCard.js"));
 app.use("/fetch/matching/users/restricted/data", require("./routes/shared/forumRelated/gatherUsersAddToSubThread/gatherRandomUsersAdd.js"));
-app.use("/gather/random/starting/users/restricted", require("./routes/shared/forumRelated/gatherUsersAddToSubThread/gatherInitialUsers.js"));
+app.use("/send/invites/create/group", require("./routes/shared/forumRelated/createCommunityRelated/sendInvitesCreateCommunity.js"));
+app.use("/send/invite/join/community/forum", require("./routes/shared/forumRelated/notifyUsers/notifyUserOfCommunityInvite/notifySpecificUser.js"));
+app.use("/gather/related/user/groups/communities", require("./routes/shared/forumRelated/communityRelated/gatherAssociatedCommunities/gatherCommunities.js"));
+app.use("/post/new/forum/post/to/community", require("./routes/shared/forumRelated/postNewForumPostToCommunity/postNewForumPost.js"));
 
 // ~ webhook logic STARTS here ~
 app.use("/passbase/webhook", require("./webhooks/passbase/webhook.js"));

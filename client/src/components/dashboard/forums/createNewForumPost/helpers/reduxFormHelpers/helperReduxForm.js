@@ -1,30 +1,28 @@
 // helpers logic related to mainly to redux-hook-form
 const MainHookForumCreationHelpers = () => {
-    const calculateBlurOrNot = (e, clearErrors, name, setError) => {
-        // deconstruct value
-        const valueLen = e.target.value.length;
-        // timeout to delay for state change(s)
-        setTimeout(() => {
-            // clear error after proper selection
-            if (valueLen >= 50) {
-                if (valueLen <= 1000) {
-                    clearErrors(name);
-                } else {
-                    // set error - TOO many characters
-                    setError(name, {
-                        type: "manual",
-                        message: "You may ONLY enter 1000 characters or less",
-                    });
-                }
-            } else {
-                // NOT Long enough
-                setError(name, {
-                    type: "manual",
-                    message: "You MUST enter AT Least 50 characters",
-                });
-            }
-        }, 100);
-    }
+    const postTitleChecker = {
+        check: (setError, register) => {
+            return (
+                {...register("title", { required: {
+                    value: true,
+                    message: "You MUST enter AT least 25 characters to 125 characters"
+                }, minLength: {
+                    value: 25,
+                    message: "You MUST enter AT Least 25 characters"
+                }, maxLength: {
+                    value: 125,
+                    message: "You may ONLY enter 125 characters or less"
+                }})}
+            )
+        },
+        onChange: (value, setValue) => {
+            setValue("title", value, { shouldValidate: true });
+        },
+        name: "title",
+        placeholder: "Enter your forum posting title (The title of your sub-thread)",
+        type: "text",
+        label: "Post Title"
+    };
     const mainDescriptionChecker = {
         check: (setError, register) => {
             return (
@@ -48,9 +46,27 @@ const MainHookForumCreationHelpers = () => {
         type: "textarea",
         label: "Enter your post description/content"
     };
+    const communityChecks = {
+        check: (setError, register) => {
+            return (
+                {...register("communityName", { required: {
+                    value: true,
+                    message: "You MUST select a COMMUNITY to post to before posting your new forum post"
+                }})}
+            )
+        },
+        onChange: (value, setValue, clearErrors) => {
+            setValue("communityName", value, { shouldValidate: true });
+            clearErrors(["communityName"])
+        },
+        name: "communityName",
+        label: "Select a community to post your forum posting to"
+    };
     // return values to other component
     return {
-        mainDescriptionChecker
+        mainDescriptionChecker,
+        postTitleChecker,
+        communityChecks
     }
 }
 
