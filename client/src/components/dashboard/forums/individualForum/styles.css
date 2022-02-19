@@ -1,0 +1,87 @@
+.card-overview-wrapper {
+    min-width: 100% !important;
+}
+#row-width-full {
+    min-width: 100% !important;
+}
+.ul-list-topper {
+    display: inline-block;
+    min-width: 100% !important;
+}
+.ul-list-topper li {
+    float:left;
+    min-width: 375px;
+    display: inline;
+}
+.sub-main-title-p {
+    font-weight: 450;
+    color: #3c31b4;
+}
+.green-text {
+    color: #51bb25;
+}
+.emoji-container-forum-react {
+    min-height: 42.5px;
+    min-width: 42.5px;
+}
+.custom-label-forum-posting-small-margin {
+    margin-bottom: 2.5px;
+    font-weight: 475;
+    text-decoration-line: underline;
+    font-size: 1.175rem;
+    color: #f73164;
+}
+.gif-reaction {
+    max-width: 100%;
+    max-height: 100%;
+}
+.smaller-ledger {
+    font-size: 1.175rem !important;
+    margin-left: 17.5px;
+    color: black;
+}
+.danger-dislikes {
+    color: #dc3545 !important;
+}
+.slider-slide-forum-video-image-vid-vid {
+    min-width: 100%;
+    min-height: 275px !important;
+    max-height: 275px !important;
+}
+.custom-label-forum-posting {
+    margin-bottom: 17.5px;
+    font-weight: 475;
+    text-decoration-line: underline;
+    font-size: 1.175rem;
+    color: #f73164;
+}
+.shim-down-width {
+    /* max-width: 62.5%; */
+}
+.slider-slide-forum-video-image-vid-vid video {
+    min-width: 100%;
+    min-height: 100% !important;
+    object-fit: cover !important;
+}
+.slider-slide-forum-video-image {
+    min-width: 100%;
+    min-height: 82.5px !important;
+    max-height: 250px !important;
+}
+.slider-slide-forum-video-image video {
+    min-width: 100%;
+    min-height: 100% !important;
+    object-fit: cover !important;
+}
+.video-wrapper-forum-individual {
+    max-height: 75px !important;
+    min-width: 100%;
+}
+.video-wrapper-forum-individual video {
+    min-width: 100% !important;
+    min-height: 100% !important;
+    object-fit: cover !important;
+}
+.product-slider-customized-profile-pics {
+
+}

@@ -1,0 +1,32 @@
+.shadowy-msg {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.125) !important;
+    border: 1.75px dotted grey !important;
+    border-radius: 17.5px;
+}
+.hover-reply-forum-comment:hover {
+    cursor: pointer !important;
+}
+.no-comments-yet-wrapper-forum {
+    display: -webkit-flexbox;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    justify-content: center;
+} 
+.forum-no-comments-img {
+    min-width: 50%;
+    min-height: 50%;
+}
+.custom-css-additions-input-response {
+    border-bottom: 2px solid lightgrey !important;
+}
+.input-group-forum-addon-custom span {
+    background-color: transparent !important;
+    border-top: none;
+    border-right: none;
+    border-bottom: 2px solid lightgrey !important;
+}

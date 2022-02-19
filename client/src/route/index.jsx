@@ -44,7 +44,7 @@ import BookmarkedEmployerAccountsAsHackerPage from "../pages/dashboard/bookmarke
 import CreateNewHackerProfileContentPostPage from "../pages/dashboard/people/hackers/individualProfile/wallData/postNewWallData/createNewWallData.js";
 import ManageIndividualHackerAlreadyHiredPage from "../pages/dashboard/jobManagement/employers/manageHiredHackers/manage/manageIndividualHacker/manageHacker.js";
 import ForumHomepageMainPage from "../pages/dashboard/forums/mainForumHomepage/mainForumHomepage.js";
-import IndividualListingToBetGambleOnPage from "../pages/dashboard/forums/individualForum/individual.js";
+import IndividualForumPage from "../pages/dashboard/forums/individualForum/individual.js";
 import MainFAQHackerPage from "../pages/dashboard/FAQ/hackers/mainFAQ/index.js";
 import MainFAQEmployerPage from "../pages/dashboard/FAQ/employers/mainFAQ/index.js";
 import PaymentMethodsAddNewPaymentMethodPage from "../pages/dashboard/paymentLogic/mainPaymentLogic/mainPaymentPage.js";
@@ -97,7 +97,7 @@ export const routes = [
         { path: "/create/new/post/hacker/profile/main/data", Component: CreateNewHackerProfileContentPostPage },
         { path: "/manage/individual/hacker/already/hired/:id", Component: ManageIndividualHackerAlreadyHiredPage },
         { path: "/forum/main/homepage", Component: ForumHomepageMainPage },
-        { path: "/individual/betting/gambling/listing/:id", Component: IndividualListingToBetGambleOnPage }, 
+        { path: "/individual/forum/subthread/:id/:poster", Component: IndividualForumPage }, 
         { path: "/frequently/asked/questions/main/hacker", Component: MainFAQHackerPage },
         { path: "/frequently/asked/questions/main/employer", Component: MainFAQEmployerPage },
         { path: "/payment/logic/main/page/all", Component: PaymentMethodsAddNewPaymentMethodPage },

@@ -191,6 +191,9 @@
 }
 .react-icon-forum:hover {
     cursor: pointer;
+    max-height: 30px !important;
+    margin-left: 25px;
+    position: static;
 }
 .minheightrow {
     min-height: 70px;
@@ -205,9 +208,19 @@
 .forum-list-group-item {
     border: 1.75px solid black;
     margin-top: 7.5px;
+    min-height: 175px !important;
+}
+.forum-list-group-item:hover {
+    border: 1.75px solid #f73164;
+    margin-top: 7.5px;
+    cursor: pointer;
+    min-height: 175px !important;
 }
 .forum-title {
     margin-right: 12.5px;
+}
+.popover-prescedence {
+    z-index: 9999999999999999999 !important;
 }
 .grey-back-forum {
     background-color: #d1d1d1;
@@ -215,8 +228,10 @@
     padding-bottom: 25px;
 }
 .reaction-count-forum {
-    margin-left: 6.5px;
     margin-top: 3.5px;
+    position: static;
+    text-align: center;
+    margin-left: 0px !important;
 } 
 .strong-header-forum:hover {
     color: #f73164 !important;
@@ -225,12 +240,17 @@
 .react-up-down-forum-wrapper {
     width: 100%;
     margin: 0 auto;
+    margin-top: -10px !important;
+    z-index: 99 !important;
 }
 .react-icon-forum {
     max-height: 30px !important;
+    margin-left: 25px;
+    position: static;
 }
 .popover-forum-group .popover .popover-inner {
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.425) !important;
+    z-index: 999999999999999999999999999 !important;
 }
 .popover-header-forum-wrapper {
     background-color: #fff !important;

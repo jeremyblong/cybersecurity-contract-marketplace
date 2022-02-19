@@ -8,6 +8,10 @@ import _ from "lodash";
 import Sheet from 'react-modal-sheet';
 import PaginationGeneralHelper from "../../universal/pagination/miscMainPagination.js";
 import FilterListingResultsAuctionsPaneHelper from "./helpers/filterPane/filterListingResultsPaneHelper.js";
+import axios from "axios";
+import moment from "moment";
+
+
 
 const getWindowDimensions = () => {
     const { innerWidth: width, innerHeight: height } = window;
@@ -38,9 +42,7 @@ const itemsPerPage = 5;
 
 const ForumHomepageMainHelper = ({ userData }) => {
     // state initialization..
-    const [ popoverOpen, setPopoverState ] = useState(false);
     const [ isOpen, setIsOpenState ] = useState(false);
-    const [ auctions, setAuctionsData ] = useState([]);
     const [ permenantData, setPermanantData ] = useState([]);
     const [ currentPage, setCurrentPage ] = useState(0);
     const [ pageCount, setPageCount ] = useState(0);
@@ -80,17 +82,41 @@ const ForumHomepageMainHelper = ({ userData }) => {
 
         setPopoversState(newPopoverState);
 
-        setPageCount(Math.ceil(forums.length / itemsPerPage));
+        const config = {
+            params: {
+                signedinID: userData.uniqueId
+            }
+        }
 
-        const endOffset = itemOffset + itemsPerPage;
+        axios.get(`${process.env.REACT_APP_BASE_URL}/gather/randomized/community/posts`, config).then((res) => {
+            if (res.data.message === "Successfully gathered random posts!") {
+                console.log(res.data);
 
-        setPermanantData(forums);
-        setForumsData(forums.slice(itemOffset, endOffset));
+                const { communities } = res.data;
 
-        setReady(true);
+                setPageCount(Math.ceil(communities.length / itemsPerPage));
+
+                const endOffset = itemOffset + itemsPerPage;
+
+                setPermanantData(communities);
+                setForumsData(communities.slice(itemOffset, endOffset));
+
+                setReady(true);
+            } else {
+                console.log("Err", res.data);
+            }
+        }).catch((err) => {
+            console.log("Err critical", err);
+        })
     }, [])
 
     const { width } = useWindowDimensions();
+
+    const handleClickAndRedirect = (lastThreadID, postedBy) => {
+        console.log("handleClickAndRedirect clicked/ran.", lastThreadID, postedBy);
+
+        history.push(`/individual/forum/subthread/${lastThreadID}/${postedBy}`);  
+    }
 
     console.log("Width", width, popovers);
     return (
@@ -231,98 +257,101 @@ const ForumHomepageMainHelper = ({ userData }) => {
                                         }) : null} */}
                                         <div className="grey-back-forum">
                                             <ListGroup>
-                                            {ready === true && typeof forums !== "undefined" && forums.length > 0 ? forums.map((forum, index) => {
-                                                return (
-                                                    <Fragment key={index}>
-                                                        <ListGroupItem className="list-group-item forum-list-group-item flex-column align-items-start">
-                                                            <Row>
-                                                                <Col sm="1" lg="1" md="1" xl="1">
+                                                {ready === true && typeof forums !== "undefined" && forums.length > 0 ? forums.map((forum, index) => {
+                                                    console.log("forum!", forum);
 
-                                                                </Col>
-                                                                <Col sm="11" lg="11" md="11" xl="11">
-                                                                    <span className="top-header-forum"><strong id={`top-popper-${index}`} onMouseEnter={() => setPopoversState(prevState => {
-                                                                        return {
-                                                                            ...prevState,
-                                                                            [`top-popper-${index}`]: true
-                                                                        }
-                                                                    })} className="strong-header-forum">h/MadeMeSmile</strong> - Posted by u/randomUserHere8437 - 6 hours ago <span className="justify-content-end-forum">
-                                                                        <small className="text-muted">{"3 days ago"}</small>
-                                                                    </span></span>
-                                                                    <Popover className="popover-forum-group" placement="bottom" isOpen={popovers[`top-popper-${index}`]} target={`top-popper-${index}`} toggle={() => setPopoversState(prevState => {
-                                                                        return {
-                                                                            ...prevState,
-                                                                            [`top-popper-${index}`]: false
-                                                                        }
-                                                                    })}>
-                                                                        <div onMouseLeave={() => setPopoversState(prevState => {
+                                                    const lastThread = forum.subthreads[forum.subthreads.length - 1];
+                                                    return (
+                                                        <Fragment key={index}>
+                                                            <ListGroupItem className="list-group-item forum-list-group-item flex-column align-items-start">
+                                                                <Row>
+                                                                    <Col sm="1" lg="1" md="1" xl="1">
+
+                                                                    </Col>
+                                                                    <Col sm="11" lg="11" md="11" xl="11">
+                                                                        <span className="top-header-forum"><strong id={`top-popper-${index}`} onMouseEnter={() => setPopoversState(prevState => {
+                                                                            return {
+                                                                                ...prevState,
+                                                                                [`top-popper-${index}`]: true
+                                                                            }
+                                                                        })} className="strong-header-forum">c/{forum.communityName}</strong> - Visibility - {forum.groupVisibility} - {moment(lastThread.date).fromNow()} <span className="justify-content-end-forum">
+                                                                            <small className="text-muted">Latest post posted {moment(forum.date).fromNow()}</small>
+                                                                        </span></span>
+                                                                        <Popover className="popover-forum-group" placement="bottom" isOpen={popovers[`top-popper-${index}`]} target={`top-popper-${index}`} toggle={() => setPopoversState(prevState => {
                                                                             return {
                                                                                 ...prevState,
                                                                                 [`top-popper-${index}`]: false
                                                                             }
                                                                         })}>
-                                                                            <PopoverHeader className="popover-header-forum-wrapper">
-                                                                                <Row>
-                                                                                    <Col sm="1" md="1" lg="1" xl="1">
-                                                                                        <img src={require("../../../../assets/images/jwt.svg")} className={"popover-forum-group-image"} />
-                                                                                    </Col>
-                                                                                    <Col sm="11" md="11" lg="11" xl="11">
-                                                                                        <h6 className="popover-group-title">h/MadeMeSmile</h6>
-                                                                                    </Col>
-                                                                                </Row>
-                                                                            </PopoverHeader>
-                                                                            <PopoverBody>
-                                                                                <Row>
-                                                                                    <Col sm="6" md="6" lg="6" xl="6">
-                                                                                        <div className="align-left-numbers-forum">
-                                                                                            <div className="columized">
-                                                                                                <h4 className="number-forum-count">4.7m</h4>
-                                                                                                <p className="number-forum-count-sub">Member's</p>
+                                                                            <div className="popover-prescedence" onMouseLeave={() => setPopoversState(prevState => {
+                                                                                return {
+                                                                                    ...prevState,
+                                                                                    [`top-popper-${index}`]: false
+                                                                                }
+                                                                            })}>
+                                                                                <PopoverHeader className="popover-header-forum-wrapper">
+                                                                                    <Row>
+                                                                                        <Col sm="1" md="1" lg="1" xl="1">
+                                                                                            <img src={require("../../../../assets/images/jwt.svg")} className={"popover-forum-group-image"} />
+                                                                                        </Col>
+                                                                                        <Col sm="11" md="11" lg="11" xl="11">
+                                                                                            <h6 className="popover-group-title">h/MadeMeSmile</h6>
+                                                                                        </Col>
+                                                                                    </Row>
+                                                                                </PopoverHeader>
+                                                                                <PopoverBody>
+                                                                                    <Row>
+                                                                                        <Col sm="6" md="6" lg="6" xl="6">
+                                                                                            <div className="align-left-numbers-forum">
+                                                                                                <div className="columized">
+                                                                                                    <h4 className="number-forum-count">4.7m</h4>
+                                                                                                    <p className="number-forum-count-sub">Member's</p>
+                                                                                                </div>
                                                                                             </div>
-                                                                                        </div>
-                                                                                    </Col>
-                                                                                    <Col sm="6" md="6" lg="6" xl="6">
-                                                                                        <div className="align-left-numbers-forum">
-                                                                                            <div className="columized">
-                                                                                                <h4 className="number-forum-count">18.3k</h4>
-                                                                                                <p className="number-forum-count-sub">Online</p>
+                                                                                        </Col>
+                                                                                        <Col sm="6" md="6" lg="6" xl="6">
+                                                                                            <div className="align-left-numbers-forum">
+                                                                                                <div className="columized">
+                                                                                                    <h4 className="number-forum-count">18.3k</h4>
+                                                                                                    <p className="number-forum-count-sub">Online</p>
+                                                                                                </div>
                                                                                             </div>
+                                                                                        </Col>
+                                                                                    </Row>
+                                                                                    <hr />
+                                                                                    <Row>
+                                                                                        <p>A place to share things that made you smile or brightened up your day. A generally uplifting subreddit.</p>
+                                                                                    </Row>
+                                                                                    <hr />
+                                                                                    <Row>
+                                                                                        <div className="centered-both-ways">
+                                                                                            <Button onClick={() => {}} className="btn-square-info" color="info" style={{ width: "100%" }}>View Community</Button>
                                                                                         </div>
-                                                                                    </Col>
-                                                                                </Row>
-                                                                                <hr />
-                                                                                <Row>
-                                                                                    <p>A place to share things that made you smile or brightened up your day. A generally uplifting subreddit.</p>
-                                                                                </Row>
-                                                                                <hr />
-                                                                                <Row>
-                                                                                    <div className="centered-both-ways">
-                                                                                        <Button onClick={() => {}} className="btn-square-info" color="info" style={{ width: "100%" }}>View Community</Button>
-                                                                                    </div>
-                                                                                </Row>
-                                                                            </PopoverBody>
+                                                                                    </Row>
+                                                                                </PopoverBody>
+                                                                            </div>
+                                                                        </Popover>
+                                                                    </Col>
+                                                                </Row>
+                                                                <Row style={{ marginTop: "7.5px" }}>
+                                                                    <Col sm="1" lg="1" md="1" xl="1">
+                                                                        <div className="react-up-down-forum-wrapper">
+                                                                            <img src={require("../../../../assets/icons/up.png")} className={"react-icon-forum"} />
+                                                                            <h6 className="reaction-count-forum">{forum.likes}/{forum.dislikes} {`\n`}likes/dislikes</h6>
+                                                                            <img src={require("../../../../assets/icons/down.png")} className={"react-icon-forum"} />
                                                                         </div>
-                                                                    </Popover>
-                                                                </Col>
-                                                            </Row>
-                                                            <Row style={{ marginTop: "7.5px" }}>
-                                                                <Col sm="1" lg="1" md="1" xl="1">
-                                                                    <div className="react-up-down-forum-wrapper">
-                                                                        <img src={require("../../../../assets/icons/up.png")} onClick={() => {}} className={"react-icon-forum"} />
-                                                                        <h6 className="reaction-count-forum">18.7k</h6>
-                                                                        <img src={require("../../../../assets/icons/down.png")} onClick={() => {}} className={"react-icon-forum"} />
-                                                                    </div>
-                                                                </Col>
-                                                                <Col sm="11" lg="11" md="11" xl="11">
-                                                                    <div className="d-flex w-100 justify-content-between">
-                                                                    <h5 className="mb-1 forum-title">{"During her latest concert, Billie Eilish noticed that a fan was having trouble breathing. So she stopped the entire concert of 20,000+ people — all for one fan — then told her crew to bring an inhaler so the fan could breath again. This is humanity"}</h5>
-                                                                    </div>
-                                                                    <p className="mb-1">{"It's hard to describe. I'm from Ukraine, Dnipro, about 200 km from the warzone that's already there for eight years, and we all here kind of used to the Russian baked shit that happening in the east. However, now everything seems different. I'm genuinely sure that they'll try to cut the whole country in half"}</p>
-                                                                </Col>
-                                                            </Row>
-                                                        </ListGroupItem>
-                                                    </Fragment>
-                                                );
-                                            }) : null}
+                                                                    </Col>
+                                                                    <Col onClick={() => handleClickAndRedirect(lastThread.id,lastThread.postedBy)} sm="11" lg="11" md="11" xl="11">
+                                                                        <div className="d-flex w-100 justify-content-between">
+                                                                        <h5 className="mb-1 forum-title">{lastThread.title}</h5>
+                                                                        </div>
+                                                                        <p className="mb-1">{lastThread.description.slice(0, 375)}{typeof lastThread.description !== "undefined" && lastThread.description.length >= 375 ? "..." : ""}</p>
+                                                                    </Col>
+                                                                </Row>
+                                                            </ListGroupItem>
+                                                        </Fragment>
+                                                    );
+                                                }) : null}
                                             </ListGroup>
                                         </div>
                                     </Row>

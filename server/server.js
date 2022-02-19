@@ -160,6 +160,10 @@ app.use("/send/invites/create/group", require("./routes/shared/forumRelated/crea
 app.use("/send/invite/join/community/forum", require("./routes/shared/forumRelated/notifyUsers/notifyUserOfCommunityInvite/notifySpecificUser.js"));
 app.use("/gather/related/user/groups/communities", require("./routes/shared/forumRelated/communityRelated/gatherAssociatedCommunities/gatherCommunities.js"));
 app.use("/post/new/forum/post/to/community", require("./routes/shared/forumRelated/postNewForumPostToCommunity/postNewForumPost.js"));
+app.use("/gather/randomized/community/posts", require("./routes/shared/forumRelated/gatherRandomPosts/gatherRandomCommunityPosts.js"));
+app.use("/gather/forum/poster/core/info", require("./routes/shared/forumRelated/gatherUserInfo/gatherForumPosterInfoCore/gatherCoreInfo.js"));
+app.use("/gather/forum/comments/subthread/individual", require("./routes/shared/forumRelated/commentRelated/retreievePreviousComments/retrieveCommentsUponLoad.js"));
+app.use("/post/new/comment/forums/subthread/subcomment", require("./routes/shared/forumRelated/commentRelated/postNewComment/postNewCommentSubthread.js"));
 
 // ~ webhook logic STARTS here ~
 app.use("/passbase/webhook", require("./webhooks/passbase/webhook.js"));
