@@ -10,13 +10,12 @@ import axios from "axios";
 import helpers from "./helpers/helperFunctions.js";
 import moment from 'moment';
 
-
 const { renderSignedinUserPicVideo, addNewComment, renderPicVideoComment } = helpers;
 
 const itemsPerPage = 10;
 
-const CustomTabsetBottomListingAuctionHelper = ({ poster, id, userData }) => {
-    const [activeTab, setActiveTab] = useState('1');
+const CustomTabsetBottomListingAuctionHelper = ({ poster, setOpenState, id, userData, isOpen }) => {
+    const [ activeTab, setActiveTab ] = useState('1');
     const [ showEmojiPicker, setShowEmojiPicker ] = useState(false);
     const [ commentText, setCommentText ] = useState("");
     const [ currentPage, setCurrentPage ] = useState(0);
@@ -25,7 +24,6 @@ const CustomTabsetBottomListingAuctionHelper = ({ poster, id, userData }) => {
     const [ permenantData, setPermenantDataState ] = useState([]);
     const [ comments, setComments ] = useState([]);
     const [ ready, setReady ] = useState(false);
-
 
     useEffect(() => {
 
@@ -67,12 +65,14 @@ const CustomTabsetBottomListingAuctionHelper = ({ poster, id, userData }) => {
 
     const replyToCommentSub = () => {
         console.log("replyToCommentSub clicked/ran..");
+
+        setOpenState(true);
     }
     const addEmoji = (emoji) => {
         setCommentText(prevState => `${prevState}${emoji.native}`);
         setShowEmojiPicker(false);
     }
-    console.log("commentText", commentText);
+    console.log("commentText", commentText, isOpen);
     return (
         <Fragment>
             <Card>

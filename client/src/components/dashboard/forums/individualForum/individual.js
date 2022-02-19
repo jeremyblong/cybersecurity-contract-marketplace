@@ -17,6 +17,10 @@ import _ from "lodash";
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm';
 import moment from "moment";
+import helpers from "./helpers/bottomTabbed/helpers/helperFunctions.js";
+
+
+const { RenderModalSheetAddComment } = helpers;
 
 const getWindowDimensions = () => {
     const { innerWidth: width, innerHeight: height } = window;
@@ -88,7 +92,9 @@ const IndividualForumHelper = ({ userData }) => {
     const [ posterData, setPosterData ] = useState(null);
     const [ reversed, setReversed ] = useState([]);
     const [ forum, setForum ] = useState(null);
+    const [ isOpen, setOpenState ] = useState(false);
 
+    
     const slider1 = useRef();
     const slider2 = useRef();
     
@@ -324,6 +330,7 @@ const IndividualForumHelper = ({ userData }) => {
     console.log("posterData", posterData);
     return (
         <Fragment>
+            <RenderModalSheetAddComment isOpen={isOpen} setOpenState={setOpenState} />
             <Parallax
                 className={"background-parallax-vpn-setup-img"} 
                 bgImage={width >= 1350 ? require('../../../../assets/images/hackerPicOne.jpg') : require('../../../../assets/images/tall-tech.jpg')}
@@ -368,7 +375,7 @@ const IndividualForumHelper = ({ userData }) => {
                                 </Col>
                             </Row>
                         </Card>
-                        <CustomTabsetBottomListingAuctionHelper id={id} poster={poster} /></Col>
+                        <CustomTabsetBottomListingAuctionHelper isOpen={isOpen} setOpenState={setOpenState} id={id} poster={poster} /></Col>
                 </Row>
             </Container>
         </Fragment>
