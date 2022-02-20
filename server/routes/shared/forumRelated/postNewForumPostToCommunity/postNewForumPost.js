@@ -34,7 +34,8 @@ router.post("/", (req, resppppp, next) => {
             sunglasses: 0,
             tearsOfJoy: 0,
             vomitting: 0
-        }
+        },
+        peopleAlreadyReacted: []
     }
 
     collection.findOneAndUpdate({ id: communityName.id }, { $push: { subthreads: newSubthreadAddition }}, { returnOriginal: false }, (err, result) => {

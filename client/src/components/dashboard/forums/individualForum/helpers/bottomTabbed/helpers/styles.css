@@ -20,3 +20,7 @@
 .shadowy-card-forum-comment {
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175) !important;
 }
+.heavy-forum-label {
+    font-weight: 475;
+    text-decoration-line: underline;
+}

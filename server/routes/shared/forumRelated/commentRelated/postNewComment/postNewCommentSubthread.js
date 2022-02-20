@@ -7,7 +7,7 @@ const moment = require("moment");
 
 router.post("/", async (req, resppppp, next) => {
     
-    const { subthreadPosterID, commentText, subthreadID, signedinUserID, signedinAccountType } = req.body;
+    const { subthreadPosterID, commentText, subthreadID, signedinUserID, signedinAccountType, hashtags } = req.body;
 
     const collection = Connection.db.db("db").collection("forumcommunities");
     const employerOrHackerCollection = Connection.db.db("db").collection(signedinAccountType);
@@ -47,7 +47,8 @@ router.post("/", async (req, resppppp, next) => {
         poster: uniqueId,
         subComments: [],
         posterName: `${firstName} ${lastName}`,
-        alreadyReacted: []
+        alreadyReacted: [],
+        hashtags
     };
 
     collection.findOneAndUpdate({ $and: [ { "subthreads.id": subthreadID }, { "subthreads.postedBy": subthreadPosterID } ]}, { $push: { "subthreads.$.subcomments": newCommentAddition }}, { returnOriginal: false }, (err, result) => {

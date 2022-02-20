@@ -164,6 +164,8 @@ app.use("/gather/randomized/community/posts", require("./routes/shared/forumRela
 app.use("/gather/forum/poster/core/info", require("./routes/shared/forumRelated/gatherUserInfo/gatherForumPosterInfoCore/gatherCoreInfo.js"));
 app.use("/gather/forum/comments/subthread/individual", require("./routes/shared/forumRelated/commentRelated/retreievePreviousComments/retrieveCommentsUponLoad.js"));
 app.use("/post/new/comment/forums/subthread/subcomment", require("./routes/shared/forumRelated/commentRelated/postNewComment/postNewCommentSubthread.js"));
+app.use("/post/subcomment/comment/forum/listing", require("./routes/shared/forumRelated/commentRelated/postNewComment/subcomment/postNewComment.js"));
+app.use("/react/thread/with/emoji", require("./routes/shared/forumRelated/emojiRelated/reactWithEmojiMainPost.js"));
 
 // ~ webhook logic STARTS here ~
 app.use("/passbase/webhook", require("./webhooks/passbase/webhook.js"));

@@ -1,6 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import { Card, Row, Col, TabContent, TabPane, Nav, NavItem, NavLink, CardBody,Button,Media,InputGroup, InputGroupAddon,Input, InputGroupText } from 'reactstrap';
-import one from "../../../../../../assets/images/user/1.jpg";
+import { Card, Badge, Row, Col, TabContent, TabPane, Nav, NavItem, NavLink, CardBody,Button,Media,InputGroup, InputGroupAddon,Input, InputGroupText } from 'reactstrap';
 import "./styles.css";
 import { Picker } from 'emoji-mart';
 import PaginationEmployerListingHelper from "../../../../universal/pagination/paginationHelper.js";
@@ -10,7 +9,7 @@ import axios from "axios";
 import helpers from "./helpers/helperFunctions.js";
 import moment from 'moment';
 
-const { renderSignedinUserPicVideo, addNewComment, renderPicVideoComment } = helpers;
+const { renderSignedinUserPicVideo, addNewComment, renderPicVideoComment, RenderModalSheetAddComment, ForumCommentAddHashtagsOptionHelper } = helpers;
 
 const itemsPerPage = 10;
 
@@ -23,7 +22,9 @@ const CustomTabsetBottomListingAuctionHelper = ({ poster, setOpenState, id, user
     const [ itemOffset, setItemOffset ] = useState(0);
     const [ permenantData, setPermenantDataState ] = useState([]);
     const [ comments, setComments ] = useState([]);
+    const [ hashtags, setHashtags ] = useState([]);
     const [ ready, setReady ] = useState(false);
+    const [ selectedComment, setSelectedComment ] = useState(null);
 
     useEffect(() => {
 
@@ -63,8 +64,9 @@ const CustomTabsetBottomListingAuctionHelper = ({ poster, setOpenState, id, user
         })
     }, [])
 
-    const replyToCommentSub = () => {
-        console.log("replyToCommentSub clicked/ran..");
+    const replyToCommentSub = (comment) => {
+
+        setSelectedComment(comment);
 
         setOpenState(true);
     }
@@ -75,6 +77,7 @@ const CustomTabsetBottomListingAuctionHelper = ({ poster, setOpenState, id, user
     console.log("commentText", commentText, isOpen);
     return (
         <Fragment>
+            <RenderModalSheetAddComment id={id} poster={poster} itemOffset={itemOffset} setComments={setComments} setPermenantDataState={setPermenantDataState} selectedComment={selectedComment} setSelectedComment={setSelectedComment} userData={userData} isOpen={isOpen} setOpenState={setOpenState} />
             <Card>
                 <Row className="product-page-main m-0">
                     <Col sm="12">
@@ -97,7 +100,7 @@ const CustomTabsetBottomListingAuctionHelper = ({ poster, setOpenState, id, user
                                             <InputGroup className="text-box">
                                                 <Input className="form-control custom-css-additions-input-response input-txt-bx" type="text" name="message-to-send" placeholder="Post Your Comment(s) - Enter at least 25 characters..." onChange={(e) => setCommentText(e.target.value)} value={commentText} />
                                                 {typeof commentText !== "undefined" && commentText.length >= 25 ? <InputGroupAddon className='input-group-forum-addon-custom' addonType="append">
-                                                    <Button color='info-2x' outline className='btn-square-info' onClick={() => addNewComment(commentText, setCommentText, id, setComments, poster, userData)}>Submit</Button>
+                                                    <Button color='info-2x' outline className='btn-square-info' onClick={() => addNewComment(commentText, setCommentText, id, setComments, poster, userData, hashtags, setHashtags)}>Submit</Button>
                                                 </InputGroupAddon> : <InputGroupAddon className='input-group-forum-addon-custom' addonType="append">
                                                     <InputGroupText>{25 - commentText.length > 0 ? `${25 - commentText.length} Min Char Left` : "Successful Entry!"}</InputGroupText>
                                                 </InputGroupAddon>}
@@ -109,6 +112,10 @@ const CustomTabsetBottomListingAuctionHelper = ({ poster, setOpenState, id, user
                                                     </Button>
                                                 </InputGroupAddon>
                                             </InputGroup>
+                                            <div className='hashtag-forum-wrapper'>
+                                                <ForumCommentAddHashtagsOptionHelper hashtags={hashtags} setHashtags={setHashtags} />
+                                            </div>
+                                            <hr />
                                         </Media>
                                     </Media>
                                 </div>
@@ -120,11 +127,41 @@ const CustomTabsetBottomListingAuctionHelper = ({ poster, setOpenState, id, user
                                                 <div className="your-msg">
                                                     <Media>
                                                         {renderPicVideoComment(comment.posterPicOrVideo)}
-                                                        <Media className='shadowy-msg' body><span className="f-w-600">{comment.posterName} <span>{moment(comment.date).fromNow()} <i className="fa fa-reply font-primary hover-reply-forum-comment" onClick={() => replyToCommentSub()}></i></span></span>
+                                                        <Media className='shadowy-msg' body><span className="f-w-600">{comment.posterName} <span>{moment(comment.date).fromNow()} <i className="fa fa-reply font-primary hover-reply-forum-comment" onClick={() => replyToCommentSub(comment)}></i></span></span>
                                                             <p>{comment.commentText}</p>
+                                                            {typeof comment.hashtags !== "undefined" && comment.hashtags.length > 0 ? <hr /> : null}
+                                                            {typeof comment.hashtags !== "undefined" && comment.hashtags.length > 0 ? comment.hashtags.map((hashtag, idxxxx) => {
+                                                                return (
+                                                                    <Fragment key={idxxxx}>
+                                                                        <Badge color="info tag-pills-sm-mb">{hashtag.text}</Badge>
+                                                                    </Fragment>
+                                                                );
+                                                            }) : null}
                                                         </Media>
                                                     </Media>
                                                 </div>
+                                                {typeof comment.subComments !== "undefined" && comment.subComments.length > 0 ? comment.subComments.map((subcomment, idx) => {
+                                                    return (
+                                                        <Fragment key={idx}>
+                                                            <div className="other-msg">
+                                                                <Media>
+                                                                    {renderPicVideoComment(subcomment.posterPicOrVideo)}
+                                                                    <Media className='shadowy-msg' body><span className="f-w-600">{subcomment.posterName} <span>{moment(subcomment.date).fromNow()} </span></span>
+                                                                        <p>{subcomment.commentText} </p>
+                                                                        {typeof subcomment.hashtags !== "undefined" && subcomment.hashtags.length > 0 ? <hr /> : null}
+                                                                        {typeof subcomment.hashtags !== "undefined" && subcomment.hashtags.length > 0 ? subcomment.hashtags.map((hashtag, idxxxx) => {
+                                                                            return (
+                                                                                <Fragment key={idxxxx}>
+                                                                                    <Badge color="info tag-pills-sm-mb">{hashtag.text}</Badge>
+                                                                                </Fragment>
+                                                                            );
+                                                                        }) : null}
+                                                                    </Media>
+                                                                </Media>
+                                                            </div>
+                                                        </Fragment>
+                                                    );
+                                                }) : null}
                                             </Fragment>
                                         );
                                     }) : <Fragment>
@@ -153,37 +190,3 @@ const mapStateToProps = (state) => {
     }
 }
 export default connect(mapStateToProps, {})(withRouter(CustomTabsetBottomListingAuctionHelper));
-
-
-// <div className="your-msg">
-//     <Media>
-//         <Media className="img-50 img-fluid m-r-20 rounded-circle" alt="" src={one} />
-//         <Media className='shadowy-msg' body><span className="f-w-600">User One <span>{"1 Year Ago"} <i className="fa fa-reply font-primary hover-reply-forum-comment" onClick={() => replyToCommentSub()}></i></span></span>
-//             <p>{"we are doing dance and singing songs, please vote our post which is very good for all young peoples"}</p>
-//         </Media>
-//     </Media>
-// </div>
-// <div className="other-msg">
-//     <Media>
-//         <Media className="img-50 img-fluid m-r-20 rounded-circle" alt="" src={one} />
-//         <Media className='shadowy-msg' body><span className="f-w-600">User Two <span>{"1 Month Ago"} <i className="fa fa-reply font-primary hover-reply-forum-comment" onClick={() => replyToCommentSub()}></i></span></span>
-//             <p>{"ohh yeah very good car and its features i will surely vote for it"} </p>
-//         </Media>
-//     </Media>
-// </div>
-// <div className="other-msg">
-//     <Media>
-//         <Media className="img-50 img-fluid m-r-20 rounded-circle" alt="" src={one} />
-//         <Media className='shadowy-msg' body><span className="f-w-600">User Three <span>{"15 Days Ago"} <i className="fa fa-reply font-primary hover-reply-forum-comment" onClick={() => replyToCommentSub()}></i></span></span>
-//             <p>{"ohh yeah very good car and its features i will surely vote for it"} </p>
-//         </Media>
-//     </Media>
-// </div>
-// <div className="your-msg">
-//     <Media>
-//         <Media className="img-50 img-fluid m-r-20 rounded-circle" alt="" src={one} />
-//         <Media className='shadowy-msg' body><span className="f-w-600">User Four <span>{"1 Year Ago"} <i className="fa fa-reply font-primary hover-reply-forum-comment" onClick={() => replyToCommentSub()}></i></span></span>
-//             <p>{"we are doing dance and singing songs, please vote our post which is very good for all young peoples"}</p>
-//         </Media>
-//     </Media>
-// </div>

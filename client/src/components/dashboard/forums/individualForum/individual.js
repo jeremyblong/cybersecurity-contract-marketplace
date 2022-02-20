@@ -1,26 +1,27 @@
 import React, { Fragment, useState, useEffect, useRef } from "react";
 import "./styles.css";
 import { Parallax } from 'react-parallax';
-import { Container, Row, Col, Button, Card, CardBody, CardHeader, Media, Label } from 'reactstrap';
+import { Container, Row, Col, Button, Card, CardBody, CardHeader, Media, Label, Popover, PopoverBody, PopoverHeader } from 'reactstrap';
 import axios from "axios";
 import { connect } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import Breadcrumb from '../../../../layout/breadcrumb';
 import CustomTabsetBottomListingAuctionHelper from './helpers/bottomTabbed/bottomTabbedHelper.js';
 import Slider from 'react-slick';
-import Ratings from 'react-ratings-declarative'
-import { ProductReview,  Brand, Availability, AddToCart, BuyNow } from "../../../../constant";
+// import Ratings from 'react-ratings-declarative'
 import { Truck, Gift,CreditCard,Clock } from 'react-feather';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import ReactPlayer from "react-player";
-import _ from "lodash";
+import _, { stubFalse } from "lodash";
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm';
 import moment from "moment";
 import helpers from "./helpers/bottomTabbed/helpers/helperFunctions.js";
+import { NotificationManager } from "react-notifications";
 
 
-const { RenderModalSheetAddComment } = helpers;
+
+const { RenderEmojiLogic } = helpers;
 
 const getWindowDimensions = () => {
     const { innerWidth: width, innerHeight: height } = window;
@@ -93,7 +94,9 @@ const IndividualForumHelper = ({ userData }) => {
     const [ reversed, setReversed ] = useState([]);
     const [ forum, setForum ] = useState(null);
     const [ isOpen, setOpenState ] = useState(false);
-
+    const [ reactionPopover, setReactionPopoverState ] = useState(false);
+    const [ reactions, setReactions ] = useState(null);
+    const [ reactionCount, setReactionCount ] = useState(0);
     
     const slider1 = useRef();
     const slider2 = useRef();
@@ -111,7 +114,7 @@ const IndividualForumHelper = ({ userData }) => {
         setState({
             nav1: slider1.current,
             nav2: slider2.current
-          });
+        });
       } ,[]);
 
     const changeRating = (rating) => {
@@ -135,6 +138,8 @@ const IndividualForumHelper = ({ userData }) => {
                 const { user, listing } = res.data;
 
                 setForum(listing);
+
+                setReactions(listing.reactionsToMainPost);
 
                 setPosterData(user);
 
@@ -160,6 +165,39 @@ const IndividualForumHelper = ({ userData }) => {
             count += counter;
         }
         return count;
+    }
+    const handleRespondEmoji = (reaction, setPopoverState) => {
+        console.log("handleRespondEmoji", reaction, setPopoverState);
+
+        const config = {
+            signedinUserID: userData.uniqueId,
+            reaction,
+            forum,
+            accountType: userData.accountType
+        }
+
+        axios.post(`${process.env.REACT_APP_BASE_URL}/react/thread/with/emoji`, config).then((res) => {
+            if (res.data.message === "Successfully reacted to forum post!") {
+
+                console.log(res.data);
+
+                const { reactions } = res.data;
+
+                NotificationManager.success("Successfully reacted with an emoji to this forum posting! If you want to change this or didn't mean to react - react again with any emoji to remove this action.", "Successfully reacted to post!", 4750);
+
+                setReactions(reactions);
+                setPopoverState(false);
+                
+            } else {
+                console.log("Err", res.data);
+
+                NotificationManager.error("An error occurred while attempting to react to this post with an emoji, if this problem persists please contact support or try the action again!", "Error attempting to react to post!", 4750);
+            }
+        }).catch((err) => {
+            NotificationManager.error("An error occurred while attempting to react to this post with an emoji, if this problem persists please contact support or try the action again!", "Error attempting to react to post!", 4750);
+
+            console.log("Err critical", err);
+        })
     }
 
     const renderMainContentConditionally = () => {
@@ -286,29 +324,65 @@ const IndividualForumHelper = ({ userData }) => {
                             <span className="underline-counts"><span className="green-text">{forum.likes.length}</span> <span style={{ color: "black" }}>/ </span><span className="danger-dislikes">{forum.dislikes.length}</span></span><span className="smaller-ledger">likes/dislikes</span>
                         </div>
                         <Label className={"custom-label-forum-posting-small-margin"}>Reactions To Post</Label>
-                        <ul className="product-color m-t-15">
-                            <li className="bg-dark emoji-container-forum-react"><img className="gif-reaction" src={require("../../../../assets/gifs/partying.gif")} /></li>
-                            <li className="bg-dark emoji-container-forum-react"><img className="gif-reaction" src={require("../../../../assets/gifs/vomitting.gif")} /></li>
-                            <li className="bg-dark emoji-container-forum-react"><img className="gif-reaction" src={require("../../../../assets/gifs/screaming.gif")} /></li>
-                            <li className="bg-dark emoji-container-forum-react"><img className="gif-reaction" src={require("../../../../assets/gifs/sunglasses.gif")} /></li>
-                            <li className="bg-dark emoji-container-forum-react"><img className="gif-reaction" src={require("../../../../assets/gifs/tearsOfJoy.gif")} /></li>
-                            <li className="bg-dark emoji-container-forum-react"><img className="gif-reaction" src={require("../../../../assets/gifs/steaming.gif")} /></li>
-                        </ul>
+                        <RenderEmojiLogic setReactionCount={setReactionCount} reactions={reactions} comments={forum.subcomments} />
                         <hr/>
                         <Label className={"custom-label-forum-posting"}>Description/Post-Description</Label>
                         <ReactMarkdown children={forum.description} className={"markdown-main-forum-post-desc"} remarkPlugins={[remarkGfm]} />
                         <hr/>
                         <div className="m-t-15">
                             <Button style={{ width: "32.5%" }} color="primary" className="m-r-10" onClick={() => {}} >
-                                <i className="fa fa-shopping-basket mr-1"></i>{"Reply/Leave New Comment"}
+                                {"Reply/Leave New Comment"}
                             </Button>
-                            <Button style={{ width: "32.5%" }} color="success" className="m-r-10" onClick={() => {}}>
-                                <i className="fa fa-shopping-cart mr-1"></i>{"Award Experience Points"}
+                            <Button style={{ width: "32.5%" }} id={"reactionPopoverCustom"} color="success" className="m-r-10" onClick={() => setReactionPopoverState(true)}>
+                                {"React/Respond With Emoji To Post"}
                             </Button>
                             <Button style={{ width: "32.5%" }} color="secondary" onClick={() => {}}>
-                                <i className="fa fa-heart mr-1"></i>{"Report/Moderate"}
+                                {"Report/Moderate"}
                             </Button>
                         </div>
+                        <Popover placement="bottom" isOpen={reactionPopover} target={"reactionPopoverCustom"} toggle={() => {
+                            setReactionPopoverState(false)
+                        }}>
+                        <PopoverHeader>Current Comment Reaction's ({reactionCount} total reaction type's)</PopoverHeader>
+                        <PopoverBody>
+                            <div onMouseLeave={() => {
+                                setReactionPopoverState(false)
+                            }} className={"mouse-exit-close-popover-emojis"}>
+                                <Row>
+                                    <Col className={"course-emoji-col"} sm="2" md="2" lg="2" xl="2">
+                                        <div onClick={() => handleRespondEmoji("sunglasses", setReactionPopoverState)} className={"emoji-wrapper-course"}>
+                                            <img className={"custom-course-emoji-render"} src={require("../../../../assets/gifs/sunglasses.gif")} />
+                                        </div>
+                                    </Col>
+                                    <Col className={"course-emoji-col"} sm="2" md="2" lg="2" xl="2">
+                                        <div onClick={() => handleRespondEmoji("steaming", setReactionPopoverState)} className={"emoji-wrapper-course"}>
+                                            <img className={"custom-course-emoji-render"} src={require("../../../../assets/gifs/steaming.gif")} />
+                                        </div>
+                                    </Col>
+                                    <Col className={"course-emoji-col"} sm="2" md="2" lg="2" xl="2">
+                                        <div onClick={() => handleRespondEmoji("tearsOfJoy", setReactionPopoverState)} className={"emoji-wrapper-course"}>
+                                            <img className={"custom-course-emoji-render"} src={require("../../../../assets/gifs/tearsOfJoy.gif")} />
+                                        </div>
+                                    </Col>
+                                    <Col className={"course-emoji-col"} sm="2" md="2" lg="2" xl="2">
+                                        <div onClick={() => handleRespondEmoji("vomitting", setReactionPopoverState)} className={"emoji-wrapper-course"}>
+                                            <img className={"custom-course-emoji-render"} src={require("../../../../assets/gifs/vomitting.gif")} />
+                                        </div>
+                                    </Col>
+                                    <Col className={"course-emoji-col"} sm="2" md="2" lg="2" xl="2">
+                                        <div onClick={() => handleRespondEmoji("partying", setReactionPopoverState)} className={"emoji-wrapper-course"}>
+                                            <img className={"custom-course-emoji-render"} src={require("../../../../assets/gifs/partying.gif")} />
+                                        </div>
+                                    </Col>
+                                    <Col className={"course-emoji-col"} sm="2" md="2" lg="2" xl="2">
+                                        <div onClick={() => handleRespondEmoji("screaming", setReactionPopoverState)} className={"emoji-wrapper-course"}>
+                                            <img className={"custom-course-emoji-render"} src={require("../../../../assets/gifs/screaming.gif")} />
+                                        </div>
+                                    </Col>
+                                </Row>
+                            </div>
+                        </PopoverBody>
+                    </Popover>
                     </CardBody>
                 </Fragment>
             );
@@ -330,7 +404,6 @@ const IndividualForumHelper = ({ userData }) => {
     console.log("posterData", posterData);
     return (
         <Fragment>
-            <RenderModalSheetAddComment isOpen={isOpen} setOpenState={setOpenState} />
             <Parallax
                 className={"background-parallax-vpn-setup-img"} 
                 bgImage={width >= 1350 ? require('../../../../assets/images/hackerPicOne.jpg') : require('../../../../assets/images/tall-tech.jpg')}
