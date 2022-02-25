@@ -127,3 +127,21 @@
     max-width: 37.5px;
     max-height: 37.5px;
 }
+.scrollable-listitem-group {
+    margin: 22.5px;   
+}
+.community-image-custom {
+    min-width: 100%;
+    object-fit: contain;
+    min-height: 100%;
+}
+.scrollable-listitem-group {
+    max-height: 67.5vh;
+    overflow-y: scroll !important;
+}
+@media only screen and (max-width: 850px) {
+    .scrollable-listitem-group {
+        max-height: 87.5vh;
+        overflow-y: scroll !important;
+    }
+}

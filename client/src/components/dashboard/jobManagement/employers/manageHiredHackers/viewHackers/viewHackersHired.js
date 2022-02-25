@@ -37,14 +37,14 @@ const ViewHiredHackersHelper = ({ userData }) => {
         })
     }, []);
 
-    const viewApplicantProfile = (hackerID) => {
+    const viewApplicantProfile = (hackerID, jobID) => {
 
         history.push(`/hacker/profile/individual/view/${hackerID}`);
     }
-    const manageHiredApplicant = (id) => {
+    const manageHiredApplicant = (id, jobID) => {
         console.log("manageHiredApplicant clicked...:", id);
 
-        history.push(`/manage/individual/hacker/already/hired/${id}`);
+        history.push(`/manage/individual/hacker/already/hired/${id}/${jobID}`);
     }
 
     const renderConditionalUponLoad = () => {
@@ -73,7 +73,7 @@ const ViewHiredHackersHelper = ({ userData }) => {
                                     </Fragment> : null}
                                     <Button onClick={() => viewApplicantProfile(hacker.applicantId)} className={"btn-square-info"} color={"info-2x"} style={{ width: "100%", marginTop: "17.5px", marginBottom: "17.5px" }} outline>View/Visit This Hacker's Profile</Button>
                                     <hr />
-                                    <Button onClick={() => manageHiredApplicant(hacker.id)} className={"btn-square-secondary"} color={"secondary-2x"} style={{ width: "100%", marginTop: "17.5px", marginBottom: "17.5px" }} outline>Manage This Employee/Contractor</Button>
+                                    <Button onClick={() => manageHiredApplicant(hacker.id, hacker.employerPostedJobId)} className={"btn-square-secondary"} color={"secondary-2x"} style={{ width: "100%", marginTop: "17.5px", marginBottom: "17.5px" }} outline>Manage This Employee/Contractor</Button>
                                 </div>
                                 
                             </div>

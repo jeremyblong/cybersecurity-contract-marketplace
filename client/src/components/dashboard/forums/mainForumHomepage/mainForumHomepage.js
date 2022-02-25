@@ -186,75 +186,6 @@ const ForumHomepageMainHelper = ({ userData }) => {
                             </Row>
                                 <div className={"vpn-inner-container"}>
                                     <Row>
-                                        {/* {typeof auctions !== "undefined" && auctions.length > 0 ? auctions.map((auction, index) => {
-                                            console.log("auction", auction);
-
-                                            const progress = Math.floor(Math.random() * (100 - 0 + 1) + 0);
-                                            const random = Math.floor(Math.random() * (500 - 25 + 1) + 25);
-                                            const hashtags = auction.originalListingData.hashtags;
-                                            const secondaryOrNot = (index % 2 === 1) ? true : false;
-
-                                            return (
-                                                <Fragment key={index}>
-                                                    <Col sm="12" md="4" lg="4" xl="4" className="mt-4">
-                                                        <div className={secondaryOrNot === true ? "project-box add-shadow-auction-wrapper-secondary" : "project-box add-shadow-auction-wrapper-info"}>
-                                                            <span className={`badge ${index % 2 === 1 ? 'badge-secondary' : 'badge-info'}`}>{"Bid/Bet On This Auction Listing"}</span>
-                                                            <h6 className="auction-mapped-title">{auction.originalListingData.publicCompanyName}</h6>
-                                                            <div className="media">
-                                                                <img className="img-20 mr-1 rounded-circle" src={require(`../../../../assets/images/user/user.png`)} alt="" />
-                                                            </div>
-                                                            <div className="auction-tags-mapped-wrapper">
-                                                                {typeof hashtags !== "undefined" && hashtags.length > 0 ? hashtags.map((tag, idx) => {
-                                                                    return (
-                                                                        <Fragment key={idx}>
-                                                                            <Badge className="tags-tag-auction-mapped" color={secondaryOrNot === true ? "secondary" : "info"}>{tag.text}</Badge>
-                                                                        </Fragment>
-                                                                    );
-                                                                }) : null}
-                                                            </div>
-                                                            <ReactMarkdown className="markdown-description-auction" children={auction.originalListingData.listingDescription} remarkPlugins={[remarkGfm]} />
-                                                            <Row className="details">
-                                                                <Col xs="10" lg="10" xl="10" md="10"><span className="span-betting">Current Active Bids/Bets </span></Col>
-                                                                <Col xs="2" lg="2" xl="2" md="2" className={"spacer-col-span-auction"}><span className={secondaryOrNot === true ? 'text-secondary-custom' : 'text-info-custom'}>{random}</span></Col>
-                                                                <Col xs="10" lg="10" xl="10" md="10"><span className="span-betting">Total Participant's (Betting Related)</span></Col>
-                                                                <Col xs="2" lg="2" xl="2" md="2" className={"spacer-col-span-auction"}><span className={secondaryOrNot === true ? 'text-secondary-custom' : 'text-info-custom'}>{random}</span></Col>
-                                                                <Col xs="10" lg="10" xl="10" md="10"> <span className="span-betting">Total Cumlative Bids/Bets (Activity)</span></Col>
-                                                                <Col xs="2" lg="2" xl="2" md="2" className={"spacer-col-span-auction"}><span className={secondaryOrNot === true ? 'text-secondary-custom' : 'text-info-custom'}>{auction.allBids.length}</span></Col>
-                                                                <Col xs="10" lg="10" xl="10" md="10"> <span className="span-betting"># Of Hacker's Participating</span></Col>
-                                                                <Col xs="2" lg="2" xl="2" md="2" className={"spacer-col-span-auction"}><span className={secondaryOrNot === true ? 'text-secondary-custom' : 'text-info-custom'}>{auction.hiredHackers.length}</span></Col>
-                                                            </Row>
-                                                            <div className="customers">
-                                                            <ul>
-                                                                <li className="d-inline-block"><img className="img-30 rounded-circle" src={require(`../../../../assets/images/user/2.png`)} alt="" /></li>
-                                                                <li className="d-inline-block"><img className="img-30 rounded-circle" src={require(`../../../../assets/images/user/3.png`)} alt="" /></li>
-                                                                <li className="d-inline-block"><img className="img-30 rounded-circle" src={require(`../../../../assets/images/user/user.png`)} alt="" /></li>
-                                                                <li className="d-inline-block ml-2">
-                                                                <p className="f-12">{`+${auction.totalParticipants.length} More`}</p>
-                                                                </li>
-                                                            </ul>
-                                                            </div>
-                                                            <div className="project-status mt-4">
-                                                            <div className="media mb-0">
-                                                                <p className={secondaryOrNot === true ? "remove-bold-restyle-auction-left-secondary" : "remove-bold-restyle-auction-left-info"}>{progress} Day's Left... </p>
-                                                                <div className="media-body text-right"><span>Time Remaining To Bid</span></div>
-                                                            </div>
-                                                            {progress === "100" ?
-                                                                <Progress className="sm-progress-bar progress-bar-animated" striped color={secondaryOrNot === true ? "secondary" : "info"} value={progress} style={{ height: "7.5px" }} />
-                                                                :
-                                                                <Progress className="sm-progress-bar progress-bar-animated" striped color={secondaryOrNot === true ? "secondary" : "info"} value={progress} style={{ height: "7.5px" }} />
-                                                            }
-
-                                                            </div>
-                                                            <div className="centered-both-ways bottom-container-auction">
-                                                                <Button onClick={() => {
-                                                                    history.push(`/individual/betting/gambling/listing/${auction.id}`)
-                                                                }} className={secondaryOrNot === true ? "btn-square-secondary" : "btn-square-info"} outline color={secondaryOrNot === true ? "secondary-2x" : "info-2x"} style={{ width: "82.5%" }}>View Auction Data/Listing</Button>
-                                                            </div>
-                                                        </div>
-                                                    </Col>
-                                                </Fragment>
-                                            );
-                                        }) : null} */}
                                         <div className="grey-back-forum">
                                             <ListGroup>
                                                 {ready === true && typeof forums !== "undefined" && forums.length > 0 ? forums.map((forum, index) => {
@@ -337,7 +268,7 @@ const ForumHomepageMainHelper = ({ userData }) => {
                                                                     <Col sm="1" lg="1" md="1" xl="1">
                                                                         <div className="react-up-down-forum-wrapper">
                                                                             <img src={require("../../../../assets/icons/up.png")} className={"react-icon-forum"} />
-                                                                            <h6 className="reaction-count-forum">{forum.likes}/{forum.dislikes} {`\n`}likes/dislikes</h6>
+                                                                            <h6 className="reaction-count-forum"><strong style={{ color: "green" }}>{lastThread.likes.length}</strong>/<strong style={{ color: "red" }}>{lastThread.dislikes.length}</strong> {`\n`}likes/dislikes</h6>
                                                                             <img src={require("../../../../assets/icons/down.png")} className={"react-icon-forum"} />
                                                                         </div>
                                                                     </Col>

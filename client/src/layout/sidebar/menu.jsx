@@ -18,7 +18,8 @@ export const MENUITEMS = [
             {
                 title: `Manage Application's, Job Data & Other Related`, icon: Home, type: 'sub', active: false, children: [
                     { path: `${process.env.PUBLIC_URL}/already/applied/jobs/hacker/account`, title: `Already Applied Job's`, type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/`, title: `Notification's`, type: 'link' }
+                    { path: `${process.env.PUBLIC_URL}/`, title: `Notification's`, type: 'link' },
+                    { path: `${process.env.PUBLIC_URL}/hackers/display/all/active/gigs/hired`, title: "Hired/Active Gigs Employed Upon", type: "link" }
                     // { path: `${process.env.PUBLIC_URL}/`, title: `ACTIVE Jobs You Employed On`, type: 'link' },
                     // { path: `${process.env.PUBLIC_URL}/`, title: 'NOT-DEFINED-YET', type: 'link' },
                     // { path: `${process.env.PUBLIC_URL}/`, title: 'NOT-DEFINED-YET', type: 'link' },
@@ -186,8 +187,9 @@ export const MENUITEMS = [
             },
             {
                 title: 'Payment Related Actions/Options', icon: Bell, type: 'sub',active: false, children: [
-                    { path: `${process.env.PUBLIC_URL}/payment/logic/main/page/all`, title: `Payment(s) Homepage/Main`, type: 'link' }
-                    // { path: `${process.env.PUBLIC_URL}/`, title: "Payment Main/Homepage", type: 'link' }
+                    { path: `${process.env.PUBLIC_URL}/payment/logic/main/page/hackers`, title: `Hacker's Payment(s) Homepage/Main`, type: 'link' },
+                    { path: `${process.env.PUBLIC_URL}/payment/logic/main/page/employers`, title: `Employer's Payment(s) Homepage/Main`, type: 'link' },
+                    { path: `${process.env.PUBLIC_URL}/employer/account/signup/flow/payment/related`, title: "Payment Set-up BEFORE any LIVE payment's", type: 'link' }
                 ]
             }
         ]          

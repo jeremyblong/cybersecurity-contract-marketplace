@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { CardBody, CardHeader, Card, Row, Container, Col, Button, ListGroup, InputGroupText, ListGroupItem, TabContent, TabPane, Input, FormGroup, InputGroup, InputGroupAddon, Label, Media, Tooltip } from "reactstrap";
+import { CardBody, CardHeader, Card, Row, Container, Col, Button, ListGroup, InputGroupText, ListGroupItem, TabContent, TabPane, Input, FormGroup, InputGroup, InputGroupAddon, Label, Media } from "reactstrap";
 import "./styles.css";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
@@ -9,6 +9,8 @@ import moment from "moment";
 import ImageUploader from 'react-images-upload';
 import { NotificationManager } from "react-notifications";
 import uuid from "react-uuid";
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+
 
 const CreateACommunityForumRelatedHelper = ({ userData, openPaneSheet, setOptions, setProgress }) => {
     const [ activeTab, setActiveTab ] = useState("1");
@@ -362,7 +364,69 @@ const CreateACommunityForumRelatedHelper = ({ userData, openPaneSheet, setOption
         </Fragment>
     );
 };
+const PaneSheetOpenTwoHelper = ({ handleGroupCommunitySelection }) => {
+    const [ communities, setCommunties ] = useState([]);
 
+    useEffect(() => {
+        const configuration = {
+            params: {
+                alreadyPooled: []
+            }
+        }
+        axios.get(`${process.env.REACT_APP_BASE_URL}/gather/communities/list`, configuration).then((res) => {
+            if (res.data.message === "Successfully gathered communities!") {
+                console.log("success", res.data);
+
+                const { communities } = res.data;
+
+                setCommunties(communities);
+            } else {
+                console.log("errrrrr", res.data);
+            }
+        }).catch((err) => {
+            console.log("ERr", err);
+        })
+    }, [])
+
+    const renderCommunityImage = (community) => {
+        return `${process.env.REACT_APP_ASSET_LINK}/${community.communityMainPic.link}`;
+    }
+    return (
+        <Fragment>
+            <div className="scrollable-listitem-group">
+                <ListGroup>
+                    {typeof communities !== "undefined" && communities.length > 0 ? communities.map((community, idx) => {
+                        return (
+                            <Fragment key={idx}>
+                                <ListGroupItem onClick={() => handleGroupCommunitySelection(community)} className="list-group-item-action flex-column align-items-start">
+                                    <Row>
+                                        <Col sm="1" lg="1" md="1" xl="1">
+                                            <img src={renderCommunityImage(community)} className={"community-image-custom"} />
+                                        </Col>
+                                        <Col sm="11" lg="11" md="11" xl="11">
+                                            <div className="d-flex w-100 justify-content-between">
+                                                <h5 className="mb-1">c/{community.communityName}</h5><small>{`${community.likes}/${community.dislikes} ~ Likes/Dislikes`}</small>
+                                            </div>
+                                            <p className="mb-1">{`This group/community has approximately ${community.members.length} member's & approximately ${community.subthreads.length} total sub-threads within this community!`}</p>
+                                            <small>Community Visibility: {community.groupVisibility}</small>
+                                        </Col>
+                                    </Row>
+                                </ListGroupItem>
+                            </Fragment>
+                        );
+                    }) : <Fragment>
+                        <SkeletonTheme baseColor="#c9c9c9" highlightColor="#444">
+                        <p>
+                            <Skeleton count={45} />
+                        </p>
+                    </SkeletonTheme>
+                    </Fragment>}
+                </ListGroup>
+            </div>
+        </Fragment>
+    );
+}
 export default {
-    CreateACommunityForumRelatedHelper
+    CreateACommunityForumRelatedHelper,
+    PaneSheetOpenTwoHelper
 };

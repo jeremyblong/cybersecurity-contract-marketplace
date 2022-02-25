@@ -47,8 +47,13 @@ import ForumHomepageMainPage from "../pages/dashboard/forums/mainForumHomepage/m
 import IndividualForumPage from "../pages/dashboard/forums/individualForum/individual.js";
 import MainFAQHackerPage from "../pages/dashboard/FAQ/hackers/mainFAQ/index.js";
 import MainFAQEmployerPage from "../pages/dashboard/FAQ/employers/mainFAQ/index.js";
-import PaymentMethodsAddNewPaymentMethodPage from "../pages/dashboard/paymentLogic/mainPaymentLogic/mainPaymentPage.js";
+import PaymentMethodsAddNewPaymentMethodPage from "../pages/dashboard/paymentLogic/hackers/mainPaymentLogic/mainPaymentPage.js";
 import CreateNewForumPostingPage from "../pages/dashboard/forums/createNewForumPost/createNewForumPost.js";
+import MainPaymentSelectionPage from "../pages/dashboard/jobManagement/employers/manageHiredHackers/paymentRelated/mainSelection/index.js";
+import ViewLiveActivehiredJobsGigsDisplayPage from "../pages/dashboard/jobManagement/hackers/liveHiredGigsActive/viewLiveHiredActiveGigs.js";
+import PaymentMethodsAddNewPaymentMethodEmployerPage from "../pages/dashboard/paymentLogic/employers/mainPaymentLogic/mainPaymentPage.js";
+import MainOnboardingFlowPage from "../pages/dashboard/paymentLogic/employers/onboardingFlow/mainOnboardingFlow.js";
+import SuccessfulOnboardCompletionPage from "../pages/dashboard/paymentLogic/employers/onboardingFlow/successfulOnboardConfirmation/success.js";
 
 export const routes = [
         { path:"/profile/settings/edit", Component: GeneralSettingsPage },
@@ -95,11 +100,16 @@ export const routes = [
         { path: "/view/as/hacker/view/bookmarked/profiles/hacker/accounts", Component: BookmarkedHackerAccountsAsHackerPage },
         { path: "/view/as/hacker/bookmarked/profiles/employer/accounts", Component: BookmarkedEmployerAccountsAsHackerPage },
         { path: "/create/new/post/hacker/profile/main/data", Component: CreateNewHackerProfileContentPostPage },
-        { path: "/manage/individual/hacker/already/hired/:id", Component: ManageIndividualHackerAlreadyHiredPage },
+        { path: "/manage/individual/hacker/already/hired/:id/:jobid", Component: ManageIndividualHackerAlreadyHiredPage },
         { path: "/forum/main/homepage", Component: ForumHomepageMainPage },
         { path: "/individual/forum/subthread/:id/:poster", Component: IndividualForumPage }, 
         { path: "/frequently/asked/questions/main/hacker", Component: MainFAQHackerPage },
         { path: "/frequently/asked/questions/main/employer", Component: MainFAQEmployerPage },
-        { path: "/payment/logic/main/page/all", Component: PaymentMethodsAddNewPaymentMethodPage },
-        { path: "/create/new/forum/post", Component: CreateNewForumPostingPage }
+        { path: "/payment/logic/main/page/hackers", Component: PaymentMethodsAddNewPaymentMethodPage },
+        { path: "/create/new/forum/post", Component: CreateNewForumPostingPage },
+        { path: "/payments/employer/account/manage/pay/hacker/:id", Component: MainPaymentSelectionPage },
+        { path: "/hackers/display/all/active/gigs/hired", Component: ViewLiveActivehiredJobsGigsDisplayPage },
+        { path: "/payment/logic/main/page/employers", Component: PaymentMethodsAddNewPaymentMethodEmployerPage },
+        { path: "/employer/account/signup/flow/payment/related", Component: MainOnboardingFlowPage },
+        { path: "/successful/onboarding/process/stripe/employer/account", Component: SuccessfulOnboardCompletionPage }
 ]; 

@@ -1,0 +1,17 @@
+.very-tall-completion-onboarding-image { 
+    min-width: 100%;
+    min-height: 100%;
+    padding: 125px;
+    border: 5px solid black;
+    background: rgb(247,49,100);
+    background: linear-gradient(90deg, rgba(247,49,100,1) 0%, rgba(115,102,255,1) 35%, rgba(0,212,255,1) 100%);
+}
+@media only screen and (max-width: 875px) {
+    .very-tall-completion-onboarding-image { 
+        min-width: 100%;
+        min-height: 100%;
+        background: rgb(247,49,100);
+        background: linear-gradient(90deg, rgba(247,49,100,1) 0%, rgba(115,102,255,1) 35%, rgba(0,212,255,1) 100%);
+        padding: 12.5px !important;
+    }
+}

@@ -378,7 +378,7 @@ const RenderEmojiLogic = ({ setReactionCount, reactions, comments }) => {
         console.log("customEmojiArr POSSIBLE Problem --- :", customEmojiArr);
 
         emojiArrayResponded(customEmojiArr);
-    });
+    }, [reactions]);
 
     return (
         <ul className="product-color m-t-15">

@@ -33,7 +33,7 @@ router.post("/", (req, resppppp, next) => {
         cardType
     }
 
-    collection.findOneAndUpdate({ uniqueId: hackerID }, { $push: { paymentMethods: newPaymentAddition }}, async (err, result) => {
+    collection.findOneAndUpdate({ uniqueId: hackerID }, { $addToSet: { paymentMethods: newPaymentAddition }}, { returnOriginal: false }, async (err, result) => {
         if (err) {
             console.log(err);
         } else {

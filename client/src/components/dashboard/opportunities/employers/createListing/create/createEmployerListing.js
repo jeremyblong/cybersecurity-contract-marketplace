@@ -924,7 +924,7 @@ const CreateJobListingMainHelper = (props) => {
                                                                         <InputGroup>
                                                                         <Input onChange={(e) => {
                                                                             changeBountyPrices(e, "lowSeverity", asset);
-                                                                        }} value={asset.lowSeverity} className="form-control" type="text" placeholder="Average Cash($) Reward Price" aria-label="Average Cash($) Reward Price"/>
+                                                                        }} value={asset.lowSeverity} className="form-control" type="number" placeholder="Average Cash($) Reward Price" aria-label="Average Cash($) Reward Price"/>
                                                                         </InputGroup>
                                                                     </FormGroup>
                                                                 </Col>
@@ -934,7 +934,7 @@ const CreateJobListingMainHelper = (props) => {
                                                                         <InputGroup>
                                                                         <Input onChange={(e) => {
                                                                             changeBountyPrices(e, "mediumSeverity", asset);
-                                                                        }} value={asset.mediumSeverity} className="form-control" type="text" placeholder="Average Cash($) Reward Price" aria-label="Average Cash($) Reward Price"/>
+                                                                        }} value={asset.mediumSeverity} className="form-control" type="number" placeholder="Average Cash($) Reward Price" aria-label="Average Cash($) Reward Price"/>
                                                                         </InputGroup>
                                                                     </FormGroup>
                                                                 </Col>
@@ -944,7 +944,7 @@ const CreateJobListingMainHelper = (props) => {
                                                                         <InputGroup>
                                                                         <Input onChange={(e) => {
                                                                             changeBountyPrices(e, "highSeverity", asset);
-                                                                        }} value={asset.highSeverity} className="form-control" type="text" placeholder="Average Cash($) Reward Price" aria-label="Average Cash($) Reward Price"/>
+                                                                        }} value={asset.highSeverity} className="form-control" type="number" placeholder="Average Cash($) Reward Price" aria-label="Average Cash($) Reward Price"/>
                                                                         </InputGroup>
                                                                     </FormGroup>
                                                                 </Col>
@@ -954,7 +954,7 @@ const CreateJobListingMainHelper = (props) => {
                                                                         <InputGroup>
                                                                         <Input onChange={(e) => {
                                                                             changeBountyPrices(e, "criticalSeverity", asset);
-                                                                        }} value={asset.criticalSeverity} className="form-control" type="text" placeholder="Average Cash($) Reward Price" aria-label="Average Cash($) Reward Price"/>
+                                                                        }} value={asset.criticalSeverity} className="form-control" type="number" placeholder="Average Cash($) Reward Price" aria-label="Average Cash($) Reward Price"/>
                                                                         </InputGroup>
                                                                     </FormGroup>
                                                                 </Col>

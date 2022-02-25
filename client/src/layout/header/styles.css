@@ -20,3 +20,8 @@
 .blue-medium-border-addition {
     border: 2.25px solid #7366ff;
 }
+@media only screen and (max-width: 875px) {
+    .logo-wrapper {
+        min-height: 100px !important;
+    }
+}

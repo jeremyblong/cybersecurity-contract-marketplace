@@ -6,8 +6,11 @@ const axios = require("axios");
 const config = require("config");
 const { v4: uuidv4 } = require('uuid');
 const moment = require("moment");
+const ArchivedListing = require("../../../../schemas/listings/employer/archive/archiveListingEnding.js");
 
-router.post("/", (req, resppppp, next) => {
+
+
+router.post("/", async (req, resppppp, next) => {
     
     const { 
         applicantID,
@@ -18,6 +21,7 @@ router.post("/", (req, resppppp, next) => {
     } = req.body;
 
     const employerCollection = Connection.db.db("db").collection("employers");
+    const archivedCollectionListing = await Connection.db.db("db").collection("archivedemployerlistings");
 
     employerCollection.findOne({ uniqueId: employerID }).then((employer) => {
         if (!employer) {
@@ -120,10 +124,36 @@ router.post("/", (req, resppppp, next) => {
                                             err: savingError
                                         })
                                     } else {
-                                        resppppp.json({
-                                            message: "Successfully hired applicant for position/listing!",
-                                            result
-                                        }) 
+
+                                        if (archivedCollectionListing === null) {
+
+                                            console.log("NOT archived - archive listing!");
+
+                                            const newArchivedListing = new ArchivedListing(listing);
+
+                                            newArchivedListing.save((errrrrrrrrr, completed) => {
+                                                if (errrrrrrrrr) {
+                                                    console.log(errrrrrrrrr);
+
+                                                    resppppp.json({
+                                                        message: "Critical error occurred while attempting to save/archive data...",
+                                                        err: errrrrrrrrr
+                                                    })
+                                                } else {
+                                                    resppppp.json({
+                                                        message: "Successfully hired applicant for position/listing!",
+                                                        result
+                                                    });
+                                                }
+                                            })
+                                        } else {
+                                            console.log("already archived - do nothing!");
+
+                                            resppppp.json({
+                                                message: "Successfully hired applicant for position/listing!",
+                                                result
+                                            });
+                                        }
                                     }
                                 })
                             }).catch((err) => {
@@ -207,10 +237,36 @@ router.post("/", (req, resppppp, next) => {
                                                 err: savingError
                                             })
                                         } else {
-                                            resppppp.json({
-                                                message: "Successfully hired applicant for position/listing!",
-                                                result
-                                            });
+
+                                            if (archivedCollectionListing === null) {
+
+                                                console.log("NOT archived - archive listing!");
+
+                                                const newArchivedListing = new ArchivedListing(listing);
+
+                                                newArchivedListing.save((errrrrrrrrr, completed) => {
+                                                    if (errrrrrrrrr) {
+                                                        console.log(errrrrrrrrr);
+
+                                                        resppppp.json({
+                                                            message: "Critical error occurred while attempting to save/archive data...",
+                                                            err: errrrrrrrrr
+                                                        })
+                                                    } else {
+                                                        resppppp.json({
+                                                            message: "Successfully hired applicant for position/listing!",
+                                                            result
+                                                        });
+                                                    }
+                                                })
+                                            } else {
+                                                console.log("already archived - do nothing!");
+
+                                                resppppp.json({
+                                                    message: "Successfully hired applicant for position/listing!",
+                                                    result
+                                                });
+                                            }
                                         }
                                     })
                                 } else {

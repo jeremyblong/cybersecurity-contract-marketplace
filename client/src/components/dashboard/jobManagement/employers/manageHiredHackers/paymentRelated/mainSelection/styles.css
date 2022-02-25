@@ -1,0 +1,16 @@
+.create-padding-input-payment {
+    padding: 5px 12.5px;
+    width: 100% !important;
+}
+.heavy-p {
+    font-weight: 425 !important;
+}
+.min-col-styled {
+    min-width: 100% !important;
+}
+.desc-desc-hiring-markdown {
+    max-height: 325px;
+    overflow-y: scroll;
+    border: 2px solid lightgrey;
+    padding: 5px 12.5px;
+}

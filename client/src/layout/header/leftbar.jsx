@@ -223,7 +223,7 @@ const Leftbar = (props) => {
                 </Container>
             </div>
           </li>
-          <li className="level-menu outside"><a className={levelMenu ? "nav-link active" : "nav-link"} href={null} onClick={() => OnLevelMenu(levelMenu)}><Inbox/><span>Account Specific</span></a>
+          {/* <li className="level-menu outside"><a className={levelMenu ? "nav-link active" : "nav-link"} href={null} onClick={() => OnLevelMenu(levelMenu)}><Inbox/><span>Account Specific</span></a>
             <ul className="header-level-menu menu-to-be-close" style={levelMenu ? { display: "" } : { display: "none" }}>
               <li><GitPullRequest/><span>{FileManager}</span></li>
               <li><a href={null}><Users/><span>{"Users"}</span></a>
@@ -237,7 +237,7 @@ const Leftbar = (props) => {
               <li><Heart/><span>{Bookmark}</span></li>
               <li><Zap/><span>{SocialApp}</span></li>
             </ul>
-          </li>
+          </li> */}
         </ul>
       </Col>
     </Fragment>

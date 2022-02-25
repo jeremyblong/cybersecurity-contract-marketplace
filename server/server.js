@@ -166,6 +166,17 @@ app.use("/gather/forum/comments/subthread/individual", require("./routes/shared/
 app.use("/post/new/comment/forums/subthread/subcomment", require("./routes/shared/forumRelated/commentRelated/postNewComment/postNewCommentSubthread.js"));
 app.use("/post/subcomment/comment/forum/listing", require("./routes/shared/forumRelated/commentRelated/postNewComment/subcomment/postNewComment.js"));
 app.use("/react/thread/with/emoji", require("./routes/shared/forumRelated/emojiRelated/reactWithEmojiMainPost.js"));
+app.use("/gather/communities/list", require("./routes/shared/forumRelated/communityRelated/gatherRandomCommunities/gatherRandomizedCommunities.js"));
+app.use("/like/forum/listing/individual/responder", require("./routes/shared/forumRelated/likesDislikes/likes/likeForumPostAndNotifyOwner.js"));
+app.use("/disliked/forum/listing/individual/responder", require("./routes/shared/forumRelated/likesDislikes/dislikes/dislikeForumPostAndNotifyOwner.js"));
+app.use("/gather/active/hired/jobs/list/full", require("./routes/hackers/hiredRelatedLogic/fetchAllHiredListings/fetchListings.js"));
+app.use("/gather/core/employer/data/related/hacking/gig", require("./routes/hackers/hiredRelatedLogic/fetchAllHiredListings/fetchEmployerRelatedData/fetchEmployerDataRestricted.js"));
+app.use("/gather/archived/and/live/employer/listing", require("./routes/employers/employerListings/archived/gatherArchivedListing/gatherListingInfo.js"));
+app.use("/notify/user/request/update/hacker", require("./routes/employers/employerListings/requestUpdateHacker/notifiyHackerRequestUpdate/requestUpdateFromHacker.js"));
+app.use("/add/new/payment/method/employer", require("./routes/employers/paymentRelated/addNewPaymentMethod/addNewMethod.js"));
+app.use("/gather/onboarding/stripe/link/data", require("./routes/employers/onboardingStripe/initiateOnboarding/initiateFetchLinks.js"));
+app.use("/check/account/mark/verified/applicable/employer", require("./routes/employers/onboardingStripe/checkMarkCompleteApplicable/checkAndMarkIfSo.js"));
+
 
 // ~ webhook logic STARTS here ~
 app.use("/passbase/webhook", require("./webhooks/passbase/webhook.js"));

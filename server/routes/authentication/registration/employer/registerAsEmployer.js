@@ -73,7 +73,8 @@ router.post("/", async (req, res) => {
           bookmarkedProfiles: [],
           profileLovesHearts: [],
           currentlyFollowedBy: [],
-          stripeAccountDetails: accountData
+          stripeAccountDetails: accountData,
+          stripeAccountVerified: false
         }), password, async (err, user) => {
           if (err) {
               console.log(err);

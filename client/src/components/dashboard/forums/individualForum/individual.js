@@ -103,23 +103,12 @@ const IndividualForumHelper = ({ userData }) => {
     
     const { id, poster } = useParams();
 
-    const symbol = "$";
-    const singleItem = {
-        price: "55.99",
-        discountPrice: "34.99",
-        stock: "11"
-    };
-
     useEffect(() => {
         setState({
             nav1: slider1.current,
             nav2: slider2.current
         });
-      } ,[]);
-
-    const changeRating = (rating) => {
-        setRating(rating);
-    }
+    } ,[]);
 
     console.log("lastThreadID", id, poster);
 
@@ -199,7 +188,94 @@ const IndividualForumHelper = ({ userData }) => {
             console.log("Err critical", err);
         })
     }
+    const handleLikeForumPostAddition = () => {
+        console.log("handleLikeForumPostAddition clicked.");
 
+        const config = {
+            signedinUserID: userData.uniqueId,
+            communitityID: forum.id
+        }
+
+        axios.post(`${process.env.REACT_APP_BASE_URL}/like/forum/listing/individual/responder`, config).then((res) => {
+            if (res.data.message === "Successfully liked this forum post!" || res.data.message === "Successfully removed response from post!") {
+
+                console.log(res.data);
+
+                const { updated, likes } = res.data;
+
+                if (likes === true) {
+                    setForum(prevState => {
+                        return {
+                            ...prevState,
+                            likes: updated
+                        }
+                    });
+                } else {
+                    setForum(prevState => {
+                        return {
+                            ...prevState,
+                            dislikes: updated
+                        }
+                    });
+                }
+
+                NotificationManager.success("You've successfully 'reacted/liked' this post (IF you've already reacted to this post then we have removed your previous action & taken no action on this latest reaction - react again if you want to re-react)! We have updated the relevant information and made the appropriate changes!", "Successfully reacted to post!", 4750);
+                
+            } else {
+                console.log("Err", res.data);
+
+                NotificationManager.error("An error occurred while attempting to react to this post with a like, if this problem persists please contact support or try the action again!", "Error attempting to react to post!", 4750);
+            }
+        }).catch((err) => {
+            NotificationManager.error("An error occurred while attempting to react to this post with a like, if this problem persists please contact support or try the action again!", "Error attempting to react to post!", 4750);
+
+            console.log("Err critical", err);
+        })
+    }
+    const handleDislikeForumPostAddition = () => {
+        console.log("handleDislikeForumPostAddition clicked.");
+
+        const config = {
+            signedinUserID: userData.uniqueId,
+            communitityID: forum.id
+        }
+
+        axios.post(`${process.env.REACT_APP_BASE_URL}/disliked/forum/listing/individual/responder`, config).then((res) => {
+            if (res.data.message === "Successfully disliked this forum post!" || res.data.message === "Successfully removed response from post!") {
+
+                console.log(res.data);
+
+                const { updated, likes } = res.data;
+
+                if (likes === true) {
+                    setForum(prevState => {
+                        return {
+                            ...prevState,
+                            likes: updated
+                        }
+                    });
+                } else {
+                    setForum(prevState => {
+                        return {
+                            ...prevState,
+                            dislikes: updated
+                        }
+                    });
+                }
+
+                NotificationManager.success("You've successfully 'reacted/disliked' this post (IF you've already reacted to this post then we have removed your previous action & taken no action on this latest reaction - react again if you want to re-react)! We have updated the relevant information and made the appropriate changes!", "Successfully reacted to post!", 4750);
+                
+            } else {
+                console.log("Err", res.data);
+
+                NotificationManager.error("An error occurred while attempting to react to this post with a dislike, if this problem persists please contact support or try the action again!", "Error attempting to react to post!", 4750);
+            }
+        }).catch((err) => {
+            NotificationManager.error("An error occurred while attempting to react to this post with a dislike, if this problem persists please contact support or try the action again!", "Error attempting to react to post!", 4750);
+
+            console.log("Err critical", err);
+        })
+    }
     const renderMainContentConditionally = () => {
         if (forum !== null && ready === true) {
             return (
@@ -264,7 +340,7 @@ const IndividualForumHelper = ({ userData }) => {
                                                         <li>Username: {`${posterData.username}`}</li>
                                                         <li>Memeber Since: {moment(posterData.registrationDate).fromNow()}</li>
                                                         <li>User Born: {moment(posterData.birthdate).fromNow()}</li>
-                                                        <li>Gender: {posterData.gender.label}</li>
+                                                        <li>Gender: {_.has(posterData, "gender") ? posterData.gender.label : "No Gender Provided."}</li>
                                                     </ul>
                                                 </div>
                                             </CardBody>
@@ -280,7 +356,7 @@ const IndividualForumHelper = ({ userData }) => {
                                                             <div className="media"><Truck/>
                                                             <div className="media-body">
                                                                 <h5>{"Total Comments"}</h5>
-                                                                <p>{forum.subcomments.length}</p>
+                                                                <p>{typeof forum.subcomments !== "undefined" ? forum.subcomments.length : "Loading/Not-Provided."}</p>
                                                             </div>
                                                             </div>
                                                         </li>
@@ -321,7 +397,7 @@ const IndividualForumHelper = ({ userData }) => {
                             <h3>{forum.title}</h3>
                         </div>
                         <div className="product-price f-28">
-                            <span className="underline-counts"><span className="green-text">{forum.likes.length}</span> <span style={{ color: "black" }}>/ </span><span className="danger-dislikes">{forum.dislikes.length}</span></span><span className="smaller-ledger">likes/dislikes</span>
+                            <span className="underline-counts"><span className="green-text">{typeof forum.likes !== "undefined" ? forum.likes.length : "---"}</span> <span style={{ color: "black" }}>/ </span><span className="danger-dislikes">{typeof forum.dislikes !== "undefined" ? forum.dislikes.length : "---"}</span></span><span className="smaller-ledger">likes/dislikes</span>
                         </div>
                         <Label className={"custom-label-forum-posting-small-margin"}>Reactions To Post</Label>
                         <RenderEmojiLogic setReactionCount={setReactionCount} reactions={reactions} comments={forum.subcomments} />
@@ -330,13 +406,16 @@ const IndividualForumHelper = ({ userData }) => {
                         <ReactMarkdown children={forum.description} className={"markdown-main-forum-post-desc"} remarkPlugins={[remarkGfm]} />
                         <hr/>
                         <div className="m-t-15">
-                            <Button style={{ width: "32.5%" }} color="primary" className="m-r-10" onClick={() => {}} >
-                                {"Reply/Leave New Comment"}
+                            <Button style={{ width: "16.25%" }} color="success" className="m-r-10" onClick={() => handleLikeForumPostAddition()} >
+                                {"Like This Post"}
                             </Button>
-                            <Button style={{ width: "32.5%" }} id={"reactionPopoverCustom"} color="success" className="m-r-10" onClick={() => setReactionPopoverState(true)}>
+                            <Button style={{ width: "16.25%" }} color="danger" className="m-r-10" onClick={() => handleDislikeForumPostAddition()} >
+                                {"Dislike This Post"}
+                            </Button>
+                            <Button style={{ width: "32.5%" }} id={"reactionPopoverCustom"} color="info" className="m-r-10" onClick={() => setReactionPopoverState(true)}>
                                 {"React/Respond With Emoji To Post"}
                             </Button>
-                            <Button style={{ width: "32.5%" }} color="secondary" onClick={() => {}}>
+                            <Button style={{ width: "32.5%" }} color="primary" onClick={() => {}}>
                                 {"Report/Moderate"}
                             </Button>
                         </div>

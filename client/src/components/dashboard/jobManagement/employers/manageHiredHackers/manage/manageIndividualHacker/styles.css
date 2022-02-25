@@ -8,6 +8,7 @@
 .counter-custom-hired-account {
     position: absolute;
     bottom: 35px;
+    color: white !important;
     text-decoration-line: underline;
     font-weight: 525;
     left: 32.5px;
@@ -16,4 +17,64 @@
 .bordered-shadowed-card {
     box-shadow: 0 0.25rem 1.5rem rgba(0, 0, 0, 0.248);
     min-height: 225px;
+}
+.fire-employee-wrapper {
+    box-shadow: 0 0.25rem 1.5rem rgba(0, 0, 0, 0.15);
+    border: 2px dotted grey;
+    padding: 32.5px 50px;
+    min-height: 304px !important;
+}
+.request-update-employee-wrapper {
+    box-shadow: 0 0.25rem 1.5rem rgba(0, 0, 0, 0.15);
+    border: 2px dotted grey;
+    padding: 32.5px 50px;
+}
+.mega-badge-heavy-update {
+    text-decoration-line: underline;
+    font-size: 1.225rem;
+}
+.digits-smaller-subsized-update {
+    font-size: 0.775rem !important;
+}
+.payment-card-actions-shadow-wrapper {
+    box-shadow: 0 0.25rem 1.5rem rgba(0, 0, 0, 0.15);
+    border: 2px dotted grey;
+}
+.stretch-all-way-seemore {
+    min-width: 100% !important;
+}
+.markdown-desc-hired {
+    min-width: 100%;
+    max-height: 225px !important;
+    overflow-y: scroll;
+    padding: 7.5px 12.5px;
+    border: 2.25px solid lightgrey;
+    margin-bottom: 17.5px;
+}
+.label-hired-user {
+    text-decoration-line: underline;
+    font-weight: 500 !important;
+    font-size: 1.275rem;
+    color: #7366ff;
+}
+.leftalign-text-hired {
+    text-align: left;
+    font-size: 1.25rem;
+}
+.daterange-individual-hired {
+    max-width: 100% !important;
+}
+.business-address-hired {
+    font-weight: bold;
+    font-size: 1.075rem !important;
+}
+.bordered-slightly-badge-light {
+    border: 1.50px solid black;
+}
+.absolute-right-hired {
+    position: absolute;
+    right: 12.5px;
+}
+.completion-date-hired {
+
 }

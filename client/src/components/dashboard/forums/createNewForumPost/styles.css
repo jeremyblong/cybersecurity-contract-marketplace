@@ -23,6 +23,9 @@
     min-height: 87.5vh;
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.295) !important;
 }
+.position-right-actually-create-group-btn {
+    min-width: 100%;
+}
 .position-right-create-group-btn {
     margin-left: 0px;
 }

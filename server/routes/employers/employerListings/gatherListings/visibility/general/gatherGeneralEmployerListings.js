@@ -6,7 +6,7 @@ router.get("/", (req, resppppp, next) => {
 
     const collection = Connection.db.db("db").collection("employerlistings");
 
-    collection.find({ }).toArray((err, listings) => {
+    collection.aggregate({ $sample: { size: 50 }}).toArray((err, listings) => {
         if (err) {
             console.log(err);
 

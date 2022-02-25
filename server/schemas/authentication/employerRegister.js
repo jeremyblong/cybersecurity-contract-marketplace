@@ -22,6 +22,9 @@ const UserSchema =  new Schema({
         type: String,
         default: ""
     }, 
+    stripeAccountVerified: {
+        type: Boolean
+    },
     stripeAccountDetails: {
         type: Object
     },

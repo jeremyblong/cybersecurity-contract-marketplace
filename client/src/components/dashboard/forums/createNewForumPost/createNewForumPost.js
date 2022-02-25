@@ -14,7 +14,7 @@ import { NotificationManager } from "react-notifications";
 import { useHistory } from "react-router-dom";
 
 
-const { CreateACommunityForumRelatedHelper } = helpers;
+const { CreateACommunityForumRelatedHelper, PaneSheetOpenTwoHelper } = helpers;
 
 const mainDescriptionChecker = formHelpers().mainDescriptionChecker;
 const postTitleChecker = formHelpers().postTitleChecker;
@@ -26,6 +26,7 @@ const CreateNewForumPostingHelper = ({ userData }) => {
     const [ paneSheetOpen, openPaneSheet ] = useState(false);
     const [ progress, setProgress ] = useState(0);
     const [ options, setOptions ] = useState([]);
+    const [ paneTwoOpen, openPaneTwoSheet ] = useState(false);
 
     const history = useHistory();
 
@@ -139,6 +140,15 @@ const CreateNewForumPostingHelper = ({ userData }) => {
           spellChecker: false,
         }
     }, []);
+
+    const handleGroupCommunitySelection = (community) => {
+        setValue("communityName", community, { shouldValidate: true });
+        clearErrors(["communityName"])
+
+        setSelectedGroup(community);
+
+        openPaneTwoSheet(false);
+    }
     return (
         <Fragment>
             <LoadingBar onLoaderFinished={() => setProgress(0)} progress={progress} color={"#51bb25"} containerClassName={"loader-container-classname-forum"} height={9} />
@@ -155,6 +165,19 @@ const CreateNewForumPostingHelper = ({ userData }) => {
                     </Sheet.Container>
                 <Sheet.Backdrop />
             </Sheet>
+            <Sheet draggable={false} isOpen={paneTwoOpen} onClose={() => openPaneTwoSheet(false)}>
+                <Sheet.Container>
+                    <Sheet.Header>
+                        <div style={{ margin: "12.5px" }} className="centered-both-ways">
+                            <Button onClick={() => openPaneTwoSheet(false)} className={"btn-square-danger"} outline color={"danger-2x"} style={{ width: "100%" }}>Exit/Close This Pane</Button>
+                        </div>
+                    </Sheet.Header>
+                    <Sheet.Content>
+                        <PaneSheetOpenTwoHelper handleGroupCommunitySelection={handleGroupCommunitySelection} setOptions={setOptions} setProgress={setProgress} openPaneTwoSheet={openPaneTwoSheet} userData={userData} />
+                    </Sheet.Content>
+                    </Sheet.Container>
+                <Sheet.Backdrop />
+            </Sheet>
             <Container fluid={true}>
                 <Row>
                     <Col sm="12" md="12" lg="12" xl="12">
@@ -163,9 +186,18 @@ const CreateNewForumPostingHelper = ({ userData }) => {
                                 <h3>Create a new forum post (Must be associated with a <a className="create-forum-post-a" href={null}>community</a>)</h3>
                             </CardHeader>
                             <CardBody>
-                                <div className="position-right-create-group-btn">
-                                    <Button onClick={() => openPaneSheet(true)} className={"btn-square-secondary"} color={"secondary-2x"} style={{ width: "42.5%" }} outline>Create a new community (sub-thread)</Button>
-                                </div>
+                                <Row>
+                                    <Col sm="12" md="6" lg="6" xl="6">
+                                        <div className="position-right-create-group-btn">
+                                            <Button onClick={() => openPaneSheet(true)} className={"btn-square-secondary"} color={"secondary-2x"} style={{ width: "100%" }} outline>Create a new community (sub-thread)</Button>
+                                        </div>
+                                    </Col>
+                                    <Col sm="12" md="6" lg="6" xl="6">
+                                        <div className="position-right-actually-create-group-btn">
+                                            <Button onClick={() => openPaneTwoSheet(true)} className={"btn-square-info"} color={"info-2x"} style={{ width: "100%" }} outline>Select a community (sub-thread) to post to</Button>
+                                        </div>
+                                    </Col>
+                                </Row>
                                 <Form className="needs-validation streaming-start-form-wrapper" noValidate="" onSubmit={handleSubmit(handleForumSubmission, (e, errors) => renderFormError(e, errors))}>
                                     <Select {...communityChecks.check(setError, register)} placeholder={"Search for a related 'community' to post in..."} dropdownRenderer={() => customDropdownRenderer(communityChecks.onChange)} options={options} />
                                     {errors.communityName ? <span className="span-tooltip">{errors.communityName.message}</span> : null}
