@@ -28,7 +28,7 @@ const ViewHiredHackersHelper = ({ userData }) => {
                 
                 const { hackers } = res.data;
 
-                setHackersData(hackers);
+                setHackersData(typeof hackers !== "undefined" && hackers.length > 0 ? hackers : []);
             } else {
                 console.log("ERROR gathering active/hired hackers...:", res.data);
             }
@@ -82,18 +82,26 @@ const ViewHiredHackersHelper = ({ userData }) => {
                 );
             })
         } else {
-            return (
-                <Fragment>
-                    <SkeletonTheme baseColor="#c9c9c9" highlightColor="#444">
-                        <p>
-                            <Skeleton count={45} />
-                        </p>
-                    </SkeletonTheme>
-                </Fragment>
-            );
+            if (typeof hackers !== "undefined" && hackers.length === 0) {
+                return (
+                    <Fragment>
+                        <img className="nothing-availiable-hired" src={require("../../../../../../assets/images/no-contracts.png")} />
+                    </Fragment>
+                );
+            } else {
+                return (
+                    <Fragment>
+                        <SkeletonTheme baseColor="#c9c9c9" highlightColor="#444">
+                            <p>
+                                <Skeleton count={45} />
+                            </p>
+                        </SkeletonTheme>
+                    </Fragment>
+                );
+            }
         }
     }
-
+    console.log("hackers", hackers);
     return (
         <Fragment>
             <Container className={"active-hired-container-wrapper"} fluid={true}>

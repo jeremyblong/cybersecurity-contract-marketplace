@@ -109,6 +109,8 @@ const ViewAlreadyAppliedJobsHackerHelper = ({ userData }) => {
                                             <div className="cal-desc text-center card-body">
                                                 <h6 className="f-w-600">{`Applied approx. ${moment(application.dateApplied).fromNow()}`}</h6>
                                                 <h4 className={"f-w-500"}><strong style={{ textDecorationLine: "underline" }}>Physical OR Digital Hack?</strong> {application.physicalOrDigitalOrBoth.label}</h4>
+                                                <hr />
+                                                <h4 className={"f-w-500"}>Offer Amount: <em style={{ color: "#51bb25", textDecorationLine: "underline" }}>${application.amountOfMoneyUponCompletion}</em></h4>
                                                 <p className="text-muted mt-3 mb-0"><strong style={{ textDecorationLine: "underline" }}>Message To Employer:</strong> {application.messageToEmployer}</p>
                                                 <hr />
                                                 <h5 className={"f-w-500"}><strong style={{ textDecorationLine: "underline" }}>Job ID:</strong> {application.employerPostedJobId}</h5>

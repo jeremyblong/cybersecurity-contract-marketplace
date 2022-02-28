@@ -183,23 +183,20 @@ const MainHooksCustomHelpers = () => {
         name: "participateInBettingProcess",
         label: "Would you like to participate in 'betting/waggering' on yourself to WIN more money IF you win the 'hack' or listing competition (WINNER selected by employer at end)"
     }
-    const tokenBidWagerAmount = {
+    const amountWillingToCompleteJob = {
         check: (setError, register, clearErrors, setValue, name) => {
             return (
                 {...register(name, { required: {
                     value: true,
-                    message: `You MUST wager anywhere from 5-100 ${process.env.REACT_APP_CRYPTO_TOKEN_NAME} IF bidding is ENABLED (participate input...)`
+                    message: `You MUST enter a value BEFORE proceeding regarding how much you're willing to complete this contract for`
                 }, min: {
-                    value: 5,
-                    message: `You MUST wager/bid AT-LEAST 5 ${process.env.REACT_APP_CRYPTO_TOKEN_NAME}`
-                }, pattern: /\d+/g, max: {
-                    value: 100,
-                    message: `You may ONLY wager/bid UP-TO 100 ${process.env.REACT_APP_CRYPTO_TOKEN_NAME}`
+                    value: 499.99,
+                    message: `You MUST enter a value of AT LEAST $499.99 OR more..`
                 }, onBlur: (e) => {
                     // deconstruct actual value
                     const value = e.target.value;
                     // check if both min/max values met
-                    if ((value >= 5) && (value <= 100)) {
+                    if (value >= 499.99) {
                         // clear error
                         clearErrors(name);
                     } else {
@@ -207,7 +204,7 @@ const MainHooksCustomHelpers = () => {
                         setTimeout(() => {
                             setError(name, {
                                 type: "manual",
-                                message: `You MUST wager anywhere from 5-100 ${process.env.REACT_APP_CRYPTO_TOKEN_NAME} IF bidding is ENABLED (participate input...) as well as entering ONLY NUMERIC charactors!`,
+                                message: `You MUST enter a value BEFORE proceeding regarding how much you're willing to complete this contract for as well as entering ONLY NUMERIC charactors!`,
                             });
                         }, 50);
                     }
@@ -220,9 +217,9 @@ const MainHooksCustomHelpers = () => {
 
             setValue(name, value, { shouldValidate: true })
         },
-        label: `Enter how many ${process.env.REACT_APP_CRYPTO_TOKEN_NAME} you'd like to wager/bid that YOU will WIN the competition & are selected as the 'winner' of this employer listing`,
-        name: "waggeredBidAmount",
-        placeholder: `Enter how many ${process.env.REACT_APP_CRYPTO_TOKEN_NAME} you'd like to wager/bet (that you WIN)`
+        label: `Enter an amount (USD-$) in which you'd be willing to complete this contract for, this should be the total value (excluding associated fee's) that you'd like to recieve upon completion`,
+        name: "amountOfMoneyUponCompletion",
+        placeholder: `Enter a numerical value in USD ($$$) in which you'd be willing to complete this contract...`
     }
     const approachToSuccessfullyHackCo = {
         check: (setError, register, clearErrors, name) => {
@@ -276,7 +273,7 @@ const MainHooksCustomHelpers = () => {
         physicalOrDigitalChecks,
         participateInBettingWagers,
         approachToSuccessfullyHackCo,
-        tokenBidWagerAmount
+        amountWillingToCompleteJob
     }
 }
 

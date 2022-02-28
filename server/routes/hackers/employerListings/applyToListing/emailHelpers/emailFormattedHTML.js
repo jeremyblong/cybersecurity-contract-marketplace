@@ -110,9 +110,9 @@ const sendEmailToEmployerNotifyingOfApplicantTemplate = (employerEmail, hackerFu
             
         
         <div class="u-row-container" style="padding: 0px;background-color: transparent">
-          <div class="u-row" style="Margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: #f73164;">
+          <div class="u-row" style="Margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: #efefef;">
             <div style="border-collapse: collapse;display: table;width: 100%;background-color: transparent;">
-              <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding: 0px;background-color: transparent;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:600px;"><tr style="background-color: #f73164;"><![endif]-->
+              <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding: 0px;background-color: transparent;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:600px;"><tr style="background-color: #efefef;"><![endif]-->
               
         <!--[if (mso)|(IE)]><td align="center" width="600" style="width: 600px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;" valign="top"><![endif]-->
         <div class="u-col u-col-100" style="max-width: 320px;min-width: 600px;display: table-cell;vertical-align: top;">
@@ -124,7 +124,7 @@ const sendEmailToEmployerNotifyingOfApplicantTemplate = (employerEmail, hackerFu
             <tr>
               <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
                 
-          <h1 style="margin: 0px; color: #ffffff; line-height: 140%; text-align: center; word-wrap: break-word; font-weight: normal; font-family: arial,helvetica,sans-serif; font-size: 22px;">
+          <h1 style="margin: 0px; color: #000000; line-height: 140%; text-align: center; word-wrap: break-word; font-weight: normal; font-family: arial,helvetica,sans-serif; font-size: 22px;">
             <strong>You've received a NEW application/applicant!<br /></strong>
           </h1>
         
@@ -145,9 +145,9 @@ const sendEmailToEmployerNotifyingOfApplicantTemplate = (employerEmail, hackerFu
         
         
         <div class="u-row-container" style="padding: 0px;background-color: transparent">
-          <div class="u-row" style="Margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: #f73164;">
+          <div class="u-row" style="Margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: #efefef;">
             <div style="border-collapse: collapse;display: table;width: 100%;background-color: transparent;">
-              <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding: 0px;background-color: transparent;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:600px;"><tr style="background-color: #f73164;"><![endif]-->
+              <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding: 0px;background-color: transparent;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:600px;"><tr style="background-color: #efefef;"><![endif]-->
               
         <!--[if (mso)|(IE)]><td align="center" width="600" style="width: 600px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;" valign="top"><![endif]-->
         <div class="u-col u-col-100" style="max-width: 320px;min-width: 600px;display: table-cell;vertical-align: top;">
@@ -179,7 +179,7 @@ const sendEmailToEmployerNotifyingOfApplicantTemplate = (employerEmail, hackerFu
             <tr>
               <td style="overflow-wrap:break-word;word-break:break-word;padding:30px 10px 10px;font-family:arial,helvetica,sans-serif;" align="left">
                 
-          <h1 style="margin: 0px; color: #ffffff; line-height: 140%; text-align: center; word-wrap: break-word; font-weight: normal; font-family: 'Open Sans',sans-serif; font-size: 40px;">
+          <h1 style="margin: 0px; color: #000000; line-height: 140%; text-align: center; word-wrap: break-word; font-weight: normal; font-family: 'Open Sans',sans-serif; font-size: 27.5px;">
             New Application <strong>Received("hire hacker's")!</strong>
           </h1>
         
@@ -261,7 +261,7 @@ const sendEmailToEmployerNotifyingOfApplicantTemplate = (employerEmail, hackerFu
             <tr>
               <td style="overflow-wrap:break-word;word-break:break-word;padding:10px 10px 30px;font-family:arial,helvetica,sans-serif;" align="left">
                 
-          <div style="color: #ffffff; line-height: 160%; text-align: center; word-wrap: break-word;">
+          <div style="color: #000000; line-height: 160%; text-align: center; word-wrap: break-word;">
             <p style="font-size: 14px; line-height: 160%;">You've received a NEW applicant/application,</p>
         <p style="font-size: 14px; line-height: 160%;">for a listing that you posted recently - you're getting responses, congrats!</p>
         <p style="font-size: 14px; line-height: 160%;">You will find "easy" access links/buttons throughout this email to quickly access this data...</p>
@@ -278,8 +278,8 @@ const sendEmailToEmployerNotifyingOfApplicantTemplate = (employerEmail, hackerFu
               <td style="overflow-wrap:break-word;word-break:break-word;padding:10px 10px 40px;font-family:arial,helvetica,sans-serif;" align="left">
                 
         <div align="center">
-          <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-spacing: 0; border-collapse: collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;font-family:arial,helvetica,sans-serif;"><tr><td style="font-family:arial,helvetica,sans-serif;" align="center"><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="" style="height:46px; v-text-anchor:middle; width:250px;" arcsize="35%" strokecolor="#ffffff" strokeweight="3px" fillcolor="#f73164"><w:anchorlock/><center style="color:#ffffff;font-family:arial,helvetica,sans-serif;"><![endif]-->
-            <a href=${`config.get("baseServerURL")/view/all/general/applications/employer/recruit`} target="_blank" style="box-sizing: border-box;display: inline-block;font-family:arial,helvetica,sans-serif;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #ffffff; background-color: #f73164; border-radius: 16px;-webkit-border-radius: 16px; -moz-border-radius: 16px; width:auto; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;border-top-color: #ffffff; border-top-style: solid; border-top-width: 3px; border-left-color: #ffffff; border-left-style: solid; border-left-width: 3px; border-right-color: #ffffff; border-right-style: solid; border-right-width: 3px; border-bottom-color: #ffffff; border-bottom-style: solid; border-bottom-width: 3px;">
+          <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-spacing: 0; border-collapse: collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;font-family:arial,helvetica,sans-serif;"><tr><td style="font-family:arial,helvetica,sans-serif;" align="center"><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="" style="height:46px; v-text-anchor:middle; width:250px;" arcsize="35%" strokecolor="#000000" strokeweight="3px" fillcolor="#efefef"><w:anchorlock/><center style="color:#000000;font-family:arial,helvetica,sans-serif;"><![endif]-->
+            <a href=${`config.get("baseServerURL")/view/all/general/applications/employer/recruit`} target="_blank" style="box-sizing: border-box;display: inline-block;font-family:arial,helvetica,sans-serif;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #000000; background-color: #efefef; border-radius: 16px;-webkit-border-radius: 16px; -moz-border-radius: 16px; width:auto; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;border-top-color: #7366ff; border-top-style: solid; border-top-width: 3px; border-left-color: #7366ff; border-left-style: solid; border-left-width: 3px; border-right-color: #7366ff; border-right-style: solid; border-right-width: 3px; border-bottom-color: #7366ff; border-bottom-style: solid; border-bottom-width: 3px;">
               <span style="display:block;padding:15px 30px;line-height:120%;"><strong><span style="font-size: 14px; line-height: 16.8px; font-family: Lato, sans-serif;">VIEW ALL&nbsp; OF YOUR APPLICANT'S!</span></strong></span>
             </a>
           <!--[if mso]></center></v:roundrect></td></tr></table><![endif]-->
@@ -377,9 +377,9 @@ const sendEmailToEmployerNotifyingOfApplicantTemplate = (employerEmail, hackerFu
         
         
         <div class="u-row-container" style="padding: 0px;background-color: transparent">
-          <div class="u-row" style="Margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: #f73164;">
+          <div class="u-row" style="Margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: #efefef;">
             <div style="border-collapse: collapse;display: table;width: 100%;background-color: transparent;">
-              <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding: 0px;background-color: transparent;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:600px;"><tr style="background-color: #f73164;"><![endif]-->
+              <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding: 0px;background-color: transparent;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:600px;"><tr style="background-color: #efefef;"><![endif]-->
               
         <!--[if (mso)|(IE)]><td align="center" width="600" style="width: 600px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;" valign="top"><![endif]-->
         <div class="u-col u-col-100" style="max-width: 320px;min-width: 600px;display: table-cell;vertical-align: top;">
@@ -391,7 +391,7 @@ const sendEmailToEmployerNotifyingOfApplicantTemplate = (employerEmail, hackerFu
             <tr>
               <td style="overflow-wrap:break-word;word-break:break-word;padding:15px 10px;font-family:arial,helvetica,sans-serif;" align="left">
                 
-          <h1 style="margin: 0px; color: #ffffff; line-height: 140%; text-align: center; word-wrap: break-word; font-weight: normal; font-family: 'Open Sans',sans-serif; font-size: 28px;">
+          <h1 style="margin: 0px; color: #000000; line-height: 140%; text-align: center; word-wrap: break-word; font-weight: normal; font-family: 'Open Sans',sans-serif; font-size: 28px;">
             <strong>Congrat's on your recent activity!</strong>
           </h1>
         

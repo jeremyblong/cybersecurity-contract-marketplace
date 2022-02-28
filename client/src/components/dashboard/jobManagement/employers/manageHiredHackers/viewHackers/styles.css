@@ -19,3 +19,8 @@
     color: #f73164;
     font-weight: 525;
 }
+.nothing-availiable-hired {
+    min-width: 100% !important;
+    min-height: 75vh !important;
+    object-fit: cover;
+}

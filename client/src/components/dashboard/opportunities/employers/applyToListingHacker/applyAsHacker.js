@@ -30,7 +30,7 @@ const messageToEmployerChecks = MainHooksCustomHelpers().messageToEmployerChecks
 const physicalOrDigitalChecks = MainHooksCustomHelpers().physicalOrDigitalChecks;
 const approachToSuccessfullyHackCo = MainHooksCustomHelpers().approachToSuccessfullyHackCo;
 const participateInBettingWagers = MainHooksCustomHelpers().participateInBettingWagers;
-const tokenBidWagerAmount = MainHooksCustomHelpers().tokenBidWagerAmount;
+const amountWillingToCompleteJob = MainHooksCustomHelpers().amountWillingToCompleteJob;
 
 
 const tourStepsOptions = [
@@ -39,12 +39,6 @@ const tourStepsOptions = [
       content: 'ONCE you have ALL of the required information completed & filled-out, Click this button to proceed forward and submit your filled out information & APPLY!',
     }
 ];
-
-const participateInBettingWagersOptions = [
-    { label: "I'd like to PARTICIPATE! Sign me up...", value: "yes-participate", actual: true },
-    { label: "N0... - Don't Participate.", value: "dont-participate", actual: false }
-];
-
 
 const ApplyAsHackerEmployerListingHelper = ({ previousFiles, userData, shiftCoreStyles, location, saveApplicationDetailsProgress, previous }) => {
 
@@ -261,11 +255,7 @@ const ApplyAsHackerEmployerListingHelper = ({ previousFiles, userData, shiftCore
         // deconstruct core information from bio-profile section
         const { username, firstName, lastName, completedJobs, registrationDate, aboutMe, title, reviews, fullyVerified, points, yearsOfExperience } = currentUserData;
         // deconstruct form-redux values on-submit
-        const { coverLetterText, messageToEmployer, participateInBettingProcess, physicalOrDigitalOrBoth, referenceLinks, selectedTestDates, technicalApproachToHack } = values;
-
-        // currentUserData.every((item) => {
-            
-        // })
+        const { coverLetterText, messageToEmployer, amountOfMoneyUponCompletion, physicalOrDigitalOrBoth, referenceLinks, selectedTestDates, technicalApproachToHack } = values;
 
         const myID = userData.uniqueId;
         const generatedID = uuid();
@@ -291,13 +281,11 @@ const ApplyAsHackerEmployerListingHelper = ({ previousFiles, userData, shiftCore
                 applicantId: myID,
                 dateApplied: new Date(),
                 legibleDateApplied: moment(new Date()).format("MM/DD/YYYY hh:mm:ss a"),
-                participateInBettingProcess, 
+                amountOfMoneyUponCompletion, 
                 physicalOrDigitalOrBoth, 
                 referenceLinks, 
                 selectedTestDates, 
-                technicalApproachToHack, 
-                waggeredBidAmount: _.has(values, "waggeredBidAmount") ? values.waggeredBidAmount : null,
-                bettingOnSelfSelected: _.has(values, "waggeredBidAmount") ? true : false
+                technicalApproachToHack
             }
         }
 
@@ -321,13 +309,11 @@ const ApplyAsHackerEmployerListingHelper = ({ previousFiles, userData, shiftCore
                 applicantId: myID,
                 dateApplied: new Date(),
                 legibleDateApplied: moment(new Date()).format("MM/DD/YYYY hh:mm:ss a"),
-                participateInBettingProcess, 
+                amountOfMoneyUponCompletion, 
                 physicalOrDigitalOrBoth, 
                 referenceLinks, 
                 selectedTestDates, 
                 technicalApproachToHack, 
-                waggeredBidAmount: _.has(values, "waggeredBidAmount") ? values.waggeredBidAmount : null,
-                bettingOnSelfSelected: _.has(values, "waggeredBidAmount") ? true : false,
                 submittedUserData: {
                     username, 
                     firstName, 
@@ -532,46 +518,13 @@ const ApplyAsHackerEmployerListingHelper = ({ previousFiles, userData, shiftCore
                                                 {errors.physicalOrDigitalOrBoth ? <span className="span-tooltip">{errors.physicalOrDigitalOrBoth.message}</span> : null}
                                             </FormGroup>
                                             <FormGroup>
-                                                <Label>{participateInBettingWagers.label}</Label>
-                                                <Controller
-                                                    control={control} 
-                                                    name={participateInBettingWagers.name}
-                                                    {...participateInBettingWagers.check(participateInBettingWagers.name, register)}
-                                                    render={({ field }) => (
-                                                        <Select
-                                                            {...field}
-                                                            autoBlur={true}
-                                                            defaultValue={null}
-                                                            ref={participateInBettingWagersRef}
-                                                            value={gatheredValues.participateInBettingProcess}
-                                                            placeholder={participateInBettingWagers.placeholder}
-                                                            onChange={(selectedOption) => {
-                                                                console.log("changed!!!!", selectedOption);
-
-                                                                setTimeout(() => {
-                                                                    // clear error after proper selection
-                                                                    if ((typeof selectedOption !== "undefined") && (Object.keys(selectedOption).length > 0)) {
-                                                                        // set selected value
-                                                                        setValue(participateInBettingWagers.name, selectedOption, { shouldValidate: false });
-                                                                        // clear relevant error
-                                                                        clearErrors(participateInBettingWagers.name);
-                                                                    } else {
-                                                                        // set error as nothing was selected (blank 'click-off' selection of selector)
-                                                                        setError(participateInBettingWagers.name, {
-                                                                            type: "manual",
-                                                                            message: "You haven't selected a 'betting/waggering participation status' yet however this is required before proceeding",
-                                                                        });
-                                                                    }
-                                                                }, 50);
-                                                            }}
-                                                            onMenuClose={() => {
-                                                                participateInBettingWagersRef.current.blur();
-                                                            }}
-                                                            options={participateInBettingWagersOptions}
-                                                        />
-                                                    )}
-                                                />
-                                                {errors.participateInBettingProcess ? <span className="span-tooltip">{errors.participateInBettingProcess.message}</span> : null}
+                                                <FormGroup>
+                                                    <Label className="heavy-label">{amountWillingToCompleteJob.label}</Label>
+                                                    <Input {...amountWillingToCompleteJob.check(setError, register, clearErrors, setValue, "amountOfMoneyUponCompletion")} value={gatheredValues.amountOfMoneyUponCompletion} placeholder={amountWillingToCompleteJob.placeholder} onChange={(e) => {
+                                                        return amountWillingToCompleteJob.onChange(e, "amountOfMoneyUponCompletion", setValue);
+                                                    }} name={amountWillingToCompleteJob.name} type="number" className="form-control input-air-primary" pattern={/\d+/g} />
+                                                </FormGroup>
+                                                {errors.amountOfMoneyUponCompletion ? <span className="span-tooltip">{errors.amountOfMoneyUponCompletion.message}</span> : null}
                                             </FormGroup>
                                         </Col>
                                         <Col md="6" lg="6" xl="6" sm="12">
@@ -589,13 +542,6 @@ const ApplyAsHackerEmployerListingHelper = ({ previousFiles, userData, shiftCore
                                                 }} name={approachToSuccessfullyHackCo.name} type="textarea" className="form-control input-air-primary" rows={"6"} />
                                                 {errors.technicalApproachToHack ? <span className="span-tooltip">{errors.technicalApproachToHack.message}</span> : null}
                                             </FormGroup>
-                                            {_.has(gatheredValues, "participateInBettingProcess") && typeof gatheredValues.participateInBettingProcess !== "undefined" && gatheredValues.participateInBettingProcess.value === "yes-participate" ? <FormGroup>
-                                                <Label className="heavy-label">{tokenBidWagerAmount.label}</Label>
-                                                <Input {...tokenBidWagerAmount.check(setError, register, clearErrors, setValue, "waggeredBidAmount")} value={gatheredValues.waggeredBidAmount} placeholder={tokenBidWagerAmount.placeholder} onChange={(e) => {
-                                                    return tokenBidWagerAmount.onChange(e, "waggeredBidAmount", setValue);
-                                                }} name={tokenBidWagerAmount.name} type="number" className="form-control input-air-primary" pattern={/\d+/g} />
-                                                {errors.waggeredBidAmount ? <span className="span-tooltip">{errors.waggeredBidAmount.message}</span> : null}
-                                            </FormGroup> : null}
                                         </Col>
                                     </Row>
                                     <Row>

@@ -5,7 +5,7 @@ const mailConfig = {
   port: 587,
   auth: {
     user: "blongjeremy@gmail.com",
-    pass: ":%[}f4}.)r)Y6kL%"
+    pass: "J@>rudB=YnN8.5nk"
   }
 };
 

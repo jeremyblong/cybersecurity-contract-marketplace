@@ -19,6 +19,7 @@ import { DateRange } from 'react-date-range';
 import Calendar from 'react-calendar';
 import { confirmAlert } from 'react-confirm-alert';
 import { NotificationManager } from 'react-notifications';
+import DepositFundsSheetPaneHelper from "./sheetHelpers/depositFunds/depositFundsSheetHelper.js";
 
 const Map = ReactMapboxGl({
     accessToken: process.env.REACT_APP_MAPBOX_TOKEN,
@@ -37,6 +38,7 @@ const ManageIndividualHackerAlreadyHiredHelper = ({ userData }) => {
     const [ dateDifference, setDateDifference ] = useState(null);
     const [ listing, setListingData ] = useState(null);
     const [ dates, setDatesAvailiable ] = useState(null);
+    const [ isDepositOpen, setSheetDepositOpen ] = useState(false);
 
     const { id, jobid } = useParams();
 
@@ -179,6 +181,7 @@ const ManageIndividualHackerAlreadyHiredHelper = ({ userData }) => {
     return (
         <Fragment>
             <Breadcrumb parent="Manage Live HIRED hacker" title="Manage payments, contract conditions, work submissions & more..."/>
+            <DepositFundsSheetPaneHelper isDepositOpen={isDepositOpen} setSheetDepositOpen={setSheetDepositOpen} />
             <Container fluid={true}>
                 <Row>
                     <Col sm="12" md="12" lg="12" xl="12">
@@ -378,14 +381,8 @@ const ManageIndividualHackerAlreadyHiredHelper = ({ userData }) => {
                             </Row>
                             <hr/>
                             <div className="m-t-15">
-                                <Button style={{ width: "32.333%" }} color="primary" className="m-r-10" onClick={() => {}} >
-                                    <i className="fa fa-shopping-basket mr-1"></i>Add to cart
-                                </Button>
-                                <Button style={{ width: "32.333%" }} color="success" className="m-r-10" onClick={() => {}}>
-                                    <i className="fa fa-shopping-cart mr-1"></i>Buy now
-                                </Button>
-                                <Button style={{ width: "32.333%" }} color="secondary" onClick={() => {}}>
-                                    <i className="fa fa-heart mr-1"></i>{"Add To WishList"}
+                                <Button style={{ width: "100%" }} color="primary" className="m-r-10" onClick={() => setSheetDepositOpen(true)}>
+                                    <i className="fa fa-shopping-cart mr-1"></i>Deposit Fund's In Preperation For Hacker Payment
                                 </Button>
                             </div>
                             </CardBody>
