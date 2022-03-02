@@ -59,6 +59,7 @@ const ViewHiredHackersHelper = ({ userData }) => {
                                 </div>
                                 <div className="cal-desc text-center card-body">
                                     <h6 className="f-w-600">{`Applied approx. ${moment(hacker.dateApplied).fromNow()}`}</h6>
+                                    <h4 className={"f-w-500"}><strong style={{ textDecorationLine: "underline" }}>Approx. Cost Per Completion: </strong> <strong style={{ color: "#f73164", textDecorationLine: "underline" }}>${Number(hacker.amountOfMoneyUponCompletion).toFixed(2)}</strong></h4>
                                     <h4 className={"f-w-500"}><strong style={{ textDecorationLine: "underline" }}>Physical OR Digital Hack OR Both?</strong> {hacker.physicalOrDigitalOrBoth.label}</h4>
                                     <p className="text-muted mt-3 mb-0"><strong style={{ textDecorationLine: "underline" }}>Message To Employer:</strong> {hacker.messageToEmployer}</p>
                                     <hr />

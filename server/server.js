@@ -176,7 +176,8 @@ app.use("/notify/user/request/update/hacker", require("./routes/employers/employ
 app.use("/add/new/payment/method/employer", require("./routes/employers/paymentRelated/addNewPaymentMethod/addNewMethod.js"));
 app.use("/gather/onboarding/stripe/link/data", require("./routes/employers/onboardingStripe/initiateOnboarding/initiateFetchLinks.js"));
 app.use("/check/account/mark/verified/applicable/employer", require("./routes/employers/onboardingStripe/checkMarkCompleteApplicable/checkAndMarkIfSo.js"));
-
+app.use("/list/employer/capabilities/payments", require("./routes/employers/paymentRelated/capabilities/gatherPaymentCapabilities/gatherCapabilities.js"));
+app.use("/modify/employer/capabilities/payments", require("./routes/employers/paymentRelated/capabilities/modify/modifyCapabilities.js"));
 
 // ~ webhook logic STARTS here ~
 app.use("/passbase/webhook", require("./webhooks/passbase/webhook.js"));

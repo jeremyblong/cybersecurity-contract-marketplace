@@ -14,3 +14,24 @@
     border: 2px solid lightgrey;
     padding: 5px 12.5px;
 }
+.cardcardcard-min {
+    min-height: 450px;
+}
+.full-payment-block {
+    border: 1.75px dotted black;
+    color: black;
+    font-weight: bold;
+}
+.mega-badge-pricing-full {
+    background-color: rgba(7, 7, 7, 0.774);
+    color: white !important;
+}
+.overlayCurrentlyDue {
+    min-width: 82.5vw;
+    min-height: 57.5vh;
+    max-height: 57.5vh;
+    overflow-y: scroll;
+}
+.top-modal-to-completed {
+
+}

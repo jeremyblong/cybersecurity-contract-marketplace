@@ -3,13 +3,8 @@ import Breadcrumb from '../../../../../../../layout/breadcrumb'
 import { Codepen, FileText, Youtube, BookOpen, Aperture, Search } from 'react-feather';
 import { connect } from "react-redux";
 import "./styles.css";
-import two from '../../../../../../../assets/images/faq/2.jpg';
-import one from '../../../../../../../assets/images/faq/1.jpg';
-import three from '../../../../../../../assets/images/faq/3.jpg';
-import four from '../../../../../../../assets/images/faq/4.jpg';
-import { Container, Row, Col, Card, CardBody, CardFooter, Media, Form, FormGroup, Input, Button } from "reactstrap"
+import { Container, Row, Col, Card, CardBody, CardFooter, Media, Form, FormGroup, Input, Button, Label, ListGroupItem, ListGroup } from "reactstrap"
 import axios from 'axios'
-import { FeaturedTutorials, WebDesign, WebDevelopment, UIDesign, UXDesign } from "../../../../../../../constant";
 import { Parallax } from 'react-parallax';
 import { useHistory, useParams } from "react-router-dom";
 import Sheet from 'react-modal-sheet';
@@ -19,6 +14,9 @@ import moment from "moment";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import ReactPlayer from 'react-player';
+import PaymentFullPaneManageAndPay from "./sheetHelpers/paymentFullPane/index.js";
+import { Modal } from 'react-responsive-modal';
+
 
 const settings = {
     dots: true,
@@ -35,6 +33,9 @@ const MainPaymentSelectionHelper = ({ userData }) => {
     const [ isOpen, setIsOpenState ] = useState(false);
     const [ currentApplication, setCurrentApplication ] = useState(null);
     const [ listingsData, setListings ] = useState([]);
+    const [ paymentPaneFull, setFullPaymentPaneOpen ] = useState(false);
+    const [ currentlyDue, setCurrentlyDue ] = useState([]);
+    const [ todoModalOpen, setModalOpenToDo ] = useState(false);
 
     const { id } = useParams();
 
@@ -125,6 +126,36 @@ const MainPaymentSelectionHelper = ({ userData }) => {
                     </Sheet.Container>
                 <Sheet.Backdrop />
             </Sheet>
+            <Modal classNames={{
+                overlay: '',
+                modal: 'overlayCurrentlyDue',
+            }} open={todoModalOpen} onClose={() => setModalOpenToDo(false)} center>
+                <div style={{ margin: "7.5px" }} className="centered-both-ways">
+                    <h4 className='top-modal-to-completed'>The following item's need to be completed via our 'onboarding-flow' before you may proceed forward with activating this payment method/type..</h4>
+                </div>
+                <hr />
+                    <ListGroup className="list-group-flush">
+                        {typeof currentlyDue !== "undefined" && currentlyDue.length > 0 ? currentlyDue.map((element, idx) => {
+                            return (
+                                <ListGroupItem key={idx}>
+                                    <Row>
+                                        <Col sm="12" md="6" lg="6" xl="6">
+                                            <strong>To Be Completed: </strong>
+                                        </Col>
+                                        <Col sm="12" md="6" lg="6" xl="6">
+                                            <strong style={{ color: "#f73164", textDecorationLine: "underline" }}>{element}</strong>
+                                        </Col>
+                                    </Row>
+                                </ListGroupItem>
+                            );
+                        }) : null}
+                    </ListGroup>
+                <hr />
+                <div style={{ margin: "7.5px" }} className="centered-both-ways">
+                    <Button onClick={() => setModalOpenToDo(false)} className={"btn-square-danger"} outline color={"danger-2x"} style={{ width: "100%" }}>Close/Exit Modal</Button>
+                </div>
+            </Modal>
+            <PaymentFullPaneManageAndPay setModalOpenToDo={setModalOpenToDo} currentlyDue={currentlyDue} setCurrentlyDue={setCurrentlyDue} currentApplication={currentApplication} paymentPaneFull={paymentPaneFull} setFullPaymentPaneOpen={setFullPaymentPaneOpen} />
             <Container fluid={true}>
                 <Row>
                     <Col sm="12" lg="12" md="12" xs="12">
@@ -164,7 +195,7 @@ const MainPaymentSelectionHelper = ({ userData }) => {
                     </Col>
                     <Col xl="6 xl-50" md="6" sm="12" sm="6">
                         <Card className="bg-primary">
-                            <CardBody>
+                            <CardBody className='cardcardcard-min'>
                                 <Media className="faq-widgets">
                                     <Media body>
                                         <h5 style={{ color: "white", textDecorationLine: "underline" }}>Setup pre-set payment period's (recurring)</h5>
@@ -180,7 +211,7 @@ const MainPaymentSelectionHelper = ({ userData }) => {
                     </Col>
                     <Col xl="6 xl-50" md="6" sm="12" sm="6">
                         <Card className="bg-info">
-                            <CardBody>
+                            <CardBody className='cardcardcard-min'>
                                 <Media className="faq-widgets">
                                     <Media body>
                                         <h5 style={{ color: "white", textDecorationLine: "underline" }}>Pay Off Entire Owed/Due Balanace</h5>
@@ -190,6 +221,24 @@ const MainPaymentSelectionHelper = ({ userData }) => {
                                         <hr />
                                         <Button onClick={() => setIsOpenState(true)} className={"btn-square-light"} color={"light-2x"} outline style={{ width: "100%", color: "white", fontWeight: "bold" }}>Clear all pending/outstanding payment's</Button>
                                     </Media><Aperture />
+                                </Media>
+                            </CardBody>
+                        </Card>
+                    </Col>
+                    <Col xl="12 xl-50" md="12" sm="12" sm="12">
+                        <Card className="bg-light">
+                            <CardBody className='full-payment-block'>
+                                <Media className="p-20">
+                                    <div className="radio radio-light mr-3">
+                                        <Input id="radio14" type="radio" name="radio1" value="option1" />
+                                        <Label for="radio14"></Label>
+                                    </div>
+                                    <Media body>
+                                        <h6 className="mt-0 mega-title-badge">Deposit funds into {process.env.REACT_APP_APPLICATION_NAME} to activate the desired/selected contract<span className="badge badge-dark pull-right digits mega-badge-pricing-full">{"DEPOSIT ENTIRE/FULL FUNDS"}</span></h6>
+                                        <p>{`Deposit Full Fund's Amount Into ${process.env.REACT_APP_APPLICATION_NAME} In Preperation To Pay Your Contractor`}</p>
+                                        <hr />
+                                        <Button onClick={() => setFullPaymentPaneOpen(true)} className={"btn-square-dark"} color={"dark-2x"} outline style={{ width: "100%", fontWeight: "bold" }}>Open Full Payment Pane</Button>
+                                    </Media>
                                 </Media>
                             </CardBody>
                         </Card>
