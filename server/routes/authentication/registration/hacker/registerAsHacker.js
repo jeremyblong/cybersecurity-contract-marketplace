@@ -20,11 +20,24 @@ router.post("/", async (req, res) => {
         accountType
     } = req.body;
 
-
-    await stripe.customers.create({
-      description: 'Hacker Account Type',
+    const account = await stripe.accounts.create({
+      type: 'custom',
+      country: 'US',
       email: email.toLowerCase().trim(),
-      name: `${firstName.toLowerCase().trim()} ${lastName.toLowerCase().trim()}`
+      business_type: "individual",
+      individual: {
+        email: email.toLowerCase().trim(),
+        first_name: firstName.toLowerCase().trim(),
+        last_name: lastName.toLowerCase().trim()
+      },
+      capabilities: {
+        card_payments: {
+          requested: true
+        },
+        transfers: {
+          requested: true
+        },
+      },
     }, (errrrrrror, accountData) => {
       if (errrrrrror) {
         console.log(errrrrrror);
@@ -63,7 +76,8 @@ router.post("/", async (req, res) => {
           profileLovesHearts: [],
           currentlyFollowedBy: [],
           profilePosts: [],
-          stripeAccountDetails: accountData
+          stripeAccountDetails: accountData,
+          stripeAccountVerified: false
         }), password, async (err, user) => {
           if (err) {
     

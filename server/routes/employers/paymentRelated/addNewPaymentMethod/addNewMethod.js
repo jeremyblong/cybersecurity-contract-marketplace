@@ -40,7 +40,7 @@ router.post("/", (req, resppppp, next) => {
             console.log(err);
         } else {
             console.log("result", result);
-
+            // stripe account ID
             const { id } = result.value.stripeAccountDetails;
 
             await stripe.paymentMethods.create({
@@ -54,6 +54,15 @@ router.post("/", (req, resppppp, next) => {
             }, async (errrrrrrr, successData) => {
                 if (errrrrrrr) {
                     console.log(errrrrrrr);
+
+                    const pulled = await collection.findOneAndUpdate({ uniqueId: employerID }, { $pull: { paymentMethods: { id: newPaymentAddition.id } } });
+
+                    if (pulled) {
+                        resppppp.json({
+                            message: "An error has occurred while attempting to create the desired card data...",
+                            err: message
+                        })
+                    }
                 } else {
                     console.log("successData", successData);
 

@@ -7,11 +7,11 @@ const stripe = require('stripe')(config.get("stripeSecretKey"));
 
 router.get("/", (req, resppppp, next) => {
     
-    const { employerID, elementID } = req.query;
+    const { hackerID, elementID } = req.query;
 
-    const collection = Connection.db.db("db").collection("employers");
+    const collection = Connection.db.db("db").collection("hackers");
 
-    collection.findOne({ uniqueId: employerID }).then(async (user) => {
+    collection.findOne({ uniqueId: hackerID }).then(async (user) => {
         if (!user) {
             console.log("User does NOT exist or could not be found.");
 

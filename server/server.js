@@ -174,10 +174,14 @@ app.use("/gather/core/employer/data/related/hacking/gig", require("./routes/hack
 app.use("/gather/archived/and/live/employer/listing", require("./routes/employers/employerListings/archived/gatherArchivedListing/gatherListingInfo.js"));
 app.use("/notify/user/request/update/hacker", require("./routes/employers/employerListings/requestUpdateHacker/notifiyHackerRequestUpdate/requestUpdateFromHacker.js"));
 app.use("/add/new/payment/method/employer", require("./routes/employers/paymentRelated/addNewPaymentMethod/addNewMethod.js"));
-app.use("/gather/onboarding/stripe/link/data", require("./routes/employers/onboardingStripe/initiateOnboarding/initiateFetchLinks.js"));
-app.use("/check/account/mark/verified/applicable/employer", require("./routes/employers/onboardingStripe/checkMarkCompleteApplicable/checkAndMarkIfSo.js"));
+app.use("/gather/onboarding/stripe/link/data", require("./routes/hackers/onboardingStripe/initiateOnboarding/initiateFetchLinks.js"));
+app.use("/check/account/mark/verified/applicable/hacker", require("./routes/hackers/onboardingStripe/checkMarkCompleteApplicable/checkAndMarkIfSo.js"));
 app.use("/list/employer/capabilities/payments", require("./routes/employers/paymentRelated/capabilities/gatherPaymentCapabilities/gatherCapabilities.js"));
 app.use("/modify/employer/capabilities/payments", require("./routes/employers/paymentRelated/capabilities/modify/modifyCapabilities.js"));
+app.use("/gather/existing/payment/methods/employer/stripe", require("./routes/employers/paymentRelated/gatherPreviousPaymentMethods/gatherPreviousCardMethods/gatherCardMethods.js"));
+app.use("/determine/primary/card/on/file", require("./routes/shared/paymentRelated/gatherPrimaryPaymentCard/primaryCardRetrival.js"));
+app.use("/deposit/funds/specific/hacker/initialization/process", require("./routes/employers/hiredHackers/depositContractedFunds/depositFunds/depositFundsForHackerContract.js"));
+app.use("/gather/employer/payment/methods/cards/only", require("./routes/employers/paymentRelated/gatherPreviousPaymentMethods/stripeCards/gatherStripeCards.js"));
 
 // ~ webhook logic STARTS here ~
 app.use("/passbase/webhook", require("./webhooks/passbase/webhook.js"));

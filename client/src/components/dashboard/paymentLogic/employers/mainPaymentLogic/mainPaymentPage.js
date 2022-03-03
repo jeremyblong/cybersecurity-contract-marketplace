@@ -44,6 +44,7 @@ const PaymentMethodsAddNewPaymentMethodEmployerHelper = ({ userData }) => {
     const [ isOpen, setIsOpen ] = useState(false);
     const [ cardTableData, setCardTableData ] = useState([]);
     const [ ready, setReady ] = useState(false);
+    const [ primaryCard, setPrimaryCard ] = useState(null);
 
     const [ cardInfo, setCardInfo ] = useState({
         cvc: "",
@@ -63,6 +64,35 @@ const PaymentMethodsAddNewPaymentMethodEmployerHelper = ({ userData }) => {
             }
         })
     }
+
+    useEffect(() => {
+        const config = {
+            params: {
+                id: userData.uniqueId,
+                accountType: userData.accountType
+            }
+        }
+        axios.get(`${process.env.REACT_APP_BASE_URL}/determine/primary/card/on/file`, config).then((res) => {
+            if (res.data.message === "Successfully found primary card!") {
+
+                console.log(res.data);
+
+                const { lastFour } = res.data;
+
+                if (lastFour !== null) {
+                    setPrimaryCard(lastFour);
+                }
+            } else {
+                console.log("err", res.data);
+                
+                NotificationManager.warning("Failed to fetch your current payment method's on file, please reload this page or contact support if this problem persists...", "Failed to load previous method's!", 4750);
+            }
+        }).catch((err) => {
+            console.log(err);
+
+            NotificationManager.warning("Failed to fetch your current payment method's on file, please reload this page or contact support if this problem persists...", "Failed to load previous method's!", 4750);
+        })
+    }, [])
     const deleteSpecificCard = (paymentID) => {
         console.log("paymentID", paymentID);
 
@@ -220,7 +250,7 @@ const PaymentMethodsAddNewPaymentMethodEmployerHelper = ({ userData }) => {
                                             <h3>{"Manage your payment methods, add new methods, view current methods & much more!"}</h3>
                                         </div>
                                         <div className="product-price custom-payment-product-price f-20">
-                                            <em style={{ color: "black" }}>Current Primary:</em> **** **** **** 4756
+                                            <em style={{ color: "black" }}>Current Primary:</em> **** **** **** {primaryCard !== null ? primaryCard : "****"}
                                         </div>
                                         <hr/>
                                         <p>You can manage any/all card or payment related activity with this page. These are the cards/payment-methods that'll be used to <strong style={{ color: "#f73164", textDecorationLine: "underline" }}>purchase {process.env.REACT_APP_APPLICATION_NAME}'s {process.env.REACT_APP_CRYPTO_TOKEN_NAME}</strong> to be gambled or used as payment for completed hack's. Check out the options on this page to explore our various payment logic...</p>

@@ -24,6 +24,9 @@ const UserSchema =  new Schema({
     stripeAccountDetails: {
         type: Object
     },
+    stripeAccountVerified: {
+        type: Boolean
+    },
     totalUniqueViews: {
         type: Number
     },

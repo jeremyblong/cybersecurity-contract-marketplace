@@ -1,13 +1,134 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import "./styles.css";
 import Cards from 'react-credit-cards';
-import { Row, Col, Button, Card, CardBody, Input, FormGroup, Form, CardHeader, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
+import { Row, Col, Button, Card, CardBody, Input, FormGroup, Form, CardHeader, TabContent, TabPane, Nav, NavItem, NavLink, Container, ListGroup, ListGroupItem, Popover, PopoverHeader, PopoverBody } from 'reactstrap';
 import axios from "axios";
 import { connect } from "react-redux";
+import { NotificationManager } from 'react-notifications';
+import { useHistory } from "react-router-dom";
 
-const BottomAddNewPaymentMethodTabbedHelper = ({ setPaymentMethods, userData, handleInputChange, cardInfo, setCardInfo }) => {
+
+const BottomAddNewPaymentMethodTabbedHelper = ({ currentlyDue, setCurrentlyDue, setModalOpenToDo, setPaymentMethods, userData, handleInputChange, cardInfo, setCardInfo }) => {
     const [activeTab, setActiveTab] = useState('1');
     const [ valid, setValidness ] = useState(false);
+    const [ capabilities, setCapabilities ] = useState([]);
+    const [ popover, setPopover ] = useState({
+        capability0: false,
+        capability1: false,
+        capability2: false
+    })
+
+    const history = useHistory();
+
+    useEffect(() => {
+        const configuration = {
+            params: { 
+                hackerID: userData.uniqueId
+            }
+        }
+        axios.get(`${process.env.REACT_APP_BASE_URL}/list/employer/capabilities/payments`, configuration).then((res) => {
+            if (res.data.message === "Successfully gathered payment capabilities!") {
+                console.log(res.data);
+
+                const { capabilities } = res.data;
+
+                const arr = [];
+
+                if (typeof capabilities.data !== "undefined" && capabilities.data.length > 0) {
+                    for (let index = 0; index < capabilities.data.length; index++) {
+                        const el = capabilities.data[index];
+                        if (el.id === "card_payments" || el.id === "us_bank_account_ach_payments" || el.id === "link_payments") {
+                            arr.push(el);
+                        }
+                    }
+                }
+                console.log("arr", arr);
+
+                setCapabilities(arr);
+            } else {
+                console.log("Err", res.data);
+            }
+        }).catch((err) => {
+            console.log("Critical errror...:", err);
+        })
+    }, [])
+
+    const calculateType = (type) => {
+        switch (type) {
+            case "card_payments":
+                return "Card Payment's"
+                break;
+            case "link_payments":
+                return "Link Payment's";
+                break;
+            case "us_bank_account_ach_payments":
+                return "US Bank Account ACH Payment's"
+                break;
+            default:
+                break;
+        }
+    }
+
+    const handleActivation = (element, idx) => {
+
+        const { id, status } = element; 
+
+        if (status === "active") {
+            NotificationManager.info("You've ALREADY activated this option/capability & it is currently set as 'active'. Please try this action again with a 'innactive' or 'unrequested' status types..", "Already activated this payment method!", 4750);
+        } else {
+            const configuration = {
+                params: { 
+                    hackerID: userData.uniqueId,
+                    elementID: id
+                }
+            }
+            axios.get(`${process.env.REACT_APP_BASE_URL}/modify/employer/capabilities/payments`, configuration).then((res) => {
+                if (res.data.message === "Successfully modified payment capabilities!") {
+                    console.log(res.data);
+
+                    const { capability, elementID } = res.data;
+
+                    const findIndexMatch = capabilities.findIndex(x => x.id === elementID);
+
+                    const shallowCopy = [...capabilities];
+
+                    shallowCopy[findIndexMatch] = capability;
+
+                    setCapabilities(shallowCopy);
+                    
+                    setPopover(prevState => {
+                        return {
+                            ...prevState,
+                            [`capability${idx}`]: false
+                        }
+                    })
+
+                    NotificationManager.success(`Successfully modified the desired capabilities & updated stripe information! You're capability ${elementID} is now ACTIVE!`, `Changed ${elementID} and is now ACTIVE!`, 4750);
+                } else if (res.data.message === "You must enable further 'onboarding settings' before activating this setting..") {
+
+                    const { currentlyDue } = res.data;
+
+                    setCurrentlyDue(currentlyDue);
+
+                    setTimeout(() => {
+                        setModalOpenToDo(true);
+                    },  625);
+                } else {
+                    console.log("Err", res.data);
+
+                    NotificationManager.error("An unknown error has occurred while attempting to update the desired information and/or capability, Please try this action again and contact support if the problem persists!", "Unknown error has occurred!", 4750);
+                }
+            }).catch((err) => {
+                console.log("Critical errror...:", err);
+
+                NotificationManager.error("An unknown error has occurred while attempting to update the desired information and/or capability, Please try this action again and contact support if the problem persists!", "Unknown error has occurred!", 4750);
+            })
+        }
+    }
+
+    console.log("capabilities", capabilities);
+
+    console.log("popover", popover);
 
     const calculateReadiness = () => {
         const { number, name, expiry, cvc } = cardInfo;
@@ -35,7 +156,7 @@ const BottomAddNewPaymentMethodTabbedHelper = ({ setPaymentMethods, userData, ha
 
                 console.log(res.data);
 
-                const { newPaymentAddition } = res.data;
+                const { account } = res.data;
 
                 setCardInfo({
                     cvc: "",
@@ -46,12 +167,30 @@ const BottomAddNewPaymentMethodTabbedHelper = ({ setPaymentMethods, userData, ha
                     cardType: ""
                 })
 
-                setPaymentMethods(prevState => [...prevState, newPaymentAddition]);
+                setPaymentMethods(prevState => [...prevState, account]);
+
+            } else if (res.data.err === "This card doesn't appear to be a debit card.") {
+
+                setCardInfo({
+                    cvc: "",
+                    expiry: "",
+                    focus: "",
+                    name: "",
+                    number: "",
+                    cardType: ""
+                })
+                
+                NotificationManager.error("This card type (Anything outside of DEBIT) is NOT allowed! You MUST enter a debit card if you wish to enter a valid card payment type...", "Enter a DEBIT card ONLY! This is NOT a debit card.", 4750);
+
             } else {
                 console.log("err", res.data);
+
+                NotificationManager.error("An unknown error has occurred, please reload this page or contact support if this problem persists...", "An unknown error has occurred!", 4750);
             }
         }).catch((err) => {
             console.log(err);
+
+            NotificationManager.error("An unknown error has occurred, please reload this page or contact support if this problem persists...", "An unknown error has occurred!", 4750);
         })
     }
     return (
@@ -68,13 +207,7 @@ const BottomAddNewPaymentMethodTabbedHelper = ({ setPaymentMethods, userData, ha
                         </NavItem>
                         <NavItem  id="myTab" role="tablist">
                             <NavLink href="#"  className={activeTab === '2' ? 'active' : ''} onClick={() => setActiveTab('2')}>
-                                Payment Related Overview
-                            </NavLink>
-                            <div className="material-border"></div>
-                        </NavItem>
-                        <NavItem  id="myTab" role="tablist">
-                            <NavLink href="#"  className={activeTab === '3' ? 'active' : ''} onClick={() => setActiveTab('3')}>
-                                Other Payment Method's
+                                Manage Your Payment Account Capabilities
                             </NavLink>
                             <div className="material-border"></div>
                         </NavItem>
@@ -220,10 +353,73 @@ const BottomAddNewPaymentMethodTabbedHelper = ({ setPaymentMethods, userData, ha
                             </Col>
                         </TabPane>
                         <TabPane tabId="2">
-                            <p className="mb-0 m-t-20">{"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"}</p>
-                        </TabPane>
-                        <TabPane tabId="3">
-                            <p className="mb-0 m-t-20"> {"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"}</p>
+                            <Container fluid={true}>
+                                <Row>
+                                    <Col sm="12" md="12" lg="12" xl="12">
+                                        <Card className='card-payment-entirely-halved'>
+                                            <CardHeader>
+                                                <h3 className='capabilities-header'>Capabilities related to payment method's</h3>
+                                                <hr />
+                                                <p className='lead'>Capabilities are the 'activated/enabled' various payment features and/or functionality on your account. The below table will display what features ARE ENABLED and which ones are NOT enabled but can be enabled by clicking the animated 'plus sign' image..</p>
+                                            </CardHeader>
+                                            <CardBody>
+                                                <ListGroup className="list-group-flush">
+                                                    {typeof capabilities !== "undefined" && capabilities.length > 0 ? capabilities.map((element, idx) => {
+                                                        return (
+                                                            <ListGroupItem key={idx}>
+                                                                <Row>
+                                                                    <Col sm="12" md="4" lg="4" xl="4">
+                                                                        <strong>Payment Type:</strong>
+                                                                    </Col>
+                                                                    <Col sm="12" md="4" lg="4" xl="4">
+                                                                        <strong style={{ color: "#f73164", textDecorationLine: "underline" }}>{calculateType(element.id)}</strong>
+                                                                    </Col>
+                                                                    <Col className='target-me' sm="12" md="4" lg="4" xl="4">
+                                                                        <div className={"create-row-capability"}>
+                                                                            <strong style={{ color: "#7366ff", textDecorationLine: "underline" }}>{element.status}</strong>
+                                                                            <img id={`capability${idx}`} onClick={() => {
+                                                                                setPopover(prevState => {
+                                                                                    return {
+                                                                                        ...prevState,
+                                                                                        [`capability${idx}`]: true
+                                                                                    }
+                                                                                })
+                                                                            }} src={require("../../../../../../../assets/gifs/add.gif")} className={"gif-add-capability"} />
+                                                                            <div onMouseLeave={() => {
+                                                                                setPopover(prevState => {
+                                                                                    return {
+                                                                                        ...prevState,
+                                                                                        [`capability${idx}`]: false
+                                                                                    }
+                                                                                })
+                                                                            }} className='zindex-pop-me'>
+                                                                                <Popover className={"elevate-popover"} placement="bottom" isOpen={popover[`capability${idx}`]} target={`capability${idx}`} toggle={() => {
+                                                                                    setPopover(prevState => {
+                                                                                        return {
+                                                                                            ...prevState,
+                                                                                            [`capability${idx}`]: !popover[`capability${idx}`]
+                                                                                        }
+                                                                                    })
+                                                                                }}>
+                                                                                    <PopoverHeader>Update/Activate Capability</PopoverHeader>
+                                                                                    <PopoverBody>Would you like to update and 'activate' this capability? You MUST have previously completed the 'onboarding-flow'.
+                                                                                    <hr />
+                                                                                    <Button onClick={() => handleActivation(element, idx)} className={"btn-square-success"} outline color={"success-2x"} style={{ width: "100%" }}>Activate!</Button>
+                                                                                    </PopoverBody>
+                                                                                </Popover>
+                                                                            </div>
+                                                                        </div>
+                                                                    </Col>
+                                                                </Row>
+                                                            </ListGroupItem>
+                                                        );
+                                                    }) : null}
+                                                </ListGroup>
+                                            </CardBody>
+                                        </Card>
+                                    </Col>
+                                </Row>
+                            </Container>
                         </TabPane>
                     </TabContent>
                     </Col>

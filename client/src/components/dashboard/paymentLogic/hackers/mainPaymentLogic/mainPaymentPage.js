@@ -11,7 +11,7 @@ import Sheet from 'react-modal-sheet';
 import DataTable from 'react-data-table-component';
 import moment from "moment";
 import { confirmAlert } from 'react-confirm-alert';
-
+import { Modal } from 'react-responsive-modal';
 
 const columns = [
     {
@@ -45,6 +45,12 @@ const PaymentMethodsAddNewPaymentMethodHelper = ({ userData }) => {
     const [ isOpen, setIsOpen ] = useState(false);
     const [ cardTableData, setCardTableData ] = useState([]);
     const [ ready, setReady ] = useState(false);
+    const [ primaryCard, setPrimaryCard ] = useState(null);
+    const [ todoModalOpen, setModalOpenToDo ] = useState(false);
+    const [ currentlyDue, setCurrentlyDue ] = useState([]);
+
+
+    const history = useHistory();
 
     const [ cardInfo, setCardInfo ] = useState({
         cvc: "",
@@ -130,40 +136,18 @@ const PaymentMethodsAddNewPaymentMethodHelper = ({ userData }) => {
     useEffect(() => {
         const config = {
             params: {
-                hackerID: userData.uniqueId
+                id: userData.uniqueId,
+                accountType: userData.accountType
             }
         }
-        axios.get(`${process.env.REACT_APP_BASE_URL}/gather/existing/payment/methods/hacker`, config).then((res) => {
-            if (res.data.message === "Successfully gathered existing payment method's!") {
+        axios.get(`${process.env.REACT_APP_BASE_URL}/determine/primary/card/on/file`, config).then((res) => {
+            if (res.data.message === "Successfully found primary card!") {
 
                 console.log(res.data);
 
-                const { paymentMethods } = res.data;
+                const { lastFour } = res.data;
 
-                const convertedPaymentsArr = [];
-
-                for (let index = 0; index < paymentMethods.length; index++) {
-                    const method = paymentMethods[index];
-                    
-                    convertedPaymentsArr.push({
-                        number: <div className='font-secondary'>{method.lastFour}</div>,
-                        name: method.name,
-                        expiry: method.expiry,
-                        dateAdded: moment(method.dateAddedRaw).fromNow(),
-                        cardType: method.cardType,
-                        action: <div><span><i onClick={() => {
-                            deleteSpecificCard(method.id)
-                        }} className="fa fa-trash add-hover-effect-icon" style={{ width: 35, fontSize: 16, padding: 11, color: '#e4566e' }}></i></span>
-                        <span><i onClick={() => {
-                            console.log(method);
-                        }} className="fa fa-pencil add-hover-effect-icon" style={{ width: 35, fontSize: 16, padding: 11, color: 'rgb(40, 167, 69)' }}></i></span>
-                        </div>
-                    })
-                }
-
-                setCardTableData(convertedPaymentsArr);
-                setPaymentMethods(paymentMethods);
-                setReady(true);
+                setPrimaryCard(lastFour);
 
             } else {
                 console.log("err", res.data);
@@ -176,6 +160,70 @@ const PaymentMethodsAddNewPaymentMethodHelper = ({ userData }) => {
             NotificationManager.warning("Failed to fetch your current payment method's on file, please reload this page or contact support if this problem persists...", "Failed to load previous method's!", 4750);
         })
     }, [])
+    useEffect(() => {
+        const config = {
+            params: {
+                hackerID: userData.uniqueId
+            }
+        }
+        axios.get(`${process.env.REACT_APP_BASE_URL}/gather/existing/payment/methods/hacker`, config).then((res) => {
+            if (res.data.message === "Successfully gathered existing payment method's!") {
+
+                console.log(res.data);
+
+                const { paymentMethods } = res.data;
+
+                const convertedPaymentsArr = [];
+                if (typeof paymentMethods !== "undefined" && paymentMethods.length > 0) {
+                    for (let index = 0; index < paymentMethods.length; index++) {
+                        const method = paymentMethods[index];
+                        
+                        convertedPaymentsArr.push({
+                            number: <div className='font-secondary'>{method.lastFour}</div>,
+                            name: method.name,
+                            expiry: method.expiry,
+                            dateAdded: moment(method.dateAddedRaw).fromNow(),
+                            cardType: method.cardType,
+                            action: <div><span><i onClick={() => {
+                                deleteSpecificCard(method.id)
+                            }} className="fa fa-trash add-hover-effect-icon" style={{ width: 35, fontSize: 16, padding: 11, color: '#e4566e' }}></i></span>
+                            <span><i onClick={() => {
+                                console.log(method);
+                            }} className="fa fa-pencil add-hover-effect-icon" style={{ width: 35, fontSize: 16, padding: 11, color: 'rgb(40, 167, 69)' }}></i></span>
+                            </div>
+                        })
+                    }
+    
+                    setCardTableData(convertedPaymentsArr);
+                    setPaymentMethods(paymentMethods);
+                    setReady(true);
+                } else {
+                    setCardTableData([]);
+                    setPaymentMethods([]);
+                    setReady(true);
+                }
+            } else {
+                console.log("err", res.data);
+                
+                NotificationManager.warning("Failed to fetch your current payment method's on file, please reload this page or contact support if this problem persists...", "Failed to load previous method's!", 4750);
+            }
+        }).catch((err) => {
+            console.log(err);
+
+            NotificationManager.warning("Failed to fetch your current payment method's on file, please reload this page or contact support if this problem persists...", "Failed to load previous method's!", 4750);
+        })
+    }, []);
+
+    const handleRedirectAndCloseModal = () => {
+        
+        setModalOpenToDo(false);
+
+        setTimeout(() => {
+            history.push("/hacker/account/signup/flow/payment/related");
+        },  750);
+    }
+
+
     return (
         <Fragment>
             <Breadcrumb parent="Manage Your Active Payment Method's" title="Add A New Payment Method(s)"/>
@@ -209,6 +257,44 @@ const PaymentMethodsAddNewPaymentMethodHelper = ({ userData }) => {
                 </Sheet.Container>
                 <Sheet.Backdrop />
             </Sheet> : null}
+            <Modal classNames={{
+                overlay: '',
+                modal: 'overlayCurrentlyDue',
+            }} open={todoModalOpen} onClose={() => setModalOpenToDo(false)} center>
+                <div style={{ margin: "7.5px" }} className="centered-both-ways">
+                    <h4 className='top-modal-to-completed'>The following item's need to be completed via our 'onboarding-flow' before you may proceed forward with activating this payment method/type..</h4>
+                </div>
+                <hr />
+                    <ListGroup className="list-group-flush">
+                        {typeof currentlyDue !== "undefined" && currentlyDue.length > 0 ? currentlyDue.map((element, idx) => {
+                            return (
+                                <ListGroupItem key={idx}>
+                                    <Row>
+                                        <Col sm="12" md="6" lg="6" xl="6">
+                                            <strong>To Be Completed: </strong>
+                                        </Col>
+                                        <Col sm="12" md="6" lg="6" xl="6">
+                                            <strong style={{ color: "#f73164", textDecorationLine: "underline" }}>{element}</strong>
+                                        </Col>
+                                    </Row>
+                                </ListGroupItem>
+                            );
+                        }) : null}
+                    </ListGroup>
+                <hr />
+                <Row>
+                    <Col sm="12" lg="6" xl="6" md="6">
+                        <div style={{ margin: "7.5px" }} className="centered-both-ways">
+                            <Button onClick={() => setModalOpenToDo(false)} className={"btn-square-danger"} color={"danger"} style={{ width: "100%" }}>Close/Exit Modal</Button>
+                        </div>
+                    </Col>
+                    <Col sm="12" lg="6" xl="6" md="6">
+                        <div style={{ margin: "7.5px" }} className="centered-both-ways">
+                            <Button onClick={() => handleRedirectAndCloseModal()} className={"btn-square-success"} color={"success"} style={{ width: "100%" }}>Redirect To Complete Required Data</Button>
+                        </div>
+                    </Col>
+                </Row>
+            </Modal>
             <Container fluid={true}>
                 <Row>
                     <Col>
@@ -221,7 +307,7 @@ const PaymentMethodsAddNewPaymentMethodHelper = ({ userData }) => {
                                             <h3>{"Manage your payment methods, add new methods, view current methods & much more!"}</h3>
                                         </div>
                                         <div className="product-price custom-payment-product-price f-20">
-                                            <em style={{ color: "black" }}>Current Primary:</em> **** **** **** 4756
+                                            <em style={{ color: "black" }}>Current Primary:</em> **** **** **** {primaryCard !== null ? primaryCard : "****"}
                                         </div>
                                         <hr/>
                                         <p>You can manage any/all card or payment related activity with this page. These are the cards/payment-methods that'll be used to <strong style={{ color: "#f73164", textDecorationLine: "underline" }}>purchase {process.env.REACT_APP_APPLICATION_NAME}'s {process.env.REACT_APP_CRYPTO_TOKEN_NAME}</strong> to be gambled or used as payment for completed hack's. Check out the options on this page to explore our various payment logic...</p>
@@ -317,7 +403,7 @@ const PaymentMethodsAddNewPaymentMethodHelper = ({ userData }) => {
                             </Col>
                         </Row>
                     </Card>
-                <BottomAddNewPaymentMethodTabbedHelper setPaymentMethods={setPaymentMethods} handleInputChange={handleInputChange} cardInfo={cardInfo} setCardInfo={setCardInfo} /></Col>
+                <BottomAddNewPaymentMethodTabbedHelper setModalOpenToDo={setModalOpenToDo} setPaymentMethods={setPaymentMethods} handleInputChange={handleInputChange} cardInfo={cardInfo} setCardInfo={setCardInfo} /></Col>
                 </Row>
             </Container>
         </Fragment>

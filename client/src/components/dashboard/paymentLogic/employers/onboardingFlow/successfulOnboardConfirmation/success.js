@@ -18,7 +18,7 @@ const SuccessfulOnboardCompletionHelper = ({ userData }) => {
         };
 
         // run checks for authenticated/onboarded stripe account..
-        axios.post(`${process.env.REACT_APP_BASE_URL}/check/account/mark/verified/applicable/employer`, configuration).then((res) => {
+        axios.post(`${process.env.REACT_APP_BASE_URL}/check/account/mark/verified/applicable/hacker`, configuration).then((res) => {
             if (res.data.message === "Successfully marked onboarding as complete!") {
                 console.log("Scucess! :", res.data);
 
@@ -26,14 +26,14 @@ const SuccessfulOnboardCompletionHelper = ({ userData }) => {
             } else if (res.data.message === "User has NOT verified or onboarded their account yet successfully..") {
                 NotificationManager.warning(`You have NOT verified your account yet & are NOT permitted to actively hire any hacker's or make any payment's until the verification process is completed. To redirect to verify your account - click this notification!`, "Click notification to redirect to onboarding flow/process!", 5250, () => {
                     // redirec to appropriate page..
-                    history.push("/employer/account/signup/flow/payment/related");
+                    history.push("/hacker/account/signup/flow/payment/related");
                 });
             } else {
                 console.log("res.data err:", res.data);
 
                 NotificationManager.error(`An unknown errror has occurred while attempting to detect whether or not your account has been properly authenticated/onboarded via stripe's payment system. Please try verifiying your account via the onboarding process/flow by clicking this notification!`, "Click notification to redirect to onboarding flow/process!", 5250, () => {
                     // redirec to appropriate page..
-                    history.push("/employer/account/signup/flow/payment/related");
+                    history.push("/hacker/account/signup/flow/payment/related");
                 });
             }
         }).catch((err) => {
@@ -41,7 +41,7 @@ const SuccessfulOnboardCompletionHelper = ({ userData }) => {
 
             NotificationManager.error(`An unknown errror has occurred while attempting to detect whether or not your account has been properly authenticated/onboarded via stripe's payment system. Please try verifiying your account via the onboarding process/flow by clicking this notification!`, "Click notification to redirect to onboarding flow/process!", 5250, () => {
                 // redirec to appropriate page..
-                history.push("/employer/account/signup/flow/payment/related");
+                history.push("/hacker/account/signup/flow/payment/related");
             });
         })
     }, []);

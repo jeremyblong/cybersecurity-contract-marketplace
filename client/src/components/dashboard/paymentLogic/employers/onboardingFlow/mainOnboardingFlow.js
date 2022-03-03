@@ -12,12 +12,15 @@ import { NotificationManager } from 'react-notifications';
 const MainOnboardingFlowHelper = ({ userData }) => {
 
     const [ link, setLink ] = useState(null);
+    const [ timeout, setTimeoutData ] = useState(null); 
 
     const history = useHistory();
 
     useEffect(() => {
 
-        // history.push("/successful/onboarding/process/stripe/employer/account");
+        // history.push("/successful/onboarding/process/stripe/hacker/account");
+
+        let timeout = null;
 
         const configuration = {
             params: {
@@ -32,9 +35,9 @@ const MainOnboardingFlowHelper = ({ userData }) => {
 
                 NotificationManager.success(`You're about to be redirect to our parter/onboarding-flow at the URL of ${link} here momentarily...`, "You're about to be redirected in 5 seconds!", 5000);
 
-                setTimeout(() => {
+                timeout = setTimeout(() => {
                     window.open(link, '_self');
-                }, 5000)
+                }, 5000);
             } else {
                 console.log("res.data err:", res.data);
 
@@ -45,6 +48,12 @@ const MainOnboardingFlowHelper = ({ userData }) => {
 
             NotificationManager.success(`An unknown error occurred while attempting to fetch the desired 'onboarding link' and we are unable to proceed forward at this time. If this problem persists try refreshing the page or contacting support!`, "Unable to load proper redirect URL link!", 4750);
         })
+        
+        return () => {
+            if (timeout !== null) {
+                clearTimeout(timeout);
+            }
+        };
     }, []);
 
     console.log("link", link);

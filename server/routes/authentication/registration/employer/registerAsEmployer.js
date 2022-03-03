@@ -23,24 +23,10 @@ router.post("/", async (req, res) => {
 
     const userID = uuidv4();
 
-    const account = await stripe.accounts.create({
-      type: 'custom',
-      country: 'US',
+    await stripe.customers.create({
+      description: 'Employer Account Type',
       email: email.toLowerCase().trim(),
-      business_type: "individual",
-      individual: {
-        email: email.toLowerCase().trim(),
-        first_name: firstName.toLowerCase().trim(),
-        last_name: lastName.toLowerCase().trim()
-      },
-      capabilities: {
-        card_payments: {
-          requested: true
-        },
-        transfers: {
-          requested: true
-        },
-      },
+      name: `${firstName.toLowerCase().trim()} ${lastName.toLowerCase().trim()}`
     }, (errrrrrror, accountData) => {
       if (errrrrrror) {
         console.log(errrrrrror);
@@ -73,8 +59,7 @@ router.post("/", async (req, res) => {
           bookmarkedProfiles: [],
           profileLovesHearts: [],
           currentlyFollowedBy: [],
-          stripeAccountDetails: accountData,
-          stripeAccountVerified: false
+          stripeAccountDetails: accountData
         }), password, async (err, user) => {
           if (err) {
               console.log(err);

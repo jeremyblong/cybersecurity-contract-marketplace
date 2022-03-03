@@ -37,3 +37,21 @@
 .elevate-popover .popover {
     z-index: 999999999999999999999999999999999999999999999999999999999999999999999999 !important;
 }
+.my-sheet-container-price-wrapper {
+    z-index: 99 !important;
+}
+.dotted-border-col {
+    border: 1.75px dotted black;
+    padding: 12.5px;
+    margin: 7.5px;
+    max-width: 42.5vw;
+    min-height: 425px;
+    overflow-y: scroll;
+    max-height: 425px;
+}
+.active-picked, .active-picked {
+    margin-top: 15px !important;
+    background-color: #fff !important;
+    font-weight: bold !important;
+    box-shadow: 0 0rem 1.5rem rgba(2, 19, 255, 0.353) !important;
+}

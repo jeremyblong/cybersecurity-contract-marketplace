@@ -2,43 +2,85 @@ import React, { Fragment, useState, useEffect } from 'react';
 import "./styles.css";
 import Breadcrumb from '../../../../../../../../../layout/breadcrumb'
 import { Container, Row, Col, Card, CardBody, CardFooter, CardHeader, ListGroup, ListGroupItem, Popover, PopoverHeader, PopoverBody, Button } from "reactstrap"
-import axios from 'axios'
+import axios from 'axios';
+import { Link } from "react-router-dom";
 import Sheet from 'react-modal-sheet';
 import { connect } from "react-redux";
 import { NotificationManager } from 'react-notifications';
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+import { confirmAlert } from 'react-confirm-alert';
+import moment from "moment";
 
-const PaymentFullPaneManageAndPay = ({ setModalOpenToDo, setCurrentlyDue, currentApplication, paymentPaneFull, setFullPaymentPaneOpen, userData }) => {
+const PaymentFullPaneManageAndPay = ({ listing, setCurrentlyDue, currentApplication, paymentPaneFull, setFullPaymentPaneOpen, userData }) => {
 
-    const [ capabilities, setCapabilities ] = useState([]);
-    const [ popover, setPopover ] = useState({
-        capability0: false,
-        capability1: false,
-        capability2: false
-    })
+    const [ cards, setCards ] = useState([]);
+    const [ activeCard, setActiveCard ] = useState(null);
+
+    const handlePaymentInitialization = () => {
+        confirmAlert({
+            title: `Are you SURE you'd like to deposit ${Number(currentApplication.amountOfMoneyUponCompletion).toFixed(2)}?`,
+            message: `This is NOT completely permanant, IF the contracted hacker does NOT complete the required work or is incompetent, you have the ABILITY to RETRIEVE your un-used funds at a later point. Confirmed transfers/payments will ALSO need to be confirmed by you prior to any money being transferred throughout accounts.`,
+            buttons: [
+              {
+                label: 'Yes, Request Update!',
+                onClick: () => {
+                    console.log("yes notify and run logic!");
+
+                    if (activeCard !== null) {
+                        const config = {
+                            userID: userData.uniqueId,
+                            depositAmount: Number(currentApplication.amountOfMoneyUponCompletion).toFixed(2),
+                            hackerID: currentApplication.applicantId,
+                            activeCard,
+                            publicCompanyName: listing.publicCompanyName,
+                            employerPostedJobId: currentApplication.employerPostedJobId
+                        }
+                
+                        axios.post(`${process.env.REACT_APP_BASE_URL}/deposit/funds/specific/hacker/initialization/process`, config).then((res) => {
+                            if (res.data.message === "Successfully deposited funds and notified hacker!") {
+                                console.log(res.data);
+    
+                                setFullPaymentPaneOpen(false)
+    
+                                NotificationManager.success(`We've successfully deposited the funds into ${process.env.REACT_APP_APPLICATION_NAME} & your contracted hacker is now READY to go and should start working immediately (within 1 business day)! Congrats on your new hire!`, "Succesfully processed request & notified hacker!", 4750);
+                            } else {
+                                console.log("Err", res.data);
+    
+                                NotificationManager.error("An error occurred while attempting to make changes, update the hacker hiree and process overall related logic - if this problem persists, please contact support or try this action again!", "An error occurred while attempting to notifiy related hacker!", 4750);
+                            }
+                        }).catch((err) => {
+                            console.log("Critical err", err);
+    
+                            NotificationManager.error("An error occurred while attempting to make changes, update the hacker hiree and process overall related logic - if this problem persists, please contact support or try this action again!", "An error occurred while attempting to notifiy related hacker!", 4750);
+                        })
+                    } else {
+                        NotificationManager.warning("You MUST select a 'payment card' to take the desired funds from, We will bill/draw funds from this account so check your balance prior to running this command to avoid errors!", "Please select a 'payment card' before continuing!", 4750);
+                    }
+                }
+              },
+              {
+                label: 'No, Cancel/Exit.',
+                onClick: () => {
+                    console.log("canelled/don't run logic");
+                }
+              }
+            ]
+        });
+    }
 
     useEffect(() => {
         const configuration = {
-            params: { 
-                employerID: userData.uniqueId
+            params: {
+                id: userData.uniqueId
             }
         }
-        axios.get(`${process.env.REACT_APP_BASE_URL}/list/employer/capabilities/payments`, configuration).then((res) => {
-            if (res.data.message === "Successfully gathered payment capabilities!") {
+        axios.get(`${process.env.REACT_APP_BASE_URL}/gather/employer/payment/methods/cards/only`, configuration).then((res) => {
+            if (res.data.message === "Gathered employer payment cards!") {
                 console.log(res.data);
 
-                const { capabilities } = res.data;
+                const { cards } = res.data;
 
-                const arr = [];
-
-                for (let index = 0; index < capabilities.data.length; index++) {
-                    const el = capabilities.data[index];
-                    if (el.id === "card_payments" || el.id === "us_bank_account_ach_payments" || el.id === "link_payments") {
-                        arr.push(el);
-                    }
-                }
-                console.log("arr", arr);
-
-                setCapabilities(arr);
+                setCards(cards.data);
             } else {
                 console.log("Err", res.data);
             }
@@ -46,190 +88,75 @@ const PaymentFullPaneManageAndPay = ({ setModalOpenToDo, setCurrentlyDue, curren
             console.log("Critical errror...:", err);
         })
     }, [])
-
-    const calculateType = (type) => {
-        switch (type) {
-            case "card_payments":
-                return "Card Payment's"
-                break;
-            case "link_payments":
-                return "Link Payment's";
-                break;
-            case "us_bank_account_ach_payments":
-                return "US Bank Account ACH Payment's"
-                break;
-            default:
-                break;
-        }
-    }
-
-    const handleActivation = (element, idx) => {
-
-        const { id, status } = element; 
-
-        if (status === "active") {
-            NotificationManager.info("You've ALREADY activated this option/capability & it is currently set as 'active'. Please try this action again with a 'innactive' or 'unrequested' status types..", "Already activated this payment method!", 4750);
-        } else {
-            const configuration = {
-                params: { 
-                    employerID: userData.uniqueId,
-                    elementID: id
-                }
-            }
-            axios.get(`${process.env.REACT_APP_BASE_URL}/modify/employer/capabilities/payments`, configuration).then((res) => {
-                if (res.data.message === "Successfully modified payment capabilities!") {
-                    console.log(res.data);
-
-                    const { capability, elementID } = res.data;
-
-                    setCapabilities(prevState => {
-                        return prevState.forEach((item, idx) => {
-                            if (item.id === elementID) {
-                                return capability;
-                            } else {
-                                return item;
-                            }
-                        })
-                    });
-                    
-                    setPopover(prevState => {
-                        return {
-                            ...prevState,
-                            [`capability${idx}`]: false
-                        }
-                    })
-
-                    NotificationManager.success(`Successfully modified the desired capabilities & updated stripe information! You're capability ${elementID} is now ACTIVE!`, `Changed ${elementID} and is now ACTIVE!`, 4750);
-                } else if (res.data.message === "You must enable further 'onboarding settings' before activating this setting..") {
-
-                    const { currentlyDue } = res.data;
-
-                    setCurrentlyDue(currentlyDue);
-
-                    setFullPaymentPaneOpen(false);
-
-                    setTimeout(() => {
-                        setModalOpenToDo(true);
-                    },  625);
-                } {
-                    console.log("Err", res.data);
-
-                    NotificationManager.error("An unknown error has occurred while attempting to update the desired information and/or capability, Please try this action again and contact support if the problem persists!", "Unknown error has occurred!", 4750);
-                }
-            }).catch((err) => {
-                console.log("Critical errror...:", err);
-
-                NotificationManager.error("An unknown error has occurred while attempting to update the desired information and/or capability, Please try this action again and contact support if the problem persists!", "Unknown error has occurred!", 4750);
-            })
-        }
-    }
-
-    console.log("capabilities", capabilities);
-
-    console.log("popover", popover);
-
     return (
         <Fragment>
-            <Sheet draggable={false} isOpen={paymentPaneFull} onClose={() => setFullPaymentPaneOpen(false)}>
-                <Sheet.Container>
+            <Sheet className={"my-sheet-container-price-wrapper"} draggable={false} isOpen={paymentPaneFull} onClose={() => setFullPaymentPaneOpen(false)}>
+                <Sheet.Container className={"my-sheet-container-price"}>
                     <Sheet.Header>
                         <div style={{ margin: "12.5px" }} className="centered-both-ways">
-                            <Button onClick={() => {
-                                setPopover(() => {
-                                    return {
-                                        capability0: false,
-                                        capability1: false,
-                                        capability2: false
-                                    }
-                                })
-                                setFullPaymentPaneOpen(false)
-                            }} className={"btn-square-danger"} outline color={"danger-2x"} style={{ width: "100%" }}>Exit/Close This Pane</Button>
+                            <Button onClick={() => setFullPaymentPaneOpen(false)} className={"btn-square-danger"} outline color={"danger-2x"} style={{ width: "100%" }}>Exit/Close This Pane</Button>
                         </div>
                     </Sheet.Header>
                     <Sheet.Content>
                         <div id={"breadcrumb-full-payment"}>
                             <Breadcrumb id={"breadcrumb-full-payment"} parent={"Make FULL Payment"} title={currentApplication !== null ? `Make a full deposit/payment to this contractor (${currentApplication.applicantName})` : "Loading Data..."} />
                             <Container className='container-pane-full-payment' fluid={true}>
-                                <Row>
+                                {currentApplication !== null ? <Row>
                                     <Col sm="12" md="12" lg="12" xl="12">
-                                        <Card className='card-payment-entirely'>
+                                        <Card className='card-payment-entirely-halved'>
                                             <CardHeader>
-                                                <h2>Make a <strong>complete payment/deposit</strong> for {currentApplication !== null ? `Make a full deposit/payment to this contractor (${currentApplication.applicantName})` : "Loading Name/Data..."} before they can proceed with the required work on this contract..</h2>
+                                                <h3 className='make-full-payment-header'>Make a FULL payment to the desired hacker assigned to this contract job (escrow type deposit service - does NOT immediately transfer)!</h3>
+                                                <hr />
+                                                <p className='lead'>This is essentially an 'escrow' type service with <em style={{ textDecorationLine: "underline" }}>stripe</em> that deposit's funds PRIOR to a hacker starting a contract to assure both {process.env.REACT_APP_APPLICATION_NAME} AND the hacker themselves that once the <strong style={{ color: "#7366ff", textDecorationLine: "underline" }}>contract is successfully completed, the funds will be released..</strong></p>
                                             </CardHeader>
                                             <CardBody>
                                                 <Row>
-                                                    <Col sm="12" md="6" lg="6" xl="6">
-                                                        <Card className='card-payment-entirely-halved'>
-                                                            <CardHeader>
-                                                                <h3 className='capabilities-header'>Capabilities related to payment method's</h3>
-                                                            </CardHeader>
-                                                            <CardBody>
-                                                                <ListGroup className="list-group-flush">
-                                                                    {typeof capabilities !== "undefined" && capabilities.length > 0 ? capabilities.map((element, idx) => {
-                                                                        return (
-                                                                            <ListGroupItem key={idx}>
-                                                                                <Row>
-                                                                                    <Col sm="12" md="4" lg="4" xl="4">
-                                                                                        <strong>Payment Type:</strong>
-                                                                                    </Col>
-                                                                                    <Col sm="12" md="4" lg="4" xl="4">
-                                                                                        <strong style={{ color: "#f73164", textDecorationLine: "underline" }}>{calculateType(element.id)}</strong>
-                                                                                    </Col>
-                                                                                    <Col className='target-me' sm="12" md="4" lg="4" xl="4">
-                                                                                        <div className={"create-row-capability"}>
-                                                                                            <strong style={{ color: "#7366ff", textDecorationLine: "underline" }}>{element.status}</strong>
-                                                                                            <img id={`capability${idx}`} onClick={() => {
-                                                                                                setPopover(prevState => {
-                                                                                                    return {
-                                                                                                        ...prevState,
-                                                                                                        [`capability${idx}`]: true
-                                                                                                    }
-                                                                                                })
-                                                                                            }} src={require("../../../../../../../../../assets/gifs/add.gif")} className={"gif-add-capability"} />
-                                                                                            <div className='zindex-pop-me'>
-                                                                                                <Popover className={"elevate-popover"} placement="bottom" isOpen={popover[`capability${idx}`]} target={`capability${idx}`} toggle={() => {
-                                                                                                    setPopover(prevState => {
-                                                                                                        return {
-                                                                                                            ...prevState,
-                                                                                                            [`capability${idx}`]: !popover[`capability${idx}`]
-                                                                                                        }
-                                                                                                    })
-                                                                                                }}>
-                                                                                                    <PopoverHeader>Update/Activate Capability</PopoverHeader>
-                                                                                                    <PopoverBody>Would you like to update and 'activate' this capability? You MUST have previously completed the 'onboarding-flow'.
-                                                                                                    <hr />
-                                                                                                    <Button onClick={() => handleActivation(element, idx)} className={"btn-square-success"} outline color={"success-2x"} style={{ width: "100%" }}>Activate!</Button>
-                                                                                                    </PopoverBody>
-                                                                                                </Popover>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </Col>
-                                                                                </Row>
-                                                                            </ListGroupItem>
-                                                                        );
-                                                                    }) : null}
-                                                                </ListGroup>
-                                                            </CardBody>
-                                                        </Card>
-                                                    </Col>
-                                                    <Col sm="12" md="6" lg="6" xl="6">
-                                                        <Card className='card-payment-entirely-halved'>
-                                                            <CardHeader>
-                                                                
-                                                            </CardHeader>
-                                                            <CardBody>
-                                                                
-                                                            </CardBody>
-                                                        </Card>
-                                                    </Col>
+                                                    <div className='centered-both-ways'>
+                                                        <Col className='dotted-border-col' sm="12" md="6" lg="6" xl="6">
+                                                            <h3>You have choosen to pay the FULL deposit of <strong style={{ color: "darkred", textDecorationLine: "underline" }}>${Number(currentApplication.amountOfMoneyUponCompletion).toFixed(2)} (USD-$)</strong> to the hacker named <strong style={{ color: "darkred", textDecorationLine: "underline" }}>{currentApplication.applicantName}</strong></h3>
+                                                            <hr />
+                                                            <p className='lead'>Initialize & pay via the payment button below... Please KEEP IN MIND that transfers are NOT locked in place forever and YOU WILL be able to RETRIEVE ANY UN-USED credits/money deposited if for any circumstance your contractor fails to properly do the job or any other unfortunate circumstances. You will HOWEVER need to do this through our support team however we emphisize customer's quality of experience on our platform and will do our best to refund your desired funds, if applicable.</p>
+                                                        </Col>
+                                                        <Col className='dotted-border-col' sm="12" md="6" lg="6" xl="6">
+                                                            <h3>Select a card that you wish to make this payment with..</h3>
+                                                            <hr />
+                                                            {typeof cards !== "undefined" && cards.length > 0 ? cards.slice(0, 3).map((payment, idx) => {
+                                                                return (
+                                                                    <Fragment key={idx}>
+                                                                        <ListGroupItem onClick={() => setActiveCard(payment)} className={activeCard !== null && activeCard.id === payment.id ? "list-group-item-action listitem-pricing-card flex-column align-items-start active active-picked" : "list-group-item-action listitem-pricing-card flex-column align-items-start"}>
+                                                                            <div className="d-flex w-100 justify-content-between">
+                                                                                <h5 className="mb-1">ID: {payment.id.slice(0, 7)}...</h5><small style={{ color: "#f73164" }} className="text-secondary">Added/Created: {moment(payment.created * 1000).fromNow()}</small>
+                                                                            </div>
+                                                                            <p className="mb-1" style={{ color: "#51bb25", fontWeight: "bold" }}>{`**** **** **** ${payment.card.last4}`}</p>
+                                                                            <small className="text-muted">{`Exp. ${payment.card.exp_month}/${payment.card.exp_year}`} <small className="float-right">Card Type: {payment.card.brand}</small></small>
+                                                                        </ListGroupItem>
+                                                                    </Fragment>
+                                                                );
+                                                            }) : <Fragment>
+                                                                <h3 style={{ color: "blue", textDecorationLine: "underline" }}>You don't have any availiable cards on file..</h3>
+                                                                <div style={{ padding: "27.5px" }} className="centered-both-ways">
+                                                                    <img src={require("../../../../../../../../../assets/images/credit-cards.jpg")} className={"credit-cards-placeholder"} />
+                                                                </div>
+                                                            </Fragment>}
+                                                        </Col>
+                                                    </div>
                                                 </Row>
+                                                <Button onClick={() => {
+                                                    handlePaymentInitialization();
+                                                }} className={"btn-square-success"} outline color={"success-2x"} style={{ width: "100%", marginTop: "17.5px" }}>Make Payment (will need to double confirm)</Button>
                                             </CardBody>
                                             <CardFooter>
-                                                <Button onClick={() => {}} className={"btn-square-info"} outline color={"info-2x"} style={{ width: "100%" }}>Submit Payment & Process Deposit (double-confirm action)</Button>
+                                                <h3>If you're confused or would like more information on <Link className={"payment-linky"} to={"/frequently/asked/questions/main/employer"}>escrow services</Link>, you can find a plethorea of information between the <a target="_blank" href={"https://en.wikipedia.org/wiki/Escrow"}>wiki page</a> or by clicking <Link className={"payment-linky"} to={"/frequently/asked/questions/main/employer"}>here</Link> to see exactly how <strong style={{ textDecorationLine: "underline" }}>WE</strong> implement escrow type services!</h3>
                                             </CardFooter>
                                         </Card>
                                     </Col>
-                                </Row>
+                                </Row> : <Row>
+                                <SkeletonTheme baseColor="#c9c9c9" highlightColor="#444">
+                                    <p>
+                                        <Skeleton count={45} />
+                                    </p>
+                                </SkeletonTheme>
+                                </Row>}
                             </Container>
                         </div>
                     </Sheet.Content>

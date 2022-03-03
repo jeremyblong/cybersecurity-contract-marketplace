@@ -189,7 +189,7 @@ export const MENUITEMS = [
                 title: 'Payment Related Actions/Options', icon: Bell, type: 'sub',active: false, children: [
                     { path: `${process.env.PUBLIC_URL}/payment/logic/main/page/hackers`, title: `Hacker's Payment(s) Homepage/Main`, type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/payment/logic/main/page/employers`, title: `Employer's Payment(s) Homepage/Main`, type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/employer/account/signup/flow/payment/related`, title: "Payment Set-up BEFORE any LIVE payment's", type: 'link' }
+                    { path: `${process.env.PUBLIC_URL}/hacker/account/signup/flow/payment/related`, title: "Payment Set-up BEFORE any LIVE payment's", type: 'link' }
                 ]
             }
         ]          

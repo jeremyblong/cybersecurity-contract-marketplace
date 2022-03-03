@@ -110,6 +110,6 @@ export const routes = [
         { path: "/payments/employer/account/manage/pay/hacker/:id", Component: MainPaymentSelectionPage },
         { path: "/hackers/display/all/active/gigs/hired", Component: ViewLiveActivehiredJobsGigsDisplayPage },
         { path: "/payment/logic/main/page/employers", Component: PaymentMethodsAddNewPaymentMethodEmployerPage },
-        { path: "/employer/account/signup/flow/payment/related", Component: MainOnboardingFlowPage },
-        { path: "/successful/onboarding/process/stripe/employer/account", Component: SuccessfulOnboardCompletionPage }
+        { path: "/hacker/account/signup/flow/payment/related", Component: MainOnboardingFlowPage },
+        { path: "/successful/onboarding/process/stripe/hacker/account", Component: SuccessfulOnboardCompletionPage }
 ]; 

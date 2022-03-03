@@ -15,7 +15,6 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import ReactPlayer from 'react-player';
 import PaymentFullPaneManageAndPay from "./sheetHelpers/paymentFullPane/index.js";
-import { Modal } from 'react-responsive-modal';
 
 
 const settings = {
@@ -35,7 +34,6 @@ const MainPaymentSelectionHelper = ({ userData }) => {
     const [ listingsData, setListings ] = useState([]);
     const [ paymentPaneFull, setFullPaymentPaneOpen ] = useState(false);
     const [ currentlyDue, setCurrentlyDue ] = useState([]);
-    const [ todoModalOpen, setModalOpenToDo ] = useState(false);
 
     const { id } = useParams();
 
@@ -126,36 +124,7 @@ const MainPaymentSelectionHelper = ({ userData }) => {
                     </Sheet.Container>
                 <Sheet.Backdrop />
             </Sheet>
-            <Modal classNames={{
-                overlay: '',
-                modal: 'overlayCurrentlyDue',
-            }} open={todoModalOpen} onClose={() => setModalOpenToDo(false)} center>
-                <div style={{ margin: "7.5px" }} className="centered-both-ways">
-                    <h4 className='top-modal-to-completed'>The following item's need to be completed via our 'onboarding-flow' before you may proceed forward with activating this payment method/type..</h4>
-                </div>
-                <hr />
-                    <ListGroup className="list-group-flush">
-                        {typeof currentlyDue !== "undefined" && currentlyDue.length > 0 ? currentlyDue.map((element, idx) => {
-                            return (
-                                <ListGroupItem key={idx}>
-                                    <Row>
-                                        <Col sm="12" md="6" lg="6" xl="6">
-                                            <strong>To Be Completed: </strong>
-                                        </Col>
-                                        <Col sm="12" md="6" lg="6" xl="6">
-                                            <strong style={{ color: "#f73164", textDecorationLine: "underline" }}>{element}</strong>
-                                        </Col>
-                                    </Row>
-                                </ListGroupItem>
-                            );
-                        }) : null}
-                    </ListGroup>
-                <hr />
-                <div style={{ margin: "7.5px" }} className="centered-both-ways">
-                    <Button onClick={() => setModalOpenToDo(false)} className={"btn-square-danger"} outline color={"danger-2x"} style={{ width: "100%" }}>Close/Exit Modal</Button>
-                </div>
-            </Modal>
-            <PaymentFullPaneManageAndPay setModalOpenToDo={setModalOpenToDo} currentlyDue={currentlyDue} setCurrentlyDue={setCurrentlyDue} currentApplication={currentApplication} paymentPaneFull={paymentPaneFull} setFullPaymentPaneOpen={setFullPaymentPaneOpen} />
+            <PaymentFullPaneManageAndPay listing={listingsData} paymentPaneFull={paymentPaneFull} setFullPaymentPaneOpen={setFullPaymentPaneOpen} currentlyDue={currentlyDue} setCurrentlyDue={setCurrentlyDue} currentApplication={currentApplication} />
             <Container fluid={true}>
                 <Row>
                     <Col sm="12" lg="12" md="12" xs="12">

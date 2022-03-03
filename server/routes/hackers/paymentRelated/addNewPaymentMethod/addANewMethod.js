@@ -41,33 +41,45 @@ router.post("/", (req, resppppp, next) => {
 
             const { id } = result.value.stripeAccountDetails;
 
-            await stripe.paymentMethods.create({
-                type: 'card',
+            const source = {
                 card: {
-                  number,
-                  exp_month: expiry.substring(0, 2),
-                  exp_year: expiry.substring(2, 4),
-                  cvc,
-                },
-            }, async (errrrrrrr, successData) => {
-                if (errrrrrrr) {
-                    console.log(errrrrrrr);
-                } else {
-                    console.log("successData", successData);
+                    number,
+                    exp_month: expiry.substring(0, 2),
+                    exp_year: expiry.substring(2, 4),
+                    cvc,
+                    name,
+                    currency: "usd"
+                }
+            };
 
-                    const paymentMethod = await stripe.paymentMethods.attach(successData.id, { customer: id });
+            console.log("source", source);
 
-                    if (paymentMethod) {
+            await stripe.tokens.create(source).then(async (dataaaaaa) => {
+                // log response
+                console.log("DATA!:", dataaaaaa);
+                // continue w/logic..
+
+                const external = await stripe.accounts.createExternalAccount(id, { external_account: dataaaaaa.id }, async (err, result) => {
+                    if (!err) {
                         resppppp.json({
                             message: "Successfully added a new payment method!",
-                            newPaymentAddition
+                            account: newPaymentAddition
                         })
                     } else {
-                        resppppp.json({
-                            message: "An error has occurred while attempting to create the desired card data..."
-                        })
+                        console.log("err", err);
+
+                        const message = err.raw.message;
+
+                        const pulled = await collection.findOneAndUpdate({ uniqueId: hackerID }, { $pull: { paymentMethods: { id: newPaymentAddition.id } } });
+
+                        if (pulled) {
+                            resppppp.json({
+                                message: "An error has occurred while attempting to create the desired card data...",
+                                err: message
+                            })
+                        }
                     }
-                }
+                });
             });
         }
     })
