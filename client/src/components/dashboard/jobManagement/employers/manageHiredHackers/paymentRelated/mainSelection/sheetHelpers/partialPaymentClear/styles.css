@@ -1,0 +1,9 @@
+.center-slider-adjustment-bar {
+    margin: 27.5px;
+}
+.current-selected-cost {
+    margin-top: 52.5px;
+    color: #f73164;
+    text-decoration-line: underline;
+    font-weight: bold;
+}

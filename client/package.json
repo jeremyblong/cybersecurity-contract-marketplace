@@ -24,7 +24,7 @@
     "nodemailer": "^6.6.5",
     "nodemailer-sendgrid-transport": "^0.2.0",
     "places.js": "^1.19.0",
-    "rc-slider": "^9.7.4",
+    "rc-slider": "^9.7.5",
     "react": "^17.0.1",
     "react-accessible-accordion": "^4.0.0",
     "react-animate-on-scroll": "^2.1.5",

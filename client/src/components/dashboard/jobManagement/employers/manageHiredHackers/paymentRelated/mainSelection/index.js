@@ -15,7 +15,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import ReactPlayer from 'react-player';
 import PaymentFullPaneManageAndPay from "./sheetHelpers/paymentFullPane/index.js";
-
+import ClearPaymentsOrPartialPane from "./sheetHelpers/partialPaymentClear/clearPaymentsOrPartial.js";
 
 const settings = {
     dots: true,
@@ -23,7 +23,7 @@ const settings = {
     centerMode: true,
     draggable: true,
     speed: 500,
-    slidesToShow: 4,
+    slidesToShow: 3,
     slidesToScroll: 1
 };
 
@@ -109,21 +109,7 @@ const MainPaymentSelectionHelper = ({ userData }) => {
     return (
         <Fragment>
             <Breadcrumb parent="Manage Payment(s)" title="Manage payments, recurring deposits & more..." />
-            <Sheet draggable={false} isOpen={isOpen} onClose={() => setIsOpenState(false)}>
-                <Sheet.Container>
-                    <Sheet.Header>
-                        <div style={{ margin: "12.5px" }} className="centered-both-ways">
-                            <Button onClick={() => setIsOpenState(false)} className={"btn-square-danger"} outline color={"danger-2x"} style={{ width: "100%" }}>Exit/Close This Pane</Button>
-                        </div>
-                    </Sheet.Header>
-                    <Sheet.Content>
-                        <div style={{ marginTop: "275px" }} className='centered-both-ways'>
-                            <h1>Clear all pending/outstanding payment's...!</h1>
-                        </div>
-                    </Sheet.Content>
-                    </Sheet.Container>
-                <Sheet.Backdrop />
-            </Sheet>
+            <ClearPaymentsOrPartialPane listing={listingsData} currentApplication={currentApplication} isOpen={isOpen} setIsOpenState={setIsOpenState} />
             <PaymentFullPaneManageAndPay listing={listingsData} paymentPaneFull={paymentPaneFull} setFullPaymentPaneOpen={setFullPaymentPaneOpen} currentlyDue={currentlyDue} setCurrentlyDue={setCurrentlyDue} currentApplication={currentApplication} />
             <Container fluid={true}>
                 <Row>
@@ -163,7 +149,7 @@ const MainPaymentSelectionHelper = ({ userData }) => {
                         />
                     </Col>
                     <Col xl="6 xl-50" md="6" sm="12" sm="6">
-                        <Card className="bg-primary">
+                        <Card className="bg-dark">
                             <CardBody className='cardcardcard-min'>
                                 <Media className="faq-widgets">
                                     <Media body>
@@ -179,22 +165,22 @@ const MainPaymentSelectionHelper = ({ userData }) => {
                         </Card>
                     </Col>
                     <Col xl="6 xl-50" md="6" sm="12" sm="6">
-                        <Card className="bg-info">
+                        <Card className="bg-dark">
                             <CardBody className='cardcardcard-min'>
                                 <Media className="faq-widgets">
                                     <Media body>
-                                        <h5 style={{ color: "white", textDecorationLine: "underline" }}>Pay Off Entire Owed/Due Balanace</h5>
-                                        <p className='heavy-p'>Pay off <strong>ENTIRE REMAINING DUE BALANCE</strong> with this <em>specific</em> contracted hacker, This option will allow you to make sure you're not oweing anyone money at any given point in time. This option/selection will display & clear all remaining payments to be paid upon <em>approval...</em></p>
+                                        <h5 style={{ color: "white", textDecorationLine: "underline" }}>Pay off a segment/chunk of your overall owed/due balance</h5>
+                                        <p className='heavy-p'>Pay off a <strong style={{ textDecorationLine: "underline" }}>CHUNK/PORTION (SELECTED)</strong> with this <em>specific</em> contracted hacker, This option will allow you to make deposit percentages of your overall dued balance at any given point in time. This option is good if you want your hacker/contractor to get started <strong style={{ textDecorationLine: "underline" }}>BUT</strong> you don't have enough money to make a <strong style={{ textDecorationLine: "underline" }}>FULL DEPOSIT</strong> or want to pay incrementally..</p>
                                         <hr />
-                                        <p className='heavy-p'>This will automatically recognize through the system how much should be paid & will provide a <em>DETAILED</em> receipt/record after completion for bookkeeping purposes.</p>
-                                        <hr />
-                                        <Button onClick={() => setIsOpenState(true)} className={"btn-square-light"} color={"light-2x"} outline style={{ width: "100%", color: "white", fontWeight: "bold" }}>Clear all pending/outstanding payment's</Button>
+                                        <p className='heavy-p'>There is a <em>"percentage bar"</em> which is adjustable and can be modified according to whatever amount you'd like to deposit at this current point in time. We <strong style={{ textDecorationLine: "underline" }}>SUGGEST</strong> you deposit at least 25% of the total due as until the hacker contracted amount is <strong style={{ color: "#7366ff" }}>paid in full and all funds are deposited into {process.env.REACT_APP_APPLICATION_NAME}</strong> so the contracted user (hacker) knows they will be paid upon <strong style={{ textDecorationLine: "underline" }}>COMPLETION OF THE CONTRACT.</strong></p>
+                                        <hr style={{ marginBottom: "32.5px" }} />
+                                        <Button onClick={() => setIsOpenState(true)} className={"btn-square-light"} color={"light-2x"} outline style={{ width: "100%", color: "white", fontWeight: "bold" }}>Make a PARTIAL payment!</Button>
                                     </Media><Aperture />
                                 </Media>
                             </CardBody>
                         </Card>
                     </Col>
-                    <Col xl="12 xl-50" md="12" sm="12" sm="12">
+                    <Col xl="12 xl-100" md="12" sm="12" sm="12">
                         <Card className="bg-light">
                             <CardBody className='full-payment-block'>
                                 <Media className="p-20">
@@ -220,11 +206,9 @@ const MainPaymentSelectionHelper = ({ userData }) => {
                             <Slider {...settings}>
                                 {typeof listingsData !== "undefined" && listingsData.length > 0 ? listingsData.map((listing, idx) => {
                                     const lastUploaded = listing.uploadedFiles[listing.uploadedFiles.length - 1];
-
-                                    console.log("listing!!!", listing);
                                     return (
                                         <Fragment key={idx}>
-                                            <Col className='min-col-styled' xl="3 xl-50 box-col-6" lg="6" xl="6" md="6">
+                                            <Col className='min-col-styled' xl="4 xl-100 box-col-4" lg="6" xl="6" md="6">
                                                 <Card className="features-faq product-box">
                                                     <div className="faq-image product-img">
                                                         {renderPicOrVideoLastUploaded(lastUploaded)}

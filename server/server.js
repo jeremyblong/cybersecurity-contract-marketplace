@@ -182,7 +182,7 @@ app.use("/gather/existing/payment/methods/employer/stripe", require("./routes/em
 app.use("/determine/primary/card/on/file", require("./routes/shared/paymentRelated/gatherPrimaryPaymentCard/primaryCardRetrival.js"));
 app.use("/deposit/funds/specific/hacker/initialization/process", require("./routes/employers/hiredHackers/depositContractedFunds/depositFunds/depositFundsForHackerContract.js"));
 app.use("/gather/employer/payment/methods/cards/only", require("./routes/employers/paymentRelated/gatherPreviousPaymentMethods/stripeCards/gatherStripeCards.js"));
-
+app.use("/deposit/funds/specific/hacker/initialization/process/partial/specific", require("./routes/employers/hiredHackers/depositContractedFunds/partialDeposit/depositPartialFunds.js"));
 // ~ webhook logic STARTS here ~
 app.use("/passbase/webhook", require("./webhooks/passbase/webhook.js"));
 // ~ webhook logic ENDS here ~

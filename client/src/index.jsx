@@ -29,6 +29,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "react-image-gallery/styles/css/image-gallery.css";
 import 'emoji-mart/css/emoji-mart.css';
+import 'rc-slider/assets/index.css';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 // components & other various imported functionality/components
 import React, { Fragment, useState, useEffect } from 'react';

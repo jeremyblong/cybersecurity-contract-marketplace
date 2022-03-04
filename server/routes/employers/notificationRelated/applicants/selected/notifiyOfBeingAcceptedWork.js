@@ -14,7 +14,8 @@ router.post("/", (req, resppppp, next) => {
         listingDescription,
         employerID,
         applicantData,
-        listingInfo
+        listingInfo,
+        generatedJobID
     } = req.body;
 
     const collection = Connection.db.db("db").collection("hackers");
@@ -37,7 +38,7 @@ router.post("/", (req, resppppp, next) => {
     };
 
     const newHackingJob = {
-        id: uuidv4(),
+        id: generatedJobID,
         date: new Date(),
         dateString: moment(new Date()).format("MM/DD/YYYY hh:mm:ss a"),
         ...applicantData,

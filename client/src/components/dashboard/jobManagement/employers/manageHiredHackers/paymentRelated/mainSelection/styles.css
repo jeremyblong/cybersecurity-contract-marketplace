@@ -16,10 +16,12 @@
 }
 .cardcardcard-min {
     min-height: 450px;
+    height: 100%;
 }
 .full-payment-block {
     border: 1.75px dotted black;
     color: black;
+    min-width: 100%;
     font-weight: bold;
 }
 .mega-badge-pricing-full {
@@ -34,4 +36,11 @@
 }
 .top-modal-to-completed {
 
+}
+.push-btn-bottom-payment {
+    position: absolute;
+    bottom: 52.5px;
+    right: 65px;
+    left: 65px;
+    padding-top: 45px;
 }

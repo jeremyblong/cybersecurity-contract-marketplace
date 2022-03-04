@@ -71,7 +71,7 @@ router.post("/", (req, resppppp, next) => {
                     if (paymentMethod) {
                         resppppp.json({
                             message: "Successfully added a new payment method!",
-                            newPaymentAddition
+                            newPaymentAddition: successData
                         })
                     } else {
                         resppppp.json({

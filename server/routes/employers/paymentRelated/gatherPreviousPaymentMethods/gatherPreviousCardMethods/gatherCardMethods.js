@@ -6,9 +6,9 @@ const stripe = require('stripe')(config.get("stripeSecretKey"));
 
 
 
-router.get("/", (req, resppppp, next) => {
+router.post("/", (req, resppppp, next) => {
     
-    const { employerID } = req.query;
+    const { employerID } = req.body;
 
     const collection = Connection.db.db("db").collection("employers");
 

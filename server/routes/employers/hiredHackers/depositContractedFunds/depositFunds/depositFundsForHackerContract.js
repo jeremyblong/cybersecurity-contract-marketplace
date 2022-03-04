@@ -10,7 +10,7 @@ const _ = require("lodash");
 
 router.post("/", async (req, resppppp, next) => {
     
-    const { userID, depositAmount, activeCard, hackerID, publicCompanyName, employerPostedJobId } = req.body; // userID is signed in user (employer)
+    const { userID, depositAmount, activeCard, hackerID, publicCompanyName, jobID } = req.body; // userID is signed in user (employer)
 
     const employerCollection = Connection.db.db("db").collection("employers");
     const hackerCollection = Connection.db.db("db").collection("hackers");
@@ -20,21 +20,19 @@ router.post("/", async (req, resppppp, next) => {
 
     if (employer !== null && hacker !== null) {
 
-        console.log("users", employer, hacker);
-
         await stripe.paymentIntents.create({
             amount: Math.round(depositAmount) * 100,
             payment_method_types: ['card'],
             confirm: false,
             currency: "usd",
             customer: employer.stripeAccountDetails.id,
-            description: "Payment made in relevation to a 'contracted hacker' - deposit funds to provide 'purchase-proof' for the hacker so they can get started with the desired contract.",
+            description: "Payment made in relation to a 'contracted hacker' - deposit funds to provide 'purchase-proof' for the hacker so they can get started with the desired contract.",
             payment_method: activeCard.id
         }, (err, result) => {
             if (err) {
                 console.log("critical error creating intent..:", err);
 
-                resppppp.json({
+                return resppppp.json({
                     message: "An error occurred while attempting to make deposit/payment for contracted worker",
                     err
                 }) 
@@ -55,7 +53,7 @@ router.post("/", async (req, resppppp, next) => {
                 const customPromise = new Promise((resolve, reject) => {
                     for (let index = 0; index < hacker.activeHiredHackingJobs.length; index++) {
                         const job = hacker.activeHiredHackingJobs[index];
-                        if (job.employerPostedJobId === employerPostedJobId) {
+                        if (job.id === jobID) {
                             if (_.has(job, "paymentHistory")) {
                                 job.paymentHistory.push(newPaymentCompleted);
                             } else {
@@ -69,15 +67,10 @@ router.post("/", async (req, resppppp, next) => {
                                     const cancelAttempt = await stripe.paymentIntents.cancel(result.id);
 
                                     if (cancelAttempt) {
-                                        resolve(null);
-
-                                        resppppp.json({
-                                            message: "An error occurred while attempting to make deposit/payment for contracted worker",
-                                            err: error
-                                        })   
+                                        resolve(null); 
                                     }
                                 } else {
-                                    resolve();
+                                    resolve(saved);
                                 }
                             })
                         }
@@ -89,12 +82,16 @@ router.post("/", async (req, resppppp, next) => {
 
                     if (passed === null) {
                         // remove previously saved database data AND cancel pending payment..
+                        return resppppp.json({
+                            message: "An error occurred while attempting to make deposit/payment for contracted worker",
+                            err: error
+                        })  
                     } else {
                         // success, save remaining data..
 
                         for (let index = 0; index < employer.activeHiredHackers.length; index++) {
                             const job = employer.activeHiredHackers[index];
-                            if (job.employerPostedJobId === employerPostedJobId) {
+                            if (job.id === jobID) {
                                 if (_.has(job, "paymentHistory")) {
                                     job.paymentHistory.push(newPaymentCompleted);
                                 } else {
@@ -117,13 +114,13 @@ router.post("/", async (req, resppppp, next) => {
                                                 if (error) {
                                                     console.log("error saving inner inner - :", error);
 
-                                                    resppppp.json({
+                                                    return resppppp.json({
                                                         message: "An error occurred while attempting to make deposit/payment for contracted worker",
                                                         err: error
                                                     }) 
                                                 } else {
         
-                                                    resppppp.json({
+                                                    return resppppp.json({
                                                         message: "Successfully saved some data however we had to abandon tasks - changes we undone."
                                                     })
                                                 }
@@ -131,7 +128,7 @@ router.post("/", async (req, resppppp, next) => {
                                         }
                                     } else {
 
-                                        resppppp.json({
+                                        return resppppp.json({
                                             message: "Successfully deposited funds and notified hacker!",
                                             employer
                                         })
@@ -146,7 +143,7 @@ router.post("/", async (req, resppppp, next) => {
     } else {
         console.log("Err gathering finding users");
 
-        resppppp.json({
+        return resppppp.json({
             message: "An error occurred while attempting to gather/find users.."
         })
     }

@@ -11,18 +11,17 @@ import DataTable from 'react-data-table-component';
 import moment from "moment";
 import { confirmAlert } from 'react-confirm-alert';
 
-
 const columns = [
     {
         name: 'Card Number (last 4)',
         selector: row => row.number,
     },
     {
-        name: 'Card Name (Full Name)',
+        name: 'Funding Type',
         selector: row => row.name,
     },
     {
-        name: 'Exp (Expiration Date)',
+        name: 'Exp (Expiration Date - MM/YYYY)',
         selector: row => row.expiry,
     },
     {
@@ -36,6 +35,10 @@ const columns = [
     {
         name: "Card Action's",
         selector: row => row.action,
+    },
+    {
+        name: "Country",
+        selector: row => row.country,
     }
 ];
 
@@ -159,27 +162,30 @@ const PaymentMethodsAddNewPaymentMethodEmployerHelper = ({ userData }) => {
     useEffect(() => {
         const config = {
             params: {
-                hackerID: userData.uniqueId
+                id: userData.uniqueId
             }
         }
-        axios.get(`${process.env.REACT_APP_BASE_URL}/gather/existing/payment/methods/employer`, config).then((res) => {
-            if (res.data.message === "Successfully gathered existing payment method's!") {
+        axios.get(`${process.env.REACT_APP_BASE_URL}/gather/employer/payment/methods/cards/only`, config).then((res) => {
+            if (res.data.message === "Gathered employer payment cards!") {
 
                 console.log(res.data);
 
-                const { paymentMethods } = res.data;
+                const { cards } = res.data;
 
                 const convertedPaymentsArr = [];
 
-                for (let index = 0; index < paymentMethods.length; index++) {
-                    const method = paymentMethods[index];
+                for (let index = 0; index < cards.data.length; index++) {
+                    const method = cards.data[index];
+
+                    const { brand, exp_month, exp_year, funding, last4, country } = method.card;
                     
                     convertedPaymentsArr.push({
-                        number: <div className='font-secondary'>{method.lastFour}</div>,
-                        name: method.name,
-                        expiry: method.expiry,
-                        dateAdded: moment(method.dateAddedRaw).fromNow(),
-                        cardType: method.cardType,
+                        number: <div className='font-secondary'>{last4}</div>,
+                        name: funding,
+                        expiry: `${exp_month}/${exp_year}`,
+                        dateAdded: moment(method.created * 1000).fromNow(),
+                        cardType: brand,
+                        country: country,
                         action: <div><span><i onClick={() => {
                             deleteSpecificCard(method.id)
                         }} className="fa fa-trash add-hover-effect-icon" style={{ width: 35, fontSize: 16, padding: 11, color: '#e4566e' }}></i></span>
@@ -191,7 +197,7 @@ const PaymentMethodsAddNewPaymentMethodEmployerHelper = ({ userData }) => {
                 }
 
                 setCardTableData(convertedPaymentsArr);
-                setPaymentMethods(paymentMethods);
+                setPaymentMethods(cards.data);
                 setReady(true);
 
             } else {
@@ -319,14 +325,15 @@ const PaymentMethodsAddNewPaymentMethodEmployerHelper = ({ userData }) => {
                                     <CardBody>
                                         <ListGroup>
                                             {typeof paymentMethods !== "undefined" && paymentMethods.length > 0 ? paymentMethods.slice(0, 3).map((payment, idx) => {
+                                                const { brand, exp_month, exp_year, funding, last4, country } = payment.card;
                                                 return (
                                                     <Fragment key={idx}>
                                                         <ListGroupItem className="list-group-item-action listitem-pricing-card flex-column align-items-start">
                                                             <div className="d-flex w-100 justify-content-between">
-                                                                <h5 className="mb-1">{payment.name}</h5><small style={{ color: "#f73164" }} className="text-secondary">{"Primary Method"}</small>
+                                                                <h5 className="mb-1">{`This is a ${funding} card - ${country} based`}</h5><small style={{ color: "#f73164" }} className="text-secondary">{`Payment #${idx + 1}`}</small>
                                                             </div>
-                                                            <p className="mb-1">{`${payment.lastFour}`}</p>
-                                                            <small className="text-muted">{`Exp. ${payment.expiry}`} <small className="float-right">Card Type: {payment.cardType}</small></small>
+                                                            <p className="mb-1">{`**** **** **** ${last4}`}</p>
+                                                            <small className="text-muted">{`Exp. ${exp_month}/${exp_year}`} <small className="float-right">Card Type: {brand}</small></small>
                                                         </ListGroupItem>
                                                     </Fragment>
                                                 );

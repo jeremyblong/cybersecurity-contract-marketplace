@@ -32,6 +32,8 @@ router.post("/", async (req, resppppp, next) => {
             })
         } else {
 
+            const generatedJobID = uuidv4();
+
             const configuration = {
                 params: {
                     listingId: applicantData.employerPostedJobId
@@ -96,13 +98,14 @@ router.post("/", async (req, resppppp, next) => {
                                 publicCompanyName: listing.publicCompanyName,
                                 listingDescription: listing.listingDescription,
                                 employerID,
-                                applicantData
+                                applicantData,
+                                generatedJobID
                             }).then((res) => {
                                 console.log(res.data);
 
                                 const newEmployerJob = {
                                     ...applicantData,
-                                    id: uuidv4(),
+                                    id: generatedJobID,
                                     date: new Date(),
                                     dateString: moment(new Date()).format("MM/DD/YYYY hh:mm:ss a")
                                 };
@@ -183,7 +186,7 @@ router.post("/", async (req, resppppp, next) => {
                                 console.log(res.data);
 
                                 const newEmployerJob = {
-                                    id: uuidv4(),
+                                    id: generatedJobID,
                                     date: new Date(),
                                     dateString: moment(new Date()).format("MM/DD/YYYY hh:mm:ss a"),
                                     employerPostedListingInfo: {

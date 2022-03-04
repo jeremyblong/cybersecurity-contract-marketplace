@@ -23,7 +23,7 @@ router.get("/", (req, resppppp, next) => {
             await stripe.accountLinks.create({
                 account: user.stripeAccountDetails.id,
                 refresh_url: `${config.get("frontendUrl")}/hacker/account/signup/flow/payment/related`,
-                return_url: `${config.get("frontendUrl")}/successful/onboarding/process/stripe/employer/account`,
+                return_url: `${config.get("frontendUrl")}/successful/onboarding/process/stripe/hacker/account`,
                 type: 'account_onboarding',
             }, (err, result) => {
                 if (err) {

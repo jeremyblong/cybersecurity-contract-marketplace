@@ -22,7 +22,7 @@ const PaymentFullPaneManageAndPay = ({ listing, setCurrentlyDue, currentApplicat
             message: `This is NOT completely permanant, IF the contracted hacker does NOT complete the required work or is incompetent, you have the ABILITY to RETRIEVE your un-used funds at a later point. Confirmed transfers/payments will ALSO need to be confirmed by you prior to any money being transferred throughout accounts.`,
             buttons: [
               {
-                label: 'Yes, Request Update!',
+                label: 'Yes, Make FULL Payment!',
                 onClick: () => {
                     console.log("yes notify and run logic!");
 
@@ -33,7 +33,7 @@ const PaymentFullPaneManageAndPay = ({ listing, setCurrentlyDue, currentApplicat
                             hackerID: currentApplication.applicantId,
                             activeCard,
                             publicCompanyName: listing.publicCompanyName,
-                            employerPostedJobId: currentApplication.employerPostedJobId
+                            jobID: currentApplication.id
                         }
                 
                         axios.post(`${process.env.REACT_APP_BASE_URL}/deposit/funds/specific/hacker/initialization/process`, config).then((res) => {
