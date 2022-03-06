@@ -8,6 +8,7 @@ const stripe = require('stripe')(config.get("stripeSecretKey"));
 const bodyParser = require("body-parser");
 const nodemailer = require('nodemailer');
 const endpointSecret = config.get("stripeWebhookSigningSecret");
+const transporter = require("../../controllers/nodemailer/transportConfig.js");
 
 mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTopology: true }, cors(), (err, db) => {
     router.post("/", bodyParser.raw({ type: 'application/json' }), (request, response) => {

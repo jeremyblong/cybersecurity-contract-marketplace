@@ -10,10 +10,10 @@ import { NotificationManager } from 'react-notifications';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import { confirmAlert } from 'react-confirm-alert';
 import moment from "moment";
-import Slider, { Range } from 'rc-slider';
+import Slider from 'rc-slider';
 
 
-const ClearPaymentsOrPartialPane = ({ listing, currentApplication, userData, isOpen, setIsOpenState }) => {
+const ClearPaymentsOrPartialPane = ({ listing, setCurrentApplication, currentApplication, userData, isOpen, setIsOpenState }) => {
 
     const [ cards, setCards ] = useState([]);
     const [ activeCard, setActiveCard ] = useState(null);
@@ -57,7 +57,7 @@ const ClearPaymentsOrPartialPane = ({ listing, currentApplication, userData, isO
     const handlePaymentInitialization = () => {
         confirmAlert({
             title: `Are you SURE you'd like to deposit a partial deposit of ${cost.toFixed(2)}?`,
-            message: `This is NOT completely permanant, IF the contracted hacker does NOT complete the required work or is incompetent, you have the ABILITY to RETRIEVE your un-used funds at a later point. Confirmed transfers/payments will ALSO need to be confirmed by you prior to any money being transferred throughout accounts.`,
+            message: `This is NOT completely permanent, IF the contracted hacker does NOT complete the required work or is incompetent, you have the ABILITY to RETRIEVE your un-used funds at a later point. Confirmed transfers/payments will ALSO need to be confirmed by you prior to any money being transferred throughout accounts.`,
             buttons: [
               {
                 label: 'Yes, Deposit Partial Funds!',
@@ -77,10 +77,16 @@ const ClearPaymentsOrPartialPane = ({ listing, currentApplication, userData, isO
                         axios.post(`${process.env.REACT_APP_BASE_URL}/deposit/funds/specific/hacker/initialization/process/partial/specific`, config).then((res) => {
                             if (res.data.message === "Successfully deposited funds and notified hacker!") {
                                 console.log(res.data);
+
+                                const { employer } = res.data;
     
                                 setIsOpenState(false);
                                 setActiveCard(null);
                                 setPercentageToBePaid(50);
+
+                                const findIndexJobUpdated = employer.activeHiredHackers.findIndex((x) => x.id === currentApplication.id);
+                                
+                                setCurrentApplication(employer.activeHiredHackers[findIndexJobUpdated]);
     
                                 NotificationManager.success(`We've successfully deposited the funds into ${process.env.REACT_APP_APPLICATION_NAME} & your contracted hacker is now READY to go and should start working immediately (within 1 business day)! Congrats on your new hire!`, "Succesfully processed request & notified hacker!", 4750);
                             } else {

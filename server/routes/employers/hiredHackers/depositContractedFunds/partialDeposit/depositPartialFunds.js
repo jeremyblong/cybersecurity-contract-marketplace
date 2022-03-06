@@ -3,7 +3,6 @@ const router = express.Router();
 const { Connection } = require("../../../../../mongoUtil.js");
 const moment = require("moment");
 const { v4: uuidv4 } = require('uuid');
-const { collection } = require("../../../../../schemas/authentication/register.js");
 const config = require("config");
 const stripe = require('stripe')(config.get("stripeSecretKey"));
 const _ = require("lodash");
@@ -48,8 +47,10 @@ router.post("/", async (req, resppppp, next) => {
                     completedPayment: result,
                     paidBy: userID,
                     full: true,
+                    recurring: false,
                     partial: false,
-                    pending: true
+                    pending: true,
+                    paidByFullName: `${employer.firstName} ${employer.lastName}`
                 } // paymentHistory
 
                 const customPromise = new Promise((resolve, reject) => {

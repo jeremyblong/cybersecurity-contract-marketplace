@@ -7,7 +7,7 @@ import { Container, Row, Col, Card, CardBody, CardFooter, Media, Form, FormGroup
 import axios from 'axios'
 import { Parallax } from 'react-parallax';
 import { useHistory, useParams } from "react-router-dom";
-import Sheet from 'react-modal-sheet';
+import RecurringPaymentPaneHelper from "./sheetHelpers/recurring/recurringPaymentPane.js";
 import Slider from "react-slick";
 import StarRatings from 'react-star-ratings';
 import moment from "moment";
@@ -23,8 +23,34 @@ const settings = {
     centerMode: true,
     draggable: true,
     speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 1
+    slidesToShow: 4,
+    slidesToScroll: 1,
+    responsive: [
+        {
+          breakpoint: 1350,
+          settings: {
+            slidesToShow: 3,
+            slidesToScroll: 3,
+            infinite: true,
+            dots: true
+          }
+        },
+        {
+          breakpoint: 1024,
+          settings: {
+            slidesToShow: 2,
+            slidesToScroll: 2,
+            initialSlide: 2
+          }
+        },
+        {
+          breakpoint: 675,
+          settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1
+          }
+        }
+      ]
 };
 
 const MainPaymentSelectionHelper = ({ userData }) => {
@@ -34,6 +60,7 @@ const MainPaymentSelectionHelper = ({ userData }) => {
     const [ listingsData, setListings ] = useState([]);
     const [ paymentPaneFull, setFullPaymentPaneOpen ] = useState(false);
     const [ currentlyDue, setCurrentlyDue ] = useState([]);
+    const [ incrementalPayentsPane, setIncrementalPaymentsOpen ] = useState(false);
 
     const { id } = useParams();
 
@@ -109,8 +136,9 @@ const MainPaymentSelectionHelper = ({ userData }) => {
     return (
         <Fragment>
             <Breadcrumb parent="Manage Payment(s)" title="Manage payments, recurring deposits & more..." />
-            <ClearPaymentsOrPartialPane listing={listingsData} currentApplication={currentApplication} isOpen={isOpen} setIsOpenState={setIsOpenState} />
-            <PaymentFullPaneManageAndPay listing={listingsData} paymentPaneFull={paymentPaneFull} setFullPaymentPaneOpen={setFullPaymentPaneOpen} currentlyDue={currentlyDue} setCurrentlyDue={setCurrentlyDue} currentApplication={currentApplication} />
+            <ClearPaymentsOrPartialPane setCurrentApplication={setCurrentApplication} listing={listingsData} currentApplication={currentApplication} isOpen={isOpen} setIsOpenState={setIsOpenState} />
+            <PaymentFullPaneManageAndPay setCurrentApplication={setCurrentApplication} listing={listingsData} paymentPaneFull={paymentPaneFull} setFullPaymentPaneOpen={setFullPaymentPaneOpen} currentlyDue={currentlyDue} setCurrentlyDue={setCurrentlyDue} currentApplication={currentApplication} />
+            <RecurringPaymentPaneHelper incrementalPayentsPane={incrementalPayentsPane} setIncrementalPaymentsOpen={setIncrementalPaymentsOpen} setCurrentApplication={setCurrentApplication} listing={listingsData} currentlyDue={currentlyDue} setCurrentlyDue={setCurrentlyDue} currentApplication={currentApplication} />
             <Container fluid={true}>
                 <Row>
                     <Col sm="12" lg="12" md="12" xs="12">
@@ -158,7 +186,7 @@ const MainPaymentSelectionHelper = ({ userData }) => {
                                         <hr />
                                         <p className='heavy-p'>With this type of recurring payment, both parties will need to <em>verify the transaction</em> however regardless if it's automated. This is a tool that prevents undesired payments to going to old/former contracted hackers - <em>BOTH PARTIES</em> will still need to confirm to clear the payment before it is fully transferred to desired contractor...</p>
                                         <hr />
-                                        <Button onClick={() => history.push(`/setup/recurring/payments/specific/contractor/${id}`)} className={"btn-square-light"} color={"light-2x"} outline style={{ width: "100%", color: "white", fontWeight: "bold" }}>Setup recurring payment's</Button>
+                                        <Button onClick={() => setIncrementalPaymentsOpen(true)} className={"btn-square-light"} color={"light-2x"} outline style={{ width: "100%", color: "white", fontWeight: "bold" }}>Setup recurring payment's</Button>
                                     </Media><BookOpen />
                                 </Media>
                             </CardBody>
@@ -195,6 +223,31 @@ const MainPaymentSelectionHelper = ({ userData }) => {
                                         <Button onClick={() => setFullPaymentPaneOpen(true)} className={"btn-square-dark"} color={"dark-2x"} outline style={{ width: "100%", fontWeight: "bold" }}>Open Full Payment Pane</Button>
                                     </Media>
                                 </Media>
+                            </CardBody>
+                        </Card>
+                    </Col>
+                    <Col xl="12 xl-100" md="12" sm="12" sm="12">
+                        <Card className="bg-dark">
+                            <CardBody className='full-payment-block'>
+                                <h3 className='previous-payment-header'>View previous payment's made on this specific contract/gig</h3>
+                                <p className='previous-payment-sub'>These are PREVIOUS payment's made by BOTH users including yourself & the contracted user. This data will be identical on the {userData.accountType === "employers" ? "hacker's" : "employer's"} account while viewing this specific contracted job.</p>
+                                <ListGroup>
+                                    {currentApplication !== null && typeof currentApplication.paymentHistory !== "undefined" && currentApplication.paymentHistory.length > 0 ? currentApplication.paymentHistory.map((payment, index) => {
+                                        const { partial, full, pending, paidByFullName } = payment;
+                                        const { amount, created, currency, description, status } = payment.completedPayment;
+                                        return (
+                                            <Fragment key={index}>
+                                                <ListGroupItem style={{ marginTop: "12.5px" }} className="list-group-item-action flex-column align-items-start">
+                                                    <div className="d-flex w-100 justify-content-between">
+                                                    <h5 className="mb-1" style={{ color: "#7366ff" }}>{`${paidByFullName} paid the contracted user $${(amount / 100).toFixed(2)} (${currency})`}</h5><small>{moment(created * 1000).fromNow()}</small>
+                                                    </div>
+                                                    <p className="mb-1">{description}</p>
+                                                    <small>{partial === false && full === true ? `Full payment which is ${pending === true ? "Pending (This payment has been captured but NOT released)" : "Processed (This payment has been captured AND has been RELEASED)"}` : `Partial payment was made and is ${pending === true ? "Pending (This payment has been captured but NOT released)" : "Processed (This payment has been captured AND has been RELEASED)"}`}</small>
+                                                </ListGroupItem>
+                                            </Fragment>
+                                        );
+                                    }) : null}
+                                </ListGroup>
                             </CardBody>
                         </Card>
                     </Col>

@@ -1,0 +1,21 @@
+.custom-date-range-picker {
+    margin-top: 12.5px;  
+    margin-bottom: 27.5px;
+}
+.no-dates-selected-video-payment {
+    border: 3.5px dashed white;   
+    padding: 7.5px;
+    background-color: black;
+}
+.dotted-border-col-two-custom {
+    border: 1.75px dotted black;
+    padding: 12.5px;
+    margin: 7.5px;
+    max-width: 42.5vw;
+    min-height: 525px;
+    overflow-y: scroll;
+    max-height: 525px;
+}
+.put-above {
+    z-index: 999 !important;
+}

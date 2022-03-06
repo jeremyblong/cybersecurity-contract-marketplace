@@ -44,3 +44,12 @@
     left: 65px;
     padding-top: 45px;
 }
+.previous-payment-header {
+    color: #7366ff;
+    font-weight: bold;
+    text-decoration-line: underline;
+}
+.previous-payment-sub {
+    color: white;
+    font-weight: bold;
+}
