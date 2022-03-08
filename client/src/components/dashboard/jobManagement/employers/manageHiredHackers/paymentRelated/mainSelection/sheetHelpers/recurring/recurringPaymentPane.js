@@ -32,6 +32,7 @@ const RecurringPaymentPaneHelper = ({ incrementalPayentsPane, setIncrementalPaym
     const [ cards, setCards ] = useState([]);
     const [ activeCard, setActiveCard ] = useState(null);
     const [ percentageToBePaid, setPercentageToBePaid ] = useState(50);
+    const [ interval, setInterval ] = useState(null);
     const [ cost, setCost ] = useState(0);
     const [ dateInterval, setDateInterval ] = useState(new Date());
     const [ selectedDayOfWeek, setSelectedDayOfWeekState ] = useState({ value: 5, label: 'Pay Every Friday' });
@@ -105,8 +106,54 @@ const RecurringPaymentPaneHelper = ({ incrementalPayentsPane, setIncrementalPaym
                                 setPercentageToBePaid(50);
 
                                 const findIndexJobUpdated = employer.activeHiredHackers.findIndex((x) => x.id === currentApplication.id);
-                                
-                                setCurrentApplication(employer.activeHiredHackers[findIndexJobUpdated]);
+
+                                const promises = [];
+                                const foundRelated = employer.activeHiredHackers[findIndexJobUpdated];
+
+                                for (let index = 0; index < foundRelated.paymentHistory.length; index++) {
+                                    const payment = foundRelated.paymentHistory[index];
+
+                                    if (payment.recurring === true) {
+                                        // fetch the payment data..
+                                        const { price } = payment.completedPayment.phases[0].items[0];
+
+                                        promises.push(new Promise((resolve, reject) => {
+                                            axios.get(`${process.env.REACT_APP_BASE_URL}/fetch/price/by/id/quick`, {
+                                                params: {
+                                                    priceID: price
+                                                }
+                                            }).then((res) => {
+                                                const { priceData, message } = res.data;
+
+                                                if (message === "Success!") {
+                                                    const newPriceObj = {
+                                                        ...payment,
+                                                        paymentData: priceData
+                                                    }
+                                                    resolve(newPriceObj);
+                                                } else {
+                                                    resolve(null);
+                                                }
+                                            }).catch((err) => {
+                                                reject(err);
+                                            })
+                                        }));
+                                    } else {
+                                        // just return the item - payment data already exists
+                                        promises.push(new Promise((resolve) => {
+                                            resolve(payment);
+                                        }));
+                                    }
+                                }
+
+                                Promise.all(promises).then((passedData) => {
+                                    console.log("passedData", passedData);
+
+                                    setCurrentApplication({
+                                        ...foundRelated,
+                                        paymentHistory: passedData
+                                    });
+                                })
     
                                 NotificationManager.success(`We've successfully deposited the funds into ${process.env.REACT_APP_APPLICATION_NAME} & your contracted hacker is now READY to go and should start working immediately (within 1 business day)! Congrats on your new hire!`, "Succesfully processed request & notified hacker!", 4750);
                             } else {
@@ -145,6 +192,25 @@ const RecurringPaymentPaneHelper = ({ incrementalPayentsPane, setIncrementalPaym
             ]
         });
     }
+
+    const checkLoadedAndUpdateNumber = () => {
+        if (currentApplication !== null) {
+            const totalCost = Math.round(Number(currentApplication.amountOfMoneyUponCompletion));
+            const perc = parseFloat(percentageToBePaid) / 100.0;
+            const converted = totalCost * perc;
+            setCost(converted);
+
+            clearInterval(interval);
+        }
+    }
+
+    useEffect(() => {
+
+        let intervalId = setInterval(checkLoadedAndUpdateNumber, 1250);
+
+        setInterval(intervalId);
+    }, [])
+
     const handleSliderValueChange = (percentage) => {
         console.log("handleSliderValueChange percentage", percentage);
 
@@ -178,30 +244,12 @@ const RecurringPaymentPaneHelper = ({ incrementalPayentsPane, setIncrementalPaym
         for (let d = startDateModified; d <= new Date(daysFromNow); d.setDate(d.getDate() + 1)) {
             const dayOfWeek = new Date(d).getDay();
 
-            console.log("dayOfWeek", dayOfWeek);
-
             if (dayOfWeek === selectedDayOfWeek.value) {
                 recurringDatesArray.push(new Date(d));
             }
         }
 
         setPaydayData(recurringDatesArray);
-        
-        console.log("recurringDatesArray", recurringDatesArray);
-
-        // for (let index = 0; index < applicantData.selectedTestDates.length; index++) {
-        //     const applicationDate = applicantData.selectedTestDates[index];
-        //     newDatesArray.push({
-        //         startDate: new Date(applicationDate.startDate),
-        //         endDate: new Date(applicationDate.endDate),
-        //         key: "selection"
-        //     });
-        //     // end of array - exit and set READY
-        //     if ((applicantData.selectedTestDates.length - 1) === index) {
-        //         setDates(newDatesArray);
-        //         setDatesReadyStatus(true);
-        //     }
-        // }
     }
     return (
         <Fragment>

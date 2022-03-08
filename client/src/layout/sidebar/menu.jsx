@@ -91,19 +91,19 @@ export const MENUITEMS = [
             },
             {
                 title: 'Promote/Advertise', icon: Command, type: 'sub', active: false, children: [
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'Advertise/Promote Account', type: 'link' },
+                    { path: `${process.env.PUBLIC_URL}/employer/promote/various/account/data`, title: 'Advertise/Promote Account Data', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Manage Subscriptions', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Purchase Competition Slot/Entry', type: 'link' }
                 ]
-            },
-            {
-                title: 'Payments & Transfers', icon: CreditCard, type: 'sub', active: false, children: [
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'Add/Manage Payment Methods', type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'Deposit Funds Into Account', type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'Make Payment To Hacker', type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'Redeem Coupon/Gift Code', type: 'link' }
-                ]
             }
+            // {
+            //     title: 'Payments & Transfers', icon: CreditCard, type: 'sub', active: false, children: [
+            //         { path: `${process.env.PUBLIC_URL}/`, title: 'Add/Manage Payment Methods', type: 'link' },
+            //         { path: `${process.env.PUBLIC_URL}/`, title: 'Deposit Funds Into Account', type: 'link' },
+            //         { path: `${process.env.PUBLIC_URL}/`, title: 'Make Payment To Hacker', type: 'link' },
+            //         { path: `${process.env.PUBLIC_URL}/`, title: 'Redeem Coupon/Gift Code', type: 'link' }
+            //     ]
+            // }
         ]
     },
     {

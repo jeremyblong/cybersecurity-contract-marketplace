@@ -184,6 +184,8 @@ app.use("/deposit/funds/specific/hacker/initialization/process", require("./rout
 app.use("/gather/employer/payment/methods/cards/only", require("./routes/employers/paymentRelated/gatherPreviousPaymentMethods/stripeCards/gatherStripeCards.js"));
 app.use("/deposit/funds/specific/hacker/initialization/process/partial/specific", require("./routes/employers/hiredHackers/depositContractedFunds/partialDeposit/depositPartialFunds.js"));
 app.use("/initialize/recurring/payment/contract/start", require("./routes/employers/hiredHackers/depositContractedFunds/recurring/initializeRecurringPayments/initializePayments.js"));
+app.use("/fetch/price/by/id/quick", require("./routes/employers/hiredHackers/depositContractedFunds/fetchPriceByID/fetchPriceByID.js"));
+app.use("/fetch/related/employer/listings/employer/account", require("./routes/employers/boostData/locateUserEmployerListings/locateListings.js"));
 // ~ webhook logic STARTS here ~
 app.use("/passbase/webhook", require("./webhooks/passbase/webhook.js"));
 // ~ webhook logic ENDS here ~

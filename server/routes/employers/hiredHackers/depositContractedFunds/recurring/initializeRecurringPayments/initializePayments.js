@@ -45,6 +45,7 @@ router.post("/", async (req, resppppp, next) => {
                     interval_count: 7
                 },
                 product: product.id
+                // tax_behavior: "inclusive"
             });
     
             console.log("price", price);
@@ -57,8 +58,11 @@ router.post("/", async (req, resppppp, next) => {
                     phases: [
                       {
                         items: [{ price: price.id }],
-                        iterations: daysToPay.length,
-                        default_payment_method: activeCard.id
+                        default_payment_method: activeCard.id,
+                        end_date: Math.round(new Date(lastPaymentDay).getTime() / 1000),
+                        // automatic_tax: {
+                        //     enabled: true
+                        // }
                       }
                     ],
                 }, (error, result) => {
@@ -71,14 +75,19 @@ router.post("/", async (req, resppppp, next) => {
                             id: generatedID,
                             date: new Date(),
                             formattedDate: moment(new Date()).format("MM/DD/YYYY hh:mm:ss a"),
-                            completedPayment: result,
+                            completedPayment: {
+                                ...result,
+                                firstPaymentDay,
+                                lastPaymentDay,
+                                paymentDayOfWeek: selectedDayOfWeek
+                            },
                             recurring: true,
                             paidBy: userID,
                             full: true,
                             partial: false,
                             pending: true,
                             paidByFullName: `${employer.firstName} ${employer.lastName}`
-                        } // paymentHistory
+                        };
         
                         const customPromise = new Promise((resolve, reject) => {
                             for (let index = 0; index < hacker.activeHiredHackingJobs.length; index++) {

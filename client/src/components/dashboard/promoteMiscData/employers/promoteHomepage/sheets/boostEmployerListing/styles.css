@@ -1,0 +1,65 @@
+.listing-desc-selectable {
+    max-height: 225px;
+    overflow-y: scroll;
+    padding: 4.25px;
+    border: 1.75px solid grey;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.195) !important;
+    background-color: #fff;
+    margin-bottom: 22.5px;
+}
+.project-boxed-shadowized-selected {
+    box-shadow: 0 0.5rem 1rem rgba(115, 102, 255, 0.775) !important;
+}
+.last-displayed {
+    max-width: 25px;
+    max-height: 25px;
+    min-height: 25px;
+    min-width: 25px;
+}
+.posted-by-date {
+    margin-left: 7.5px;
+    font-weight: bold;
+    color: #7366ff;
+    text-decoration-line: underline;
+    font-size: 1rem;
+}
+.customized-box-inner {
+
+} 
+.project-boxed-shadowized {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.195) !important;
+}
+.row-me {
+    display: flex;
+    flex-direction: row;
+}
+.min-rounded {
+    min-height: 30px;
+    min-width: 30px;
+}
+.ul-tags-hashtags {
+ 
+}
+.hash-label {
+    font-weight: bold;
+    margin-bottom: 2.5px;
+    color: #000000;
+    margin-bottom: 0px !important;
+    position: absolute;
+    left: -22.5px;
+}
+.align-proper-loc span {
+    position: relative !important;   
+}
+.align-proper-loc {
+    min-height: 100px;
+    min-width: 100%;
+    margin-bottom: 27.5px;
+    margin-left: 32.5px;
+    margin-right: 32.5px;
+    max-width: 100%;
+    position: relative;
+}
+.slim-border-badge {
+    border: 1.75px solid black;
+}

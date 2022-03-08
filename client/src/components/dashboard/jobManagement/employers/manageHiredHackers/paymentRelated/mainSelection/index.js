@@ -79,13 +79,58 @@ const MainPaymentSelectionHelper = ({ userData }) => {
                 employerID: userData.uniqueId
             }
         }
-        axios.get(`${process.env.REACT_APP_BASE_URL}/gather/core/user/information/related/hired/hackers`, configuration).then((res) => {
+        axios.get(`${process.env.REACT_APP_BASE_URL}/gather/core/user/information/related/hired/hackers`, configuration).then(async (res) => {
             if (res.data.message === "Successfully gathered appropriate info!") {
                 console.log(res.data);
 
                 const { currentApplication } = res.data;
 
-                setCurrentApplication(currentApplication);
+                const promises = [];
+
+                for (let index = 0; index < currentApplication.paymentHistory.length; index++) {
+                    const payment = currentApplication.paymentHistory[index];
+
+                    if (payment.recurring === true) {
+                        // fetch the payment data..
+                        const { price } = payment.completedPayment.phases[0].items[0];
+
+                        promises.push(new Promise((resolve, reject) => {
+                            axios.get(`${process.env.REACT_APP_BASE_URL}/fetch/price/by/id/quick`, {
+                                params: {
+                                    priceID: price
+                                }
+                            }).then((res) => {
+                                const { priceData, message } = res.data;
+
+                                if (message === "Success!") {
+                                    const newPriceObj = {
+                                        ...payment,
+                                        paymentData: priceData
+                                    }
+                                    resolve(newPriceObj);
+                                } else {
+                                    resolve(null);
+                                }
+                            }).catch((err) => {
+                                reject(err);
+                            })
+                        }));
+                    } else {
+                        // just return the item - payment data already exists
+                        promises.push(new Promise((resolve) => {
+                            resolve(payment);
+                        }));
+                    }
+                }
+
+                Promise.all(promises).then((passedData) => {
+                    console.log("passedData", passedData);
+
+                    setCurrentApplication({
+                        ...currentApplication,
+                        paymentHistory: passedData
+                    });
+                })
             } else {
                 console.log("Err", res.data);
             }
@@ -233,19 +278,35 @@ const MainPaymentSelectionHelper = ({ userData }) => {
                                 <p className='previous-payment-sub'>These are PREVIOUS payment's made by BOTH users including yourself & the contracted user. This data will be identical on the {userData.accountType === "employers" ? "hacker's" : "employer's"} account while viewing this specific contracted job.</p>
                                 <ListGroup>
                                     {currentApplication !== null && typeof currentApplication.paymentHistory !== "undefined" && currentApplication.paymentHistory.length > 0 ? currentApplication.paymentHistory.map((payment, index) => {
-                                        const { partial, full, pending, paidByFullName } = payment;
+                                        const { partial, full, pending, paidByFullName, recurring } = payment;
                                         const { amount, created, currency, description, status } = payment.completedPayment;
-                                        return (
-                                            <Fragment key={index}>
-                                                <ListGroupItem style={{ marginTop: "12.5px" }} className="list-group-item-action flex-column align-items-start">
-                                                    <div className="d-flex w-100 justify-content-between">
-                                                    <h5 className="mb-1" style={{ color: "#7366ff" }}>{`${paidByFullName} paid the contracted user $${(amount / 100).toFixed(2)} (${currency})`}</h5><small>{moment(created * 1000).fromNow()}</small>
-                                                    </div>
-                                                    <p className="mb-1">{description}</p>
-                                                    <small>{partial === false && full === true ? `Full payment which is ${pending === true ? "Pending (This payment has been captured but NOT released)" : "Processed (This payment has been captured AND has been RELEASED)"}` : `Partial payment was made and is ${pending === true ? "Pending (This payment has been captured but NOT released)" : "Processed (This payment has been captured AND has been RELEASED)"}`}</small>
-                                                </ListGroupItem>
-                                            </Fragment>
-                                        );
+                                        if (recurring === false) {
+                                            return (
+                                                <Fragment key={index}>
+                                                    <ListGroupItem style={{ marginTop: "12.5px" }} className="list-group-item-action flex-column align-items-start">
+                                                        <div className="d-flex w-100 justify-content-between">
+                                                        <h5 className="mb-1" style={{ color: "#7366ff" }}>{`${paidByFullName} paid the contracted user $${(amount / 100).toFixed(2)} (${currency})`}</h5><small>{moment(created * 1000).fromNow()}</small>
+                                                        </div>
+                                                        <p className="mb-1">{description}</p>
+                                                        <small>{partial === false && full === true ? `Full payment which is ${pending === true ? "Pending (This payment has been captured but NOT released)" : "Processed (This payment has been captured AND has been RELEASED)"}` : `Partial payment was made and is ${pending === true ? "Pending (This payment has been captured but NOT released)" : "Processed (This payment has been captured AND has been RELEASED)"}`}</small>
+                                                    </ListGroupItem>
+                                                </Fragment>
+                                            );
+                                        } else {
+                                            const { active, created, currency, unit_amount } = payment.paymentData;
+                                            const { lastPaymentDay, firstPaymentDay } = payment.completedPayment;
+                                            return (
+                                                <Fragment key={index}>
+                                                    <ListGroupItem style={{ marginTop: "12.5px" }} className="list-group-item-action flex-column align-items-start">
+                                                        <div className="d-flex w-100 justify-content-between">
+                                                        <h5 className="mb-1" style={{ color: "#7366ff" }}>{`${paidByFullName} has initialized a subscription/recurring payment of $${(unit_amount / 100).toFixed(2)}`}</h5><small>{moment(created * 1000).fromNow()}</small>
+                                                        </div>
+                                                        <p className="mb-1">{`This payment is ${active === true ? "active" : "innactive"} in the currency of ${currency === "usd" ? "US Dollar (USD)" : "Unknown Currency."}. This is a recurring payment/deposit type with a start date of ${moment(firstPaymentDay).format("dddd MM/DD")} (MM/DD) while ending on ${moment(lastPaymentDay).format("dddd MM/DD")} (MM/DD) of full payment completion (whichever comes first)!`}</p>
+                                                        <small>{`This is a RECURRING payment which means every week, this payment will automatically be billed on the desired/selected day upon initializing this payment type. These can be cancelled but as of now, this payment is still active and will be availiable on a weekly basis!`}</small>
+                                                    </ListGroupItem>
+                                                </Fragment>
+                                            );
+                                        }
                                     }) : null}
                                 </ListGroup>
                             </CardBody>

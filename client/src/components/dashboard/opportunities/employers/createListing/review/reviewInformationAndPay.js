@@ -15,6 +15,8 @@ import { Modal } from 'react-responsive-modal';
 import FileViewer from 'react-file-viewer';
 import axios from "axios";
 import { withRouter } from "react-router-dom";
+import { saveListingData } from "../../../../../../redux/actions/employer/listings/listingData.js";
+
 
 const monthOptions = [
   { value: '01', label: '01' },
@@ -82,7 +84,12 @@ constructor(props) {
     }
     handleCardSelectionChange = (value) => {
         this.setState({
-            selectedPaymentCard: value
+            selectedPaymentCard: value,
+            cvc: "",
+            expiry: "",
+            focus: "",
+            name: "",
+            number: ""
         })
     }
     handleInputChange = (e) => {
@@ -93,11 +100,13 @@ constructor(props) {
                 let filtered = value.replace(/\D/, '');
 
                 this.setState({ 
-                    number: filtered
+                    number: filtered,
+                    selectedPaymentCard: null
                 });
             } else {
                 this.setState({ 
-                    number: ""
+                    number: "",
+                    selectedPaymentCard: null
                 });
             }
         } else if (name === "cvc") {
@@ -105,15 +114,17 @@ constructor(props) {
                 let filtered = value.replace(/\D/, '');
 
                 this.setState({ 
-                    cvc: filtered
+                    cvc: filtered,
+                    selectedPaymentCard: null
                 });
             } else {
                 this.setState({ 
-                    cvc: ""
+                    cvc: "",
+                    selectedPaymentCard: null
                 });
             }
         } else {
-            this.setState({ [name]: value });
+            this.setState({ [name]: value, selectedPaymentCard: null });
         }
     }
     componentDidMount() {
@@ -132,6 +143,43 @@ constructor(props) {
                 key
             })
         }
+
+        const config = {
+            params: {
+                id: this.props.userData.uniqueId
+            }
+        }
+        axios.get(`${process.env.REACT_APP_BASE_URL}/gather/employer/payment/methods/cards/only`, config).then((res) => {
+            if (res.data.message === "Gathered employer payment cards!") {
+
+                console.log(res.data);
+
+                const { cards } = res.data;
+
+                const convertedPaymentsArr = [];
+
+                for (let index = 0; index < cards.data.length; index++) {
+                    const method = cards.data[index];
+
+                    const { brand, exp_month, exp_year, funding, last4, country } = method.card;
+                    
+                    convertedPaymentsArr.push({ label: `**** **** **** ${last4}`, value: method })
+                }
+
+                this.setState({
+                    previousCardOptions: convertedPaymentsArr
+                });
+
+            } else {
+                console.log("err", res.data);
+                
+                NotificationManager.warning("Failed to fetch your current payment method's on file, please reload this page or contact support if this problem persists...", "Failed to load previous method's!", 4750);
+            }
+        }).catch((err) => {
+            console.log(err);
+
+            NotificationManager.warning("Failed to fetch your current payment method's on file, please reload this page or contact support if this problem persists...", "Failed to load previous method's!", 4750);
+        })
 
         this.setState({
             ranges: newTestingDatesArray
@@ -228,10 +276,11 @@ constructor(props) {
             name,
             number,
             expiry,
-            cvc
+            cvc,
+            selectedPaymentCard
         } = this.state;
 
-        if ((typeof name !== "undefined" && name.length > 0) && (typeof number !== "undefined" && number.length > 0) && (typeof expiry !== "undefined" && expiry.length > 0 && (expiry.length === 4 || expiry.length === 5)) && (typeof cvc !== "undefined" && cvc.length > 0 && (cvc.length === 3 || cvc.length === 4))) {
+        if (((typeof name !== "undefined" && name.length > 0) && (typeof number !== "undefined" && number.length > 0) && (typeof expiry !== "undefined" && expiry.length > 0 && (expiry.length === 4 || expiry.length === 5)) && (typeof cvc !== "undefined" && cvc.length > 0 && (cvc.length === 3 || cvc.length === 4))) || selectedPaymentCard !== null) {
             return true;
         } else {
             return false;
@@ -243,6 +292,15 @@ constructor(props) {
         console.log("ran function handlePayment!");
 
         const { assetArray, typeOfHack, testingDatesHackers, rulesOfEngagement, publicCompanyName, outOfScopeVulnerabilities, listingDescription, hashtags, businessAddress, requiredRankToApply, experienceAndCost, desiredSkills, maxNumberOfApplicants, disclosureVisibility, tokensRequiredToApply, listingVisibility, estimatedCompletionDate, timespan, uploadedFiles } = this.props.previousData;
+
+        const { 
+            selectedPaymentCard,
+            name,
+            number,
+            focus,
+            expiry,
+            cvc
+        } = this.state;
 
         const newData = {
             assetArray, 
@@ -268,12 +326,43 @@ constructor(props) {
         
         axios.post(`${process.env.REACT_APP_BASE_URL}/post/employer/listing/recruit`, {
             data: newData,
-            uniqueId: this.props.userData.uniqueId
+            alreadyExistentCard: selectedPaymentCard !== null ? true : false,
+            existentCard: selectedPaymentCard,
+            uniqueId: this.props.userData.uniqueId,
+            cost: experienceAndCost.cost,
+            name,
+            number,
+            focus,
+            expiry,
+            cvc
         }).then((res) => {
             if (res.data.message === "Successfully posted a new employer listing!") {
                 console.log(res.data);
 
                 this.props.history.push("/dashboard/employer");
+
+                setTimeout(() => {
+                    this.props.saveListingData({
+                        testingDatesHackers: [],
+                        listingDescription: "",
+                        rulesOfEngagement: "",
+                        assetArray: [], 
+                        typeOfHack: {}, 
+                        publicCompanyName: "", 
+                        outOfScopeVulnerabilities: "", 
+                        hashtags: [], 
+                        businessAddress: {}, 
+                        requiredRankToApply: {}, 
+                        experienceAndCost: {}, 
+                        desiredSkills: [], 
+                        maxNumberOfApplicants: {}, 
+                        disclosureVisibility: {}, 
+                        tokensRequiredToApply: {}, 
+                        listingVisibility: {}, 
+                        estimatedCompletionDate: null,
+                        ...this.props.listingData.listingData
+                    });
+                }, 750);
             } else {
                 console.log("err", res.data);
             }
@@ -387,7 +476,8 @@ constructor(props) {
                                                             value={this.state.selectedMonth}
                                                             onChange={(value) => {
                                                                 this.setState({
-                                                                    selectedMonth: value
+                                                                    selectedMonth: value,
+                                                                    selectedPaymentCard: null
                                                                 })
                                                             }}
                                                             onBlur={() => {
@@ -401,7 +491,8 @@ constructor(props) {
                                                             value={this.state.selectedYear}
                                                             onChange={(value) => {
                                                                 this.setState({
-                                                                    selectedYear: value
+                                                                    selectedYear: value,
+                                                                    selectedPaymentCard: null
                                                                 })
                                                             }}
                                                             onBlur={() => {
@@ -663,4 +754,4 @@ const mapStateToProps = (state) => {
         userData: state.auth.data
     }
 }
-export default connect(mapStateToProps, {  })(withRouter(ReviewListingInformationAndPayHelper));
+export default connect(mapStateToProps, { saveListingData })(withRouter(ReviewListingInformationAndPayHelper));

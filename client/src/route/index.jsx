@@ -54,6 +54,7 @@ import ViewLiveActivehiredJobsGigsDisplayPage from "../pages/dashboard/jobManage
 import PaymentMethodsAddNewPaymentMethodEmployerPage from "../pages/dashboard/paymentLogic/employers/mainPaymentLogic/mainPaymentPage.js";
 import MainOnboardingFlowPage from "../pages/dashboard/paymentLogic/employers/onboardingFlow/mainOnboardingFlow.js";
 import SuccessfulOnboardCompletionPage from "../pages/dashboard/paymentLogic/employers/onboardingFlow/successfulOnboardConfirmation/success.js";
+import PromoteHomepageSelectionDataPage from "../pages/dashboard/promoteMiscData/employers/promoteHomepage/promoteHomepageSelection.js";
 
 export const routes = [
         { path:"/profile/settings/edit", Component: GeneralSettingsPage },
@@ -111,5 +112,6 @@ export const routes = [
         { path: "/hackers/display/all/active/gigs/hired", Component: ViewLiveActivehiredJobsGigsDisplayPage },
         { path: "/payment/logic/main/page/employers", Component: PaymentMethodsAddNewPaymentMethodEmployerPage },
         { path: "/hacker/account/signup/flow/payment/related", Component: MainOnboardingFlowPage },
-        { path: "/successful/onboarding/process/stripe/hacker/account", Component: SuccessfulOnboardCompletionPage }
+        { path: "/successful/onboarding/process/stripe/hacker/account", Component: SuccessfulOnboardCompletionPage },
+        { path: "/employer/promote/various/account/data", Component: PromoteHomepageSelectionDataPage }
 ]; 

@@ -521,7 +521,7 @@ const ManageIndividualHackerAlreadyHiredHelper = ({ userData }) => {
                     </Col>
                 </Row>
                 <Row>
-                    <Col sm="12" md="7" lg="7" xl="7">
+                    <Col sm="12" md="12" lg="12" xl="12">
                         <Card className={"bordered-shadowed-card"}>
                             <CardBody>
                                 <Card className="card-absolute payment-card-actions-shadow-wrapper">
@@ -537,13 +537,13 @@ const ManageIndividualHackerAlreadyHiredHelper = ({ userData }) => {
                             </CardBody>
                         </Card>
                     </Col>
-                    <Col sm="12" md="5" lg="5" xl="5">
+                    {/* <Col sm="12" md="5" lg="5" xl="5">
                         <Card className={"bordered-shadowed-card"}>
                             <CardBody>
                                 
                             </CardBody>
                         </Card>
-                    </Col>
+                    </Col> */}
                 </Row>
                 <Row>
                     <Col sm="12" md="4" lg="4" xl="4">

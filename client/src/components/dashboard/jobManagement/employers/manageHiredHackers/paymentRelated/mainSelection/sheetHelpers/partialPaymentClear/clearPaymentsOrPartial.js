@@ -86,7 +86,53 @@ const ClearPaymentsOrPartialPane = ({ listing, setCurrentApplication, currentApp
 
                                 const findIndexJobUpdated = employer.activeHiredHackers.findIndex((x) => x.id === currentApplication.id);
                                 
-                                setCurrentApplication(employer.activeHiredHackers[findIndexJobUpdated]);
+                                const promises = [];
+                                const foundRelated = employer.activeHiredHackers[findIndexJobUpdated];
+
+                                for (let index = 0; index < foundRelated.paymentHistory.length; index++) {
+                                    const payment = foundRelated.paymentHistory[index];
+
+                                    if (payment.recurring === true) {
+                                        // fetch the payment data..
+                                        const { price } = payment.completedPayment.phases[0].items[0];
+
+                                        promises.push(new Promise((resolve, reject) => {
+                                            axios.get(`${process.env.REACT_APP_BASE_URL}/fetch/price/by/id/quick`, {
+                                                params: {
+                                                    priceID: price
+                                                }
+                                            }).then((res) => {
+                                                const { priceData, message } = res.data;
+
+                                                if (message === "Success!") {
+                                                    const newPriceObj = {
+                                                        ...payment,
+                                                        paymentData: priceData
+                                                    }
+                                                    resolve(newPriceObj);
+                                                } else {
+                                                    resolve(null);
+                                                }
+                                            }).catch((err) => {
+                                                reject(err);
+                                            })
+                                        }));
+                                    } else {
+                                        // just return the item - payment data already exists
+                                        promises.push(new Promise((resolve) => {
+                                            resolve(payment);
+                                        }));
+                                    }
+                                }
+
+                                Promise.all(promises).then((passedData) => {
+                                    console.log("passedData", passedData);
+
+                                    setCurrentApplication({
+                                        ...foundRelated,
+                                        paymentHistory: passedData
+                                    });
+                                })
     
                                 NotificationManager.success(`We've successfully deposited the funds into ${process.env.REACT_APP_APPLICATION_NAME} & your contracted hacker is now READY to go and should start working immediately (within 1 business day)! Congrats on your new hire!`, "Succesfully processed request & notified hacker!", 4750);
                             } else {
