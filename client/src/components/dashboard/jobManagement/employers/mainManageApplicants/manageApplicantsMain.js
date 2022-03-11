@@ -76,7 +76,7 @@ const ManageApplicantsMainHelper = ({ userData }) => {
     const [tagModal, setTagModal] = useState(false)
     const [gridView,setgridView] = useState(true);
     const [ activeBool, showActiveJobsMapped ] = useState(false);
-    const [ uniqueJobArray, setUniqueJobArrayState ] = useState(null);
+    const [ uniqueJobArray, setUniqueJobArrayState ] = useState([]);
     const [ currentSelectedMap, setCurrentSelectedMap ] = useState("");
     // ADD toggle
     const addToggle = () => { setaddModal(!addModal) }
@@ -101,16 +101,20 @@ const ManageApplicantsMainHelper = ({ userData }) => {
 
                 const uniqueJobIDArray = [];
 
-                for (let index = 0; index < user.applicants.length; index++) {
-                    const gigID = user.applicants[index].employerPostedJobId;
-                    if (!uniqueJobIDArray.includes(gigID)) {
-                        uniqueJobIDArray.push(gigID);
+                if (typeof user.applicants !== "undefined" && user.applicants.length > 0) {
+                    for (let index = 0; index < user.applicants.length; index++) {
+                        const gigID = user.applicants[index].employerPostedJobId;
+                        if (!uniqueJobIDArray.includes(gigID)) {
+                            uniqueJobIDArray.push(gigID);
+                        }
+                        // check for END of array/loop
+                        if ((user.applicants.length - 1) === index) {
+                            setUniqueJobArrayState(uniqueJobIDArray);
+                            setUserData(user);
+                        }
                     }
-                    // check for END of array/loop
-                    if ((user.applicants.length - 1) === index) {
-                        setUniqueJobArrayState(uniqueJobIDArray);
-                        setUserData(user);
-                    }
+                } else {
+                    setUserData(user);
                 }
             } else {
                 console.log("Err", res.data);
@@ -278,7 +282,7 @@ const ManageApplicantsMainHelper = ({ userData }) => {
     }
     return (
         <Fragment>
-        <Breadcrumb parent="Active Applicant's" title="Applicant's for posted gigs/jobs and listing's" />
+        <Breadcrumb parent="Active Applicant's & Other Related Data" title="Applicant's for posted gigs/jobs and listing's" />
             <Container fluid={true}>
                 <div className="email-wrap bookmark-wrap">
                 <Row>
@@ -290,56 +294,11 @@ const ManageApplicantsMainHelper = ({ userData }) => {
                             <div className="media">
                                 <div className="media-size-email"><img className="mr-3 rounded-circle" src={require("../../../../../assets/images/user/user.png")} alt="" /></div>
                                 <div className="media-body">
-                                    <h6 className="f-w-600">{user !== null ? `${user.firstName} ${user.lastName}` : "Loading..."}</h6>
+                                    <h6 className="f-w-600" style={{ textDecorationLine: "underline", color: "#7366ff" }}>{user !== null ? `${user.firstName} ${user.lastName}` : "Loading..."}</h6>
                                     <p>{user !== null && _.has(user, "title") ? user.title : "No title provided."}</p>
                                 </div>
                             </div>
                             <Nav className="main-menu" role="tablist">
-                                <NavItem>
-                                <button  className="badge-light-primary btn-block btn-mail" onClick={addToggle}><Bookmark /> Add New Bookmark</button>
-                                    <Modal isOpen={addModal} toggle={addToggle} size="lg">
-                                        <ModalHeader toggle={addToggle}>{AddBookmark}</ModalHeader>
-                                        <ModalBody>
-                                            <div className="form-row">
-                                            <div className="contact-profile">
-                                                <img className="rounded-circle img-100" src={`https://cybersecurity-platform.s3.amazonaws.com/placeholder.png`} alt="" />
-                                                <div className="icon-wrapper">
-                                                <i className="icofont icofont-pencil-alt-5">
-                                                    <input className="upload" name="imageurl" type="file" onChange={(e) => ADDUrl(e)} />
-                                                </i>
-                                                </div>
-                                            </div>
-                                            <FormGroup className="col-md-12">
-                                                <Label>{WebUrl}</Label>
-                                                <Input className="form-control" name="url" type="text" autoComplete="off" innerRef={null} />
-                                            </FormGroup>
-                                            <FormGroup className="col-md-12">
-                                                <Label>{Title}</Label>
-                                                <Input className="form-control" name="title" type="text" autoComplete="off" innerRef={null} />
-                                            </FormGroup>
-                                            <FormGroup className="col-md-12">
-                                                <Label>{Description}</Label>
-                                                <Input className="form-control" name="desc" type="textarea" autoComplete="off" innerRef={null}></Input>
-                                            </FormGroup>
-                                            <FormGroup className="col-md-6 mb-0">
-                                                <Label>{Group}</Label>
-                                                <Input className="js-example-basic-single" type="select" name="group" innerRef={null}>
-                                                <option value="bookmark">{MyBookmarks}</option>
-                                                </Input>
-                                            </FormGroup>
-                                            <FormGroup className="col-md-6 mb-0">
-                                                <Label>{Collection}</Label>
-                                                <Input className="js-example-disabled-results" type="select" name="collection" innerRef={null}>
-                                                <option value="general">{General}</option>
-                                                <option value="fs">{"fs"}</option>
-                                                </Input>
-                                            </FormGroup>
-                                            </div>
-                                            <Button color="secondary" className="mr-1">{Save}</Button>
-                                            <Button color="primary" onClick={addToggle}>{Cancel}</Button>
-                                        </ModalBody>
-                                    </Modal>
-                                </NavItem>
                                 <li>
                                     <hr />
                                 </li>
@@ -350,7 +309,7 @@ const ManageApplicantsMainHelper = ({ userData }) => {
                                     <CardBody className="dropdown-basic">
                                         <Dropdown toggle={() => {}}>
                                             <div className={"allow-full-height-dropdown"}>
-                                                <Button color={"info"} className="dropbtn customized-dropdown-btn" >Posted Active Jobs/Gigs ({activeGigsJobs.length}) <span><i className="icofont icofont-arrow-down"></i></span></Button>
+                                                <Button color={"primary"} className="dropbtn customized-dropdown-btn" >Active Jobs W/Applicant's ({typeof uniqueJobArray !== "undefined" && uniqueJobArray.length > 0 ? uniqueJobArray.length : 0}) <span><i className="icofont icofont-arrow-down"></i></span></Button>
                                                 <DropdownMenu id={"custom-dropdown-links"} className="dropdown-content">
                                                     {typeof uniqueJobArray !== "undefined" && uniqueJobArray !== null && uniqueJobArray.length > 0 ? uniqueJobArray.map((link, index) => {
                                                         return (
@@ -375,7 +334,7 @@ const ManageApplicantsMainHelper = ({ userData }) => {
                                     <CardBody className="dropdown-basic">
                                         <Dropdown toggle={() => {}}>
                                             <div className={"allow-full-height-dropdown"}>
-                                                <Button color={"info"} className="dropbtn customized-dropdown-btn" >Posted Software Listing's ({[].length}) <span><i className="icofont icofont-arrow-down"></i></span></Button>
+                                                <Button color={"primary"} className="dropbtn customized-dropdown-btn" >Posted Software Listing's ({[].length}) <span><i className="icofont icofont-arrow-down"></i></span></Button>
                                                 <DropdownMenu id={"custom-dropdown-links"} className="dropdown-content">
                                                     {[].map((link, index) => {
                                                         return (
@@ -400,7 +359,7 @@ const ManageApplicantsMainHelper = ({ userData }) => {
                                     <CardBody className="dropdown-basic">
                                         <Dropdown toggle={() => {}}>
                                             <div className={"allow-full-height-dropdown"}>
-                                                <Button color={"info"} className="dropbtn customized-dropdown-btn" >Posted Hardware Listing's ({[].length}) <span><i className="icofont icofont-arrow-down"></i></span></Button>
+                                                <Button color={"primary"} className="dropbtn customized-dropdown-btn" >Posted Hardware Listing's ({[].length}) <span><i className="icofont icofont-arrow-down"></i></span></Button>
                                                 <DropdownMenu id={"custom-dropdown-links"} className="dropdown-content">
                                                     {[].map((link, index) => {
                                                         return (
@@ -453,7 +412,7 @@ const ManageApplicantsMainHelper = ({ userData }) => {
                             <TabPane tabId="1">
                                 <Card className="mb-0">
                                 <CardHeader>
-                                    <h3 style={{ textDecorationLine: "underline", color: "#a927f9" }} className="mb-0">{"Active Jobs/Gigs (Employer listings recruiting hacker's for physical/digital hack's)"}</h3>
+                                    <h3 style={{ textDecorationLine: "underline", color: "#f73164" }} className="mb-0">{"Active Jobs/Gigs (Employer listings recruiting hacker's for physical/digital hack's)"}</h3>
                                     <hr />
                                     {typeof currentSelectedMap !== "undefined" && currentSelectedMap.length > 0 ? <h6 className="custom-selected-indicator">You've selected the listing with an ID of <strong style={{ color: "blue" }}>{currentSelectedMap}</strong></h6> : <h6 className="custom-selected-indicator">You <strong style={{ color: "blue" }}> have NOT </strong> selected a listing/posted-job yet, if you'd like to see the applicant for a specific job, click the coresponding ID to view any/all applicant's for that listing/gig!</h6>}
                                 </CardHeader>
@@ -603,19 +562,6 @@ const ManageApplicantsMainHelper = ({ userData }) => {
                         </Card>
                     </div>
                     </Col>
-                </Row>
-                <Row>
-                    <div className="centered-both-ways">
-                        <Pagination className="m-b-30" aria-label="Page navigation example">
-                            <ul className="pagination pagination-lg pagination-secondary">
-                                <PaginationItem><PaginationLink href={null}>{"Previous"}</PaginationLink></PaginationItem>
-                                <PaginationItem active><PaginationLink href={null}>{"1"}</PaginationLink></PaginationItem>
-                                <PaginationItem><PaginationLink href={null}>{"2"}</PaginationLink></PaginationItem>
-                                <PaginationItem><PaginationLink href={null}>{"3"}</PaginationLink></PaginationItem>
-                                <PaginationItem><PaginationLink href={null}>{"Next"}</PaginationLink></PaginationItem>
-                            </ul>
-                        </Pagination>
-                    </div>
                 </Row>
                 </div>
             </Container>

@@ -56,6 +56,26 @@ const corsOptions = {
 	credentials: true,
 };
 
+app.use((req, res, next) => {
+    // Website you wish to allow to connect
+    // res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+
+    res.setHeader('Access-Control-Allow-Origin', '*');
+
+    // Request methods you wish to allow
+    res.setHeader('Access-Control-Allow-Methods', 'POST');
+
+    // Request headers you wish to allow
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+    // Set to true if you need the website to include cookies in the requests sent
+    // to the API (e.g. in case you use sessions)
+    res.setHeader('Access-Control-Allow-Credentials', true);
+
+    // Pass to next layer of middleware
+    next();
+});
+
 app.use(flash());
 
 app.use(session({ 
@@ -186,6 +206,10 @@ app.use("/deposit/funds/specific/hacker/initialization/process/partial/specific"
 app.use("/initialize/recurring/payment/contract/start", require("./routes/employers/hiredHackers/depositContractedFunds/recurring/initializeRecurringPayments/initializePayments.js"));
 app.use("/fetch/price/by/id/quick", require("./routes/employers/hiredHackers/depositContractedFunds/fetchPriceByID/fetchPriceByID.js"));
 app.use("/fetch/related/employer/listings/employer/account", require("./routes/employers/boostData/locateUserEmployerListings/locateListings.js"));
+app.use("/boost/employer/listing/period/time", require("./routes/employers/boostData/boostEmployerListing/initializeBoostAndTakePayment.js"));
+app.use("/gather/employer/listings/general/promoted/only", require("./routes/employers/employerListings/gatherListings/gatherBoostedListings/gatherBoosted/fetchBoostedListings.js"));
+app.use("/boost/employer/profile/period/time", require("./routes/employers/boostData/initializeProfileBoost/initializeBoostAndPay.js"));
+app.use("/gather/promoted/employer/accounts/sampled", require("./routes/employers/boostData/gatherBoostedEmployerProfiles/gatherProfilesEmployersPromoted.js"));
 // ~ webhook logic STARTS here ~
 app.use("/passbase/webhook", require("./webhooks/passbase/webhook.js"));
 // ~ webhook logic ENDS here ~
@@ -210,13 +234,13 @@ app.get('/*', cors(), function(_, res) {
 	};
 });
 
-app.use(function(req, res, next) {
-	res.header("Access-Control-Allow-Origin", req.headers.origin);
-	res.header("Access-Control-Allow-Credentials", true);
-	res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-	res.header("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json');
-	next();
-});
+// app.use(function(req, res, next) {
+// 	res.header("Access-Control-Allow-Origin", req.headers.origin);
+// 	res.header("Access-Control-Allow-Credentials", true);
+// 	res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+// 	res.header("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json');
+// 	next();
+// });
 
 // io.on("connection", socket => {
 

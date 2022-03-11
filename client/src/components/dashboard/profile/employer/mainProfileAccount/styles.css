@@ -1,0 +1,31 @@
+.shadow-wrapper-overview-profile-employer {
+    box-shadow: 0.5rem 0.5rem 1rem rgba(0, 0, 0, 0.225) !important;
+}
+.stretch-banner-profile-picture {
+    min-width: 100%;
+    min-height: 100%;
+    max-height: 375px;
+    object-fit: cover;
+    z-index: 9999;
+}
+.employer-profile-designed {
+    box-shadow: 0.5rem 0.5rem 1rem rgba(0, 0, 0, 0.225) !important;
+}
+.custom-tabs-maxed {
+    padding-top: 112.5px;
+}
+.custom-maxed-employer-card {
+    max-height: 100% !important;
+}
+.maxed-nav-wrapper-employer-profile {
+    padding-bottom: 27.5px !important;
+}
+#position-above {
+    z-index: 2 !important;
+}
+.min-img-thumbnail-employer-profile {
+    min-height: 350px;
+}
+.my-anchor-css-class {
+    margin-bottom: 22.5px;
+}

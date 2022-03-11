@@ -9,6 +9,7 @@
 }
 .project-boxed-shadowized-selected {
     box-shadow: 0 0.5rem 1rem rgba(115, 102, 255, 0.775) !important;
+    display: inline-block;
 }
 .last-displayed {
     max-width: 25px;
@@ -26,8 +27,31 @@
 .customized-box-inner {
 
 } 
-.project-boxed-shadowized {
+.row-infinite-pane {
+    width: 100%;
+    min-width: 100%;
+    flex-direction: row;
+    display: flex;
+    max-width: 100%;
+    padding-bottom: 25px;
+}
+.scroller-custom-horizontally-pane {
+    width: 100%;
+    min-width: 100%;
+    overflow-x: scroll;
+    flex-direction: row;
+    display: flex;
+    max-width: 100%;
+    padding-bottom: 37.5px;
+}
+.project-boxed-shadowized-min-second {
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.195) !important;
+    min-height: 725px;
+}
+.project-boxed-shadowized, .bordered-shadowed-card-deposit {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.195) !important;
+    display: inline-block;
+    max-width: 100% !important;
 }
 .row-me {
     display: flex;

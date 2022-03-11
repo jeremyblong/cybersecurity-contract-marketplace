@@ -4,12 +4,14 @@ import { Container, Row, Col, Card, CardHeader, CardBody, Button } from 'reactst
 import "./styles.css";
 import { connect } from "react-redux";
 import BoostAlreadyPostedEmployerListingPaneHelper from "./sheets/boostEmployerListing/boostListingPosted.js";
-
+import PromoteProfileBoostSheetHelper from "./sheets/boostProfileOnly/profileBoosts.js";
 
 const PromoteHomepageSelectionDataHelper = ({ userData }) => {
 
     const [ employerListingPromotePane, setSheetOpenEmployerListingPromote ] = useState(false);
     const [ listingBoostSelected, setEmployerListingBoostState ] = useState(null);
+    const [ boostProfilePaneOpen, setSheetOpenProfileBoost ] = useState(false);
+    const [ profileBoostedSelected, setProfileBoostedSelection ] = useState(null);
 
     const handleSelectionPromoteListing = (selection) => {
         console.log("selection", selection);
@@ -22,6 +24,7 @@ const PromoteHomepageSelectionDataHelper = ({ userData }) => {
         <Fragment>
             <Breadcrumb parent="Purchase Various 'Boosted Data'!" title="Purchase Profile Boost's, Employer Listing Boost's & More...!"/>
             <BoostAlreadyPostedEmployerListingPaneHelper userData={userData} listingBoostSelected={listingBoostSelected} employerListingPromotePane={employerListingPromotePane} setSheetOpenEmployerListingPromote={setSheetOpenEmployerListingPromote} />
+            <PromoteProfileBoostSheetHelper userData={userData} profileBoostedSelected={profileBoostedSelected} boostProfilePaneOpen={boostProfilePaneOpen} setSheetOpenProfileBoost={setSheetOpenProfileBoost} />
             <Container fluid={true}>
                 <Row>
                     <Col sm="12">
@@ -101,7 +104,10 @@ const PromoteHomepageSelectionDataHelper = ({ userData }) => {
                                             <li>{"Shows Your 'Profile' Before Other Un-Boosted"}</li>
                                             <li>{"Access to special members/boosted account ONLY restricted content/data"}</li>
                                         </ul>
-                                        <div className="pricingtable-signup"><Button color="secondary" size="lg">Select & Proceed!</Button></div>
+                                        <div className="pricingtable-signup"><Button onClick={() => {
+                                            setProfileBoostedSelection("tier-1");
+                                            setSheetOpenProfileBoost(true);
+                                        }} color="secondary" size="lg">Select & Proceed!</Button></div>
                                     </div>
                                 </Col>
                                 <Col md="4" sm="6">
@@ -118,7 +124,10 @@ const PromoteHomepageSelectionDataHelper = ({ userData }) => {
                                             <li>{"Highlight's Normal 'Profile' W/Neon Outline Drawing More Attention"}</li>
                                             <li>{"Access to special members/boosted account ONLY restricted content/data"}</li>
                                         </ul>
-                                        <div className="pricingtable-signup"><Button color="secondary" size="lg">Select & Proceed!</Button></div>
+                                        <div className="pricingtable-signup"><Button onClick={() => {
+                                            setProfileBoostedSelection("tier-2");
+                                            setSheetOpenProfileBoost(true);
+                                        }} color="secondary" size="lg">Select & Proceed!</Button></div>
                                     </div>
                                 </Col>
                                 <Col md="4" sm="6">
@@ -136,7 +145,10 @@ const PromoteHomepageSelectionDataHelper = ({ userData }) => {
                                             <li>{"Highlight's Normal 'Profile' W/Neon Outline Drawing More Attention"}</li>
                                             <li>{"Access to special members/boosted account ONLY restricted content/data"}</li>
                                         </ul>
-                                        <div className="pricingtable-signup"><Button color="secondary" size="lg">Select & Proceed!</Button></div>
+                                        <div className="pricingtable-signup"><Button onClick={() => {
+                                            setProfileBoostedSelection("tier-3");
+                                            setSheetOpenProfileBoost(true);
+                                        }} color="secondary" size="lg">Select & Proceed!</Button></div>
                                     </div>
                                 </Col>
                             </CardBody>

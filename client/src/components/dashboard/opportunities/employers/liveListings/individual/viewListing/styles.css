@@ -39,3 +39,10 @@
     color: blue !important;
     font-weight: bold;
 }
+.modal-stretched-both{ 
+    min-width: 100%;
+    min-height: 72.5vh;
+    max-height: 72.5vh !important;
+    padding-top: 75px !important;
+    object-fit: contain !important;
+}

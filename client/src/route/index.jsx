@@ -55,6 +55,7 @@ import PaymentMethodsAddNewPaymentMethodEmployerPage from "../pages/dashboard/pa
 import MainOnboardingFlowPage from "../pages/dashboard/paymentLogic/employers/onboardingFlow/mainOnboardingFlow.js";
 import SuccessfulOnboardCompletionPage from "../pages/dashboard/paymentLogic/employers/onboardingFlow/successfulOnboardConfirmation/success.js";
 import PromoteHomepageSelectionDataPage from "../pages/dashboard/promoteMiscData/employers/promoteHomepage/promoteHomepageSelection.js";
+import MainEmployerProfileDisplayPage from "../pages/dashboard/profile/employer/mainProfileAccount/index.js";
 
 export const routes = [
         { path:"/profile/settings/edit", Component: GeneralSettingsPage },
@@ -113,5 +114,6 @@ export const routes = [
         { path: "/payment/logic/main/page/employers", Component: PaymentMethodsAddNewPaymentMethodEmployerPage },
         { path: "/hacker/account/signup/flow/payment/related", Component: MainOnboardingFlowPage },
         { path: "/successful/onboarding/process/stripe/hacker/account", Component: SuccessfulOnboardCompletionPage },
-        { path: "/employer/promote/various/account/data", Component: PromoteHomepageSelectionDataPage }
+        { path: "/employer/promote/various/account/data", Component: PromoteHomepageSelectionDataPage },
+        { path: "/employer/individual/profile/main/:id", Component: MainEmployerProfileDisplayPage }
 ]; 

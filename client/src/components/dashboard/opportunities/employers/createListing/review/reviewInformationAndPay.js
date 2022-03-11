@@ -454,7 +454,7 @@ constructor(props) {
                                                 <FormGroup>
                                                     <Label>Card Number</Label>
                                                     <InputGroup>
-                                                        <Input onFocus={this.handleInputFocus} onChange={this.handleInputChange} value={number} name="number" className="form-control" maxlength={19} size={19} type="text" placeholder="Debit/Credit Card Number" aria-label="Debit/Credit Card Number"/>
+                                                        <Input onFocus={this.handleInputFocus} onChange={this.handleInputChange} value={number} name="number" className="form-control" maxlength={19} size={19} type="number" placeholder="Debit/Credit Card Number" aria-label="Debit/Credit Card Number"/>
                                                     </InputGroup>
                                                 </FormGroup>
                                             </Col>
@@ -509,7 +509,7 @@ constructor(props) {
                                                 <FormGroup>
                                                     <Label>CVC</Label>
                                                     <InputGroup>
-                                                        <Input onFocus={this.handleInputFocus} onChange={this.handleInputChange} value={cvc} name="cvc" className="form-control" maxlength="4" size="4" type="text" placeholder="CVC" aria-label="CVC"/>
+                                                        <Input onFocus={this.handleInputFocus} onChange={this.handleInputChange} value={cvc} name="cvc" className="form-control" maxlength="4" size="4" type="number" placeholder="CVC" aria-label="CVC"/>
                                                     </InputGroup>
                                                 </FormGroup>
                                             </Col>

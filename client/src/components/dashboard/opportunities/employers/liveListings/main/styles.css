@@ -18,3 +18,32 @@
 .custom-project-box {
     height: 100% !important;
 }
+.no-promoted-listings-wrapper {
+    margin-bottom: 32.5px;
+    margin-top: 32.5px;
+}
+.longer-image-no-promoted {
+    width: 92.5%;
+    height: 92.5%;
+    border: 4.25px solid #f73164;
+    box-shadow: 0.5rem 0.5rem 1.5rem rgba(0, 0, 0, 0.275) !important;
+}
+.row-promoted-listings-flex {
+    width: 100%;
+    min-width: 100%;
+    flex-direction: row;
+    display: flex;
+    overflow-x: scroll;
+    max-width: 100%;
+}
+.shadowey-promoted-card {
+    box-shadow: 0.5rem 0.5rem 1.5rem rgba(0, 0, 0, 0.275) !important;
+    border: 2.25px solid  #7366ff;
+}
+.boosted-listings-title {
+    color: #7366ff;
+    text-decoration-line: underline;
+}
+.spacer-top-portion-promoted {
+    margin: 22.5px;
+}

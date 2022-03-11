@@ -803,11 +803,11 @@ const ViewIndividualJobListingHelper = ({ userData, saveApplicationDetailsProgre
                         <CardBody>
                             <h3 className="text-left">File Details/Preview</h3>  
                             <div className="my-fileviewer-custom-wrapper">
-                                <FileViewer
+                                {calculateFileType(file.type) === ("png" || "jpg" || "jpeg") ? <img className='modal-stretched-both' src={`${process.env.REACT_APP_ASSET_LINK}/${file.onlineID}`} /> : <FileViewer
                                     fileType={calculateFileType(file.type)}
                                     filePath={`${process.env.REACT_APP_ASSET_LINK}/${file.onlineID}`}
                                     onError={onError}
-                                />
+                                />}
                             </div>
                         </CardBody>
                         <div className="create-space">

@@ -27,6 +27,7 @@ import 'react-accessible-accordion/dist/fancy-example.css';
 import 'react-image-crop/dist/ReactCrop.css';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import 'react-image-lightbox/style.css';
 import "react-image-gallery/styles/css/image-gallery.css";
 import 'emoji-mart/css/emoji-mart.css';
 import 'rc-slider/assets/index.css';
@@ -146,7 +147,7 @@ const Root = (props) =>  {
   const renderBasedOnAccountType = (path, Component) => {
     const accountData = store.getState().auth.data;
 
-    const employerNOTAllowedRoutes = ["/profile/settings/edit", "/create/listing/software/exchange/hacker/account", "/create/new/live/stream/hackers", "/already/applied/jobs/hacker/account", "/view/as/hacker/bookmarked/profiles/employer/accounts", "/view/as/hacker/view/bookmarked/profiles/hacker/accounts", "/dashboard/hacker", "/create/new/post/hacker/profile/main/data", "/vpn/download/core/files/setup", "/download/dependencies/final/step/vpn/setup", "/frequently/asked/questions/main/hacker", "/view/bettable/listings/main", "/payment/logic/main/page/hackers", "/hacker/account/signup/flow/payment/related", "/successful/onboarding/process/stripe/hacker/account"];
+    const employerNOTAllowedRoutes = ["/profile/settings/edit", "/create/listing/software/exchange/hacker/account", "/create/new/live/stream/hackers", "/already/applied/jobs/hacker/account", "/view/as/hacker/bookmarked/profiles/employer/accounts", "/view/as/hacker/view/bookmarked/profiles/hacker/accounts", "/dashboard/hacker", "/create/new/post/hacker/profile/main/data", "/vpn/download/core/files/setup", "/download/dependencies/final/step/vpn/setup", "/frequently/asked/questions/main/hacker", "/view/bettable/listings/main", "/payment/logic/main/page/hackers", "/hacker/account/signup/flow/payment/related", "/successful/onboarding/process/stripe/hacker/account", "/hackers/display/all/active/gigs/hired"];
     const hackersNOTAllowedRoutes = ["/profile/settings/edit/employer", "/view/all/general/applications/employer/recruit", "/employer/view/hired/applicants/active", "/view/as/employer/view/bookmarked/profiles/employer/accounts", "/view/as/employer/view/bookmarked/profiles/hacker/accounts", "/dashboard/employer", "/employer/profile/main/display/personal", "/frequently/asked/questions/main/employer", "/payments/employer/account/manage/pay/hacker", "/payment/logic/main/employer/page", "/payment/logic/main/page/employers", "/payments/employer/account/manage/pay/hacker/:id", "/employer/promote/various/account/data"];
 
     if (path === "/hacker/profile/individual/view/:id") {
