@@ -29,3 +29,24 @@
 .my-anchor-css-class {
     margin-bottom: 22.5px;
 }
+.map-header-employer-profile {
+    margin-bottom: 17.5px;
+}
+.maxed-img-video-rounded-custom {
+    max-width: 48px;
+    max-height: 48px;
+}
+.maxed-out-display-list { 
+    max-width: 90px;
+    min-height: 90px;
+    max-height: 90px;
+    min-width: 90px;
+    display: inline-block !important;
+}
+.link-color-employer-profile {
+    color: #f73164;
+}
+.link-color-employer-profile:hover {
+    color: #7366ff;
+    cursor: pointer;
+}

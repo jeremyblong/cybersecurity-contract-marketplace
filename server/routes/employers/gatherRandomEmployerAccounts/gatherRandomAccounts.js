@@ -6,7 +6,15 @@ router.get("/", (req, resppppp, next) => {
 
     const collection = Connection.db.db("db").collection("employers");
 
-    collection.aggregate([{ $sample: { size: 20 } }]).toArray((err, employers) => {
+    collection.aggregate([{ $sample: { size: 20 } }, { $project: {
+        paymentMethods: 0,
+        passbaseIDAccessKey: 0,
+        stripeAccountDetails: 0,
+        phoneNumber: 0,
+        salt: 0,
+        hash: 0,
+        refreshToken: 0
+    }}]).toArray((err, employers) => {
         if (err) {
             console.log("Error occurred while gathering employers...");
 

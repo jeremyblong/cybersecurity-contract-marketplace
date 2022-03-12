@@ -210,6 +210,7 @@ app.use("/boost/employer/listing/period/time", require("./routes/employers/boost
 app.use("/gather/employer/listings/general/promoted/only", require("./routes/employers/employerListings/gatherListings/gatherBoostedListings/gatherBoosted/fetchBoostedListings.js"));
 app.use("/boost/employer/profile/period/time", require("./routes/employers/boostData/initializeProfileBoost/initializeBoostAndPay.js"));
 app.use("/gather/promoted/employer/accounts/sampled", require("./routes/employers/boostData/gatherBoostedEmployerProfiles/gatherProfilesEmployersPromoted.js"));
+app.use("/heart/profile/employer/account", require("./routes/employers/profile/publicProfile/heartProfileEmployer/heartLoveEmployerProfile.js"));
 // ~ webhook logic STARTS here ~
 app.use("/passbase/webhook", require("./webhooks/passbase/webhook.js"));
 // ~ webhook logic ENDS here ~

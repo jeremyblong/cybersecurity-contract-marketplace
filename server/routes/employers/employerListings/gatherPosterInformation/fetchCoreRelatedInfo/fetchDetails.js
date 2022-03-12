@@ -18,7 +18,14 @@ router.get("/", (req, resppppp, next) => {
         refreshToken: 0, 
         salt: 0,
         hash: 0, 
-        userLatestLocation: 0 
+        userLatestLocation: 0,
+        paymentMethods: 0,
+        passbaseIDAccessKey: 0,
+        stripeAccountDetails: 0,
+        phoneNumber: 0,
+        salt: 0,
+        hash: 0,
+        refreshToken: 0
     }};
 
     const query = { uniqueId };

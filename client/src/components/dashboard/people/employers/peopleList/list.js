@@ -146,7 +146,7 @@ const UsersCardsEmployersAccountsHelper = (props) => {
                     {employers.filter((employer) => (_.has(employer, "companyName") ? employer.companyName.toLowerCase() : "").includes(searchText)).map((employer, i) => {
                         const bannerImage = _.has(employer, "profileBannerImage") ? `${process.env.REACT_APP_ASSET_LINK}/${employer.profileBannerImage.link}` : require(`../../../../../assets/images/other-images/img-cropper.jpg`);
                         const profilePicture = _.has(employer, "profilePicsVideos") && employer.profilePicsVideos.length > 0 ? employer.profilePicsVideos[employer.profilePicsVideos.length - 1] : null;
-                        
+                        console.log("employer", employer);
                         return (
                             <Col md="4" lg="4" xl="4" className="box-col-4" key={i}>
                                 <Card id={"promoted-employer-card"} className="custom-card centered-both-ways shadowy-card-promoted-employers">

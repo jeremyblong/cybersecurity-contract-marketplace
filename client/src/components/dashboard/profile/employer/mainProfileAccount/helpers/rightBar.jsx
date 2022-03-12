@@ -7,24 +7,18 @@ import five from "../../../../../../assets/images/user/5.jpg";
 import two from "../../../../../../assets/images/user/2.png";
 import eight from "../../../../../../assets/images/user/8.jpg";
 import eleven from "../../../../../../assets/images/user/11.png";
-import timeline4 from "../../../../../../assets/images/social-app/timeline-4.png";
+import helpers from "./miscFunctions/helperFunctions.js";
 import ten from "../../../../../../assets/images/user/10.jpg";
 import six from "../../../../../../assets/images/user/6.jpg";
 import fourteen from "../../../../../../assets/images/user/14.png";
 import four from "../../../../../../assets/images/user/4.jpg";
 import ShowMoreText from "react-show-more-text";
 import _ from "lodash";
-import post9 from "../../../../../../assets/images/social-app/post-9.png";
-import post8 from "../../../../../../assets/images/social-app/post-8.png";
-import post7 from "../../../../../../assets/images/social-app/post-7.png";
-import post6 from "../../../../../../assets/images/social-app/post-6.png";
-import post5 from "../../../../../../assets/images/social-app/post-5.png";
-import post4 from "../../../../../../assets/images/social-app/post-4.png";
-import post3 from "../../../../../../assets/images/social-app/post-3.png";
-import post2 from "../../../../../../assets/images/social-app/post-2.png";
-import post1 from "../../../../../../assets/images/social-app/post-1.png";
+import { SocialNetworks, Dribbble, BuckyBarnes, JasonBorne, SarahLoren, AndewJon, AddFriend, ComerenDiaz, Friends, Facebooks, Twitters, Follower, Following } from "../../../../../../constant";
 
-import { ProfileIntro, SocialNetworks, Dribbble, BuckyBarnes, JasonBorne, SarahLoren, AndewJon, AddFriend, ComerenDiaz, Friends, Facebooks, Twitters, FavouriteMusicBands, Follower, Following, LatestPhotos } from "../../../../../../constant";
+
+const { renderPicVideoPlaceholder, renderProfilePicVideoGallerySubbed } = helpers;
+
 
 const RightBar = ({ employerData }) => {
     const [isIntro, setisIntro] = useState(true);
@@ -41,7 +35,7 @@ const RightBar = ({ employerData }) => {
                     <CardHeader>
                         <h5 className="mb-0">
                             <Button color="link pl-0" onClick={() => setisIntro(!isIntro)}
-                                data-toggle="collapse" data-target="#collapseicon7" aria-expanded={isIntro} aria-controls="collapseicon7">{ProfileIntro}</Button>
+                                data-toggle="collapse" data-target="#collapseicon7" aria-expanded={isIntro} aria-controls="collapseicon7">Core Profile Information</Button>
                         </h5>
                     </CardHeader>
                     <Collapse isOpen={isIntro}>
@@ -61,8 +55,8 @@ const RightBar = ({ employerData }) => {
                                 <p>{_.has(employerData, "aboutCompany") ? employerData.aboutCompany : "No Data Provided Yet."}</p>
                             </ShowMoreText>
                             <span className="f-w-600">{"Area/Specialty"} :</span>
-                            <p>{_.has(employerData, "sectorOrSpecialty") ? employerData.sectorOrSpecialty : "No Data Provided Yet."}</p><span className="f-w-600">{FavouriteMusicBands} :</span>
-                            <p>{"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim modi dolor ut maiores recusandae voluptas quod ea error cupiditate libero."}</p>
+                            <p>{_.has(employerData, "sectorOrSpecialty") ? employerData.sectorOrSpecialty : "No Data Provided Yet."}</p><span className="f-w-600">Total Previously Completed Jobs :</span>
+                            <p>{_.has(employerData, "completedJobs") ? employerData.completedJobs : "No Data Provided Yet."} Previously Completed Contract's</p>
                             <div className="social-network theme-form"><span className="f-w-600">{SocialNetworks}</span>
                                 <Button color="social-btn btn-fb mb-2 text-center"><i className="fa fa-facebook m-r-5"></i>{Facebooks}</Button>
                                 <Button color="social-btn btn-twitter mb-2 text-center"><i className="fa fa-twitter m-r-5"></i>{Twitters}</Button>
@@ -145,57 +139,22 @@ const RightBar = ({ employerData }) => {
                     <CardHeader>
                         <h5 className="mb-0">
                             <Button color="link pl-0" onClick={() => setisPhotos(!isPhotos)}
-                                data-toggle="collapse" data-target="#collapseicon9" aria-expanded={isPhotos} aria-controls="collapseicon9">{LatestPhotos}</Button>
+                                data-toggle="collapse" data-target="#collapseicon9" aria-expanded={isPhotos} aria-controls="collapseicon9">Latest Profile Pictures/Video's</Button>
                         </h5>
                     </CardHeader>
                     <Collapse isOpen={isPhotos}>
                         <CardBody className="photos filter-cards-view px-0">
-                            <ul className="text-center">
-                                <li>
-                                    <div className="latest-post">
-                                        <img className="img-fluid" alt="post1" src={post1} />
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="latest-post">
-                                        <img className="img-fluid" alt="post2" src={post2} />
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="latest-post">
-                                        <img className="img-fluid" alt="post3" src={post3} />
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="latest-post">
-                                        <img className="img-fluid" alt="post4" src={post4} />
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="latest-post">
-                                        <img className="img-fluid" alt="post5" src={post5} />
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="latest-post">
-                                        <img className="img-fluid" alt="post6" src={post6} />
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="latest-post">
-                                        <img className="img-fluid" alt="post7" src={post7} />
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="latest-post">
-                                        <img className="img-fluid" alt="post8" src={post8} />
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="latest-post">
-                                        <img className="img-fluid" alt="post9" src={post9} />
-                                    </div>
-                                </li>
+                            <ul className="text-center ul-list-profile-employer">
+                                {typeof employerData.profilePicsVideos !== "undefined" && employerData.profilePicsVideos.length > 0 ?
+                                    <Fragment>
+                                        {employerData.profilePicsVideos.map((file, index) => {
+                                            return (
+                                                <Fragment key={index}>
+                                                    {renderProfilePicVideoGallerySubbed(file)}
+                                                </Fragment>
+                                            );
+                                        })}
+                                </Fragment> : ""}
                             </ul>
                         </CardBody>
                     </Collapse>
@@ -228,7 +187,9 @@ const RightBar = ({ employerData }) => {
                 </Card>
             </Col>
             <Col xl="12 xl-50 box-col-6">
-                <Card><Media className="img-fluid" src={timeline4} alt="" /></Card>
+                <Card>
+                    {renderPicVideoPlaceholder(_.has(employerData, "profilePicsVideos") && typeof employerData.profilePicsVideos !== "undefined" && employerData.profilePicsVideos.length > 0 ? employerData.profilePicsVideos[employerData.profilePicsVideos.length - 1] : null)}
+                </Card>
             </Col>
         </Fragment>
     );

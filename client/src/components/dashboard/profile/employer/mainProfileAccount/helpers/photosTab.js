@@ -45,7 +45,7 @@ const PhotosTabEmployerProfileHelper = ({ employerData }) => {
                         <CardBody className="my-gallery row gallery-with-description">
                             {employerData.profilePicsVideos.map((file, index) => {
                                 return (
-                                    <Fragment>
+                                    <Fragment key={index}>
                                         <figure className="col-xl-3 col-sm-6"><a href={null} data-size="1600x950">
                                             {renderProfilePicVideoGallery(file, setPhotoIndex, photoIndex, index)}
                                             <div className="caption">

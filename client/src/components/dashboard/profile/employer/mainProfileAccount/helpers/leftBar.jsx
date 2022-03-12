@@ -6,16 +6,18 @@ import five from "../../../../../../assets/images/user/5.jpg";
 import two from "../../../../../../assets/images/user/2.png";
 import eight from "../../../../../../assets/images/user/8.jpg";
 import eleven from "../../../../../../assets/images/user/11.png";
-import timeline3 from "../../../../../../assets/images/social-app/timeline-3.png";
+import helpers from "./miscFunctions/helperFunctions.js";
 import ten from "../../../../../../assets/images/user/10.jpg";
 import six from "../../../../../../assets/images/user/6.jpg";
 import fourteen from "../../../../../../assets/images/user/14.png";
 import four from "../../../../../../assets/images/user/4.jpg";
 import _ from "lodash";
-import { MyProfile, BuckyBarnes, JasonBorne, SarahLoren, AndewJon, JohnyWaston, JohnyWilliam, ComerenDiaz, MyPage, View, MutualFriends, ActivityFeed, Messages, Likes, Notification } from "../../../../../../constant";
+import { MyProfile, BuckyBarnes, JasonBorne, SarahLoren, AndewJon, JohnyWaston, JohnyWilliam, ComerenDiaz, MyPage, View, MutualFriends, ActivityFeed, Likes } from "../../../../../../constant";
+
+const { renderPicVideoPlaceholder } = helpers;
 
 
-const LeftBar = ({ employerData }) => {
+const LeftBar = ({ employerData, activeHearts }) => {
 
     const [isProfile, setisProfile] = useState(true);
     const [isMutual, setisMutual] = useState(true);
@@ -46,7 +48,7 @@ const LeftBar = ({ employerData }) => {
                                 <Button color="light text-center" type="button">{View}</Button>
                             </div>
                             <div className="likes-profile text-center">
-                                <h5><span><i className="fa fa-heart font-danger"></i> {"884"}</span></h5>
+                                <h5><span><i className="fa fa-heart font-danger"></i> {typeof activeHearts !== "undefined" ? `${activeHearts.length} profile 'hearts'` : 0}</span></h5>
                             </div>
                             <div className="text-center">{"35 New Likes This Week"}</div>
                             <div className="customers text-center social-group">
@@ -94,7 +96,9 @@ const LeftBar = ({ employerData }) => {
                 </Card>
             </Col>
             <Col xl="12">
-                <Card><Media className="img-fluid" alt="" src={timeline3} /></Card>
+                <Card>
+                    {renderPicVideoPlaceholder(_.has(employerData, "profilePicsVideos") && typeof employerData.profilePicsVideos !== "undefined" && employerData.profilePicsVideos.length > 0 ? employerData.profilePicsVideos[employerData.profilePicsVideos.length - 1] : null)}
+                </Card>
             </Col>
             <Col xl="12">
                 <Card>
