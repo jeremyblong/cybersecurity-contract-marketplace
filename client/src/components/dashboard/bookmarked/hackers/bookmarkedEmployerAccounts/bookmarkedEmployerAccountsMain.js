@@ -128,10 +128,7 @@ const BookmarkedEmployerAccountsAsHackerHelper = ({ userData }) => {
                             </Col>
                         );
                     }) : <div style={{ marginBottom: "27.5px" }}>
-                        <div class="error">No results found...</div>
-                        <br /><br />
-                        <span class="animated-info">No specific results were returned for this page of <strong className={"emphisis-account-type"}>"Employer/Hiring Bookmarked Account's"</strong> (No matching/relevant data found).</span>
-                        <img src={require("../../../../../assets/gifs/2.gif")} className={"animation-background-no-results"} />
+                        <img src={require("../../../../../assets/images/no-bookmarked.png")} className={"animation-background-no-results"} />
                     </div>}
                     {employers.length > 0 ? <Fragment>
                         <Row style={{ marginTop: "50px", marginBottom: "75px" }}>

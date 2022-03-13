@@ -26,7 +26,7 @@ const LeftBar = ({ employerData, activeHearts }) => {
     return (
         <Fragment>
             <Col xl="12">
-                <Card>
+                <Card className={"shadow-card-employer"}>
                     <CardHeader>
                         <h5 className="mb-0">
                             <Button color="link pl-0" onClick={() => setisProfile(!isProfile)}
@@ -103,12 +103,12 @@ const LeftBar = ({ employerData, activeHearts }) => {
                 </Card>
             </Col>
             <Col xl="12">
-                <Card>
+                <Card className={"shadow-card-employer"}>
                     {renderPicVideoPlaceholder(_.has(employerData, "profilePicsVideos") && typeof employerData.profilePicsVideos !== "undefined" && employerData.profilePicsVideos.length > 0 ? employerData.profilePicsVideos[employerData.profilePicsVideos.length - 1] : null)}
                 </Card>
             </Col>
             <Col xl="12">
-                <Card>
+                <Card className={"shadow-card-employer"}>
                     <CardHeader>
                         <h5 className="mb-0">
                             <Button color="link pl-0" onClick={() => setisMutual(!isMutual)}
@@ -140,8 +140,8 @@ const LeftBar = ({ employerData, activeHearts }) => {
                     </Collapse>
                 </Card>
             </Col>
-            <Col xl="12">
-                <Card>
+            {/* <Col xl="12">
+                <Card className={"shadow-card-employer"}>
                     <CardHeader>
                         <h5 className="mb-0">
                             <Button color="link pl-0" onClick={() => setisActivity(!isActivity)}
@@ -189,7 +189,7 @@ const LeftBar = ({ employerData, activeHearts }) => {
                         </CardBody>
                     </Collapse>
                 </Card>
-            </Col>
+            </Col> */}
         </Fragment>
     );
 };

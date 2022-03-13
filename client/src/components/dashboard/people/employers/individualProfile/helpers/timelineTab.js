@@ -98,7 +98,7 @@ const TimelineTabEmployerProfileHelper = ({ employerData, activeHearts, userData
                 <Col xl="6 xl-60 box-col-8" lg="12" md="7">
                     <Row>
                         <Col sm="12">
-                            <Card>
+                            <Card className='shadow-card-employer'>
                                 <CardBody>
                                     <div className="new-users-social">
                                         <Media>
@@ -143,7 +143,7 @@ const TimelineTabEmployerProfileHelper = ({ employerData, activeHearts, userData
                             {typeof listings !== "undefined" && listings.length > 0 ? listings.map((listing, i) => {
                                 console.log("listing", listing);
                                 return (
-                                    <Card key={i} className={`${false ? '' : 'ribbon-vertical-left-wrapper'}`}>
+                                    <Card key={i} className={`${false ? 'shadow-card-employer' : 'ribbon-vertical-left-wrapper shadow-card-employer'}`}>
                                         <div className="job-search">
                                             <CardBody id="custom-cardbody-listing-map">
                                                 <Media>

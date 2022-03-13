@@ -41,7 +41,7 @@ const PhotosTabEmployerProfileHelper = ({ employerData }) => {
             <Row>
                 {typeof employerData.profilePicsVideos !== "undefined" && employerData.profilePicsVideos.length > 0 ?
                 <Col sm="12">
-                    <Card>
+                    <Card className='shadow-card-employer'>
                         <CardBody className="my-gallery row gallery-with-description">
                             {employerData.profilePicsVideos.map((file, index) => {
                                 return (

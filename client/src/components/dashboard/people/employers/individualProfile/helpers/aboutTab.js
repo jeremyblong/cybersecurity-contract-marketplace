@@ -41,7 +41,7 @@ const AboutGeneralInfoHelper = ({ employerData, activeHearts }) => {
                 <Col xl="6 xl-60 box-col-8" lg="12" md="7">
                     <Row>
                         <Col sm="12">
-                            <Card>
+                            <Card className='shadow-card-employer'>
                                 <CardHeader className="social-header">
                                     <h5><span>{"Core Employer Data/Information"}</span></h5>
                                 </CardHeader>
@@ -110,7 +110,7 @@ const AboutGeneralInfoHelper = ({ employerData, activeHearts }) => {
                             </Card>
                         </Col>
                         <Col sm="12">
-                            <Card>
+                            <Card className='shadow-card-employer'>
                                 <CardHeader>
                                     <h5>{"Previously Viewed Your Profile"}</h5>
                                 </CardHeader>

@@ -75,3 +75,14 @@
     border: 5px solid grey;
     padding: 10px;
 }
+.shadow-card-employer {
+    box-shadow: 0.5rem 0.5rem 1rem rgba(0, 0, 0, 0.225) !important;
+}
+.absolute-message-btn {
+    position: absolute;
+    bottom: 155px;
+}
+.hover-btn-employer-custom:hover {
+    color: #fff !important;
+    cursor: pointer;
+}

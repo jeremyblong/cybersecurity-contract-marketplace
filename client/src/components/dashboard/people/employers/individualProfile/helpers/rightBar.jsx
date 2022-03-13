@@ -46,7 +46,7 @@ const RightBar = ({ employerData }) => {
     return (
         <Fragment>
             <Col xl="12 xl-50 box-col-6">
-                <Card>
+                <Card className={"shadow-card-employer"}>
                     <CardHeader>
                         <h5 className="mb-0">
                             <Button color="link pl-0" onClick={() => setisIntro(!isIntro)}
@@ -84,7 +84,7 @@ const RightBar = ({ employerData }) => {
                 </Card>
             </Col>
             <Col xl="12 xl-50 box-col-6">
-                <Card>
+                <Card className={"shadow-card-employer"}>
                     <CardHeader>
                         <h5 className="mb-0">
                             <Button color="link pl-0" onClick={() => setisFollowers(!isFollowers)}
@@ -109,7 +109,7 @@ const RightBar = ({ employerData }) => {
                 </Card>
             </Col>
             <Col xl="12 xl-50 box-col-6">
-                <Card>
+                <Card className={"shadow-card-employer"}>
                     <CardHeader>
                         <h5 className="mb-0">
                             <Button color="link pl-0" onClick={() => setisFollowings(!isFollowings)}
@@ -133,7 +133,7 @@ const RightBar = ({ employerData }) => {
                 </Card>
             </Col>
             <Col xl="12 xl-50 box-col-6">
-                <Card>
+                <Card className={"shadow-card-employer"}>
                     <CardHeader>
                         <h5 className="mb-0">
                             <Button color="link pl-0" onClick={() => setisPhotos(!isPhotos)}
@@ -159,7 +159,7 @@ const RightBar = ({ employerData }) => {
                 </Card>
             </Col>
             <Col xl="12 xl-50 box-col-6">
-                <Card>
+                <Card className={"shadow-card-employer"}>
                     <CardHeader>
                         <h5 className="mb-0">
                             <Button color="link pl-0" onClick={() => setisFriends(!isFriends)}
@@ -185,7 +185,7 @@ const RightBar = ({ employerData }) => {
                 </Card>
             </Col>
             <Col xl="12 xl-50 box-col-6">
-                <Card>
+                <Card className={"shadow-card-employer"}>
                     {renderPicVideoPlaceholder(_.has(employerData, "profilePicsVideos") && typeof employerData.profilePicsVideos !== "undefined" && employerData.profilePicsVideos.length > 0 ? employerData.profilePicsVideos[employerData.profilePicsVideos.length - 1] : null)}
                 </Card>
             </Col>

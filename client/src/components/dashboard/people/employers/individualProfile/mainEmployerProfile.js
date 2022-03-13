@@ -246,16 +246,21 @@ const MainEmployerProfileDisplayHelper = ({ userData }) => {
                                             <li><a className="social-icon bg-warning"><i className="fa fa-share-alt"></i></a></li>
                                         </ul>
                                     </div>
+                                    <Row>
+                                        <div style={{ paddingTop: "12.5px" }} className='centered-both-ways'>
+                                            <Button className='btn-square-dark absolute-message-btn hover-btn-employer-custom' color='dark-2x' outline style={{ width: "50%", color: "#f73164" }}>Message This User!</Button>
+                                        </div>
+                                    </Row>
                                     <div className="info market-tabs p-0 maxed-nav-wrapper-employer-profile">
                                         <Nav tabs className="border-tab tabs-scoial custom-tabs-maxed">
                                             <NavItem className="nav" id="myTab" role="tablist">
                                                 <NavLink id={"position-above"} className={activeTab === '1' ? 'active' : ''}>
-                                                    <Button style={{ minWidth: "100%" }} onClick={() => setActiveTab('1')} className={"btn-square-primary"} color={"primary-2x"} outline>Timeline/Core-Data</Button>
+                                                    <Button style={{ minWidth: "100%", color: "#f73164" }} onClick={() => setActiveTab('1')} className={"btn-square-dark hover-btn-employer-custom"} color={"dark-2x"} outline>Timeline/Core-Data</Button>
                                             </NavLink>
                                             </NavItem>
                                             <NavItem className="nav" id="myTab" role="tablist">
                                                 <NavLink id={"position-above"} className={activeTab === '2' ? 'active' : ''}>
-                                                    <Button style={{ minWidth: "100%" }} onClick={() => setActiveTab('2')} className={"btn-square-secondary"} color={"secondary-2x"} outline>About</Button>
+                                                    <Button style={{ minWidth: "100%", color: "#f73164" }} onClick={() => setActiveTab('2')} className={"btn-square-dark hover-btn-employer-custom"} color={"dark-2x"} outline>About</Button>
                                             </NavLink>
                                             </NavItem>
                                             <NavItem>
@@ -265,12 +270,12 @@ const MainEmployerProfileDisplayHelper = ({ userData }) => {
                                             </NavItem>
                                             <NavItem className="nav" id="myTab" role="tablist">
                                                 <NavLink id={"position-above"} className={activeTab === '3' ? 'active' : ''}>
-                                                    <Button style={{ minWidth: "100%" }} onClick={() => setActiveTab('3')} className={"btn-square-success"} color={"success-2x"} outline>Following/Followed</Button>
+                                                    <Button style={{ minWidth: "100%", color: "#f73164" }} onClick={() => setActiveTab('3')} className={"btn-square-dark hover-btn-employer-custom"} color={"dark-2x"} outline>Following/Followed</Button>
                                             </NavLink>
                                             </NavItem>
                                             <NavItem className="nav" id="myTab" role="tablist">
                                                 <NavLink id={"position-above"} className={activeTab === '4' ? 'active' : ''}>
-                                                    <Button style={{ minWidth: "100%" }} onClick={() => setActiveTab("4")} className={"btn-square-info"} color={"info-2x"} outline>Photo's</Button>
+                                                    <Button style={{ minWidth: "100%", color: "#f73164" }} onClick={() => setActiveTab("4")} className={"btn-square-dark hover-btn-employer-custom"} color={"dark-2x"} outline>Photo's</Button>
                                             </NavLink>
                                             </NavItem>
                                         </Nav>
