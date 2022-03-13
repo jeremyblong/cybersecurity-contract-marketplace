@@ -13,7 +13,8 @@ router.get("/", (req, resppppp, next) => {
         phoneNumber: 0,
         salt: 0,
         hash: 0,
-        refreshToken: 0
+        refreshToken: 0,
+        stripeAccountVerified: 0
     }}]).toArray((err, employers) => {
         if (err) {
             console.log("Error occurred while gathering employers...");

@@ -3,7 +3,6 @@ const router = express.Router();
 const { Connection } = require("../../../../../mongoUtil.js");
 const { v4: uuidv4 } = require('uuid');
 const moment = require("moment");
-const { collection } = require("../../../../../schemas/authentication/register.js");
 
 router.post("/", (req, resppppp, next) => {
     
@@ -277,8 +276,7 @@ router.post("/", (req, resppppp, next) => {
                                 console.log("resulllllt", resulllllt);
         
                                 resppppp.json({
-                                    message: "You've ALREADY followed this user's profile...",
-                                    hacker
+                                    message: "You've ALREADY followed this user's profile..."
                                 })
                             }
                         });

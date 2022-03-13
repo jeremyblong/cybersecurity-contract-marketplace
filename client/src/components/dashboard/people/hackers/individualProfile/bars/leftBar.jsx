@@ -42,7 +42,7 @@ const LeftBar = ({ user }) => {
                         <CardBody className="socialprofile filter-cards-view">
                             {user !== null ? <Media><Media className="img-50 img-fluid m-r-20 rounded-circle" src={one} alt="" />
                                 <Media body>
-                                    <h6 className="font-primary f-w-600">{`${user.firstName} ${user.lastName}`}</h6><span className="d-block">Member Since {moment(user.registrationDate).fromNow()}<br /><span><i className="fa fa-comments-o"> </i><span className="px-2 following-text-profile-hacker-larger">Following...  <span style={{ color: "#fff" }} className="badge badge-pill badge-secondary">{user.followingHackers.length} Hacker's</span></span></span></span><span className="d-block"><span><i className="fa fa-bell-o"></i><span className="px-2 following-text-profile-hacker-larger">Following..  <span style={{ color: "#fff" }} className="badge badge-pill badge-info">{user.followingCompanies.length} Employer's</span></span></span></span>
+                                    <h6 className="font-primary f-w-600">{`${user.firstName} ${user.lastName}`}</h6><span className="d-block">Member Since {moment(user.registrationDate).fromNow()}<br /><span><i className="fa fa-comments-o"> </i><span className="px-2 following-text-profile-hacker-larger">Following...  <span style={{ color: "#fff" }} className="badge badge-pill badge-secondary">{typeof user.followingHackers !== "undefined" && user.followingHackers.length} Hacker's</span></span></span></span><span className="d-block"><span><i className="fa fa-bell-o"></i><span className="px-2 following-text-profile-hacker-larger">Following..  <span style={{ color: "#fff" }} className="badge badge-pill badge-info">{typeof user.followingCompanies !== "undefined" && user.followingCompanies.length} Employer's</span></span></span></span>
                                 </Media>
                             </Media> : null}
                             <div className="social-btngroup d-flex">
@@ -50,7 +50,7 @@ const LeftBar = ({ user }) => {
                                 <Button onClick={() => setViewType("views")} color={viewType !== "likesAndHearts" ? "info text-center" : "light text-center"} type="button">Total Page View's</Button>
                             </div>
                             {viewType === "likesAndHearts" ? <div className="likes-profile text-center">
-                                <h5><span><i className="fa fa-heart font-danger"></i> {user !== null ? user.profileLovesHearts.length : 0} Page Heart's</span></h5>
+                                <h5><span><i className="fa fa-heart font-danger"></i> {user !== null && typeof user.profileLovesHearts !== "undefined" ? user.profileLovesHearts.length : 0} Page Heart's</span></h5>
                             </div> : <div className="likes-profile text-center">
                                 <h5><span><i className="fa fa-eye font-danger"></i> {user !== null ? user.totalUniqueViews : 0} Total Page View's</span></h5>
                             </div>}

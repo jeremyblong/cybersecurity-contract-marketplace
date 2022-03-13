@@ -211,6 +211,9 @@ app.use("/gather/employer/listings/general/promoted/only", require("./routes/emp
 app.use("/boost/employer/profile/period/time", require("./routes/employers/boostData/initializeProfileBoost/initializeBoostAndPay.js"));
 app.use("/gather/promoted/employer/accounts/sampled", require("./routes/employers/boostData/gatherBoostedEmployerProfiles/gatherProfilesEmployersPromoted.js"));
 app.use("/heart/profile/employer/account", require("./routes/employers/profile/publicProfile/heartProfileEmployer/heartLoveEmployerProfile.js"));
+app.use("/mark/profile/view/employer/account", require("./routes/employers/profile/publicProfile/markProfileView/markView.js"));
+app.use("/start/following/employer/account", require("./routes/employers/profile/publicProfile/followEmployerUser/startFollowingThisEmployerUser.js"));
+app.use("/bookmark/employer/profile/either/account/type", require("./routes/employers/profile/publicProfile/bookmarkProfile/bookmarkEmployerProfile.js"));
 // ~ webhook logic STARTS here ~
 app.use("/passbase/webhook", require("./webhooks/passbase/webhook.js"));
 // ~ webhook logic ENDS here ~

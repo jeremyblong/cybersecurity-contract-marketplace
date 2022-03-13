@@ -12,8 +12,6 @@ router.get("/", (req, resppppp, next) => {
         email: 0, 
         password: 0, 
         agreement: 0, 
-        followingHackers: 0, 
-        followingEmployers: 0, 
         authStrategy: 0, 
         refreshToken: 0, 
         salt: 0,

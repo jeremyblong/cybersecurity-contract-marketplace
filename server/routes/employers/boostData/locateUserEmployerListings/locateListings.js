@@ -13,8 +13,8 @@ router.get("/", (req, resppppp, next) => {
             console.log(err);
 
             resppppp.json({
-                message: "Gathered related listings to choose from!",
-                user
+                message: "Error occurred while attempting to fetch listings..",
+                err
             })
         } else {
             console.log("listings", listings);

@@ -55,7 +55,7 @@ import PaymentMethodsAddNewPaymentMethodEmployerPage from "../pages/dashboard/pa
 import MainOnboardingFlowPage from "../pages/dashboard/paymentLogic/employers/onboardingFlow/mainOnboardingFlow.js";
 import SuccessfulOnboardCompletionPage from "../pages/dashboard/paymentLogic/employers/onboardingFlow/successfulOnboardConfirmation/success.js";
 import PromoteHomepageSelectionDataPage from "../pages/dashboard/promoteMiscData/employers/promoteHomepage/promoteHomepageSelection.js";
-import MainEmployerProfileDisplayPage from "../pages/dashboard/profile/employer/mainProfileAccount/index.js";
+import MainEmployerProfileDisplayPage from "../pages/dashboard/people/employers/individualProfile/index.js";
 
 export const routes = [
         { path:"/profile/settings/edit", Component: GeneralSettingsPage },

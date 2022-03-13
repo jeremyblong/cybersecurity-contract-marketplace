@@ -1,0 +1,77 @@
+.shadow-wrapper-overview-profile-employer {
+    box-shadow: 0.5rem 0.5rem 1rem rgba(0, 0, 0, 0.225) !important;
+}
+.stretch-banner-profile-picture {
+    min-width: 100%;
+    min-height: 100%;
+    max-height: 375px;
+    object-fit: cover;
+    z-index: 9999;
+}
+.employer-profile-designed {
+    box-shadow: 0.5rem 0.5rem 1rem rgba(0, 0, 0, 0.225) !important;
+}
+.custom-tabs-maxed {
+    padding-top: 112.5px;
+}
+.custom-maxed-employer-card {
+    max-height: 100% !important;
+}
+.maxed-nav-wrapper-employer-profile {
+    padding-bottom: 27.5px !important;
+}
+#position-above {
+    z-index: 2 !important;
+}
+.min-img-thumbnail-employer-profile {
+    min-height: 350px;
+}
+.my-anchor-css-class {
+    margin-bottom: 22.5px;
+}
+.map-header-employer-profile {
+    margin-bottom: 17.5px;
+}
+.no-loc-image {
+    min-width: 100%;
+    height: 100%;
+}
+.maxed-img-video-rounded-custom {
+    max-width: 48px;
+    max-height: 48px;
+}
+.maxed-out-display-list { 
+    max-width: 90px;
+    min-height: 90px;
+    max-height: 90px;
+    min-width: 90px;
+    display: inline-block !important;
+}
+.maxed-out-display-list-custom {
+    min-width: 57.5px;
+    max-height: 57.5px;
+    max-width: 57.5px;
+    margin-right: 12.5px;
+    border-radius: 50%;
+    min-width: 57.5px;
+}
+.link-color-employer-profile {
+    color: #f73164;
+}
+.link-color-employer-profile:hover {
+    color: #7366ff;
+    cursor: pointer;
+}
+.custom-employer-profile-ribbon {
+    margin-top: 27.5px;
+}
+.custom-employer-profile-ribbon:hover {
+    margin-top: 27.5px;
+    cursor: pointer;
+    background-color: #fff;
+    color: #000;
+}
+.no-listings-availiable {
+    border: 5px solid grey;
+    padding: 10px;
+}
