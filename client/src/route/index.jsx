@@ -56,6 +56,8 @@ import MainOnboardingFlowPage from "../pages/dashboard/paymentLogic/employers/on
 import SuccessfulOnboardCompletionPage from "../pages/dashboard/paymentLogic/employers/onboardingFlow/successfulOnboardConfirmation/success.js";
 import PromoteHomepageSelectionDataPage from "../pages/dashboard/promoteMiscData/employers/promoteHomepage/promoteHomepageSelection.js";
 import MainEmployerProfileDisplayPage from "../pages/dashboard/people/employers/individualProfile/index.js";
+import IntroVideoEmployerAccountPage from "../pages/dashboard/profile/employer/introduction/introVideo.js";
+import TopOffBalancePage from "../pages/dashboard/balanceRelated/topOffBal/topoffBalance.js";
 
 export const routes = [
         { path:"/profile/settings/edit", Component: GeneralSettingsPage },
@@ -115,5 +117,7 @@ export const routes = [
         { path: "/hacker/account/signup/flow/payment/related", Component: MainOnboardingFlowPage },
         { path: "/successful/onboarding/process/stripe/hacker/account", Component: SuccessfulOnboardCompletionPage },
         { path: "/employer/promote/various/account/data", Component: PromoteHomepageSelectionDataPage },
-        { path: "/employer/individual/profile/main/:id", Component: MainEmployerProfileDisplayPage }
+        { path: "/employer/individual/profile/main/:id", Component: MainEmployerProfileDisplayPage },
+        { path: "/employer/introductory/video/upload", Component: IntroVideoEmployerAccountPage },
+        { path: "/funding/top/off/balance/both", Component: TopOffBalancePage }
 ]; 

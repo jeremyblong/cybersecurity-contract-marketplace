@@ -30,6 +30,9 @@ const UserSchema =  new Schema({
     totalUniqueViews: {
         type: Number
     },
+    tokens: {
+        type: Number
+    },
     profilePosts: {
         type: Array
     },

@@ -3,10 +3,6 @@ import "./styles.css";
 import Sheet from 'react-modal-sheet';
 import { Button, Container, Row, Col, Card, CardHeader, CardBody, Progress, Badge, Label, Input, InputGroup, FormGroup }  from "reactstrap";
 import axios from 'axios';
-import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
-import ReactPlayer from 'react-player';
-import moment from "moment";
 import { NotificationManager } from "react-notifications";
 import Cards from 'react-credit-cards';
 import Select from 'react-select';

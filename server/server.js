@@ -214,6 +214,10 @@ app.use("/heart/profile/employer/account", require("./routes/employers/profile/p
 app.use("/mark/profile/view/employer/account", require("./routes/employers/profile/publicProfile/markProfileView/markView.js"));
 app.use("/start/following/employer/account", require("./routes/employers/profile/publicProfile/followEmployerUser/startFollowingThisEmployerUser.js"));
 app.use("/bookmark/employer/profile/either/account/type", require("./routes/employers/profile/publicProfile/bookmarkProfile/bookmarkEmployerProfile.js"));
+app.use("/purchase/account/tokens/either/account", require("./routes/shared/purchaseTokens/purchaseAccountTokensCredits.js"));
+app.use("/upload/file/intro/video/employer/save/data", require("./routes/employers/companyIntroductoryVideo/createIntroVideo.js"));
+app.use("/gather/cards/payment/methods/both/accounts", require("./routes/shared/paymentRelated/gatherCardsRelated/gatherRelevantCardsPerAccountType.js"));
+app.use("/deposit/funds/account/both/account/types", require("./routes/shared/paymentRelated/accountBalance/topoffAccountBalance/topoff.js"));
 // ~ webhook logic STARTS here ~
 app.use("/passbase/webhook", require("./webhooks/passbase/webhook.js"));
 // ~ webhook logic ENDS here ~

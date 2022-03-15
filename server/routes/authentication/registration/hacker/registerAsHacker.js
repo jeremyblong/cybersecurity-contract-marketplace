@@ -68,6 +68,7 @@ router.post("/", async (req, res) => {
           followingCompanies: [],
           experiencePoints: 0,
           rankLevel: 1,
+          tokens: 0,
           previouslyAppliedJobs: [],
           recentlyViewedProfileViews: [],
           recentlyViewedProfileIDSOnly: [],

@@ -16,6 +16,17 @@
     overflow-y: scroll;
     max-height: 525px;
 }
+@media only screen and (max-width: 875px) {
+    .dotted-border-col-two-custom {
+        border: 1.75px dotted black;
+        padding: 12.5px;
+        margin: 7.5px;
+        max-width: 92.5vw;
+        min-height: 525px;
+        overflow-y: scroll;
+        max-height: 525px;
+    }
+}
 .put-above {
     z-index: 999 !important;
 }

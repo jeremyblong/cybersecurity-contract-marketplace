@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const { Connection } = require("../../../../../mongoUtil.js");
 const config = require("config");
-const { UserExistsError } = require("passport-local-mongoose/lib/errors");
 const stripe = require('stripe')(config.get("stripeSecretKey"));
 
 

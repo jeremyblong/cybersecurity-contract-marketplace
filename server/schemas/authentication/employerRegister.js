@@ -39,6 +39,9 @@ const UserSchema =  new Schema({
         type: String,
         default: ""
     }, 
+    tokens: {
+        type: Number
+    },
     accountType: {
         type: String
     },

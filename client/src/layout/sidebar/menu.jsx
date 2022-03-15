@@ -20,10 +20,6 @@ export const MENUITEMS = [
                     { path: `${process.env.PUBLIC_URL}/already/applied/jobs/hacker/account`, title: `Already Applied Job's`, type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/`, title: `Notification's`, type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/hackers/display/all/active/gigs/hired`, title: "Hired/Active Gigs Employed Upon", type: "link" }
-                    // { path: `${process.env.PUBLIC_URL}/`, title: `ACTIVE Jobs You Employed On`, type: 'link' },
-                    // { path: `${process.env.PUBLIC_URL}/`, title: 'NOT-DEFINED-YET', type: 'link' },
-                    // { path: `${process.env.PUBLIC_URL}/`, title: 'NOT-DEFINED-YET', type: 'link' },
-                    // { path: `${process.env.PUBLIC_URL}/`, title: 'NOT-DEFINED-YET', type: 'link' }
                 ]
             },
             {
@@ -85,7 +81,7 @@ export const MENUITEMS = [
             {
                 title: 'Account Management', icon: User, type: 'sub', active: false, children: [
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Manage Core Settings', type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'Company Video/Intro', type: 'link' },
+                    { path: `${process.env.PUBLIC_URL}/employer/introductory/video/upload`, title: 'Company Video/Intro', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Manage Public Profile', type: 'link' }
                 ]
             },
@@ -178,11 +174,11 @@ export const MENUITEMS = [
     },
     {
         menutitle:"Payments, Subscriptions & More",
-        menucontent:"Subscribe to memberships, purchase in-app content, add payment method's and more!",
+        menucontent:"Subscribe to memberships, purchase in-app content, purchase tokens, add payment method's and more!",
         Items:[
             {
                 title: 'Subscriptions', icon: Bell, type: 'sub',active: false, children: [
-                    { path: `${process.env.PUBLIC_URL}/memberships/selection`, title: 'Choose Subscription(s)', type: 'link' }
+                    { path: `${process.env.PUBLIC_URL}/memberships/selection`, title: `Choose Subscription(s) Or Purchase Token's`, type: 'link' }
                 ]
             },
             {
@@ -190,6 +186,11 @@ export const MENUITEMS = [
                     { path: `${process.env.PUBLIC_URL}/payment/logic/main/page/hackers`, title: `Hacker's Payment(s) Homepage/Main`, type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/payment/logic/main/page/employers`, title: `Employer's Payment(s) Homepage/Main`, type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/hacker/account/signup/flow/payment/related`, title: "Payment Set-up BEFORE any LIVE payment's", type: 'link' }
+                ]
+            },
+            {
+                title: 'Funding/In-App Balance (Funding related changes)', icon: Bell, type: 'sub',active: false, children: [
+                    { path: `${process.env.PUBLIC_URL}/funding/top/off/balance/both`, title: `'Top-Off' Account Balance (Add Funds)`, type: 'link' }
                 ]
             }
         ]          

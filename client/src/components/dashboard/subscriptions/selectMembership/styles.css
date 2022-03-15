@@ -1,0 +1,23 @@
+.code-price-purchase-tokens { 
+    background-color: rgba(146, 146, 252, 0.175);
+    padding: 15px 0px;
+    border: 3px dashed #5f27f980;
+    text-decoration-line: underline;
+    font-weight: 450 !important;
+    color: #5f27f9;
+    box-shadow: 0.25rem 0.75rem 1rem rgba(0, 0, 0, 0.225) !important;
+}
+.card-shadow-purchase-tokens {
+    box-shadow: 0.5rem 0.5rem 1.5rem rgba(0, 0, 0, 0.325) !important;
+}
+.linked-faq-purchase {
+    font-weight: bold;
+    color: #5f27f9;
+    text-decoration-line: underline;
+}
+.linked-faq-purchase:hover {
+    color: #f73164;
+    font-weight: bold;
+    text-decoration-line: underline;
+    cursor: pointer;
+}

@@ -49,7 +49,7 @@ router.get("/", (req, resppppp, next) => {
 
                             resppppp.json({
                                 message: "Successfully found primary card!",
-                                lastFour: defaultCard.last4
+                                lastFour: defaultCard !== null ? defaultCard.last4 : null
                             })
                         } else {
                             resppppp.json({
@@ -85,7 +85,7 @@ router.get("/", (req, resppppp, next) => {
 
                         resppppp.json({
                             message: "Successfully found primary card!",
-                            lastFour: defaultCard.last4
+                            lastFour: defaultCard !== null ? defaultCard.last4 : null
                         })
                     }
                 });

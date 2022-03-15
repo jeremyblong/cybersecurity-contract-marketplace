@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import man from '../../assets/images/dashboard/profile.jpg'
-import { FileText, LogIn, Mail, User, MessageSquare, Bell, Minimize, Search, ShoppingCart, Minus, Plus, X } from 'react-feather';
+import { FileText, LogIn, Mail, User, MessageSquare, Bell, Minimize, Search, ShoppingCart, Minus, Plus, X, DollarSign } from 'react-feather';
 import Bookmark from "../../layout/bookmark"
 import {
   setTranslations,
@@ -335,6 +335,9 @@ const Rightbar = ({ authenticated, data, authentication, saveListingData, saveSo
               </div>
             </div>
             <ul className="profile-dropdown onhover-show-div">
+              <li onClick={() => {
+                history.push("/funding/top/off/balance/both");
+              }}><DollarSign /><span>Deposit Funds Into Account</span></li>
               <li onClick={() => {
                 if (data.accountType === "employers") {
                   console.log("employer ran.");

@@ -1,0 +1,24 @@
+.dotted-border-col-two-customized {
+    border: 2.5px dashed #701f34;
+    padding: 17.5px;
+    margin: 7.5px;
+    max-width: 35vw;
+    min-height: 525px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    max-height: 525px;
+    box-shadow: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.195);
+}
+@media only screen and (max-width: 875px) {
+    .dotted-border-col-two-customized {
+        border: 2.5px dashed #701f34;
+        padding: 17.5px;
+        margin: 7.5px;
+        max-width: 92.5vw;
+        min-height: 525px;
+        box-shadow: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.195);
+        overflow-y: scroll;
+        overflow-x: hidden;
+        max-height: 525px;
+    }
+}

@@ -50,6 +50,7 @@ router.post("/", async (req, res) => {
           registrationDate: new Date(),
           registrationDateString: moment(new Date()).format("MM/DD/YYYY hh:mm:ss a"),
           completedJobs: 0,
+          tokens: 0,
           reviews: [],
           fullyVerified: false,
           identityVerified: false,
