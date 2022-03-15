@@ -12,6 +12,7 @@
     "body-scroll-lock": "^4.0.0-beta.0",
     "bootstrap-scss": "^4.5.0",
     "chartist": "^0.11.4",
+    "crypto-js": "^4.1.1",
     "dotenv": "^10.0.0",
     "easymde": "^2.15.0",
     "emoji-mart": "^3.0.1",
@@ -117,9 +118,11 @@
     "sweetalert2": "^11.1.7",
     "sweetalert2-react-content": "^4.1.1",
     "thunk": "0.0.1",
+    "twilio-video": "^2.21.0",
     "webpack": "^4.42.0"
   },
   "devDependencies": {
+    "@types/crypto-js": "^4.1.1",
     "node-sass": "4.14.1",
     "sass-loader": "^7.0.1"
   },

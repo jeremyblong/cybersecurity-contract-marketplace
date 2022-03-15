@@ -58,6 +58,7 @@ import PromoteHomepageSelectionDataPage from "../pages/dashboard/promoteMiscData
 import MainEmployerProfileDisplayPage from "../pages/dashboard/people/employers/individualProfile/index.js";
 import IntroVideoEmployerAccountPage from "../pages/dashboard/profile/employer/introduction/introVideo.js";
 import TopOffBalancePage from "../pages/dashboard/balanceRelated/topOffBal/topoffBalance.js";
+import CreateVideoChatEmployerPage from "../pages/dashboard/video/employers/createVideoInterview/createVideoChat.js";
 
 export const routes = [
         { path:"/profile/settings/edit", Component: GeneralSettingsPage },
@@ -119,5 +120,6 @@ export const routes = [
         { path: "/employer/promote/various/account/data", Component: PromoteHomepageSelectionDataPage },
         { path: "/employer/individual/profile/main/:id", Component: MainEmployerProfileDisplayPage },
         { path: "/employer/introductory/video/upload", Component: IntroVideoEmployerAccountPage },
-        { path: "/funding/top/off/balance/both", Component: TopOffBalancePage }
+        { path: "/funding/top/off/balance/both", Component: TopOffBalancePage },
+        { path: "/start/video/interview/chat/employer", Component: CreateVideoChatEmployerPage }
 ]; 

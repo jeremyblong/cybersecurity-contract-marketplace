@@ -1,4 +1,4 @@
-import React, { Fragment,useState,useEffect,useCallback } from 'react';
+import React, { Fragment, useState, useEffect, useCallback } from 'react';
 import {Form,Row} from 'reactstrap'
 import {X} from 'react-feather'
 import {MENUITEMS} from '../sidebar/menu'
@@ -7,8 +7,10 @@ import RightHeader from './rightbar'
 import {Link} from 'react-router-dom'
 import {Loading} from '../../constant'
 import { useSelector } from 'react-redux'
+import axios from "axios";
+import { connect } from "react-redux";
 
-const Header = (props) => {
+const Header = ({ data, ready, balance }) => {
 
   // eslint-disable-next-line
   const [mainmenu, setMainMenu] = useState(MENUITEMS);
@@ -18,7 +20,7 @@ const Header = (props) => {
   // eslint-disable-next-line
   const [searchResultEmpty, setSearchResultEmpty] = useState(false);
   const layout_type = useSelector(content => content.Customizer.layout)
-  const layout_version = useSelector(content => content.Customizer.mix_background_layout)
+  const layout_version = useSelector(content => content.Customizer.mix_background_layout);
   
   const escFunction = useCallback((event) => {
     if(event.keyCode === 27) {
@@ -144,11 +146,15 @@ const Header = (props) => {
           </div>
       </Form> 
       <LeftHeader/>
-      <RightHeader/>
+      <RightHeader ready={ready} balance={balance} />
       </Row>
     </div>
     </Fragment>
   );
 }
-
-export default Header;
+const mapStateToProps = (state) => {
+    return {
+        data: state.auth.data
+    }
+  }
+export default connect(mapStateToProps, {  })(Header);

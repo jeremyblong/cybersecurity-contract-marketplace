@@ -39,7 +39,7 @@ setDefaultLanguage('en');
 setLanguageCookie();
 
 // actual component starts...
-const Rightbar = ({ authenticated, data, authentication, saveListingData, saveSoftwareListingInfo, saveSendbirdInitialData, updateCourseInformationData }) => {   
+const Rightbar = ({ balance, ready, authenticated, data, authentication, saveListingData, saveSoftwareListingInfo, saveSendbirdInitialData, updateCourseInformationData }) => {   
   const history = useHistory();
    
   const [searchresponsive, setSearchresponsive] = useState(false)
@@ -48,7 +48,7 @@ const Rightbar = ({ authenticated, data, authentication, saveListingData, saveSo
   const [selected, setSelected] = useState("en")
   const [cartDropdown, setCartDropDown] = useState(false)
   const [notificationDropDown, setNotificationDropDown] = useState(false)
-  const [chatDropDown, setChatDropDown] = useState(false)
+  const [chatDropDown, setChatDropDown] = useState(false);
 
   const handleSetLanguage = (key) => {
     setLanguage(key);
@@ -114,7 +114,7 @@ const Rightbar = ({ authenticated, data, authentication, saveListingData, saveSo
     }
   }
   const handleDeauthentication = () => {
-    axios.get("http://localhost:5000/logout", {
+    axios.get(`${process.env.REACT_APP_BASE_URL}/logout`, {
         params: {
             uniqueId: data.uniqueId,
             accountType: data.accountType
@@ -138,6 +138,8 @@ const Rightbar = ({ authenticated, data, authentication, saveListingData, saveSo
         console.log(err);
     })
   }
+  // gather availiable pending balance
+
   const handlePreviewActivate = () => {
     confirmAlert({
       title: 'Want to Sign-Out?',
@@ -335,6 +337,7 @@ const Rightbar = ({ authenticated, data, authentication, saveListingData, saveSo
               </div>
             </div>
             <ul className="profile-dropdown onhover-show-div">
+              <li><DollarSign /><span style={{ color: "#f73164" }}>Account Balance: ${ready === false ? "---" : balance}</span></li>
               <li onClick={() => {
                 history.push("/funding/top/off/balance/both");
               }}><DollarSign /><span>Deposit Funds Into Account</span></li>

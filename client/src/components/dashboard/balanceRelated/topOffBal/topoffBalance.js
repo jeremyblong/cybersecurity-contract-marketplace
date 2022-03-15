@@ -5,15 +5,23 @@ import Breadcrumb from '../../../../layout/breadcrumb';
 import Slider from 'rc-slider';
 import { connect } from "react-redux";
 import Cards from 'react-credit-cards';
-import Select from 'react-select';
 import axios from "axios";
 import { NotificationManager } from 'react-notifications';
+import crypto from "../../../../utils/crypto.js";
+import { confirmAlert } from 'react-confirm-alert';
+
+
+const { 
+    encryptString,
+    decryptString,
+    decryptObject,
+    encryptObject 
+} = crypto;
 
 const TopOffBalanceHelper = ({ userData }) => {
     const [ valid, setValidness ] = useState(false);
     const [ percentageToBePaid, setPercentageToBePaid ] = useState(25);
     const [ cost, setCost ] = useState(0);
-    const [ previousCardOptions, setPreviousCardOptions ] = useState([]);
     const [ marks, setMarks ] = useState({
         0: { style: { color: "blue" }, label: "$0.00" },
         10: { style: { color: "blue" }, label: "$125" },
@@ -50,6 +58,8 @@ const TopOffBalanceHelper = ({ userData }) => {
         })
     }
 
+    console.log("setSelectedCard", selectedPaymentCard);
+
     const handleSliderValueChange = (percentage) => {
         console.log("handleSliderValueChange percentage", percentage);
 
@@ -70,65 +80,10 @@ const TopOffBalanceHelper = ({ userData }) => {
         return `$${converted.toFixed(0)} selected to be deposited into your account immediately!`;
     }
 
-
-    useEffect(() => {
-        const config = {
-            params: {
-                id: userData.uniqueId,
-                accountType: userData.accountType
-            }
-        }
-        axios.get(`${process.env.REACT_APP_BASE_URL}/gather/cards/payment/methods/both/accounts`, config).then((res) => {
-            if (res.data.message === "Gathered employer payment cards!") {
-
-                console.log(res.data);
-
-                const { cards } = res.data;
-
-                const convertedPaymentsArr = [];
-
-                if (typeof cards !== "undefined" && cards.length > 0) {
-                    for (let index = 0; index < cards.length; index++) {
-                        const method = cards[index];
-    
-                        const { last4 } = method.card;
-                        
-                        convertedPaymentsArr.push({ label: `**** **** **** ${last4}`, value: method })
-                    }
-    
-                    setPreviousCardOptions(convertedPaymentsArr);
-                }
-
-            } else {
-                console.log("err", res.data);
-                
-                NotificationManager.warning("Failed to fetch your current payment method's on file, please reload this page or contact support if this problem persists...", "Failed to load previous method's!", 4750);
-            }
-        }).catch((err) => {
-            console.log(err);
-
-            NotificationManager.warning("Failed to fetch your current payment method's on file, please reload this page or contact support if this problem persists...", "Failed to load previous method's!", 4750);
-        })
-    }, [])
-
-    const handleCardSelectionChange = (value) => {
-
-        setSelectedCard(value);
-
-        setCardInfo({
-            cvc: "",
-            expiry: "",
-            focus: "",
-            name: "",
-            number: "",
-            cardType: ""
-        })
-    }
-
     const calculateDisabled = () => {
         const { cvc, expiry, focus, name, number, cardType } = cardInfo;
 
-        if ((selectedPaymentCard !== null) || (valid === true && (typeof cvc !== "undefined" && cvc.length >= 3) && (typeof expiry !== "undefined" && expiry.length >= 4) && (typeof name !== "undefined" && name.length >= 8) && (typeof number !== "undefined" && number.length >= 10))) {
+        if ((valid === true && (typeof cvc !== "undefined" && cvc.length >= 3) && (typeof expiry !== "undefined" && expiry.length >= 4) && (typeof name !== "undefined" && name.length >= 8) && (typeof number !== "undefined" && number.length >= 10))) {
             return false;
         } else {
             return true;
@@ -136,15 +91,42 @@ const TopOffBalanceHelper = ({ userData }) => {
     }
     const handleSubmissionDepositFunds = () => {
         console.log("handleSubmissionDepositFunds ran/running!");
-        
+
+
+        if (selectedPaymentCard !== null) {
+            confirmAlert({
+                customUI: ({ onClose }) => {
+                  return (
+                    <div className='custom-ui'>
+                        <h1>Are you sure you'd like to make this deposit?!</h1>
+                        <p>You're about to deposit approx. <strong style={{ color: "#f73164" }}>${cost.toFixed(2)}</strong> into your account which will charge the entered/selected card via the form on this page. Please click "Yes, Make Payment & Deposit Funds!" if you wish to proceed with this transaction and/or deposit!</p>
+                        <hr />
+                        <Button className='btn-square-success' color={"success"} style={{ width: "50%" }} onClick={() => {
+                            submitLogic();
+                            onClose();
+                        }}>Yes, Make Payment & Deposit Funds!</Button>
+                        <Button className='btn-square-danger' color={"danger"} style={{ width: "50%" }} onClick={() => {
+                            onClose();
+                        }}
+                        >
+                            Yes, Cancel!
+                        </Button>
+                    </div>
+                  );
+                }
+            });
+        } else {
+            submitLogic();
+        }
+    }
+
+    const submitLogic = () => {
         if (typeof cost !== "undefined" && cost !== 0) {
             const config = {
                 id: userData.uniqueId,
                 accountType: userData.accountType,
-                existingCard: selectedPaymentCard !== null ? true : false,
-                cardInfo,
-                cost,
-                selectedPaymentCard
+                cardInfo: encryptObject(cardInfo),
+                cost
             }
             axios.post(`${process.env.REACT_APP_BASE_URL}/deposit/funds/account/both/account/types`, config).then((res) => {
                 if (res.data.message === "Successfully deposited funds!") {
@@ -167,7 +149,6 @@ const TopOffBalanceHelper = ({ userData }) => {
             NotificationManager.info("You MUST select a value (number) amount so we know how much you'd like to deposit into your account, please select a value with the slider before proceeding...!", "Select a value/number via the slider before continuing!", 4750);
         }
     }
-
     console.log("Cardinfo", cardInfo);
 
     return (
@@ -197,15 +178,6 @@ const TopOffBalanceHelper = ({ userData }) => {
                                             </div>
                                         </Col>
                                         <Col className='dotted-border-col-two-customized' sm="12" md="6" lg="6" xl="6">
-                                            <Row style={{ paddingBottom: "10px" }}>
-                                                <Label>Select An Existing Registered Card</Label>
-                                                <Select
-                                                    value={selectedPaymentCard}
-                                                    onChange={handleCardSelectionChange}
-                                                    options={previousCardOptions}
-                                                />
-                                            </Row>
-                                            <hr />
                                             <Form className="theme-form mega-form">
                                                 <FormGroup>
                                                     <Input

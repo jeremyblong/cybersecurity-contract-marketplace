@@ -1,0 +1,5 @@
+.fullscreen-loader {
+    min-width: 100vw !important;
+    min-height: 100vh !important;
+    background-color: black !important;
+}

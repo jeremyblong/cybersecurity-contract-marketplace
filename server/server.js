@@ -218,6 +218,8 @@ app.use("/purchase/account/tokens/either/account", require("./routes/shared/purc
 app.use("/upload/file/intro/video/employer/save/data", require("./routes/employers/companyIntroductoryVideo/createIntroVideo.js"));
 app.use("/gather/cards/payment/methods/both/accounts", require("./routes/shared/paymentRelated/gatherCardsRelated/gatherRelevantCardsPerAccountType.js"));
 app.use("/deposit/funds/account/both/account/types", require("./routes/shared/paymentRelated/accountBalance/topoffAccountBalance/topoff.js"));
+app.use("/gather/availiable/stripe/bal", require("./routes/shared/paymentRelated/accountBalance/gatherBalance/fetchBal.js"));
+app.use("/generate/twilio/access/token", require("./routes/shared/twilio/createToken/createAccessToken.js"));
 // ~ webhook logic STARTS here ~
 app.use("/passbase/webhook", require("./webhooks/passbase/webhook.js"));
 // ~ webhook logic ENDS here ~
