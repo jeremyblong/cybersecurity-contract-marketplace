@@ -1,0 +1,50 @@
+.header-balance-red {
+    text-decoration-line: underline;
+    font-size: 2.05rem !important;
+    color: #f73164;
+}
+.header-balance-primary {
+    color: #7366ff;
+    text-decoration-line: underline;
+    font-size: 2.05rem !important;
+}
+.header-balance-green {
+    text-decoration-line: underline;
+    font-size: 2.05rem !important;
+    color: #51bb25;
+}
+.card-bal-bal {
+    box-shadow: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.195);
+    min-height: 525px !important;
+}
+.heavy-instant-availiable {
+    font-size: 1.75rem;
+    text-align: center;
+    font-weight: 475;
+}
+.custom-ending-bal-text {
+    font-size: 1.15rem;
+}
+.custom-starting-bal-text {
+    font-size: 1.35rem;
+    text-decoration-line: underline;
+    color: #7366ff;
+}
+.listgroup-bal {
+    max-height: 600px;
+    min-height: 600px;
+    overflow-y: scroll;
+}
+.custom-list-group-transactions {
+    margin-top: 12.5px;
+}
+.top-portion-transactions {
+    
+}
+.topportion-text {
+    font-size: 1.725rem !important;
+    text-decoration-line: underline;
+}
+.lower-p {
+    font-size: 1.125rem !important;
+}

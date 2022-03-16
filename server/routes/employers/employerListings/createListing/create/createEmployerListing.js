@@ -6,10 +6,16 @@ const { v4: uuidv4 } = require('uuid');
 const config = require("config");
 const stripe = require('stripe')(config.get("stripeSecretKey"));
 const { Connection } = require("../../../../../mongoUtil.js");
+const { 
+    decryptObject
+} = require("../../../../../crypto-js.js");
+
 
 router.post("/", (req, resppppp, next) => {
     
-    const { uniqueId, data, alreadyExistentCard, existentCard, cost, name, number, focus, expiry, cvc } = req.body;
+    const { uniqueId, data, alreadyExistentCard, existentCard, cost, cardEntered } = req.body;
+
+    const { name, number, focus, expiry, cvc } = decryptObject(cardEntered);
 
     const newListing = new Listing({
         ...data,
@@ -29,6 +35,8 @@ router.post("/", (req, resppppp, next) => {
     });
     
     console.log("REQ.BODY :", req.body);
+
+    const decrypted = decryptObject(existentCard);
 
     const collection = Connection.db.db("db").collection("employers");
 
@@ -50,7 +58,7 @@ router.post("/", (req, resppppp, next) => {
                     amount: cost,
                     customer: user.stripeAccountDetails.id,
                     currency: 'usd',
-                    payment_method: existentCard.value.id,
+                    payment_method: decrypted.value.id,
                     description: `Payment directly to ${config.get("applicationName")} for 'posting a new listing' fee..`,
                     confirm: true
                 }, (err, charge) => {

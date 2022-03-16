@@ -6,18 +6,18 @@ const stripe = require('stripe')(config.get("stripeSecretKey"));
 const { v4: uuidv4 } = require('uuid');
 const moment = require("moment");
 const { encrypt } = require("../../../../crypto.js");
-
+const { 
+    decryptObject
+} = require("../../../../crypto-js.js");
 
 router.post("/", (req, resppppp, next) => {
     
     const { 
-        number,
-        name, 
-        expiry, 
-        cvc,
-        employerID,
-        cardType
+        encryptedCardInfo,
+        employerID
     } = req.body;
+
+    const { number, name, expiry, cvc, cardType } = decryptObject(encryptedCardInfo);
 
     console.log("req.body", req.body);
 

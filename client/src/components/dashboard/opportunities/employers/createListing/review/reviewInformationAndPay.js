@@ -16,7 +16,12 @@ import FileViewer from 'react-file-viewer';
 import axios from "axios";
 import { withRouter } from "react-router-dom";
 import { saveListingData } from "../../../../../../redux/actions/employer/listings/listingData.js";
+import crypto from "../../../../../../utils/crypto.js";
 
+
+const { 
+    encryptObject 
+} = crypto;
 
 const monthOptions = [
   { value: '01', label: '01' },
@@ -323,18 +328,22 @@ constructor(props) {
             timespan, 
             uploadedFiles
         }
-        
-        axios.post(`${process.env.REACT_APP_BASE_URL}/post/employer/listing/recruit`, {
-            data: newData,
-            alreadyExistentCard: selectedPaymentCard !== null ? true : false,
-            existentCard: selectedPaymentCard,
-            uniqueId: this.props.userData.uniqueId,
-            cost: experienceAndCost.cost,
+
+        const cardInfo = {
             name,
             number,
             focus,
             expiry,
             cvc
+        }
+        
+        axios.post(`${process.env.REACT_APP_BASE_URL}/post/employer/listing/recruit`, {
+            data: newData,
+            alreadyExistentCard: selectedPaymentCard !== null ? true : false,
+            existentCard: encryptObject(selectedPaymentCard),
+            uniqueId: this.props.userData.uniqueId,
+            cost: experienceAndCost.cost,
+            cardEntered: encryptObject(cardInfo)
         }).then((res) => {
             if (res.data.message === "Successfully posted a new employer listing!") {
                 console.log(res.data);
@@ -359,8 +368,7 @@ constructor(props) {
                         disclosureVisibility: {}, 
                         tokensRequiredToApply: {}, 
                         listingVisibility: {}, 
-                        estimatedCompletionDate: null,
-                        ...this.props.listingData.listingData
+                        estimatedCompletionDate: null
                     });
                 }, 750);
             } else {

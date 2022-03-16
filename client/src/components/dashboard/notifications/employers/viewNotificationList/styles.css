@@ -1,0 +1,22 @@
+.no-notifications-img {
+    min-width: 100%;
+    min-height: 775px;
+}
+.shadow-notification-card {
+    box-shadow: 0.5rem 0.5rem 1rem rgba(0, 0, 0, 0.325) !important;
+}
+.notification-pic-video {
+    min-width: 100%;
+    min-height: 75px;
+    max-height: 75px;
+}
+.notification-pagination-wrapper {
+    margin-top: 27.5px;
+}
+.maxed-title-notification {
+    max-width: 92.5%;
+}
+.notification-custom-notification:hover {
+    cursor: pointer;
+    border: 1px solid #f73164;
+}

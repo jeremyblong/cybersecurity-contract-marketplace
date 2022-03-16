@@ -186,8 +186,6 @@ const RenderCommentsEmployerListingHelper = ({ userData, data }) => {
                 </Form>
                 <ul className={"comment-list-course-ul"}>
                     {typeof comments !== "undefined" && comments.length > 0 ? comments.map((comment, index) => {
-                        console.log("comment", comment);
-
                         const popoverIDTarget = `comment${index}`;
                         return (
                             <Fragment key={uuid()}>
@@ -219,7 +217,6 @@ const RenderCommentsEmployerListingHelper = ({ userData, data }) => {
                                     </Media>
                                 </li>
                                 {typeof comment.subComments !== "undefined" && comment.subComments.length > 0 ? comment.subComments.map((subcomment, idx) => {
-                                    console.log("sub-comment", subcomment);
                                     return (
                                         <li key={idx}>
                                             <ul>

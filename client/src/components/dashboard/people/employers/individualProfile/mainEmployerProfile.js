@@ -14,7 +14,8 @@ import helpers from "./helpers/miscFunctions/helperFunctions.js";
 import { NotificationManager } from "react-notifications";
 import { connect } from "react-redux";
 import { confirmAlert } from 'react-confirm-alert';
-
+import { connect as twilioConnect } from "twilio-video";
+import uuid from "react-uuid";
 
 const { renderProfilePicVideo } = helpers;
 
@@ -24,6 +25,7 @@ const MainEmployerProfileDisplayHelper = ({ userData }) => {
 
     const [ employerData, setEmployerData ] = useState(null);
     const [ activeHearts, setActiveHears ] = useState([]);
+    const [ room, setRoom ] = useState(null);
 
     const { id } = useParams();
 
@@ -220,6 +222,33 @@ const MainEmployerProfileDisplayHelper = ({ userData }) => {
             ]
         });
     }
+    const joinRoomVideoChat = async () => {
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/generate/twilio/access/token`, {
+                params: {
+                    uniqueId: userData.uniqueId,
+                    accountType: userData.accountType
+                }
+            });
+            if (response) {
+                console.log("response", response);
+
+                const { data } = response;
+
+                const generatedRoomID = uuid();
+
+                const room = await twilioConnect(data.token, {
+                    name: generatedRoomID,
+                    audio: true,
+                    video: true
+                });
+            
+                setRoom(room);
+            }
+        } catch(err) {
+            console.log(err);
+        }
+    }
 
     const renderContentMain = () => {
         return (
@@ -246,11 +275,6 @@ const MainEmployerProfileDisplayHelper = ({ userData }) => {
                                             <li><a className="social-icon bg-warning"><i className="fa fa-share-alt"></i></a></li>
                                         </ul>
                                     </div>
-                                    <Row>
-                                        <div style={{ paddingTop: "12.5px" }} className='centered-both-ways'>
-                                            <Button className='btn-square-dark absolute-message-btn hover-btn-employer-custom' color='dark-2x' outline style={{ width: "50%", color: "#f73164" }}>Message This User!</Button>
-                                        </div>
-                                    </Row>
                                     <div className="info market-tabs p-0 maxed-nav-wrapper-employer-profile">
                                         <Nav tabs className="border-tab tabs-scoial custom-tabs-maxed">
                                             <NavItem className="nav" id="myTab" role="tablist">
@@ -279,6 +303,20 @@ const MainEmployerProfileDisplayHelper = ({ userData }) => {
                                             </NavLink>
                                             </NavItem>
                                         </Nav>
+                                    </div>
+                                    <div style={{ paddingTop: "7.5px" }} className='position-just-above'>
+                                        <Row>
+                                            <Col sm="12" md="6" lg="6" xl="6">
+                                                <div className='centered-both-ways'>
+                                                    <Button className='btn-square-dark absolute-message-btn hover-btn-employer-custom' color='dark-2x' outline style={{ width: "97.5%", color: "#f73164" }}>Message This User!</Button>
+                                                </div>
+                                            </Col>
+                                            <Col sm="12" md="6" lg="6" xl="6">
+                                                <div className='centered-both-ways'>
+                                                    <Button className='btn-square-dark absolute-message-btn hover-btn-employer-custom' onClick={joinRoomVideoChat} color='dark-2x' outline style={{ width: "97.5%", color: "#f73164" }}>Invite/Initialize Video Chat With User!</Button>
+                                                </div>
+                                            </Col>
+                                        </Row>
                                     </div>
                                 </Card>
                             </Col>

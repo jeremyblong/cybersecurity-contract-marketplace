@@ -4,6 +4,13 @@ import Cards from 'react-credit-cards';
 import { Row, Col, Button, Card, CardBody, Input, FormGroup, Form, CardHeader, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
 import axios from "axios";
 import { connect } from "react-redux";
+import crypto from "../../../../../../../utils/crypto.js";
+
+
+const { 
+    encryptObject 
+} = crypto;
+
 
 const BottomAddNewPaymentMethodTabbedEmployerHelper = ({ setPaymentMethods, userData, handleInputChange, cardInfo, setCardInfo }) => {
     const [activeTab, setActiveTab] = useState('1');
@@ -19,15 +26,12 @@ const BottomAddNewPaymentMethodTabbedEmployerHelper = ({ setPaymentMethods, user
         }
     }
     const addNewCardToAccount = () => {
-        const { number, name, expiry, cvc, cardType } = cardInfo;
+
+        const encryptedCardInfo = encryptObject(cardInfo);
 
         const config = {
-            number,
-            name, 
-            expiry, 
-            cvc,
-            employerID: userData.uniqueId,
-            cardType
+            encryptedCardInfo,
+            employerID: userData.uniqueId
         }
     
         axios.post(`${process.env.REACT_APP_BASE_URL}/add/new/payment/method/employer`, config).then((res) => {

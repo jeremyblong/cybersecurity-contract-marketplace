@@ -10,7 +10,7 @@ import {
   translate,
 } from 'react-switch-lang';
 import { saveSendbirdInitialData } from "../../redux/actions/messaging/initialization/initSBLogic.js";
-import { English, Deutsch, Español, Français, Português, 简体中文, Notification, DeliveryProcessing, OrderComplete, TicketsGenerated, DeliveryComplete, CheckAllNotification, ViewAll, MessageBox, EricaHughes, KoriThomas, Admin, Account, Inbox, Taskboard, LogOut, AinChavez, CheckOut, ShopingBag, OrderTotal, GoToShopingBag } from '../../constant'
+import { English, Deutsch, Español, Français, Português, 简体中文, Notification, DeliveryProcessing, OrderComplete, TicketsGenerated, DeliveryComplete, ViewAll, MessageBox, EricaHughes, KoriThomas, Account, Inbox, LogOut, AinChavez, CheckOut, OrderTotal, GoToShopingBag } from '../../constant'
 import { connect } from "react-redux";
 import _ from "lodash";
 import axios from "axios";
@@ -225,7 +225,13 @@ const Rightbar = ({ balance, ready, authenticated, data, authentication, saveLis
               <li>
                 <p><i className="fa fa-circle-o mr-3 font-danger"></i>{DeliveryComplete}<span className="pull-right">{"6 hr"}</span></p>
               </li>
-              <li><button className="btn btn-primary" >{CheckAllNotification}</button>
+              <li><button onClick={() => {
+                if (data.accountType === "employers") {
+                  history.push("/employer/notifications");
+                } else {
+                  history.push("/hacker/notifications");
+                }
+              }} className="btn btn-primary" >Check All Notification's</button>
               </li>
             </ul>
           </li>
@@ -337,7 +343,9 @@ const Rightbar = ({ balance, ready, authenticated, data, authentication, saveLis
               </div>
             </div>
             <ul className="profile-dropdown onhover-show-div">
-              <li><DollarSign /><span style={{ color: "#f73164" }}>Account Balance: ${ready === false ? "---" : balance}</span></li>
+              <li onClick={() => {
+                history.push("/both/accounts/view/balance/info");
+              }}><DollarSign /><span style={{ color: "#f73164" }}>Account Balance: ${ready === false ? "---" : balance}</span></li>
               <li onClick={() => {
                 history.push("/funding/top/off/balance/both");
               }}><DollarSign /><span>Deposit Funds Into Account</span></li>

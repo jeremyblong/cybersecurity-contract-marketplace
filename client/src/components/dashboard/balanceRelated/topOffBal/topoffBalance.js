@@ -12,9 +12,6 @@ import { confirmAlert } from 'react-confirm-alert';
 
 
 const { 
-    encryptString,
-    decryptString,
-    decryptObject,
     encryptObject 
 } = crypto;
 

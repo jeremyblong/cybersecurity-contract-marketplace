@@ -6,7 +6,12 @@ import axios from "axios";
 import { connect } from "react-redux";
 import { NotificationManager } from 'react-notifications';
 import { useHistory } from "react-router-dom";
+import crypto from "../../../../../../../utils/crypto.js";
 
+
+const { 
+    encryptObject 
+} = crypto;
 
 const BottomAddNewPaymentMethodTabbedHelper = ({ currentlyDue, setCurrentlyDue, setModalOpenToDo, setPaymentMethods, userData, handleInputChange, cardInfo, setCardInfo }) => {
     const [activeTab, setActiveTab] = useState('1');
@@ -140,15 +145,11 @@ const BottomAddNewPaymentMethodTabbedHelper = ({ currentlyDue, setCurrentlyDue, 
         }
     }
     const addNewCardToAccount = () => {
-        const { number, name, expiry, cvc, cardType } = cardInfo;
+        const encryptedCardInfo = encryptObject(cardInfo);
 
         const config = {
-            number,
-            name, 
-            expiry, 
-            cvc,
             hackerID: userData.uniqueId,
-            cardType
+            encryptedCardInfo
         }
     
         axios.post(`${process.env.REACT_APP_BASE_URL}/add/new/payment/method/hacker`, config).then((res) => {
@@ -182,6 +183,8 @@ const BottomAddNewPaymentMethodTabbedHelper = ({ currentlyDue, setCurrentlyDue, 
                 
                 NotificationManager.error("This card type (Anything outside of DEBIT) is NOT allowed! You MUST enter a debit card if you wish to enter a valid card payment type...", "Enter a DEBIT card ONLY! This is NOT a debit card.", 4750);
 
+            } else if (res.data.err === "This card doesn't appear to support payouts.") {
+                NotificationManager.warning("This card does NOT support 'payouts' (payments sent to YOUR account/card after receiving funds via our platform). Please note that you will NOT be able to receive payouts to this card though!", "Payouts NOT allowed with this card!", 4750);
             } else {
                 console.log("err", res.data);
 

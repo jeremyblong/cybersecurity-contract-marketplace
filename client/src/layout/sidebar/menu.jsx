@@ -75,8 +75,8 @@ export const MENUITEMS = [
                 title: 'Job Management', icon: Briefcase, type: 'sub', active: false, children: [
                     { path: `${process.env.PUBLIC_URL}/view/all/general/applications/employer/recruit`, title: `View/Manage Current Applicant/Application's`, type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/`, title: 'Manage Reviews & Past Work', type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/employer/view/hired/applicants/active`, title: 'Current Hires', type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/start/video/interview/chat/employer`, title: 'Start/Generate Video Interview/Chat', type: 'link' }
+                    { path: `${process.env.PUBLIC_URL}/employer/view/hired/applicants/active`, title: 'Current Hires', type: 'link' }
+                    // { path: `${process.env.PUBLIC_URL}/start/video/interview/chat/employer`, title: 'Start/Generate Video Interview/Chat', type: 'link' }
                 ]
             },
             {

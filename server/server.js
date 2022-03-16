@@ -220,6 +220,10 @@ app.use("/gather/cards/payment/methods/both/accounts", require("./routes/shared/
 app.use("/deposit/funds/account/both/account/types", require("./routes/shared/paymentRelated/accountBalance/topoffAccountBalance/topoff.js"));
 app.use("/gather/availiable/stripe/bal", require("./routes/shared/paymentRelated/accountBalance/gatherBalance/fetchBal.js"));
 app.use("/generate/twilio/access/token", require("./routes/shared/twilio/createToken/createAccessToken.js"));
+app.use("/gather/account/notifications", require("./routes/shared/notifications/gatherNotifications.js"));
+app.use("/fetch/profile/pic/video/only", require("./routes/shared/general/userInfo/gatherProfilePicVideoOnly/gatherResource.js"));
+app.use("/mark/notification/viewed/both/account/types", require("./routes/shared/notifications/markSeen/markNotificationSeen.js"));
+app.use("/gather/transactional/history/employer", require("./routes/employers/transactionalHistory/gatherTransactions/fetchTransactions.js"));
 // ~ webhook logic STARTS here ~
 app.use("/passbase/webhook", require("./webhooks/passbase/webhook.js"));
 // ~ webhook logic ENDS here ~

@@ -1,35 +1,12 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import "./styles.css";
-import { Container, Row, Col, Card, CardBody, CardHeader, CardFooter } from "reactstrap";
+import { Container, Row, Col, Card, CardBody, CardHeader, CardFooter, Button } from "reactstrap";
 import Breadcrumb from '../../../../../layout/breadcrumb';
-import { connect } from "twilio-video";
-import axios from 'axios';
 import { connect as reduxConnect } from "react-redux";
 
 const CreateVideoChatEmployerHelper = ({ userData }) => {
 
-    const [ room, setRoom ] = useState(null);
-
-    const joinRoom = async () => {
-        try {
-            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/generate/twilio/access/token`, {
-                params: {
-                    uniqueId: userData.uniqueId,
-                    accountType: userData.accountType
-                }
-            });
-            const data = await response.json();
-            const room = await connect(data.accessToken, {
-                name: 'cool-room',
-                audio: true,
-                video: true
-            });
-        
-            setRoom(room);
-        } catch(err) {
-            console.log(err);
-        }
-    }
+    
     return (
         <Fragment>
             <Breadcrumb parent="Invite Hacker(s) To Video Interview With You!" title="Find, Select & Invite Anyone On Our Platform.." /> 
@@ -43,11 +20,22 @@ const CreateVideoChatEmployerHelper = ({ userData }) => {
                             </CardHeader>
                             <CardBody className='b-l-success b-r-success'>
                                 <Row>
-                                    
+                                    <Col sm="12" md="6" lg="6" xl="6">
+                                        <video width="100%" height="100%" controls>
+                                            <source src={null} type="video/mp4" />
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    </Col>
+                                    <Col sm="12" md="6" lg="6" xl="6">
+                                        <video width="100%" height="100%" controls>
+                                            <source src={null} type="video/mp4" />
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    </Col>
                                 </Row>
                             </CardBody>
                             <CardFooter className='b-l-secondary b-r-secondary'>
-
+                                <Button className={"btn-square-success"} outline color={"success-2x"} style={{ width: "100%" }} onClick={null}>Initialize Room</Button>
                             </CardFooter>
                         </Card>
                     </Col>
