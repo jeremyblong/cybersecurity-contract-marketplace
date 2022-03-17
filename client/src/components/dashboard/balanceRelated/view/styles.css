@@ -17,6 +17,13 @@
     box-shadow: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.195);
     min-height: 525px !important;
 }
+.full-width-placeholder {
+    min-width: 90%;
+    margin-top: 22.5px;
+    min-height: 575px;
+    object-fit: contain;
+    overflow-y: hidden;
+}
 .heavy-instant-availiable {
     font-size: 1.75rem;
     text-align: center;

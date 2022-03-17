@@ -157,6 +157,13 @@ const Root = (props) =>  {
           render={props => <Component key={props.match.params.id} {...props} />}
         />
       );
+    } else if (path === "/view/individual/employer/listing/public/:id") {
+      return (
+        <Route
+          path={"/view/individual/employer/listing/public/:id"}
+          render={props => <Component key={props.match.params.id} {...props} />}
+        />
+      );
     } else {
       if (accountData.accountType === "employers") {
         // employer(s) authenticated acct.

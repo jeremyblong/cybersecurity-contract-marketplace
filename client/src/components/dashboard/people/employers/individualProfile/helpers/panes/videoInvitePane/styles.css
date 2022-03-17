@@ -1,0 +1,6 @@
+.marginized-header {
+    margin: 12.5px 20px;
+}
+.inner-container-invite .container-fluid .page-title .row .col-6 nav .breadcrumb {
+    background-color: transparent !important;
+}

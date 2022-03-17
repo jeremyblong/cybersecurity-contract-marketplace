@@ -198,7 +198,9 @@ const ViewAllBalanceRelatedInfoHelper = ({ userData }) => {
                                             </ListGroupItem>
                                         </Fragment>
                                     );
-                                }) : null}
+                                }) : <Fragment>
+                                    <img src={require("../../../../assets/images/ch.png")} className={"full-width-placeholder"} />
+                                </Fragment>}
                             </ListGroup>
                         </Col>
                     </Fragment>

@@ -2,7 +2,7 @@ import React, { Fragment, useState, useEffect } from 'react';
 import { Container, Row, Col, Card, CardBody, CardHeader, Media, TabContent, TabPane, Nav, NavItem, NavLink, Button } from "reactstrap";
 import Breadcrumb from '../../../../../layout/breadcrumb';
 import "./styles.css";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import axios from "axios";
 import TimelineTabEmployerProfileHelper from './helpers/timelineTab.js';
@@ -14,18 +14,23 @@ import helpers from "./helpers/miscFunctions/helperFunctions.js";
 import { NotificationManager } from "react-notifications";
 import { connect } from "react-redux";
 import { confirmAlert } from 'react-confirm-alert';
-import { connect as twilioConnect } from "twilio-video";
-import uuid from "react-uuid";
+import MessagingPanePrivateEmployerHelper from "./helpers/panes/messagingPane/messagePane.js";
+import VideoInvitePaneInviteEmployerHelper from "./helpers/panes/videoInvitePane/videoInvite.js";
+
 
 const { renderProfilePicVideo } = helpers;
 
 const MainEmployerProfileDisplayHelper = ({ userData }) => {
+
+    const history = useHistory();
 
     const [ activeTab, setActiveTab ] = useState('1');
 
     const [ employerData, setEmployerData ] = useState(null);
     const [ activeHearts, setActiveHears ] = useState([]);
     const [ room, setRoom ] = useState(null);
+    const [ messagingPaneOpen, setMessagePaneState ] = useState(false);
+    const [ videoInterviewPane, setVideoInterviewStartPane ] = useState(false);
 
     const { id } = useParams();
 
@@ -222,33 +227,6 @@ const MainEmployerProfileDisplayHelper = ({ userData }) => {
             ]
         });
     }
-    const joinRoomVideoChat = async () => {
-        try {
-            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/generate/twilio/access/token`, {
-                params: {
-                    uniqueId: userData.uniqueId,
-                    accountType: userData.accountType
-                }
-            });
-            if (response) {
-                console.log("response", response);
-
-                const { data } = response;
-
-                const generatedRoomID = uuid();
-
-                const room = await twilioConnect(data.token, {
-                    name: generatedRoomID,
-                    audio: true,
-                    video: true
-                });
-            
-                setRoom(room);
-            }
-        } catch(err) {
-            console.log(err);
-        }
-    }
 
     const renderContentMain = () => {
         return (
@@ -308,12 +286,12 @@ const MainEmployerProfileDisplayHelper = ({ userData }) => {
                                         <Row>
                                             <Col sm="12" md="6" lg="6" xl="6">
                                                 <div className='centered-both-ways'>
-                                                    <Button className='btn-square-dark absolute-message-btn hover-btn-employer-custom' color='dark-2x' outline style={{ width: "97.5%", color: "#f73164" }}>Message This User!</Button>
+                                                    <Button onClick={() => setMessagePaneState(true)} className='btn-square-dark absolute-message-btn hover-btn-employer-custom' color='dark-2x' outline style={{ width: "97.5%", color: "#f73164" }}>Message This User!</Button>
                                                 </div>
                                             </Col>
                                             <Col sm="12" md="6" lg="6" xl="6">
                                                 <div className='centered-both-ways'>
-                                                    <Button className='btn-square-dark absolute-message-btn hover-btn-employer-custom' onClick={joinRoomVideoChat} color='dark-2x' outline style={{ width: "97.5%", color: "#f73164" }}>Invite/Initialize Video Chat With User!</Button>
+                                                    <Button className='btn-square-dark absolute-message-btn hover-btn-employer-custom' onClick={() => setVideoInterviewStartPane(true)} color='dark-2x' outline style={{ width: "97.5%", color: "#f73164" }}>Invite/Initialize Video Chat With User!</Button>
                                                 </div>
                                             </Col>
                                         </Row>
@@ -343,7 +321,9 @@ const MainEmployerProfileDisplayHelper = ({ userData }) => {
 
     return (
         <Fragment>
-           <Breadcrumb parent="Viewing Individual Employer Profile Page" title="You're Now Viewing This Employer's Profile Information/Data" />
+            <VideoInvitePaneInviteEmployerHelper videoInterviewPane={videoInterviewPane} setVideoInterviewStartPane={setVideoInterviewStartPane} />
+            <MessagingPanePrivateEmployerHelper employerID={id} employerName={employerData !== null ? `${employerData.firstName} ${employerData.lastName}` : "Unknown - Loading..."} messagePaneOpen={messagingPaneOpen} setMessagePaneState={setMessagePaneState} />
+            <Breadcrumb parent="Viewing Individual Employer Profile Page" title="You're Now Viewing This Employer's Profile Information/Data" />
             <Container fluid={true}>
                 <Row>
                     <Card className='b-l-info b-r-info shadow-wrapper-overview-profile-employer'>

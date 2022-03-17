@@ -1,8 +1,6 @@
-import React, { Fragment ,useState, useEffect } from 'react';
+import React, { Fragment ,useState } from 'react';
 import { Col, Row, Card, CardBody, Media, CardHeader, Button } from 'reactstrap';
-import axios from 'axios';
-import { MoreVertical, ThumbsUp, UserPlus, MessageSquare } from 'react-feather';
-import { AddFriend, ActivityLog, AnnaMull, DionCast, KarleneLex, WaiSchalk, Hobbies, VellaChism, JasonBorne, } from "../../../../../../constant";
+import ReactPlayer from "react-player";
 import LeftBar from './leftBar';
 import RightBar from './rightBar';
 import helpers from "./miscFunctions/helperFunctions.js";
@@ -122,7 +120,9 @@ const AboutGeneralInfoHelper = ({ employerData, activeHearts }) => {
                                                     <Fragment key={idx}>
                                                         <li>
                                                             <div className="add-friend text-center">
-                                                                {renderPicOrVideoProfileOrNot(visit)}
+                                                                <div className='centered-both-ways'>
+                                                                    {renderPicOrVideoProfileOrNot(visit)}
+                                                                </div>
                                                                 <span className="d-block f-w-600">{visit.viewerName}</span>
                                                                 <span className="d-block">Member Since: {moment(visit.memberSince).format("MM/DD/YYYY")} <br />{visit.accountType === "hackers" ? "Hacker Account" : "Employer Account"}</span>
                                                                 <Button onClick={() => handleProfileRedirectViewer(visit.viewedBy, visit.accountType)} color="primary" size="xs">View Profile</Button>
@@ -136,53 +136,17 @@ const AboutGeneralInfoHelper = ({ employerData, activeHearts }) => {
                                 </CardBody>
                             </Card>
                         </Col>
-                        {/* <Col sm="12">
+                        {_.has(employerData, "companyIntroductionVideo") ? <Col sm="12">
                             <Card>
                                 <CardHeader>
-                                    <h5>{ActivityLog}</h5>
+                                    <h5>Introductory Company Video</h5>
+                                    <p className='lead'>This company has uploaded an 'introductory video' informing the public and/or hacker's about what they're all about, view the video to understand more about this company!</p>
                                 </CardHeader>
                                 <CardBody>
-                                    <div className="activity-log">
-                                        <div className="my-activity">
-                                            <h6 className="f-w-600">{"Today"}</h6>
-                                            <p><span><ThumbsUp className="m-r-20" /></span>{"Comeren Diaz likes your photos."}</p>
-                                            <p><span><UserPlus className="m-r-20" /></span>{"Karlene Lex and Comeren Diaz now friends."}</p>
-                                            <p><span><MessageSquare className="m-r-20" /></span>{"Sarah Loren wrote on your timeline"}</p>
-                                            <p><span><ThumbsUp className="m-r-20" /></span>{"Johny Waston likes your post's."}</p>
-                                            <p><span><UserPlus className="m-r-20" /></span>{"Andew Jon became friends with Comeren Diaz."}</p>
-                                            <p><span><UserPlus className="m-r-20" /></span>{"Johny Waston became friends with Bucky Barnes."}</p>
-                                        </div>
-                                        <div className="my-activity">
-                                            <h6 className="f-w-600">{"25 December"}</h6>
-                                            <p><span><ThumbsUp className="m-r-20" /></span>{"Comeren Diaz likes your photos."}</p>
-                                            <p><span><ThumbsUp className="m-r-20" /></span>{"Johny Waston likes your post's."}</p>
-                                            <p><span><UserPlus className="m-r-20" /></span>{"Karlene Lex and Comeren Diaz now friends."}</p>
-                                            <p><span><UserPlus className="m-r-20" /></span>{"Johny Waston became friends with Bucky Barnes."}</p>
-                                            <p><span><MessageSquare className="m-r-20" /></span>{"Sarah Loren wrote on your timeline"}</p>
-                                            <p><span><MessageSquare className="m-r-20" /></span>{"Comeren Diaz wrote on your timeline"}</p>
-                                        </div>
-                                        <div className="my-activity">
-                                            <h6 className="f-w-600">{"8 september"}</h6>
-                                            <p><span><ThumbsUp className="m-r-20" /></span>{"Comeren Diaz likes your photos."}</p>
-                                            <p><span><ThumbsUp className="m-r-20" /></span>{"Johny Waston likes your post's."}</p>
-                                            <p><span><UserPlus className="m-r-20" /></span>{"Karlene Lex and Comeren Diaz now friends."}</p>
-                                            <p><span><UserPlus className="m-r-20" /></span>{"Johny Waston became friends with Bucky Barnes."}</p>
-                                            <p><span><MessageSquare className="m-r-20" /></span>{"Sarah Loren wrote on your timeline"}</p>
-                                            <p><span><UserPlus className="m-r-20" /></span>{"Andew Jon became friends with Comeren Diaz."}</p>
-                                        </div>
-                                        <div className="my-activity">
-                                            <h6 className="f-w-600">{"6 June"}</h6>
-                                            <p><span><ThumbsUp className="m-r-20" /></span>{"Comeren Diaz likes your photos."}</p>
-                                            <p><span><UserPlus className="m-r-20" /></span>{"Karlene Lex and Comeren Diaz now friends."}</p>
-                                            <p><span><MessageSquare className="m-r-20" /></span>{"Sarah Loren wrote on your timeline"}</p>
-                                            <p><span><ThumbsUp className="m-r-20" /></span>{"Johny Waston likes your post's."}</p>
-                                            <p><span><UserPlus className="m-r-20" /></span>{"Andew Jon became friends with Comeren Diaz."}</p>
-                                            <p><span><UserPlus className="m-r-20" /></span>{"Johny Waston became friends with Bucky Barnes."}</p>
-                                        </div>
-                                    </div>
+                                    <ReactPlayer controls={true} loop={true} height={"100%"} width={"100%"} className={"introductory-company-vid"} wrapper={"div"} url={`${process.env.REACT_APP_ASSET_LINK}/${employerData.companyIntroductionVideo.resource}`} />
                                 </CardBody>
                             </Card>
-                        </Col> */}
+                        </Col> : null}
                     </Row>
                 </Col>
                 <div className="col-xl-3 xl-100 box-col-12">

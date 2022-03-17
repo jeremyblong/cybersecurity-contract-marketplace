@@ -19,15 +19,43 @@
     line-height: 1.7;
     letter-spacing: 0.7px;
 }
-.listgroupitem-list-custom .list-group {
-
+.btn-gradient-employer {
+    background-image: linear-gradient(
+        0deg,
+        hsl(245deg 100% 70%) 0%,
+        hsl(248deg 100% 69%) 10%,
+        hsl(252deg 100% 68%) 20%,
+        hsl(255deg 100% 68%) 30%,
+        hsl(258deg 100% 67%) 40%,
+        hsl(261deg 100% 65%) 49%,
+        hsl(264deg 99% 64%) 59%,
+        hsl(267deg 98% 63%) 68%,
+        hsl(271deg 97% 61%) 79%,
+        hsl(274deg 96% 59%) 89%,
+        hsl(277deg 95% 56%) 100%
+    );
+    color: #fff;
+    font-weight: bold;
+    border: 2.25px solid lightgrey;
 }
 .custom-card-top-bar {
     width: 100%;
     margin: 12.5px;
 }
-.listgroupitem-list-custom-active {
-
+.markdown-listing-sub-listing {
+    max-height: 175px;
+    margin-top: 17.5px;
+    padding: 3.5px 7.5px;
+    overflow-y: scroll;
+}
+.customized-mini-display-img {
+    max-width: 72.5px;
+    max-height: 72.5px;
+    border-radius: 20%;
+    object-fit: contain;
+}
+.minimal-height {
+    object-fit: contain;
 }
 .list-listview-wrapper-wrap {
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;

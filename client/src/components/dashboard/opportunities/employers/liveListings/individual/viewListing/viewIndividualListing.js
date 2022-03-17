@@ -2,9 +2,8 @@ import React, { Fragment, useEffect, useState } from 'react';
 import Breadcrumb from '../../../../../../../layout/breadcrumb';
 import { Container, Row, Col, Card, CardBody, Media, Button, Badge, CardHeader, Input, InputGroup, ListGroupItem, ListGroup, FormGroup, Label } from 'reactstrap';
 import one from '../../../../../../../assets/images/job-search/1.jpg';
-import two from '../../../../../../../assets/images/job-search/6.jpg';
-import { useLocation, useHistory }  from 'react-router-dom';
-import { Share, SimilarJobs, SeniorUXDesigner } from "../../../../../../../constant";
+import { useLocation, useHistory, Link }  from 'react-router-dom';
+import { Share } from "../../../../../../../constant";
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -34,6 +33,8 @@ const ViewIndividualJobListingHelper = ({ userData, saveApplicationDetailsProgre
     
     const passedData = useLocation();
     const history = useHistory();
+
+    console.log("passedData", passedData);
     
     const [ data, setData ] = useState(null);
     const [ ready, setReady ] = useState(false);
@@ -41,104 +42,7 @@ const ViewIndividualJobListingHelper = ({ userData, saveApplicationDetailsProgre
     const [ file, setFile ] = useState(null);
     const [ employerInfo, setEmployerInfo ] = useState(null);
     const [ messagePaneOpen, setMessagePaneState ] = useState(false);
-
-    const [JobData,setJobData] = useState([{
-        badgeType: "primary",
-        job_name: "Praesent tempor porta ante et semper. In vulputate tellus a ipsum pharetra, ac rutrum diam pellentesqu",
-        job_description: "Donec porta euismod molestie. Nunc eu imperdiet odio, eget tristique arcu. Mauris velit augue, commodo luctus est et, dignissim gravida est. Donec aliquam mattis auctor. In dolor dui, ullamcorper non bibendum nec, tincidunt a est. Duis interdum molestie pulvinar. Quisque consectetur nibh id orci auctor, in vestibulum ante pretium. Nullam sed bibendum ex.",
-        job_area: "North Carolina",
-        job_city: "Charlotte",
-        badgeValue: "Newly Posted",
-        uniqueId: "292a60dc-46db-421a-8ed5-a401942aca07"
-    }, {
-        badgeType: "primary",
-        job_name: "Praesent tempor porta ante et semper. In vulputate tellus a ipsum pharetra, ac rutrum diam pellentesqu",
-        job_description: "Donec porta euismod molestie. Nunc eu imperdiet odio, eget tristique arcu. Mauris velit augue, commodo luctus est et, dignissim gravida est. Donec aliquam mattis auctor. In dolor dui, ullamcorper non bibendum nec, tincidunt a est. Duis interdum molestie pulvinar. Quisque consectetur nibh id orci auctor, in vestibulum ante pretium. Nullam sed bibendum ex.",
-        job_area: "North Carolina",
-        job_city: "Charlotte",
-        badgeValue: "Newly Posted",
-        uniqueId: "a29f1b98-2fcc-460e-a748-483538676e89"
-    }, {
-        badgeType: "primary",
-        job_name: "Praesent tempor porta ante et semper. In vulputate tellus a ipsum pharetra, ac rutrum diam pellentesqu",
-        job_description: "Donec porta euismod molestie. Nunc eu imperdiet odio, eget tristique arcu. Mauris velit augue, commodo luctus est et, dignissim gravida est. Donec aliquam mattis auctor. In dolor dui, ullamcorper non bibendum nec, tincidunt a est. Duis interdum molestie pulvinar. Quisque consectetur nibh id orci auctor, in vestibulum ante pretium. Nullam sed bibendum ex.",
-        job_area: "North Carolina",
-        job_city: "Charlotte",
-        badgeValue: "Newly Posted",
-        uniqueId: "85f073fa-9700-4f49-982d-3cd479a6f001"
-    }, {
-        badgeType: "primary",
-        job_name: "Praesent tempor porta ante et semper. In vulputate tellus a ipsum pharetra, ac rutrum diam pellentesqu",
-        job_description: "Donec porta euismod molestie. Nunc eu imperdiet odio, eget tristique arcu. Mauris velit augue, commodo luctus est et, dignissim gravida est. Donec aliquam mattis auctor. In dolor dui, ullamcorper non bibendum nec, tincidunt a est. Duis interdum molestie pulvinar. Quisque consectetur nibh id orci auctor, in vestibulum ante pretium. Nullam sed bibendum ex.",
-        job_area: "North Carolina",
-        job_city: "Charlotte",
-        badgeValue: "Newly Posted",
-        uniqueId: "10f1e2f4-d0d5-419a-831c-59299a8187ad"
-    }, {
-        badgeType: "primary",
-        job_name: "Praesent tempor porta ante et semper. In vulputate tellus a ipsum pharetra, ac rutrum diam pellentesqu",
-        job_description: "Donec porta euismod molestie. Nunc eu imperdiet odio, eget tristique arcu. Mauris velit augue, commodo luctus est et, dignissim gravida est. Donec aliquam mattis auctor. In dolor dui, ullamcorper non bibendum nec, tincidunt a est. Duis interdum molestie pulvinar. Quisque consectetur nibh id orci auctor, in vestibulum ante pretium. Nullam sed bibendum ex.",
-        job_area: "North Carolina",
-        job_city: "Charlotte",
-        badgeValue: "Newly Posted",
-        uniqueId: "885cdc2e-12e3-4a9a-a147-9d390cd92f7b"
-    }, {
-        badgeType: "primary",
-        job_name: "Praesent tempor porta ante et semper. In vulputate tellus a ipsum pharetra, ac rutrum diam pellentesqu",
-        job_description: "Donec porta euismod molestie. Nunc eu imperdiet odio, eget tristique arcu. Mauris velit augue, commodo luctus est et, dignissim gravida est. Donec aliquam mattis auctor. In dolor dui, ullamcorper non bibendum nec, tincidunt a est. Duis interdum molestie pulvinar. Quisque consectetur nibh id orci auctor, in vestibulum ante pretium. Nullam sed bibendum ex.",
-        job_area: "North Carolina",
-        job_city: "Charlotte",
-        badgeValue: "Newly Posted",
-        uniqueId: "f583586e-d52c-4e45-aa7e-94c42f8eb949"
-    }, {
-        badgeType: "secondary",
-        job_name: "Praesent tempor porta ante et semper. In vulputate tellus a ipsum pharetra, ac rutrum diam pellentesqu",
-        job_description: "Donec porta euismod molestie. Nunc eu imperdiet odio, eget tristique arcu. Mauris velit augue, commodo luctus est et, dignissim gravida est. Donec aliquam mattis auctor. In dolor dui, ullamcorper non bibendum nec, tincidunt a est. Duis interdum molestie pulvinar. Quisque consectetur nibh id orci auctor, in vestibulum ante pretium. Nullam sed bibendum ex.",
-        job_area: "North Carolina",
-        job_city: "Charlotte",
-        badgeValue: "Newly Posted",
-        uniqueId: "08f549ff-c5c5-4eec-826e-7323c9fcfa52"
-    }, {
-        badgeType: "secondary",
-        job_name: "Praesent tempor porta ante et semper. In vulputate tellus a ipsum pharetra, ac rutrum diam pellentesqu",
-        job_description: "Donec porta euismod molestie. Nunc eu imperdiet odio, eget tristique arcu. Mauris velit augue, commodo luctus est et, dignissim gravida est. Donec aliquam mattis auctor. In dolor dui, ullamcorper non bibendum nec, tincidunt a est. Duis interdum molestie pulvinar. Quisque consectetur nibh id orci auctor, in vestibulum ante pretium. Nullam sed bibendum ex.",
-        job_area: "North Carolina",
-        job_city: "Charlotte",
-        badgeValue: "Newly Posted",
-        uniqueId: "29df568c-dd4c-4df2-b3ce-0d4a779835ce"
-    }, {
-        badgeType: "primary",
-        job_name: "Praesent tempor porta ante et semper. In vulputate tellus a ipsum pharetra, ac rutrum diam pellentesqu",
-        job_description: "Donec porta euismod molestie. Nunc eu imperdiet odio, eget tristique arcu. Mauris velit augue, commodo luctus est et, dignissim gravida est. Donec aliquam mattis auctor. In dolor dui, ullamcorper non bibendum nec, tincidunt a est. Duis interdum molestie pulvinar. Quisque consectetur nibh id orci auctor, in vestibulum ante pretium. Nullam sed bibendum ex.",
-        job_area: "North Carolina",
-        job_city: "Charlotte",
-        badgeValue: "Newly Posted",
-        uniqueId: "cc5f6436-14f8-445d-9ec8-60d00a5e436d"
-    }, {
-        badgeType: "primary",
-        job_name: "Praesent tempor porta ante et semper. In vulputate tellus a ipsum pharetra, ac rutrum diam pellentesqu",
-        job_description: "Donec porta euismod molestie. Nunc eu imperdiet odio, eget tristique arcu. Mauris velit augue, commodo luctus est et, dignissim gravida est. Donec aliquam mattis auctor. In dolor dui, ullamcorper non bibendum nec, tincidunt a est. Duis interdum molestie pulvinar. Quisque consectetur nibh id orci auctor, in vestibulum ante pretium. Nullam sed bibendum ex.",
-        job_area: "North Carolina",
-        job_city: "Charlotte",
-        badgeValue: "Newly Posted",
-        uniqueId: "160f69d6-6e3a-4da7-9630-f53085469403"
-    }, {
-        badgeType: "secondary",
-        job_name: "Praesent tempor porta ante et semper. In vulputate tellus a ipsum pharetra, ac rutrum diam pellentesqu",
-        job_description: "Donec porta euismod molestie. Nunc eu imperdiet odio, eget tristique arcu. Mauris velit augue, commodo luctus est et, dignissim gravida est. Donec aliquam mattis auctor. In dolor dui, ullamcorper non bibendum nec, tincidunt a est. Duis interdum molestie pulvinar. Quisque consectetur nibh id orci auctor, in vestibulum ante pretium. Nullam sed bibendum ex.",
-        job_area: "North Carolina",
-        job_city: "Charlotte",
-        badgeValue: "Newly Posted",
-        uniqueId: "69ac0d19-329f-4f4d-a2ac-31a6c150b7e8"
-    }, {
-        badgeType: "secondary",
-        job_name: "Praesent tempor porta ante et semper. In vulputate tellus a ipsum pharetra, ac rutrum diam pellentesqu",
-        job_description: "Donec porta euismod molestie. Nunc eu imperdiet odio, eget tristique arcu. Mauris velit augue, commodo luctus est et, dignissim gravida est. Donec aliquam mattis auctor. In dolor dui, ullamcorper non bibendum nec, tincidunt a est. Duis interdum molestie pulvinar. Quisque consectetur nibh id orci auctor, in vestibulum ante pretium. Nullam sed bibendum ex.",
-        job_area: "North Carolina",
-        job_city: "Charlotte",
-        badgeValue: "Newly Posted",
-        uniqueId: "e502944e-c780-45d0-b494-a0add9c0e9e2"
-    }]);
+    const [ bottomListings, setBottomListings ] = useState([]);
 
     const generateRandomNumber = (num) => {
         return Math.floor(Math.random() * num) + 1;
@@ -207,7 +111,74 @@ const ViewIndividualJobListingHelper = ({ userData, saveApplicationDetailsProgre
             }).catch((err) => {
                 console.log(err);
             })
-        };
+        } else {
+            console.log("THIS ONE RAN!");
+
+            if (typeof passedData.listing !== "undefined" && _.has(passedData, "listing")) {
+
+                const { assetArray, typeOfHack, testingDatesHackers, rulesOfEngagement, publicCompanyName, outOfScopeVulnerabilities, listingDescription, hashtags, businessAddress, requiredRankToApply, experienceAndCost, desiredSkills, maxNumberOfApplicants, disclosureVisibility, tokensRequiredToApply, listingVisibility, estimatedCompletionDate, uploadedFiles, applicants, postedBy } = passedData.listing;
+
+                const newDatesArray = [];
+
+                axios.get(`${process.env.REACT_APP_BASE_URL}/retrieve/related/employer/core/information`, {
+                    params: {
+                        uniqueId: postedBy
+                    }
+                }).then((res) => {
+                    if (res.data.message === "Gathered relevant information!") {
+                        console.log(res.data);
+
+                        const { user } = res.data;
+
+                        setEmployerInfo(user);
+
+                        for (let index = 0; index < testingDatesHackers.length; index++) {
+                            const selectedDate = testingDatesHackers[index];
+                            
+                            const { startDate, endDate, key } = selectedDate;
+            
+                            const newData = {
+                                startDate: new Date(startDate),
+                                endDate: new Date(endDate),
+                                key
+                            }
+            
+                            newDatesArray.push(newData);
+                        }
+            
+                        const newData = {
+                            ...passedData.listing,
+                            assetArray, 
+                            typeOfHack, 
+                            testingDatesHackers: newDatesArray, 
+                            rulesOfEngagement, 
+                            publicCompanyName, 
+                            outOfScopeVulnerabilities, 
+                            listingDescription, 
+                            hashtags, 
+                            businessAddress, 
+                            requiredRankToApply, 
+                            experienceAndCost, 
+                            desiredSkills, 
+                            maxNumberOfApplicants, 
+                            disclosureVisibility, 
+                            tokensRequiredToApply, 
+                            listingVisibility, 
+                            estimatedCompletionDate, 
+                            uploadedFiles,
+                            applicants
+                        };
+            
+                        setData(newData);
+                        setReady(true);
+                    } else {
+                        console.log("err", res.data);
+                    }
+                }).catch((err) => {
+                    console.log(err);
+                })
+            }
+        }
     }, []);
 
     const onError = (err, other) => {
@@ -279,6 +250,33 @@ const ViewIndividualJobListingHelper = ({ userData, saveApplicationDetailsProgre
 
         history.push("/employer/listing/betting/bidding/main/page", { item, listing: data });
     }
+
+
+    useEffect(() => {
+        axios.get(`${process.env.REACT_APP_BASE_URL}/gather/short/list/jobs`).then((res) => {
+            if (res.data.message === "Successfully gathered jobs!") {
+                console.log(res.data);
+
+                const { listings } = res.data;
+
+                setBottomListings(listings);
+            } else {
+                console.log("Err", res.data);
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
+    }, []);
+
+    const renderImagePreview = (files) => {
+
+        const filtered = files.filter((x) => x.type.includes("image"));
+
+        console.log("filtered", filtered);
+
+        return `${process.env.REACT_APP_ASSET_LINK}/${filtered[0].link}`;
+    }
+
     const renderContent = () => {
         if (ready === true) {
             return (
@@ -440,7 +438,7 @@ const ViewIndividualJobListingHelper = ({ userData, saveApplicationDetailsProgre
                                                         return (
                                                             <li className="file-box" key={index}>
                                                                 <div className="file-top">
-                                                                    <ReactPlayer playing={true} muted={true} url={`${process.env.REACT_APP_ASSET_LINK}/${file.onlineID}`} className="stretch-both-ways" />
+                                                                    <ReactPlayer playing={true} muted={true} url={`${process.env.REACT_APP_ASSET_LINK}/${file.onlineID}`} className="stretch-both-ways minimal-height" />
                                                                 </div>
                                                                 <div className="file-bottom">
                                                                     <h6>{file.name} </h6>
@@ -456,7 +454,7 @@ const ViewIndividualJobListingHelper = ({ userData, saveApplicationDetailsProgre
                                                     } else if (file.type === "image/jpeg" || file.type === "image/jpg" || file.type === "image/png") {
                                                         return (
                                                             <li className="file-box" key={index}>
-                                                                <div className="file-top"><img src={`${process.env.REACT_APP_ASSET_LINK}/${file.onlineID}`} className="stretch-both-ways" /><i className="fa fa-ellipsis-v f-14 ellips"></i>
+                                                                <div className="file-top"><img src={`${process.env.REACT_APP_ASSET_LINK}/${file.onlineID}`} className="stretch-both-ways minimal-height" /><i className="fa fa-ellipsis-v f-14 ellips"></i>
                                                                 </div>
                                                                 <div className="file-bottom">
                                                                     <h6>{file.name} </h6>
@@ -472,7 +470,7 @@ const ViewIndividualJobListingHelper = ({ userData, saveApplicationDetailsProgre
                                                     } else {
                                                         return (
                                                             <li className="file-box" key={index}>
-                                                                <div className="file-top"><i className={`fa fa-file-text-o ${renderColor(index)}`}></i><i className="fa fa-ellipsis-v f-14 ellips"></i>
+                                                                <div className="file-top minimal-height"><i className={`fa fa-file-text-o ${renderColor(index)}`}></i><i className="fa fa-ellipsis-v f-14 ellips"></i>
                                                                 </div>
                                                                 <div className="file-bottom">
                                                                     <h6>{file.name} </h6>
@@ -530,57 +528,34 @@ const ViewIndividualJobListingHelper = ({ userData, saveApplicationDetailsProgre
                             </div>
                         </Card>
                         <div className="header-faq">
-                            <h6 className="mb-0 f-w-600">{SimilarJobs}</h6>
+                            <h6 className="mb-0 f-w-600">Similar Jobs</h6>
                         </div>
                         <Row>
-                            {JobData.slice(0, 4).map((data, i) => {
+                            {bottomListings.slice(0, 10).map((data, i) => {
                                 return (
                                     <Col xl="6 xl-100" key={i}>
                                         <Card>
                                             <div className="job-search">
                                                 <CardBody>
                                                     <Media>
-                                                        <img className="img-40 img-fluid m-r-20" src={require(`../../../../../../../assets/images/user/10.jpg`)} alt="" />
+                                                        <img className="customized-mini-display-img img-fluid m-r-20" src={renderImagePreview(data.uploadedFiles)} alt="" />
                                                         <Media body>
-                                                            <h6 className="f-w-600"><a href={null}>{data.job_name}</a>
-                                                                {(data.badgeType === 'primary' ? <span className="badge badge-primary pull-right">{data.badgeValue}</span>
-                                                                    : ''
-                                                                )}
+                                                            <h6 className="f-w-600"><a href={null}>{data.publicCompanyName}</a>
+                                                                <span className="badge badge-primary pull-right">Posted {moment(data.systemDate).fromNow()}</span>
                                                             </h6>
-                                                            <p>{data.job_area} <span>{data.job_city}</span>
-                                                                <span>
-                                                                    <i className="fa fa-star font-warning"></i>
-                                                                    <i className="fa fa-star font-warning"></i>
-                                                                    <i className="fa fa-star font-warning"></i>
-                                                                    <i className="fa fa-star font-warning"></i>
-                                                                    <i className="fa fa-star font-warning-o"></i>
-                                                                </span>
+                                                            <p>{data.maxNumberOfApplicants.label} Required ~ <span> Physical Hack Located In {_.has(data, "businessAddress") ? `${data.businessAddress.address.localName} ` : "Digital Asset's ONLY."}</span>
                                                             </p>
                                                         </Media>
                                                     </Media>
-                                                    <p>{data.job_description}</p>
+                                                    <ReactMarkdown className="markdown-listing-sub-listing" children={data.listingDescription} remarkPlugins={[remarkGfm]} />
+                                                    <hr />
+                                                    <Link to={{ pathname: `/view/individual/employer/listing/public/${data.uniqueId}`, listing: data }} className='btn btn-gradient-employer' style={{ width: "100%" }}>View This Listing!</Link>
                                                 </CardBody>
                                             </div>
                                         </Card>
                                     </Col>
                                 )
                             })}
-                            <Col xl="12">
-                                <Card>
-                                    <div className="job-search">
-                                        <CardBody>
-                                            <Media>
-                                                <img className="img-40 img-fluid m-r-20" src={two} alt="" />
-                                                <Media body>
-                                                    <h6 className="f-w-600"><a href={null}>{SeniorUXDesigner}</a><span className="pull-right">{"5 days ago"}</span></h6>
-                                                    <p>{"Sutherland"} <span>{"Lelystad, Netherlands"} </span><span><i className="fa fa-star font-warning"></i><i className="fa fa-star font-warning"></i><i className="fa fa-star font-warning"></i><i className="fa fa-star font-warning-half-o"></i><i className="fa fa-star font-warning-o"></i></span></p>
-                                                </Media>
-                                            </Media>
-                                            <p>{"Woody equal ask saw sir weeks aware decay. Entrance prospect removing we packages strictly is no smallest he. For hopes may chief get hours day rooms. Oh no turned behind polite piqued enough at. Forbade few through inquiry blushes you. Cousin no itself eldest it in dinner latter missed no."}</p>
-                                        </CardBody>
-                                    </div>
-                                </Card>
-                            </Col>
                         </Row>
                     </Col>
                 </Fragment>
@@ -709,22 +684,22 @@ const ViewIndividualJobListingHelper = ({ userData, saveApplicationDetailsProgre
                                             <div className="list-listview-wrapper-wrap">
                                                 <ListGroupItem className="listgroupitem-list-custom">
                                                     <ListGroup>
-                                                        <p className="lead-list-group-item"><strong style={{ fontSize: "17.5px" }}>{generateRandomNumber(17)}</strong> people have already been hired for this job/gig</p>
+                                                        <p className="lead-list-group-item"><strong style={{ fontSize: "17.5px" }}>{typeof data.applicants !== "undefined" && data.applicants.length > 0 ? data.applicants.length : 0}</strong> people are currently being interviewed for this contract</p>
                                                     </ListGroup>
                                                 </ListGroupItem>
                                                 <ListGroupItem className="listgroupitem-list-custom-active active">
                                                     <ListGroup>
-                                                        <p className="lead-list-group-item"><strong style={{ fontSize: "17.5px" }}>{generateRandomNumber(33)}</strong> total hackers are required for this listing</p>
+                                                        <p className="lead-list-group-item"><strong style={{ fontSize: "17.5px" }}>{data.maxNumberOfApplicants.value}</strong> total hackers are required for this listing</p>
                                                     </ListGroup>
                                                 </ListGroupItem>
                                                 <ListGroupItem className="listgroupitem-list-custom">
                                                     <ListGroup>
-                                                        <p className="lead-list-group-item"><strong style={{ fontSize: "17.5px" }}>{generateRandomNumber(100)}</strong> total <strong style={{ fontSize: "17.5px" }}>CURRENT</strong> applicants</p>
+                                                        <p className="lead-list-group-item"><strong style={{ fontSize: "17.5px" }}>{data.totalViews}</strong> people have <strong style={{ fontSize: "17.5px" }}>viewed</strong> this contract/listing</p>
                                                     </ListGroup>
                                                 </ListGroupItem>
                                                 <ListGroupItem className="listgroupitem-list-custom-active active">
                                                     <ListGroup>
-                                                        <p className="lead-list-group-item"><strong style={{ fontSize: "17.5px" }}>{generateRandomNumber(325)}</strong> people are <strong style={{ fontSize: "17.5px" }}>currently bidding</strong> on this job/listing</p>
+                                                        <p className="lead-list-group-item"><strong style={{ fontSize: "17.5px" }}>{data.tokensRequiredToApply.value}</strong> <strong style={{ fontSize: "17.5px" }}>token's</strong> are required to apply to this contract</p>
                                                     </ListGroup>
                                                 </ListGroupItem>
                                                 <ListGroupItem className="listgroupitem-list-custom">
