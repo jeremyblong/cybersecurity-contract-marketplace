@@ -1,0 +1,6 @@
+.video-overflow-x-scroller { 
+    max-width: 100%;
+    overflow-x: scroll;
+    flex-direction: row;
+    display: flex;
+}

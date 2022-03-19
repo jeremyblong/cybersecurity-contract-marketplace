@@ -225,6 +225,8 @@ app.use("/fetch/profile/pic/video/only", require("./routes/shared/general/userIn
 app.use("/mark/notification/viewed/both/account/types", require("./routes/shared/notifications/markSeen/markNotificationSeen.js"));
 app.use("/gather/transactional/history/employer", require("./routes/employers/transactionalHistory/gatherTransactions/fetchTransactions.js"));
 app.use("/gather/short/list/jobs", require("./routes/employers/employerListings/gatherListings/shortList/gatherShortList.js"));
+app.use("/send/invite/video/chat/notification", require("./routes/employers/employerListings/videoInvite/sendVideoInvite/sendInvite.js"));
+app.use("/gather/video/chat/info", require("./routes/shared/twilio/video/gatherVideoCallInfo/gatherInfo.js"));
 // ~ webhook logic STARTS here ~
 app.use("/passbase/webhook", require("./webhooks/passbase/webhook.js"));
 // ~ webhook logic ENDS here ~

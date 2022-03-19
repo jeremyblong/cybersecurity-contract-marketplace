@@ -15,13 +15,18 @@ import { authentication } from "../../../../../redux/actions/authentication/auth
 import { NotificationManager } from 'react-notifications';
 import "../../styles.css";
 import { useHistory } from 'react-router-dom';
+import "./styles.css";
+import helpers from "./helpers/miscFunctions.js";
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 
+const { renderProfilePicVideoMainPageImg } = helpers;
 
 const MainLandingPageHackerHelper = ({ authentication, userData }) => {
 
   const history = useHistory();
 
   const [daytimes,setDayTimes] = useState();
+  const [ user, setUserData ] = useState(null);
   const [ locationError, setLocationErr ] = useState("");
   const today = new Date()
   const curHr = today.getHours()
@@ -142,6 +147,86 @@ const MainLandingPageHackerHelper = ({ authentication, userData }) => {
     // eslint-disable-next-line
   }, [])
 
+  useEffect(() => {
+    // fetch user data
+
+    const configgg = {
+      params: {
+        accountType: userData.accountType,
+        id: userData.uniqueId
+      }
+    }
+
+    axios.get(`${process.env.REACT_APP_BASE_URL}/gather/general/user/data`, configgg).then((res) => {
+        if (res.data.message === "Gathered user!") {
+            console.log(res.data);
+
+            const { user } = res.data;
+
+            setUserData(user);
+
+        } else {
+            console.log("err", res.data);
+
+            NotificationManager.error("An unknown error occurred while attempting to fetch this user's data/information...", "Error occurred while fetching user's data!", 4750);
+        }
+    }).catch((err) => {
+        console.log(err);
+    })
+  }, [])
+
+  const renderSkelatonLoading = (lines) => {
+    return (
+        <Fragment>
+            <SkeletonTheme baseColor="#c9c9c9" highlightColor="#444">
+                <p>
+                    <Skeleton count={lines} />
+                </p>
+            </SkeletonTheme>
+        </Fragment>
+    );
+  }
+
+  console.log("U.S.E.R :", user);
+
+  const renderTopLeft = () => {
+    if (user !== null) {
+      const lastPicVid = user.profilePicsVideos[user.profilePicsVideos.length - 1];
+      const bannerImageVideo = `${process.env.REACT_APP_ASSET_LINK}/${user.profileBannerImage.link}`;
+      return (
+        <Fragment>
+          <Card className="o-hidden">
+            <img src={bannerImageVideo} className={"backgroundcard-image"} />
+            <CardBody className='ontop-other'>
+              <div className="media">
+                <div className="badge-groups w-100">
+                  <div className="badge f-12">
+                    <Clock style={{ width:"16px", height:"16px" }} className="mr-1"/>
+                    <span id="txt">{curHr}:{curMi < 10 ? "0"+curMi :curMi} {meridiem}</span>
+                  </div>
+                  <div className="badge f-12"><i className="fa fa-spin fa-cog f-14"></i></div>
+                </div>
+              </div>
+              <div className="greeting-user text-center">
+                <div className="profile-vector">{renderProfilePicVideoMainPageImg(lastPicVid)}</div>
+                <h4 style={{ marginTop: "32.5px" }} className="f-w-600 white-text-custom"><span id="greeting">{daytimes}</span> <span className="right-circle"><i className="fa fa-check-circle f-14 middle"></i></span></h4>
+                <p className='white-text-custom'><span> {"Today's earrning is $405 & your sales increase rate is 3.7 over the last 24 hours"}</span></p>
+                <div className="whatsnew-btn"><a className="btn btn-primary" href="#javascript">{"Whats New !"}</a></div>
+                <div className="left-icon"><i className="fa fa-bell"> </i></div>
+              </div>
+            </CardBody>
+          </Card>
+        </Fragment>
+      );
+    } else {
+      return (
+        <Fragment>
+          {renderSkelatonLoading(22)}
+        </Fragment>
+      );
+    }
+  }
+
   return (
     <Fragment>
       <Breadcrumb parent="Dashboard" title="Default" />
@@ -149,26 +234,7 @@ const MainLandingPageHackerHelper = ({ authentication, userData }) => {
         {typeof locationError !== "undefined" && locationError.length > 0 ? <p style={{ color: "red" }} className="lead">{locationError}</p> : null}
         <Row className="second-chart-list third-news-update">
           <Col xl="4 xl-50" lg="12" className="morning-sec box-col-12">
-            <Card className="o-hidden profile-greeting">
-              <CardBody>
-                <div className="media">
-                  <div className="badge-groups w-100">
-                    <div className="badge f-12">
-                      <Clock style={{width:"16px" ,height:"16px"}} className="mr-1"/>
-                      <span id="txt">{curHr}:{curMi < 10 ? "0"+curMi :curMi} {meridiem}</span>
-                    </div>
-                    <div className="badge f-12"><i className="fa fa-spin fa-cog f-14"></i></div>
-                  </div>
-                </div>
-                <div className="greeting-user text-center">
-                  <div className="profile-vector"><img className="img-fluid" src={require("../../../../../assets/images/dashboard/welcome.png")} alt="" /></div>
-                  <h4 className="f-w-600"><span id="greeting">{daytimes}</span> <span className="right-circle"><i className="fa fa-check-circle f-14 middle"></i></span></h4>
-                  <p><span> {"Today's earrning is $405 & your sales increase rate is 3.7 over the last 24 hours"}</span></p>
-                  <div className="whatsnew-btn"><a className="btn btn-primary" href="#javascript">{"Whats New !"}</a></div>
-                  <div className="left-icon"><i className="fa fa-bell"> </i></div>
-                </div>
-              </CardBody>
-            </Card>
+            {renderTopLeft()}
           </Col>
           <Col xl="8 xl-100" className="dashboard-sec box-col-12">
             <Card className="earning-card">

@@ -27,7 +27,7 @@ const { renderProfilePicVideoPost } = helpers;
 
 const renderGridImageOrVideo = (file) => {
     console.log("FUCK...file.... ", file);
-    if (file !== null) {
+    if (typeof file !== "undefined" && file !== null) {
         const filePathLink = `${process.env.REACT_APP_ASSET_LINK}/${file.link}`;
         if (file.type.includes("video")) {
             // video logic

@@ -58,9 +58,10 @@ import PromoteHomepageSelectionDataPage from "../pages/dashboard/promoteMiscData
 import MainEmployerProfileDisplayPage from "../pages/dashboard/people/employers/individualProfile/index.js";
 import IntroVideoEmployerAccountPage from "../pages/dashboard/profile/employer/introduction/introVideo.js";
 import TopOffBalancePage from "../pages/dashboard/balanceRelated/topOffBal/topoffBalance.js";
-import CreateVideoChatEmployerPage from "../pages/dashboard/video/employers/createVideoInterview/createVideoChat.js";
+import CreateVideoChatEmployerPage from "../pages/dashboard/video/createVideoInterview/createVideoChat.js";
 import ViewNotificationListPage from "../pages/dashboard/notifications/employers/viewNotificationList/viewNotifications.js";
 import ViewAllBalanceRelatedInfoPage from "../pages/dashboard/balanceRelated/view/viewBalanceInfo.js";
+import ManageVariousVideoCallsPage from "../pages/dashboard/video/shared/viewManageCalls/manageCalls.js";
 
 export const routes = [
         { path:"/profile/settings/edit", Component: GeneralSettingsPage },
@@ -123,7 +124,8 @@ export const routes = [
         { path: "/employer/individual/profile/main/:id", Component: MainEmployerProfileDisplayPage },
         { path: "/employer/introductory/video/upload", Component: IntroVideoEmployerAccountPage },
         { path: "/funding/top/off/balance/both", Component: TopOffBalancePage },
-        { path: "/start/video/interview/chat/employer", Component: CreateVideoChatEmployerPage },
+        { path: "/start/video/interview/chat/employer/:id", Component: CreateVideoChatEmployerPage },
         { path: "/employer/notifications", Component: ViewNotificationListPage },
-        { path: "/both/accounts/view/balance/info", Component: ViewAllBalanceRelatedInfoPage }
+        { path: "/both/accounts/view/balance/info", Component: ViewAllBalanceRelatedInfoPage },
+        { path: "/view/pending/video/calling", Component: ManageVariousVideoCallsPage }
 ]; 

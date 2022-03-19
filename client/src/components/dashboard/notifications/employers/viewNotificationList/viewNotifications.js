@@ -9,12 +9,16 @@ import _ from "lodash";
 import ReactPlayer from 'react-player';
 import PaginationEmployerListingHelper from "../../../universal/pagination/paginationHelper.js";
 import moment from "moment";
+import { useHistory } from 'react-router-dom';
+
 
 // pagination settings and/or setup
 const itemsPerPage = 15;
 
 
 const ViewNotificationListHelper = ({ userData }) => {
+
+    const history = useHistory();
 
     const [ notifications, setNotifications ] = useState([]);
     const [ ready, setReady ] = useState(false);
@@ -114,6 +118,16 @@ const ViewNotificationListHelper = ({ userData }) => {
         } 
     }
 
+    const calculateWhereToRedirect = (data) => {
+        console.log("calculateWhereToRedirect ran...!");
+
+        if (_.has(data, "action") && data.action === "video-invite") {
+            history.push(`/start/video/interview/chat/employer/${data.metadata.attachments.attachment.generatedRoomID}`);
+        } else {
+            
+        }
+    }
+
     const handleNotificationClick = (notification) => {
         console.log("handleNotificationClick clicked..");
 
@@ -153,6 +167,8 @@ const ViewNotificationListHelper = ({ userData }) => {
                     setNotifications(shallowCopy);
 
                     NotificationManager.success("We've successfully marked this notification as 'read' or 'seen' - you will be redirected momentarily IF this notification has any related logic, otherwise no action will be taken.", "Successfully marked as viewed/seen!", 4750);
+
+                    calculateWhereToRedirect(notification);
                 } else {
                     NotificationManager.error("An unknown error has occurred while attempting mark notification as 'viewed' & process notification logic! Please reload the page or contact support if the problem persists..", "Error occurred while fetching notifications!", 4750);
                 }

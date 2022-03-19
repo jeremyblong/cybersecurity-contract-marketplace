@@ -321,7 +321,7 @@ const MainEmployerProfileDisplayHelper = ({ userData }) => {
 
     return (
         <Fragment>
-            <VideoInvitePaneInviteEmployerHelper videoInterviewPane={videoInterviewPane} setVideoInterviewStartPane={setVideoInterviewStartPane} />
+            <VideoInvitePaneInviteEmployerHelper otherUserID={id} employerData={employerData} userData={userData} videoInterviewPane={videoInterviewPane} setVideoInterviewStartPane={setVideoInterviewStartPane} />
             <MessagingPanePrivateEmployerHelper employerID={id} employerName={employerData !== null ? `${employerData.firstName} ${employerData.lastName}` : "Unknown - Loading..."} messagePaneOpen={messagingPaneOpen} setMessagePaneState={setMessagePaneState} />
             <Breadcrumb parent="Viewing Individual Employer Profile Page" title="You're Now Viewing This Employer's Profile Information/Data" />
             <Container fluid={true}>

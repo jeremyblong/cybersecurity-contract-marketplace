@@ -8,7 +8,6 @@ import { useHistory } from 'react-router-dom';
 import helpers from "./helpers/misc/index.js";
 import ViewPostFileContentHelper from "./helpers/viewPostFileContents/viewContent.js";
 import _ from "lodash";
-import uuid from 'react-uuid';
 
 const { TimelinePostsMappedHelper } = helpers;
 

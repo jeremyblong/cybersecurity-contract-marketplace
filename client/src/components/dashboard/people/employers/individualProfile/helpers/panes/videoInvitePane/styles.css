@@ -4,3 +4,27 @@
 .inner-container-invite .container-fluid .page-title .row .col-6 nav .breadcrumb {
     background-color: transparent !important;
 }
+.inner-container-invite .container-fluid .page-title {
+    background-color: transparent !important;
+    margin-top: 32.5px;
+}
+.inner-container-invite {
+    min-height: 100%;
+    overflow-y: scroll;
+}
+.card-shadow-messaging-initialize {
+    min-height: 100%;
+    overflow-y: scroll;
+    margin-bottom: 125px;
+}
+.time-selector-invite-video {
+    min-width: 100%;
+}
+.popupClassName {
+    z-index: 999999 !important;
+}
+.label-time-selector {
+    margin-bottom: 12.5px;
+    font-weight: 425;
+    font-size: 1.20rem;
+}

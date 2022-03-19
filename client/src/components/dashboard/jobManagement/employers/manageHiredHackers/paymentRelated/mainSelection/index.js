@@ -87,50 +87,57 @@ const MainPaymentSelectionHelper = ({ userData }) => {
 
                 const promises = [];
 
-                for (let index = 0; index < currentApplication.paymentHistory.length; index++) {
-                    const payment = currentApplication.paymentHistory[index];
-
-                    if (payment.recurring === true) {
-                        // fetch the payment data..
-                        const { price } = payment.completedPayment.phases[0].items[0];
-
-                        promises.push(new Promise((resolve, reject) => {
-                            axios.get(`${process.env.REACT_APP_BASE_URL}/fetch/price/by/id/quick`, {
-                                params: {
-                                    priceID: price
-                                }
-                            }).then((res) => {
-                                const { priceData, message } = res.data;
-
-                                if (message === "Success!") {
-                                    const newPriceObj = {
-                                        ...payment,
-                                        paymentData: priceData
+                if (typeof currentApplication.paymentHistory !== "undefined" && currentApplication.paymentHistory.length > 0) {
+                    for (let index = 0; index < currentApplication.paymentHistory.length; index++) {
+                        const payment = currentApplication.paymentHistory[index];
+    
+                        if (payment.recurring === true) {
+                            // fetch the payment data..
+                            const { price } = payment.completedPayment.phases[0].items[0];
+    
+                            promises.push(new Promise((resolve, reject) => {
+                                axios.get(`${process.env.REACT_APP_BASE_URL}/fetch/price/by/id/quick`, {
+                                    params: {
+                                        priceID: price
                                     }
-                                    resolve(newPriceObj);
-                                } else {
-                                    resolve(null);
-                                }
-                            }).catch((err) => {
-                                reject(err);
-                            })
-                        }));
-                    } else {
-                        // just return the item - payment data already exists
-                        promises.push(new Promise((resolve) => {
-                            resolve(payment);
-                        }));
+                                }).then((res) => {
+                                    const { priceData, message } = res.data;
+    
+                                    if (message === "Success!") {
+                                        const newPriceObj = {
+                                            ...payment,
+                                            paymentData: priceData
+                                        }
+                                        resolve(newPriceObj);
+                                    } else {
+                                        resolve(null);
+                                    }
+                                }).catch((err) => {
+                                    reject(err);
+                                })
+                            }));
+                        } else {
+                            // just return the item - payment data already exists
+                            promises.push(new Promise((resolve) => {
+                                resolve(payment);
+                            }));
+                        }
                     }
-                }
-
-                Promise.all(promises).then((passedData) => {
-                    console.log("passedData", passedData);
-
+    
+                    Promise.all(promises).then((passedData) => {
+                        console.log("passedData", passedData);
+    
+                        setCurrentApplication({
+                            ...currentApplication,
+                            paymentHistory: passedData
+                        });
+                    })
+                } else {
                     setCurrentApplication({
                         ...currentApplication,
-                        paymentHistory: passedData
+                        paymentHistory: []
                     });
-                })
+                }
             } else {
                 console.log("Err", res.data);
             }

@@ -70,10 +70,10 @@ const BookmarkedEmployerAccountsAsHackerHelper = ({ userData }) => {
         })
     }, [])
 
-    const redirectToEmployersProfile = (hackerID) => {
+    const redirectToEmployersProfile = (employerID) => {
         console.log("redirectToEmployersProfile ran...");
 
-        history.push(`/hacker/profile/individual/view/${hackerID}`);
+        history.push(`/employer/individual/profile/main/${employerID}`);
     }
 
     const renderContentMain = () => {

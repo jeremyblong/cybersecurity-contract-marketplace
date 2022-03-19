@@ -19,9 +19,15 @@
 .add-hover-message-convo:hover {
     cursor: pointer;
 }
+.redirect-helper {
+    text-decoration-line: underline;
+}
 .add-hover-message-convo-individual {
     background-color: #fff !important;
     border-radius: 20px !important;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+.shadowy-card-videos {
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
 }
 .add-hover-message-convo-individual:hover {

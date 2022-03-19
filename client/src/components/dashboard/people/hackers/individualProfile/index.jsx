@@ -14,6 +14,8 @@ import "./styles.css";
 import NotificationManager from 'react-notifications/lib/NotificationManager';
 import helpers from "./bars/helpers/rightBarHelperFunctions.js";
 import { confirmAlert } from 'react-confirm-alert';
+import VideoInvitePaneInviteHackerHelper from "./helpers/sheets/videoInvite/videoInvitePane.js";
+
 
 const { renderProfilePicVideo } = otherHelpers;
 
@@ -29,11 +31,18 @@ constructor(props) {
         isOpen: false,
         currentlySelected: null,
         modalIndexSelected: 0,
-        permenantData: []
+        permenantData: [],
+        videoInterviewPane: false
     }
 
     this.passedCustomGalleryRef = React.createRef(null);
 }
+
+    setVideoInterviewStartPane = (value) => {
+        this.setState({
+            videoInterviewPane: value
+        })
+    }
     componentDidMount() {
         const userID = this.props.match.params.id;
 
@@ -363,6 +372,7 @@ constructor(props) {
         const { userData } = this.props;
         return (
             <Fragment>
+                <VideoInvitePaneInviteHackerHelper user={this.state.user} videoInterviewPane={this.state.videoInterviewPane} setVideoInterviewStartPane={this.setVideoInterviewStartPane} />
                 <Breadcrumb parent="Profile's" title="Individual Hacker Profile" />
                 {user !== null ? <RenderGalleryModalHackerProfileHelper passedCustomGalleryRef={this.passedCustomGalleryRef} setSelectedCurrently={this.setSelectedCurrently} currentlySelected={currentlySelected} userData={userData} modalIndexSelected={modalIndexSelected} setSelectedModalIndex={this.setSelectedModalIndex} onCloseModal={this.onCloseModal} isOpen={isOpen} user={user} /> : null}
                 <Container fluid={true}>
@@ -386,7 +396,9 @@ constructor(props) {
                                         <ul className="share-icons">
                                             <li onClick={this.handleOnlyProfileHeart}><a className="social-icon bg-primary" href={null}><i className="fa fa-heart"></i></a></li>
                                             <li><a className="social-icon bg-secondary" href={null}><i className="fa fa-wechat"></i></a></li>
-                                            <li><a className="social-icon bg-warning" href={null}><i className="fa fa-share-alt"></i></a></li>
+                                            <li><a onClick={() => {
+                                                this.setVideoInterviewStartPane(true);
+                                            }} className="social-icon bg-success" href={null}><i className="fa fa-video"></i></a></li>
                                         </ul>
                                     </div>
                                     <div className="info market-tabs p-0">

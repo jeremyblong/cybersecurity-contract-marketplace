@@ -23,3 +23,6 @@ div.profile-picture-account.media-body.rounded-circle-video-custom video {
 .min-height-card-boosted {
     min-height: 800px;
 }
+.min-height-card-boosted {
+    box-shadow: 0.5rem 0.5rem 1rem rgba(0, 0, 0, 0.225) !important;
+}

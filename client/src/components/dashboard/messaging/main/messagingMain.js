@@ -8,7 +8,7 @@ import errorImg from '../../../../assets/images/search-not-found.png';
 import {Picker} from 'emoji-mart'
 import { CALL, STATUS, PROFILE, EricaHughes, VincentPorter, Active, ChataApp_p1, ChataApp_p2, Following, Follower, MarkJecno, Send } from '../../../../constant';
 import { connect } from "react-redux";
-import moment from "moment";
+import { useHistory } from "react-router-dom";
 import "./styles.css";
 import helpers from "./helpers/mainHelperFunctions.js";
 import typingIndicator from "../../../../assets/gifs/typing-white.gif";
@@ -30,6 +30,8 @@ const {
 const MessagingMainHelper = ({ SBData, userData }) =>  {
 
     const channelHandler = new SBData.ChannelHandler();
+
+    const history = useHistory();
 
     const allMembers = [];
     const chats = [];
@@ -558,6 +560,20 @@ const MessagingMainHelper = ({ SBData, userData }) =>  {
                   </CardBody>
                 </Card>
               </Col>
+            </Row>
+            <Row>
+                <Col sm="12" md="12" lg="12" xl="12">
+                    <Card className='shadowy-card-videos'>
+                        <CardBody>
+                            <h4 className='redirect-helper'>Redirect to manage your pending & active video calling requests?</h4>
+                            <p className='lead'>By clicking the button below, you will be redirected to the appropriate page where you'll be able to manage and initialize <strong>LIVE VIDEO CALLING</strong> & much more! Check it out..</p>
+                            <hr />
+                            <Button className='btn-square-info' color='info-2x' outline style={{ width: "100%" }} onClick={() => {
+                                history.push("/view/pending/video/calling");
+                            }}>Video Calling/Chat Related Action's</Button>
+                        </CardBody>
+                    </Card>
+                </Col>
             </Row>
           </Container>
         </Fragment>
