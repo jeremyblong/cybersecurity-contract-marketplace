@@ -29,7 +29,10 @@ router.get("/", (req, resppppp, next) => {
         profileBannerImage: 1,
         points: 1,
         fullyVerified: 1,
-        uniqueId: 1
+        uniqueId: 1,
+        premierAccountStatus: 1,
+        experienceMultiplier: 1,
+        subscriptionData: 1
     }}).then((user) => {
         if (!user) {
             console.log("User does NOT exist or could not be found.");

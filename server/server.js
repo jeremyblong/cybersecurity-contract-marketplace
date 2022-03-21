@@ -4,12 +4,7 @@ const config = require("config");
 // init middleware
 const bodyParser = require('body-parser');
 const cors = require("cors");
-// const server = http.createServer(app);
-// const io = require('socket.io')(server, {
-// 	cors: {
-// 		origin: '*',
-// 	}
-// });
+const runCronJob = require("./cronjobs/subscriptions/hackerSubscription/subscriptionChecks.js");
 const xss = require('xss-clean');
 const helmet = require("helmet");
 const mongoSanitize = require('express-mongo-sanitize');
@@ -227,6 +222,7 @@ app.use("/gather/transactional/history/employer", require("./routes/employers/tr
 app.use("/gather/short/list/jobs", require("./routes/employers/employerListings/gatherListings/shortList/gatherShortList.js"));
 app.use("/send/invite/video/chat/notification", require("./routes/employers/employerListings/videoInvite/sendVideoInvite/sendInvite.js"));
 app.use("/gather/video/chat/info", require("./routes/shared/twilio/video/gatherVideoCallInfo/gatherInfo.js"));
+app.use("/subscribe/membership/both/account/types", require("./routes/shared/subscriptions/subscribeToMembership/subscribe.js"));
 // ~ webhook logic STARTS here ~
 app.use("/passbase/webhook", require("./webhooks/passbase/webhook.js"));
 // ~ webhook logic ENDS here ~
@@ -265,6 +261,8 @@ app.get('/*', cors(), function(_, res) {
 
 // 	socket.on("disconnect", () => console.log("Client disconnected"));
 // });
+
+runCronJob();
 
 Connection.open();
 

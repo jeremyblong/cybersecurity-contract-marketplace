@@ -18,7 +18,9 @@ router.get("/", (req, resppppp, next) => {
         } else {
             console.log("user", user);
 
-            const indexed = user.pendingVideoCalls.findIndex((item) => item.id === videocallID);
+            const indexed = user.pendingVideoCalls.findIndex((item) => item.roomName === videocallID);
+
+            console.log("INDEXED!", indexed);
 
             resppppp.json({
                 message: "Gathered info!",

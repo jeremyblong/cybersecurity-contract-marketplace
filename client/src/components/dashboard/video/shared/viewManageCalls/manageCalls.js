@@ -49,9 +49,11 @@ const ManageVariousVideoCallsHelper = ({ userData }) => {
                             <CardBody>
                                 <Row>
                                     <div className='video-overflow-x-scroller'>
-                                        {typeof pending !== "undefined" && pending.length > 0 ? pending.map((item, index) => {
+                                        {typeof pending !== "undefined" && pending.length > 0 ? pending.sort((a, b) => {
+                                            return new Date(b.date) - new Date(a.date);
+                                        }).map((item, index) => {
                                             return (
-                                                <Fragment>
+                                                <Fragment key={index}>
                                                     <Col sm="12" md="6" lg="6" xl="6">
                                                         <Card className='shadow'>
                                                             <CardBody>

@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect, useRef } from 'react';
+import React, { Fragment, useState, useEffect, useRef, useCallback } from 'react';
 import "./styles.css";
 import { Container, Row, Col, Card, CardBody, CardHeader, CardFooter, Button } from "reactstrap";
 import Breadcrumb from '../../../../layout/breadcrumb';
@@ -9,6 +9,7 @@ import axios from "axios";
 import Participant from "./participant/participant.js";
 import { connect as twilioConnect } from "twilio-video";
 import uuid from "react-uuid";
+import { NotificationManager } from 'react-notifications';
 
 
 const CreateVideoChatEmployerHelper = ({ userData }) => {
@@ -49,6 +50,24 @@ const CreateVideoChatEmployerHelper = ({ userData }) => {
                     audio: true,
                     video: true
                 });
+
+                console.log("roo", room);
+
+                const participantConnected = participant => {
+                    setParticipants(prevParticipants => [...prevParticipants, participant]);
+                };
+                const participantDisconnected = participant => {
+                    setParticipants(prevParticipants =>
+                        prevParticipants.filter(p => p !== participant)
+                    );
+                };
+
+                setRoom(room);
+
+                room.on('participantConnected', participantConnected);
+                room.on('participantDisconnected', participantDisconnected);
+                room.participants.forEach(participantConnected);
+
                 setRoom(room);
                 // if (room) {
                 //     history.push(`/start/video/interview/chat/employer`, { roomID: generatedRoomID })
@@ -56,8 +75,24 @@ const CreateVideoChatEmployerHelper = ({ userData }) => {
             }
         } catch(err) {
             console.log(err);
+
+            if (err) {
+                NotificationManager.info(`We weren't able to access the microphone and/or webcam. Please make sure no other application is currently accessing it, then press "Try again.`, "Unable to access video/audio devices!", 4750);
+            }
         }
     }
+
+    const handleLogout = useCallback(() => {
+        setRoom((prevRoom) => {
+          if (prevRoom) {
+            prevRoom.localParticipant.tracks.forEach((trackPub) => {
+              trackPub.track.stop();
+            });
+            prevRoom.disconnect();
+          }
+          return null;
+        });
+    }, []);
 
     console.log("room", room);
 
@@ -128,25 +163,6 @@ const CreateVideoChatEmployerHelper = ({ userData }) => {
 
                 setVideoCallData(videoCall);
 
-                Video.connect(user.activeVideoChatRoom.tokenized, { name: videoCall.roomName }).then(room => {
-                    console.log('Connected to Room', room);
-
-                    const participantConnected = participant => {
-                        setParticipants(prevParticipants => [...prevParticipants, participant]);
-                    };
-                    const participantDisconnected = participant => {
-                        setParticipants(prevParticipants =>
-                            prevParticipants.filter(p => p !== participant)
-                        );
-                    };
-
-                    setRoom(room);
-                    
-                    room.on('participantConnected', participantConnected);
-                    room.on('participantDisconnected', participantDisconnected);
-                    room.participants.forEach(participantConnected);
-                });
-
             } else {
                 console.log("err gathering user..:", res.data);
             }
@@ -154,6 +170,10 @@ const CreateVideoChatEmployerHelper = ({ userData }) => {
             console.log(err);
         })
     }, [])
+
+    const remoteParticipants = participants.map((participant) => (
+        <Participant key={participant.sid} participant={participant} />
+    ));
     
     return (
         <Fragment>
@@ -168,20 +188,28 @@ const CreateVideoChatEmployerHelper = ({ userData }) => {
                             </CardHeader>
                             <CardBody className='b-l-success b-r-success'>
                                 <Row>
-                                    {room !== null ? room.participants.map((participant, index) => {
-                                        return (
-                                            <Col sm="12" md="6" lg="6" xl="6">
-                                                <Participant
-                                                    key={room.localParticipant.sid}
-                                                    participant={room.localParticipant}
-                                                />
-                                            </Col>
-                                        );
-                                    }) : null}
+                                    {room !== null ? <Fragment>
+                                        <Col sm="12" md="6" lg="6" xl="6">
+                                            <Participant
+                                                key={room.localParticipant.sid}
+                                                participant={room.localParticipant}
+                                            />
+                                        </Col>
+                                    </Fragment> : null}
+                                    <Col sm="12" md="6" lg="6" xl="6">
+                                        <div className="remote-participants">{remoteParticipants}</div>
+                                    </Col>
                                 </Row>
                             </CardBody>
                             <CardFooter className='b-l-secondary b-r-secondary'>
-                                <Button className={"btn-square-success"} outline color={"success-2x"} style={{ width: "100%" }} onClick={joinRoomVideoChat}>Initialize Room</Button>
+                                <Row>
+                                    <Col sm="12" md="6" lg="6" xl="6">
+                                        <Button className={"btn-square-success"} outline color={"success-2x"} style={{ width: "100%" }} onClick={joinRoomVideoChat}>Initialize Room</Button>
+                                    </Col>
+                                    <Col sm="12" md="6" lg="6" xl="6">
+                                        <Button className={"btn-square-danger"} outline color={"danger-2x"} style={{ width: "100%" }} onClick={handleLogout}>Exit/Close Video Call</Button>
+                                    </Col>
+                                </Row>
                             </CardFooter>
                         </Card>
                     </Col>

@@ -1,19 +1,24 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import Breadcrumb from '../../../../layout/breadcrumb';
 import { Container, Row, Col, Card, CardHeader, CardBody, Button } from 'reactstrap';
 import helpers from "./helpers/helperFunctions.js";
 import "./styles.css";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-
+import SubscribeToMembershipConfirmationHelper from "./helpers/panes/subscribeSheet.js";
 
 const { handleTokenPurchase } = helpers;
 
 const PricingSelectMembershipHelper = ({ userData }) => {
     const string = "These tokens can be TRADED, used to apply to various contracts/jobs, tip (add a bonus or additional token(s) after job completion) and SO many other actions! You WILL need these to do most function's on our application..";
 
+    const [ confirmationPane, setConfirmationPaneState ] = useState(false);
+    const [ selectedSubscription, setSelectedSubscription ] = useState(false);
+
+
     return (
         <Fragment>
+        <SubscribeToMembershipConfirmationHelper userData={userData} selectedSubscription={selectedSubscription} confirmationPane={confirmationPane} setConfirmationPaneState={setConfirmationPaneState} />
         <Breadcrumb parent="Purchase Tokens And/Or Membership's" title="Purchase Various Account 'Enhancements'" />
         <Container fluid={true} >
                 <Row>
@@ -36,7 +41,10 @@ const PricingSelectMembershipHelper = ({ userData }) => {
                                             <li>{"1 Profile Boost Per Month"}</li>
                                             <li>{"1 Ticket To A Restricted Event Per Month"}</li>
                                         </ul>
-                                    <div className="pricingtable-signup"><Button color="primary" size="lg">Purchase & Subscribe</Button></div>
+                                    <div className="pricingtable-signup"><Button color="primary" size="lg" onClick={() => {
+                                        setSelectedSubscription("tier-1");
+                                        setConfirmationPaneState(true);
+                                    }}>Purchase & Subscribe</Button></div>
                                 </div>
                             </Col>
                             <Col md="4" sm="6">
@@ -52,7 +60,10 @@ const PricingSelectMembershipHelper = ({ userData }) => {
                                             <li>{"2 Tickets To A Restricted Event Per Month"}</li>
                                             <li>{"Earn 1.5x Experience Per Every 1x Earned"}</li>
                                         </ul>
-                                    <div className="pricingtable-signup"><Button color="primary" size="lg">Purchase & Subscribe</Button></div>
+                                    <div className="pricingtable-signup"><Button color="primary" size="lg" onClick={() => {
+                                        setSelectedSubscription("tier-2");
+                                        setConfirmationPaneState(true);
+                                    }}>Purchase & Subscribe</Button></div>
                                 </div>
                             </Col>
                             <Col md="4" sm="6">
@@ -68,7 +79,10 @@ const PricingSelectMembershipHelper = ({ userData }) => {
                                             <li>{"3 Tickets To A Restricted Event Per Month"}</li>
                                             <li>{"Earn 1.5x Experience Per Every 1x Earned"}</li>
                                         </ul>
-                                    <div className="pricingtable-signup"><Button color="primary" size="lg">Purchase & Subscribe</Button></div>
+                                    <div className="pricingtable-signup"><Button color="primary" size="lg" onClick={() => {
+                                        setSelectedSubscription("tier-3");
+                                        setConfirmationPaneState(true);
+                                    }}>Purchase & Subscribe</Button></div>
                                 </div>
                             </Col>
                         </CardBody>
