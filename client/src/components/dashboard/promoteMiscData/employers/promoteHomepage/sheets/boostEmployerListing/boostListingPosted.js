@@ -383,7 +383,7 @@ const BoostAlreadyPostedEmployerListingPaneHelper = ({ userData, listingBoostSel
                                                                 setFullySelected(listing);
                                                             }} className={selected === listing.uniqueId ? "project-box project-boxed-shadowized-selected" : "project-box project-boxed-shadowized"}>
                                                                 <span className={`badge badge-primary`}>Min Lvl. To Apply: {listing.requiredRankToApply.label}</span>
-                                                                <h6>{listing.publicCompanyName}</h6>
+                                                                <h6 className='publicCompanyName'>{listing.publicCompanyName}</h6>
                                                                 <div className="media">
                                                                     {/* {<img className="img-20 mr-1 rounded-circle" src={calculateFirstImage(listing)} alt="" />} */}
                                                                     {calculateFirstImage(listing)}

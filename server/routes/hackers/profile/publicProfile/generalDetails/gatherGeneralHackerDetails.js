@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const { Connection } = require("../../../../../mongoUtil.js");
+const _ = require("lodash");
+
 
 router.post("/", (req, resppppp, next) => {
     
@@ -42,7 +44,7 @@ router.post("/", (req, resppppp, next) => {
                         // return response
                         resppppp.json({
                             message: "Gathered & updated the required data (IF applicable)...",
-                            user,
+                            user: _.omit(user, ['authStrategy', 'currentAddress', 'email', 'hash', 'password', 'paymentMethods', 'previouslyAppliedJobs', 'refreshToken', 'userLatestLocation', 'salt', 'stripeAccountDetails', 'notifications']),
                             modified
                         })
                     }
@@ -51,7 +53,7 @@ router.post("/", (req, resppppp, next) => {
                 // user has ALREADY viewed this person's profile
                 resppppp.json({
                     message: "Gathered & updated the required data (IF applicable)...",
-                    user,
+                    user: _.omit(user, ['authStrategy', 'currentAddress', 'email', 'hash', 'password', 'paymentMethods', 'previouslyAppliedJobs', 'refreshToken', 'userLatestLocation', 'salt', 'stripeAccountDetails', 'notifications']),
                     modified
                 })   
             }

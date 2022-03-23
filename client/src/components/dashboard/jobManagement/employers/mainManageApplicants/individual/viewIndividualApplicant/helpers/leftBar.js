@@ -6,9 +6,7 @@ import five from "../../../../../../../../assets/images/user/5.jpg";
 import two from "../../../../../../../../assets/images/user/2.png";
 import eight from "../../../../../../../../assets/images/user/8.jpg";
 import eleven from "../../../../../../../../assets/images/user/11.png";
-import timeline3 from "../../../../../../../../assets/images/social-app/timeline-3.png";
-import ten from "../../../../../../../../assets/images/user/10.jpg";
-import four from "../../../../../../../../assets/images/user/4.jpg";
+import { useHistory } from "react-router-dom";
 import _ from "lodash";
 import { BuckyBarnes, JasonBorne, SarahLoren, AndewJon, JohnyWaston, ComerenDiaz, ActivityFeed } from "../../../../../../../../constant";
 import profileLogoPlaceholder from "../../../../../../../../assets/images/logo/logo-icon.png";
@@ -34,6 +32,8 @@ const calculateStatusType = (num) => {
 const LeftBar = ({ applicantData, lastProfileItem, user }) => {
 
     console.log("LEFTBAR user...: ", user);
+
+    const history = useHistory();
 
     const [testingDatesOpen, setTestingDatesOpen] = useState(true);
     const [isMutual, setisMutual] = useState(true);
@@ -102,6 +102,12 @@ const LeftBar = ({ applicantData, lastProfileItem, user }) => {
         status: calculateStatusType(Math.floor(Math.random() * 3) + 1)
     }]);
 
+    const redirectToHackersProfile = (hackerID) => {
+        console.log("redirectToHackersProfile ran...");
+
+        history.push(`/hacker/profile/individual/view/${hackerID}`);
+    }
+
     return (
         <Fragment>
             <Col xl="12">
@@ -121,16 +127,16 @@ const LeftBar = ({ applicantData, lastProfileItem, user }) => {
                         <CardBody className="socialprofile filter-cards-view">
                             <Media><Media className="img-50 img-fluid m-r-20 rounded-circle min-width-height" src={(typeof lastProfileItem !== "undefined" && _.has(lastProfileItem, "link")) ? `${process.env.REACT_APP_ASSET_LINK}/${lastProfileItem.link}` : profileLogoPlaceholder} alt="" />
                                 <Media body>
-                                    <h6 className="font-primary f-w-600">{applicantData.applicantName}</h6><span className="d-block"><span><i className="fa fa-bell-o"> </i><span className="px-2">FOLLOWERS <span style={{ color: "white" }} className="badge badge-pill badge-info">{(Math.floor(Math.random() * 750) + 1)}</span></span></span></span><span className="d-block"><span><i className="fa fa-bell-o"></i><span className="px-2">FOLLOWING <span style={{ color: "white" }} className="badge badge-pill badge-info">{(Math.floor(Math.random() * 750) + 1)}</span></span></span></span>
+                                    <h6 className="font-primary f-w-600">{applicantData.applicantName}</h6><span className="d-block"><span><i className="fa fa-bell-o"> </i><span className="px-2">Following <span style={{ color: "white" }} className="badge badge-pill badge-secondary">{typeof user.followingCompanies !== "undefined" && user.followingCompanies.length} Employer's</span></span></span></span><span className="d-block"><span><i className="fa fa-bell-o"></i><span className="px-2">Following <span style={{ color: "white" }} className="badge badge-pill badge-info">{typeof user.followingHackers !== "undefined" && user.followingHackers.length} Hacker's</span></span></span></span>
                                 </Media>
                             </Media>
                             <div className="social-btngroup d-flex">
-                                <Button outline className={"btn-square-info text-center"} color="info-2x" type="button">View More AKA View User Profile</Button>
+                                <Button outline className={"btn-square-info text-center"} color="info-2x" type="button" onClick={() => redirectToHackersProfile(applicantData.applicantId)}>View Applicant Profile</Button>
                             </div>
                             <div className="likes-profile text-center">
-                                <h5><span><i className="fa fa-heart font-danger"></i> {`${(Math.floor(Math.random() * 10000) + 1)} total page saves`}</span></h5>
+                                <h5><span><i className="fa fa-heart font-danger"></i>  {user !== null && typeof user.profileLovesHearts !== "undefined" ? user.profileLovesHearts.length : 0} Page Heart's</span></h5>
                             </div>
-                            <div className="text-center">{`${(Math.floor(Math.random() * 250) + 1)} New Saves This Week`}</div>
+                            <div className="text-center">{`${typeof user.recentlyViewedProfileViews !== "undefined" && user.recentlyViewedProfileViews.length > 0 ? user.recentlyViewedProfileViews.length : 0} Total Unique Profile View(s)`}</div>
                             <div className="customers text-center social-group">
                                 <ul>
                                     <li className="d-inline-block">

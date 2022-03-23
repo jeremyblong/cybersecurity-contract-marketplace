@@ -152,14 +152,16 @@ const ViewLiveActivehiredJobsGigsDisplayHelper = ({ userData }) => {
                                                         </div>
                                                         <div className="centered-both-ways bottom-container-auction">
                                                             <Button onClick={() => {
-                                                                history.push(`/individual/hired/job/data/view/manage/${listing.id}`)
+                                                                history.push(`/individual/hired/job/data/view/manage/${listing.generatedID}`)
                                                             }} className={secondaryOrNot === true ? "btn-square-secondary" : "btn-square-info"} outline color={secondaryOrNot === true ? "secondary-2x" : "info-2x"} style={{ width: "82.5%" }}>View/Manage Listing Data</Button>
                                                         </div>
                                                     </div>
                                                 </Col>
                                             </Fragment>
                                         );
-                                    }) : null}
+                                    }) : <Fragment>
+                                        <img src={require("../../../../../assets/images/no-current-hired-results.png")} className={"noresultsimg"} />
+                                    </Fragment>}
                                 </Row>
                             </CardBody>
                         </Card>

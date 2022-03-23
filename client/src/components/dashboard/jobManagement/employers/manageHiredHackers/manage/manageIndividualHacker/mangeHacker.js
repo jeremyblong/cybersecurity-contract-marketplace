@@ -277,20 +277,20 @@ const ManageIndividualHackerAlreadyHiredHelper = ({ userData }) => {
                                         <table className="product-page-width">
                                             <tbody>
                                                 <tr>
-                                                    <td> <b>Brand &nbsp;&nbsp;&nbsp;:</b></td>
-                                                    <td>{"Pixelstrap"}</td>
+                                                    <td> <b>Posted Date &nbsp;&nbsp;&nbsp;:</b></td>
+                                                    <td>{listing.postedDate}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td> <b>Availability &nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;</b></td>
-                                                    <td className="txt-success">Stock 1</td>
+                                                    <td> <b>Visibility &nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;</b></td>
+                                                    <td className="txt-success">{listing.listingVisibility.label}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td> <b>{"Seller"} &nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;</b></td>
-                                                    <td>{"ABC"}</td>
+                                                    <td> <b>{"# Of Likes"} &nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;</b></td>
+                                                    <td>{listing.likedBy.length}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td> <b>{"Fabric"} &nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;</b></td>
-                                                    <td>{"Cotton"}</td>
+                                                    <td> <b>{"Desired Completion Date"} &nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;</b></td>
+                                                    <td>{moment(listing.estimatedCompletionDate).format("MM/DD/YYYY")}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -299,20 +299,20 @@ const ManageIndividualHackerAlreadyHiredHelper = ({ userData }) => {
                                         <table className="product-page-width">
                                             <tbody>
                                                 <tr>
-                                                    <td> <b>Brand &nbsp;&nbsp;&nbsp;:</b></td>
-                                                    <td>{"Pixelstrap"}</td>
+                                                    <td> <b>Comment Count&nbsp;&nbsp;&nbsp;:</b></td>
+                                                    <td>{listing.comments.length}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td> <b>Availability &nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;</b></td>
-                                                    <td className="txt-success">Stock 1</td>
+                                                    <td> <b>Rank To Apply&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;</b></td>
+                                                    <td className="txt-success">{listing.requiredRankToApply.label}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td> <b>{"Seller"} &nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;</b></td>
-                                                    <td>{"ABC"}</td>
+                                                    <td> <b>{"Total View(s)"}&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;</b></td>
+                                                    <td>{listing.totalViews}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td> <b>{"Fabric"} &nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;</b></td>
-                                                    <td>{"Cotton"}</td>
+                                                    <td> <b>{"Token's To Apply"}&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;</b></td>
+                                                    <td>{listing.tokensRequiredToApply.label}</td>
                                                 </tr>
                                             </tbody>
                                         </table>

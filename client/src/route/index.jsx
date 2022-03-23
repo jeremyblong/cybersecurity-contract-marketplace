@@ -62,6 +62,8 @@ import CreateVideoChatEmployerPage from "../pages/dashboard/video/createVideoInt
 import ViewNotificationListPage from "../pages/dashboard/notifications/employers/viewNotificationList/viewNotifications.js";
 import ViewAllBalanceRelatedInfoPage from "../pages/dashboard/balanceRelated/view/viewBalanceInfo.js";
 import ManageVariousVideoCallsPage from "../pages/dashboard/video/shared/viewManageCalls/manageCalls.js";
+import CashoutAvailiableBalancePage from "../pages/dashboard/balanceRelated/cashout/cashoutRemainingBal.js";
+import ViewIndividualLiveHiredhackingJobPage from "../pages/dashboard/jobManagement/hackers/liveHiredGigsActive/individualView/viewIndividualListing/viewListing.js";
 
 export const routes = [
         { path:"/profile/settings/edit", Component: GeneralSettingsPage },
@@ -127,5 +129,7 @@ export const routes = [
         { path: "/start/video/interview/chat/employer/:id", Component: CreateVideoChatEmployerPage },
         { path: "/employer/notifications", Component: ViewNotificationListPage },
         { path: "/both/accounts/view/balance/info", Component: ViewAllBalanceRelatedInfoPage },
-        { path: "/view/pending/video/calling", Component: ManageVariousVideoCallsPage }
+        { path: "/view/pending/video/calling", Component: ManageVariousVideoCallsPage },
+        { path: "/cashout/immediate/funding/funds", Component: CashoutAvailiableBalancePage },
+        { path: "/individual/hired/job/data/view/manage/:id", Component: ViewIndividualLiveHiredhackingJobPage }
 ]; 

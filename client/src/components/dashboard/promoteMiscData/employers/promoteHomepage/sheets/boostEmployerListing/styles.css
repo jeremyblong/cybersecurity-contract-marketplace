@@ -11,6 +11,9 @@
     box-shadow: 0 0.5rem 1rem rgba(115, 102, 255, 0.775) !important;
     display: inline-block;
 }
+.publicCompanyName {
+    margin-right: 200px;
+}
 .last-displayed {
     max-width: 25px;
     max-height: 25px;

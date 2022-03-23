@@ -56,7 +56,7 @@ router.post("/", async (req, resppppp, next) => {
 
     const newListingData = createNewBoostedListingSchema(calculateTierSecondsTTL(), {
         ...foundPreviouslyPostedListing,
-        createdAt: Date.now(), 
+        createdAt: new Date(), 
         id: generatedID, 
         date: new Date(), 
         dateString: moment(new Date()).format("MM/DD/YYYY hh:mm:ss a")

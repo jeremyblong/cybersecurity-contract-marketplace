@@ -627,7 +627,7 @@ const ViewIndividualJobListingHelper = ({ userData, saveApplicationDetailsProgre
                             <Col sm="12" lg="4" className="order-sm-0 order-xl-1">
                             <div className="user-designation">
                                 <div className="title"><a target="_blank" href={null}>{data.publicCompanyName}</a></div>
-                                <div className="desc mt-2">Poster's Company Name</div>
+                                <div className="desc mt-2">Visibility: {data.listingVisibility.label}</div>
                             </div>
                             </Col>
                             <Col sm="6" lg="4" className="order-sm-2 order-xl-2">

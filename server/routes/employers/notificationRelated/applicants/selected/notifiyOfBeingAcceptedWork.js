@@ -38,10 +38,10 @@ router.post("/", (req, resppppp, next) => {
     };
 
     const newHackingJob = {
+        ...applicantData,
         id: generatedJobID,
         date: new Date(),
         dateString: moment(new Date()).format("MM/DD/YYYY hh:mm:ss a"),
-        ...applicantData,
         employerPostedListingInfo: { ...listingInfo },
         hired: true
     }

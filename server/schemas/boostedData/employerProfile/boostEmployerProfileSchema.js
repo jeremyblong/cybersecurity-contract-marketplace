@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 const BoostedEmployerProfileSchema = new Schema({
     createdAt: { 
-        type: Number
+        type: Date
     },
     id: {
         type: String

@@ -1,0 +1,19 @@
+.nocashout-img {
+    min-width: 100%;
+    min-height: 675px;
+    border: 3.25px solid grey;
+    box-shadow: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.225);
+}
+.customlistgroup-payment-methods {
+    max-height: 675px;
+    overflow-y: scroll;
+}
+.addhover-list-group-payment:hover {
+    border: 2.5px solid #f73164;
+}
+.addhover-list-group-payment {
+    margin-top: 12.5px !important;
+}
+.custom-container-payouts {
+    padding: 37.5px;
+}
