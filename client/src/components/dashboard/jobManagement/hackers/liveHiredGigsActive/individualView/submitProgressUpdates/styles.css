@@ -1,0 +1,40 @@
+#smalllist:hover {
+    cursor: pointer;
+}
+.wrapper-number-counter-absolute {
+    background-color: #7366ff;
+    max-width: 42.5px;
+    border-radius: 50%;
+    padding: 22.5px;
+    border: 3px solid black;
+    max-height: 42.5px;
+} 
+.numbernumber {
+    color: #fff;
+    font-weight: bold;
+}
+.row-wrapper-submit-details {
+    display: flex;
+    flex-direction: row;
+}
+.header-submit-report {
+    margin-left: 12.5px;
+    margin-top: 10px;
+}
+.cushion-card-media-option {
+    margin: 12.5px;
+}
+.transparentaddon {
+    background-color: #fff !important;
+}
+.transparentaddon-text {
+    background-color: transparent !important;
+}
+.absolute-right-cancel-delete {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+}
+.absolute-right-cancel-delete i {
+    color: red;
+}

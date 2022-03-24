@@ -2,7 +2,7 @@ import React, { Fragment, useState, useEffect, useRef } from 'react';
 import Breadcrumb from '../../../../../../../layout/breadcrumb'
 import { Container, Row, Col, Card, Button, Media, CardBody, CardHeader, Input, Label, Badge } from 'reactstrap'
 import { connect } from "react-redux";
-import { useHistory, withRouter, useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import axios from "axios";
 import { NotificationManager } from 'react-notifications';
 import "./styles.css";
@@ -36,10 +36,7 @@ const ViewIndividualLiveHiredhackingJobHelper = ({ userData }) => {
     const [ listing, setListingData ] = useState(null);
     const [ info, setInfoData ] = useState(null);
     const [ currentApplicationData, setCurrentApplicationData ] = useState(null);
-    const [ dateDifference, setDateDifference ] = useState(null);
     const [ dates, setDatesAvailiable ] = useState(null);
-    // eslint-disable-next-line
-    const [ quantity, setquantity ] = useState(1)
     
     const slider1 = useRef();
     const slider2 = useRef();
@@ -50,13 +47,6 @@ const ViewIndividualLiveHiredhackingJobHelper = ({ userData }) => {
             nav2: slider2.current
           });
       } ,[]);
-    const { nav1, nav2 } = state;
-    const singleItem = {
-        price: "45.99",
-        discountPrice: "39.99",
-        stock: 11
-    }
-    const symbol = "$";
 
     const history = useHistory();
 
@@ -431,35 +421,22 @@ const ViewIndividualLiveHiredhackingJobHelper = ({ userData }) => {
                     </SkeletonTheme>
                 </Fragment>}
                 <Row>
-                    <Col sm="12" md="6" lg="6" xl="6">
+                    <Col sm="12" md="12" lg="12" xl="12">
                         <Card className={"bordered-shadowed-card"}>
                             <CardBody>
                                 <Media className="p-20 fire-employee-wrapper">
-                                    <div className="radio radio-danger mr-3">
-                                        <Label for="radio14"></Label>
+                                    <div className="radio radio-success mr-3">
+                                        
                                     </div>
                                     <Media body>
-                                        <h6 className="mt-0 mega-title-badge mega-badge-heavy-update">Submit Results And/Or Hacking Data/Progress<span className="badge badge-danger pull-right digits digits-smaller-subsized-update">{"SUBMIT RESULTS & PROGRESS"}</span></h6>
+                                        <h6 className="mt-0 mega-title-badge mega-badge-heavy-update">Submit Results And/Or Hacking Data/Progress<span className="badge badge-success pull-right digits digits-smaller-subsized-update">{"SUBMIT RESULTS & PROGRESS"}</span></h6>
                                         <p>{"Manage updates, data and various changes so your employer knows exactly what's been going on and what progress you've made recently. It's good habit to continously submit new information/data to the employer so they can make improvements as your hack proceeds/continues... Fixing previously broken logic."}</p>
                                         <hr />
-                                        <Button className={"btn-square-danger"} color={"danger-2x"} outline style={{ width: "100%" }}>Submit Updates & Results</Button>
-                                    </Media>
-                                </Media>
-                            </CardBody>
-                        </Card>
-                    </Col>
-                    <Col sm="12" md="6" lg="6" xl="6">
-                        <Card className={"bordered-shadowed-card"}>
-                            <CardBody>
-                                <Media className="p-20 request-update-employee-wrapper">
-                                    <div className="radio radio-info mr-3">
-                                        <Label for="radio14"></Label>
-                                    </div>
-                                    <Media body>
-                                        <h6 className="mt-0 mega-title-badge mega-badge-heavy-update">Something here Something here Something here Something here Something here Something here <span className="badge badge-info pull-right digits digits-smaller-subsized-update">{"Something here"}</span></h6>
-                                        <p>{"Something here Something here Something here Something here Something here Something here Something here Something here Something here Something here Something here Something here Something here Something here Something here Something here Something here Something here Something here Something here Something here Something here Something here Something here Something here Something here Something here Something here Something here Something here "}</p>
+                                        <Button className={"btn-square-success"} color={"success-2x"} outline style={{ width: "100%" }} onClick={() => {
+                                            history.push(`/submit/progress/updates/live/hacking/contract/${info.generatedID}`);
+                                        }}>Submit Updates & Results</Button>
                                         <hr />
-                                        <Button onClick={() => {}} className={"btn-square-info"} color={"info-2x"} outline style={{ width: "100%" }}>Request Immediate Update/Feedback</Button>
+                                        <p>Submit your updates for this employer and/or portions of an overall completed contract/job! You <strong>should only</strong> submit relevant data to this employer to save time on both ends. <strong>IF an employer</strong> is <strong>slacking/lacking</strong> payment deposits, do not submit work until you are sure funds have been deposited so you can be paid upon agreement of completion of this contract or a portion of this contract.</p>
                                     </Media>
                                 </Media>
                             </CardBody>
@@ -471,13 +448,13 @@ const ViewIndividualLiveHiredhackingJobHelper = ({ userData }) => {
                         <Card className={"bordered-shadowed-card"}>
                             <CardBody>
                                 <Card className="card-absolute payment-card-actions-shadow-wrapper">
-                                    <CardHeader className="bg-success">
+                                    <CardHeader className="bg-primary">
                                         <h5 style={{ textDecorationLine: "underline", color: "white" }}>Manage Payment Related Logic</h5>
                                     </CardHeader>
                                     <CardBody>
                                         <p>Do you need to manage your payment's regarding this specific hacker/contractor ({currentApplicationData !== null ? currentApplicationData.applicantName : "---"})? Utilize the action below to redirect to manage <strong>ALL PAYMENT RELATED</strong> tasks. You will be able to make <em>partial payments</em>, complete payments, setup payment schedules/payment-times and much more after being redirected to the approriate page...</p>
                                         <hr />
-                                        <Button onClick={() => history.push(`/payments/employer/account/manage/pay/hacker/${id}`)} className={"btn-square-success"} color={"success-2x"} outline style={{ width: "100%" }}>Make payments (partial/full), set delayed payments & much more...</Button>
+                                        <Button onClick={() => history.push(`/payments/employer/account/manage/pay/hacker/${id}`)} className={"btn-square-primary"} color={"primary-2x"} outline style={{ width: "100%" }}>Make payments (partial/full), set delayed payments & much more...</Button>
                                     </CardBody>
                                 </Card>
                             </CardBody>
@@ -508,163 +485,6 @@ const ViewIndividualLiveHiredhackingJobHelper = ({ userData }) => {
                     </Col>
                 </Row>
             </Container>
-            {/* <Container fluid={true}>
-                <Row>
-                    <Col xl="7 xl-100">
-                        <Card>
-                            <CardBody>
-                            <div className="product-page-details">
-                                <h3>{"Women Pink shirt."}</h3>
-                            </div>
-                            <div className="product-price f-28">
-                                {symbol}{singleItem.price}
-                                <del>{symbol}{singleItem.discountPrice}</del>
-                            </div>
-                            <ul className="product-color m-t-15">
-                                <li className="bg-primary"></li>
-                                <li className="bg-secondary"></li>
-                                <li className="bg-success"></li>
-                                <li className="bg-info"></li>
-                                <li className="bg-warning"></li>
-                            </ul>
-                            <hr/>
-                            <p>{"It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that."}</p>
-                            <hr/>
-                            <div>
-                                <table className="product-page-width">
-                                <tbody>
-                                    <tr>
-                                    <td> <b>{Brand} &nbsp;&nbsp;&nbsp;:</b></td>
-                                    <td>{"Pixelstrap"}</td>
-                                    </tr>
-                                    <tr>
-                                    <td> <b>{Availability} &nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;</b></td>
-                                    <td className="txt-success">{singleItem.stock}</td>
-                                    </tr>
-                                    <tr>
-                                    <td> <b>{"Seller"} &nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;</b></td>
-                                    <td>{"ABC"}</td>
-                                    </tr>
-                                    <tr>
-                                    <td> <b>{"Fabric"} &nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;</b></td>
-                                    <td>{"Cotton"}</td>
-                                    </tr>
-                                </tbody>
-                                </table>
-                            </div>
-                            <hr/>
-                            <Row>
-                                <Col md="6">
-                                <h6 className="product-title">{"share it"}</h6>
-                                </Col>
-                                <Col md="6">
-                                <div className="product-icon">
-                                    <ul className="product-social">
-                                    <li className="d-inline-block"><a href="#javascript"><i className="fa fa-facebook"></i></a></li>
-                                    <li className="d-inline-block"><a href="#javascript"><i className="fa fa-google-plus"></i></a></li>
-                                    <li className="d-inline-block"><a href="#javascript"><i className="fa fa-twitter"></i></a></li>
-                                    <li className="d-inline-block"><a href="#javascript"><i className="fa fa-instagram"></i></a></li>
-                                    <li className="d-inline-block"><a href="#javascript"><i className="fa fa-rss"></i></a></li>
-                                    </ul>
-                                    <form className="d-inline-block f-right"></form>
-                                </div>
-                                </Col>
-                            </Row>
-                            <hr/>
-                            <Row>
-                                <Col md="6">
-                                <h6 className="product-title">{"Rate Now"}</h6>
-                                </Col>
-                                <Col md="6">
-                                <div className="d-flex">
-                                        <Ratings
-                                        rating={rating}
-                                        widgetRatedColors="blue"
-                                        changeRating={changeRating}
-                                        >
-                                        <Ratings.Widget />
-                                        <Ratings.Widget />
-                                        <Ratings.Widget />
-                                        <Ratings.Widget />
-                                        <Ratings.Widget />
-                                    </Ratings>
-                                    <span>{ProductReview}</span>
-                                </div>
-                                </Col>
-                            </Row>
-                            <hr/>
-                            <div className="m-t-15">
-                                <Button  color="primary" className="m-r-10" onClick={() => {}} >
-                                    <i className="fa fa-shopping-basket mr-1"></i>Add To Cart
-                                </Button>
-                                <Button  color="success" className="m-r-10" onClick={() => {}}>
-                                    <i className="fa fa-shopping-cart mr-1"></i>Buy-it-now
-                                </Button>
-                                <Button color="secondary" onClick={() => {}}>
-                                    <i className="fa fa-heart mr-1"></i>{"Add To WishList"}
-                                </Button>
-                            </div>
-                            </CardBody>
-                        </Card>
-                    </Col>
-                    <Col xl="5 xl-cs-35">
-                        <Card>
-                            <CardBody>
-                            <div className="filter-block">
-                                <h4>{"Brand"}</h4>
-                                <ul>
-                                <li>{"Clothing"}</li>
-                                <li>{"Bags"}</li>
-                                <li>{"Footwear"}</li>
-                                <li>{"Watches"}</li>
-                                <li>{"ACCESSORIES"}</li>
-                                </ul>
-                            </div>
-                            </CardBody>
-                        </Card>
-                        <Card>
-                            <CardBody>
-                            <div className="collection-filter-block">
-                                <ul>
-                                <li>
-                                    <div className="media"><Truck/>
-                                    <div className="media-body">
-                                        <h5>{"Free Shipping"}</h5>
-                                        <p>{"Free Shipping World Wide"}</p>
-                                    </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="media"><Clock/>
-                                    <div className="media-body">
-                                        <h5>{"24 X 7 Service"}</h5>
-                                        <p>{"Online Service For New Customer"}</p>
-                                    </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="media"><Gift/>
-                                    <div className="media-body">
-                                        <h5>{"Festival Offer"}</h5>
-                                        <p>{"New Online Special Festival"}</p>
-                                    </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="media"><CreditCard/>
-                                    <div className="media-body">
-                                        <h5>{"Online Payment"}</h5>
-                                        <p>{"Contrary To Popular Belief."}</p>
-                                    </div>
-                                    </div>
-                                </li>
-                                </ul>
-                            </div>
-                            </CardBody>
-                        </Card>
-                    </Col>
-                </Row>
-            </Container> */}
         </Fragment>
     );
 }

@@ -24,6 +24,10 @@
 .shadow {
     box-shadow: 0 0.75rem 1.25rem rgba(0, 0, 0, 0.1775) !important;
 }
+.relative {
+    position: relative;
+    max-width: 100%;
+}
 .error:after {
     content: 'Unable to retrieve any results...';
     text-shadow: -2.5px -2.5px 0 #000, 2.5px -2.5px 0 #000, -2.5px 2.5px 0 #000, 2.5px 2.5px 0 #000;

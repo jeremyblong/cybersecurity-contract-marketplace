@@ -226,6 +226,10 @@ app.use("/subscribe/membership/both/account/types", require("./routes/shared/sub
 app.use("/gather/both/account/payout/methods", require("./routes/shared/paymentRelated/payouts/gatherPayoutMethods/gatherPayoutsLinked.js"));
 app.use("/create/payout/and/cashout/both/account/types", require("./routes/shared/paymentRelated/payouts/cashout/cashoutSelectedFundsCard.js"));
 app.use("/gather/hired/employer/information/hacker/account", require("./routes/hackers/hiredRelatedLogic/fetchIndividualData/fetchHiredHackerData.js"));
+app.use("/submit/data/employed/contract/data/hacker", require("./routes/hackers/hiredRelatedLogic/submitDataUpdates/submitProgressReport.js"));
+
+
+
 // ~ webhook logic STARTS here ~
 app.use("/passbase/webhook", require("./webhooks/passbase/webhook.js"));
 // ~ webhook logic ENDS here ~
