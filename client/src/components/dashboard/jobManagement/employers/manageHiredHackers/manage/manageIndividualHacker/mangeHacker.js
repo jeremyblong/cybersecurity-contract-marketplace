@@ -537,13 +537,22 @@ const ManageIndividualHackerAlreadyHiredHelper = ({ userData }) => {
                             </CardBody>
                         </Card>
                     </Col>
-                    {/* <Col sm="12" md="5" lg="5" xl="5">
+                    <Col sm="12" md="12" lg="12" xl="12">
                         <Card className={"bordered-shadowed-card"}>
                             <CardBody>
-                                
+                                <Card className="card-absolute payment-card-actions-shadow-wrapper">
+                                    <CardHeader className="bg-primary">
+                                        <h5 style={{ textDecorationLine: "underline", color: "white" }}>Manage Payment Related Logic</h5>
+                                    </CardHeader>
+                                    <CardBody>
+                                        <p>View <strong>updates & new data submissions</strong> from the hacker/contractor you've employed on this particular job. You will find vulnerability reports, "hack findings" and any other evidence based results produced from the hacker's infiltration techniques.. This includes but is not limited to the exploit type found, vulnerability risk/classification, related attached files and much more.. Check it out!</p>
+                                        <hr />
+                                        <Button onClick={() => history.push(`/individual/hiring/job/data/view/manage/${currentApplicationData.generatedID}`)} className={"btn-square-primary"} color={"primary-2x"} outline style={{ width: "100%" }}>View Submitted Updates/Information From Hacker</Button>
+                                    </CardBody>
+                                </Card>
                             </CardBody>
                         </Card>
-                    </Col> */}
+                    </Col>
                 </Row>
                 <Row>
                     <Col sm="12" md="4" lg="4" xl="4">

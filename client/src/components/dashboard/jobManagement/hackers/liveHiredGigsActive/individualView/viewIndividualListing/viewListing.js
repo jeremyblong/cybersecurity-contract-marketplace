@@ -449,12 +449,12 @@ const ViewIndividualLiveHiredhackingJobHelper = ({ userData }) => {
                             <CardBody>
                                 <Card className="card-absolute payment-card-actions-shadow-wrapper">
                                     <CardHeader className="bg-primary">
-                                        <h5 style={{ textDecorationLine: "underline", color: "white" }}>Manage Payment Related Logic</h5>
+                                        <h5 style={{ textDecorationLine: "underline", color: "white" }}>View/Manage Submitted Contract Related Data</h5>
                                     </CardHeader>
                                     <CardBody>
-                                        <p>Do you need to manage your payment's regarding this specific hacker/contractor ({currentApplicationData !== null ? currentApplicationData.applicantName : "---"})? Utilize the action below to redirect to manage <strong>ALL PAYMENT RELATED</strong> tasks. You will be able to make <em>partial payments</em>, complete payments, setup payment schedules/payment-times and much more after being redirected to the approriate page...</p>
+                                        <p>View your <strong>previously submitted</strong> information that you've submitted for the employer to review. This can include but not be limited to progress reports, hack/vulnerability findings or really any supporting documentation on any progress you've made with this contracted hack.</p>
                                         <hr />
-                                        <Button onClick={() => history.push(`/payments/employer/account/manage/pay/hacker/${id}`)} className={"btn-square-primary"} color={"primary-2x"} outline style={{ width: "100%" }}>Make payments (partial/full), set delayed payments & much more...</Button>
+                                        <Button onClick={() => history.push(`/view/submitted/hacker/information/hired/job/submissions/${id}`)} className={"btn-square-primary"} color={"primary-2x"} outline style={{ width: "100%" }}>View Details & Submitted Data</Button>
                                     </CardBody>
                                 </Card>
                             </CardBody>

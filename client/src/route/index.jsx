@@ -65,7 +65,8 @@ import ManageVariousVideoCallsPage from "../pages/dashboard/video/shared/viewMan
 import CashoutAvailiableBalancePage from "../pages/dashboard/balanceRelated/cashout/cashoutRemainingBal.js";
 import ViewIndividualLiveHiredhackingJobPage from "../pages/dashboard/jobManagement/hackers/liveHiredGigsActive/individualView/viewIndividualListing/viewListing.js";
 import SubmitProgressUpdatesForEmployerPage from "../pages/dashboard/jobManagement/hackers/liveHiredGigsActive/individualView/submitProgressUpdates/submitProgressUpdates.js";
-
+import ViewPreviouslySubmittedDataHackerAccountPage from "../pages/dashboard/jobManagement/hackers/liveHiredGigsActive/individualView/submitProgressUpdates/viewSubmittedData/viewData.js";
+import ViewPreviouslySubmittedDataEmployerAccountPage from "../pages/dashboard/jobManagement/employers/manageHiredHackers/manage/manageIndividualHacker/viewData/viewData.js";
 
 export const routes = [
         { path:"/profile/settings/edit", Component: GeneralSettingsPage },
@@ -134,5 +135,7 @@ export const routes = [
         { path: "/view/pending/video/calling", Component: ManageVariousVideoCallsPage },
         { path: "/cashout/immediate/funding/funds", Component: CashoutAvailiableBalancePage },
         { path: "/individual/hired/job/data/view/manage/:id", Component: ViewIndividualLiveHiredhackingJobPage },
-        { path: "/submit/progress/updates/live/hacking/contract/:id", Component: SubmitProgressUpdatesForEmployerPage }
+        { path: "/submit/progress/updates/live/hacking/contract/:id", Component: SubmitProgressUpdatesForEmployerPage },
+        { path: "/view/submitted/hacker/information/hired/job/submissions/:id", Component: ViewPreviouslySubmittedDataHackerAccountPage },
+        { path: "/individual/hiring/job/data/view/manage/:id", Component: ViewPreviouslySubmittedDataEmployerAccountPage }
 ]; 

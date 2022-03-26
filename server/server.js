@@ -41,7 +41,7 @@ app.use(bodyParser.urlencoded({
 const whitelist = config.get("WHITELISTED_DOMAINS") ? config.get("WHITELISTED_DOMAINS").split(",") : [];
 
 const corsOptions = {
-	origin: function (origin, callback) {
+	origin: (origin, callback) => {
 	  if (!origin || whitelist.indexOf(origin) !== -1) {
 		callback(null, true)
 	  } else {
@@ -227,7 +227,7 @@ app.use("/gather/both/account/payout/methods", require("./routes/shared/paymentR
 app.use("/create/payout/and/cashout/both/account/types", require("./routes/shared/paymentRelated/payouts/cashout/cashoutSelectedFundsCard.js"));
 app.use("/gather/hired/employer/information/hacker/account", require("./routes/hackers/hiredRelatedLogic/fetchIndividualData/fetchHiredHackerData.js"));
 app.use("/submit/data/employed/contract/data/hacker", require("./routes/hackers/hiredRelatedLogic/submitDataUpdates/submitProgressReport.js"));
-
+app.use("/gather/hacker/submitted/information/employer/account", require("./routes/employers/hiredHackers/viewSubmittedData/viewSubmittedHackerDataFindings.js"));
 
 
 // ~ webhook logic STARTS here ~

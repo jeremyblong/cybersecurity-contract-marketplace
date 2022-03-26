@@ -92,9 +92,6 @@ const SubmitProgressUpdatesForEmployerHelper = ({ userData }) => {
 
         setSelectedVulAsset(values[0]);
     }
-    const handleChangeStatus = ({ meta, file }, status) => {
-        console.log("handleChangeStatus ran", meta, file, status);
-    }
 
     const handleFinalMainSubmission = () => {
         if ((typeof description !== "undefined" && description.length >= 50) && (typeof title !== "undefined" && title.length >= 25) && (typeof resultsText !== "undefined" && resultsText.length >= 25) && (optionSelected !== null) && (_.has(selectedVul, "description") && Object.keys(selectedVul).length > 0) && (_.has(selectedAsset, "name") && Object.keys(selectedAsset).length > 0)) {
