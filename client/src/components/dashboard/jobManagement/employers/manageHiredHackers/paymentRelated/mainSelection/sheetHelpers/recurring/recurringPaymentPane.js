@@ -90,7 +90,7 @@ const RecurringPaymentPaneHelper = ({ incrementalPayentsPane, setIncrementalPaym
                             hackerID: currentApplication.applicantId,
                             activeCard,
                             publicCompanyName: listing.publicCompanyName,
-                            jobID: currentApplication.id,
+                            jobID: currentApplication.generatedID,
                             daysToPay: paydays,
                             selectedDayOfWeek: selectedDayOfWeek.value
                         };

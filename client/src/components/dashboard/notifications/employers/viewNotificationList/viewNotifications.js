@@ -143,7 +143,7 @@ const ViewNotificationListHelper = ({ userData }) => {
 
                 const { notification } = res.data;
 
-                const findIndexNotification = notifications.findIndex((item) => item.id === notification.id);
+                const findIndexNotification = notifications.findIndex((item) => item !== null && item.id === notification.id);
 
                 const shallowCopy = [...notifications];
 
@@ -200,24 +200,26 @@ const ViewNotificationListHelper = ({ userData }) => {
                             <CardBody>
                                 <ListGroup>
                                     {typeof notifications !== "undefined" && notifications.length > 0 ? notifications.map((notification, index) => {
-                                        return (
-                                            <Fragment key={index}>
-                                                <ListGroupItem onClick={() => handleNotificationClick(notification)} className={notification.seenRead === true ? "list-group-item-action flex-column align-items-start notification-custom-notification active" : "list-group-item-action flex-column align-items-start notification-custom-notification"}>
-                                                    <Row>
-                                                        <Col sm="12" md="1" lg="1" xl="1">
-                                                            {renderProfilePicVideo(notification.profilePicVideo)}
-                                                        </Col>
-                                                        <Col sm="12" md="11" lg="11" xl="11">
-                                                            <div className="d-flex w-100 justify-content-between">
-                                                                <h5 className="mb-1 maxed-title-notification">{notification.title}</h5><small>{moment(notification.date).fromNow()}</small>
-                                                            </div>
-                                                            <p className="mb-1">{notification.description}</p>
-                                                            <small>{notification.dateString}</small>
-                                                        </Col>
-                                                    </Row>
-                                                </ListGroupItem>
-                                            </Fragment>
-                                        );
+                                        if (notification !== null) {
+                                            return (
+                                                <Fragment key={index}>
+                                                    <ListGroupItem onClick={() => handleNotificationClick(notification)} className={notification.seenRead === true ? "list-group-item-action flex-column align-items-start notification-custom-notification active" : "list-group-item-action flex-column align-items-start notification-custom-notification"}>
+                                                        <Row>
+                                                            <Col sm="12" md="1" lg="1" xl="1">
+                                                                {renderProfilePicVideo(notification.profilePicVideo)}
+                                                            </Col>
+                                                            <Col sm="12" md="11" lg="11" xl="11">
+                                                                <div className="d-flex w-100 justify-content-between">
+                                                                    <h5 className="mb-1 maxed-title-notification">{notification.title}</h5><small>{moment(notification.date).fromNow()}</small>
+                                                                </div>
+                                                                <p className="mb-1">{notification.description}</p>
+                                                                <small>{notification.dateString}</small>
+                                                            </Col>
+                                                        </Row>
+                                                    </ListGroupItem>
+                                                </Fragment>
+                                            );
+                                        }
                                     }) : <Fragment>
                                         <img src={require("../../../../../assets/images/no-current-notifications.png")} className={"no-notifications-img"} />
                                     </Fragment>}

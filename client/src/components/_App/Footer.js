@@ -15,24 +15,24 @@ const Footer = () => {
                                 <ul className="contact-info">
                                     <li>
                                         <i className="bx bx-phone-call"></i>
-                                        <span>Hotline:</span> 
-                                        <a href="tel:Phone:+892-569-756">
-                                            Phone: +892-569-756
+                                        <span>Support:</span> 
+                                        <a href="tel:Phone:+19808006253">
+                                            Phone: +1(980)-800-6253
                                         </a>
                                     </li>
                                     
                                     <li>
                                         <i className="bx bx-envelope"></i>
                                         <span>Email:</span> 
-                                        <a href="mailto:hello@pisa.com">
-                                            hello@pisa.com
+                                        <a className='wrapme' href="mailto:support@thehackermarketplace.com">
+                                            support@thehackermarketplace.com
                                         </a>
                                     </li>
                                     
                                     <li>
                                         <i className="bx bx-location-plus"></i>
                                         <span>Address:</span> 
-                                        658 Lane Drive st Riverside. California
+                                            Central Los Angeles, CA 90012
                                     </li>
                                 </ul>
                             </div>

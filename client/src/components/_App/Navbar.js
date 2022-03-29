@@ -14,7 +14,6 @@ import { saveSoftwareListingInfo } from "../../redux/actions/hackers/createSoftw
 import { saveSendbirdInitialData } from "../../redux/actions/messaging/initialization/initSBLogic.js";
 import { updateCourseInformationData } from "../../redux/actions/courses/createNewCourse/index.js";
 
-
 const Navbar = ({ data, authenticated, authentication, saveListingData, saveSoftwareListingInfo, saveSendbirdInitialData, updateCourseInformationData }) => {
 
     const history = useHistory();
@@ -102,7 +101,7 @@ const Navbar = ({ data, authenticated, authentication, saveListingData, saveSoft
                                 <nav className="navbar navbar-expand-md navbar-light">
                                     <Link to="/">
                                         <a onClick={() => setCollapsed(true)} className="navbar-brand">
-                                            <img src="/img/logo.png" alt="logo" />
+                                            <img src={require("../../assets/images/placeholderlogo.png")} className={"logo-customized"} />
                                         </a>
                                     </Link>
                                     {/* frequently-asked-questions */}

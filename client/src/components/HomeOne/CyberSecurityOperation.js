@@ -7,31 +7,31 @@ const CyberSecurityOperation = () => {
 				<div className="row">
 					<div className="col-lg-6">
 						<div className="cybersecurity-content">
-							<h2>24/7 Cybersecurity Operation Center</h2>
-							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse.</p>
+							<h2>Make <strong style={{ textDecorationLine: "underline" }}>LEGITIMATE</strong> money with your hacking knowledge in a sustainable manner! We <strong>HACK EVERYTHING.</strong></h2>
+							<p>Explore the various ways and means to <strong>monetize your knowledge</strong> and expertise in various forms/fashions such as the below-mentioned features/functionality available ONLY on <strong>'The Hacker Marketplace'</strong>!</p>
 
 							<div className="row">
 								<div className="col-lg-6 col-sm-6">
 									<ul className="cybersecurity-item">
 										<li>
 											<i className="bx bx-check"></i>
-											Managed Web Application
+											Apply To Contracted Gigs (Digital/Physical Asset's)
 										</li>
 										<li>
 											<i className="bx bx-check"></i>
-											SIEM Threat Detection
+											Sell Your Knowledge Via Purchasable Courses (To Other Hacker's)
 										</li>
 										<li>
 											<i className="bx bx-check"></i>
-											Content Delivery Network
+											LIVE Stream While You Actively Hack (To Other Hacker's)
 										</li>
 										<li>
 											<i className="bx bx-check"></i>
-											Website Hack Repair
+											Sell Custom-Coded Software Hack's (DDoS, Malware, Etc..)
 										</li>
 										<li>
 											<i className="bx bx-check"></i>
-											Instant Malware Removal
+											Build A Repor With In A Tight-Knit Community
 										</li>
 									</ul>
 								</div>
@@ -40,23 +40,23 @@ const CyberSecurityOperation = () => {
 									<ul>
 										<li>
 											<i className="bx bx-check"></i>
-											Instant Malware Removal
+											Malware/Virus Detection & Removal
 										</li>
 										<li>
 											<i className="bx bx-check"></i>
-											Instant Malware Removal
+											Preventative Maintance & Testing
 										</li>
 										<li>
 											<i className="bx bx-check"></i>
-											Instant Malware Removal
+											Test <strong>PHYSICAL</strong> Asset's As A Lone-Actor
 										</li>
 										<li>
 											<i className="bx bx-check"></i>
-											Instant Malware Removal
+											System's Testing/Exploitation
 										</li>
 										<li>
 											<i className="bx bx-check"></i>
-											Instant Malware Removal
+											Anything You Can Honestly Think Of 'Hack Related'
 										</li>
 									</ul>
 								</div>

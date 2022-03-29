@@ -127,6 +127,8 @@ const ViewLiveActivehiredJobsGigsDisplayHelper = ({ userData }) => {
                                                             <Col xs="4" lg="4" xl="4" md="4" className={"spacer-col-span-auction"}><span className={secondaryOrNot === true ? 'text-secondary-custom' : 'text-info-custom'}>{coreEmployerData.currentlyFollowedBy.length} Following</span></Col>
                                                             <Col xs="8" lg="8" xl="8" md="8"> <span className="span-betting"># Of Previously Completed Jobs</span></Col>
                                                             <Col xs="4" lg="4" xl="4" md="4" className={"spacer-col-span-auction"}><span className={secondaryOrNot === true ? 'text-secondary-custom' : 'text-info-custom'}>{coreEmployerData.completedJobs} Completed Jobs</span></Col>
+                                                            <Col xs="8" lg="8" xl="8" md="8"> <span className="span-betting">Total (USD-$) Est. Total/Completion</span></Col>
+                                                            <Col xs="4" lg="4" xl="4" md="4" className={"spacer-col-span-auction"}><span style={{ fontWeight: "bold", textDecorationLine: "underline" }} className={"txt-success"}>${Number(listing.amountOfMoneyUponCompletion).toFixed(2)} Est. Total Proceeds</span></Col>
                                                         </Row>
                                                         <div className="customers">
                                                         <ul>

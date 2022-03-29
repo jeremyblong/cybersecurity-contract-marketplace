@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect, useRef } from 'react';
 import Breadcrumb from '../../../../../../../layout/breadcrumb'
-import { Container, Row, Col, Card, Button, Media, CardBody, CardHeader, Input, Label, Badge } from 'reactstrap'
+import { Container, Row, Col, Card, Button, Media, CardBody, CardHeader, ListGroupItem, ListGroup, Label, Badge } from 'reactstrap'
 import { connect } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import axios from "axios";
@@ -18,6 +18,9 @@ import _ from "lodash";
 import { DateRange } from 'react-date-range';
 import Calendar from 'react-calendar';
 import MessagingPaneMessageEmployerHelper from "./panes/messagePane/messageSendPane.js";
+import { confirmAlert } from 'react-confirm-alert';
+
+
 
 const Map = ReactMapboxGl({
     accessToken: process.env.REACT_APP_MAPBOX_TOKEN,
@@ -107,7 +110,53 @@ const ViewIndividualLiveHiredhackingJobHelper = ({ userData }) => {
         }
         return sum;
     }
+    const handleTotalCompletion = () => {
+        console.log("handleTotalCompletion ran/clicked..");
 
+        confirmAlert({
+            title: `Are you sure you'd like to request to mark this contract as 'complete'?`,
+            message: `This is NOT guarenteed to be agreed-upon AND the employer MUST 'OK/Confirm' that the job is in fact 'completed' in order to release any pending funds. We also have the option to release partial funds or funds for ONLY portions of completed work if that is more interesting/relevant...`,
+            buttons: [
+              {
+                label: 'Yes, Request Contract Completion! (Not Guarenteed***)',
+                onClick: () => {
+                    console.log("yes..");
+
+                    const configuration = {
+                        signedinUserID: userData.uniqueId,
+                        employerID: info.employerPosterId,
+                        generatedID: id
+                    }
+                    axios.post(`${process.env.REACT_APP_BASE_URL}/mark/complete/request/confirmation/hacker/account`, configuration).then((res) => {
+                        if (res.data.message === "Successfully marked as complete - request sent!") {
+                            console.log("Successfully gathered information :... ", res.data);
+                            
+                            NotificationManager.success("We've successfully updated and changed the appropriate information. You're request has been SENT and will be reviewed shortly by your employer. Stay tuned!", "Successfully sent request to employer!", 4750);
+
+                            const { data } = res.data;
+
+                            setInfoData(data);
+                        } else {
+                            console.log("ERROR gathering active/hired applications...:", res.data);
+            
+                            NotificationManager.error("An unknown error occurred while attempting process your request to 'mark contract as complete & request review', if this problem persists - please contact support & report this problem!", "Could NOT gather data!", 4750);
+                        }
+                    }).catch((err) => {
+                        console.log("CRITICAL ERROR gathering active/hired application data...:", err);
+            
+                        NotificationManager.error("An unknown error occurred while attempting process your request to 'mark contract as complete & request review', if this problem persists - please contact support & report this problem!", "Could NOT gather data!", 4750);
+                    })
+                }
+              },
+              {
+                label: 'No, Cancel!',
+                onClick: () => {
+                    console.log("cancelled.");
+                }
+              }
+            ]
+        });
+    }
 
     return (
         <Fragment>
@@ -124,49 +173,50 @@ const ViewIndividualLiveHiredhackingJobHelper = ({ userData }) => {
                             <CardBody>
                                 {info !== null ? <Fragment>
                                     <Row>
-                                        <Col sm="6" xl="3" lg="3">
+                                        <Col md="6" sm="6" xl="3" lg="3">
                                             <Card className="o-hidden">
                                                 <CardBody className="bg-primary b-r-4 card-body static-top-widget-custom-hired">
                                                     <div className="media static-top-widget">
                                                     <div className="align-self-center text-center"><DollarSign /></div>
-                                                        <div className="media-body"><span className="m-0 special-text-spanned">Money To Be Earned Upon Completion</span>
+                                                        <div style={{ marginBottom: "32.5px" }} className="media-body"><span className="m-0 special-text-spanned">Money To Be Earned Upon Completion</span>
                                                             <h4 className="mb-0 counter counter-custom-hired-account">$<CountUp duration={5.75} end={Number(info.amountOfMoneyUponCompletion)} /> Will Be Earned!</h4><Rss className="icon-bg" />
                                                         </div>
                                                     </div>
                                                 </CardBody>
                                             </Card>
                                         </Col>
-                                        <Col sm="6" xl="3" lg="3">
+                                        <Col md="6" sm="6" xl="3" lg="3">
                                             <Card className="o-hidden">
                                                 <div className="bg-secondary b-r-4 card-body static-top-widget-custom-hired">
                                                     <div className="media static-top-widget">
                                                     <div className="align-self-center text-center"><AlertOctagon /></div>
-                                                        <div className="media-body"><span className="m-0 special-text-spanned"># Of <strong>attached</strong> file(s)</span>
+                                                        <div style={{ marginBottom: "32.5px" }} className="media-body"><span className="m-0 special-text-spanned"># Of <strong>attached</strong> file(s)</span>
                                                             <h4 className="mb-0 counter counter-custom-hired-account"><CountUp duration={5.75} end={info.attachedFiles.length} /> file's were attached..</h4><AlertOctagon className="icon-bg" />
                                                         </div>
                                                     </div>
                                                 </div>
                                             </Card>
                                         </Col>
-                                        <Col sm="6" xl="3" lg="3">
+                                        <Col md="6" sm="6" xl="3" lg="3">
                                             <Card className="o-hidden">
                                                 <CardBody className="bg-primary b-r-4 static-top-widget-custom-hired">
                                                     <div className="media static-top-widget">
                                                     <div className="align-self-center text-center"><Rss /></div>
-                                                        <div className="media-body"><span className="m-0 special-text-spanned"># Of Total Applicant's</span>
+                                                        <div style={{ marginBottom: "32.5px" }} className="media-body"><span className="m-0 special-text-spanned"># Of Total Applicant's</span>
                                                             <h4 className="mb-0 counter counter-custom-hired-account">There are <CountUp duration={5.75} end={info.employerPostedListingInfo.applicants.length} /> total applicant's</h4><DollarSign className="icon-bg" />
                                                         </div>
                                                     </div>
                                                 </CardBody>
                                             </Card>
                                         </Col>
-                                        <Col sm="6" xl="3" lg="3">
+                                        <Col md="6" sm="6" xl="3" lg="3">
                                             <Card className="o-hidden">
-                                                <CardBody className="bg-info b-r-4 static-top-widget-custom-hired">
+                                                <CardBody className="bg-success b-r-4 static-top-widget-custom-hired-longer">
                                                     <div className="media static-top-widget">
                                                     <div className="align-self-center text-center"><Eye /></div>
-                                                        <div className="media-body"><span className="m-0 special-text-spanned">Total Recieved View's</span>
-                                                            <h4 className="mb-0 counter counter-custom-hired-account"><CountUp duration={5.75} end={info.employerPostedListingInfo.viewedBy.length} /> Total View's...</h4><AlertOctagon className="icon-bg" />
+                                                        <div className="media-body"><span className="m-0">Each confirmation marks whether or not a user has already marked this job as <strong>complete!</strong> Once marked as <strong>complete</strong>, both user's will be able to see the appropriate changes..</span>
+                                                            <h4 className="mb-0 counter counter-custom-hired-account-upper">{_.has(info, "requestedJobCompletionReview") && info.requestedJobCompletionReview.approvedByHacker === true ? "Hacker Already APPROVED!" : "Hacker has NOT Approved Yet."}</h4><DollarSign className="icon-bg" />
+                                                            <h4 className="mb-0 counter counter-custom-hired-account">{_.has(info, "requestedJobCompletionReview") && info.requestedJobCompletionReview.approvedByEmployer === true ? "Employer Already APPROVED!" : "Employer has NOT Approved yet."}</h4><DollarSign className="icon-bg" />
                                                         </div>
                                                     </div>
                                                 </CardBody>
@@ -311,7 +361,6 @@ const ViewIndividualLiveHiredhackingJobHelper = ({ userData }) => {
                                         numberOfStars={5}
                                         name='rating'
                                     />
-                                    <span className='absolute-right-hired'>ProductReview</span>
                                 </div>
                                 </Col>
                             </Row>
@@ -460,26 +509,66 @@ const ViewIndividualLiveHiredhackingJobHelper = ({ userData }) => {
                             </CardBody>
                         </Card>
                     </Col>
-                    {/* <Col sm="12" md="5" lg="5" xl="5">
-                        <Card className={"bordered-shadowed-card"}>
-                            <CardBody>
-                                
-                            </CardBody>
-                        </Card>
-                    </Col> */}
                 </Row>
                 <Row>
-                    <Col sm="12" md="4" lg="4" xl="4">
-                        <Card className={"bordered-shadowed-card"}>
-                            <CardBody>
-
+                    <Col xl="12 xl-100" md="12" sm="12" sm="12">
+                        <Card className="bg-dark">
+                            <CardBody className='full-payment-block'>
+                                <h3 className='previous-payment-header'>View previous payment's made on this specific contract/gig</h3>
+                                <p className='previous-payment-sub'>These are PREVIOUS payment's made by BOTH users including yourself & the contracted user. This data will be identical on the {userData.accountType === "employers" ? "hacker's" : "employer's"} account while viewing this specific contracted job.</p>
+                                <ListGroup>
+                                    {info !== null && typeof info.paymentHistory !== "undefined" && info.paymentHistory.length > 0 ? info.paymentHistory.map((payment, index) => {
+                                        const { partial, full, pending, paidByFullName, recurring } = payment;
+                                        const { amount, created, currency, description, status } = payment.completedPayment;
+                                        if (recurring === false) {
+                                            return (
+                                                <Fragment key={index}>
+                                                    <ListGroupItem style={{ marginTop: "12.5px" }} className="list-group-item-action flex-column align-items-start">
+                                                        <div className="d-flex w-100 justify-content-between">
+                                                        <h5 className="mb-1" style={{ color: "#7366ff" }}>{`${paidByFullName} paid the contracted user $${(amount / 100).toFixed(2)} (${currency})`}</h5><small>{moment(created * 1000).fromNow()}</small>
+                                                        </div>
+                                                        <p className="mb-1">{description}</p>
+                                                        <small>{partial === false && full === true ? `Full payment which is ${pending === true ? "Pending (This payment has been captured but NOT released)" : "Processed (This payment has been captured AND has been RELEASED)"}` : `Partial payment was made and is ${pending === true ? "Pending (This payment has been captured but NOT released)" : "Processed (This payment has been captured AND has been RELEASED)"}`}</small>
+                                                    </ListGroupItem>
+                                                </Fragment>
+                                            );
+                                        } else {
+                                            const { active, created, currency, unit_amount } = payment.paymentData;
+                                            const { lastPaymentDay, firstPaymentDay } = payment.completedPayment;
+                                            return (
+                                                <Fragment key={index}>
+                                                    <ListGroupItem style={{ marginTop: "12.5px" }} className="list-group-item-action flex-column align-items-start">
+                                                        <div className="d-flex w-100 justify-content-between">
+                                                        <h5 className="mb-1" style={{ color: "#7366ff" }}>{`${paidByFullName} has initialized a subscription/recurring payment of $${(unit_amount / 100).toFixed(2)}`}</h5><small>{moment(created * 1000).fromNow()}</small>
+                                                        </div>
+                                                        <p className="mb-1">{`This payment is ${active === true ? "active" : "innactive"} in the currency of ${currency === "usd" ? "US Dollar (USD)" : "Unknown Currency."}. This is a recurring payment/deposit type with a start date of ${moment(firstPaymentDay).format("dddd MM/DD")} (MM/DD) while ending on ${moment(lastPaymentDay).format("dddd MM/DD")} (MM/DD) of full payment completion (whichever comes first)!`}</p>
+                                                        <small>{`This is a RECURRING payment which means every week, this payment will automatically be billed on the desired/selected day upon initializing this payment type. These can be cancelled but as of now, this payment is still active and will be availiable on a weekly basis!`}</small>
+                                                    </ListGroupItem>
+                                                </Fragment>
+                                            );
+                                        }
+                                    }) : null}
+                                </ListGroup>
                             </CardBody>
                         </Card>
                     </Col>
-                    <Col sm="12" md="8" lg="8" xl="8">
+                </Row>
+                <Row>
+                    <Col sm="12" md="12" lg="12" xl="12">
                         <Card className={"bordered-shadowed-card"}>
                             <CardBody>
-                                
+                                <Card className="card-absolute payment-card-actions-shadow-wrapper">
+                                    <CardHeader className="bg-secondary">
+                                        <h5 style={{ textDecorationLine: "underline", color: "white" }}>Mark Job As Complete & Request Confirmation From Employer</h5>
+                                    </CardHeader>
+                                    <CardBody>
+                                        <p>This will initiate the <strong>nearing of completion</strong> for both you and the other user (employer). You should <strong>ONLY</strong> activate this option <strong>IF YOU'RE ENTIRELY FINISHED</strong> with said contract & are requesting to end/complete the job to release any pending resulting funds/money to be credited to your account..</p>
+                                        <hr />
+                                        <p className='lead'>This will <strong>COMPLETE</strong> this entire process-flow and once <strong>confirmed by both parties</strong> involved, will release all pending funds that the employer/hirer has previously deposited in which {process.env.REACT_APP_APPLICATION_NAME} has collected and held until the release point..</p>
+                                        <hr />
+                                        <Button onClick={() => handleTotalCompletion()} className={"btn-square-secondary"} color={"secondary-2x"} outline style={{ width: "100%" }}>Mark Job As Complete & Request Confirmation (from employer)</Button>
+                                    </CardBody>
+                                </Card>
                             </CardBody>
                         </Card>
                     </Col>

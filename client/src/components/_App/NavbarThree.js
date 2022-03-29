@@ -317,18 +317,18 @@ const NavbarThree = () => {
                         <ul>
                             <li>
                                 <i className="bx bx-location-plus"></i>
-                                2750 Quadra Street Victoria,
+                                Los Angeles, CA 90012
                             </li>
                             <li>
                                 <i className="bx bx-envelope"></i>
-                                <a href="mailto:hello@pisa.com">hello@pisa.com</a>
-                                <a href="mailto:info@pisa.com">info@pisa.com</a>
+                                <a href="mailto:support@thehackermarketplace.com">support@thehackermarketplace.com</a>
+                                {/* <a href="mailto:info@pisa.com">info@pisa.com</a> */}
                                 
                             </li>
                             <li>
                                 <i className="bx bx-phone-call"></i>
-                                <a href="tel:+44-458-895-456">+44 458 895 456</a>
-                                <a href="tel:+44-458-895-455">+44 458 895 455</a>
+                                <a href="tel:+44-458-895-456">+1 (980)-800-6253</a>
+                                {/* <a href="tel:+44-458-895-455">+44 458 895 455</a> */}
                             </li>
                         </ul>
                     </div>

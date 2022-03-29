@@ -26,45 +26,33 @@ class ElectronicProtection extends Component {
 					<div className="row align-items-center">
 						<div className="col-lg-6">
 							<div className="electronic-content">
-								<h2>Innovative Electronic Protection of Your Office and Home Control Online</h2>
+								<h2>Test and discover vulnerabilities in your websites, mobile apps or even your physical cooperate locations security systems</h2>
 								<div className="electronic-tab-wrap">
 									<div className="tab electronic-tab">
 										{/* Tabs Nav */}
 										<ul className="tabs">
-											<li
+											<li style={{ marginBottom: "12.5px" }}
 												className="current"
 												onClick={(e) => this.openTabSection(e, 'tab1')}
 											>
-												Intercom System
+												Quick, Through & Quality Testing
 											</li>
-											<li
+											<li style={{ marginBottom: "12.5px" }}
 												onClick={(e) => this.openTabSection(e, 'tab2')}
 											>
-												CCTV
+												Secure With Expert's
 											</li>
 											<li
 												onClick={(e) => this.openTabSection(e, 'tab3')}
 											>
-												GDPR
-											</li>
-											<li
-												onClick={(e) => this.openTabSection(e, 'tab4')}
-											>
-												Encryption
-											</li>
-											<li
-												onClick={(e) => this.openTabSection(e, 'tab5')}
-											>
-												Our Goal
+												Hacker's Come To YOU!
 											</li>
 										</ul>
 
 										{/* Tab Content */}
 										<div className="tab_content">
 											<div id="tab1" className="tabs_item">
-												<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Illo ducimus vero, vero corporis voluptates beatae pariatur laudantium, fugiat illum ab deserunt nostrum aliquid quisquam esse? Voluptatibus quia velit numquam esse porro ipsum dolor, sit amet consectetur adipisicing elit. Illo ducimus vero, corporis.</p>
-		
-												<p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Perspiciatis, soluta, aspernatur dolorum sequi quisquam ullam in pariatur nihil dolorem cumque excepturi totam. Qui excepturi quasi cumque placeat fuga. Ea, eius?</p>
+												<p>'The Hacker Marketplace' is the few platform's that allow you to test and discover vulnerabilities in your website, mobile app or even your co-workers! Did we also mention we testing <strong>PHYSICAL SECURITY</strong> as well by recruiting hacker's locally in your own backyard/city? You truly <strong>never</strong> know where your next vulnerability will be so by staying vigilant, your liklihood of success will be much <strong>greater!</strong></p>
 												
 												<Link href="/about">
 													<a className="default-btn">Learn About</a>
@@ -72,9 +60,7 @@ class ElectronicProtection extends Component {
 											</div>
 
 											<div id="tab2" className="tabs_item">
-												<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum</p>
-
-												<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+												<p>Post a job and have the best of the best apply to your company. With our trusted white hat hackers, you can feel safe knowing that your assets are being tested by professionals. We'll also be there with support throughout the entire process - from posting to hiring--so that you can keep your company secure and free from harm.</p>
 
 												<Link href="/about">
 													<a className="default-btn">Learn About</a>
@@ -82,29 +68,7 @@ class ElectronicProtection extends Component {
 											</div>
 
 											<div id="tab3" className="tabs_item">
-												<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-												
-												<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum</p>
- 
-												<Link href="/about">
-													<a className="default-btn">Learn About</a>
-												</Link>
-											</div>
-
-											<div id="tab4" className="tabs_item">
-												<p>But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness.</p>
-
-												<p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique</p>
-
-												<Link href="/about">
-													<a className="default-btn">Learn About</a>
-												</Link>
-											</div>
-
-											<div id="tab5" className="tabs_item">
-												<p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique</p>
-												
-												<p>But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness.</p>
+												<p>Stop worrying about cyber-security. Let hackers find your company's vulnerabilities so you can focus on growing and scaling your business. You're not alone in this endeavor, we'll help you every step of the way <strong>especially</strong> if you have any discrepancies or difficulties <strong>at any point</strong> along the way. We truly do have your back <strong>and</strong> want the best for <strong>each and every</strong> customer that joins our vision!</p>
  
 												<Link href="/about">
 													<a className="default-btn">Learn About</a>

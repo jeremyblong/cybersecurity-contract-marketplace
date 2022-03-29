@@ -6,6 +6,7 @@ import axios from "axios";
 import { connect } from "react-redux";
 import { useHistory } from 'react-router-dom'
 import moment from "moment";
+import ReactPlayer from 'react-player';
 
 const ManageVariousVideoCallsHelper = ({ userData }) => {
 
@@ -106,7 +107,18 @@ const ManageVariousVideoCallsHelper = ({ userData }) => {
                                                     </Col> 
                                                 </Fragment>
                                             );
-                                        }) : null}
+                                        }) : <Fragment>
+                                            <Col sm="12" md="12" lg="12" xl="12">
+                                                <Card className='shadow'>
+                                                    <CardBody>
+                                                        <video autoPlay={true} loop={true} width="100%" height="775" controls>
+                                                            <source src={require("../../../../../assets/video/no-pending-calls.mp4")} type="video/mp4" />
+                                                            Your browser does not support the video tag.
+                                                        </video>
+                                                    </CardBody>
+                                                </Card>
+                                            </Col>
+                                        </Fragment>}
                                     </div>
                                 </Row>
                             </CardBody>

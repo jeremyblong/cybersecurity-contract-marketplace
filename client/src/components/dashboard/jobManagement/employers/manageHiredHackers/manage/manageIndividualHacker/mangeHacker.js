@@ -175,6 +175,54 @@ const ManageIndividualHackerAlreadyHiredHelper = ({ userData }) => {
         });
     }
 
+    const handleTotalCompletion = () => {
+        console.log("handleTotalCompletion ran/clicked..");
+
+        confirmAlert({
+            title: `Are you sure you'd like to request to mark this contract as 'complete'?`,
+            message: `This is NOT guarenteed to be agreed-upon AND the hacker MUST 'OK/Confirm' that the job is in fact 'completed' in order to release any pending funds. We also have the option to release partial funds or funds for ONLY portions of completed work if that is more interesting/relevant...`,
+            buttons: [
+              {
+                label: 'Yes, Request Contract Completion! (Not Guarenteed***)',
+                onClick: () => {
+                    console.log("yes..");
+
+                    const configuration = {
+                        signedinUserID: userData.uniqueId,
+                        hackerID: currentApplicationData.applicantId,
+                        generatedID: currentApplicationData.generatedID
+                    }
+                    axios.post(`${process.env.REACT_APP_BASE_URL}/mark/complete/request/confirmation/employer/account`, configuration).then((res) => {
+                        if (res.data.message === "Successfully marked as complete - request sent!") {
+                            console.log("Successfully gathered information :... ", res.data);
+                            
+                            NotificationManager.success("We've successfully updated and changed the appropriate information. You're request has been SENT and will be reviewed shortly by your hacker. Stay tuned!", "Successfully sent request to hacker!", 4750);
+
+                            const { data } = res.data;
+
+                            setCurrentApplicationData(data);
+                        } else {
+                            console.log("ERROR gathering active/hired applications...:", res.data);
+            
+                            NotificationManager.error("An unknown error occurred while attempting process your request to 'mark contract as complete & request review', if this problem persists - please contact support & report this problem!", "Could NOT gather data!", 4750);
+                        }
+                    }).catch((err) => {
+                        console.log("CRITICAL ERROR gathering active/hired application data...:", err);
+            
+                        NotificationManager.error("An unknown error occurred while attempting process your request to 'mark contract as complete & request review', if this problem persists - please contact support & report this problem!", "Could NOT gather data!", 4750);
+                    })
+                }
+              },
+              {
+                label: 'No, Cancel!',
+                onClick: () => {
+                    console.log("cancelled.");
+                }
+              }
+            ]
+        });
+    }
+
     console.log("currentApplicationData", currentApplicationData);
     console.log("listing", listing);
 
@@ -192,7 +240,7 @@ const ManageIndividualHackerAlreadyHiredHelper = ({ userData }) => {
                             </CardHeader>
                             <CardBody>
                                 <Row>
-                                    <Col sm="6" xl="3" lg="3">
+                                    <Col sm="6" md="6" xl="3" lg="3">
                                         <Card className="o-hidden">
                                             <CardBody className="bg-primary b-r-4 card-body static-top-widget-custom-hired">
                                                 <div className="media static-top-widget">
@@ -204,7 +252,7 @@ const ManageIndividualHackerAlreadyHiredHelper = ({ userData }) => {
                                             </CardBody>
                                         </Card>
                                     </Col>
-                                    <Col sm="6" xl="3" lg="3">
+                                    <Col sm="6" md="6" xl="3" lg="3">
                                         <Card className="o-hidden">
                                             <div className="bg-secondary b-r-4 card-body static-top-widget-custom-hired">
                                                 <div className="media static-top-widget">
@@ -216,19 +264,20 @@ const ManageIndividualHackerAlreadyHiredHelper = ({ userData }) => {
                                             </div>
                                         </Card>
                                     </Col>
-                                    <Col sm="6" xl="3" lg="3">
+                                    <Col sm="6" md="6" xl="3" lg="3">
                                         <Card className="o-hidden">
-                                            <CardBody className="bg-primary b-r-4 static-top-widget-custom-hired">
+                                            <CardBody className="bg-success b-r-4 static-top-widget-custom-hired-longer">
                                                 <div className="media static-top-widget">
                                                 <div className="align-self-center text-center"><DollarSign /></div>
-                                                    <div className="media-body"><span className="m-0">{currentApplicationData !== null && currentApplicationData.bettingOnSelfSelected === true ? "Hacker is gambling/betting on themselves!" : "Hacker has OPTED-OUT of gambling/betting on self."}</span>
-                                                        <h4 className="mb-0 counter counter-custom-hired-account"><CountUp duration={5.75} end={currentApplicationData !== null && currentApplicationData.bettingOnSelfSelected === true ? Math.floor(Number(currentApplicationData.waggeredBidAmount)) : 0} /> {process.env.REACT_APP_CRYPTO_TOKEN_NAME} Waggered/Betted</h4><DollarSign className="icon-bg" />
+                                                    <div className="media-body"><span className="m-0">Each confirmation marks whether or not a user has already marked this job as <strong>complete!</strong> Once marked as <strong>complete</strong>, both user's will be able to see the appropriate changes..</span>
+                                                        <h4 className="mb-0 counter counter-custom-hired-account-upper">{_.has(currentApplicationData, "requestedJobCompletionReview") && currentApplicationData.requestedJobCompletionReview.approvedByHacker === true ? "Hacker Already APPROVED!" : "Hacker has NOT Approved Yet."}</h4><DollarSign className="icon-bg" />
+                                                        <h4 className="mb-0 counter counter-custom-hired-account">{_.has(currentApplicationData, "requestedJobCompletionReview") && currentApplicationData.requestedJobCompletionReview.approvedByEmployer === true ? "Employer Already APPROVED!" : "Employer has NOT Approved yet."}</h4><DollarSign className="icon-bg" />
                                                     </div>
                                                 </div>
                                             </CardBody>
                                         </Card>
                                     </Col>
-                                    <Col sm="6" xl="3" lg="3">
+                                    <Col sm="6" md="6" xl="3" lg="3">
                                         <Card className="o-hidden">
                                             <CardBody className="bg-info b-r-4 static-top-widget-custom-hired">
                                                 <div className="media static-top-widget">
@@ -555,17 +604,21 @@ const ManageIndividualHackerAlreadyHiredHelper = ({ userData }) => {
                     </Col>
                 </Row>
                 <Row>
-                    <Col sm="12" md="4" lg="4" xl="4">
+                    <Col sm="12" md="12" lg="12" xl="12">
                         <Card className={"bordered-shadowed-card"}>
                             <CardBody>
-
-                            </CardBody>
-                        </Card>
-                    </Col>
-                    <Col sm="12" md="8" lg="8" xl="8">
-                        <Card className={"bordered-shadowed-card"}>
-                            <CardBody>
-                                
+                                <Card className="card-absolute payment-card-actions-shadow-wrapper">
+                                    <CardHeader className="bg-secondary">
+                                        <h5 style={{ textDecorationLine: "underline", color: "white" }}>Mark Job As Complete & Request Confirmation From Hacker</h5>
+                                    </CardHeader>
+                                    <CardBody>
+                                        <p>This will initiate the <strong>nearing of completion</strong> for both you and the other user (hacker). You should <strong>ONLY</strong> activate this option <strong>IF YOU'RE ENTIRELY FINISHED</strong> with said contract & are requesting to end/complete the job to release any pending resulting funds/money to be credited to your account..</p>
+                                        <hr />
+                                        <p className='lead'>This will <strong>COMPLETE</strong> this entire process-flow and once <strong>confirmed by both parties</strong> involved, will release all pending funds that you've deposited previously in which {process.env.REACT_APP_APPLICATION_NAME} has collected and held until the release point..</p>
+                                        <hr />
+                                        <Button onClick={() => handleTotalCompletion()} className={"btn-square-secondary"} color={"secondary-2x"} outline style={{ width: "100%" }}>Mark Job As Complete & Request Confirmation (from hacker)</Button>
+                                    </CardBody>
+                                </Card>
                             </CardBody>
                         </Card>
                     </Col>

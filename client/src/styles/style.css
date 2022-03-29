@@ -768,12 +768,19 @@ Banner Area Style
 }
 
 .banner-area.banner-item-bg-1 {
-  background-image: url(../assets/img/home-one/home1-banner.jpg);
+  background-image: url(../assets/images/hacker-banner.jpeg);
 }
-
+.wrapme {
+  word-break: break-all;
+  hyphens: auto;
+}
 .banner-area .banner-text {
   position: relative;
-  max-width: 690px;
+  max-width: 825px;
+  background-color: rgba(0, 0, 0, 0.45);
+  padding: 22.5px 37.5px;
+  border-radius: 22.5px;
+  border: 2.25px solid white;
   z-index: 1;
   overflow: hidden;
   margin-bottom: -8px;

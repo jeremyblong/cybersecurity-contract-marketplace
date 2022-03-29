@@ -54,7 +54,7 @@ router.post("/", async (req, resppppp, next) => {
                 const customPromise = new Promise((resolve, reject) => {
                     for (let index = 0; index < hacker.activeHiredHackingJobs.length; index++) {
                         const job = hacker.activeHiredHackingJobs[index];
-                        if (job.id === jobID) {
+                        if (job.generatedID === jobID) {
                             if (_.has(job, "paymentHistory")) {
                                 job.paymentHistory.push(newPaymentCompleted);
                             } else {
@@ -92,7 +92,7 @@ router.post("/", async (req, resppppp, next) => {
 
                         for (let index = 0; index < employer.activeHiredHackers.length; index++) {
                             const job = employer.activeHiredHackers[index];
-                            if (job.id === jobID) {
+                            if (job.generatedID === jobID) {
                                 if (_.has(job, "paymentHistory")) {
                                     job.paymentHistory.push(newPaymentCompleted);
                                 } else {

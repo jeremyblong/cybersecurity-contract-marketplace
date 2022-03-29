@@ -3,11 +3,25 @@
     box-shadow: 0 0.25rem 1.5rem rgba(0, 0, 0, 0.248);
 }
 .static-top-widget-custom-hired {
-    min-height: 200px;
+    min-height: 225px;
+    height: calc(100% + 32.5px);
+}
+.static-top-widget-custom-hired-longer {
+    min-height: 325px;
+    height: calc(100% + 32.5px);
 }
 .counter-custom-hired-account {
     position: absolute;
-    bottom: 35px;
+    bottom: 22.5px;
+    color: white !important;
+    text-decoration-line: underline;
+    font-weight: 525;
+    left: 32.5px;
+    right: 5px;
+}
+.counter-custom-hired-account-upper {
+    position: absolute;
+    bottom: 67.5px;
     color: white !important;
     text-decoration-line: underline;
     font-weight: 525;

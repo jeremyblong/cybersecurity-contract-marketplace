@@ -228,7 +228,8 @@ app.use("/create/payout/and/cashout/both/account/types", require("./routes/share
 app.use("/gather/hired/employer/information/hacker/account", require("./routes/hackers/hiredRelatedLogic/fetchIndividualData/fetchHiredHackerData.js"));
 app.use("/submit/data/employed/contract/data/hacker", require("./routes/hackers/hiredRelatedLogic/submitDataUpdates/submitProgressReport.js"));
 app.use("/gather/hacker/submitted/information/employer/account", require("./routes/employers/hiredHackers/viewSubmittedData/viewSubmittedHackerDataFindings.js"));
-
+app.use("/mark/complete/request/confirmation/hacker/account", require("./routes/hackers/hiredRelatedLogic/markCompleteRequestReview/markCompleteAndRequestAReview.js"));
+app.use("/mark/complete/request/confirmation/employer/account", require("./routes/employers/hiredHackers/markCompleteRequestReview/markCompleteAndRequestAReview.js"));
 
 // ~ webhook logic STARTS here ~
 app.use("/passbase/webhook", require("./webhooks/passbase/webhook.js"));

@@ -71,7 +71,7 @@ const ClearPaymentsOrPartialPane = ({ listing, setCurrentApplication, currentApp
                             hackerID: currentApplication.applicantId,
                             activeCard,
                             publicCompanyName: listing.publicCompanyName,
-                            jobID: currentApplication.id
+                            jobID: currentApplication.generatedID
                         };
                 
                         axios.post(`${process.env.REACT_APP_BASE_URL}/deposit/funds/specific/hacker/initialization/process/partial/specific`, config).then((res) => {

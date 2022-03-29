@@ -8,15 +8,15 @@ const TopHeader = () => {
                     <div className="col-lg-6 col-sm-8">
                         <ul className="header-content-left">
                             <li>
-                                <a href="mailto:hello@pisa.com">
+                                <a href="mailto:support@thehackermarketplace.com">
                                     <i className="bx bx-envelope"></i>
-                                    Email: hello@pisa.com
+                                    Email: support@thehackermarketplace.com
                                 </a>
                             </li>
 
                             <li>
                                 <i className="bx bx-location-plus"></i>
-                                658 Lane Drive St. California
+                                    Central Los Angeles, CA 90012
                             </li>
                         </ul>
                     </div>
