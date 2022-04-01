@@ -15,6 +15,10 @@
 .product-social-listing-custom li {
    
 }
+.price-price-header-topper:hover {
+    color: #f73164;
+    cursor: pointer;
+}
 .redish-b {
     color: black;
 }

@@ -101,7 +101,7 @@ const Navbar = ({ data, authenticated, authentication, saveListingData, saveSoft
                                 <nav className="navbar navbar-expand-md navbar-light">
                                     <Link to="/">
                                         <a onClick={() => setCollapsed(true)} className="navbar-brand">
-                                            <img src={require("../../assets/images/placeholderlogo.png")} className={"logo-customized"} />
+                                            <img src={require("../../assets/images/logo-long-transparent.png")} className={"logo-customized"} />
                                         </a>
                                     </Link>
                                     {/* frequently-asked-questions */}
@@ -317,22 +317,27 @@ const Navbar = ({ data, authenticated, authentication, saveListingData, saveSoft
                                                             <a onClick={() => setCollapsed(true)} className="nav-link nav-link-custom-homepage">Blog Main/Grid</a>
                                                         </Link>
                                                     </li>
-
+                                                    {/* 
                                                     <li className="nav-item custom-nav-item-link">
                                                         <Link to="/blog-left-sidebar" activeClassName="active">
                                                             <a onClick={() => setCollapsed(true)} className="nav-link nav-link-custom-homepage">Blog Left Sidebar</a>
                                                         </Link>
-                                                    </li>
-
+                                                    </li> */}
+                                                    {/* 
                                                     <li className="nav-item custom-nav-item-link">
                                                         <Link to="/blog-right-sidebar" activeClassName="active">
                                                             <a onClick={() => setCollapsed(true)} className="nav-link nav-link-custom-homepage">Blog Right Sidebar</a>
                                                         </Link>
-                                                    </li>
-
+                                                    </li> */}
+                                                    {/*     
                                                     <li className="nav-item custom-nav-item-link">
                                                         <Link to="/blog-details" activeClassName="active">
                                                             <a onClick={() => setCollapsed(true)} className="nav-link nav-link-custom-homepage">Blog Details</a>
+                                                        </Link>
+                                                    </li> */}
+                                                    <li className="nav-item custom-nav-item-link">
+                                                        <Link to="/create-new-blog" activeClassName="active">
+                                                            <a onClick={() => setCollapsed(true)} className="nav-link nav-link-custom-homepage">Create A New Blog</a>
                                                         </Link>
                                                     </li>
                                                 </ul>

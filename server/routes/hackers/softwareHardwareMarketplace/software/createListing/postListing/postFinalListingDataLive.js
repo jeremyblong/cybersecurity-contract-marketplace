@@ -57,8 +57,8 @@ router.post("/", (req, resppppp, next) => {
         responses: [], 
         bookmarks: 0, 
         likes: 0,
-        bids: auctionPriceRelatedData.auctionSelectedType.includes("auction") ? [] : undefined,
-        currentBidPrice: auctionPriceRelatedData.auctionSelectedType.includes("auction") ? auctionPriceRelatedData.startBid || 0 : undefined
+        bids: auctionPriceRelatedData.auctionPurchaseType.includes("auction") ? [] : undefined,
+        currentBidPrice: auctionPriceRelatedData.auctionPurchaseType.includes("auction") ? auctionPriceRelatedData.startBid || 0 : undefined
     });
 
     newListing.save((error, data) => {

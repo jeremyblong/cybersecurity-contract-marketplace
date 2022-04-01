@@ -1,0 +1,17 @@
+.subtitle-header-blog {
+    font-size: 1.2rem;
+    color: #f73164;
+}
+.my-anchor-css-class-blogging {
+    color: #f73164;
+}
+.thin-grey-line {
+    border-top: 1px solid rgb(235, 235, 235) !important;
+}
+.no-comments-blog {
+    min-width: 100%;
+    min-height: 475px;
+    border-radius: 22.5px;
+    border: 7.5px solid white;
+    box-shadow: 0 0.75rem 1rem rgba(0, 0, 0, 0.425);
+}

@@ -140,9 +140,7 @@ const FooterTwo = () => {
 				<div className="container">
 					<div className="row align-items-center">
 						<div className="col-lg-6 col-md-6">
-							<p>
-								Copyright <i className="bx bx-copyright"></i>2021 Pisa. Designed By <a href="https://envytheme.com/" target="blank">EnvyTheme</a>
-							</p>
+							<p>Copyright 2020 © CyberHunt CyberSecurity Marketplace Inc.</p>
 						</div>
 
 						<div className="col-lg-6 col-md-6">

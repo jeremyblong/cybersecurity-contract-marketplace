@@ -349,47 +349,76 @@ const RenderNoThumbnailProvided = ({ scrollToTourWrapper, stepOpen, setStepOpenS
     );
 }
 const ThumbnailListingRenderHelper = ({ thumbnailImage }) => {
-    // state logic
-    const [ modalOpen, setModalOpen ] = useState(false);
-    const [ file, setFile ] = useState(null);
-    // prep image URL
-    const url = `${process.env.REACT_APP_ASSET_LINK}/${thumbnailImage.link}`;
-    // on image click helper
+
     const handleImageClick = () => {
         // open modal and display image
         setModalOpen(true);
     }
-    return (
-        <Col sm="12" md="6" lg="6" xl="6">
-            <Modal classNames={{
-                overlay: 'modalOverylayDisplayThumbnail',
-                modal: 'customThumbnailModal',
-            }} open={modalOpen} onClose={() => {
-                setModalOpen(false);
-            }} center>
-                <div className="d-flex w-100 custom-modal-interior-div">
-                    <div className="boxed-image-wrapper">
-                        <img src={url} className="inner-img-thumbnail" />
+
+    const [ modalOpen, setModalOpen ] = useState(false);
+    const [ file, setFile ] = useState(null);
+    // prep image URL
+    // state logic
+    if (thumbnailImage !== null) {
+        const url = `${process.env.REACT_APP_ASSET_LINK}/${thumbnailImage.link}`;
+        return (
+            <Col sm="12" md="6" lg="6" xl="6">
+                <Modal classNames={{
+                    overlay: 'modalOverylayDisplayThumbnail',
+                    modal: 'customThumbnailModal',
+                }} open={modalOpen} onClose={() => {
+                    setModalOpen(false);
+                }} center>
+                    <div className="d-flex w-100 custom-modal-interior-div">
+                        <div className="boxed-image-wrapper">
+                            <img src={url} className="inner-img-thumbnail" />
+                        </div>
                     </div>
-                </div>
-            </Modal>
-            <ListGroupItem className="list-group-item-action flex-column align-items-start custom-listgroup-item-outter custom-listgroup-item-outter-thumbnail">
-                <div style={{ paddingBottom: "17.5px" }} className="d-flex w-100 justify-content-between">
-                    <h6><p className="descriptive-chunk">Thumbnail Image/Preview</p></h6><strong className="top-right-title">Preview</strong>
-                </div>
-                <p><strong>CLICK</strong> this image to enlarge and examine it. This is the <strong>FIRST</strong> picture people will see when scrolling for software for sale so make sure it's a quality and high-quality image!</p>
-                <div className="natural-sm-spacer" />
-                <div className="natural-sm-spacer" />
-                <div className="d-flex w-100">
-                    <div onClick={handleImageClick} className="boxed-image-wrapper">
-                        <img src={url} className="inner-img-thumbnail" />
+                </Modal>
+                <ListGroupItem className="list-group-item-action flex-column align-items-start custom-listgroup-item-outter custom-listgroup-item-outter-thumbnail">
+                    <div style={{ paddingBottom: "17.5px" }} className="d-flex w-100 justify-content-between">
+                        <h6><p className="descriptive-chunk">Thumbnail Image/Preview</p></h6><strong className="top-right-title">Preview</strong>
                     </div>
-                </div>
-            </ListGroupItem>
-        </Col>
-    );
+                    <p><strong>CLICK</strong> this image to enlarge and examine it. This is the <strong>FIRST</strong> picture people will see when scrolling for software for sale so make sure it's a quality and high-quality image!</p>
+                    <div className="natural-sm-spacer" />
+                    <div className="natural-sm-spacer" />
+                    <div className="d-flex w-100">
+                        <div onClick={handleImageClick} className="boxed-image-wrapper">
+                            <img src={url} className="inner-img-thumbnail" />
+                        </div>
+                    </div>
+                </ListGroupItem>
+            </Col>
+        );
+    } else {
+        return null;
+    }
 }
 const RenderScreenshotedUploadsHelper = ({ screenshotUploadImages }) => {
+
+    // const [ imageState, setImageState ] = useState([]);
+
+    // useEffect(() => {
+    //     const newImageArray = [];
+
+    //     for (let index = 0; index < screenshotUploadImages.length; index++) {
+    //         const file = screenshotUploadImages[index];
+
+    //         if (file.type.includes("image")) {
+    //             newImageArray.push({
+    //                 original: `${process.env.REACT_APP_ASSET_LINK}/${file.link}`,
+    //                 thumbnail: `${process.env.REACT_APP_ASSET_LINK}/${file.link}`
+    //             })
+    //         } else {
+    //             newImageArray.push({
+    //                 original: process.env.REACT_APP_PLACEHOLDER_IMAGE,
+    //                 thumbnail: process.env.REACT_APP_PLACEHOLDER_IMAGE
+    //             })
+    //         }
+    //     }
+    //     setImageState(newImageArray);
+
+    // }, [screenshotUploadImages])
     return (
         <div id="gallery-container-slideshow">
             <ListGroupItem className="list-group-item-action flex-column align-items-start custom-listgroup-item-outter-screenshots">

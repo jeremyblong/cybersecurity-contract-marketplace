@@ -6,8 +6,8 @@ const LatesNewStyleTwo = () => {
         <section className="blog-area pb-70">
 			<div className="container">
 				<div className="section-title">
-					<h2>Latest News From Blog</h2>
-					<p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Doloribus quam neque quibusdam corrupti aspernatur corporis alias nisi dolorum expedita veritatis voluptates minima.</p>
+					<h2>Latest News From "The Hacker Marketplace"</h2>
+					<p>View our blogs, updates and <strong>any new content</strong> availiable on "The Hacker Marketplace"! We post <strong>very frequently</strong> so make sure to <strong>stay tuned</strong> for breaking news, tutorials, updates on local cybersecurity "best practices" & much more..</p>
 				</div>
 
 				<div className="row">

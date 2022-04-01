@@ -142,6 +142,8 @@ const PageFourMainHelper = ({ previouslySavedSoftwareData, saveSoftwareListingIn
     const renderMainContentChunk = () => {
         const { category, listingTitle, description, codingLanguageContent, auctionPriceRelatedData, auctionPurchaseType, commentToReviewer, demoURL, hashtags, listingTimespan, supportExternalURL, supportProvidedExternalURL, supportResponseTimespanData, uploadedPublicFiles, thumbnailImage } = previouslySavedSoftwareData;
 
+        console.log("previouslySavedSoftwareData previouslySavedSoftwareData", previouslySavedSoftwareData);
+
         const supportDetails = {
             ...supportResponseTimespanData,
             supportProvidedExternalURL,
@@ -316,7 +318,7 @@ const PageFourMainHelper = ({ previouslySavedSoftwareData, saveSoftwareListingIn
                             </Col>
                             <Col sm="12" md="6" lg="6" xl="6">
                                 <ListGroup>
-                                    {renderConvertedListingTypeValue(auctionPriceRelatedData.auctionSelectedType)}
+                                    {typeof auctionPriceRelatedData !== "undefined" && "undefined" && auctionPriceRelatedData.auctionSelectedType !== null ? renderConvertedListingTypeValue(auctionPriceRelatedData.auctionSelectedType) : null}
                                 </ListGroup>
                             </Col>
                         </Row>

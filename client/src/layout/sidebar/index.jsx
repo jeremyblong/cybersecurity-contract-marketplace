@@ -278,8 +278,8 @@ const Sidebar = (props) => {
       <div className="sidebar-wrapper">
         <div className="logo-wrapper">
           <Link to={props.userData.accountType === "employers" ? "/dashboard/employer" : "/dashboard/hacker"}>
-            <img className="img-fluid logo_long_top_left for-light" src={require("../../assets/images/logo_one.png")} alt="" />
-            <img className="img-fluid logo_long_top_left for-dark" src={require("../../assets/images/logo_large_white.png")} alt="" />
+            <img className="img-fluid logo_long_top_left for-light" src={require("../../assets/images/logo-saturated-shorter.png")} alt="" />
+            <img className="img-fluid logo_long_top_left for-dark" src={require("../../assets/images/logo-saturated-shorter.png")} alt="" />
           </Link>
           <div className="back-btn" onClick={() => responsiveSidebar()}><i className="fa fa-angle-left"></i></div>
           <div className="toggle-sidebar" onClick={() => openCloseSidebar(sidebartoogle)}><Grid className="status_toggle middle sidebar-toggle" /></div>

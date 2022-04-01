@@ -179,6 +179,7 @@ div#gallery-container-slideshow li.list-group-item-action.flex-column.align-item
 }
 .gallery-wrapper-image {
     max-height: 435px !important;
+    overflow-y: scroll;
     width: 100%;
     min-height: 435px !important;
 }

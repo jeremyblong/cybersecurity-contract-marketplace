@@ -58,7 +58,7 @@ const EffectiveProtection = () => {
 											className="content-css"
 											anchorClass="my-anchor-css-class"
 											onClick={() => handleOpener("one")}
-											expanded={openReadMore.one}
+											expanded={openReadMore.two}
 											truncatedEndingComponent={"... "}
 										>
 											<p>Level-up your game <strong>(literally - with our ranking system)</strong> and chase the leaderboard spots, sell your custom-coded 'hacks' via our software exchange marketplace <strong>and even live stream</strong> LIVE hack's to your followers! (Yes, You can also follow and be followed by various users)</p>
@@ -68,7 +68,7 @@ const EffectiveProtection = () => {
 								<div className="col-lg-6 col-sm-6">
 									<div className="single-security single-security-addon">
 										<i className="flaticon-order"></i>
-										<h3>Connect with others in a 'social' way/manner</h3>
+										<h3>Connect with others in a 'social' manner leading to a low-stress environment ultimately leading to more leads, income and success</h3>
 										<ShowMoreText
 											lines={5}
 											more="Show more"
@@ -76,10 +76,10 @@ const EffectiveProtection = () => {
 											className="content-css"
 											anchorClass="my-anchor-css-class"
 											onClick={() => handleOpener("one")}
-											expanded={openReadMore.one}
+											expanded={openReadMore.three}
 											truncatedEndingComponent={"... "}
 										>
-											<p>Browse other hackers profile's and interact <strong>only</strong> when and if <strong>you</strong> want to! After successful sign-up and authentication, we provide numerous resources to up your <strong>'game'</strong> such as games, forums & more!</p>
+											<p>The Hacker Marketplace makes a typically/potentially 'stressful' process drastically less stressful and most of all, cultivates a casual work environment where user's can explore any other users accounts and find that exact perfect-match candidate! As an employer, find your EXACT match and/or the perfect candidate. Hacker's are guaranteed to make money money through our platform as sole-actors do not have the typical overhead of security firms and other similar competitors.</p>
 										</ShowMoreText>
 									</div>
 								</div>
@@ -88,7 +88,7 @@ const EffectiveProtection = () => {
 								<div className="col-lg-6 col-sm-6">
 									<div className="single-security single-security-addon mb-0">
 										<i className="flaticon-technical-support"></i>
-										<h3>Meets your social needs while also being your professional home!</h3>
+										<h3><strong>Invest</strong> your free-time and skills in a marketplace with <strong>high-paying</strong> jobs and a <strong>steady</strong> stream of employers. You are in <strong>complete control</strong> of your own career.</h3>
 										<ShowMoreText
 											lines={5}
 											more="Show more"
@@ -96,10 +96,10 @@ const EffectiveProtection = () => {
 											className="content-css"
 											anchorClass="my-anchor-css-class"
 											onClick={() => handleOpener("one")}
-											expanded={openReadMore.one}
+											expanded={openReadMore.four}
 											truncatedEndingComponent={"... "}
 										>
-											<p>There are many websites out there that provide a space for coders and cyber-security experts to work together and make money. The difference with the Hacker Marketplace is that we focus on creating a space for those that share similar mindsets, skills, backgrounds, interests. We provide a safe environment for like-minded individuals to not only meet but code and collaborate together in order to make more than what could be accomplished otherwise.</p>
+											<p>As an independent contractor, you can choose the projects that interest you and work on them as much or as little as suits your situation. You'll be rewarded for hard work with high-paying employment opportunities from employers who are always seeking qualified contractors.</p>
 										</ShowMoreText>
 									</div>
 								</div>

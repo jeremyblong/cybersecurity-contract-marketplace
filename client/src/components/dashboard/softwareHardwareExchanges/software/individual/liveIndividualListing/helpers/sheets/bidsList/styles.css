@@ -1,0 +1,17 @@
+.no-bids-available-video {
+    max-height: 575px;
+    min-width: 100%;
+}
+.bidder-name {
+    font-size: 1.125rem;
+    text-align: center;
+    min-width: 100%;
+}
+.bids-listgroup {
+    min-width: 100%;
+}
+.absolute-right-bid {
+    position: absolute;
+    right: 15px;
+    top: 5px;
+}

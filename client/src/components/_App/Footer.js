@@ -217,7 +217,7 @@ const Footer = () => {
                     <div className="row align-items-center">
                         <div className="col-lg-6">
                             <div className="copy-right">
-                                <p>Copyright &copy;{currentYear} Pisa. Designed <a href="https://envytheme.com/" target="blank">EnvyTheme</a></p>
+                                <p>Copyright 2020 © CyberHunt CyberSecurity Marketplace Inc.</p>
                             </div>
                         </div>
 

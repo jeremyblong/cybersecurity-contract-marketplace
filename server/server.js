@@ -15,6 +15,15 @@ const passport = require("passport");
 const { Connection } = require("./mongoUtil.js");
 const flash = require('connect-flash');
 const session = require('express-session');
+// websockets logic initialization
+const http = require("http");
+const server = http.createServer(app);
+const io = require('socket.io')(server, {
+	cors: {
+		origin: '*',
+	}
+});
+
 
 app.use(cookieParser(config.get("COOKIE_SECRET")));
 
@@ -230,6 +239,14 @@ app.use("/submit/data/employed/contract/data/hacker", require("./routes/hackers/
 app.use("/gather/hacker/submitted/information/employer/account", require("./routes/employers/hiredHackers/viewSubmittedData/viewSubmittedHackerDataFindings.js"));
 app.use("/mark/complete/request/confirmation/hacker/account", require("./routes/hackers/hiredRelatedLogic/markCompleteRequestReview/markCompleteAndRequestAReview.js"));
 app.use("/mark/complete/request/confirmation/employer/account", require("./routes/employers/hiredHackers/markCompleteRequestReview/markCompleteAndRequestAReview.js"));
+app.use("/place/bid/software/listing", require("./routes/hackers/softwareHardwareMarketplace/bidOnAuction/placeNewBidAuction/placeANewBid.js"));
+app.use("/submit/new/blog/post/admin", require("./routes/adminONLY/newBlogPost/postNewBlogPostUnauth.js"));
+app.use("/gather/all/blogs/forward/facing", require("./routes/unauthenticated/blogs/gatherPreviousBlogs/gatherAllBlogs.js"));
+app.use("/gather/individual/foward/facing/blog", require("./routes/unauthenticated/blogs/gatherIndividualBlog/gatherIndividualBlog.js"));
+app.use("/gather/all/blogs/forward/facing/snippet", require("./routes/unauthenticated/blogs/gatherPreviousBlogs/gatherBreifListBlogs.js"));
+app.use("/like/blog/post/authenticated", require("./routes/unauthenticated/blogs/reactToBlog/like/likeSpecificBlogPost.js"));
+app.use("/dislike/blog/post/authenticated", require("./routes/unauthenticated/blogs/reactToBlog/dislike/processDislikeBlogPost.js"));
+app.use("/post/comment/blog/post/forward/facing/side", require("./routes/unauthenticated/blogs/reactToBlog/commentRelated/postNewComment/postANewCommentBlogPost.js"));
 
 // ~ webhook logic STARTS here ~
 app.use("/passbase/webhook", require("./webhooks/passbase/webhook.js"));
@@ -255,26 +272,24 @@ app.get('/*', cors(), function(_, res) {
 	};
 });
 
-// app.use(function(req, res, next) {
-// 	res.header("Access-Control-Allow-Origin", req.headers.origin);
-// 	res.header("Access-Control-Allow-Credentials", true);
-// 	res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-// 	res.header("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json');
-// 	next();
-// });
+io.on("connection", socket => {
 
-// io.on("connection", socket => {
+	console.log("New client connected");
 
-// 	console.log("New client connected");
+	socket.on("newBidRecieved", (listing) => {
+		console.log("NEW BID RECIEVED!...", listing);
 
-// 	socket.on("disconnect", () => console.log("Client disconnected"));
-// });
+		io.sockets.emit("newBidRecieved", listing);
+	})
+
+	socket.on("disconnect", () => console.log("Client disconnected"));
+});
 
 runCronJob();
 
 Connection.open();
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
 
 	console.log(`app listening on port ${PORT}!`);
 });

@@ -73,7 +73,7 @@ import BlogRightSidebar from "./pages/blog-right-sidebar.js";
 import MountingLogicRedux from "./mountingLogicRedux.js";
 import SimpleReactLightbox from 'simple-react-lightbox';
 import UnauthorizedAccessPage from "./pages/dashboard/unauthorized/unauthorizedAccess.js";
-
+import CreateANewBlogPostPage from "./pages/unauthenticatedMisc/blogRelated/postNewBlogPage.js";
 
 require('dotenv').config();
 
@@ -230,12 +230,13 @@ const Root = (props) =>  {
         <Route exact path="/team" render={(props) => renderComponent(Team, props)} />
         <Route exact path="/service-details" render={(props) => renderComponent(ServiceDetails, props)} />
         <Route exact path="/blog-main" render={(props) => renderComponent(BlogGrid, props)} />
-        <Route exact path="/blog-details" render={(props) => renderComponent(BlogDetails, props)} />
+        <Route exact path="/blog-details/:id" render={(props) => renderComponent(BlogDetails, props)} />
         <Route exact path="/services-one" render={(props) => renderComponent(ServicesOne, props)} />
         <Route exact path="/services-two" render={(props) => renderComponent(ServicesTwo, props)} />
         <Route exact path="/services-three" render={(props) => renderComponent(ServicesThree, props)} />
         <Route exact path="/blog-left-sidebar" render={(props) => renderComponent(BlogLeftSidebar, props)} />
         <Route exact path="/blog-right-sidebar" render={(props) => renderComponent(BlogRightSidebar, props)} />
+        <Route exact path="/create-new-blog" render={(props) => renderComponent(CreateANewBlogPostPage, props)} />
         <App>
           <TransitionGroup>
             {routes.map(({ path, Component }) => renderDashboardComponents(path, Component))}

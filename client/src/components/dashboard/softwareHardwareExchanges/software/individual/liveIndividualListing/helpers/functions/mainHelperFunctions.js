@@ -1,15 +1,15 @@
 import React, { Fragment } from "react";
 
-const preparePriceString = (item) => {
+const preparePriceString = (item, openBidListPane) => {
     const type = item.auctionPurchaseType;
     // AUCTION LISTINGS (((ONLY)))
     if (type.includes("auction")) {
         if (type === "auction-ONLY") {
             const bids = item.bids;
-            const currentPrice = item.currentBidPrice;
+            const currentPrice = Number(item.currentBidPrice);
             return (
                 <Fragment>
-                    <p className={"price-price-header"}><code className={"custom-price-tag"}>{`${bids.length}`}</code> {"reserved price"}</p>
+                    <p onClick={() => openBidListPane(true)} className={"price-price-header price-price-header-topper"}><code className={"custom-price-tag"}>{`${bids.length}`}</code> {"current bids"}</p>
                     <div />
                     <p className={"price-price-header"}><code className={"custom-price-tag"}>{`$${currentPrice.toFixed(2)}(USD)`}</code> current price (${item.auctionPriceRelatedData.biddingIncrementInterval.value.toFixed(2)} Minimum Bid Increment)</p>
                     <div />
@@ -20,11 +20,11 @@ const preparePriceString = (item) => {
         } else if (type === "auction-AND-buy-it-now") {
             const reservePrice = item.auctionPriceRelatedData.reservePrice;
             const buyitnowPrice = item.auctionPriceRelatedData.buyItNowData.buyItNowPrice;
-            const currentPrice = item.currentBidPrice;
+            const currentPrice = Number(item.currentBidPrice);
             const bids = item.bids;
             return (
                 <Fragment>
-                    <p className={"price-price-header"}><code className={"custom-price-tag"}>{`$${currentPrice.toFixed(2)}(USD)`}</code> current price (${item.auctionPriceRelatedData.biddingIncrementInterval.value.toFixed(2)} Minimum Bid Increment)</p>
+                    <p onClick={() => openBidListPane(true)} className={"price-price-header price-price-header-topper"}><code className={"custom-price-tag"}>{`$${currentPrice.toFixed(2)}(USD)`}</code> current price (${item.auctionPriceRelatedData.biddingIncrementInterval.value.toFixed(2)} Minimum Bid Increment)</p>
                     <div />
                     <p className={"price-price-header"}><code className={"custom-price-tag"}>{bids.length}</code> current bids</p>
                     <div />

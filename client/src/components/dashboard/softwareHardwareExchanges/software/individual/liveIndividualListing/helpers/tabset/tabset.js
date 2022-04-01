@@ -50,7 +50,7 @@ const TabsetIndividualLiveListingHelper = ({ passedData, ready, user }) => {
                                     </div>
                                     <Col className="adjust-top-margin" md="12" sm="12" lg="12" xl="12">
                                         <Label style={{ marginTop: "27.5px" }} className="custom-label-view">'About Me' (about the poster) section</Label>
-                                        <p className="aboutme-other-user-bio">{user.aboutMe}</p>
+                                        <p className="aboutme-other-user-bio">{_.has(user, "aboutMe") ? user.aboutMe : "None Provided."}</p>
                                     </Col>
                                 </Col>
                                 {passedData.auctionPurchaseType.includes("auction") ? <Col md="4" sm="12" lg="4" xl="4">
@@ -112,7 +112,7 @@ const TabsetIndividualLiveListingHelper = ({ passedData, ready, user }) => {
                                                     <div className="media"><Aperture/>
                                                     <div className="media-body">
                                                         <h5 className="color-purple-red">{"Username"}</h5>
-                                                        <p>{user.username}</p>
+                                                        <p>{_.has(user, "username") ? user.username : "None Provided."}</p>
                                                     </div>
                                                     </div>
                                                 </li>
@@ -165,7 +165,7 @@ const TabsetIndividualLiveListingHelper = ({ passedData, ready, user }) => {
                                                     <div className="media"><Aperture/>
                                                     <div className="media-body">
                                                         <h5 className="color-purple-red">{"Gender"}</h5>
-                                                        <p>{user.gender.label}</p>
+                                                        <p>{_.has(user, "gender") ? user.gender.label : "None Provided"}</p>
                                                     </div>
                                                     </div>
                                                 </li>

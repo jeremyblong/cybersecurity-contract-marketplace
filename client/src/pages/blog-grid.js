@@ -1,156 +1,88 @@
-import React from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import Navbar from '../components/_App/Navbar';
 import PageBanner from '../components/Common/PageBanner';
 import Footer from '../components/_App/Footer';
-import {Link} from 'react-router-dom'; 
+import { Link } from 'react-router-dom'; 
+import axios from "axios";
+import ShowMoreText from "react-show-more-text";
 
 const BlogGrid = () => {
+
+    const [ blogs, setBlogsState ] = useState([]);
+    const [ blogOpenMore, setBlogViewMoreOpen ] = useState({});
+
+    useEffect(() => {
+        const configuration = {
+            params: {
+
+            }
+        }
+        axios.get(`${process.env.REACT_APP_BASE_URL}/gather/all/blogs/forward/facing`, configuration).then((res) => {
+            if (res.data.message === "Gathered blogs!") {
+                console.log(res.data);
+
+                const { blogs } = res.data;
+
+                const newBlogOpenState = {};
+                
+                for (let index = 0; index < blogs.length; index++) {
+                    newBlogOpenState[index] = false;
+                }
+
+                setBlogViewMoreOpen(newBlogOpenState);
+                setBlogsState(blogs);
+            } else {
+                console.log("Err", res.data);
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
+    }, []);
+
+    console.log("logging...:", blogOpenMore, blogs);
+
     return (
         <>
             <Navbar />
 
             <PageBanner 
-                pageTitle="Blog Grid" 
+                pageTitle={`Blog's Posted By 'The Hacker Marketplace'`} 
                 homePageUrl="/" 
                 homePageText="Home" 
-                activePageText="Blog Grid" 
+                activePageText={`Blog's Posted By 'The Hacker Marketplace'`} 
             /> 
 
             <section className="blog-area ptb-100">
                 <div className="container">
                     <div className="section-title">
-                        <h2>Latest News From Blog</h2>
-                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Doloribus quam neque quibusdam corrupti aspernatur corporis alias nisi dolorum expedita veritatis voluptates minima.</p>
+                        <h2>Latest News From "The Hacker Marketplace"</h2>
+                        <p>View our blogs, updates and <strong>any new content</strong> availiable on "The Hacker Marketplace"! We post <strong>very frequently</strong> so make sure to <strong>stay tuned</strong> for breaking news, tutorials, updates on local cybersecurity "best practices" & much more..</p>
                     </div>
 
                     <div className="row">
-                        <div className="col-lg-4 col-sm-6">
-                            <div className="single-blog">
-                                <img src="/img/blog/blog1.jpg" alt="Image" />
-
-                                <div className="blog-content">
-                                    <h3>
-                                        <Link to="/blog-details">
-                                            <a>Secure Managed IT</a>
-                                        </Link>
-                                    </h3>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolorer</p>
-
-                                    <Link to="/blog-details">
-                                        <a className="read-more">Read More</a>
-                                    </Link>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="col-lg-4 col-sm-6">
-                            <div className="single-blog">
-                                <img src="/img/blog/blog2.jpg" alt="Image" />
-
-                                <div className="blog-content">
-                                    <h3>
-                                        <Link to="/blog-details">
-                                            <a>Cloud Security</a>
-                                        </Link>
-                                    </h3>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolorer</p>
-                                    <Link to="/blog-details">
-                                        <a className="read-more">Read More</a>
-                                    </Link>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="col-lg-4 col-sm-6">
-                            <div className="single-blog">
-                                <img src="/img/blog/blog3.jpg" alt="Image" />
-
-                                <div className="blog-content">
-                                    <h3>
-                                        <Link to="/blog-details">
-                                            <a>Secure Managed IT</a>
-                                        </Link>
-                                    </h3>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolorer</p>
-                                    <Link to="/blog-details">
-                                        <a className="read-more">Read More</a>
-                                    </Link>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="col-lg-4 col-sm-6">
-                            <div className="single-blog">
-                                <img src="/img/blog/blog4.jpg" alt="Image" />
-
-                                <span>Cyber Security</span>
-                                <div className="blog-content">
-                                    <div className="date">
-                                        <i className="bx bx-calendar"></i>
-                                        Jun 20 2020
+                        {typeof blogs !== "undefined" && blogs.length > 0 ? blogs.map((blog, index) => {
+                            return (
+                                <Fragment>
+                                    <div className="col-lg-4 col-sm-6">
+                                        <div className="single-blog">
+                                            <img src="/img/blog/blog1.jpg" alt="Image" />
+                                            <span>{blog.viewedBy.length} Total View(s)</span>
+                                            <div className="blog-content">
+                                                <h3>
+                                                    <Link to={{ pathname: `/blog-details/${blog.id}` }}>
+                                                        <a>{blog.title.slice(0, 55)}{typeof blog.title !== "undefined" && blog.title.length >= 55 ? "..." : ""}</a>
+                                                    </Link>
+                                                </h3>
+                                                <p>{blog.subtitle.slice(0, 75)}{typeof blog.subtitle !== "undefined" && blog.subtitle.length >= 75 ? "..." : ""}</p>
+                                                <Link to={{ pathname: `/blog-details/${blog.id}` }}>
+                                                    <a className="read-more">Read More...</a>
+                                                </Link>
+                                            </div>
+                                        </div>
                                     </div>
-
-                                    <h3>
-                                        <Link to="/blog-details">
-                                            <a>DHS issues emergency directive to prevent hacking attack</a>
-                                        </Link>
-                                    </h3>
-
-                                    <Link to="/blog-details">
-                                        <a className="read-more">Read More</a>
-                                    </Link>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="col-lg-4 col-sm-6">
-                            <div className="single-blog">
-                                <img src="/img/blog/blog5.jpg" alt="Image" />
-
-                                <span>Cyber Crime</span>
-                                <div className="blog-content">
-                                    <div className="date">
-                                        <i className="bx bx-calendar"></i>
-                                        Jun 21 2020
-                                    </div>
-
-                                    <h3>
-                                        <Link to="/blog-details">
-                                            <a>Drughydrus  add google drive to roughrobin torjan</a>
-                                        </Link>
-                                    </h3>
-                                    
-                                    <Link to="/blog-details">
-                                        <a className="read-more">Read More</a>
-                                    </Link>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="col-lg-4 col-sm-6">
-                            <div className="single-blog">
-                                <img src="/img/blog/blog6.jpg" alt="Image" />
-
-                                <span>Hacking Protection</span>
-                                <div className="blog-content">
-                                    <div className="date">
-                                        <i className="bx bx-calendar"></i>
-                                        Jun 22 2020
-                                    </div>
-
-                                    <h3>
-                                        <Link to="/blog-details">
-                                            <a>Security in a fragment world of workload</a>
-                                        </Link>
-                                    </h3>
-                                    
-                                    <Link to="/blog-details">
-                                        <a className="read-more">Read More</a>
-                                    </Link>
-                                </div>
-                            </div>
-                        </div>
-
+                                </Fragment>
+                            );
+                        }) : null}
                         {/* Pagination */}
                         <div className="col-lg-12">
                             <div className="page-navigation-area">

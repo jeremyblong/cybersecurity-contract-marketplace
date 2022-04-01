@@ -1,7 +1,53 @@
-import React from 'react';
-import {Link} from 'react-router-dom'; 
+import React, { Fragment } from 'react';
+import { Link } from 'react-router-dom'; 
+import moment from "moment";
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 
-const Sidebar = () => {
+
+const Sidebar = ({ blogs }) => {
+    
+    const renderSkelatonLoading = () => {
+        return (
+            <Fragment>
+                <SkeletonTheme baseColor="#c9c9c9" highlightColor="#444">
+                    <p>
+                        <Skeleton count={30} />
+                    </p>
+                </SkeletonTheme>
+            </Fragment>
+        );
+    }
+
+    const renderMainContent = () => {
+        if (blogs !== null) {
+            return (
+                <Fragment>
+                    {blogs.map((blog, index) => {
+                        return (
+                            <Fragment key={index}>
+                                <div className="item">
+                                    <div className="info">
+                                        <span className="time">{moment(blog.date).fromNow()}</span>
+                                        <h4 className="title usmall">
+                                            <Link to={{ pathname: `/blog-details/${blog.id}` }}>
+                                                <a style={{ color: "#f73164" }}>{blog.title}</a>
+                                                <hr />
+                                                <a>{blog.subtitle.slice(0, 70)}{typeof blog.subtitle !== "undefined" && blog.subtitle.length >= 70 ? "..." : ""}</a>
+                                            </Link>
+                                        </h4>
+                                    </div>
+
+                                    <div className="clear"></div>
+                                </div>
+                            </Fragment>
+                        );
+                    })}
+                </Fragment>
+            );
+        } else {
+            return renderSkelatonLoading();
+        }
+    }
     return (
         <aside className="widget-area" id="secondary">
             <div className="widget widget_search mt-0">
@@ -21,60 +67,7 @@ const Sidebar = () => {
             <div className="widget widget-peru-posts-thumb">
                 <h3 className="widget-title">Popular Posts</h3>
                 <div className="post-wrap">
-                    <div className="item">
-                        <Link to="/blog-details">
-                            <a className="thumb">
-                                <span className="fullimage cover bg1" role="img"></span>
-                            </a>
-                        </Link>
-
-                        <div className="info">
-                            <span className="time">April 20, 2020</span>
-                            <h4 className="title usmall">
-                                <Link to="/blog-details">
-                                    <a>Drughydrus Add Google Drive To Roughrobin Torjan</a>
-                                </Link>
-                            </h4>
-                        </div>
-
-                        <div className="clear"></div>
-                    </div>
-
-                    <div className="item">
-                        <Link to="/blog-details">
-                            <a className="thumb">
-                                <span className="fullimage cover bg2" role="img"></span>
-                            </a>
-                        </Link>
-                        <div className="info">
-                            <span className="time">Jun 21, 2020</span>
-                            <h4 className="title usmall">
-                                <Link to="/blog-details">
-                                    <a>DHS Issues Emergency Directive To Prevent Hacking Attack</a>
-                                </Link>
-                            </h4>
-                        </div>
-
-                        <div className="clear"></div>
-                    </div>
-
-                    <div className="item">
-                        <Link to="/blog-details">
-                            <a className="thumb">
-                                <span className="fullimage cover bg3" role="img"></span>
-                            </a>
-                        </Link>
-                        <div className="info">
-                            <span className="time">Jun  22, 2020</span>
-                            <h4 className="title usmall">
-                                <Link to="/blog-details">
-                                    <a>Security In A Fragment World Of Workload</a> 
-                                </Link>
-                            </h4>
-                        </div>
-
-                        <div className="clear"></div>
-                    </div>
+                    {renderMainContent()}
                 </div>
             </div>
 

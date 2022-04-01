@@ -4,9 +4,7 @@ import { Container, Row, Col, Card, Button, Input, CardBody, Label, CardHeader, 
 import TabsetIndividualLiveListingHelper from './helpers/tabset/tabset.js';
 import { useHistory, withRouter } from 'react-router-dom';
 import "./styles.css";
-// import Ratings from 'react-ratings-declarative';
-import { ProductReview, AddToCart, BuyNow } from "../../../../../../constant";
-import uuid from "react-uuid";
+import { AddToCart, BuyNow } from "../../../../../../constant";
 import ImageGallery from 'react-image-gallery';
 import helpers from "./helpers/functions/mainHelperFunctions.js";
 import ReactMarkdown from 'react-markdown';
@@ -16,87 +14,99 @@ import moment from "moment";
 import _ from 'lodash';
 import axios from 'axios';
 import StarRatings from 'react-star-ratings';
+import PlaceABidSoftwareActionHelper from "./helpers/sheets/placeABid/placeBidPane.js";
+import { NotificationManager } from 'react-notifications';
+import io from 'socket.io-client';
+import ViewPreviousBidsListHelper from "./helpers/sheets/bidsList/viewBidListPrevious.js";
+import { connect } from "react-redux";
 
-const ViewIndividualListingSoftwarePageHelper = ({ location })  => {
+const newSocket = io(process.env.REACT_APP_BASE_URL);
+
+
+const ViewIndividualListingSoftwarePageHelper = ({ location, userData })  => {
 
     const history = useHistory();
     // state initializations
+    const [ socket, setSocket ] = useState(null);
     const [ passedData, setPassedDataState ] = useState(null);
     const [ posterUser, setPosterUserState ] = useState(null);
+    const [ bidsPane, openBidListPane ] = useState(false);
+    const [ sheetBidOpen, setSheetPaneOpen ] = useState(false);
+    const [ bidPrice, setBidPrice ] = useState(null);
     const [ ready, setReady ] = useState(false);
+    const [ timeLeft, setTimeLeft ] = useState(null);
 
     // helper functions
     const { preparePriceString } = helpers;
-    const [rating,setRating] = useState(0)
-    // eslint-disable-next-line
-    const slider1 = useRef();
-    const slider2 = useRef();
-
-    const calculateStatus = (num) => {
-        switch (num) {
-            case 1:
-                return "love"
-                break;
-            case 2: 
-                return "Hot"
-                break;
-            case 3:
-                return "gift"
-                break;
-            case 4: 
-                return "50%"
-                break;
-            case 5:
-                return "sale"
-                break;
-            default:
-                break;
-        }
-    }
+    const [rating,setRating] = useState(0);
 
     useEffect(() => {
-        const passedData = location.state.item;
+        setSocket(newSocket);
 
-        const firstURL = `${process.env.REACT_APP_ASSET_LINK}/${passedData.thumbnailImage.link}`;
-    
-        const galleryImages = [{ original: firstURL, thumbnail: firstURL } ,...passedData.screenshotUploadImages];
+        return () => newSocket.close();
+    }, [ setSocket ]);
 
-        const configuration = {
-            params: {
-                uniqueId: passedData.poster
+    console.log("socket", socket);
+
+    useEffect(() => {
+        if (typeof location.state !== "undefined" && location.state !== null) {
+            const passedData = location.state.item;
+
+            const firstURL = `${process.env.REACT_APP_ASSET_LINK}/${passedData.thumbnailImage.link}`;
+        
+            const galleryImages = [{ original: firstURL, thumbnail: firstURL } ,...passedData.screenshotUploadImages];
+
+            const configuration = {
+                params: {
+                    uniqueId: passedData.poster
+                }
             }
+
+            axios.get(`${process.env.REACT_APP_BASE_URL}/gather/core/anonymous/user/data`, configuration).then((res) => {
+                if (res.data.message === "Successfully gathered core user information!") {
+                    console.log(res.data);
+
+                    const { user } = res.data;
+
+                    const calculatedTimeMillisecondsEnd = moment(passedData.date).add(passedData.listingTimespan.value, "minutes");
+
+                    setTimeLeft({
+                        calculated: new Date(calculatedTimeMillisecondsEnd),
+                        posted: new Date(passedData.date)
+                    });
+
+                    setPosterUserState(user);
+
+                    setPassedDataState({
+                        ...passedData,
+                        bidCount: passedData.bids.length,
+                        galleryImages
+                    });
+                    setReady(true);
+                } else {
+                    console.log("Err", res.data);
+
+                    setPassedDataState({
+                        ...passedData,
+                        bidCount: passedData.bids.length,
+                        galleryImages
+                    });
+                    setReady(true);
+                }
+            }).catch((err) => {
+                console.log(err);
+            })
+        } else {
+            history.push("/software/exchange/landing")
         }
-
-        axios.get(`${process.env.REACT_APP_BASE_URL}/gather/core/anonymous/user/data`, configuration).then((res) => {
-            if (res.data.message === "Successfully gathered core user information!") {
-                console.log(res.data);
-
-                const { user } = res.data;
-
-                setPosterUserState(user);
-
-                setPassedDataState({
-                    ...passedData,
-                    galleryImages
-                });
-                setReady(true);
-            } else {
-                console.log("Err", res.data);
-
-                setPassedDataState({
-                    ...passedData,
-                    galleryImages
-                });
-                setReady(true);
-            }
-        }).catch((err) => {
-            console.log(err);
-        })
     }, [])
 
     const changeRating = (newRating) => {
         setRating(newRating)
     }
+
+    console.log("timeLeft", timeLeft);
+
     const renderUponReadyMainContent = () => {
         const notApplicable = "Not Applicable.";
 
@@ -136,7 +146,7 @@ const ViewIndividualListingSoftwarePageHelper = ({ location })  => {
                                         <h3>{passedData.listingTitle}</h3>
                                     </div>
                                     <div className="product-price f-28 custom-product-inner-price">
-                                        {preparePriceString(passedData)}
+                                        {preparePriceString(passedData, openBidListPane)}
                                     </div>
                                     <hr/>
                                     <Row>
@@ -147,12 +157,16 @@ const ViewIndividualListingSoftwarePageHelper = ({ location })  => {
                                             </div>
                                         </Col>
                                     </Row>
-                                    {/* auctionSelectedType */}
                                     <Row>
                                         <Col sm="12" md="12" lg="12" xl="12">
-                                            <p className="posted-ago-date">Posted {moment(passedData.systemDate).fromNow()}</p>
+                                            {new Date() > new Date(timeLeft.calculated) ? <p className="posted-ago-date">Auction has <em style={{ textDecorationLine: "underline" }}>ALREADY</em> ended.</p> : <p className="posted-ago-date">{moment(new Date()).from(new Date(timeLeft.calculated), true)} from <em style={{ textDecorationLine: "underline" }}>now</em> OR <em style={{ textDecorationLine: "underline" }}>{moment(new Date(timeLeft.calculated)).format("MM/DD hh:mm:ss a")}</em></p>}
                                             <div />
                                             <p className="normal-text-styled">Coupons Accepted? : {_.has(passedData.auctionPriceRelatedData, "discountCodeAcceptance") ? passedData.auctionPriceRelatedData.discountCodeAcceptance.label : notApplicable}</p>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col sm="12" md="12" lg="12" xl="12">
+                                            <Button className='btn-square-success' color='success-2x' style={{ width: "100%", marginTop: "22.5px" }} outline onClick={() => setSheetPaneOpen(true)}>Submit A New Bid/Bet</Button>
                                         </Col>
                                     </Row>
                                     <hr/>
@@ -468,11 +482,77 @@ const ViewIndividualListingSoftwarePageHelper = ({ location })  => {
             );
         }
     }
+
+    useEffect(() => {
+        if (socket !== null) {
+            
+            console.log("websocket is NO LONGER NULL!");
+
+            const newBidRecievedListener = (listing) => {
+                
+                console.log("newBidRecievedListener listening...", listing);
+
+                const parsed = JSON.parse(listing);
+
+                setPassedDataState(prevState => {
+                    return {
+                        ...prevState,
+                        currentBidPrice: parsed.currentBidPrice,
+                        bidCount: parsed.bids.length += 1
+                    }
+                })
+            };
+          
+            socket.on('newBidRecieved', newBidRecievedListener);
+        
+            return () => {
+              socket.off('newBidRecieved', newBidRecievedListener);
+            };
+        } else {
+            console.log("WS is currently null.");
+        }
+    }, [socket]);
+
+
+    const handleNewBidSubmission = () => {
+        console.log("handleNewBidSubmission clicked/ran...");
+
+        const configuration = {
+            signedinUserID: userData.uniqueId,
+            softwareListingID: passedData.uniqueId,
+            bidPrice,
+            posterID: passedData.poster,
+            signedinUserFullName: `${userData.firstName} ${userData.lastName}`
+        }
+
+        axios.post(`${process.env.REACT_APP_BASE_URL}/place/bid/software/listing`, configuration).then((res) => {
+            if (res.data.message === "Successfully placed a bid!") {
+                console.log(res.data);
+
+                const { newlyPlacedBid, listing } = res.data;
+
+                socket.emit('newBidRecieved', JSON.stringify(listing));
+
+                NotificationManager.success("Successfully placed your NEW BID! Your bid was successfully/properly placed and is NOW LIVE! Check the leaderboards and/or bid-history to see various updates as new bids come in.", "Successfully placed bid!", 4750);
+
+                setSheetPaneOpen(false);
+
+            } else if (res.data.message === "Error, enter a value higher than the existing bid price!") {
+                NotificationManager.warning("Enter a value HIGHER than the EXISTING value and/or the current price. New bids MUST be higher than the current amount!", "Enter a GREATER amount than the CURRENT PRICE!", 4750);
+            } else {
+                console.log("Err", res.data);
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
+    }
     console.log("passed DATA...: ", passedData);
     return (
         <Fragment>
             <Breadcrumb parent="Buy/sell/trade digital software & code" title="Individual Software Product Page"/>
             <Container fluid={true}>
+                <PlaceABidSoftwareActionHelper bidPrice={bidPrice} setBidPrice={setBidPrice} handleNewBidSubmission={handleNewBidSubmission} sheetBidOpen={sheetBidOpen} setSheetPaneOpen={setSheetPaneOpen} />
+                <ViewPreviousBidsListHelper bids={typeof passedData !== "undefined" && passedData !== null ? passedData.bids : null} bidsPane={bidsPane} openBidListPane={openBidListPane} />
                 <Row>
                     <Col>
                     <Card>
@@ -484,4 +564,9 @@ const ViewIndividualListingSoftwarePageHelper = ({ location })  => {
         </Fragment>
     );
 }
-export default withRouter(ViewIndividualListingSoftwarePageHelper);
+const mapStateToProps = (state) => {
+    return {
+        userData: state.auth.data
+    }
+}
+export default connect(mapStateToProps, { })(withRouter(ViewIndividualListingSoftwarePageHelper));
