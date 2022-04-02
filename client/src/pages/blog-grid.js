@@ -4,12 +4,29 @@ import PageBanner from '../components/Common/PageBanner';
 import Footer from '../components/_App/Footer';
 import { Link } from 'react-router-dom'; 
 import axios from "axios";
-import ShowMoreText from "react-show-more-text";
+import PaginationEmployerListingHelper from "../components/dashboard/universal/pagination/paginationHelper.js";
+
+
+const itemsPerPage = 6;
 
 const BlogGrid = () => {
 
     const [ blogs, setBlogsState ] = useState([]);
     const [ blogOpenMore, setBlogViewMoreOpen ] = useState({});
+    const [ currentPage, setCurrentPage ] = useState(0);
+    const [ pageCount, setPageCount ] = useState(0);
+    const [ itemOffset, setItemOffset ] = useState(0);
+    const [ permanentData, setPermenantData ] = useState([]);
+
+    // render EVERY CHANGE to pagination
+    useEffect(() => {
+        const endOffset = itemOffset + itemsPerPage;
+
+        setPageCount(Math.ceil(permanentData.length / itemsPerPage));
+
+        setBlogsState(permanentData.slice(itemOffset, endOffset));
+        
+    }, [itemOffset, itemsPerPage]);
 
     useEffect(() => {
         const configuration = {
@@ -29,8 +46,13 @@ const BlogGrid = () => {
                     newBlogOpenState[index] = false;
                 }
 
+                const endOffset = itemOffset + itemsPerPage;
+
+                // set state logic after successful fetch from db
+                setPermenantData(blogs);
                 setBlogViewMoreOpen(newBlogOpenState);
-                setBlogsState(blogs);
+                setBlogsState(blogs.slice(itemOffset, endOffset));
+                setPageCount(Math.ceil(blogs.length / itemsPerPage));
             } else {
                 console.log("Err", res.data);
             }
@@ -85,39 +107,7 @@ const BlogGrid = () => {
                         }) : null}
                         {/* Pagination */}
                         <div className="col-lg-12">
-                            <div className="page-navigation-area">
-                                <ul className="pagination">
-                                    <li className="page-item">
-                                        <Link to={"/"}>
-                                            <a className="page-link page-links">
-                                                <i className='bx bx-chevrons-left'></i>
-                                            </a>
-                                        </Link>
-                                    </li>
-                                    <li className="page-item active">
-                                        <Link to={"/"}>
-                                            <a className="page-link">1</a>
-                                        </Link>
-                                    </li>
-                                    <li className="page-item">
-                                        <Link to={"/"}>
-                                            <a className="page-link">2</a>
-                                        </Link>
-                                    </li>
-                                    <li className="page-item">
-                                        <Link to={"/"}>
-                                            <a className="page-link">3</a>
-                                        </Link>
-                                    </li>
-                                    <li className="page-item">
-                                        <Link to={"/"}>
-                                            <a className="page-link">
-                                                <i className='bx bx-chevrons-right'></i>
-                                            </a>
-                                        </Link>
-                                    </li>
-                                </ul>
-                            </div>
+                            <PaginationEmployerListingHelper itemsPerPage={itemsPerPage} setItemOffset={setItemOffset} loopingData={permanentData} setPageCount={setPageCount} pageCount={pageCount} currentPage={currentPage} setCurrentPage={setCurrentPage} />
                         </div>
                     </div>
                 </div>

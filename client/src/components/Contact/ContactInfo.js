@@ -1,41 +1,81 @@
 import React from 'react';
+import { Parallax } from 'react-parallax';
+import ReactMapboxGl, { Marker } from 'react-mapbox-gl';
+import { CardHeader, Card, CardBody, Col, Row } from 'reactstrap';
+import "./styles.css";
+
+const Map = ReactMapboxGl({
+    accessToken: process.env.REACT_APP_MAPBOX_TOKEN,
+    interactive: false
+});
 
 const ContactInfo = () => {
     return (
         <div className="contact-info-area">
 			<div className="container-fluid">
-				<div className="row">
-					<div className="col-lg-3 p-0">
-						<div className="single-contact-info">
-							<i className="bx bx-location-plus"></i>
-							<h3>New York</h3>
-							<p>88 Flower Avenue. Kingdom St. New York</p>
-							<a href="mailto:hello@pisa.com">Email: info@pisa.com</a>
-							<a href="tel:+822456974">+822456974</a>
-						</div>
-					</div>
-
-					<div className="col-lg-3 p-0">
-						<div className="single-contact-map">
-							<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d193595.1583091352!2d-74.11976373946234!3d40.69766374859258!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2sbd!4v1588019781257!5m2!1sen!2sbd"></iframe>
-						</div>
-					</div>
-
-					<div className="col-lg-3 p-0">
-						<div className="single-contact-info">
-							<i className="bx bx-location-plus"></i>
-							<h3>California</h3>
-							<p>658 Lane Drive st Riverside. California</p>
-							<a href="mailto:hello@pisa.com">Email: hello@pisa.com</a>
-							<a href="tel:+892-569-756">+892-569-756</a>
-						</div>
-					</div>
-
-					<div className="col-lg-3 p-0">
-						<div className="single-contact-map">
-							<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6509156.5834578!2d-123.79616103953882!3d37.1931243309143!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808fb9fe5f285e3d%3A0x8b5109a227086f55!2sCalifornia%2C%20USA!5e0!3m2!1sen!2sbd!4v1591218371520!5m2!1sen!2sbd"></iframe>
-						</div>
-					</div>
+				<div className='row'>
+					<Col sm="12" md="12" lg="12" xl="12">
+						<Card style={{ margin: "22.5px" }} className={"shadow"}>
+							<CardHeader className='b-l-info b-r-info'>
+								<h3>This is our <strong style={{ textDecorationLine: "underline" }}>corporate</strong> office location - we do NOT accept any walk-in's <strong style={{ textDecorationLine: "underline" }}>however</strong> we do accept 'booked' appointments..</h3>
+								<p className='lead'>If you're looking to <strong>partner with us</strong>, we would <strong>LOVE</strong> to introduce you to our team & corperate location and discuss next actions to help us further your agenda as well as ours!</p>
+							</CardHeader>
+							<CardBody>
+								<Row>
+									<Col sm="12" md="6" lg="6" xl="6">
+										<Card className='shadow equal-height'>
+											<CardBody>
+												<div className="calender-widget">
+													<div className="cal-img">
+														<img src={require("../../assets/images/logo-saturated-long.png")} className={"inner-contact-img"} />
+													</div>
+													<div className="cal-desc text-left card-body">
+														<h6 className="f-w-600 address-text-header">{"Company Location/Address"}</h6>
+														<p className="text-left mt-1 mb-0 address-text-contact">The Hacker Marketplace</p>
+														<p className="text-left mt-1 mb-0 address-text-contact">1634 North Lake Ave.</p>
+														<p className="text-left mt-1 mb-0 address-text-contact">Los Angeles, California 90012</p>
+													</div>
+												</div>
+											</CardBody>
+										</Card>
+									</Col>
+									<Col sm="12" md="6" lg="6" xl="6">
+										<Card className='shadow'>
+											<CardBody>
+												<Map
+													center={[-118.3228, 34.0687]}
+													style="mapbox://styles/mapbox/streets-v9"
+													containerStyle={{
+														height: "425px",
+														width: '100%',
+														border: "3px solid white"
+													}}
+												>
+													<Marker
+														coordinates={[-118.3228, 34.0687]}
+														anchor="bottom"
+													>
+														<img src={require("../../assets/icons/location.png")}/>
+													</Marker>
+												</Map>
+											</CardBody>
+										</Card>
+									</Col>
+								</Row>
+							</CardBody>
+						</Card>
+					</Col>
+				</div>
+				<div className='row'>
+					<Parallax
+						blur={{ min: -20, max: 20 }}
+						bgImage={require('../../assets/images/progressional-img.jpg')}
+						bgImageAlt="banner-image"
+						strength={425}
+					>
+						Blur transition from min to max
+						<div style={{ height: '500px' }} />
+					</Parallax>
 				</div>
 			</div>
 		</div>

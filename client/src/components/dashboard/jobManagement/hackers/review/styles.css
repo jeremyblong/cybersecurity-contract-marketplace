@@ -1,0 +1,11 @@
+.accesskey-text-input {
+    background-color: transparent;
+    border: 1px solid #f73164;
+}
+.header-review-main {
+    text-transform: capitalize;
+}
+.extrastrong-review {
+    color: #f73164;
+    text-decoration-line: underline;
+}

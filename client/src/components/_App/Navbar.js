@@ -273,8 +273,8 @@ const Navbar = ({ data, authenticated, authentication, saveListingData, saveSoft
                                                 
                                                 <ul className="dropdown-menu">
                                                     <li className="nav-item custom-nav-item-link">
-                                                        <Link to="/service-details" activeClassName="active">
-                                                            <a onClick={() => setCollapsed(true)} className="nav-link nav-link-custom-homepage">Service Details</a>
+                                                        <Link to="/company-details" activeClassName="active">
+                                                            <a onClick={() => setCollapsed(true)} className="nav-link nav-link-custom-homepage">About Our Company</a>
                                                         </Link>
                                                     </li>
                                                     

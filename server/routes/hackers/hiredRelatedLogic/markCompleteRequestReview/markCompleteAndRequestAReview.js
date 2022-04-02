@@ -43,14 +43,19 @@ router.post("/", async (req, resppppp, next) => {
         const promises = [];
 
         if (_.has(matched, "requestedJobCompletionReview") && matched.requestedJobCompletionReview.approvedByEmployer === true) {
+
+            const generatedAccessKeyReview = uuidv4().split("-")[0];
+
             // handle employer logic first
             jobMatch.requestedJobCompletionReview.approvedByHacker = true;
             jobMatch.requestedJobCompletionReview.hackerApprovalDate = new Date();
             jobMatch.requestedJobCompletionReview.completed = true;
+            jobMatch.generatedAccessKeyReview = generatedAccessKeyReview;
             // now handle hacker logic changes
             matched.requestedJobCompletionReview.approvedByHacker = true;
             matched.requestedJobCompletionReview.hackerApprovalDate = new Date();
             matched.requestedJobCompletionReview.completed = true;
+            matched.generatedAccessKeyReview = generatedAccessKeyReview;
 
             // iterate through existing payments & confirm them!
 

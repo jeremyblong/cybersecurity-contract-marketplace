@@ -2,3 +2,16 @@
     font-size: 1.225rem;
     font-weight: bold;
 }
+.spantext-copy {
+    font-size: 1.25em !important;
+    font-weight: 450;
+    color: #7366ff !important;
+    text-decoration-line: underline;
+}
+.spantext-copy:hover {
+    cursor: pointer;
+    font-size: 1.25em !important;
+    font-weight: 450;
+    color: #f73164 !important;
+    text-decoration-line: underline;
+}

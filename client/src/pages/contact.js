@@ -11,10 +11,10 @@ const Contact = () => {
             <Navbar />
 
             <PageBanner 
-                pageTitle="Contact" 
+                pageTitle="Contact Us (Potential Partnership's)" 
                 homePageUrl="/" 
                 homePageText="Home" 
-                activePageText="Contact" 
+                activePageText="Contact Page" 
             /> 
 
             <ContactInfo />

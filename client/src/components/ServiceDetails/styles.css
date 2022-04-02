@@ -1,0 +1,14 @@
+.slider-blogs-snippet {
+    min-width: 100%;
+    width: 100%;
+    flex-direction: row;
+}
+.slider-blogs-snippet .inlined-display {
+    min-width: 100%;
+    display: inline-block;
+    width: 100%;
+}
+.stretch-blog-snippet-post {
+    min-width: 100%;
+    width: 100%;
+}

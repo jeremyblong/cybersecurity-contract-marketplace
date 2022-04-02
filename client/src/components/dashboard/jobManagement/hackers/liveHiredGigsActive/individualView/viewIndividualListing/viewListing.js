@@ -19,7 +19,7 @@ import { DateRange } from 'react-date-range';
 import Calendar from 'react-calendar';
 import MessagingPaneMessageEmployerHelper from "./panes/messagePane/messageSendPane.js";
 import { confirmAlert } from 'react-confirm-alert';
-
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 
 const Map = ReactMapboxGl({
@@ -158,6 +158,15 @@ const ViewIndividualLiveHiredhackingJobHelper = ({ userData }) => {
         });
     }
 
+    const redirectToReviewAsHackerPage = () => {
+
+        if (_.has(info, "requestedJobCompletionReview") && info.requestedJobCompletionReview.approvedByEmployer === true && info.requestedJobCompletionReview.approvedByHacker === true) {
+            history.push(`/leave/employer/review/hacker/account/${id}/${info.employerPosterId}`);
+        } else {
+            NotificationManager.warning("BOTH user's have NOT marked this job as complete, yet... You MUST wait until both yourself and the employer have marked this contract as 'complete' to start the review process.", "Cannot review yet, need both user's completion mark first!", 4750);
+        }
+    }
+
     return (
         <Fragment>
             <Breadcrumb parent="Manage Your ACTIVE Job Data & Take Various Actions.." title="Manage This Active Contracted Information/Data!" />
@@ -234,235 +243,237 @@ const ViewIndividualLiveHiredhackingJobHelper = ({ userData }) => {
                         </Card>
                     </Col>
                 </Row>
-                {listing !== null ? <Row>
-                    <Col xl="7 xl-100">
-                        <Card>
-                            <CardBody>
-                            <div className="product-page-details">
-                                <h3 style={{ textDecorationLine: "underline" }}>{listing.publicCompanyName}</h3>
-                            </div>
-                            <div className="product-price f-28">
-                                Experience Points Awarded Winner: <em style={{ textDecorationLine: "underline" }}>{(listing.experienceAndCost.experience).toLocaleString('en')} XP Points</em>
-                            </div>
-                            <CardBody>
-                                <Label className='label-hired-user'>Completion Timeline/Date</Label>
-                                <Calendar
-                                    value={new Date(listing.estimatedCompletionDate)}
-                                    className={"completion-date-hired"}
-                                />
-                            </CardBody>
-                            <hr/>
-                            <Label className='label-hired-user'>Listing Description</Label>
-                            <ReactMarkdown children={listing.listingDescription} className={"markdown-desc-hired"} remarkPlugins={[remarkGfm]} />
-                            <Label className='label-hired-user'>Rules Of Engagement</Label>
-                            <ReactMarkdown children={listing.rulesOfEngagement} className={"markdown-desc-hired"} remarkPlugins={[remarkGfm]} />
-                            <hr/>
-                            <div>
+                {listing !== null ? <Fragment>
+                    <Row>
+                        <Col xl="7 xl-100">
+                            <Card>
+                                <CardBody>
+                                <div className="product-page-details">
+                                    <h3 style={{ textDecorationLine: "underline" }}>{listing.publicCompanyName}</h3>
+                                </div>
+                                <div className="product-price f-28">
+                                    Experience Points Awarded Winner: <em style={{ textDecorationLine: "underline" }}>{(listing.experienceAndCost.experience).toLocaleString('en')} XP Points</em>
+                                </div>
+                                <CardBody>
+                                    <Label className='label-hired-user'>Completion Timeline/Date</Label>
+                                    <Calendar
+                                        value={new Date(listing.estimatedCompletionDate)}
+                                        className={"completion-date-hired"}
+                                    />
+                                </CardBody>
+                                <hr/>
+                                <Label className='label-hired-user'>Listing Description</Label>
+                                <ReactMarkdown children={listing.listingDescription} className={"markdown-desc-hired"} remarkPlugins={[remarkGfm]} />
+                                <Label className='label-hired-user'>Rules Of Engagement</Label>
+                                <ReactMarkdown children={listing.rulesOfEngagement} className={"markdown-desc-hired"} remarkPlugins={[remarkGfm]} />
+                                <hr/>
+                                <div>
+                                    <Row>
+                                        <Col sm="12" md="6" lg="6" xl="6">
+                                            <table className="product-page-width">
+                                                <tbody>
+                                                    <tr>
+                                                        <td> <b>Posted Date &nbsp;&nbsp;&nbsp;:</b></td>
+                                                        <td>{listing.postedDate}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td> <b>Visibility &nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;</b></td>
+                                                        <td className="txt-success">{listing.listingVisibility.label}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td> <b>{"# Of Likes"} &nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;</b></td>
+                                                        <td>{listing.likedBy.length}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td> <b>{"Desired Completion Date"} &nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;</b></td>
+                                                        <td>{moment(listing.estimatedCompletionDate).format("MM/DD/YYYY")}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </Col>
+                                        <Col sm="12" md="6" lg="6" xl="6">
+                                            <table className="product-page-width">
+                                                <tbody>
+                                                    <tr>
+                                                        <td> <b>Comment Count&nbsp;&nbsp;&nbsp;:</b></td>
+                                                        <td>{listing.comments.length}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td> <b>Rank To Apply&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;</b></td>
+                                                        <td className="txt-success">{listing.requiredRankToApply.label}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td> <b>{"Total View(s)"}&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;</b></td>
+                                                        <td>{listing.totalViews}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td> <b>{"Token's To Apply"}&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;</b></td>
+                                                        <td>{listing.tokensRequiredToApply.label}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </Col>
+                                    </Row>
+                                </div>
+                                <hr/>
+                                <Label className='label-hired-user'>Tags/Hashtags</Label>
+                                <br />
+                                {listing !== null && typeof listing.hashtags !== "undefined" && listing.hashtags.length > 0 ? listing.hashtags.map((hashtag, idx) => {
+                                    return (
+                                        <Fragment key={idx}>
+                                            <Badge color="dark tag-pills-sm-mb">{hashtag.text}</Badge>
+                                        </Fragment>
+                                    );
+                                }) : <Fragment>
+                                    <h4 className='leftalign-text-hired'>No tags/hashtags are provided for this specific listing..</h4>
+                                </Fragment>}
+                                <hr />
                                 <Row>
-                                    <Col sm="12" md="6" lg="6" xl="6">
-                                        <table className="product-page-width">
-                                            <tbody>
-                                                <tr>
-                                                    <td> <b>Posted Date &nbsp;&nbsp;&nbsp;:</b></td>
-                                                    <td>{listing.postedDate}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td> <b>Visibility &nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;</b></td>
-                                                    <td className="txt-success">{listing.listingVisibility.label}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td> <b>{"# Of Likes"} &nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;</b></td>
-                                                    <td>{listing.likedBy.length}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td> <b>{"Desired Completion Date"} &nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;</b></td>
-                                                    <td>{moment(listing.estimatedCompletionDate).format("MM/DD/YYYY")}</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                    <Col md="6">
+                                        <h6 className="product-title">{"share it"}</h6>
                                     </Col>
-                                    <Col sm="12" md="6" lg="6" xl="6">
-                                        <table className="product-page-width">
-                                            <tbody>
-                                                <tr>
-                                                    <td> <b>Comment Count&nbsp;&nbsp;&nbsp;:</b></td>
-                                                    <td>{listing.comments.length}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td> <b>Rank To Apply&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;</b></td>
-                                                    <td className="txt-success">{listing.requiredRankToApply.label}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td> <b>{"Total View(s)"}&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;</b></td>
-                                                    <td>{listing.totalViews}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td> <b>{"Token's To Apply"}&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;</b></td>
-                                                    <td>{listing.tokensRequiredToApply.label}</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                    <Col md="6">
+                                        <div className="product-icon">
+                                            <ul className="product-social">
+                                            <li className="d-inline-block"><a href={null}><i className="fa fa-facebook"></i></a></li>
+                                            <li className="d-inline-block"><a href={null}><i className="fa fa-google-plus"></i></a></li>
+                                            <li className="d-inline-block"><a href={null}><i className="fa fa-twitter"></i></a></li>
+                                            <li className="d-inline-block"><a href={null}><i className="fa fa-instagram"></i></a></li>
+                                            <li className="d-inline-block"><a href={null}><i className="fa fa-rss"></i></a></li>
+                                            </ul>
+                                            <form className="d-inline-block f-right"></form>
+                                        </div>
                                     </Col>
                                 </Row>
-                            </div>
-                            <hr/>
-                            <Label className='label-hired-user'>Tags/Hashtags</Label>
-                            <br />
-                            {listing !== null && typeof listing.hashtags !== "undefined" && listing.hashtags.length > 0 ? listing.hashtags.map((hashtag, idx) => {
-                                return (
-                                    <Fragment key={idx}>
-                                        <Badge color="dark tag-pills-sm-mb">{hashtag.text}</Badge>
-                                    </Fragment>
-                                );
-                            }) : <Fragment>
-                                <h4 className='leftalign-text-hired'>No tags/hashtags are provided for this specific listing..</h4>
-                            </Fragment>}
-                            <hr />
-                            <Row>
-                                <Col md="6">
-                                    <h6 className="product-title">{"share it"}</h6>
-                                </Col>
-                                <Col md="6">
-                                    <div className="product-icon">
-                                        <ul className="product-social">
-                                        <li className="d-inline-block"><a href={null}><i className="fa fa-facebook"></i></a></li>
-                                        <li className="d-inline-block"><a href={null}><i className="fa fa-google-plus"></i></a></li>
-                                        <li className="d-inline-block"><a href={null}><i className="fa fa-twitter"></i></a></li>
-                                        <li className="d-inline-block"><a href={null}><i className="fa fa-instagram"></i></a></li>
-                                        <li className="d-inline-block"><a href={null}><i className="fa fa-rss"></i></a></li>
-                                        </ul>
-                                        <form className="d-inline-block f-right"></form>
+                                <hr/>
+                                <Label className='label-hired-user'>Desired Skill's</Label>
+                                <br />
+                                {listing !== null && typeof listing.desiredSkills !== "undefined" && listing.desiredSkills.length > 0 ? listing.desiredSkills.map((skill, idx) => {
+                                    return (
+                                        <Fragment key={idx}>
+                                            <Badge color="light bordered-slightly-badge-light tag-pills-sm-mb">{skill.label}</Badge>
+                                        </Fragment>
+                                    );
+                                }) : <Fragment>
+                                    <h4 className='leftalign-text-hired'>No are provided/required for this specific job/gig..</h4>
+                                </Fragment>}
+                                <hr />
+                                <Row>
+                                    <Col md="6">
+                                    <h6 className="product-title">{"Rate Now"}</h6>
+                                    </Col>
+                                    <Col md="6">
+                                    <div className="d-flex">
+                                        <StarRatings
+                                            rating={4.45}
+                                            starRatedColor="blue"
+                                            changeRating={() => {}}
+                                            numberOfStars={5}
+                                            name='rating'
+                                        />
                                     </div>
-                                </Col>
-                            </Row>
-                            <hr/>
-                            <Label className='label-hired-user'>Desired Skill's</Label>
-                            <br />
-                            {listing !== null && typeof listing.desiredSkills !== "undefined" && listing.desiredSkills.length > 0 ? listing.desiredSkills.map((skill, idx) => {
-                                return (
-                                    <Fragment key={idx}>
-                                        <Badge color="light bordered-slightly-badge-light tag-pills-sm-mb">{skill.label}</Badge>
-                                    </Fragment>
-                                );
-                            }) : <Fragment>
-                                <h4 className='leftalign-text-hired'>No are provided/required for this specific job/gig..</h4>
-                            </Fragment>}
-                            <hr />
-                            <Row>
-                                <Col md="6">
-                                <h6 className="product-title">{"Rate Now"}</h6>
-                                </Col>
-                                <Col md="6">
-                                <div className="d-flex">
-                                    <StarRatings
-                                        rating={4.45}
-                                        starRatedColor="blue"
-                                        changeRating={() => {}}
-                                        numberOfStars={5}
-                                        name='rating'
-                                    />
+                                    </Col>
+                                </Row>
+                                <hr/>
+                                <div className="m-t-15">
+                                    <Button style={{ width: "100%" }} color="primary" className="m-r-10" onClick={() => setMessagePaneState(true)}>
+                                        <i class="fa fa-solid fa-comment-dots mr-1"></i>Send Message To Your Employer<i class="fa fa-solid fa-comment-dots ml-1"></i>
+                                    </Button>
                                 </div>
-                                </Col>
-                            </Row>
-                            <hr/>
-                            <div className="m-t-15">
-                                <Button style={{ width: "100%" }} color="primary" className="m-r-10" onClick={() => setMessagePaneState(true)}>
-                                    <i class="fa fa-solid fa-comment-dots mr-1"></i>Send Message To Your Employer<i class="fa fa-solid fa-comment-dots ml-1"></i>
-                                </Button>
-                            </div>
-                            </CardBody>
-                        </Card>
-                    </Col>
-                    <Col xl="5 xl-cs-35">
-                        <Card>
-                            <CardBody>
-                            <div className="filter-block">
-                                <h4 style={{ color: "#7366ff" }}>{"Core Information/Stat's"}</h4>
-                                <ul>
-                                    <li><strong>Disclosure Policy</strong>: {listing.disclosureVisibility.label}</li>
-                                    <li><strong>Total View(s)</strong>: {listing.totalViews}</li>
-                                    <li><strong>Likes</strong>: {listing.likes}</li>
-                                    <li><strong>Dislikes</strong>: {listing.dislikes}</li>
-                                    <li><strong>Type Of Hack</strong>: {listing.typeOfHack.label}</li>
-                                </ul>
-                            </div>
-                            </CardBody>
-                        </Card>
-                        <Card>
-                            <CardBody>
-                            <div className="collection-filter-block">
-                                <ul>
-                                    <li>
-                                        <div className="media"><Truck/>
-                                        <div className="media-body">
-                                            <h5>{"Total Number (#) Of Applicant's"}</h5>
-                                            <p>{listing.applicants.length} applicant's applied</p>
-                                        </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div className="media"><Clock/>
-                                        <div className="media-body">
-                                            <h5>{"Originally Posted On"}</h5>
-                                            <p>{moment(listing.postedDate).format("MM/DD/YYYY hh:mm:ss a")}</p>
-                                        </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div className="media"><Gift/>
-                                        <div className="media-body">
-                                            <h5>{"Total Accumlative Comments/Sub-Comment's"}</h5>
-                                            <p>{calculateCommentsLength(listing.comments)} total general comment's</p>
-                                        </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div className="media"><CreditCard/>
-                                        <div className="media-body">
-                                            <h5>{"Uploaded File(s) For Hacker"}</h5>
-                                            <p>{listing.uploadedFiles.length} files ready for hacker(s)</p>
-                                        </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                                <hr />
-                                <Label style={{ marginTop: "12.5px" }} className='label-hired-user'>Dates Availiable (Phyiscal Hacking/hacks)</Label>
-                                <DateRange 
-                                    showDateDisplay={false}
-                                    ranges={dates}
-                                    direction={"horizontal"}
-                                    months={2}
-                                    className={"daterange-individual-hired"}
-                                    onChange={() => {}}
-                                />
-                                <hr />
-                                <Label style={{ marginTop: "25px" }} className='label-hired-user'>Out-Of-Scope Vulnerabilities</Label>
-                                <ReactMarkdown children={listing.outOfScopeVulnerabilities} className={"markdown-desc-hired"} remarkPlugins={[remarkGfm]} />
-                                {typeof listing.businessAddress !== "undefined" && _.has(listing, "businessAddress") ? <Fragment>
+                                </CardBody>
+                            </Card>
+                        </Col>
+                        <Col xl="5 xl-cs-35">
+                            <Card>
+                                <CardBody>
+                                <div className="filter-block">
+                                    <h4 style={{ color: "#7366ff" }}>{"Core Information/Stat's"}</h4>
+                                    <ul>
+                                        <li><strong>Disclosure Policy</strong>: {listing.disclosureVisibility.label}</li>
+                                        <li><strong>Total View(s)</strong>: {listing.totalViews}</li>
+                                        <li><strong>Likes</strong>: {listing.likes}</li>
+                                        <li><strong>Dislikes</strong>: {listing.dislikes}</li>
+                                        <li><strong>Type Of Hack</strong>: {listing.typeOfHack.label}</li>
+                                    </ul>
+                                </div>
+                                </CardBody>
+                            </Card>
+                            <Card>
+                                <CardBody>
+                                <div className="collection-filter-block">
+                                    <ul>
+                                        <li>
+                                            <div className="media"><Truck/>
+                                            <div className="media-body">
+                                                <h5>{"Total Number (#) Of Applicant's"}</h5>
+                                                <p>{listing.applicants.length} applicant's applied</p>
+                                            </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div className="media"><Clock/>
+                                            <div className="media-body">
+                                                <h5>{"Originally Posted On"}</h5>
+                                                <p>{moment(listing.postedDate).format("MM/DD/YYYY hh:mm:ss a")}</p>
+                                            </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div className="media"><Gift/>
+                                            <div className="media-body">
+                                                <h5>{"Total Accumlative Comments/Sub-Comment's"}</h5>
+                                                <p>{calculateCommentsLength(listing.comments)} total general comment's</p>
+                                            </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div className="media"><CreditCard/>
+                                            <div className="media-body">
+                                                <h5>{"Uploaded File(s) For Hacker"}</h5>
+                                                <p>{listing.uploadedFiles.length} files ready for hacker(s)</p>
+                                            </div>
+                                            </div>
+                                        </li>
+                                    </ul>
                                     <hr />
-                                    <p className='business-address-hired'>Business Physical Address: {listing.businessAddress.address.freeformAddress}</p>
-                                    <Map
-                                        center={[listing.businessAddress.position.lon, listing.businessAddress.position.lat]}
-                                        style="mapbox://styles/mapbox/streets-v9"
-                                        containerStyle={{
-                                            height: "275px",
-                                            width: '100%',
-                                            border: "2px solid grey"
-                                        }}
-                                    >
-                                        <Marker
-                                            coordinates={[listing.businessAddress.position.lon, listing.businessAddress.position.lat]}
-                                            anchor="bottom"
+                                    <Label style={{ marginTop: "12.5px" }} className='label-hired-user'>Dates Availiable (Phyiscal Hacking/hacks)</Label>
+                                    <DateRange 
+                                        showDateDisplay={false}
+                                        ranges={dates}
+                                        direction={"horizontal"}
+                                        months={2}
+                                        className={"daterange-individual-hired"}
+                                        onChange={() => {}}
+                                    />
+                                    <hr />
+                                    <Label style={{ marginTop: "25px" }} className='label-hired-user'>Out-Of-Scope Vulnerabilities</Label>
+                                    <ReactMarkdown children={listing.outOfScopeVulnerabilities} className={"markdown-desc-hired"} remarkPlugins={[remarkGfm]} />
+                                    {typeof listing.businessAddress !== "undefined" && _.has(listing, "businessAddress") ? <Fragment>
+                                        <hr />
+                                        <p className='business-address-hired'>Business Physical Address: {listing.businessAddress.address.freeformAddress}</p>
+                                        <Map
+                                            center={[listing.businessAddress.position.lon, listing.businessAddress.position.lat]}
+                                            style="mapbox://styles/mapbox/streets-v9"
+                                            containerStyle={{
+                                                height: "275px",
+                                                width: '100%',
+                                                border: "2px solid grey"
+                                            }}
                                         >
-                                            <img src={require("../../../../../../../assets/icons/location.png")}/>
-                                        </Marker>
-                                    </Map>
-                                </Fragment> : null}
-                            </div>
-                            </CardBody>
-                        </Card>
-                    </Col>
-                </Row> : <Fragment>
+                                            <Marker
+                                                coordinates={[listing.businessAddress.position.lon, listing.businessAddress.position.lat]}
+                                                anchor="bottom"
+                                            >
+                                                <img src={require("../../../../../../../assets/icons/location.png")}/>
+                                            </Marker>
+                                        </Map>
+                                    </Fragment> : null}
+                                </div>
+                                </CardBody>
+                            </Card>
+                        </Col>
+                    </Row>
+                </Fragment> : <Fragment>
                     <SkeletonTheme baseColor="#c9c9c9" highlightColor="#444">
                         <p>
                             <Skeleton count={30} />
@@ -493,7 +504,7 @@ const ViewIndividualLiveHiredhackingJobHelper = ({ userData }) => {
                     </Col>
                 </Row>
                 <Row>
-                    <Col sm="12" md="12" lg="12" xl="12">
+                    <Col sm="12" md="6" lg="6" xl="6">
                         <Card className={"bordered-shadowed-card"}>
                             <CardBody>
                                 <Card className="card-absolute payment-card-actions-shadow-wrapper">
@@ -506,6 +517,24 @@ const ViewIndividualLiveHiredhackingJobHelper = ({ userData }) => {
                                         <Button onClick={() => history.push(`/view/submitted/hacker/information/hired/job/submissions/${id}`)} className={"btn-square-primary"} color={"primary-2x"} outline style={{ width: "100%" }}>View Details & Submitted Data</Button>
                                     </CardBody>
                                 </Card>
+                            </CardBody>
+                        </Card>
+                    </Col>
+                    <Col sm="12" lg="6" md="6" xl="6">
+                        <Card className='shadow'>
+                            <CardHeader className='b-l-primary b-r-primary'>
+                                <h3><strong>IF BOTH</strong> user's (employer & hacker alike) have agreed that this job is complete, you may leave a review for this user.</h3>
+                                <p>We HIGHLY recommend leaving reviews immediately as these are vital to helping other hackers/employer guage the skills & competency of other user's on our platform. <strong>IF</strong> you do <strong>not</strong> leave a review, the other user's review will <strong>still be posted to your profile</strong> regardless if you decided to complete your half. This typically happens after 1 week of innactivity..</p>
+                                <hr />
+                                {_.has(info, "generatedAccessKeyReview") ? <CopyToClipboard text={info.generatedAccessKeyReview}
+                                    onCopy={() => {
+                                        NotificationManager.success("Successfully copied code and/or 'review code' to clipboard - you can now paste it!", "Successfully copied to clipboard!", 4750);
+                                    }}>
+                                    <span className='spantext-copy'>Copy your 'review code' by clicking here - {info.generatedAccessKeyReview} <em style={{ color: "#000" }}>(You will need this before proceeding to the 'review' page)</em></span>
+                                </CopyToClipboard> : <span className='spantext-copy'>Your 'review code' is NOT availiable yet, please wait till <strong>BOTH USERS</strong> have agreed the job is 'complete'.. <em style={{ color: "#000" }}>(You will need this before proceeding to the 'review' page)</em></span>}
+                            </CardHeader>
+                            <CardBody>
+                                <Button onClick={() => redirectToReviewAsHackerPage()} className={"btn-square-primary"} color={"primary-2x"} outline style={{ width: "100%" }}>Leave a review for this user</Button>
                             </CardBody>
                         </Card>
                     </Col>

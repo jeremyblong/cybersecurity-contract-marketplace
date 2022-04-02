@@ -74,6 +74,7 @@ import MountingLogicRedux from "./mountingLogicRedux.js";
 import SimpleReactLightbox from 'simple-react-lightbox';
 import UnauthorizedAccessPage from "./pages/dashboard/unauthorized/unauthorizedAccess.js";
 import CreateANewBlogPostPage from "./pages/unauthenticatedMisc/blogRelated/postNewBlogPage.js";
+import AboutCompanyDetails from "./pages/aboutCompany.js";
 
 require('dotenv').config();
 
@@ -217,6 +218,7 @@ const Root = (props) =>  {
       <BrowserRouter>
       <Switch>
         <Route exact path="/" render={(props) => renderComponent(Index, props)} />
+        <Route exact path="/company-details" render={(props) => renderComponent(AboutCompanyDetails, props)} />
         <Route exact path="/sign-in" render={(props) => renderComponent(SignIn, props)} />
         <Route exact path="/sign-up" render={(props) => renderComponent(SignUp, props)} />
         <Route exact path="/forgot-password" render={(props) => renderComponent(ForgotPassword, props)} />
