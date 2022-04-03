@@ -69,7 +69,7 @@ import ViewPreviouslySubmittedDataHackerAccountPage from "../pages/dashboard/job
 import ViewPreviouslySubmittedDataEmployerAccountPage from "../pages/dashboard/jobManagement/employers/manageHiredHackers/manage/manageIndividualHacker/viewData/viewData.js";
 import ViewNotificationListHackerPage from "../pages/dashboard/notifications/hackers/viewNotificationList/viewNotifications.js";
 import ReviewEmployerAccountPage from "../pages/dashboard/jobManagement/hackers/review/reviewEmployerAccount.js";
-
+import ReviewHackerAccountCompletedJobPage from "../pages/dashboard/jobManagement/employers/review/reviewHackerAccount.js";
 
 export const routes = [
         { path:"/profile/settings/edit", Component: GeneralSettingsPage },
@@ -142,5 +142,6 @@ export const routes = [
         { path: "/view/submitted/hacker/information/hired/job/submissions/:id", Component: ViewPreviouslySubmittedDataHackerAccountPage },
         { path: "/individual/hiring/job/data/view/manage/:id", Component: ViewPreviouslySubmittedDataEmployerAccountPage },
         { path: "/hacker/notifications", Component: ViewNotificationListHackerPage },
-        { path: "/leave/employer/review/hacker/account/:id/:employerID", Component: ReviewEmployerAccountPage }
+        { path: "/leave/employer/review/hacker/account/:id/:employerID", Component: ReviewEmployerAccountPage },
+        { path: "/leave/hacker/review/employer/account/:id/:hackerID", Component: ReviewHackerAccountCompletedJobPage }
 ]; 

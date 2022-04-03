@@ -122,7 +122,7 @@ const ReviewEmployerAccountHelper = ({ userData }) => {
 
         const { overall, communication, accurateDescription, contentmentOverallWithJob, responseTimes, instructionOrDirectionsProvided, professionalism, wentAsExpected, wouldDoRepeatBusiness, wouldReferToFriendOrFamily } = rating;
 
-        if (typeof reviewText !== "undefined" && reviewText.length >= 50 && overall !== 0 && communication !== 0 && accurateDescription !== 0 && contentmentOverallWithJob !== 0 && responseTimes !== 0 && instructionOrDirectionsProvided !== 0 && professionalism !== 0 && wentAsExpected !== 0 && wouldDoRepeatBusiness !== 0 && wouldReferToFriendOrFamily !== 0 ) {
+        if (typeof reviewText !== "undefined" && reviewText.length >= 250 && overall !== 0 && communication !== 0 && accurateDescription !== 0 && contentmentOverallWithJob !== 0 && responseTimes !== 0 && instructionOrDirectionsProvided !== 0 && professionalism !== 0 && wentAsExpected !== 0 && wouldDoRepeatBusiness !== 0 && wouldReferToFriendOrFamily !== 0 ) {
             return false;
         } else {
             return true;
@@ -139,7 +139,7 @@ const ReviewEmployerAccountHelper = ({ userData }) => {
                     <hr />
                     <Row>
                         <FormGroup className="row mb-0">
-                            <Label className="col-sm-3 col-form-label"><strong className='extrastrong-review'>Comments, Review Text, Thoughts & General Review Of Interaction</strong> <br /><br /> Please note anything <strong style={{ color: "blue" }}>good or bad</strong> that this user did or anything really that stood-out to your during your encounter with this user. Please be honest, transparent and thorough with your review.. {typeof reviewText !== "undefined" && reviewText.length <= 50 ? <Fragment><hr /><em style={{ color: "red", textDecorationLine: "underline" }}>{`You must enter at-least another ${50 - reviewText.length} characters before proceeding..`}</em></Fragment> : null}</Label>
+                            <Label className="col-sm-3 col-form-label"><strong className='extrastrong-review'>Comments, Review Text, Thoughts & General Review Of Interaction</strong> <br /><br /> Please note anything <strong style={{ color: "blue" }}>good or bad</strong> that this user did or anything really that stood-out to your during your encounter with this user. Please be honest, transparent and thorough with your review.. {typeof reviewText !== "undefined" && reviewText.length <= 250 ? <Fragment><hr /><em style={{ color: "red", textDecorationLine: "underline" }}>{`You must enter at-least another ${250 - reviewText.length} characters before proceeding..`}</em></Fragment> : null}</Label>
                             <Col sm="9">
                                 <textarea value={reviewText} onChange={(e) => setReviewText(e.target.value)} className="form-control" rows="10" placeholder={"Describe accurately your experience with this user and this contracted position/job, please be as thorough and detailed as possible. Note what this person did both good AND bad - please leave a professional review as this relects back on you..."}></textarea>
                             </Col>

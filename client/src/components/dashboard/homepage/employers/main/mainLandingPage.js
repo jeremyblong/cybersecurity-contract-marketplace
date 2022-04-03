@@ -16,6 +16,7 @@ import { NotificationManager } from 'react-notifications';
 import "../../styles.css";
 import { useHistory } from 'react-router-dom';
 
+console.log("new Date", new Date());
 
 const MainLandingPageEmployerHelper = ({ authentication, userData }) => {
 

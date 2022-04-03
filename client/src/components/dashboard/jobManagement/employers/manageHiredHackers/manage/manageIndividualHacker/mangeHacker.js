@@ -20,6 +20,8 @@ import Calendar from 'react-calendar';
 import { confirmAlert } from 'react-confirm-alert';
 import { NotificationManager } from 'react-notifications';
 import DepositFundsSheetPaneHelper from "./sheetHelpers/depositFunds/depositFundsSheetHelper.js";
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+
 
 const Map = ReactMapboxGl({
     accessToken: process.env.REACT_APP_MAPBOX_TOKEN,
@@ -173,6 +175,14 @@ const ManageIndividualHackerAlreadyHiredHelper = ({ userData }) => {
               }
             ]
         });
+    }
+
+    const redirectToReviewAsEmployerPage = () => {
+        if (_.has(currentApplicationData, "requestedJobCompletionReview") && currentApplicationData.requestedJobCompletionReview.approvedByEmployer === true && currentApplicationData.requestedJobCompletionReview.approvedByHacker === true) {
+            history.push(`/leave/hacker/review/employer/account/${currentApplicationData.generatedID}/${currentApplicationData.applicantId}`);
+        } else {
+            NotificationManager.warning("BOTH user's have NOT marked this job as complete, yet... You MUST wait until both yourself and the employer have marked this contract as 'complete' to start the review process.", "Cannot review yet, need both user's completion mark first!", 4750);
+        }
     }
 
     const handleTotalCompletion = () => {
@@ -604,7 +614,7 @@ const ManageIndividualHackerAlreadyHiredHelper = ({ userData }) => {
                     </Col>
                 </Row>
                 <Row>
-                    <Col sm="12" md="12" lg="12" xl="12">
+                    <Col sm="12" md="6" lg="6" xl="6">
                         <Card className={"bordered-shadowed-card"}>
                             <CardBody>
                                 <Card className="card-absolute payment-card-actions-shadow-wrapper">
@@ -617,6 +627,28 @@ const ManageIndividualHackerAlreadyHiredHelper = ({ userData }) => {
                                         <p className='lead'>This will <strong>COMPLETE</strong> this entire process-flow and once <strong>confirmed by both parties</strong> involved, will release all pending funds that you've deposited previously in which {process.env.REACT_APP_APPLICATION_NAME} has collected and held until the release point..</p>
                                         <hr />
                                         <Button onClick={() => handleTotalCompletion()} className={"btn-square-secondary"} color={"secondary-2x"} outline style={{ width: "100%" }}>Mark Job As Complete & Request Confirmation (from hacker)</Button>
+                                    </CardBody>
+                                </Card>
+                            </CardBody>
+                        </Card>
+                    </Col>
+                    <Col sm="12" lg="6" md="6" xl="6">
+                        <Card className={"bordered-shadowed-card"}>
+                            <CardBody>
+                                <Card className='shadow'>
+                                    <CardHeader className='b-l-primary b-r-primary'>
+                                        <h3><strong>IF BOTH</strong> user's (employer & hacker alike) have agreed that this job is complete, you may leave a review for this user.</h3>
+                                        <p>We HIGHLY recommend leaving reviews immediately as these are vital to helping other hackers/employer guage the skills & competency of other user's on our platform. <strong>IF</strong> you do <strong>not</strong> leave a review, the other user's review will <strong>still be posted to your profile</strong> regardless if you decided to complete your half. This typically happens after 1 week of innactivity..</p>
+                                        <hr />
+                                        {_.has(currentApplicationData, "generatedAccessKeyReview") ? <CopyToClipboard text={currentApplicationData.generatedAccessKeyReview}
+                                            onCopy={() => {
+                                                NotificationManager.success("Successfully copied code and/or 'review code' to clipboard - you can now paste it!", "Successfully copied to clipboard!", 4750);
+                                            }}>
+                                            <span className='spantext-copy'>Copy your 'review code' by clicking here - {currentApplicationData.generatedAccessKeyReview} <em style={{ color: "#000" }}>(You will need this before proceeding to the 'review' page)</em></span>
+                                        </CopyToClipboard> : <span className='spantext-copy'>Your 'review code' is NOT availiable yet, please wait till <strong>BOTH USERS</strong> have agreed the job is 'complete'.. <em style={{ color: "#000" }}>(You will need this before proceeding to the 'review' page)</em></span>}
+                                    </CardHeader>
+                                    <CardBody>
+                                        <Button onClick={() => redirectToReviewAsEmployerPage()} className={"btn-square-primary"} color={"primary-2x"} outline style={{ width: "100%" }}>Leave a review for this user</Button>
                                     </CardBody>
                                 </Card>
                             </CardBody>

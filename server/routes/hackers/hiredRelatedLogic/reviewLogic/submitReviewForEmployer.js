@@ -19,6 +19,8 @@ router.post("/", async (req, resppppp, next) => {
         employerID
     } = req.body;
 
+    // hackerHasReviewedEmployerAlready
+
     const hackerResults = Connection.db.db("db").collection("hackers");
     const employerResults = Connection.db.db("db").collection("employers");
 
@@ -37,54 +39,45 @@ router.post("/", async (req, resppppp, next) => {
 
         const employerJobMatch = employerData.activeHiredHackers[employerFindIndexMatch]; 
 
-        if (accessCode === hackerJobMatch.generatedAccessKeyReview) {
+        if (accessCode === employerJobMatch.generatedAccessKeyReview) {
             // code STILL matches
-            const newReviewAddition = {
-                id: uuidv4(),
-                date: new Date(),
-                dateString: moment(new Date()).format("MM/DD/YYYY hh:mm:ss a"),
-                validated: false,
-                validationDate: null,
-                reviewerID: id,
-                reviewerName: fullName,
-                rating,
-                reviewText,
-                reviewerPicOrVideo: picOrVideo
-            };
+            if (_.has(hackerData, "employerHasReviewedHackerAlready") && hackerData.employerHasReviewedHackerAlready === true) {
 
-            employerJobMatch["hackerHasReviewedEmployerAlready"] = true;
+                const findReviewIndex = hackerData.reviews.findIndex((review) => review.associatedGeneratedID === releventAssociatedContractID);
 
-            // push into reviews array
-            if (_.has(employerData, "reviews")) {
-                employerData.reviews.push(newReviewAddition);
-            } else {
-                employerData["reviews"] = [newReviewAddition];
-            }
-            // save newly added-data
-            employerResults.save(employerData, (err, result) => {
-                if (err) {
-                    console.log("err", err);
+                const foundReview = hackerData.reviews[findReviewIndex];
+
+                foundReview["validated"] = true;
+                foundReview["validationDate"] = new Date();
+
+                const newReviewAddition = {
+                    id: uuidv4(),
+                    date: new Date(),
+                    dateString: moment(new Date()).format("MM/DD/YYYY hh:mm:ss a"),
+                    validated: true,
+                    validationDate: new Date(),
+                    reviewerID: id,
+                    reviewerName: fullName,
+                    rating,
+                    reviewText,
+                    reviewerPicOrVideo: picOrVideo,
+                    associatedGeneratedID: releventAssociatedContractID
+                };
     
-                    resppppp.json({
-                        message: "Error occurred while attempting to save new data..",
-                        err
-                    })
-                } else {
-                    console.log("result", result);
+                if (employerFindIndexMatch !== -1) {
+                    employerJobMatch["hackerHasReviewedEmployerAlready"] = true;
 
-                    hackerData.activeHiredHackingJobs.splice(hackerFindIndexMatch, 1);
-
-                    if (_.has(hackerData, "archivedJobs")) {
-                        hackerData.archivedJobs.push(hackerJobMatch);
+                    // push into reviews array
+                    if (_.has(employerData, "reviews")) {
+                        employerData.reviews.push(newReviewAddition);
                     } else {
-                        hackerData["archivedJobs"] = [hackerJobMatch];
+                        employerData["reviews"] = [newReviewAddition];
                     }
-
                     // save newly added-data
-                    hackerResults.save(hackerData, (err, result) => {
+                    employerResults.save(employerData, (err, result) => {
                         if (err) {
                             console.log("err", err);
-
+            
                             resppppp.json({
                                 message: "Error occurred while attempting to save new data..",
                                 err
@@ -92,13 +85,143 @@ router.post("/", async (req, resppppp, next) => {
                         } else {
                             console.log("result", result);
 
+                            hackerData.activeHiredHackingJobs.splice(hackerFindIndexMatch, 1);
+
+                            if (_.has(hackerData, "archivedJobs")) {
+                                hackerData.archivedJobs.push(hackerJobMatch);
+                            } else {
+                                hackerData["archivedJobs"] = [hackerJobMatch];
+                            }
+
+                            // save newly added-data
+                            hackerResults.save(hackerData, (err, result) => {
+                                if (err) {
+                                    console.log("err", err);
+
+                                    resppppp.json({
+                                        message: "Error occurred while attempting to save new data..",
+                                        err
+                                    })
+                                } else {
+                                    console.log("result", result);
+
+                                    resppppp.json({
+                                        message: "Successfully submitted your new review!"
+                                    })
+                                }
+                            })
+                        }
+                    })
+                } else {
+                    // push into reviews array
+                    if (_.has(employerData, "reviews")) {
+                        employerData.reviews.push(newReviewAddition);
+                    } else {
+                        employerData["reviews"] = [newReviewAddition];
+                    }
+                    // save newly added-data
+                    employerResults.save(employerData, (err, result) => {
+                        if (err) {
+                            console.log("err", err);
+            
                             resppppp.json({
-                                message: "Successfully submitted your new review!"
+                                message: "Error occurred while attempting to save new data..",
+                                err
+                            })
+                        } else {
+                            console.log("result", result);
+
+                            hackerData.activeHiredHackingJobs.splice(hackerFindIndexMatch, 1);
+
+                            if (_.has(hackerData, "archivedJobs")) {
+                                hackerData.archivedJobs.push(hackerJobMatch);
+                            } else {
+                                hackerData["archivedJobs"] = [hackerJobMatch];
+                            }
+
+                            // save newly added-data
+                            hackerResults.save(hackerData, (err, result) => {
+                                if (err) {
+                                    console.log("err", err);
+
+                                    resppppp.json({
+                                        message: "Error occurred while attempting to save new data..",
+                                        err
+                                    })
+                                } else {
+                                    console.log("result", result);
+
+                                    resppppp.json({
+                                        message: "Successfully submitted your new review!"
+                                    })
+                                }
                             })
                         }
                     })
                 }
-            })
+            } else {
+                const newReviewAddition = {
+                    id: uuidv4(),
+                    date: new Date(),
+                    dateString: moment(new Date()).format("MM/DD/YYYY hh:mm:ss a"),
+                    validated: false,
+                    validationDate: null,
+                    reviewerID: id,
+                    reviewerName: fullName,
+                    rating,
+                    reviewText,
+                    reviewerPicOrVideo: picOrVideo,
+                    associatedGeneratedID: releventAssociatedContractID
+                };
+    
+                employerJobMatch["hackerHasReviewedEmployerAlready"] = true;
+
+                // push into reviews array
+                if (_.has(employerData, "reviews")) {
+                    employerData.reviews.push(newReviewAddition);
+                } else {
+                    employerData["reviews"] = [newReviewAddition];
+                }
+                // save newly added-data
+                employerResults.save(employerData, (err, result) => {
+                    if (err) {
+                        console.log("err", err);
+        
+                        resppppp.json({
+                            message: "Error occurred while attempting to save new data..",
+                            err
+                        })
+                    } else {
+                        console.log("result", result);
+
+                        hackerData.activeHiredHackingJobs.splice(hackerFindIndexMatch, 1);
+
+                        if (_.has(hackerData, "archivedJobs")) {
+                            hackerData.archivedJobs.push(hackerJobMatch);
+                        } else {
+                            hackerData["archivedJobs"] = [hackerJobMatch];
+                        }
+
+                        // save newly added-data
+                        hackerResults.save(hackerData, (err, result) => {
+                            if (err) {
+                                console.log("err", err);
+
+                                resppppp.json({
+                                    message: "Error occurred while attempting to save new data..",
+                                    err
+                                })
+                            } else {
+                                console.log("result", result);
+
+                                resppppp.json({
+                                    message: "Successfully submitted your new review!"
+                                })
+                            }
+                        })
+                    }
+                })
+            }
         } else {
             resppppp.json({
                 message: "Code does NOT match, try again!"

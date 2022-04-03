@@ -249,6 +249,8 @@ app.use("/dislike/blog/post/authenticated", require("./routes/unauthenticated/bl
 app.use("/post/comment/blog/post/forward/facing/side", require("./routes/unauthenticated/blogs/reactToBlog/commentRelated/postNewComment/postANewCommentBlogPost.js"));
 app.use("/submit/access/code/review/check", require("./routes/hackers/hiredRelatedLogic/reviewLogic/enterReviewCodeGainAccess.js"));
 app.use("/submit/review/for/employer/contract", require("./routes/hackers/hiredRelatedLogic/reviewLogic/submitReviewForEmployer.js"));
+app.use("/submit/access/code/review/check/hacker", require("./routes/employers/hiredHackers/reviewLogic/enterReviewCodeGainAccess.js"));
+app.use("/submit/review/for/hacker/contract", require("./routes/employers/hiredHackers/reviewLogic/submitReviewForHacker.js"));
 
 // ~ webhook logic STARTS here ~
 app.use("/passbase/webhook", require("./webhooks/passbase/webhook.js"));
