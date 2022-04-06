@@ -1,12 +1,11 @@
 import React, { Fragment, useState } from 'react';
 import { Collapse } from 'reactstrap';
 import { Row, Col, Card, CardHeader, CardBody, Media, Input, Label, Button } from 'reactstrap'
-import { WebDevelopment, UXDevelopment, CourseBy, BusinessAnalyst, UpcomingCourses } from "../../../../../../constant";
 import { connect } from "react-redux";
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 
 
-const LearningEducationCourseFilterHelper = ({ openViewsModal, handleCouseDislike, handleAdditionalCourseLike, userData, courseData, updateModalDemoVideo }) => {
+const LearningEducationCourseFilterHelper = ({ openViewsModal, handleCouseDislike, handleAdditionalCourseLike, userData, courseData, updateModalDemoVideo, purchaseCourseContent }) => {
     const [isFilter, setIsFilter] = useState(true);
     const [isDesign, setIsDesign] = useState(true);
 
@@ -35,6 +34,8 @@ const LearningEducationCourseFilterHelper = ({ openViewsModal, handleCouseDislik
                                                     <Button className={"btn-square-info"} color={"info-2x"} outline style={{ width: "100%" }}>Bookmark This Course</Button>
                                                 <Label className={"heavy-label-course"}>View Promotional/Demo Video</Label>
                                                     <Button onClick={() => updateModalDemoVideo(true)} className={"btn-square-dark"} color={"dark"} style={{ width: "100%" }}>VIEW Promo/Demo Video</Button>
+                                                <Label className={"heavy-label-course"}>Purchase This Course Content</Label>
+                                                    <Button onClick={() => purchaseCourseContent()} className={"btn-square-primary"} color={"primary"} style={{ width: "100%" }}>Purchase This Course!</Button>
                                             </div>
                                         </CardBody>
                                     </div>

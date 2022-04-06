@@ -21,3 +21,8 @@
 .maxed-width-header-applied {
     max-width: 80%;
 }
+.already-applied-contracts-img {
+    min-width: 100%;
+    min-height: 725px;
+    object-fit: contain;
+}

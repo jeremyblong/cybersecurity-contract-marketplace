@@ -4,7 +4,7 @@ import LearningEducationCourseFilterHelper from "./helpers/filter.js";
 import { Container, Row, Col, Media, Label, Badge, ListGroup, ListGroupItem, Card, CardBody, CardHeader } from 'reactstrap';
 import { connect } from "react-redux";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -26,6 +26,8 @@ import { NotificationManager } from 'react-notifications';
 const LearningEducationCourseHelper = ({ userData, location }) => {
   // params from url 
   const params = useParams();
+  // history object creation
+  const history = useHistory();
   // initialize state items
   const [ courseData, setCourseData ] = useState(null);
   const [ user, setUserData ] = useState(null);
@@ -244,7 +246,7 @@ const LearningEducationCourseHelper = ({ userData, location }) => {
                       <Accordion onChange={(values) => accordionValuesChanged(values)}>
                         {courseData.mainData.pageTwoData.courseContentSections.map((section, idx) => {
                           return (
-                            <Fragment>
+                            <Fragment key={idx}>
                               <AccordionItem uuid={section.id} className={"accordion-wrapper-course"}>
                                   <AccordionItemHeading className={"accordion-header-courses"}>
                                       <AccordionItemButton onClick={(value) => console.log("button clicked", value)} className={"heavy-accordion-title"}>
@@ -345,14 +347,18 @@ const LearningEducationCourseHelper = ({ userData, location }) => {
       );
     }
   }
+  const purchaseCourseContent = () => {
+    console.log("purchaseCourseContent clicked/ran..");
 
+    history.push(`/purchase/course/content/educational/content/${courseData.id}`);
+  }
   return (
       <Fragment>
         <Breadcrumb parent="Learning new skills & leveling up!" title="Course details & core information"/>
           <Container fluid={true}>
           <Row>
             {renderMainContentConditionally()}
-            <LearningEducationCourseFilterHelper handleCouseDislike={handleCouseDislike} handleAdditionalCourseLike={handleAdditionalCourseLike} setTotalViewsList={setTotalViewsList} openViewsModal={openViewsModal} updateModalDemoVideo={updateModalDemoVideo}  courseData={courseData} />
+            <LearningEducationCourseFilterHelper purchaseCourseContent={purchaseCourseContent} handleCouseDislike={handleCouseDislike} handleAdditionalCourseLike={handleAdditionalCourseLike} setTotalViewsList={setTotalViewsList} openViewsModal={openViewsModal} updateModalDemoVideo={updateModalDemoVideo}  courseData={courseData} />
         </Row>
         </Container>
       </Fragment>

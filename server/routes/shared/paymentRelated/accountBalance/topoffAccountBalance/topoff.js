@@ -120,7 +120,10 @@ router.post("/", (req, resppppp, next) => {
                         currency: "usd",
                         description: `Deposited funds into account adding to ${config.get("applicationName")} platform balance!`,
                         source: dataaaaaa.id,
-                        capture: true
+                        capture: true,
+                        metadata: {
+                            action: "topoff"
+                        }
                     }, {
                         stripeAccount: user.stripeAccountDetails.id
                     }, async (err, charge) => {

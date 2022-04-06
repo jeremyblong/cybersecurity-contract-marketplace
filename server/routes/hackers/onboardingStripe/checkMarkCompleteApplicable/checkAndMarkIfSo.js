@@ -28,34 +28,56 @@ router.post("/", (req, resppppp, next) => {
 
             const chargesEnabled = account.charges_enabled;
 
-            if (chargesEnabled === true) {
-                if (_.has(user, "stripeAccountVerified")) {
-                    user.stripeAccountVerified = true;
-                } else {
-                    user["stripeAccountVerified"] = true;
-                }
+            // if (chargesEnabled === true) {
+            //     if (_.has(user, "stripeAccountVerified")) {
+            //         user.stripeAccountVerified = true;
+            //     } else {
+            //         user["stripeAccountVerified"] = true;
+            //     }
 
-                collection.save(user, (error, result) => {
-                    if (error) {
-                        console.log("an unknown error saving occurred...:", error);
+            //     collection.save(user, (error, result) => {
+            //         if (error) {
+            //             console.log("an unknown error saving occurred...:", error);
 
-                        resppppp.json({
-                            message: "An error occurred while attempting to save/update user information!",
-                            err: error
-                        })
-                    } else {
-                        resppppp.json({
-                            message: "Successfully marked onboarding as complete!",
-                            user
-                        })
-                    }
-                })
+            //             resppppp.json({
+            //                 message: "An error occurred while attempting to save/update user information!",
+            //                 err: error
+            //             })
+            //         } else {
+            //             resppppp.json({
+            //                 message: "Successfully marked onboarding as complete!",
+            //                 user
+            //             })
+            //         }
+            //     })
+            // } else {
+            //     resppppp.json({
+            //         message: "User has NOT verified or onboarded their account yet successfully..",
+            //         user
+            //     })
+            // }
+
+            if (_.has(user, "stripeAccountVerified")) {
+                user.stripeAccountVerified = true;
             } else {
-                resppppp.json({
-                    message: "User has NOT verified or onboarded their account yet successfully..",
-                    user
-                })
+                user["stripeAccountVerified"] = true;
             }
+
+            collection.save(user, (error, result) => {
+                if (error) {
+                    console.log("an unknown error saving occurred...:", error);
+
+                    resppppp.json({
+                        message: "An error occurred while attempting to save/update user information!",
+                        err: error
+                    })
+                } else {
+                    resppppp.json({
+                        message: "Successfully marked onboarding as complete!",
+                        user
+                    })
+                }
+            })
         }
     }).catch((err) => {
         console.log(err);

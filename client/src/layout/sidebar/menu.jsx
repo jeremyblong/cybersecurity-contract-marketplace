@@ -104,7 +104,7 @@ export const MENUITEMS = [
             // }
         ]
     },
-    {
+    { // 
         menutitle:"Learning & Streaming",
         menucontent:"Learning & LIVE Streams",
         Items:[
@@ -112,14 +112,20 @@ export const MENUITEMS = [
                 title: 'Knowledge Expansion', icon: Home, type: 'sub', active: false, children: [
                     { path: `${process.env.PUBLIC_URL}/course/learning/list/main`, title: 'Courses', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/learning/courses/creation/new/course`, title: 'Create New Teaching Course/Seminar', type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'Professional Seminars', type: 'link' },
+                    { path: `${process.env.PUBLIC_URL}/view/previously/purchased/course/content/download`, title: `View 'Previously Purchased' Courses`, type: 'link' }
+                ]
+            },
+            {
+                title: 'Streaming/Live-Streaming', icon: Home, type: 'sub', active: false, children: [
                     { path: `${process.env.PUBLIC_URL}/view/all/live/streams/general`, title: 'Live Hacking-Streams', type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/create/new/live/stream/hackers`, title: 'Create New Hacking Live Stream', type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'Chat Rooms', type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'Tutorial Videos', type: 'link' },
+                    { path: `${process.env.PUBLIC_URL}/create/new/live/stream/hackers`, title: 'Create New Hacking Live Stream', type: 'link' }
+                ]
+            },
+            {
+                title: 'Blogging Related', icon: Home, type: 'sub', active: false, children: [
                     { path: `${process.env.PUBLIC_URL}/blogging/main/page/display/all`, title: 'Blogging/Blogs', type: 'link' }
                 ]
-            }
+            },
         ]          
     },
     {
@@ -169,7 +175,8 @@ export const MENUITEMS = [
         Items:[
             {
                 title: 'Profile Related', icon: Headphones, type: 'sub', active: false, children: [
-                    { path: `${process.env.PUBLIC_URL}/profile/settings/edit`, title: 'Edit/Modify Profile Data', type: 'link' }
+                    { path: `${process.env.PUBLIC_URL}/profile/settings/edit`, title: 'Edit/Modify Profile Data', type: 'link' },
+                    { path: `${process.env.PUBLIC_URL}/social/links/profile`, title: 'Edit/Modify Public Social Links', type: 'link' }
                 ]
             }
         ]          

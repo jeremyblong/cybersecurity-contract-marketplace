@@ -1,0 +1,12 @@
+.description-markdown-course {
+    max-height: 225px;
+    overflow-y: scroll;
+    border: 1.75px solid grey;
+    background-color: white;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.195);
+    margin-top: 17.5px;
+    padding: 7.5px;
+}
+.listitem-pricing-card:hover {
+    cursor: pointer;
+}

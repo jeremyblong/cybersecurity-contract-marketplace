@@ -70,6 +70,11 @@ import ViewPreviouslySubmittedDataEmployerAccountPage from "../pages/dashboard/j
 import ViewNotificationListHackerPage from "../pages/dashboard/notifications/hackers/viewNotificationList/viewNotifications.js";
 import ReviewEmployerAccountPage from "../pages/dashboard/jobManagement/hackers/review/reviewEmployerAccount.js";
 import ReviewHackerAccountCompletedJobPage from "../pages/dashboard/jobManagement/employers/review/reviewHackerAccount.js";
+import AddNewSocialMediaLinksHackerPage from "../pages/dashboard/profile/socialMediaLinks/addNewSocialMediaLinksHacker.js";
+import PurchaseCourseContentStripePaymentPage from "../pages/dashboard/learning/educationalCoursesSeminars/viewCourses/purchaseCourseContent/purchaseContent.js";
+import ListViewPurchasedCoursesPage from "../pages/dashboard/learning/educationalCoursesSeminars/previouslyPurchased/listPurchasedCourses/listPurchasedCourses.js";
+import ViewIndividualPurchasedCourseDataPage from "../pages/dashboard/learning/educationalCoursesSeminars/previouslyPurchased/listPurchasedCourses/individual/viewIndividualCourseAndDownload.js";
+
 
 export const routes = [
         { path:"/profile/settings/edit", Component: GeneralSettingsPage },
@@ -143,5 +148,9 @@ export const routes = [
         { path: "/individual/hiring/job/data/view/manage/:id", Component: ViewPreviouslySubmittedDataEmployerAccountPage },
         { path: "/hacker/notifications", Component: ViewNotificationListHackerPage },
         { path: "/leave/employer/review/hacker/account/:id/:employerID", Component: ReviewEmployerAccountPage },
-        { path: "/leave/hacker/review/employer/account/:id/:hackerID", Component: ReviewHackerAccountCompletedJobPage }
+        { path: "/leave/hacker/review/employer/account/:id/:hackerID", Component: ReviewHackerAccountCompletedJobPage },
+        { path: "/social/links/profile", Component: AddNewSocialMediaLinksHackerPage },
+        { path: "/purchase/course/content/educational/content/:id", Component: PurchaseCourseContentStripePaymentPage },
+        { path: "/view/previously/purchased/course/content/download", Component: ListViewPurchasedCoursesPage },
+        { path: "/view/individual/purchased/course/data/:id", Component: ViewIndividualPurchasedCourseDataPage }
 ]; 

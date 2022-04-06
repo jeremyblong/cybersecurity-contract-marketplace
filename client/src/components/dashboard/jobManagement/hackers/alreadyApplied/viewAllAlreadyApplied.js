@@ -23,6 +23,7 @@ const ViewAlreadyAppliedJobsHackerHelper = ({ userData }) => {
     const [ pageCount, setPageCount ] = useState(0);
     const [ itemOffset, setItemOffset ] = useState(0);
     const [ permenantData, setPermenantDataState ] = useState([]);
+    const [ ready, setReady ] = useState(false);
 
     useEffect(() => {
 
@@ -56,6 +57,7 @@ const ViewAlreadyAppliedJobsHackerHelper = ({ userData }) => {
 
                 setPermenantDataState(applications);
                 setApplicationData(applications.slice(itemOffset, endOffset));
+                setReady(true);
             } else {
                 console.log("ERROR gathering active/hired applications...:", res.data);
             }
@@ -93,46 +95,54 @@ const ViewAlreadyAppliedJobsHackerHelper = ({ userData }) => {
     }
 
     const renderConditionalUponLoad = () => {
-        if (typeof applications !== "undefined" && applications.length > 0) {
-            return (
-                <Fragment>
-                    <Row>
-                        {applications.map((application, index) => {
-                            console.log("APPLICATION...:", application);
-                            return (
-                                <Col md="6" lg="4" xl="4" key={index}>
-                                    <Card className="height-equal already-applied-card-wrapper">
-                                        <div className="calender-widget">
-                                            <div className="cal-img hired-video-wrapper">
-                                                <ReactPlayer playing={true} loop={true} muted={true} width={"100%"} height={"100%"} wrapper={"div"} url={require("../../../../../assets/video/previously-applied.mp4")} className="stretch-both-ways-hired-video" />
-                                            </div>
-                                            <div className="cal-desc text-center card-body">
-                                                <h6 className="f-w-600">{`Applied approx. ${moment(application.dateApplied).fromNow()}`}</h6>
-                                                <h4 className={"f-w-500"}><strong style={{ textDecorationLine: "underline" }}>Physical OR Digital Hack?</strong> {application.physicalOrDigitalOrBoth.label}</h4>
-                                                <hr />
-                                                <h4 className={"f-w-500"}>Offer Amount: <em style={{ color: "#51bb25", textDecorationLine: "underline" }}>${application.amountOfMoneyUponCompletion}</em></h4>
-                                                <p className="text-muted mt-3 mb-0"><strong style={{ textDecorationLine: "underline" }}>Message To Employer:</strong> {application.messageToEmployer}</p>
-                                                <hr />
-                                                <h5 className={"f-w-500"}><strong style={{ textDecorationLine: "underline" }}>Job ID:</strong> {application.employerPostedJobId}</h5>
-                                                <hr />
-                                                {application.bettingOnSelfSelected === true ? <Fragment>
-                                                    <div className="cal-desc text-center">
-                                                        <h6 className="f-w-600 slightly-larger-sub-application-text">{"Betting/Wagered Information..."}</h6>
-                                                        <p className="custom-sub-application-text">You have decided to <strong style={{ color: "#f73164", textDecorationLine: "underline" }}>wager/bet {Number(application.waggeredBidAmount).toFixed(2)} {process.env.REACT_APP_CRYPTO_TOKEN_NAME}</strong> on winning this hack (You will win this amount IF you win this hack otherwise you'll LOSE this amount)...</p>
-                                                    </div>
+        if (ready === true) {
+            if (typeof applications !== "undefined" && applications.length > 0) {
+                return (
+                    <Fragment>
+                        <Row>
+                            {applications.map((application, index) => {
+                                console.log("APPLICATION...:", application);
+                                return (
+                                    <Col md="6" lg="4" xl="4" key={index}>
+                                        <Card className="height-equal already-applied-card-wrapper">
+                                            <div className="calender-widget">
+                                                <div className="cal-img hired-video-wrapper">
+                                                    <ReactPlayer playing={true} loop={true} muted={true} width={"100%"} height={"100%"} wrapper={"div"} url={require("../../../../../assets/video/previously-applied.mp4")} className="stretch-both-ways-hired-video" />
+                                                </div>
+                                                <div className="cal-desc text-center card-body">
+                                                    <h6 className="f-w-600">{`Applied approx. ${moment(application.dateApplied).fromNow()}`}</h6>
+                                                    <h4 className={"f-w-500"}><strong style={{ textDecorationLine: "underline" }}>Physical OR Digital Hack?</strong> {application.physicalOrDigitalOrBoth.label}</h4>
                                                     <hr />
-                                                </Fragment> : null}
-                                                <Button onClick={() => viewAndVisitEmployerListing(application.employerPostedJobId)} className={"btn-square-info"} color={"info-2x"} style={{ width: "100%", marginTop: "17.5px", marginBottom: "17.5px" }} outline>View/Visit This "Employer Listing"</Button>
+                                                    <h4 className={"f-w-500"}>Offer Amount: <em style={{ color: "#51bb25", textDecorationLine: "underline" }}>${application.amountOfMoneyUponCompletion}</em></h4>
+                                                    <p className="text-muted mt-3 mb-0"><strong style={{ textDecorationLine: "underline" }}>Message To Employer:</strong> {application.messageToEmployer}</p>
+                                                    <hr />
+                                                    <h5 className={"f-w-500"}><strong style={{ textDecorationLine: "underline" }}>Job ID:</strong> {application.employerPostedJobId}</h5>
+                                                    <hr />
+                                                    {application.bettingOnSelfSelected === true ? <Fragment>
+                                                        <div className="cal-desc text-center">
+                                                            <h6 className="f-w-600 slightly-larger-sub-application-text">{"Betting/Wagered Information..."}</h6>
+                                                            <p className="custom-sub-application-text">You have decided to <strong style={{ color: "#f73164", textDecorationLine: "underline" }}>wager/bet {Number(application.waggeredBidAmount).toFixed(2)} {process.env.REACT_APP_CRYPTO_TOKEN_NAME}</strong> on winning this hack (You will win this amount IF you win this hack otherwise you'll LOSE this amount)...</p>
+                                                        </div>
+                                                        <hr />
+                                                    </Fragment> : null}
+                                                    <Button onClick={() => viewAndVisitEmployerListing(application.employerPostedJobId)} className={"btn-square-info"} color={"info-2x"} style={{ width: "100%", marginTop: "17.5px", marginBottom: "17.5px" }} outline>View/Visit This "Employer Listing"</Button>
+                                                </div>
+                                                
                                             </div>
-                                            
-                                        </div>
-                                    </Card>
-                                </Col>
-                            );
-                        })}
-                    </Row>
-                </Fragment>
-            );
+                                        </Card>
+                                    </Col>
+                                );
+                            })}
+                        </Row>
+                    </Fragment>
+                );
+            } else {
+                return (
+                    <Fragment>
+                        <img src={require("../../../../../assets/images/no-previously-applied-contracts.png")} className={"already-applied-contracts-img"} />
+                    </Fragment>
+                );
+            }
         } else {
             return (
                 <Fragment>

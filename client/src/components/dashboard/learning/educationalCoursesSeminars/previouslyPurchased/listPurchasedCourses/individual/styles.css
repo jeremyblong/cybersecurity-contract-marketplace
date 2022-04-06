@@ -1,0 +1,12 @@
+.maxedout-overflow-course-sections {
+    max-height: 100vh;
+    overflow-y: scroll;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.395);
+}
+.formatted-size-course {
+    font-weight: bold;
+}
+.list-group-item-action-hover-effect:hover {
+    cursor: pointer;
+    background-color: aliceblue;
+}

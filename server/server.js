@@ -24,12 +24,16 @@ const io = require('socket.io')(server, {
 	}
 });
 
-
 app.use(cookieParser(config.get("COOKIE_SECRET")));
 
 require("./strategies/jwtstrategy.js");
 require("./strategies/localstrategy.js");
 require("./schemas/authentication/authenticate.js");
+
+// ~ webhook logic STARTS here ~
+app.use("/passbase/webhook", require("./webhooks/passbase/webhook.js"));
+app.use("/stripe/webhook", bodyParser.raw({type: "*/*"}), require("./webhooks/stripe/webhook.js"));
+// ~ webhook logic ENDS here ~
 
 aws.config.update({
     secretAccessKey: config.get("awsSecretKey"),
@@ -251,10 +255,12 @@ app.use("/submit/access/code/review/check", require("./routes/hackers/hiredRelat
 app.use("/submit/review/for/employer/contract", require("./routes/hackers/hiredRelatedLogic/reviewLogic/submitReviewForEmployer.js"));
 app.use("/submit/access/code/review/check/hacker", require("./routes/employers/hiredHackers/reviewLogic/enterReviewCodeGainAccess.js"));
 app.use("/submit/review/for/hacker/contract", require("./routes/employers/hiredHackers/reviewLogic/submitReviewForHacker.js"));
+app.use("/update/both/account/type/social/media/links", require("./routes/shared/profileRelated/socialMediaLinks/updateSocialMediaLinks.js"));
+app.use("/handle/purchase/course/content/payment", require("./routes/shared/learningCoursesForSale/purchaseCourse/purchaseCourseContent.js"));
+app.use("/verify/transfer/initiate", require("./routes/shared/paymentRelated/accountBalance/topoffAccountBalance/verifyTransaction.js"));
+app.use("/gather/purchased/course/data/only", require("./routes/shared/learningCoursesForSale/purchasedCourseContent/fetchPreviouslyPurchasedCourses.js"));
+app.use("/gather/purchased/course/data/profile", require("./routes/shared/learningCoursesForSale/purchasedCourseContent/fetchPurchasedContentCourse.js"));
 
-// ~ webhook logic STARTS here ~
-app.use("/passbase/webhook", require("./webhooks/passbase/webhook.js"));
-// ~ webhook logic ENDS here ~
 
 app.get('*', function(req, res) {
   res.sendFile(__dirname, './client/public/index.html');
