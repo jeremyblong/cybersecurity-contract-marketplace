@@ -112,7 +112,9 @@ export const MENUITEMS = [
                 title: 'Knowledge Expansion', icon: Home, type: 'sub', active: false, children: [
                     { path: `${process.env.PUBLIC_URL}/course/learning/list/main`, title: 'Courses', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/learning/courses/creation/new/course`, title: 'Create New Teaching Course/Seminar', type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/view/previously/purchased/course/content/download`, title: `View 'Previously Purchased' Courses`, type: 'link' }
+                    { path: `${process.env.PUBLIC_URL}/view/previously/purchased/course/content/download`, title: `View 'Previously Purchased' Courses`, type: 'link' },
+                    { path: `${process.env.PUBLIC_URL}/view/tutorial/videos/clips`, title: `View Tutorial Video Snippet's`, type: 'link' },
+                    { path: `${process.env.PUBLIC_URL}/create/tutorial/course/content`, title: `Create A Tutorial Video`, type: 'link' }
                 ]
             },
             {

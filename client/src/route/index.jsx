@@ -74,7 +74,9 @@ import AddNewSocialMediaLinksHackerPage from "../pages/dashboard/profile/socialM
 import PurchaseCourseContentStripePaymentPage from "../pages/dashboard/learning/educationalCoursesSeminars/viewCourses/purchaseCourseContent/purchaseContent.js";
 import ListViewPurchasedCoursesPage from "../pages/dashboard/learning/educationalCoursesSeminars/previouslyPurchased/listPurchasedCourses/listPurchasedCourses.js";
 import ViewIndividualPurchasedCourseDataPage from "../pages/dashboard/learning/educationalCoursesSeminars/previouslyPurchased/listPurchasedCourses/individual/viewIndividualCourseAndDownload.js";
-
+import ViewAllTutorialCoursesPage from "../pages/dashboard/learning/tutorialVideos/viewAllTutorials/viewAllTutorialContent.js";
+import CreateTutorialCourseContentPage from "../pages/dashboard/learning/tutorialVideos/create/createTutorialVideoCourse.js";
+import ViewIndividualTutorialVideoPage from "../pages/dashboard/learning/tutorialVideos/individualTutorial/viewIndividualTutorial.js";
 
 export const routes = [
         { path:"/profile/settings/edit", Component: GeneralSettingsPage },
@@ -152,5 +154,8 @@ export const routes = [
         { path: "/social/links/profile", Component: AddNewSocialMediaLinksHackerPage },
         { path: "/purchase/course/content/educational/content/:id", Component: PurchaseCourseContentStripePaymentPage },
         { path: "/view/previously/purchased/course/content/download", Component: ListViewPurchasedCoursesPage },
-        { path: "/view/individual/purchased/course/data/:id", Component: ViewIndividualPurchasedCourseDataPage }
+        { path: "/view/individual/purchased/course/data/:id", Component: ViewIndividualPurchasedCourseDataPage },
+        { path: "/view/tutorial/videos/clips", Component: ViewAllTutorialCoursesPage },
+        { path: "/create/tutorial/course/content", Component: CreateTutorialCourseContentPage },
+        { path: "/view/individual/tutorial/video/:id", Component: ViewIndividualTutorialVideoPage }
 ]; 

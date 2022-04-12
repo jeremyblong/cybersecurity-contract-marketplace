@@ -1,0 +1,40 @@
+.tutorial-video-player {
+    min-height: 200px;
+    min-width: 100%;
+    max-width: 90%;
+    max-height: 200px;
+}
+.custom-card-chunk-tutorial {
+    min-width: 100% !important;
+    margin-top: 80px;
+    margin-bottom: 125px;
+}
+.muted-text-color {
+    color: grey;
+    line-height: 6.25px;
+}
+.bold-text-underline {
+    text-decoration-line: underline;
+    color: #f73164;
+}
+.leaded-course {
+    font-weight: 425;
+    font-size: 1rem;
+}
+.card-tutorial-video {
+    transition: transform .2s;
+}
+.card-tutorial-video:hover {
+    box-shadow: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.50) !important;
+    transform: scale(1.25);
+    z-index: 9999 !important;
+}
+.slider-settings-tutorials {
+    min-height: 500px;
+}
+.conditional-tutorial-btn {
+    display: none;
+}
+.card-tutorial-video:hover .conditional-tutorial-btn {
+    display: block;
+}

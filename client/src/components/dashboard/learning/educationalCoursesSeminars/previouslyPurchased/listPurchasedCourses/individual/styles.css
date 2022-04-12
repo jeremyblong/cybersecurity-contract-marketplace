@@ -1,7 +1,14 @@
 .maxedout-overflow-course-sections {
-    max-height: 100vh;
+    max-height: 200vh;
     overflow-y: scroll;
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.395);
+}
+@media only screen and (max-width: 850px) {
+    .maxedout-overflow-course-sections {
+        max-height: 100vh;
+        overflow-y: scroll;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.395);
+    }
 }
 .formatted-size-course {
     font-weight: bold;
@@ -9,4 +16,11 @@
 .list-group-item-action-hover-effect:hover {
     cursor: pointer;
     background-color: aliceblue;
+}
+.markdown-currentselected-course-section {
+    max-height: 325px;
+    overflow-y: scroll;
+    padding: 7.5px;
+    border: 1.75px solid grey;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.195);
 }

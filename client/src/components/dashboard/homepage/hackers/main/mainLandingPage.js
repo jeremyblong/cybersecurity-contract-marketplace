@@ -18,6 +18,7 @@ import { useHistory } from 'react-router-dom';
 import "./styles.css";
 import helpers from "./helpers/miscFunctions.js";
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+import _ from "lodash";
 
 const { renderProfilePicVideoMainPageImg } = helpers;
 
@@ -36,6 +37,12 @@ const MainLandingPageHackerHelper = ({ authentication, userData }) => {
   const [date, setDate] = useState({ date: new Date() });
   // eslint-disable-next-line
   const [startDate, setStartDate] = useState(new Date());
+  const [ paymentData, setPaymentData ] = useState({
+    available: 0,
+    instant: 0,
+    pending: 0,
+    ready: false
+  })
   const handleChange = date => {
     setDate(date)
   };
@@ -116,20 +123,20 @@ const MainLandingPageHackerHelper = ({ authentication, userData }) => {
       setMeridiem('AM')
     }
     
-    var ordervalue1 = Knob({
-      value: 60,
-      angleOffset: 0,
-      thickness: 0.3,
-      width: 65,
-      fgColor: "#7366ff",
-      readOnly: false,
-      dynamicDraw: true,
-      tickColorizeValues: true,
-      bgColor: '#eef5fb',
-      lineCap: 'round',
-      displayPrevious: false
-    })
-    document.getElementById('ordervalue1').appendChild(ordervalue1);
+    // var ordervalue1 = Knob({
+    //   value: 60,
+    //   angleOffset: 0,
+    //   thickness: 0.3,
+    //   width: 65,
+    //   fgColor: "#7366ff",
+    //   readOnly: false,
+    //   dynamicDraw: true,
+    //   tickColorizeValues: true,
+    //   bgColor: '#eef5fb',
+    //   lineCap: 'round',
+    //   displayPrevious: false
+    // })
+    // document.getElementById('ordervalue1').appendChild(ordervalue1);
 
     var ordervalue2 = Knob({
       value: 60,
@@ -226,6 +233,77 @@ const MainLandingPageHackerHelper = ({ authentication, userData }) => {
       );
     }
   }
+  useEffect(() => {
+    
+  }, [])
+  useEffect(() => {
+    const config = {
+        params: {
+            uniqueId: userData.uniqueId,
+            accountType: "hackers"
+        }
+    }
+    axios.get(`${process.env.REACT_APP_BASE_URL}/gather/availiable/stripe/bal`, config).then((res) => {
+        if (res.data.message === "Gathered balance!") {
+
+              const { bal } = res.data;
+
+              for (let index = 0; index < bal.instant_available.length; index++) {
+                  const element = bal.instant_available[index];
+                  if (element.currency === "usd") {
+                    setPaymentData(prevState => {
+                      return {
+                        ...prevState,
+                        instant: element
+                      }
+                    })
+                    break;
+                  }
+              }
+              for (let index = 0; index < bal.available.length; index++) {
+                  const element = bal.available[index];
+                  if (element.currency === "usd") {
+                    setPaymentData(prevState => {
+                      return {
+                        ...prevState,
+                        available: element
+                      }
+                    })
+                    break;
+                  }
+              }
+              for (let index = 0; index < bal.pending.length; index++) {
+                  const element = bal.pending[index];
+                  if (element.currency === "usd") {
+                    setPaymentData(prevState => {
+                      return {
+                        ...prevState,
+                        pending: element
+                      }
+                    })
+                    break;
+                  }
+              }
+
+              setPaymentData(prevState => {
+                return {
+                  ...prevState,
+                  ready: true
+                }
+              });
+          } else {
+              console.log("err", res.data);
+              
+              NotificationManager.warning("An unknown error has occurred while attempting to fetch your related balance related information, Contact support if the problem persists!", "Unknown error has occurred.", 4750);
+          }
+    }).catch((err) => {
+        console.log(err);
+
+        NotificationManager.warning("An unknown error has occurred while attempting to fetch your related balance related information, Contact support if the problem persists!", "Unknown error has occurred.", 4750);
+    })
+  }, []);
+
+  console.log("paymentData", paymentData);
 
   return (
     <Fragment>
@@ -354,7 +432,7 @@ const MainLandingPageHackerHelper = ({ authentication, userData }) => {
                       </div>
                       <div className="media-body">
                         <div className="right-chart-content">
-                          <h4>{"1001"}</h4><span>{Purchase} </span>
+                          <h4>{paymentData.ready === true ? `$${(paymentData.available.amount / 100)}` : "Loading..."}</h4><span>Available Bal.</span>
                         </div>
                       </div>
                     </div>
@@ -382,7 +460,7 @@ const MainLandingPageHackerHelper = ({ authentication, userData }) => {
                       </div>
                       <div className="media-body">
                         <div className="right-chart-content">
-                          <h4>{"1005"}</h4><span>{Sales}</span>
+                          <h4>{paymentData.ready === true ? `$${(paymentData.pending.amount / 100)}` : "Loading..."}</h4><span>Pending Bal.</span>
                         </div>
                       </div>
                     </div>
@@ -410,7 +488,7 @@ const MainLandingPageHackerHelper = ({ authentication, userData }) => {
                       </div>
                       <div className="media-body">
                         <div className="right-chart-content">
-                          <h4>{"100"}</h4><span>{SalesReturn}</span>
+                          <h4>{user !== null && user.stripeAccountVerified === true ? "Verified!" : "NOT Verified."}</h4><span>Payment Acct. Verficiation</span>
                         </div>
                       </div>
                     </div>
@@ -438,7 +516,7 @@ const MainLandingPageHackerHelper = ({ authentication, userData }) => {
                       </div>
                       <div className="media-body">
                         <div className="right-chart-content">
-                          <h4>{"101"}</h4><span>{PurchaseRet}</span>
+                          <h4>{user !== null && _.has(user, "tokens") ? user.tokens : "Loading..."}</h4><span>Account Token's</span>
                         </div>
                       </div>
                     </div>
@@ -452,10 +530,7 @@ const MainLandingPageHackerHelper = ({ authentication, userData }) => {
               <CardBody>
                 <div className="media align-items-center">
                   <div className="media-body right-chart-content">
-                    <h4>{"$95,900"}<span className="new-box">{Hot}</span></h4><span>{PurchaseOrderValue}</span>
-                  </div>
-                  <div className="knob-block text-center">
-                    <div className="knob1" id="ordervalue1"></div>
+                    <h4>{user !== null && _.has(user, "fullyVerified") && user.fullyVerified === true ? "Verified!" : "NOT Verified."}<span className="new-box">Verification Status</span></h4><span>Account Verification Status</span>
                   </div>
                 </div>
               </CardBody>

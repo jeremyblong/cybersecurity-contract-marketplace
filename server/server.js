@@ -260,6 +260,13 @@ app.use("/handle/purchase/course/content/payment", require("./routes/shared/lear
 app.use("/verify/transfer/initiate", require("./routes/shared/paymentRelated/accountBalance/topoffAccountBalance/verifyTransaction.js"));
 app.use("/gather/purchased/course/data/only", require("./routes/shared/learningCoursesForSale/purchasedCourseContent/fetchPreviouslyPurchasedCourses.js"));
 app.use("/gather/purchased/course/data/profile", require("./routes/shared/learningCoursesForSale/purchasedCourseContent/fetchPurchasedContentCourse.js"));
+app.use("/post/short/tutorial/course/instructional", require("./routes/hackers/tutorialCoursesShort/createNewTutorialCourse/createNewCourse.js"));
+app.use("/gather/instructional/tutorial/courses/tutorials", require("./routes/hackers/tutorialCoursesShort/gatherCourses/gatherTutorialCourses.js"));
+app.use("/gather/instructional/tutorial/course/singular", require("./routes/hackers/tutorialCoursesShort/gatherCourses/individual/gatherIndividualCourseData.js"));
+app.use("/like/response/tutorial/individual/response", require("./routes/shared/learningCoursesForSale/tutorialRelated/respondToTutorial/like/likeRespondTutorialPost.js"));
+app.use("/dislike/response/tutorial/individual/response", require("./routes/shared/learningCoursesForSale/tutorialRelated/respondToTutorial/dislike/dislikeRespondTutorialPost.js"));
+app.use("/transfer/tip/amount/poster/user", require("./routes/shared/learningCoursesForSale/tutorialRelated/tipPostingUser/tipPosterUserTutorialVideo.js"));
+
 
 
 app.get('*', function(req, res) {
@@ -290,6 +297,12 @@ io.on("connection", socket => {
 		console.log("NEW BID RECIEVED!...", listing);
 
 		io.sockets.emit("newBidRecieved", listing);
+	})
+
+	socket.on("fireTutorialConfetti", (amount) => {
+		console.log("Start displaying confetti - activate display...!", amount);
+
+		io.sockets.emit("fireTutorialConfetti", amount);
 	})
 
 	socket.on("disconnect", () => console.log("Client disconnected"));
