@@ -21,6 +21,9 @@ const UserSchema =  new Schema({
     recentlyViewedProfileViews: {
         type: Array
     },
+    referral: {
+        type: Schema.Types.Mixed
+    },
     stripeAccountDetails: {
         type: Object
     },
@@ -29,6 +32,9 @@ const UserSchema =  new Schema({
     },
     totalUniqueViews: {
         type: Number
+    },
+    referralCode: {
+        type: String
     },
     tokens: {
         type: Number

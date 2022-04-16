@@ -363,7 +363,7 @@ const Rightbar = ({ balance, ready, authenticated, data, authentication, saveLis
               {data.accountType === "hackers" ? <li className={"row-wrap"} onClick={() => {
                 history.push(`/hacker/profile/individual/view/${data.uniqueId}`);
               }}><FileText /><span className={"row-wrap"}>View Public H&shy;acker-Account</span></li> : <li className={"row-wrap"} onClick={() => {
-                console.log("do nothing yet...");
+                history.push(`/employer/individual/profile/main/${data.uniqueId}`)
               }}><FileText /><span className={"row-wrap"}>View Public E&shy;mployer-Account</span></li>}
               <li onClick={() => {
                 history.push("/messaging/main");

@@ -22,11 +22,17 @@ const UserSchema =  new Schema({
         type: String,
         default: ""
     }, 
+    referral: {
+        type: Schema.Types.Mixed
+    },
     stripeAccountVerified: {
         type: Boolean
     },
     stripeAccountDetails: {
         type: Object
+    },
+    referralCode: {
+        type: String
     },
     email: {
         type: String,

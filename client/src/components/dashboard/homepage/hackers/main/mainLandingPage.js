@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import Breadcrumb from '../../../../../layout/breadcrumb'
-import { Container, Row, Col, Card, CardHeader, CardBody } from 'reactstrap'
+import { Container, Row, Col, Card, CardHeader, CardBody, ListGroup, ListGroupItem, Media, Button, CardFooter } from 'reactstrap'
 import DatePicker from "react-datepicker";
 import ApexCharts from 'react-apexcharts'
 import ChartistChart from 'react-chartist';
@@ -8,7 +8,7 @@ import Knob from "knob";
 import { Currentlysale, Marketvalue } from '../../chartsData/apex-charts-data'
 import { smallchart1data, smallchart1option, smallchart2data, smallchart2option, smallchart3data, smallchart3option, smallchart4data, smallchart4option } from '../../chartsData/chartist-charts-data'
 import { Send, Clock } from 'react-feather';
-import { Dashboard, Summary, NewsUpdate, Appointment, Notification, MarketValue, Chat, New, Tomorrow, Yesterday, Daily, Weekly, Monthly, Store, Online, ReferralEarning, CashBalance, SalesForcasting, Purchase, Sales, SalesReturn, PurchaseRet, PurchaseOrderValue, ProductOrderValue, Pending, Yearly, Hot, Today, VenterLoren, Done, JohnLoren, Year, Month, Day, RightNow } from '../../../../../constant'
+import { Dashboard, Summary, Notification, MarketValue, Chat, New, Tomorrow, Yesterday, Daily, Weekly, Monthly, Store, Online, ReferralEarning, CashBalance, SalesForcasting, ProductOrderValue, Yearly, Today, Year, Month, Day, RightNow } from '../../../../../constant'
 import axios from "axios";
 import { connect } from "react-redux";
 import { authentication } from "../../../../../redux/actions/authentication/auth.js";
@@ -19,8 +19,19 @@ import "./styles.css";
 import helpers from "./helpers/miscFunctions.js";
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import _ from "lodash";
+import ReactMapboxGl, { Marker } from 'react-mapbox-gl';
+import moment from "moment";
+
+
 
 const { renderProfilePicVideoMainPageImg } = helpers;
+
+
+
+const Map = ReactMapboxGl({
+  accessToken: process.env.REACT_APP_MAPBOX_TOKEN,
+  interactive: false
+});
 
 const MainLandingPageHackerHelper = ({ authentication, userData }) => {
 
@@ -218,7 +229,7 @@ const MainLandingPageHackerHelper = ({ authentication, userData }) => {
                 <div className="profile-vector">{renderProfilePicVideoMainPageImg(lastPicVid)}</div>
                 <h4 style={{ marginTop: "32.5px" }} className="f-w-600 white-text-custom"><span id="greeting">{daytimes}</span> <span className="right-circle"><i className="fa fa-check-circle f-14 middle"></i></span></h4>
                 <p className='white-text-custom'><span> {"Today's earrning is $405 & your sales increase rate is 3.7 over the last 24 hours"}</span></p>
-                <div className="whatsnew-btn"><a className="btn btn-primary" href="#javascript">{"Whats New !"}</a></div>
+                <div className="whatsnew-btn"><a className="btn btn-primary" href={null}>{"Whats New !"}</a></div>
                 <div className="left-icon"><i className="fa fa-bell"> </i></div>
               </div>
             </CardBody>
@@ -305,6 +316,15 @@ const MainLandingPageHackerHelper = ({ authentication, userData }) => {
 
   console.log("paymentData", paymentData);
 
+
+  const handleNotificationClick = (notification) => {
+    console.log("handleNotificationClick", notification);
+  }
+
+  const viewAllNotifications = () => {
+    history.push("/hacker/notifications");
+  }
+
   return (
     <Fragment>
       <Breadcrumb parent="Dashboard" title="Default" />
@@ -315,7 +335,7 @@ const MainLandingPageHackerHelper = ({ authentication, userData }) => {
             {renderTopLeft()}
           </Col>
           <Col xl="8 xl-100" className="dashboard-sec box-col-12">
-            <Card className="earning-card">
+            <Card className="earning-card shadow">
               <CardBody className="p-0">
                 <Row className="m-0">
                   <Col xl="3" className="earning-content p-0">
@@ -336,7 +356,7 @@ const MainLandingPageHackerHelper = ({ authentication, userData }) => {
                         <h5>{"90%"}</h5>
                         <p className="font-roboto">{"This Month Sale"}</p>
                       </Col>
-                      <Col xl="12" className="p-0 left-btn"><a className="btn btn-gradient" href="#javascript">{Summary}</a></Col>
+                      <Col xl="12" className="p-0 left-btn"><a className="btn btn-gradient" href={null}>{Summary}</a></Col>
                     </Row>
                   </Col>
                   <Col xl="9" className="p-0">
@@ -406,7 +426,7 @@ const MainLandingPageHackerHelper = ({ authentication, userData }) => {
             </Card>
           </Col>
           <Col xl="9 xl-100" className="chart_data_left box-col-12">
-            <Card>
+            <Card className={"shadow"}>
               <CardBody className="p-0">
                 <Row className="m-0 chart-main">
                   <Col xl="3" md="6" sm="6" className="p-0 box-col-6">
@@ -526,7 +546,7 @@ const MainLandingPageHackerHelper = ({ authentication, userData }) => {
             </Card>
           </Col>
           <Col xl="3 xl-50" className="chart_data_right box-col-12">
-            <Card>
+            <Card className={"shadow"}>
               <CardBody>
                 <div className="media align-items-center">
                   <div className="media-body right-chart-content">
@@ -537,7 +557,7 @@ const MainLandingPageHackerHelper = ({ authentication, userData }) => {
             </Card>
           </Col>
           <Col xl="3 xl-50" className="chart_data_right second d-none">
-            <Card>
+            <Card className={"shadow"}>
               <CardBody>
                 <div className="media align-items-center">
                   <div className="media-body right-chart-content">
@@ -551,10 +571,10 @@ const MainLandingPageHackerHelper = ({ authentication, userData }) => {
             </Card>
           </Col>
           <Col xl="4 xl-50" className="news box-col-6">
-            <Card>
+            <Card className={"shadow"}>
               <CardHeader>
                 <div className="header-top">
-                  <h5 className="m-0">{NewsUpdate}</h5>
+                  <h5 className="m-0">Recently Viewed 'Profile View's</h5>
                   <div className="card-header-right-icon">
                     <select className="button btn btn-primary">
                       <option>{Today}</option>
@@ -565,73 +585,64 @@ const MainLandingPageHackerHelper = ({ authentication, userData }) => {
                 </div>
               </CardHeader>
               <CardBody className="p-0">
-                <div className="news-update">
-                  <h6>{"36% off For pixel lights Couslations Types."}</h6><span>{"Lorem Ipsum is simply dummy..."}</span>
-                </div>
-                <div className="news-update">
-                  <h6>{"We are produce new product this"}</h6><span> {"Lorem Ipsum is simply text of the printing... "}</span>
-                </div>
-                <div className="news-update">
-                  <h6>{"50% off For COVID Couslations Types."}</h6><span>{"Lorem Ipsum is simply dummy..."}</span>
-                </div>
+                <ListGroup>
+                  {user !== null && typeof user.recentlyViewedProfileViews !== "undefined" && user.recentlyViewedProfileViews.length > 0 ? user.recentlyViewedProfileViews.slice(0, 4).map((viewer, index) => {
+                      if (viewer !== null) {
+                        return (
+                            <Fragment key={index}>
+                                <ListGroupItem onClick={() => {}} className={"list-group-item-action flex-column align-items-start notification-custom-notification"}>
+                                    <Row>
+                                        <Col sm="12" md="12" lg="12" xl="12">
+                                            <div className="d-flex w-100 justify-content-between">
+                                                <h5 className="mb-1" style={{ marginRight: "12.5px" }}>{`${viewer.viewerName} has viewed your profile..`}</h5><br /><small>{`The viewer ${viewer.viewerName} has viewed your profile on ${moment(viewer.viewedOnLegibleDate).format("MM/DD/YYYY")} - This is a 'profile view' which means they visited your particular profile!`}</small>
+                                            </div>
+                                            <p className="mb-1">Has been a member since {moment(viewer.memberSince).fromNow()}...</p>
+                                            <small>{viewer.viewedOnLegibleDate}</small>
+                                        </Col>
+                                    </Row>
+                                </ListGroupItem>
+                            </Fragment>
+                          );
+                        }
+                    }) : <Fragment>
+                        <img src={require("../../../../../assets/images/no-current-notifications.png")} className={"no-notifications-img"} />
+                    </Fragment>}
+                </ListGroup>
               </CardBody>
               <div className="card-footer">
-                <div className="bottom-btn"><a href="#javascript">{"More..."}</a></div>
+                <div className="bottom-btn"><a href={null}>{"More..."}</a></div>
               </div>
             </Card>
           </Col>
           <Col xl="4 xl-50" className="appointment-sec box-col-6">
             <Row>
               <Col xl="12" className="appointment">
-                <Card>
-                  <CardHeader className="card-no-border">
-                    <div className="header-top">
-                          <h5 className="m-0">{Appointment}</h5>
-                      <div className="card-header-right-icon">
-                        <select className="button btn btn-primary">
-                          <option>{Today}</option>
-                          <option>{Tomorrow}</option>
-                          <option>{Yesterday}</option>
-                        </select>
-                      </div>
-                    </div>
+                <Card className={"shadow"}>
+                  <CardHeader className='b-l-primary b-r-primary'>
+                    <h4>Your current location (this is private information)</h4>
                   </CardHeader>
-                  <CardBody className="pt-0">
-                    <div className="appointment-table table-responsive">
-                      <table className="table table-bordernone">
-                        <tbody>
-                          <tr>
-                            <td><img className="img-fluid img-40 rounded-circle mb-3" src={require("../../../../../assets/images/appointment/app-ent.jpg")} alt="" />
-                              <div className="status-circle bg-primary"></div>
-                            </td>
-                            <td className="img-content-box"><span className="d-block">{VenterLoren}</span><span className="font-roboto">Now</span></td>
-                            <td>
-                              <p className="m-0 font-primary">{"28 Sept"}</p>
-                            </td>
-                            <td className="text-right">
-                              <div className="button btn btn-primary">{Done}<i className="fa fa-check-circle ml-2"></i></div>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td><img className="img-fluid img-40 rounded-circle" src={require("../../../../../assets/images/appointment/app-ent.jpg")} alt="" />
-                              <div className="status-circle bg-primary"></div>
-                            </td>
-                            <td className="img-content-box"><span className="d-block">{JohnLoren}</span><span className="font-roboto">{"11:00"}</span></td>
-                            <td>
-                              <p className="m-0 font-primary">{"22 Sept"}</p>
-                            </td>
-                            <td className="text-right">
-                              <div className="button btn btn-danger">{Pending}<i className="fa fa-check-circle ml-2"></i></div>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
+                  <CardBody style={{ marginTop: "27.5px" }} className="pt-0">
+                    <Map
+                      style="mapbox://styles/mapbox/streets-v9"
+                      containerStyle={{
+                        height: "275px",
+                        width: '100%',
+                        border: "3px solid grey"
+                      }}
+                      center={_.has(userData, "userLatestLocation") ? [userData.userLatestLocation.longitude, userData.userLatestLocation.latitude] : [104.9903, 39.7392]}
+                    >
+                      <Marker
+                        coordinates={_.has(userData, "userLatestLocation") ? [userData.userLatestLocation.longitude, userData.userLatestLocation.latitude] : [104.9903, 39.7392]}
+                        anchor="bottom"
+                      >
+                        <img src={require("../../../../../assets/icons/location.png")}/>
+                      </Marker>
+                    </Map>
                   </CardBody>
                 </Card>
               </Col>
               <Col xl="12" className="alert-sec">
-                <Card className="bg-img">
+                <Card className="bg-img shadow">
                   <CardHeader>
                     <div className="header-top">
                       <h5 className="m-0">{"Alert"}  </h5>
@@ -662,31 +673,37 @@ const MainLandingPageHackerHelper = ({ authentication, userData }) => {
                 </div>
               </CardHeader>
               <CardBody className="pt-0">
-                <div className="media">
-                  <div className="media-body">
-                    <p>{"20-04-2020"} <span>{"10:10"}</span></p>
-                    <h6>{"Updated Product"}<span className="dot-notification"></span></h6><span>{"Quisque a consequat ante sit amet magna..."}</span>
-                  </div>
-                </div>
-                <div className="media">
-                  <div className="media-body">
-                    <p>{"20-04-2020"}<span className="pl-1">{Today}</span><span className="badge badge-secondary">{New}</span></p>
-                    <h6>{"Tello just like your product"}<span className="dot-notification"></span></h6><span>{"Quisque a consequat ante sit amet magna... "}</span>
-                  </div>
-                </div>
-                <div className="media">
-                  <div className="media-body">
-                    <div className="d-flex mb-3">
-                      <div className="inner-img"><img className="img-fluid" src={require("../../../../../assets/images/notification/1.jpg")} alt="Product-1" /></div>
-                      <div className="inner-img"><img className="img-fluid" src={require("../../../../../assets/images/notification/2.jpg")} alt="Product-2" /></div>
-                    </div><span className="mt-3">{"Quisque a consequat ante sit amet magna..."}</span>
-                  </div>
-                </div>
+                <ListGroup>
+                  {user !== null && typeof user.notifications !== "undefined" && user.notifications.length > 0 ? user.notifications.sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 3).map((notification, index) => {
+                      if (notification !== null) {
+                        return (
+                            <Fragment key={index}>
+                                <ListGroupItem onClick={() => handleNotificationClick(notification)} className={notification.seenRead === true ? "list-group-item-action flex-column align-items-start notification-custom-notification active" : "list-group-item-action flex-column align-items-start notification-custom-notification"}>
+                                    <Row>
+                                        <Col sm="12" md="12" lg="12" xl="12">
+                                            <div className="d-flex w-100 justify-content-between">
+                                                <h5 className="mb-1 maxed-title-notification" style={{ marginRight: "82.5px" }}>{notification.title.slice(0, 75)}{typeof notification.title !== "undefined" && notification.title.length >= 75 ? "..." : ""}</h5><small>{moment(notification.date).fromNow()}</small>
+                                            </div>
+                                            <p className="mb-1">{notification.description.slice(0, 100)}{typeof notification.description !== "undefined" && notification.description.length >= 100 ? "..." : ""}</p>
+                                            <small>{notification.dateString}</small>
+                                        </Col>
+                                    </Row>
+                                </ListGroupItem>
+                            </Fragment>
+                          );
+                        }
+                    }) : <Fragment>
+                        <img src={require("../../../../../assets/images/no-current-notifications.png")} className={"no-notifications-img"} />
+                    </Fragment>}
+                </ListGroup>
               </CardBody>
+              <CardFooter>
+                <Button className={"btn-square-info"} color={"info-2x"} style={{ width: "100%" }} outline onClick={() => viewAllNotifications()}>View All Notification's</Button>
+              </CardFooter>
             </Card>
           </Col>
           <Col xl="4 xl-50" className="appointment box-col-6">
-            <Card>
+            <Card className={"shadow"}>
               <CardHeader>
                 <div className="header-top">
                   <h5 className="m-0">{MarketValue}</h5>
@@ -707,7 +724,7 @@ const MainLandingPageHackerHelper = ({ authentication, userData }) => {
             </Card>
           </Col>
           <Col xl="4 xl-100" className="chat-sec box-col-6">
-            <Card className="chat-default">
+            <Card className="chat-default shadow">
               <CardHeader className="card-no-border">
                 <div className="media media-dashboard">
                   <div className="media-body">
@@ -759,7 +776,7 @@ const MainLandingPageHackerHelper = ({ authentication, userData }) => {
             </Card>
           </Col>
           <Col xl="4 xl-50" lg="12" className="calendar-sec box-col-6">
-            <Card className="gradient-primary o-hidden">
+            <Card className="gradient-primary o-hidden shadow">
               <CardBody>
                 <div className="default-datepicker">
                   <DatePicker

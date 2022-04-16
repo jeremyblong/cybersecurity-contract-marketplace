@@ -19,6 +19,20 @@ router.post("/", async (req, resppppp, next) => {
 
     if (employer !== null && hacker !== null) {
 
+        const calculateDate = () => {
+            // date referred/signed-up
+            const referralDate = new Date(hacker.referral.date);
+            const hours = 730; // approx. ONE MONTH in hours..
+            // exp date - discontinue perks..
+            const expirationDate = referralDate.setHours(referralDate.getHours() + hours);
+
+            if (referralDate < expirationDate) {
+                return true;
+            } else {    
+                return false;
+            }
+        }
+
         await stripe.paymentIntents.create({
             amount: Math.round(depositAmount) * 100,
             payment_method_types: ['card'],
@@ -26,7 +40,11 @@ router.post("/", async (req, resppppp, next) => {
             currency: "usd",
             customer: employer.stripeAccountDetails.id,
             description: "Payment made in relation to a 'contracted hacker' - deposit funds to provide 'purchase-proof' for the hacker so they can get started with the desired contract.",
-            payment_method: activeCard.id
+            payment_method: activeCard.id,
+            transfer_data: {
+                destination: hacker.stripeAccountDetails.id,
+                amount: _.has(hacker, "referral") && calculateDate() ? Number(Math.round(depositAmount) * 100).toFixed(0) : Number(((Math.round(depositAmount) * 100) * config.get("percentageCut"))).toFixed(0)
+            }
         }, (err, result) => {
             if (err) {
                 console.log("critical error creating intent..:", err);

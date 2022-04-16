@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import ShowMoreText from "react-show-more-text";
+import { Row, Col } from "reactstrap";
+import "./styles.css";
+
 
 const EffectiveProtection = () => {
 	const [ openReadMore, setOpenReadMore ] = useState({
@@ -21,7 +24,31 @@ const EffectiveProtection = () => {
 			<div className="container-fluid">
 				<div className="row">
 					<div className="col-lg-6 pl-0">
-						<div className="complete-img"></div>
+						<div className="complete-img">
+							<Row style={{ paddingTop: "22.5px" }}>
+								<Col sm="12" md="12" lg="12" xl="12">
+									<div className='centered-both-ways'>
+										<iframe className='youtube-homepage-video' width="67.5%" height="340" src="https://www.youtube.com/embed/iJaplbzj4Js" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+									</div>
+								</Col>
+							</Row>
+							<hr />
+							<Row>
+								<Col sm="12" md="12" lg="12" xl="12">
+									<div className='centered-both-ways'>
+										<iframe className='youtube-homepage-video' width="67.5%" height="340" src="https://www.youtube.com/embed/c-VQXSILzng" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+									</div>
+								</Col>
+							</Row>
+							<hr />
+							<Row style={{ paddingBottom: "22.5px" }}>
+								<Col sm="12" md="12" lg="12" xl="12">
+									<div className='centered-both-ways'>
+										<iframe className='youtube-homepage-video' width="67.5%" height="340" src="https://www.youtube.com/embed/d0-9etZlAK4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+									</div>
+								</Col>
+							</Row>
+						</div>
 					</div>
 					<div className="col-lg-6">
 						<div className="complete-content">

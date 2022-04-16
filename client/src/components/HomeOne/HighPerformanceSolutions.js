@@ -1,5 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom'; 
+import { Row, Col } from "reactstrap";
+import "./styles.css";
 
 const HighPerformanceSolutions = () => {
     return (
@@ -9,7 +11,15 @@ const HighPerformanceSolutions = () => {
 					<h2>Hire Hackers To Test Your Company's Security.</h2>
 					<p>At The Hacker Marketplace, we take away the need for you to find a hacker and manage the process in order to test your company's security. We offer a marketplace where you can post your job, hackers will apply, and then you review our candidates and hire one or even multiple contractors. You get access to all of the hacker's work completed—from start to finish- on our platform <strong>as soon</strong> as new submissions are <strong>processed</strong> for piece of mind & assurance along the way!</p>
 				</div>
-
+				<Row>
+					<Col sm="12" md="6" lg="6" xl="6">
+						<img src={require("../../assets/images/createlivestream.png")} className={"landing-page-display-img"} />
+					</Col>
+					<Col sm="12" md="6" lg="6" xl="6">
+						<img src={require("../../assets/images/employerlist.png")} className={"landing-page-display-img"} />
+					</Col>
+				</Row>
+				<hr style={{ marginTop: "22.5px", marginBottom: "22.5px" }} />
 				<div className="row">
 					<div className="col-lg-5">
 						<div className="single-solutions solutions-time-bg-1">
@@ -86,6 +96,15 @@ const HighPerformanceSolutions = () => {
 						</div>
 					</div>
 				</div>
+				<hr style={{ marginTop: "22.5px", marginBottom: "22.5px" }} />
+				<Row>
+					<Col sm="12" md="6" lg="6" xl="6">
+						<img src={require("../../assets/images/tutorialindividualview.png")} className={"landing-page-display-img"} />
+					</Col>
+					<Col sm="12" md="6" lg="6" xl="6">
+						<img src={require("../../assets/images/forumindividual.png")} className={"landing-page-display-img"} />
+					</Col>
+				</Row>
 			</div>
 		</section>
     )

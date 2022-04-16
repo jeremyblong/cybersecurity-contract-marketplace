@@ -100,25 +100,25 @@ const RenderEmojiLogic = ({ reactions, comments }) => {
 
     return (
         <div className={"emoji-already-existant-wrapper-container"}>
-            {emojiData.map((reaction) => {
+            {emojiData.map((reaction, i) => {
                 switch (reaction) {
                     case "partying":
-                        return <img src={require("../../../../../../../../assets/gifs/partying.gif")} className={"emoji-already-existant-profile-wall"} />;
+                        return <img key={i} src={require("../../../../../../../../assets/gifs/partying.gif")} className={"emoji-already-existant-profile-wall"} />;
                         break;
                     case "screaming":
-                        return <img src={require("../../../../../../../../assets/gifs/screaming.gif")} className={"emoji-already-existant-profile-wall"} />;
+                        return <img key={i} src={require("../../../../../../../../assets/gifs/screaming.gif")} className={"emoji-already-existant-profile-wall"} />;
                         break;
                     case "steaming":
-                        return <img src={require("../../../../../../../../assets/gifs/steaming.gif")} className={"emoji-already-existant-profile-wall"} />;
+                        return <img key={i} src={require("../../../../../../../../assets/gifs/steaming.gif")} className={"emoji-already-existant-profile-wall"} />;
                         break;
                     case "sunglasses":
-                        return <img src={require("../../../../../../../../assets/gifs/sunglasses.gif")} className={"emoji-already-existant-profile-wall"} />;
+                        return <img key={i} src={require("../../../../../../../../assets/gifs/sunglasses.gif")} className={"emoji-already-existant-profile-wall"} />;
                         break;
                     case "tearsOfJoy":
-                        return <img src={require("../../../../../../../../assets/gifs/tearsOfJoy.gif")} className={"emoji-already-existant-profile-wall"} />;
+                        return <img key={i} src={require("../../../../../../../../assets/gifs/tearsOfJoy.gif")} className={"emoji-already-existant-profile-wall"} />;
                         break;
                     case "vomitting":
-                        return <img src={require("../../../../../../../../assets/gifs/vomitting.gif")} className={"emoji-already-existant-profile-wall"} />;
+                        return <img key={i} src={require("../../../../../../../../assets/gifs/vomitting.gif")} className={"emoji-already-existant-profile-wall"} />;
                         break;
                     default:
                         return null;

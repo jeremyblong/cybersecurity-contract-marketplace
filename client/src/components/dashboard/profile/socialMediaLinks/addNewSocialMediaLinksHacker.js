@@ -132,7 +132,7 @@ const AddNewSocialMediaLinksHackerHelper = ({ userData }) => {
                                                             ...prevState,
                                                             github: e.target.value
                                                         }
-                                                    })} className="form-control" type="text" placeholder={"https://github.com/<handle>"} />
+                                                    })} className="form-control" type="text" placeholder={"Enter your 'github' social profile URL.."} />
                                                 <InputGroupAddon addonType="append"><InputGroupText className='input-group-text-social-reddish'>{"GitHub"}</InputGroupText></InputGroupAddon>
                                             </InputGroup>
                                         </FormGroup>
@@ -164,7 +164,7 @@ const AddNewSocialMediaLinksHackerHelper = ({ userData }) => {
                                                             ...prevState,
                                                             bugcrowd: e.target.value
                                                         }
-                                                    })} className="form-control" type="text" placeholder={"https://bugcrowd.com/<handle>"} />
+                                                    })} className="form-control" type="text" placeholder={"Enter your 'bugcrowd' social profile URL.."} />
                                                 <InputGroupAddon addonType="append"><InputGroupText className='input-group-text-social'>{"Bugcrowd"}</InputGroupText></InputGroupAddon>
                                             </InputGroup>
                                         </FormGroup>
@@ -179,7 +179,7 @@ const AddNewSocialMediaLinksHackerHelper = ({ userData }) => {
                                                             ...prevState,
                                                             cobalt: e.target.value
                                                         }
-                                                    })} className="form-control" type="text" placeholder={"https://app.cobalt.io/<handle>"} />
+                                                    })} className="form-control" type="text" placeholder={"Enter your 'cobalt' social profile URL.."} />
                                                 <InputGroupAddon addonType="append"><InputGroupText className='input-group-text-social'>{"Cobalt"}</InputGroupText></InputGroupAddon>
                                             </InputGroup>
                                         </FormGroup>
@@ -196,7 +196,7 @@ const AddNewSocialMediaLinksHackerHelper = ({ userData }) => {
                                                             ...prevState,
                                                             gitlab: e.target.value
                                                         }
-                                                    })} className="form-control" type="text" placeholder={"https://gitlab.com/<handle>"} />
+                                                    })} className="form-control" type="text" placeholder={"Enter your 'gitlab' social profile URL.."} />
                                                 <InputGroupAddon addonType="append"><InputGroupText className='input-group-text-social-reddish'>{"GitLab"}</InputGroupText></InputGroupAddon>
                                             </InputGroup>
                                         </FormGroup>
@@ -211,7 +211,7 @@ const AddNewSocialMediaLinksHackerHelper = ({ userData }) => {
                                                             ...prevState,
                                                             twitter: e.target.value
                                                         }
-                                                    })} className="form-control" type="text" placeholder={"https://twitter.com/<handle>"} />
+                                                    })} className="form-control" type="text" placeholder={"Enter your 'twitter' social profile URL.."} />
                                                 <InputGroupAddon addonType="append"><InputGroupText className='input-group-text-social-reddish'>{"Twitter"}</InputGroupText></InputGroupAddon>
                                             </InputGroup>
                                         </FormGroup>
@@ -228,7 +228,7 @@ const AddNewSocialMediaLinksHackerHelper = ({ userData }) => {
                                                             ...prevState,
                                                             hackerrank: e.target.value
                                                         }
-                                                    })} className="form-control" type="text" placeholder={"Enter your 'hacker-rank' social URL/Handle.."} />
+                                                    })} className="form-control" type="text" placeholder={"Enter your 'hacker-rank' social URL.."} />
                                                 <InputGroupAddon addonType="append"><InputGroupText className='input-group-text-social'>{"HackerRank"}</InputGroupText></InputGroupAddon>
                                             </InputGroup>
                                         </FormGroup>
@@ -243,7 +243,7 @@ const AddNewSocialMediaLinksHackerHelper = ({ userData }) => {
                                                             ...prevState,
                                                             hackthebox: e.target.value
                                                         }
-                                                    })} className="form-control" type="text" placeholder={"https://app.hackthebox.eu/profile/<handle>"} />
+                                                    })} className="form-control" type="text" placeholder={"Enter your 'hack-the-box' social profile URL.."} />
                                                 <InputGroupAddon addonType="append"><InputGroupText className='input-group-text-social'>{"HackTheBox"}</InputGroupText></InputGroupAddon>
                                             </InputGroup>
                                         </FormGroup>
@@ -260,7 +260,7 @@ const AddNewSocialMediaLinksHackerHelper = ({ userData }) => {
                                                             ...prevState,
                                                             youtube: e.target.value
                                                         }
-                                                    })} className="form-control" type="text" placeholder={"Enter your 'hacker-rank' social URL/Handle.."} />
+                                                    })} className="form-control" type="text" placeholder={"Enter your 'youtube' social URL.."} />
                                                 <InputGroupAddon addonType="append"><InputGroupText className='input-group-text-social-reddish'>{"YouTube"}</InputGroupText></InputGroupAddon>
                                             </InputGroup>
                                         </FormGroup>
@@ -275,7 +275,7 @@ const AddNewSocialMediaLinksHackerHelper = ({ userData }) => {
                                                             ...prevState,
                                                             tiktok: e.target.value
                                                         }
-                                                    })} className="form-control" type="text" placeholder={"Enter your 'TikTok' social URL/Handle.."} />
+                                                    })} className="form-control" type="text" placeholder={"Enter your 'TikTok' social URL.."} />
                                                 <InputGroupAddon addonType="append"><InputGroupText className='input-group-text-social-reddish'>{"TikTok"}</InputGroupText></InputGroupAddon>
                                             </InputGroup>
                                         </FormGroup>

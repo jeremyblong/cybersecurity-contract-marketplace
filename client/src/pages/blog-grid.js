@@ -84,7 +84,7 @@ const BlogGrid = () => {
                     <div className="row">
                         {typeof blogs !== "undefined" && blogs.length > 0 ? blogs.map((blog, index) => {
                             return (
-                                <Fragment>
+                                <Fragment key={index}>
                                     <div className="col-lg-4 col-sm-6">
                                         <div className="single-blog">
                                             <img src="/img/blog/blog1.jpg" alt="Image" />

@@ -180,6 +180,11 @@ export const MENUITEMS = [
                     { path: `${process.env.PUBLIC_URL}/profile/settings/edit`, title: 'Edit/Modify Profile Data', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/social/links/profile`, title: 'Edit/Modify Public Social Links', type: 'link' }
                 ]
+            },
+            {
+                title: 'Referral System', icon: Headphones, type: 'sub', active: false, children: [
+                    { path: `${process.env.PUBLIC_URL}/create/new/referral/invitation/user`, title: 'Create A New Referral', type: 'link' }
+                ]
             }
         ]          
     },

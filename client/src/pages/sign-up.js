@@ -24,7 +24,8 @@ constructor (props) {
         username: "",
         agreement: false,
         switchAccountType: "You're registering as a 'Company/Employer'",
-        checked: false
+        checked: false,
+        referralCode: ""
     }
 }
 
@@ -48,7 +49,7 @@ constructor (props) {
 
         console.log("submitted.");
 
-        const { firstName, lastName, email, username, password, agreement, checked } = this.state;
+        const { firstName, lastName, email, username, password, agreement, checked, referralCode } = this.state;
 
         if ((typeof firstName !== "undefined" && firstName.length > 0) && (typeof lastName !== "undefined" && lastName.length > 0) && (typeof email !== "undefined" && email.length > 0) && (typeof username !== "undefined" && username.length > 0) && (typeof password !== "undefined" && password.length > 0)) {
             if (agreement === true) {
@@ -60,6 +61,7 @@ constructor (props) {
                     username, 
                     password, 
                     agreement,
+                    referralCode,
                     accountType: checked === true ? "hackers" : "employers"
                 }, {
                     withCredentials: true
@@ -74,6 +76,7 @@ constructor (props) {
                             password: "",
                             username: "",
                             agreement: false,
+                            referralCode: null,
                             checked: false,
                             switchAccountType: "You're registering as a 'Company/Employer'"
                         }, () => {
@@ -91,6 +94,8 @@ constructor (props) {
                                 }
                             }, 3000);
                         })
+                    } else if (res.data.message === "An unknown error has occurred while trying to locate referring user - please make sure you're entering a 'proper referral code' as we were unable to find any results for a user with that information/code..") {
+                        NotificationManager.error(res.data.message, "Enter a VALID referral code OR just don't use one!", 4750);
                     } else {
                         NotificationManager.error('An error occurred during the registration process - please try again...', 'ERROR REGISTERING.', 3500);
                     }
@@ -188,6 +193,17 @@ constructor (props) {
                                             onChange={this.handleChange}
                                             name="password" 
                                             placeholder="Password" />
+                                        </div>
+                                    </div>
+                                    <div className="col-md-12 col-sm-12">
+                                        <div className="form-group">
+                                            <input 
+                                            className="form-control" 
+                                            type="text" 
+                                            value={this.state.referralCode}
+                                            onChange={this.handleChange}
+                                            name="referralCode" 
+                                            placeholder="Enter your referral code (if you have one.. *NOT REQUIRED*)" />
                                         </div>
                                     </div>
 

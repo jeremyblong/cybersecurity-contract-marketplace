@@ -14,8 +14,10 @@ import fourteen from "../../../../../../assets/images/user/14.png";
 import four from "../../../../../../assets/images/user/4.jpg";
 import ShowMoreText from "react-show-more-text";
 import _ from "lodash";
-import { SocialNetworks, BuckyBarnes, JasonBorne, SarahLoren, AndewJon, AddFriend, ComerenDiaz, Friends } from "../../../../../../constant";
+import { SocialNetworks, Friends } from "../../../../../../constant";
 import { useHistory } from "react-router-dom"; 
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { NotificationManager } from "react-notifications";
 
 const { renderPicVideoPlaceholder, renderProfilePicVideoGallerySubbed, renderHackerEmployerMapped } = helpers;
 
@@ -73,11 +75,102 @@ const RightBar = ({ employerData }) => {
                             <p>{_.has(employerData, "sectorOrSpecialty") ? employerData.sectorOrSpecialty : "No Data Provided Yet."}</p><span className="f-w-600">Total Previously Completed Jobs :</span>
                             <p>{_.has(employerData, "completedJobs") ? employerData.completedJobs : "No Data Provided Yet."} Previously Completed Contract's</p>
                             <div className="social-network theme-form"><span className="f-w-600">{SocialNetworks}</span>
-                            <Button color="social-btn btn-fb mb-2 text-center"><i className="fa fa-facebook m-r-5"></i>Facebook</Button>
-                                <Button color="social-btn btn-twitter mb-2 text-center"><i className="fa fa-twitter m-r-5"></i>Twitter</Button>
-                                <Button color="social-btn btn-google text-center"><i className="fa fa-dribbble m-r-5"></i>Dribble</Button>
-                                <Button style={{ marginTop: "7.5px" }} color="social-btn btn-info text-center"><i className="fa fa-github m-r-5"></i>GitHub</Button>
-                                <Button style={{ marginTop: "7.5px" }} color="social-btn btn-secondary text-center"><i className="fa fa-linkedin m-r-5"></i>Linked-In</Button>
+                            <CopyToClipboard 
+                                text={_.has(employerData, "socials") && typeof employerData.socials.facebook !== "undefined" && employerData.socials.facebook.length > 0 ? employerData.socials.facebook : ""}
+                                onCopy={() => {
+                                    NotificationManager.success("You've successfully 'copied' the desired 'handle URL' - you may now paste it wherever you deem appropriate! Social media handle was copied..", "Successfully copied social-media link/url!", 4750);
+                                }}
+                            >
+                                <Button color="social-btn btn-secondary mb-2 text-center"><i className="fa fa-facebook m-r-5"></i>Facebook</Button>
+                            </CopyToClipboard>
+                                <CopyToClipboard 
+                                text={_.has(employerData, "socials") && typeof employerData.socials.gitlab !== "undefined" && employerData.socials.gitlab.length > 0 ? employerData.socials.gitlab : ""}
+                                onCopy={() => {
+                                    NotificationManager.success("You've successfully 'copied' the desired 'handle URL' - you may now paste it wherever you deem appropriate! Social media handle was copied..", "Successfully copied social-media link/url!", 4750);
+                                }}
+                            >
+                                <Button color="social-btn btn-primary mb-2 text-center"><i className="fa fa-twitter m-r-5"></i>GitLab</Button>
+                            </CopyToClipboard>
+                                <CopyToClipboard 
+                                text={_.has(employerData, "socials") && typeof employerData.socials.bugcrowd !== "undefined" && employerData.socials.bugcrowd.length > 0 ? employerData.socials.bugcrowd : ""}
+                                onCopy={() => {
+                                    NotificationManager.success("You've successfully 'copied' the desired 'handle URL' - you may now paste it wherever you deem appropriate! Social media handle was copied..", "Successfully copied social-media link/url!", 4750);
+                                }}
+                            >
+                                <Button color="social-btn btn-secondary text-center"><i class="fa fa-solid fa-circle-question m-r-5"></i>BugCrowd</Button>
+                            </CopyToClipboard>
+                                <CopyToClipboard 
+                                text={_.has(employerData, "socials") && typeof employerData.socials.github !== "undefined" && employerData.socials.github.length > 0 ? employerData.socials.github : ""}
+                                onCopy={() => {
+                                    NotificationManager.success("You've successfully 'copied' the desired 'handle URL' - you may now paste it wherever you deem appropriate! Social media handle was copied..", "Successfully copied social-media link/url!", 4750);
+                                }}
+                            >
+                                <Button style={{ marginTop: "7.5px" }} color="social-btn btn-primary text-center"><i className="fa fa-github m-r-5"></i>GitHub</Button>
+                            </CopyToClipboard>
+                                <CopyToClipboard 
+                                text={_.has(employerData, "socials") && typeof employerData.socials.hackerrank !== "undefined" && employerData.socials.hackerrank.length > 0 ? employerData.socials.hackerrank : ""}
+                                onCopy={() => {
+                                    NotificationManager.success("You've successfully 'copied' the desired 'handle URL' - you may now paste it wherever you deem appropriate! Social media handle was copied..", "Successfully copied social-media link/url!", 4750);
+                                }}
+                            >
+                                <Button style={{ marginTop: "7.5px" }} color="social-btn btn-secondary text-center">HackerRank</Button>
+                            </CopyToClipboard>
+                                <CopyToClipboard 
+                                text={_.has(employerData, "socials") && typeof employerData.socials.youtube !== "undefined" && employerData.socials.youtube.length > 0 ? employerData.socials.youtube : ""}
+                                onCopy={() => {
+                                    NotificationManager.success("You've successfully 'copied' the desired 'handle URL' - you may now paste it wherever you deem appropriate! Social media handle was copied..", "Successfully copied social-media link/url!", 4750);
+                                }}
+                            >
+                                <Button style={{ marginTop: "7.5px" }} color="social-btn btn-primary mb-2 text-center"><i class="fa fa-brands fa-youtube m-r-5"></i>YouTube</Button>
+                            </CopyToClipboard>
+                                <CopyToClipboard 
+                                text={_.has(employerData, "socials") && typeof employerData.socials.instagram !== "undefined" && employerData.socials.instagram.length > 0 ? employerData.socials.instagram : ""}
+                                onCopy={() => {
+                                    NotificationManager.success("You've successfully 'copied' the desired 'handle URL' - you may now paste it wherever you deem appropriate! Social media handle was copied..", "Successfully copied social-media link/url!", 4750);
+                                }}
+                            >
+                                <Button color="social-btn btn-secondary text-center"><i class="fa fa-brands fa-instagram m-r-5"></i>Instagram</Button>
+                            </CopyToClipboard>
+                                <CopyToClipboard 
+                                text={_.has(employerData, "socials") && typeof employerData.socials.linkedin !== "undefined" && employerData.socials.linkedin.length > 0 ? employerData.socials.linkedin : ""}
+                                onCopy={() => {
+                                    NotificationManager.success("You've successfully 'copied' the desired 'handle URL' - you may now paste it wherever you deem appropriate! Social media handle was copied..", "Successfully copied social-media link/url!", 4750);
+                                }}
+                            >
+                                <Button style={{ marginTop: "7.5px" }} color="social-btn btn-primary text-center"><i className="fa fa-github m-r-5"></i>LinkedIn</Button>
+                            </CopyToClipboard>
+                                <CopyToClipboard 
+                                text={_.has(employerData, "socials") && typeof employerData.socials.cobalt !== "undefined" && employerData.socials.cobalt.length > 0 ? employerData.socials.cobalt : ""}
+                                onCopy={() => {
+                                    NotificationManager.success("You've successfully 'copied' the desired 'handle URL' - you may now paste it wherever you deem appropriate! Social media handle was copied..", "Successfully copied social-media link/url!", 4750);
+                                }}
+                            >
+                                <Button style={{ marginTop: "7.5px" }} color="social-btn btn-secondary text-center"><i className="fa fa-brands fa-linkedin m-r-5"></i>Cobalt</Button>
+                            </CopyToClipboard>
+                                <CopyToClipboard 
+                                text={_.has(employerData, "socials") && typeof employerData.socials.twitter !== "undefined" && employerData.socials.twitter.length > 0 ? employerData.socials.twitter : ""}
+                                onCopy={() => {
+                                    NotificationManager.success("You've successfully 'copied' the desired 'handle URL' - you may now paste it wherever you deem appropriate! Social media handle was copied..", "Successfully copied social-media link/url!", 4750);
+                                }}
+                            >
+                                <Button style={{ marginTop: "7.5px" }} color="social-btn btn-primary text-center"><i className="fa fa-brands fa-twitter-square m-r-5"></i>Twitter</Button>
+                            </CopyToClipboard>
+                                <CopyToClipboard 
+                                text={_.has(employerData, "socials") && typeof employerData.socials.hackthebox !== "undefined" && employerData.socials.hackthebox.length > 0 ? employerData.socials.hackthebox : ""}
+                                onCopy={() => {
+                                    NotificationManager.success("You've successfully 'copied' the desired 'handle URL' - you may now paste it wherever you deem appropriate! Social media handle was copied..", "Successfully copied social-media link/url!", 4750);
+                                }}
+                            >
+                                <Button style={{ marginTop: "7.5px" }} color="social-btn btn-secondary text-center"><i className="fa fa-github m-r-5"></i>HackTheBox</Button>
+                            </CopyToClipboard>
+                                <CopyToClipboard 
+                                text={_.has(employerData, "socials") && typeof employerData.socials.tiktok !== "undefined" && employerData.socials.tiktok.length > 0 ? employerData.socials.tiktok : ""}
+                                onCopy={() => {
+                                    NotificationManager.success("You've successfully 'copied' the desired 'handle URL' - you may now paste it wherever you deem appropriate! Social media handle was copied..", "Successfully copied social-media link/url!", 4750);
+                                }}
+                            >
+                                <Button style={{ marginTop: "7.5px" }} color="social-btn btn-primary text-center">TikTok</Button>
+                            </CopyToClipboard>
                             </div>
                         </CardBody>
                     </Collapse>

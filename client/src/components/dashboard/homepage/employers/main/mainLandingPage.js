@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import Breadcrumb from '../../../../../layout/breadcrumb'
-import { Container, Row, Col, Card, CardHeader, CardBody } from 'reactstrap'
+import { Container, Row, Col, Card, CardHeader, CardBody, ListGroup, ListGroupItem, CardFooter, Button } from 'reactstrap'
 import DatePicker from "react-datepicker";
 import ApexCharts from 'react-apexcharts'
 import ChartistChart from 'react-chartist';
@@ -15,14 +15,33 @@ import { authentication } from "../../../../../redux/actions/authentication/auth
 import { NotificationManager } from 'react-notifications';
 import "../../styles.css";
 import { useHistory } from 'react-router-dom';
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+import helpers from "./helpers/helpers.js";
+import _ from "lodash";
+import moment from "moment";
+import ReactMapboxGl, { Marker } from 'react-mapbox-gl';
+
+
+
+const { renderProfilePicVideoMainPageImg } = helpers;
+
+
+
+const Map = ReactMapboxGl({
+  accessToken: process.env.REACT_APP_MAPBOX_TOKEN,
+  interactive: false
+});
 
 
 const MainLandingPageEmployerHelper = ({ authentication, userData }) => {
 
   const history = useHistory();
-
+  
+  const [ balance, setBalanceInfo ] = useState(null);
+  const [ ready, setReady ] = useState(false);
   const [daytimes,setDayTimes] = useState();
   const [ locationError, setLocationErr ] = useState("");
+  const [ user, setUserData ] = useState(null);
   const today = new Date()
   const curHr = today.getHours()
   const curMi = today.getMinutes()
@@ -35,6 +54,34 @@ const MainLandingPageEmployerHelper = ({ authentication, userData }) => {
     setDate(date)
   };
 
+
+  useEffect(() => {
+    const config = {
+      params: {
+          uniqueId: userData.uniqueId,
+          accountType: userData.accountType
+      }
+    }
+    axios.get(`${process.env.REACT_APP_BASE_URL}/gather/availiable/stripe/bal`, config).then((res) => {
+        if (res.data.message === "Gathered balance!") {
+            console.log("res.data payment: ", res.data);
+  
+            const { bal } = res.data;
+  
+            setBalanceInfo(bal);
+  
+            setReady(true);
+        } else {
+            console.log("err", res.data);
+            
+            NotificationManager.warning("An unknown error has occurred while attempting to fetch your related balance related information, Contact support if the problem persists!", "Unknown error has occurred.", 4750);
+        }
+    }).catch((err) => {
+        console.log(err);
+  
+        NotificationManager.warning("An unknown error has occurred while attempting to fetch your related balance related information, Contact support if the problem persists!", "Unknown error has occurred.", 4750);
+    })  
+  }, [])
   useEffect(() => {
 
     if (userData.accountType === "hackers") {
@@ -110,23 +157,8 @@ const MainLandingPageEmployerHelper = ({ authentication, userData }) => {
     }else{
       setMeridiem('AM')
     }
-    
-    var ordervalue1 = Knob({
-      value: 60,
-      angleOffset: 0,
-      thickness: 0.3,
-      width: 65,
-      fgColor: "#7366ff",
-      readOnly: false,
-      dynamicDraw: true,
-      tickColorizeValues: true,
-      bgColor: '#eef5fb',
-      lineCap: 'round',
-      displayPrevious: false
-    })
-    document.getElementById('ordervalue1').appendChild(ordervalue1);
 
-    var ordervalue2 = Knob({
+    let ordervalue2 = Knob({
       value: 60,
       angleOffset: 0,
       thickness: 0.3,
@@ -140,7 +172,94 @@ const MainLandingPageEmployerHelper = ({ authentication, userData }) => {
     document.getElementById('ordervalue2').appendChild(ordervalue2);
 
     // eslint-disable-next-line
+  }, []);
+
+
+  useEffect(() => {
+    // fetch user data
+
+    const configgg = {
+      params: {
+        accountType: userData.accountType,
+        id: userData.uniqueId
+      }
+    }
+
+    axios.get(`${process.env.REACT_APP_BASE_URL}/gather/general/user/data`, configgg).then((res) => {
+        if (res.data.message === "Gathered user!") {
+            console.log(res.data);
+
+            const { user } = res.data;
+
+            setUserData(user);
+
+        } else {
+            console.log("err", res.data);
+
+            NotificationManager.error("An unknown error occurred while attempting to fetch this user's data/information...", "Error occurred while fetching user's data!", 4750);
+        }
+    }).catch((err) => {
+        console.log(err);
+    })
   }, [])
+
+  const renderSkelatonLoading = (lines) => {
+    return (
+        <Fragment>
+            <SkeletonTheme baseColor="#c9c9c9" highlightColor="#444">
+                <p>
+                    <Skeleton count={lines} />
+                </p>
+            </SkeletonTheme>
+        </Fragment>
+    );
+  }
+
+  const renderTopLeft = () => {
+    if (user !== null) {
+      const lastPicVid = user.profilePicsVideos[user.profilePicsVideos.length - 1];
+      const bannerImageVideo = `${process.env.REACT_APP_ASSET_LINK}/${user.profileBannerImage.link}`;
+      return (
+        <Fragment>
+          <Card className="o-hidden profile-greeting">
+            <img src={bannerImageVideo} className={"backgroundcard-image"} />
+            <CardBody className='ontop-other'>
+              <div className="media">
+                <div className="badge-groups w-100">
+                  <div className="badge f-12">
+                    <Clock style={{ width:"16px", height:"16px" }} className="mr-1"/>
+                    <span id="txt">{curHr}:{curMi < 10 ? "0"+curMi :curMi} {meridiem}</span>
+                  </div>
+                  <div className="badge f-12"><i className="fa fa-spin fa-cog f-14"></i></div>
+                </div>
+              </div>
+              <div className="greeting-user text-center">
+                <div className="profile-vector centered-both-ways">{renderProfilePicVideoMainPageImg(lastPicVid)}</div>
+                <h4 style={{ marginTop: "32.5px" }} className="f-w-600 white-text-custom"><span id="greeting">{daytimes}</span> <span className="right-circle"><i className="fa fa-check-circle f-14 middle"></i></span></h4>
+                <p className='white-text-custom'><span> {"Today's earrning is $405 & your sales increase rate is 3.7 over the last 24 hours"}</span></p>
+                <div className="whatsnew-btn"><a className="btn btn-primary" href="#javascript">{"Whats New !"}</a></div>
+                <div className="left-icon"><i className="fa fa-bell"> </i></div>
+              </div>
+            </CardBody>
+          </Card>
+        </Fragment>
+      );
+    } else {
+      return (
+        <Fragment>
+          {renderSkelatonLoading(22)}
+        </Fragment>
+      );
+    }
+  };
+
+  const handleNotificationClick = (notification) => {
+    console.log("handleNotificationClick", notification);
+  }
+
+  const viewAllNotifications = () => {
+    history.push("/hacker/notifications");
+  }
 
   return (
     <Fragment>
@@ -149,29 +268,10 @@ const MainLandingPageEmployerHelper = ({ authentication, userData }) => {
         {typeof locationError !== "undefined" && locationError.length > 0 ? <p style={{ color: "red" }} className="lead">{locationError}</p> : null}
         <Row className="second-chart-list third-news-update">
           <Col xl="4 xl-50" lg="12" className="morning-sec box-col-12">
-            <Card className="o-hidden profile-greeting">
-              <CardBody>
-                <div className="media">
-                  <div className="badge-groups w-100">
-                    <div className="badge f-12">
-                      <Clock style={{width:"16px" ,height:"16px"}} className="mr-1"/>
-                      <span id="txt">{curHr}:{curMi < 10 ? "0"+curMi :curMi} {meridiem}</span>
-                    </div>
-                    <div className="badge f-12"><i className="fa fa-spin fa-cog f-14"></i></div>
-                  </div>
-                </div>
-                <div className="greeting-user text-center">
-                  <div className="profile-vector"><img className="img-fluid" src={require("../../../../../assets/images/dashboard/welcome.png")} alt="" /></div>
-                  <h4 className="f-w-600"><span id="greeting">{daytimes}</span> <span className="right-circle"><i className="fa fa-check-circle f-14 middle"></i></span></h4>
-                  <p><span> {"Today's earrning is $405 & your sales increase rate is 3.7 over the last 24 hours"}</span></p>
-                  <div className="whatsnew-btn"><a className="btn btn-primary" href="#javascript">{"Whats New !"}</a></div>
-                  <div className="left-icon"><i className="fa fa-bell"> </i></div>
-                </div>
-              </CardBody>
-            </Card>
+            {renderTopLeft()}
           </Col>
           <Col xl="8 xl-100" className="dashboard-sec box-col-12">
-            <Card className="earning-card">
+            <Card className="earning-card shadow">
               <CardBody className="p-0">
                 <Row className="m-0">
                   <Col xl="3" className="earning-content p-0">
@@ -262,7 +362,7 @@ const MainLandingPageEmployerHelper = ({ authentication, userData }) => {
             </Card>
           </Col>
           <Col xl="9 xl-100" className="chart_data_left box-col-12">
-            <Card>
+            <Card className='shadow'>
               <CardBody className="p-0">
                 <Row className="m-0 chart-main">
                   <Col xl="3" md="6" sm="6" className="p-0 box-col-6">
@@ -288,7 +388,7 @@ const MainLandingPageEmployerHelper = ({ authentication, userData }) => {
                       </div>
                       <div className="media-body">
                         <div className="right-chart-content">
-                          <h4>{"1001"}</h4><span>{Purchase} </span>
+                          <h4>{user !== null ? user.completedJobs : 0}</h4><span>Completed Contracts</span>
                         </div>
                       </div>
                     </div>
@@ -316,7 +416,7 @@ const MainLandingPageEmployerHelper = ({ authentication, userData }) => {
                       </div>
                       <div className="media-body">
                         <div className="right-chart-content">
-                          <h4>{"1005"}</h4><span>{Sales}</span>
+                          <h4>{user !== null && _.has(user, "tokens") ? user.tokens : 0}</h4><span>Tokens</span>
                         </div>
                       </div>
                     </div>
@@ -344,7 +444,7 @@ const MainLandingPageEmployerHelper = ({ authentication, userData }) => {
                       </div>
                       <div className="media-body">
                         <div className="right-chart-content">
-                          <h4>{"100"}</h4><span>{SalesReturn}</span>
+                          <h4>{user !== null && _.has(user, "totalUniqueViews") ? user.totalUniqueViews : 0}</h4><span>Unique Profile Views</span>
                         </div>
                       </div>
                     </div>
@@ -372,7 +472,7 @@ const MainLandingPageEmployerHelper = ({ authentication, userData }) => {
                       </div>
                       <div className="media-body">
                         <div className="right-chart-content">
-                          <h4>{"101"}</h4><span>{PurchaseRet}</span>
+                          <h4>{ready === true ? `$${balance}` : "Loading.."}</h4><span>Account Bal.</span>
                         </div>
                       </div>
                     </div>
@@ -382,21 +482,23 @@ const MainLandingPageEmployerHelper = ({ authentication, userData }) => {
             </Card>
           </Col>
           <Col xl="3 xl-50" className="chart_data_right box-col-12">
-            <Card>
+            <Card className='shadow'>
               <CardBody>
-                <div className="media align-items-center">
+                <div className="media">
                   <div className="media-body right-chart-content">
-                    <h4>{"$95,900"}<span className="new-box">{Hot}</span></h4><span>{PurchaseOrderValue}</span>
-                  </div>
-                  <div className="knob-block text-center">
-                    <div className="knob1" id="ordervalue1"></div>
+                    <Row>
+                      <Col sm="12" md="12" lg="12" xl="12">
+                        <h4>{user !== null ? user.followingHackers.length : "Loading.."}<span className="new-box">{"Hacker Account's You're Following"}</span></h4><span>Following Hacker's</span>
+                      </Col>
+                    </Row>
+                    <h4>{user !== null ? user.followingCompanies.length : "Loading.."}<span className="new-box">{"Company Account's You're Following"}</span></h4><span>Following Company's</span>
                   </div>
                 </div>
               </CardBody>
             </Card>
           </Col>
           <Col xl="3 xl-50" className="chart_data_right second d-none">
-            <Card>
+            <Card className='shadow'>
               <CardBody>
                 <div className="media align-items-center">
                   <div className="media-body right-chart-content">
@@ -410,10 +512,10 @@ const MainLandingPageEmployerHelper = ({ authentication, userData }) => {
             </Card>
           </Col>
           <Col xl="4 xl-50" className="news box-col-6">
-            <Card>
+            <Card className='shadow'>
               <CardHeader>
                 <div className="header-top">
-                  <h5 className="m-0">{NewsUpdate}</h5>
+                  <h5 className="m-0">Recently Viewed 'Profile View's</h5>
                   <div className="card-header-right-icon">
                     <select className="button btn btn-primary">
                       <option>{Today}</option>
@@ -424,17 +526,31 @@ const MainLandingPageEmployerHelper = ({ authentication, userData }) => {
                 </div>
               </CardHeader>
               <CardBody className="p-0">
-                <div className="news-update">
-                  <h6>{"36% off For pixel lights Couslations Types."}</h6><span>{"Lorem Ipsum is simply dummy..."}</span>
-                </div>
-                <div className="news-update">
-                  <h6>{"We are produce new product this"}</h6><span> {"Lorem Ipsum is simply text of the printing... "}</span>
-                </div>
-                <div className="news-update">
-                  <h6>{"50% off For COVID Couslations Types."}</h6><span>{"Lorem Ipsum is simply dummy..."}</span>
-                </div>
+                <ListGroup>
+                  {user !== null && typeof user.recentlyViewedProfileViews !== "undefined" && user.recentlyViewedProfileViews.length > 0 ? user.recentlyViewedProfileViews.slice(0, 4).map((viewer, index) => {
+                      if (viewer !== null) {
+                        return (
+                            <Fragment key={index}>
+                                <ListGroupItem onClick={() => {}} className={"list-group-item-action flex-column align-items-start notification-custom-notification"}>
+                                    <Row>
+                                        <Col sm="12" md="12" lg="12" xl="12">
+                                            <div className="d-flex w-100 justify-content-between">
+                                                <h5 className="mb-1" style={{ marginRight: "12.5px" }}>{`${viewer.viewerName} has viewed your profile..`}</h5><br /><small>{`The viewer ${viewer.viewerName} has viewed your profile on ${moment(viewer.viewedOnLegibleDate).format("MM/DD/YYYY")} - This is a 'profile view' which means they visited your particular profile!`}</small>
+                                            </div>
+                                            <p className="mb-1">Has been a member since {moment(viewer.memberSince).fromNow()}...</p>
+                                            <small>{viewer.viewedOnLegibleDate}</small>
+                                        </Col>
+                                    </Row>
+                                </ListGroupItem>
+                            </Fragment>
+                          );
+                        }
+                    }) : <Fragment>
+                        <img src={require("../../../../../assets/images/no-current-notifications.png")} className={"no-notifications-img"} />
+                    </Fragment>}
+                </ListGroup>
               </CardBody>
-              <div className="card-footer">
+              <div style={{ marginTop: "22.5px" }} className="card-footer">
                 <div className="bottom-btn"><a href="#javascript">{"More..."}</a></div>
               </div>
             </Card>
@@ -442,50 +558,27 @@ const MainLandingPageEmployerHelper = ({ authentication, userData }) => {
           <Col xl="4 xl-50" className="appointment-sec box-col-6">
             <Row>
               <Col xl="12" className="appointment">
-                <Card>
-                  <CardHeader className="card-no-border">
-                    <div className="header-top">
-                          <h5 className="m-0">{Appointment}</h5>
-                      <div className="card-header-right-icon">
-                        <select className="button btn btn-primary">
-                          <option>{Today}</option>
-                          <option>{Tomorrow}</option>
-                          <option>{Yesterday}</option>
-                        </select>
-                      </div>
-                    </div>
+                <Card className={"shadow"}>
+                  <CardHeader className='b-l-primary b-r-primary'>
+                    <h4>Your current location (this is private information)</h4>
                   </CardHeader>
-                  <CardBody className="pt-0">
-                    <div className="appointment-table table-responsive">
-                      <table className="table table-bordernone">
-                        <tbody>
-                          <tr>
-                            <td><img className="img-fluid img-40 rounded-circle mb-3" src={require("../../../../../assets/images/appointment/app-ent.jpg")} alt="" />
-                              <div className="status-circle bg-primary"></div>
-                            </td>
-                            <td className="img-content-box"><span className="d-block">{VenterLoren}</span><span className="font-roboto">Now</span></td>
-                            <td>
-                              <p className="m-0 font-primary">{"28 Sept"}</p>
-                            </td>
-                            <td className="text-right">
-                              <div className="button btn btn-primary">{Done}<i className="fa fa-check-circle ml-2"></i></div>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td><img className="img-fluid img-40 rounded-circle" src={require("../../../../../assets/images/appointment/app-ent.jpg")} alt="" />
-                              <div className="status-circle bg-primary"></div>
-                            </td>
-                            <td className="img-content-box"><span className="d-block">{JohnLoren}</span><span className="font-roboto">{"11:00"}</span></td>
-                            <td>
-                              <p className="m-0 font-primary">{"22 Sept"}</p>
-                            </td>
-                            <td className="text-right">
-                              <div className="button btn btn-danger">{Pending}<i className="fa fa-check-circle ml-2"></i></div>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
+                  <CardBody style={{ marginTop: "27.5px" }} className="pt-0">
+                    <Map
+                      style="mapbox://styles/mapbox/streets-v9"
+                      containerStyle={{
+                        height: "275px",
+                        width: '100%',
+                        border: "3px solid grey"
+                      }}
+                      center={_.has(userData, "userLatestLocation") ? [userData.userLatestLocation.longitude, userData.userLatestLocation.latitude] : [104.9903, 39.7392]}
+                    >
+                      <Marker
+                        coordinates={_.has(userData, "userLatestLocation") ? [userData.userLatestLocation.longitude, userData.userLatestLocation.latitude] : [104.9903, 39.7392]}
+                        anchor="bottom"
+                      >
+                        <img src={require("../../../../../assets/icons/location.png")}/>
+                      </Marker>
+                    </Map>
                   </CardBody>
                 </Card>
               </Col>
@@ -507,7 +600,7 @@ const MainLandingPageEmployerHelper = ({ authentication, userData }) => {
             </Row>
           </Col>
           <Col xl="4 xl-50" className="notification notification-custom box-col-6">
-            <Card className="shadow-md-custom">
+            <Card className="shadow-md-custom shadow">
               <CardHeader className="card-no-border">
                 <div className="header-top">
                   <h5 className="m-0">{Notification}</h5>
@@ -521,31 +614,37 @@ const MainLandingPageEmployerHelper = ({ authentication, userData }) => {
                 </div>
               </CardHeader>
               <CardBody className="pt-0">
-                <div className="media">
-                  <div className="media-body">
-                    <p>{"20-04-2020"} <span>{"10:10"}</span></p>
-                    <h6>{"Updated Product"}<span className="dot-notification"></span></h6><span>{"Quisque a consequat ante sit amet magna..."}</span>
-                  </div>
-                </div>
-                <div className="media">
-                  <div className="media-body">
-                    <p>{"20-04-2020"}<span className="pl-1">{Today}</span><span className="badge badge-secondary">{New}</span></p>
-                    <h6>{"Tello just like your product"}<span className="dot-notification"></span></h6><span>{"Quisque a consequat ante sit amet magna... "}</span>
-                  </div>
-                </div>
-                <div className="media">
-                  <div className="media-body">
-                    <div className="d-flex mb-3">
-                      <div className="inner-img"><img className="img-fluid" src={require("../../../../../assets/images/notification/1.jpg")} alt="Product-1" /></div>
-                      <div className="inner-img"><img className="img-fluid" src={require("../../../../../assets/images/notification/2.jpg")} alt="Product-2" /></div>
-                    </div><span className="mt-3">{"Quisque a consequat ante sit amet magna..."}</span>
-                  </div>
-                </div>
+                <ListGroup>
+                  {user !== null && typeof user.notifications !== "undefined" && user.notifications.length > 0 ? user.notifications.sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 3).map((notification, index) => {
+                      if (notification !== null) {
+                        return (
+                            <Fragment key={index}>
+                                <ListGroupItem onClick={() => handleNotificationClick(notification)} className={notification.seenRead === true ? "list-group-item-action flex-column align-items-start notification-custom-notification active" : "list-group-item-action flex-column align-items-start notification-custom-notification"}>
+                                    <Row>
+                                        <Col sm="12" md="12" lg="12" xl="12">
+                                            <div className="d-flex w-100 justify-content-between">
+                                                <h5 className="mb-1 maxed-title-notification" style={{ marginRight: "82.5px" }}>{notification.title.slice(0, 75)}{typeof notification.title !== "undefined" && notification.title.length >= 75 ? "..." : ""}</h5><small>{moment(notification.date).fromNow()}</small>
+                                            </div>
+                                            <p className="mb-1">{notification.description.slice(0, 100)}{typeof notification.description !== "undefined" && notification.description.length >= 100 ? "..." : ""}</p>
+                                            <small>{notification.dateString}</small>
+                                        </Col>
+                                    </Row>
+                                </ListGroupItem>
+                            </Fragment>
+                          );
+                        }
+                    }) : <Fragment>
+                        <img src={require("../../../../../assets/images/no-current-notifications.png")} className={"no-notifications-img"} />
+                    </Fragment>}
+                </ListGroup>
               </CardBody>
+              <CardFooter>
+                <Button className={"btn-square-info"} color={"info-2x"} style={{ width: "100%" }} outline onClick={() => viewAllNotifications()}>View All Notification's</Button>
+              </CardFooter>
             </Card>
           </Col>
           <Col xl="4 xl-50" className="appointment box-col-6">
-            <Card>
+            <Card className='shadow'>
               <CardHeader>
                 <div className="header-top">
                   <h5 className="m-0">{MarketValue}</h5>
@@ -566,7 +665,7 @@ const MainLandingPageEmployerHelper = ({ authentication, userData }) => {
             </Card>
           </Col>
           <Col xl="4 xl-100" className="chat-sec box-col-6">
-            <Card className="chat-default">
+            <Card className="chat-default shadow">
               <CardHeader className="card-no-border">
                 <div className="media media-dashboard">
                   <div className="media-body">
@@ -618,7 +717,7 @@ const MainLandingPageEmployerHelper = ({ authentication, userData }) => {
             </Card>
           </Col>
           <Col xl="4 xl-50" lg="12" className="calendar-sec box-col-6">
-            <Card className="gradient-primary o-hidden">
+            <Card className="gradient-primary o-hidden shadow">
               <CardBody>
                 <div className="default-datepicker">
                   <DatePicker

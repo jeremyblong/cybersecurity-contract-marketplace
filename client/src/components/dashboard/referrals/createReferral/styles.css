@@ -1,0 +1,13 @@
+.customized-clipboard {
+    color: #7366ff;
+    font-weight: bold;
+    font-size: 1.25rem;
+    text-decoration-line: underline;
+}
+.customized-clipboard:hover {
+    color: red;
+    font-weight: bold;
+    font-size: 1.25rem;
+    text-decoration-line: underline;
+    cursor: pointer;
+}

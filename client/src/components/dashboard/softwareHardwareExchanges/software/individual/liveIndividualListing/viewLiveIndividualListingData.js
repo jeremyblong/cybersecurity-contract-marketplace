@@ -371,7 +371,7 @@ const ViewIndividualListingSoftwarePageHelper = ({ location, userData })  => {
                                     <hr/>
                                     <ReactMarkdown className="markdown-individual-listing-info" children={passedData.description} remarkPlugins={[remarkGfm]} />
                                     <hr/>
-                                    <div className="m-t-15">
+                                    {/* <div className="m-t-15">
                                         <Button  color="primary" className="m-r-10" onClick={() => {
                                             // addcart(singleItem, quantity);
                                             console.log("add to cart...!");
@@ -390,7 +390,7 @@ const ViewIndividualListingSoftwarePageHelper = ({ location, userData })  => {
                                         }}>
                                             <i className="fa fa-heart mr-1"></i>{"Add To WishList"}
                                         </Button>
-                                    </div>
+                                    </div> */}
                                 </CardBody>
                             </Card>
                         </Col>

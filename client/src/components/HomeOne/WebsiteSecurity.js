@@ -1,4 +1,6 @@
 import React from 'react';
+import "./styles.css";
+
 
 const WebsiteSecurity = () => {
     return (
@@ -26,6 +28,15 @@ const WebsiteSecurity = () => {
 						</div>
 					</div>
 
+					<div className="col-lg-6 col-sm-6 col-md-6 col-xl-6">
+						<img style={{ marginBottom: "75px" }} src={require("../../assets/images/listings.png")} className={"screenshot-homepage"} />
+						<hr />
+					</div>
+				</div>
+				<div className="row">
+					<div className="col-lg-6 col-sm-6 col-md-6 col-xl-6">
+						<img src={require("../../assets/images/softwareforsale.png")} className={"screenshot-homepage"} />
+					</div>
 					<div className="col-lg-3 col-sm-6">
 						<div className="single-security">
 							<i className="flaticon-support"></i>

@@ -77,6 +77,8 @@ import ViewIndividualPurchasedCourseDataPage from "../pages/dashboard/learning/e
 import ViewAllTutorialCoursesPage from "../pages/dashboard/learning/tutorialVideos/viewAllTutorials/viewAllTutorialContent.js";
 import CreateTutorialCourseContentPage from "../pages/dashboard/learning/tutorialVideos/create/createTutorialVideoCourse.js";
 import ViewIndividualTutorialVideoPage from "../pages/dashboard/learning/tutorialVideos/individualTutorial/viewIndividualTutorial.js";
+import CreateNewReferralPage from "../pages/dashboard/referrals/createReferral/createNewReferralCode.js";
+
 
 export const routes = [
         { path:"/profile/settings/edit", Component: GeneralSettingsPage },
@@ -157,5 +159,6 @@ export const routes = [
         { path: "/view/individual/purchased/course/data/:id", Component: ViewIndividualPurchasedCourseDataPage },
         { path: "/view/tutorial/videos/clips", Component: ViewAllTutorialCoursesPage },
         { path: "/create/tutorial/course/content", Component: CreateTutorialCourseContentPage },
-        { path: "/view/individual/tutorial/video/:id", Component: ViewIndividualTutorialVideoPage }
+        { path: "/view/individual/tutorial/video/:id", Component: ViewIndividualTutorialVideoPage },
+        { path: "/create/new/referral/invitation/user", Component: CreateNewReferralPage }
 ]; 

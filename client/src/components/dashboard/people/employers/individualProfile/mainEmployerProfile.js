@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect, useRef } from 'react';
 import { Container, Row, Col, Card, CardBody, CardHeader, Media, TabContent, TabPane, Nav, NavItem, NavLink, Button } from "reactstrap";
 import Breadcrumb from '../../../../../layout/breadcrumb';
 import "./styles.css";
@@ -7,8 +7,8 @@ import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import axios from "axios";
 import TimelineTabEmployerProfileHelper from './helpers/timelineTab.js';
 import AboutGeneralInfoHelper from './helpers/aboutTab.js';
-import FriendsTabEmployerProfileHelper from './helpers/friendsTab.js';
-import PhotosTab from './helpers/photosTab.js';
+import FollowingEmployerAccountHelper from './helpers/following.js';
+import CurrentlyFollowedByEmployerAccount from './helpers/followedBy.js';
 import _ from "lodash";
 import helpers from "./helpers/miscFunctions/helperFunctions.js";
 import { NotificationManager } from "react-notifications";
@@ -32,63 +32,83 @@ const MainEmployerProfileDisplayHelper = ({ userData }) => {
     const [ messagingPaneOpen, setMessagePaneState ] = useState(false);
     const [ videoInterviewPane, setVideoInterviewStartPane ] = useState(false);
 
+
+    const useIsMounted = () => {
+        // create ref
+        const isMounted = useRef(false);
+        // run mounting logic..
+        useEffect(() => {
+          isMounted.current = true;
+          return () => isMounted.current = false;
+        }, []);
+      
+        return isMounted;
+    }
+
+    const isMounted = useIsMounted();
+
     const { id } = useParams();
 
     useEffect(() => {
 
-        const configuration = {
-            signedinUserID: userData.uniqueId, 
-            viewingEmployerAccountID: id, 
-            signedinLastProfileFile: userData.profilePicsVideos[userData.profilePicsVideos.length - 1], 
-            signedinUserNameFull: `${userData.firstName} ${userData.lastName}`, 
-            signedinMemberSince: userData.registrationDate,
-            accountType: userData.accountType
-        }
-        axios.post(`${process.env.REACT_APP_BASE_URL}/mark/profile/view/employer/account`, configuration).then((res) => {
-            if (res.data.message === "Found user & modified/marked view in DB!") {
-                console.log(res.data);
-
-                const { result, modified } = res.data;
-
-                NotificationManager.success("Successfully marked your page/profile view as a 'unique' view! Whenver you view this page again, the count will NOT increase - it will remain as it was with a MAXIMUM 1 unique page view per user.", "Successfully marked profile view!", 4750);
-
-            } else {
-                console.log("errr inside...:", res.data);
-
-                NotificationManager.error("An unknown error has occurred, please try this action again or contact support if the problem still persists over multiple attempts!", "An unknown error has occurred while attempting to 'heart' this profile!", 4750);
+        if (isMounted.current === true) {
+            const configuration = {
+                signedinUserID: userData.uniqueId, 
+                viewingEmployerAccountID: id, 
+                signedinLastProfileFile: userData.profilePicsVideos[userData.profilePicsVideos.length - 1], 
+                signedinUserNameFull: `${userData.firstName} ${userData.lastName}`, 
+                signedinMemberSince: userData.registrationDate,
+                accountType: userData.accountType
             }
-        }).catch((err) => {
-            console.log(err);
-
-            NotificationManager.error("An unknown error has occurred, please try this action again or contact support if the problem still persists over multiple attempts!", "An unknown error has occurred while attempting to 'heart' this profile!", 4750);
-        })
+            axios.post(`${process.env.REACT_APP_BASE_URL}/mark/profile/view/employer/account`, configuration).then((res) => {
+                if (res.data.message === "Found user & modified/marked view in DB!") {
+                    console.log(res.data);
+    
+                    const { result, modified } = res.data;
+    
+                    NotificationManager.success("Successfully marked your page/profile view as a 'unique' view! Whenver you view this page again, the count will NOT increase - it will remain as it was with a MAXIMUM 1 unique page view per user.", "Successfully marked profile view!", 4750);
+    
+                } else {
+                    console.log("errr inside...:", res.data);
+    
+                    NotificationManager.error("An unknown error has occurred, please try this action again or contact support if the problem still persists over multiple attempts!", "An unknown error has occurred while attempting to 'heart' this profile!", 4750);
+                }
+            }).catch((err) => {
+                console.log(err);
+    
+                NotificationManager.error("An unknown error has occurred, please try this action again or contact support if the problem still persists over multiple attempts!", "An unknown error has occurred while attempting to 'heart' this profile!", 4750);
+            })
+        }
     }, [])
 
     useEffect(() => {
-        const configuration = {
-            params: {
-                uniqueId: id
+
+        if (isMounted.current === true) {
+            const configuration = {
+                params: {
+                    uniqueId: id
+                }
             }
-        }
-        axios.get(`${process.env.REACT_APP_BASE_URL}/retrieve/related/employer/core/information`, configuration).then((res) => {
-            if (res.data.message === "Gathered relevant information!") {
-                console.log(res.data);
+            axios.get(`${process.env.REACT_APP_BASE_URL}/retrieve/related/employer/core/information`, configuration).then((res) => {
+                if (res.data.message === "Gathered relevant information!") {
+                    console.log(res.data);
 
-                const { user } = res.data;
+                    const { user } = res.data;
 
-                setActiveHears(_.has(user, "profileLovesHearts") ? user.profileLovesHearts : []);
+                    setActiveHears(_.has(user, "profileLovesHearts") ? user.profileLovesHearts : []);
 
-                setEmployerData(user);
-            } else {
-                console.log("errr inside...:", res.data);
+                    setEmployerData(user);
+                } else {
+                    console.log("errr inside...:", res.data);
+
+                    NotificationManager.error("An unknown error has occurred, please try this action again or contact support if the problem still persists over multiple attempts!", "An unknown error has occurred while attempting to 'heart' this profile!", 4750);
+                }
+            }).catch((err) => {
+                console.log(err);
 
                 NotificationManager.error("An unknown error has occurred, please try this action again or contact support if the problem still persists over multiple attempts!", "An unknown error has occurred while attempting to 'heart' this profile!", 4750);
-            }
-        }).catch((err) => {
-            console.log(err);
-
-            NotificationManager.error("An unknown error has occurred, please try this action again or contact support if the problem still persists over multiple attempts!", "An unknown error has occurred while attempting to 'heart' this profile!", 4750);
-        })
+            })
+        }
     }, []);
 
     const heartResponseProfile = () => {
@@ -277,7 +297,7 @@ const MainEmployerProfileDisplayHelper = ({ userData }) => {
                                             </NavItem>
                                             <NavItem className="nav" id="myTab" role="tablist">
                                                 <NavLink id={"position-above"} className={activeTab === '4' ? 'active' : ''}>
-                                                    <Button style={{ minWidth: "100%", color: "#f73164" }} onClick={() => setActiveTab("4")} className={"btn-square-dark hover-btn-employer-custom"} color={"dark-2x"} outline>Photo's</Button>
+                                                    <Button style={{ minWidth: "100%", color: "#f73164" }} onClick={() => setActiveTab("4")} className={"btn-square-dark hover-btn-employer-custom"} color={"dark-2x"} outline>Followed-By</Button>
                                             </NavLink>
                                             </NavItem>
                                         </Nav>
@@ -307,10 +327,10 @@ const MainEmployerProfileDisplayHelper = ({ userData }) => {
                                 <AboutGeneralInfoHelper activeHearts={activeHearts} employerData={employerData} />
                             </TabPane>
                             <TabPane tabId="3">
-                                <FriendsTabEmployerProfileHelper employerData={employerData} />
+                                <FollowingEmployerAccountHelper employerData={employerData} />
                             </TabPane>
                             <TabPane tabId="4">
-                                <PhotosTab employerData={employerData} />
+                                <CurrentlyFollowedByEmployerAccount employerData={employerData} />
                             </TabPane>
                         </TabContent>
                     </div>

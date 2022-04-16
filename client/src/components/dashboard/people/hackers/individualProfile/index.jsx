@@ -3,8 +3,8 @@ import Breadcrumb from '../../../../../layout/breadcrumb'
 import { Container, Row, Col, Card, Media, TabContent, TabPane, Nav, NavItem, NavLink, CardHeader, Button } from 'reactstrap';
 import TimelineTab from './timelineTab';
 import AboutTab from './aboutTab';
-import FriendsTab from './friendsTab';
-import PhotosTab from './photosTab';
+import FollowingHackerTab from './following';
+import FollowedByHackerAccountHelper from './followedBy';
 import axios from "axios";
 import { withRouter } from "react-router-dom";
 import _ from "lodash";
@@ -36,7 +36,25 @@ constructor(props) {
     }
 
     this.passedCustomGalleryRef = React.createRef(null);
+    this.isComponentMounted = React.createRef(false);
 }
+
+    componentWillUnmount () {
+        console.log("unmount.");
+
+        this.setState({
+            activeTab: "1",
+            user: null,
+            isOpen: false,
+            currentlySelected: null,
+            modalIndexSelected: 0,
+            permenantData: [],
+            videoInterviewPane: false
+        }, () => {
+            this.isComponentMounted.current = false;
+        })
+    }
+
 
     setVideoInterviewStartPane = (value) => {
         this.setState({
@@ -44,89 +62,94 @@ constructor(props) {
         })
     }
     componentDidMount() {
+        
+        this.isComponentMounted.current = true;
+
         const userID = this.props.match.params.id;
 
         const { userData } = this.props;
 
-        const apiRequestPromise = new Promise((resolve, reject) => {
+        if (this.isComponentMounted.current === true) {
+            const apiRequestPromise = new Promise((resolve, reject) => {
     
-            const configuration = {
-                viewingHackerAccountID: userID,
-                signedinUserID: userData.uniqueId,
-                signedinLastProfileFile: typeof userData.profilePicsVideos !== "undefined" && userData.profilePicsVideos.length > 0 ? userData.profilePicsVideos[userData.profilePicsVideos.length - 1] : null,
-                signedinUserNameFull: `${userData.firstName} ${userData.lastName}`,
-                signedinMemberSince: userData.registrationDate,
-                accountType: userData.accountType
-            }
-            axios.post(`${process.env.REACT_APP_BASE_URL}/update/hacker/view/account/details/new/view`, configuration).then((res) => {
-                if (res.data.message === "Found user & modified/marked view in DB!") {
-                    console.log(res.data);
-    
-                    const { result, modified } = res.data;
-
-                    if (modified === true) {
-                        resolve({
-                            modified: true,
-                            result
-                        });
-                    } else {
-                        resolve({
-                            modified: false,
-                            result
-                        });
-                    }
-                } else {
-                    console.log("err", res.data);
-                    
-                    reject(res.data);
+                const configuration = {
+                    viewingHackerAccountID: userID,
+                    signedinUserID: userData.uniqueId,
+                    signedinLastProfileFile: typeof userData.profilePicsVideos !== "undefined" && userData.profilePicsVideos.length > 0 ? userData.profilePicsVideos[userData.profilePicsVideos.length - 1] : null,
+                    signedinUserNameFull: `${userData.firstName} ${userData.lastName}`,
+                    signedinMemberSince: userData.registrationDate,
+                    accountType: userData.accountType
                 }
-            }).catch((err) => {
-                console.log(err);
-
-                reject(err);
-            })
-        })
-
-        apiRequestPromise.then((passedData) => {
-            console.log("passedData", passedData.modified, passedData.result);
-
-            const configgg = {
-                userID,
-                result: passedData.result, 
-                modified: passedData.modified,
-                signedinUserID: userData.uniqueId
-            }
-
-            axios.post(`${process.env.REACT_APP_BASE_URL}/gather/hacker/profile/details`, configgg).then((res) => {
-                if (res.data.message === "Gathered & updated the required data (IF applicable)...") {
-                    console.log(res.data);
+                axios.post(`${process.env.REACT_APP_BASE_URL}/update/hacker/view/account/details/new/view`, configuration).then((res) => {
+                    if (res.data.message === "Found user & modified/marked view in DB!") {
+                        console.log(res.data);
+        
+                        const { result, modified } = res.data;
     
-                    const { user, modified } = res.data;
-
-                    this.setPermenantDataState(user.recentlyViewedProfileViews);
-    
-                    if (modified === false) {
-                        this.setState({
-                            user
-                        }, () => {
-                            NotificationManager.info("You've ALREADY viewed this hacker's profile so we left the users profile data untouched - ONLY on first view will your information be documented and displayed...", "Already viewed this hacker's profile!", 4750);
-                        })
+                        if (modified === true) {
+                            resolve({
+                                modified: true,
+                                result
+                            });
+                        } else {
+                            resolve({
+                                modified: false,
+                                result
+                            });
+                        }
                     } else {
-                        this.setState({
-                            user
-                        })
+                        console.log("err", res.data);
+                        
+                        reject(res.data);
                     }
-                } else {
-                    console.log("err", res.data);
-
-                    NotificationManager.error("An unknown error occurred while attempting to fetch this user's data/information...", "Error occurred while fetching user's data!", 4750);
-                }
-            }).catch((err) => {
-                console.log(err);
+                }).catch((err) => {
+                    console.log(err);
+    
+                    reject(err);
+                })
             })
-        }).catch((err) => {
-            NotificationManager.error("An error occurred while attempting to fetch this hacker's user profile data, please try reloading the page & contact support if this issue persists...", "Error gathering user's data!", 4500);
-        })
+    
+            apiRequestPromise.then((passedData) => {
+                console.log("passedData", passedData.modified, passedData.result);
+    
+                const configgg = {
+                    userID,
+                    result: passedData.result, 
+                    modified: passedData.modified,
+                    signedinUserID: userData.uniqueId
+                }
+    
+                axios.post(`${process.env.REACT_APP_BASE_URL}/gather/hacker/profile/details`, configgg).then((res) => {
+                    if (res.data.message === "Gathered & updated the required data (IF applicable)...") {
+                        console.log(res.data);
+        
+                        const { user, modified } = res.data;
+    
+                        this.setPermenantDataState(user.recentlyViewedProfileViews);
+        
+                        if (modified === false) {
+                            this.setState({
+                                user
+                            }, () => {
+                                NotificationManager.info("You've ALREADY viewed this hacker's profile so we left the users profile data untouched - ONLY on first view will your information be documented and displayed...", "Already viewed this hacker's profile!", 4750);
+                            })
+                        } else {
+                            this.setState({
+                                user
+                            })
+                        }
+                    } else {
+                        console.log("err", res.data);
+    
+                        NotificationManager.error("An unknown error occurred while attempting to fetch this user's data/information...", "Error occurred while fetching user's data!", 4750);
+                    }
+                }).catch((err) => {
+                    console.log(err);
+                })
+            }).catch((err) => {
+                NotificationManager.error("An error occurred while attempting to fetch this hacker's user profile data, please try reloading the page & contact support if this issue persists...", "Error gathering user's data!", 4500);
+            })
+        }
     }
     renderConditionalNavigationalTabs = () => {
         const { activeTab, user } = this.state;
@@ -367,6 +390,7 @@ constructor(props) {
             permenantData: data
         })
     }
+
     render () {
         const { user, currentlySelected, isOpen, modalIndexSelected } = this.state;
         const { userData } = this.props;
@@ -413,13 +437,13 @@ constructor(props) {
                                     <TimelineTab setSelectedCurrently={this.setSelectedCurrently} currentlySelected={currentlySelected} modalIndexSelected={modalIndexSelected} setSelectedModalIndex={this.setSelectedModalIndex} user={user} onOpenModal={this.onOpenModal} isOpen={this.state.isOpen} onCloseModal={this.onCloseModal} />
                                 </TabPane>
                                 <TabPane tabId="2">
-                                    <AboutTab setPermenantDataState={this.setPermenantDataState} permenantData={this.state.permenantData} setSelectedCurrently={this.setSelectedCurrently} currentlySelected={currentlySelected} modalIndexSelected={modalIndexSelected} setSelectedModalIndex={this.setSelectedModalIndex} user={user} onOpenModal={this.onOpenModal} isOpen={this.state.isOpen} onCloseModal={this.onCloseModal} />
+                                    <AboutTab userData={userData} setPermenantDataState={this.setPermenantDataState} permenantData={this.state.permenantData} setSelectedCurrently={this.setSelectedCurrently} currentlySelected={currentlySelected} modalIndexSelected={modalIndexSelected} setSelectedModalIndex={this.setSelectedModalIndex} user={user} onOpenModal={this.onOpenModal} isOpen={this.state.isOpen} onCloseModal={this.onCloseModal} />
                                 </TabPane>
                                 <TabPane tabId="3">
-                                    <FriendsTab user={user} onOpenModal={this.onOpenModal} isOpen={this.state.isOpen} onCloseModal={this.onCloseModal} />
+                                    <FollowingHackerTab user={user} onOpenModal={this.onOpenModal} isOpen={this.state.isOpen} onCloseModal={this.onCloseModal} />
                                 </TabPane>
                                 <TabPane tabId="4">
-                                    <PhotosTab user={user} onOpenModal={this.onOpenModal} isOpen={this.state.isOpen} onCloseModal={this.onCloseModal} />
+                                    <FollowedByHackerAccountHelper user={user} onOpenModal={this.onOpenModal} isOpen={this.state.isOpen} onCloseModal={this.onCloseModal} />
                                 </TabPane>
                             </Fragment> : null}
                         </TabContent>

@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { TabContent, TabPane, Nav, NavItem, NavLink, Row, Col, Card, CardBody, ListGroupItem, Label } from 'reactstrap';
 import { Aperture } from 'react-feather';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
@@ -8,13 +8,19 @@ import _ from "lodash";
 import ReactPlayer from 'react-player';
 
 const TabsetIndividualLiveListingHelper = ({ passedData, ready, user }) => {
+
     const [activeTab, setActiveTab] = useState('1');
+    const [ highest, setHighestBid ] = useState(null);
 
-    console.log("user", user);
+    useEffect(() => {
+        if (passedData !== null && typeof passedData.bids !== "undefined" && passedData.bids.length > 0) {
+            console.log("RUNNNNNNNING.....!");
 
-    const randomDate = (start, end) => {
-        return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
-    }
+            setHighestBid(Math.max.apply(Math, passedData.bids.map((o) => { return o.amount; })));
+        }
+    }, [passedData])
+
+    console.log("passedData bids?", passedData);
 
     const notSpecified = "Not Specified.";
     return (
@@ -59,21 +65,19 @@ const TabsetIndividualLiveListingHelper = ({ passedData, ready, user }) => {
                                             <div className="most-recent-bids-list">
                                                 <Card>
                                                     <CardBody> {/* passedData.bids */}
-                                                        {new Array(3).fill("").map((bid, index) => {
-                                                            const random10000 = (Math.floor(Math.random() * 10000) + 1);
-                                                            const randomlyGeneratedDate = moment(randomDate(new Date(2021, 0, 1), new Date())).fromNow();
+                                                        {passedData !== null && typeof passedData.bids !== "undefined" && passedData.bids.length > 0 ? passedData.bids.map((bid, index) => {
                                                             return (
-                                                                <Fragment>
+                                                                <Fragment key={index}>
                                                                     <ListGroupItem className="list-group-item-action flex-column align-items-start" >
                                                                         <div className="d-flex w-100 justify-content-between">
-                                                                        <h5 className="mb-1">{`Bid placed for approximately $${random10000.toFixed(2)}`}</h5><small className="text-muted red-text-secondary">{`Bid ${randomlyGeneratedDate}`}</small>
+                                                                        <h5 className="mb-1">{`Bid placed for approximately $${bid.amount.toFixed(2)}`}</h5><small className="text-muted red-text-secondary">{`Bid approx. ${moment(bid.bidDate).fromNow()}`}</small>
                                                                         </div>
-                                                                        <p className="mb-1">{`(User's Username goes here) place a bid for $${random10000.toFixed(2)}(USD) about ${randomlyGeneratedDate}...`}</p>
-                                                                        <small className={index === 2 ? "text-muted red-text-secondary" : "text-muted"}>{index === 2 ? "Highest Current Bid Standing!" : "NOT a winning bid."}</small>
+                                                                        <p className="mb-1">{`(User's Username goes here) place a bid for $${bid.amount.toFixed(2)}(USD) about ${moment(bid.bidDate).fromNow()}...`}</p>
+                                                                        <small className={highest === bid.amount ? "text-muted red-text-secondary" : "text-muted"}>{highest === bid.amount ? "Highest Current Bid Standing!" : "NOT a winning bid."}</small>
                                                                     </ListGroupItem>
                                                                 </Fragment>
                                                             );
-                                                        })}
+                                                        }) : null}
                                                     </CardBody>
                                                 </Card>
                                             </div>

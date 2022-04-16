@@ -61,3 +61,14 @@
 .people-know-li-item {
     margin-right: 15px !important;
 }
+.push-bottom-button-profile {
+    position: absolute;
+    bottom: -45px;
+    left: 0;
+    right: 0;
+}
+.outtercardfollowing {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 75px;
+}

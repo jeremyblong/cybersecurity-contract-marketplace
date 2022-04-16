@@ -1,11 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { Row, Col, Card, CardHeader, CardBody, Button, Media } from 'reactstrap';
-import three from "../../../../../assets/images/user/3.jpg";
-import two from "../../../../../assets/images/user/2.png";
-import eight from "../../../../../assets/images/user/8.jpg";
-import ten from "../../../../../assets/images/user/10.jpg";
-import fourteen from "../../../../../assets/images/user/14.png";
-import four from "../../../../../assets/images/user/4.jpg";
+import axios from "axios";
 import { MoreVertical, ThumbsUp, UserPlus, MessageSquare } from 'react-feather';
 import RightBar from './bars/rightBar.jsx';
 import LeftBar from './bars/leftBar.jsx';
@@ -13,18 +8,46 @@ import helpers from "./helpers/aboutSectionHelpers/helpers.js";
 import PaginationGeneralHelper from "../../../universal/pagination/miscMainPagination.js";
 import { useHistory } from 'react-router-dom';
 import NotificationManager from 'react-notifications';
+import moment from 'moment';
+import _ from "lodash";
 
-const { renderPicOrVideoProfileOrNotViewed } = helpers;
+
+
+const { renderPicOrVideoProfileOrNotViewed, lastRenderPicImageVideo } = helpers;
 
 const itemsPerPage = 20;
 
-const AboutTab = ({ setPermenantDataState, permenantData, user, isOpen, onCloseModal, onOpenModal, setSelectedCurrently, modalIndexSelected, setSelectedModalIndex }) => {
+const AboutTab = ({ userData, setPermenantDataState, permenantData, user, isOpen, onCloseModal, onOpenModal, setSelectedCurrently, modalIndexSelected, setSelectedModalIndex }) => {
     const [ currentPage, setCurrentPage ] = useState(0);
     const [ itemOffset, setItemOffset ] = useState(0);
     const [ pageCount, setPageCount ] = useState(0);
     const [ alreadyViewed, setAlreadyViewedState ] = useState([]);
+    const [ suggestedRandom, setSuggestedRandomHackers ] = useState([]);
 
     const history = useHistory();
+    
+
+    useEffect(() => {
+        const configgg = {
+            params: {}
+        }
+
+        axios.get(`${process.env.REACT_APP_BASE_URL}/gather/hackers/random/general`, configgg).then((res) => {
+            if (res.data.message === "Successfully gathered hackers!") {
+                console.log(res.data);
+
+                const { hackers } = res.data;
+
+                setSuggestedRandomHackers(hackers);
+            } else {
+                console.log("err", res.data);
+
+                NotificationManager.error("An unknown error occurred while attempting to fetch this user's data/information...", "Error occurred while fetching user's data!", 4750);
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
+    }, [])
 
     useEffect(() => {
 
@@ -64,48 +87,22 @@ const AboutTab = ({ setPermenantDataState, permenantData, user, isOpen, onCloseM
                                 <CardBody className="avatar-showcase">
                                     <div className="pepole-knows">
                                         <ul>
-                                            <li>
-                                                <div className="add-friend text-center">
-                                                    <Media body className="img-60 img-fluid rounded-circle" alt="twoImg" src={two} /><span className="d-block f-w-600">Jason Borne</span>
-                                                    <Button color="primary" size="xs">View Their Profile</Button>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div className="add-friend text-center">
-                                                    <Media body className="img-60 img-fluid rounded-circle" alt="threeImg" src={three} /><span className="d-block f-w-600">Anna Mull</span>
-                                                    <Button color="primary" size="xs">View Their Profile</Button>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div className="add-friend text-center">
-                                                    <Media body className="img-60 img-fluid rounded-circle" alt="threeImg" src={three} /><span className="d-block f-w-600">Dion Casto</span>
-                                                    <Button color="primary" size="xs">View Their Profile</Button>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div className="add-friend text-center">
-                                                    <Media body className="img-60 img-fluid rounded-circle" alt="four" src={four} /><span className="d-block f-w-600">Karlen Lexon</span>
-                                                    <Button color="primary" size="xs">View Their Profile</Button>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div className="add-friend text-center">
-                                                    <Media body className="img-60 img-fluid rounded-circle" alt="eightImg" src={eight} /><span className="d-block f-w-600">Vella Chism</span>
-                                                    <Button color="primary" size="xs">View Their Profile</Button>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div className="add-friend text-center">
-                                                    <Media body className="img-60 img-fluid rounded-circle" alt="tenImg" src={ten} /><span className="d-block f-w-600">Wai Chalko</span>
-                                                    <Button color="primary" size="xs">View Their Profile</Button>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div className="add-friend text-center">
-                                                    <Media body className="img-60 img-fluid rounded-circle" alt="" src={fourteen} /><span className="d-block f-w-600">Adam Sandler</span>
-                                                    <Button color="primary" size="xs">View Their Profile</Button>
-                                                </div>
-                                            </li>
+                                            {typeof suggestedRandom !== "undefined" && suggestedRandom.length > 0 ? suggestedRandom.map((suggestion, index) => {
+                                                return (
+                                                    <Fragment key={index}>
+                                                        <li className={"people-know-li-item"}>
+                                                            <div className="add-friend text-center center-viewed-content">
+                                                                {lastRenderPicImageVideo(typeof suggestion.profilePicsVideos !== "undefined" && suggestion.profilePicsVideos.length > 0 ? suggestion.profilePicsVideos[suggestion.profilePicsVideos.length - 1] : null)}
+                                                                <span style={{ paddingTop: "3.5px" }} className="d-block f-w-600">{`${suggestion.firstName} ${suggestion.lastName}`}</span>
+                                                                <span className={"d-block"}>{typeof suggestion.reviews !== "undefined" && suggestion.reviews.length > 0 ? suggestion.reviews.length : 0} Review(s)</span>
+                                                                <Button onClick={() => {
+                                                                    redirectToHackerOrEmployerViewed(suggestion.accountType, suggestion.uniqueId);
+                                                                }} color="primary" size="xs">~ View Profile ~</Button>
+                                                            </div>
+                                                        </li>
+                                                    </Fragment>
+                                                );
+                                            }) : null}
                                         </ul>
                                     </div>
                                 </CardBody>
@@ -119,49 +116,61 @@ const AboutTab = ({ setPermenantDataState, permenantData, user, isOpen, onCloseM
                                 <CardBody>
                                     <Row className="details-about">
                                         <Col sm="6">
-                                            <div className="your-details"><span className="f-w-600">Hobbies/Interests:</span>
-                                                <p>{"I like to ride the bike to work, swimming, and working out. I also like reading design magazines, go to museums, and binge watching a good tv show while it’s raining outside."}</p>
+                                            <div className="your-details"><span className="f-w-600">Years Of Experience:</span>
+                                                <p>This user has approx <em style={{ color: "#7366ff" }}>{user.yearsOfExperience.label}</em></p>
                                             </div>
                                         </Col>
                                         <Col sm="6">
-                                            <div className="your-details your-details-xs"><span className="f-w-600">{"Favourite Music Bands / Artists:"}</span>
-                                                <p>{"Iron Maid, DC/AC, Megablow, The Ill, Kung Fighters, System of a Revenge."}</p>
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                    <Row className="details-about">
-                                        <Col sm="6">
-                                            <div className="your-details"><span className="f-w-600">{"Favourite TV Shows:"}</span>
-                                                <p>{"Breaking Good, RedDevil, People of Interest, The Running Dead, Found, American Guy."}</p>
-                                            </div>
-                                        </Col>
-                                        <Col sm="6">
-                                            <div className="your-details your-details-xs"><span className="f-w-600">{"Favourite Books:"}</span>
-                                                <p>{"The Crime of the Century, Egiptian Mythology 101, The Scarred Wizard, Lord of the Wings, Amongst Gods, The Oracle, A Tale of Air and Water."}</p>
+                                            <div className="your-details your-details-xs"><span className="f-w-600">Username: </span>
+                                                <p>{user.username}</p>
                                             </div>
                                         </Col>
                                     </Row>
                                     <Row className="details-about">
                                         <Col sm="6">
-                                            <div className="your-details"><span className="f-w-600">{"Favourite Movies:"}</span>
-                                                <p>{"Idiocratic, The Scarred Wizard and the Fire Crown, Crime Squad Ferrum Man."}</p>
+                                            <div className="your-details"><span className="f-w-600">Total Unique Views: </span>
+                                                <p><em style={{ color: "#7366ff" }}>{user.totalUniqueViews}</em> unique profile view(s)</p>
                                             </div>
                                         </Col>
                                         <Col sm="6">
-                                            <div className="your-details your-details-xs"><span className="f-w-600">{"Favourite Writers:"}</span>
-                                                <p>{"Martin T. Georgeston, Jhonathan R. Token, Ivana Rowle, Alexandr Platt, Marcus Roth."}</p>
+                                            <div className="your-details your-details-xs"><span className="f-w-600">Total # Of Reviews: </span>
+                                                <p>This user has approx. <em style={{ color: "#7366ff" }}>{typeof user.reviews !== "undefined" && user.reviews.length > 0 ? user.reviews.length : 0}</em> total reviews</p>
                                             </div>
                                         </Col>
                                     </Row>
                                     <Row className="details-about">
                                         <Col sm="6">
-                                            <div className="your-details"><span className="f-w-600">{"Favourite Games:"}</span>
-                                                <p>{"The First of Us, Assassin’s Squad, Dark Assylum, NMAK16, Last Cause 4, Grand Snatch Auto."}</p>
+                                            <div className="your-details"><span className="f-w-600">Registration Date</span>
+                                                <p>Registered <em style={{ color: "#7366ff" }}>{moment(user.registrationDate).fromNow()}</em></p>
                                             </div>
                                         </Col>
                                         <Col sm="6">
-                                            <div className="your-details your-details-xs"><span className="f-w-600">{"Other Interests:"}</span>
-                                                <p>{"Swimming, Surfing, Scuba Diving, Anime, Photography, Tattoos, Street Art."}</p>
+                                            <div className="your-details your-details-xs"><span className="f-w-600">Total Profile Post(s)</span>
+                                                <p><em style={{ color: "#7366ff" }}>{_.has(user, "profilePosts") ? user.profilePosts.length : 0}</em> total posts</p>
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                    <Row className="details-about">
+                                        <Col sm="6">
+                                            <div className="your-details"><span className="f-w-600">Gender/Sexuality</span>
+                                                <p>{_.has(user, "gender") ? user.gender.label : "Not Provided."}</p>
+                                            </div>
+                                        </Col>
+                                        <Col sm="6">
+                                            <div className="your-details your-details-xs"><span className="f-w-600">Account Verification Status</span>
+                                                <p><em style={{ color: "#7366ff" }}>{user.fullyVerified === true ? "Account is fully-verified!" : "Account is NOT provided."}</em></p>
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                    <Row className="details-about">
+                                        <Col sm="6">
+                                            <div className="your-details"><span className="f-w-600">Current Number Of Follower's</span>
+                                                <p>{typeof user.currentlyFollowedBy !== "undefined" && user.currentlyFollowedBy.length > 0 ? user.currentlyFollowedBy.length : 0} follower's</p>
+                                            </div>
+                                        </Col>
+                                        <Col sm="6">
+                                            <div className="your-details your-details-xs"><span className="f-w-600">Born/Birthdate</span>
+                                                <p>{moment(user.birthdate).format("MM/DD/YYYY hh:mm:ss a")}</p>
                                             </div>
                                         </Col>
                                     </Row>
@@ -251,7 +260,7 @@ const AboutTab = ({ setPermenantDataState, permenantData, user, isOpen, onCloseM
                                 </CardBody>
                             </Card>
                         </Col>
-                        <Col sm="12">
+                        {/* <Col sm="12">
                             <Card className={"add-shadow-general-card-profile"}>
                                 <CardHeader>
                                     <h5>Activity Log</h5>
@@ -297,7 +306,7 @@ const AboutTab = ({ setPermenantDataState, permenantData, user, isOpen, onCloseM
                                     </div>
                                 </CardBody>
                             </Card>
-                        </Col>
+                        </Col> */}
                     </Row>
                 </Col> 
                 <div className="col-xl-3 xl-100 box-col-12">

@@ -135,6 +135,14 @@ const ClearPaymentsOrPartialPane = ({ listing, setCurrentApplication, currentApp
                                 })
     
                                 NotificationManager.success(`We've successfully deposited the funds into ${process.env.REACT_APP_APPLICATION_NAME} & your contracted hacker is now READY to go and should start working immediately (within 1 business day)! Congrats on your new hire!`, "Succesfully processed request & notified hacker!", 4750);
+                            } else if (res.data.message === "Listing/job is already complete, cannot make payment!") {
+                                console.log("Err - already paid and job has ended..", res.data);
+
+                                setIsOpenState(false);
+                                setActiveCard(null);
+                                setPercentageToBePaid(50);
+    
+                                NotificationManager.info("This listing has ALREADY ended & the recipient of your payment transaction WILL NOT receive these funds, therefore we have declined to accept your payment & no charge was made.", "NO CHARGE WAS MADE/INITIATED!", 4750);
                             } else {
                                 console.log("Err", res.data);
 
