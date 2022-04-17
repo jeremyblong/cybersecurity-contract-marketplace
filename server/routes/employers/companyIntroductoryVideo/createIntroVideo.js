@@ -9,9 +9,9 @@ const moment = require("moment");
 const { Connection } = require("../../../mongoUtil.js");
 
 
-const s3 = new aws.S3();
-
 const generatedID = uuidv4();
+
+const s3 = new aws.S3();
 
 const upload = multer({
     storage: multerS3({
@@ -27,9 +27,9 @@ const upload = multer({
 
 router.post("/", upload.single('file'), (req, resppppp, next) => {
 
-    const { fieldname, originalname, mimetype, key, size } = req.file;
-
     const { uniqueId } = req.body;
+
+    console.log("req.body", req.body);
 
     const collection = Connection.db.db("db").collection("employers");
 
@@ -62,7 +62,7 @@ router.post("/", upload.single('file'), (req, resppppp, next) => {
                     console.log("successfully saved!");
 
                     resppppp.json({
-                        message: "Gathered user!",
+                        message: "Successfully uploaded file!",
                         user
                     })
                 }

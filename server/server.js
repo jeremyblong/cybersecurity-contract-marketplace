@@ -18,11 +18,19 @@ const session = require('express-session');
 // websockets logic initialization
 const http = require("http");
 const server = http.createServer(app);
+const ClamScanConfiguration = require("./config/clamscan.js");
 const io = require('socket.io')(server, {
 	cors: {
 		origin: '*',
 	}
 });
+const NodeClam = require('clamscan');
+
+
+app.use(async (req, _, next) => {
+	req.clamscan = await new NodeClam().init({ ...ClamScanConfiguration })
+	next()
+})
 
 app.use(cookieParser(config.get("COOKIE_SECRET")));
 
@@ -266,8 +274,9 @@ app.use("/gather/instructional/tutorial/course/singular", require("./routes/hack
 app.use("/like/response/tutorial/individual/response", require("./routes/shared/learningCoursesForSale/tutorialRelated/respondToTutorial/like/likeRespondTutorialPost.js"));
 app.use("/dislike/response/tutorial/individual/response", require("./routes/shared/learningCoursesForSale/tutorialRelated/respondToTutorial/dislike/dislikeRespondTutorialPost.js"));
 app.use("/transfer/tip/amount/poster/user", require("./routes/shared/learningCoursesForSale/tutorialRelated/tipPostingUser/tipPosterUserTutorialVideo.js"));
-
-
+app.use("/gather/reviews/only/both/account/types", require("./routes/shared/reviews/gatherReviews/gatherReviewsEachAccountType.js"));
+app.use("/upload/new/blog/post/individual/public", require("./routes/shared/blogging/createNewBlog/createNewRestrictedBlog.js"));
+app.use("/gather/blogs/randomized/short/restricted", require("./routes/shared/blogging/gatherBlogs/gatherRandomizedBlogs.js"));
 
 app.get('*', function(req, res) {
   res.sendFile(__dirname, './client/public/index.html');

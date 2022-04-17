@@ -21,8 +21,6 @@ const {
     onSubmitHelper, 
     renderPreviewOfFile, 
     renderCustomButtonDropzone, 
-    calculateFileType, 
-    handleSubmit, 
     CustomInputHelper 
 } = helpers;
 

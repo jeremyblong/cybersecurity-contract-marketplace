@@ -1,0 +1,8 @@
+.border-right-digits-blog {
+    border-right: 1.50px solid grey;
+}
+.top-radius-blog-custom-contain {
+    object-fit: contain;
+    max-height: 250px;
+    min-height: 250px;
+}

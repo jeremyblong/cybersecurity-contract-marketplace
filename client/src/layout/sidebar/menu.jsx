@@ -19,7 +19,8 @@ export const MENUITEMS = [
                 title: `Manage Application's, Job Data & Other Related`, icon: Home, type: 'sub', active: false, children: [
                     { path: `${process.env.PUBLIC_URL}/already/applied/jobs/hacker/account`, title: `Already Applied Job's`, type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/hacker/notifications`, title: `Notification's`, type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/hackers/display/all/active/gigs/hired`, title: "Hired/Active Gigs Employed Upon", type: "link" }
+                    { path: `${process.env.PUBLIC_URL}/hackers/display/all/active/gigs/hired`, title: "Hired/Active Gigs Employed Upon", type: "link" },
+                    { path: `${process.env.PUBLIC_URL}/hacker/account/view/reviews/previous`, title: 'Manage Reviews & Past Work', type: 'link' }
                 ]
             },
             {
@@ -74,10 +75,9 @@ export const MENUITEMS = [
             {
                 title: 'Job Management', icon: Briefcase, type: 'sub', active: false, children: [
                     { path: `${process.env.PUBLIC_URL}/view/all/general/applications/employer/recruit`, title: `View/Manage Current Applicant/Application's`, type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'Manage Reviews & Past Work', type: 'link' },
+                    { path: `${process.env.PUBLIC_URL}/employer/account/view/reviews/previous`, title: 'Manage Reviews & Past Work', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/employer/view/hired/applicants/active`, title: 'Current Hires', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/employer/notifications`, title: `Notification's`, type: 'link' }
-                    // { path: `${process.env.PUBLIC_URL}/start/video/interview/chat/employer`, title: 'Start/Generate Video Interview/Chat', type: 'link' }
                 ]
             },
             {
@@ -125,7 +125,8 @@ export const MENUITEMS = [
             },
             {
                 title: 'Blogging Related', icon: Home, type: 'sub', active: false, children: [
-                    { path: `${process.env.PUBLIC_URL}/blogging/main/page/display/all`, title: 'Blogging/Blogs', type: 'link' }
+                    { path: `${process.env.PUBLIC_URL}/blogging/main/page/display/all`, title: 'Blogging/Blogs', type: 'link' },
+                    { path: `${process.env.PUBLIC_URL}/blogging/creation/new/blog/post`, title: 'Create A New Blog Post', type: 'link' }
                 ]
             },
         ]          

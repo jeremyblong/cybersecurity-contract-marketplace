@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import Breadcrumb from '../../../../../layout/breadcrumb'
+import Breadcrumb from '../../../../../layout/breadcrumb';
 import { Container, Row, Col, Card, CardHeader, CardBody, ListGroup, ListGroupItem, CardFooter, Button } from 'reactstrap'
 import DatePicker from "react-datepicker";
 import ApexCharts from 'react-apexcharts'
@@ -8,7 +8,7 @@ import Knob from "knob";
 import { Currentlysale, Marketvalue } from '../../chartsData/apex-charts-data'
 import { smallchart1data, smallchart1option, smallchart2data, smallchart2option, smallchart3data, smallchart3option, smallchart4data, smallchart4option } from '../../chartsData/chartist-charts-data'
 import { Send, Clock } from 'react-feather';
-import {Dashboard,Summary,NewsUpdate,Appointment,Notification,MarketValue,Chat,New,Tomorrow,Yesterday,Daily,Weekly,Monthly,Store,Online,ReferralEarning,CashBalance,SalesForcasting,Purchase,Sales,SalesReturn,PurchaseRet,PurchaseOrderValue,ProductOrderValue,Pending,Yearly,Hot,Today,VenterLoren,Done,JohnLoren,Year,Month,Day,RightNow} from '../../../../../constant'
+import {Dashboard,Summary,Notification,MarketValue,Chat,New,Tomorrow,Yesterday,Daily,Weekly,Monthly,Store,Online,ReferralEarning,CashBalance,SalesForcasting,ProductOrderValue,Yearly,Today,Year,Month,Day,RightNow} from '../../../../../constant'
 import axios from "axios";
 import { connect } from "react-redux";
 import { authentication } from "../../../../../redux/actions/authentication/auth.js";
@@ -217,8 +217,8 @@ const MainLandingPageEmployerHelper = ({ authentication, userData }) => {
 
   const renderTopLeft = () => {
     if (user !== null) {
-      const lastPicVid = user.profilePicsVideos[user.profilePicsVideos.length - 1];
-      const bannerImageVideo = `${process.env.REACT_APP_ASSET_LINK}/${user.profileBannerImage.link}`;
+      const lastPicVid = typeof user.profilePicsVideos !== "undefined" && user.profilePicsVideos.length > 0 ? user.profilePicsVideos[user.profilePicsVideos.length - 1] : process.env.REACT_APP_PLACEHOLDER_IMAGE;
+      const bannerImageVideo = _.has(user, "profileBannerImage") ? `${process.env.REACT_APP_ASSET_LINK}/${user.profileBannerImage.link}` : process.env.REACT_APP_PLACEHOLDER_IMAGE;
       return (
         <Fragment>
           <Card className="o-hidden profile-greeting">
@@ -263,7 +263,7 @@ const MainLandingPageEmployerHelper = ({ authentication, userData }) => {
 
   return (
     <Fragment>
-      <Breadcrumb parent="Dashboard" title="Default" />
+      <Breadcrumb parent="Employer Main Dashboard" title="Dashboard/Core Data & Information" />
       <Container fluid={true}>
         {typeof locationError !== "undefined" && locationError.length > 0 ? <p style={{ color: "red" }} className="lead">{locationError}</p> : null}
         <Row className="second-chart-list third-news-update">
@@ -546,7 +546,7 @@ const MainLandingPageEmployerHelper = ({ authentication, userData }) => {
                           );
                         }
                     }) : <Fragment>
-                        <img src={require("../../../../../assets/images/no-current-notifications.png")} className={"no-notifications-img"} />
+                        <img src={require("../../../../../assets/images/placeholder-profile.png")} className={"no-notifications-img-dashboard"} />
                     </Fragment>}
                 </ListGroup>
               </CardBody>
@@ -634,7 +634,7 @@ const MainLandingPageEmployerHelper = ({ authentication, userData }) => {
                           );
                         }
                     }) : <Fragment>
-                        <img src={require("../../../../../assets/images/no-current-notifications.png")} className={"no-notifications-img"} />
+                        <img src={require("../../../../../assets/images/no-current-notifications.png")} className={"no-notifications-img-dashboard"} />
                     </Fragment>}
                 </ListGroup>
               </CardBody>

@@ -1,0 +1,6 @@
+.stretch-blog-creation-img {
+    min-height: 450px;
+    max-height: 450px;
+    object-fit: contain;
+    min-width: 100%;
+}

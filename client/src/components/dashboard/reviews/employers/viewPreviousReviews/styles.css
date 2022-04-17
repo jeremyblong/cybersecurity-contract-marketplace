@@ -1,0 +1,20 @@
+.no-reviews-found {
+    min-width: 100%;
+    min-height: 775px;
+    object-fit: contain;
+}
+@media only screen and (max-width: 850px) {
+    .no-reviews-found {
+        min-width: 100%;
+        min-height: 425px;
+        object-fit: contain;
+    }
+}
+.review-left-by {
+    margin-left: 47.5px;
+}
+.review-label {
+    color: #f73164;
+    text-decoration-line: underline;
+    font-weight: 425;
+}

@@ -78,6 +78,9 @@ import ViewAllTutorialCoursesPage from "../pages/dashboard/learning/tutorialVide
 import CreateTutorialCourseContentPage from "../pages/dashboard/learning/tutorialVideos/create/createTutorialVideoCourse.js";
 import ViewIndividualTutorialVideoPage from "../pages/dashboard/learning/tutorialVideos/individualTutorial/viewIndividualTutorial.js";
 import CreateNewReferralPage from "../pages/dashboard/referrals/createReferral/createNewReferralCode.js";
+import ViewRecentReviewsAllEmployerPage from "../pages/dashboard/reviews/employers/viewPreviousReviews/viewRecentReviews.js";
+import ViewRecentReviewsAllHackerPage from "../pages/dashboard/reviews/hackers/viewPreviousReviews/viewRecentReviews.js";
+import CreateNewBlogPostPage from "../pages/dashboard/blogging/blogCreation/createNewBlogPost.js";
 
 
 export const routes = [
@@ -160,5 +163,8 @@ export const routes = [
         { path: "/view/tutorial/videos/clips", Component: ViewAllTutorialCoursesPage },
         { path: "/create/tutorial/course/content", Component: CreateTutorialCourseContentPage },
         { path: "/view/individual/tutorial/video/:id", Component: ViewIndividualTutorialVideoPage },
-        { path: "/create/new/referral/invitation/user", Component: CreateNewReferralPage }
+        { path: "/create/new/referral/invitation/user", Component: CreateNewReferralPage },
+        { path: "/employer/account/view/reviews/previous", Component: ViewRecentReviewsAllEmployerPage },
+        { path: "/hacker/account/view/reviews/previous", Component: ViewRecentReviewsAllHackerPage },
+        { path: "/blogging/creation/new/blog/post", Component: CreateNewBlogPostPage }
 ]; 

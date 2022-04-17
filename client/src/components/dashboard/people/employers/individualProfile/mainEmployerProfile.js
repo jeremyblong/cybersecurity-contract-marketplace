@@ -55,7 +55,7 @@ const MainEmployerProfileDisplayHelper = ({ userData }) => {
             const configuration = {
                 signedinUserID: userData.uniqueId, 
                 viewingEmployerAccountID: id, 
-                signedinLastProfileFile: userData.profilePicsVideos[userData.profilePicsVideos.length - 1], 
+                signedinLastProfileFile: typeof userData.profilePicsVideos !== "undefined" && userData.profilePicsVideos.length > 0 ? userData.profilePicsVideos[userData.profilePicsVideos.length - 1] : null, 
                 signedinUserNameFull: `${userData.firstName} ${userData.lastName}`, 
                 signedinMemberSince: userData.registrationDate,
                 accountType: userData.accountType

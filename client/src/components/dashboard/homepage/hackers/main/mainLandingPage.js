@@ -327,7 +327,7 @@ const MainLandingPageHackerHelper = ({ authentication, userData }) => {
 
   return (
     <Fragment>
-      <Breadcrumb parent="Dashboard" title="Default" />
+      <Breadcrumb parent="Hacker Main Dashboard" title="Dashboard/Core Data & Information" />
       <Container fluid={true}>
         {typeof locationError !== "undefined" && locationError.length > 0 ? <p style={{ color: "red" }} className="lead">{locationError}</p> : null}
         <Row className="second-chart-list third-news-update">
@@ -605,7 +605,7 @@ const MainLandingPageHackerHelper = ({ authentication, userData }) => {
                           );
                         }
                     }) : <Fragment>
-                        <img src={require("../../../../../assets/images/no-current-notifications.png")} className={"no-notifications-img"} />
+                        <img src={require("../../../../../assets/images/placeholder-profile.png")} className={"no-notifications-img-dashboard"} />
                     </Fragment>}
                 </ListGroup>
               </CardBody>
@@ -693,7 +693,7 @@ const MainLandingPageHackerHelper = ({ authentication, userData }) => {
                           );
                         }
                     }) : <Fragment>
-                        <img src={require("../../../../../assets/images/no-current-notifications.png")} className={"no-notifications-img"} />
+                        <img src={require("../../../../../assets/images/no-current-notifications.png")} className={"no-notifications-img-dashboard"} />
                     </Fragment>}
                 </ListGroup>
               </CardBody>
