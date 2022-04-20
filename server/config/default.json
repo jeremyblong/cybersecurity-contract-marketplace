@@ -32,5 +32,8 @@
     "adminUltimatePasswordKey": "F}2*bxp&,@pJ2m:", 
     "stripeWebhookSigningSecret": "whsec_DPaPzM4OTv3hUoRLrG3htUsKLckjK2Sg",
     "ngrokURL": "https://thehackermarketplace.ngrok.io",
-    "percentageCut": 0.97
+    "percentageCut": 0.97,
+    "twilioServiceSID": "ACa52ef4c5037df72183d9d15a7d063dec",
+    "twilioAuthToken": "e334ef0c5502cfdedca030a3eb7cb74f",
+    "twilioAuthyProductionKey": "MI9dgtEl8XP0P48NXZenssqy4Gb5kXXN"
 }

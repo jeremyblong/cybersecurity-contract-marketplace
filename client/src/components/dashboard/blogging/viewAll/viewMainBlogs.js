@@ -1,17 +1,16 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import Breadcrumb from '../../../../layout/breadcrumb';
-import blog from "../../../../assets/images/blog/blog.jpg";
 import blog2 from "../../../../assets/images/blog/blog-2.jpg";
 import blog3 from "../../../../assets/images/blog/blog-3.jpg";
-import blog5 from "../../../../assets/images/blog/blog-5.jpg";
+import blog6 from "../../../../assets/images/blog/blog-6.jpg";
 import moment from "moment";
-import { Container, Row, Col, Card, Media, Progress } from "reactstrap";
+import { Container, Row, Col, Card, Media, Progress, CardFooter, Button } from "reactstrap";
 import { connect } from "react-redux";
 import axios from "axios";
 import { NotificationManager } from "react-notifications";
 import Slider from "react-slick";
 import "./styles.css";
-
+import { useHistory } from "react-router-dom";
 
 const settings = {
     dots: false,
@@ -25,8 +24,11 @@ const settings = {
 
 const BlogsMainHomepageViewHelper = ({ userData }) => {
 
+
+    const history = useHistory();
+
     const [ blogs, setBlogs ] = useState([]);
-    const [ promoted, setPromoted ] = useState(["", "", "", "", "", "", "", "", "", ""]);
+    const [ promoted, setPromoted ] = useState([]);
     const [ progress, setProgress ] = useState(10);
 
     useEffect(() => {
@@ -42,7 +44,8 @@ const BlogsMainHomepageViewHelper = ({ userData }) => {
 
                 const { blogs } = res.data;
 
-                setBlogs(blogs);
+                setBlogs(blogs.concat(new Array(28 - blogs.length).fill(false)));
+                setPromoted(blogs);
             } else {
                 console.log("Err", res.data);
 
@@ -90,6 +93,15 @@ const BlogsMainHomepageViewHelper = ({ userData }) => {
     const afterChangeHelper = (index) => {
         setProgress((index + 1) * 10);
     }
+    const handleRedirectToIndividualBlog = (blog) => {
+        console.log("handleRedirectToIndividualBlog clicked..:", blog);
+
+        if (blog === false) {
+            NotificationManager.warning("Cannot redirect to this listing as this data is ONLY PLACEHOLDER DATA!", "Cannot redirect due to placeholder data!", 4750);
+        } else {
+            history.push(`/view/individual/restricted/blog/content/${blog.id}`);
+        }
+    }
     return (
         <Fragment>
             <Breadcrumb parent="User blogging homepage" title="Blogging details & homepage (blogs from our platform user's)" />
@@ -99,26 +111,30 @@ const BlogsMainHomepageViewHelper = ({ userData }) => {
                         <div className={"centered-horizontally-custom"}><h5 id={calculateClassProgress(progress)}>{progress}% Though Slider (Swipe to pan through slide's)</h5></div>
                         <Progress className={"progressbar-course-scrollable sm-progress-bar"} animated color={calculateClassProgressColor(progress)} value={progress} />
                         <Slider afterChange={afterChangeHelper} onSwipe={(direction) => handleSwipe(direction)} {...settings}>
-                            {promoted.map((item, index) => {
+                            {typeof promoted !== "undefined" && promoted.length > 0 ? promoted.map((blog, index) => {
                                 return (
-                                    <div key={index} className={"centered-horizontally-custom"}>
-                                        <Card>
-                                            <div className="blog-box blog-shadow">
-                                                <Media className="img-fluid" src={blog} alt="" />
-                                                <div className="blog-details">
-                                                    <p className="digits">{"25 July 2019"}</p>
-                                                    <h4>{"Accusamus et iusto odio dignissimos ducimus qui blanditiis."}</h4>
-                                                    <ul className="blog-social">
-                                                        <li><i className="icofont icofont-user"></i>{`${userData.firstName} ${userData.lastName}`}</li>
-                                                        <li className="digits"><i className="icofont icofont-thumbs-up"></i>{"02 Hits"}</li>
-                                                        <li className="digits"><i className="icofont icofont-ui-chat"></i>{"598 Comments"}</li>
-                                                    </ul>
+                                    <Fragment key={index}>
+                                        <Col md="12" xl="12 box-col-12 xl-100">
+                                            <Card>
+                                                <div className="blog-box blog-grid text-center">
+                                                    <Media className="img-fluid top-radius-blog top-radius-blog-custom-cover" src={`${process.env.REACT_APP_ASSET_LINK}/${blog.displayImage}`} alt="" />
+                                                    <div className="blog-details-main">
+                                                        <ul className="blog-social row">
+                                                            <Col sm="12" md="4" lg="4" xl="4" className="digits border-right-digits-blog">{moment(blog.date).format("MM/DD/YYYY")}<br />{moment(blog.date).fromNow()}</Col>
+                                                            <Col sm="12" md="4" lg="4" xl="4" className="digits border-right-digits-blog">{`By: ${blog.posterName}`}</Col>
+                                                            <Col sm="12" md="4" lg="4" xl="4" className="digits"><strong style={{ color: "green" }}>{blog.likes} likes</strong>/<strong style={{ color: "red" }}>{blog.dislikes} dislikes</strong></Col>
+                                                        </ul>
+                                                        <hr />
+                                                        <h6 className="blog-bottom-details"><em style={{ color: "#f73164", textDecorationLine: "underline" }}>Title</em>: {blog.title.slice(0, 100)}{typeof blog.title !== "undefined" && blog.title.length >= 100 ? "..." : ""}</h6>
+                                                        <hr />
+                                                        <h6 className="blog-bottom-details"><em style={{ color: "#f73164", textDecorationLine: "underline" }}>Sub-Title</em>: {blog.subtitle.slice(0, 125)}{typeof blog.subtitle !== "undefined" && blog.subtitle.length >= 125 ? "..." : ""}</h6>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </Card>
-                                    </div>
+                                            </Card>
+                                        </Col>
+                                    </Fragment>
                                 );
-                            })}
+                            }) : null}
                         </Slider>
                     </Col>
                     <Col sm="12" lg="6 box-col-12 xl-100" md="6 box-col-12 xl-100" xl="6 box-col-12 xl-100">
@@ -167,28 +183,59 @@ const BlogsMainHomepageViewHelper = ({ userData }) => {
                     </Col>
                     {/* this is the start of main chunk.. */}
                     {typeof blogs !== "undefined" && blogs.length > 0 ? blogs.map((blog, index) => {
-                        return (
-                            <Fragment key={index}>
-                                <Col md="6" xl="3 box-col-6 xl-50">
-                                    <Card>
-                                        <div className="blog-box blog-grid text-center">
-                                            <Media className="img-fluid top-radius-blog top-radius-blog-custom-contain" src={`${process.env.REACT_APP_ASSET_LINK}/${blog.displayImage}`} alt="" />
-                                            <div className="blog-details-main">
-                                                <ul className="blog-social row">
-                                                    <Col sm="12" md="4" lg="4" xl="4" className="digits border-right-digits-blog">{moment(blog.date).format("MM/DD/YYYY")}<br />{moment(blog.date).fromNow()}</Col>
-                                                    <Col sm="12" md="4" lg="4" xl="4" className="digits border-right-digits-blog">{`By: ${blog.posterName}`}</Col>
-                                                    <Col sm="12" md="4" lg="4" xl="4" className="digits"><strong style={{ color: "green" }}>{blog.likes} likes</strong>/<strong style={{ color: "red" }}>{blog.dislikes} dislikes</strong></Col>
-                                                </ul>
-                                                <hr />
-                                                <h6 className="blog-bottom-details"><em style={{ color: "#f73164", textDecorationLine: "underline" }}>Title</em>: {blog.title.slice(0, 100)}{typeof blog.title !== "undefined" && blog.title.length >= 100 ? "..." : ""}</h6>
-                                                <hr />
-                                                <h6 className="blog-bottom-details"><em style={{ color: "#f73164", textDecorationLine: "underline" }}>Sub-Title</em>: {blog.subtitle.slice(0, 125)}{typeof blog.subtitle !== "undefined" && blog.subtitle.length >= 125 ? "..." : ""}</h6>
+                        if (blog === false) {
+                            return (
+                                <Fragment key={index}>
+                                    <Col md="3" sm="12" lg="3" xl="3 box-col-6 xl-50">
+                                        <Card>
+                                            <div className="blog-box blog-grid text-center">
+                                                <Media className="img-fluid top-radius-blog" src={blog6} alt="" />
+                                                <div className="blog-details-main">
+                                                    <ul className="blog-social">
+                                                        <li className="digits">{"9 April 2019"}</li>
+                                                        <li className="digits">{"by: Admin"}</li>
+                                                        <li className="digits">{"0 Hits"}</li>
+                                                    </ul>
+                                                    <hr />
+                                                    <h6 className="blog-bottom-details"><em style={{ color: "#f73164", textDecorationLine: "underline" }}>Title</em>: Neque egestas congue quisque egestas diam in arcu. Facilisis sed odio morbi quis commodo. Bibendum ut tristique et egestas quis ipsum. Convallis posuere morbi leo urna molestie at elementum</h6>
+                                                    <hr />
+                                                    <h6 className="blog-bottom-details"><em style={{ color: "#f73164", textDecorationLine: "underline" }}>Sub-Title</em>: Habitant morbi tristique senectus et. Elit eget gravida cum sociis. Ultrices vitae auctor eu augue ut lectus arcu. Pellentesque id nibh tortor id aliquet.</h6>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </Card>
-                                </Col>
-                            </Fragment>
-                        );
+                                            <CardFooter className={"b-l-secondary b-r-secondary"}>
+                                                <Button className={"btn-square-success"} outline color={"success-2x"} style={{ width: "100%" }} onClick={() => handleRedirectToIndividualBlog(blog)}>Redirect To Blog!</Button>
+                                            </CardFooter>
+                                        </Card>
+                                    </Col>
+                                </Fragment>
+                            );
+                        } else {
+                            return (
+                                <Fragment key={index}>
+                                    <Col md="3" sm="12" lg="3" xl="3 box-col-6 xl-50">
+                                        <Card>
+                                            <div className="blog-box blog-grid text-center">
+                                                <Media className="img-fluid top-radius-blog top-radius-blog-custom-cover" src={`${process.env.REACT_APP_ASSET_LINK}/${blog.displayImage}`} alt="" />
+                                                <div className="blog-details-main">
+                                                    <ul className="blog-social row">
+                                                        <Col sm="12" md="4" lg="4" xl="4" className="digits border-right-digits-blog">{moment(blog.date).format("MM/DD/YYYY")}<br />{moment(blog.date).fromNow()}</Col>
+                                                        <Col sm="12" md="4" lg="4" xl="4" className="digits border-right-digits-blog">{`By: ${blog.posterName}`}</Col>
+                                                        <Col sm="12" md="4" lg="4" xl="4" className="digits"><strong style={{ color: "green" }}>{blog.likes} likes</strong>/<strong style={{ color: "red" }}>{blog.dislikes} dislikes</strong></Col>
+                                                    </ul>
+                                                    <hr />
+                                                    <h6 className="blog-bottom-details"><em style={{ color: "#f73164", textDecorationLine: "underline" }}>Title</em>: {blog.title.slice(0, 100)}{typeof blog.title !== "undefined" && blog.title.length >= 100 ? "..." : ""}</h6>
+                                                    <hr />
+                                                    <h6 className="blog-bottom-details"><em style={{ color: "#f73164", textDecorationLine: "underline" }}>Sub-Title</em>: {blog.subtitle.slice(0, 125)}{typeof blog.subtitle !== "undefined" && blog.subtitle.length >= 125 ? "..." : ""}</h6>
+                                                </div>
+                                            </div>
+                                            <CardFooter className={"b-l-secondary b-r-secondary"}>
+                                                <Button className={"btn-square-success"} outline color={"success-2x"} style={{ width: "100%" }} onClick={() => handleRedirectToIndividualBlog(blog)}>Redirect To Blog!</Button>
+                                            </CardFooter>
+                                        </Card>
+                                    </Col>
+                                </Fragment>
+                            );
+                        }
                     }) : null}
                 </Row>
             </Container>

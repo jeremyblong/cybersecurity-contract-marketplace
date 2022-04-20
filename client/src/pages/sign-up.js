@@ -9,6 +9,7 @@ import { authentication } from "../redux/actions/authentication/auth.js";
 import { connect } from "react-redux";
 import Switch from "react-switch";
 import { withRouter } from "react-router-dom";
+import PhoneInput from 'react-phone-number-input'
 
 
 class SignUp extends Component {
@@ -25,7 +26,8 @@ constructor (props) {
         agreement: false,
         switchAccountType: "You're registering as a 'Company/Employer'",
         checked: false,
-        referralCode: ""
+        referralCode: "",
+        phoneNumber: ""
     }
 }
 
@@ -49,9 +51,9 @@ constructor (props) {
 
         console.log("submitted.");
 
-        const { firstName, lastName, email, username, password, agreement, checked, referralCode } = this.state;
+        const { firstName, lastName, email, username, password, agreement, checked, referralCode, phoneNumber } = this.state;
 
-        if ((typeof firstName !== "undefined" && firstName.length > 0) && (typeof lastName !== "undefined" && lastName.length > 0) && (typeof email !== "undefined" && email.length > 0) && (typeof username !== "undefined" && username.length > 0) && (typeof password !== "undefined" && password.length > 0)) {
+        if ((typeof phoneNumber !== "undefined" && phoneNumber.length >= 10) && (typeof firstName !== "undefined" && firstName.length > 0) && (typeof lastName !== "undefined" && lastName.length > 0) && (typeof email !== "undefined" && email.length > 0) && (typeof username !== "undefined" && username.length > 0) && (typeof password !== "undefined" && password.length > 0)) {
             if (agreement === true) {
                 // agreed
                 axios.post(`${process.env.REACT_APP_BASE_URL}/registration/${checked === true ? "hacker" : "employer"}`, {
@@ -62,6 +64,7 @@ constructor (props) {
                     password, 
                     agreement,
                     referralCode,
+                    phoneNumber,
                     accountType: checked === true ? "hackers" : "employers"
                 }, {
                     withCredentials: true
@@ -77,6 +80,7 @@ constructor (props) {
                             username: "",
                             agreement: false,
                             referralCode: null,
+                            phoneNumber: "",
                             checked: false,
                             switchAccountType: "You're registering as a 'Company/Employer'"
                         }, () => {
@@ -193,6 +197,20 @@ constructor (props) {
                                             onChange={this.handleChange}
                                             name="password" 
                                             placeholder="Password" />
+                                        </div>
+                                    </div>
+                                    <div className="col-md-12 col-sm-12">
+                                        <div className="form-group">
+                                            <PhoneInput
+                                                defaultCountry="US"
+                                                placeholder="Enter your phone number.."
+                                                value={this.state.phoneNumber}
+                                                onChange={(value) => {
+                                                    this.setState({
+                                                        phoneNumber: value
+                                                    })
+                                                }}
+                                            />
                                         </div>
                                     </div>
                                     <div className="col-md-12 col-sm-12">

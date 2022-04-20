@@ -22,3 +22,6 @@
     border: 3px solid #fff;
     max-height: 100px;
 }
+.img-fluid-min-profile {
+    min-height: 100px;
+}

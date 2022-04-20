@@ -2,6 +2,8 @@ import React from 'react';
 import {Link} from 'react-router-dom'; 
 import { Row, Col } from "reactstrap";
 import "./styles.css";
+import ReactPlayer from "react-player";
+
 
 const HighPerformanceSolutions = () => {
     return (
@@ -16,7 +18,7 @@ const HighPerformanceSolutions = () => {
 						<img src={require("../../assets/images/createlivestream.png")} className={"landing-page-display-img"} />
 					</Col>
 					<Col sm="12" md="6" lg="6" xl="6">
-						<img src={require("../../assets/images/employerlist.png")} className={"landing-page-display-img"} />
+						<ReactPlayer playing={true} loop={true} muted={true} width={"100%"} height={350} className={"landing-page-display-video"} wrapper={"div"} url={require("../../assets/video/employer-view-video.mp4")} />
 					</Col>
 				</Row>
 				<hr style={{ marginTop: "22.5px", marginBottom: "22.5px" }} />

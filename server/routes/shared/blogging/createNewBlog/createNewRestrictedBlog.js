@@ -10,7 +10,7 @@ router.post("/", (req, resppppp, next) => {
     const { 
         title, 
         subtitle,
-        body,
+        description,
         hashtags,
         userID,
         userFullName,
@@ -25,7 +25,7 @@ router.post("/", (req, resppppp, next) => {
         title,
         subtitle,
         hashtags,
-        description: body,
+        description,
         posterName: userFullName,
         posterID: userID,
         posterAccountType: userAccountType,

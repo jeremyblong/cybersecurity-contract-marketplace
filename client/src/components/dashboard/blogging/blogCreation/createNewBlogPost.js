@@ -86,13 +86,13 @@ const CreateNewBlogPostHelper = ({ userData }) => {
     const handleFinalSubmission = (data) => {
         console.log("handleFinalSubmission", data);
 
-        const { title, subtitle, body, hashtags } = data;
+        const { title, subtitle, description, hashtags } = data;
 
         if (file !== null) {
             const config = {
                 title,
                 subtitle,
-                body,
+                description,
                 hashtags,
                 userID: userData.uniqueId,
                 userFullName: `${userData.firstName} ${userData.lastName}`,

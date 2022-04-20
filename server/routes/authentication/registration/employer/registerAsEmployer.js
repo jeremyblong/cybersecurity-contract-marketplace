@@ -6,6 +6,8 @@ const moment = require("moment");
 const { getToken, COOKIE_OPTIONS, getRefreshToken } = require("../../../../schemas/authentication/authenticate.js");
 const { encrypt } = require("../../../../crypto.js");
 const config = require("config");
+const Client = require('authy-client').Client;
+const authy = new Client({ key: config.get("twilioAuthyProductionKey") });
 const stripe = require('stripe')(config.get("stripeSecretKey"));
 const { Connection } = require("../../../../mongoUtil.js");
 
@@ -19,7 +21,8 @@ router.post("/", async (req, res) => {
         password, 
         referralCode,
         agreement,
-        accountType
+        accountType,
+        phoneNumber
     } = req.body;
 
     const userID = uuidv4();
@@ -65,7 +68,8 @@ router.post("/", async (req, res) => {
               lastName: lastName.toLowerCase().trim(), 
               email: email.toLowerCase().trim(), 
               username: username.toLowerCase().trim(), 
-              password: encrypt(password.trim()), 
+              password: encrypt(password.trim()),
+              phoneNumber, 
               accountType,
               agreement,
               referral: newReferralData,
@@ -100,14 +104,32 @@ router.post("/", async (req, res) => {
                   const refreshToken = getRefreshToken({ _id: user._id });
         
                   user.refreshToken.push({ refreshToken });
-        
-                  user.save((errrrrrrrr, user) => {
-                    if (errrrrrrrr) {
-                      res.statusCode = 500
-                      res.send(errrrrrrrr);
+
+                  authy.registerUser({
+                    countryCode: "US",
+                    email: email.toLowerCase().trim(),
+                    phone: phoneNumber
+                  }, (regErr, regRes) => {
+                    if (regErr) {
+
+                        console.log('regError Registering User with Authy');
+
+                        res.status(500).json(regErr);
+
+                        return;
                     } else {
-                      res.cookie("refreshToken", refreshToken, COOKIE_OPTIONS)
-                      res.send({ success: true, token, message: "Successfully registered!", data: user });
+
+                      user["authyId"] = regRes.user.id;
+
+                      user.save((errrrrrrrr, user) => {
+                        if (errrrrrrrr) {
+                          res.statusCode = 500
+                          res.send(errrrrrrrr);
+                        } else {
+                          res.cookie("refreshToken", refreshToken, COOKIE_OPTIONS)
+                          res.send({ success: true, token, message: "Successfully registered!", data: user });
+                        }
+                      });
                     }
                   });
                 }
@@ -150,6 +172,7 @@ router.post("/", async (req, res) => {
                 agreement,
                 referral: newReferralData,
                 uniqueId: userID,
+                phoneNumber,
                 referralCode: uuidv4(),
                 registrationDate: new Date(),
                 registrationDateString: moment(new Date()).format("MM/DD/YYYY hh:mm:ss a"),
@@ -181,13 +204,31 @@ router.post("/", async (req, res) => {
           
                     user.refreshToken.push({ refreshToken });
           
-                    user.save((errrrrrrrr, user) => {
-                      if (errrrrrrrr) {
-                        res.statusCode = 500
-                        res.send(errrrrrrrr);
+                    authy.registerUser({
+                      countryCode: "US",
+                      email: email.toLowerCase().trim(),
+                      phone: phoneNumber
+                    }, (regErr, regRes) => {
+                      if (regErr) {
+  
+                          console.log('regError Registering User with Authy');
+  
+                          res.status(500).json(regErr);
+  
+                          return;
                       } else {
-                        res.cookie("refreshToken", refreshToken, COOKIE_OPTIONS)
-                        res.send({ success: true, token, message: "Successfully registered!", data: user });
+  
+                        user["authyId"] = regRes.user.id;
+  
+                        user.save((errrrrrrrr, user) => {
+                          if (errrrrrrrr) {
+                            res.statusCode = 500
+                            res.send(errrrrrrrr);
+                          } else {
+                            res.cookie("refreshToken", refreshToken, COOKIE_OPTIONS)
+                            res.send({ success: true, token, message: "Successfully registered!", data: user });
+                          }
+                        });
                       }
                     });
                   }
@@ -226,6 +267,7 @@ router.post("/", async (req, res) => {
             accountType,
             agreement,
             uniqueId: userID,
+            phoneNumber,
             referralCode: uuidv4(),
             referral: null,
             registrationDate: new Date(),
@@ -258,13 +300,31 @@ router.post("/", async (req, res) => {
       
                 user.refreshToken.push({ refreshToken });
       
-                user.save((errrrrrrrr, user) => {
-                  if (errrrrrrrr) {
-                    res.statusCode = 500
-                    res.send(errrrrrrrr);
+                authy.registerUser({
+                  countryCode: "US",
+                  email: email.toLowerCase().trim(),
+                  phone: phoneNumber
+                }, (regErr, regRes) => {
+                  if (regErr) {
+
+                      console.log('regError Registering User with Authy');
+
+                      res.status(500).json(regErr);
+
+                      return;
                   } else {
-                    res.cookie("refreshToken", refreshToken, COOKIE_OPTIONS)
-                    res.send({ success: true, token, message: "Successfully registered!", data: user });
+
+                    user["authyId"] = regRes.user.id;
+
+                    user.save((errrrrrrrr, user) => {
+                      if (errrrrrrrr) {
+                        res.statusCode = 500
+                        res.send(errrrrrrrr);
+                      } else {
+                        res.cookie("refreshToken", refreshToken, COOKIE_OPTIONS)
+                        res.send({ success: true, token, message: "Successfully registered!", data: user });
+                      }
+                    });
                   }
                 });
               }

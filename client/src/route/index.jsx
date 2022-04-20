@@ -81,7 +81,7 @@ import CreateNewReferralPage from "../pages/dashboard/referrals/createReferral/c
 import ViewRecentReviewsAllEmployerPage from "../pages/dashboard/reviews/employers/viewPreviousReviews/viewRecentReviews.js";
 import ViewRecentReviewsAllHackerPage from "../pages/dashboard/reviews/hackers/viewPreviousReviews/viewRecentReviews.js";
 import CreateNewBlogPostPage from "../pages/dashboard/blogging/blogCreation/createNewBlogPost.js";
-
+import ViewIndividualRestrictedAuthBlogPage from "../pages/dashboard/blogging/individual/viewIndividualBlog.js";
 
 export const routes = [
         { path:"/profile/settings/edit", Component: GeneralSettingsPage },
@@ -166,5 +166,6 @@ export const routes = [
         { path: "/create/new/referral/invitation/user", Component: CreateNewReferralPage },
         { path: "/employer/account/view/reviews/previous", Component: ViewRecentReviewsAllEmployerPage },
         { path: "/hacker/account/view/reviews/previous", Component: ViewRecentReviewsAllHackerPage },
-        { path: "/blogging/creation/new/blog/post", Component: CreateNewBlogPostPage }
+        { path: "/blogging/creation/new/blog/post", Component: CreateNewBlogPostPage },
+        { path: "/view/individual/restricted/blog/content/:id", Component: ViewIndividualRestrictedAuthBlogPage }
 ]; 

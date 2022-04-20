@@ -26,7 +26,6 @@ const io = require('socket.io')(server, {
 });
 const NodeClam = require('clamscan');
 
-
 app.use(async (req, _, next) => {
 	req.clamscan = await new NodeClam().init({ ...ClamScanConfiguration })
 	next()
@@ -123,6 +122,8 @@ app.use("/activate/random/test/action", require("./routes/randomTestRoute.js"));
 
 
 // routes go here...
+app.use("/twilio/verify/code", require("./routes/authentication/twilio/verify/verifyTwilioCode.js"));
+app.use("/twilio/send/code", require("./routes/authentication/twilio/sendCode/send.js"));
 app.use("/registration/hacker", require("./routes/authentication/registration/hacker/registerAsHacker.js"));
 app.use("/login/hacker", require("./routes/authentication/login/hackerLogin.js"));
 app.use("/login/employer", require("./routes/authentication/login/employerLogin.js"));
@@ -277,6 +278,11 @@ app.use("/transfer/tip/amount/poster/user", require("./routes/shared/learningCou
 app.use("/gather/reviews/only/both/account/types", require("./routes/shared/reviews/gatherReviews/gatherReviewsEachAccountType.js"));
 app.use("/upload/new/blog/post/individual/public", require("./routes/shared/blogging/createNewBlog/createNewRestrictedBlog.js"));
 app.use("/gather/blogs/randomized/short/restricted", require("./routes/shared/blogging/gatherBlogs/gatherRandomizedBlogs.js"));
+app.use("/gather/blog/individual/randomized/short/restricted", require("./routes/shared/blogging/individual/gatherIndividualBlog.js"));
+app.use("/like/blog/post/restricted/response", require("./routes/shared/blogging/individual/like/likeIndividualBlogPost.js"));
+app.use("/dislike/blog/post/restricted/response", require("./routes/shared/blogging/individual/dislike/dislikeIndividualBlogPost.js"));
+app.use("/mark/view/restricted/blog/individual", require("./routes/shared/blogging/individual/viewed/markBlogRestrictedView.js"));
+app.use("/leave/comment/restricted/blog/content", require("./routes/shared/blogging/individual/comments/leaveAComment/leaveNewComment.js"));
 
 app.get('*', function(req, res) {
   res.sendFile(__dirname, './client/public/index.html');

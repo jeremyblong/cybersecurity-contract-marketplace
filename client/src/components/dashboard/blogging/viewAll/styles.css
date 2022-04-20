@@ -6,3 +6,8 @@
     max-height: 250px;
     min-height: 250px;
 }
+.top-radius-blog-custom-cover {
+    object-fit: cover;
+    max-height: 300px;
+    min-height: 300px;
+}

@@ -25,6 +25,12 @@ const UserSchema =  new Schema({
     referral: {
         type: Schema.Types.Mixed
     },
+    authyId: {
+        type: Number
+    },
+    phoneNumber: {
+        type: String
+    },
     stripeAccountVerified: {
         type: Boolean
     },

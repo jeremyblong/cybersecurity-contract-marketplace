@@ -209,8 +209,8 @@ const MainLandingPageHackerHelper = ({ authentication, userData }) => {
 
   const renderTopLeft = () => {
     if (user !== null) {
-      const lastPicVid = user.profilePicsVideos[user.profilePicsVideos.length - 1];
-      const bannerImageVideo = `${process.env.REACT_APP_ASSET_LINK}/${user.profileBannerImage.link}`;
+      const lastPicVid = typeof user.profilePicsVideos !== "undefined" && user.profilePicsVideos.length > 0 ? user.profilePicsVideos[user.profilePicsVideos.length - 1] : null;
+      const bannerImageVideo = _.has(user, "profileBannerImage") ? `${process.env.REACT_APP_ASSET_LINK}/${user.profileBannerImage.link}` : process.env.REACT_APP_PLACEHOLDER_IMAGE;
       return (
         <Fragment>
           <Card className="o-hidden">
