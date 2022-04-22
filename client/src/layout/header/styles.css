@@ -25,3 +25,10 @@
         min-height: 100px !important;
     }
 }
+.notification-dropdown {
+    min-width: 37.5vw;
+}
+.pic-vid-min-height-width {
+    min-width: 75px;
+    min-height: 75px;
+}

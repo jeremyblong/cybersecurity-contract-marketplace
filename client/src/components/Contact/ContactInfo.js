@@ -26,7 +26,7 @@ const ContactInfo = () => {
 										<Card className='shadow equal-height'>
 											<CardBody>
 												<div className="calender-widget">
-													<div className="cal-img">
+													<div className="cal-img centered-both-ways">
 														<img src={require("../../assets/images/logo-saturated-long.png")} className={"inner-contact-img"} />
 													</div>
 													<div className="cal-desc text-left card-body">

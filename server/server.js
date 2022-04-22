@@ -283,6 +283,12 @@ app.use("/like/blog/post/restricted/response", require("./routes/shared/blogging
 app.use("/dislike/blog/post/restricted/response", require("./routes/shared/blogging/individual/dislike/dislikeIndividualBlogPost.js"));
 app.use("/mark/view/restricted/blog/individual", require("./routes/shared/blogging/individual/viewed/markBlogRestrictedView.js"));
 app.use("/leave/comment/restricted/blog/content", require("./routes/shared/blogging/individual/comments/leaveAComment/leaveNewComment.js"));
+app.use("/submit/comment/sub/reply/blog/content/restricted/response", require("./routes/shared/blogging/individual/comments/leaveAComment/leaveSubReplyToOP.js"));
+app.use("/update/phone/number/employer", require("./routes/employers/profile/generalInformation/phoneNumber/updatePhoneNumber.js"));
+app.use("/leave/comment/tutorial/video/content", require("./routes/hackers/tutorialCoursesShort/commentRelated/leaveInitialMainComment.js"));
+app.use("/submit/comment/sub/reply/tutorial/video/content/response", require("./routes/hackers/tutorialCoursesShort/commentRelated/leaveSubReplyCommentToOP.js"));
+
+
 
 app.get('*', function(req, res) {
   res.sendFile(__dirname, './client/public/index.html');

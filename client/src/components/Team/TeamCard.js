@@ -6,34 +6,34 @@ const TeamCard = () => {
         <section className="team-area ptb-100">
             <div className="container">
                 <div className="section-title">
-                    <h2>Our Expert Team</h2>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incidiunt labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida.</p>
+                    <h2>Meet Our Expert Team</h2>
+                    <p>Meet our team of designers, coders, founders, business management and other related roles! We <strong>strongly</strong> believe in cultivating a team where the memebers feel appreciated, part-of and assuring our team is fully-content while working for us. <strong>Honesty, transparency & communication is paramount</strong>!</p>
                 </div>
 
                 <div className="row">
                     <div className="col-lg-3 col-sm-6">
                         <div className="single-team">
                             <div className="image">
-                                <img src="/img/team/team1.jpg" alt="image" />
+                                <img src={require("../../assets/images/use_this_photo_me.jpg")} alt="image" />
     
                                 <ul className="social">
                                     <li>
-                                        <a href="https://facebook.com/" target="_blank">
+                                        <a href="https://www.facebook.com/profile.php?id=100008228624124" target="_blank">
                                             <i className="bx bxl-facebook"></i>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="https://twitter.com/" target="_blank">
-                                            <i className="bx bxl-twitter"></i>
+                                        <a href="https://www.youtube.com/channel/UCeZLmf5iF8EZeZuh8_krMZg" target="_blank">
+                                            <i class="fa fa-brands fa-youtube"></i>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="https://linkedin.com/" target="_blank">
+                                        <a href="https://www.linkedin.com/in/jeremy-blong-97351616b/" target="_blank">
                                             <i className="bx bxl-linkedin"></i>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="https://instagram.com/" target="_blank">
+                                        <a href="https://www.instagram.com/thatlaughdoeeee/" target="_blank">
                                             <i className="bx bxl-instagram"></i>
                                         </a>
                                     </li>
@@ -41,8 +41,8 @@ const TeamCard = () => {
                             </div>
     
                             <div className="content">
-                                <h3>Peter Pers</h3>
-                                <span>Director</span>
+                                <h3>Jeremy Blong</h3>
+                                <span>Founder/Software-Engineer</span>
                             </div>
                         </div>
                     </div>
@@ -50,7 +50,7 @@ const TeamCard = () => {
                     <div className="col-lg-3 col-sm-6">
                         <div className="single-team">
                             <div className="image">
-                                <img src="/img/team/team2.jpg" alt="image" />
+                                <img src={require("../../assets/images/user/10.jpg")} alt="image" />
     
                                 <ul className="social">
                                     <li>
@@ -77,8 +77,8 @@ const TeamCard = () => {
                             </div>
     
                             <div className="content">
-                                <h3>Sarah Swift</h3>
-                                <span>Executive</span>
+                                <h3>None Provided</h3>
+                                <span>N/A</span>
                             </div>
                         </div>
                     </div>
@@ -86,7 +86,7 @@ const TeamCard = () => {
                     <div className="col-lg-3 col-sm-6">
                         <div className="single-team">
                             <div className="image">
-                                <img src="/img/team/team3.jpg" alt="image" />
+                                <img src={require("../../assets/images/user/10.jpg")} alt="image" />
     
                                 <ul className="social">
                                     <li>
@@ -113,8 +113,8 @@ const TeamCard = () => {
                             </div>
     
                             <div className="content">
-                                <h3>Alita Scot</h3>
-                                <span>Programmer</span>
+                                <h3>None Provided</h3>
+                                <span>N/A</span>
                             </div>
                         </div>
 					</div>
@@ -122,7 +122,7 @@ const TeamCard = () => {
                     <div className="col-lg-3 col-sm-6">
                         <div className="single-team">
                             <div className="image">
-                                <img src="/img/team/team4.jpg" alt="image" />
+                                <img src={require("../../assets/images/user/10.jpg")} alt="image" />
     
                                 <ul className="social">
                                     <li>
@@ -149,8 +149,8 @@ const TeamCard = () => {
                             </div>
     
                             <div className="content">
-                                <h3>Denial James</h3>
-                                <span>CEO</span>
+                                <h3>None Provided</h3>
+                                <span>N/A</span>
                             </div>
                         </div>
 					</div>
@@ -158,7 +158,7 @@ const TeamCard = () => {
                     <div className="col-lg-3 col-sm-6">
                         <div className="single-team">
                             <div className="image">
-                                <img src="/img/team/team5.jpg" alt="image" />
+                                <img src={require("../../assets/images/user/10.jpg")} alt="image" />
     
                                 <ul className="social">
                                     <li>
@@ -185,8 +185,8 @@ const TeamCard = () => {
                             </div>
     
                             <div className="content">
-                                <h3>Killv Smith</h3>
-                                <span>Regional Leader</span>
+                                <h3>None Provided</h3>
+                                <span>N/A</span>
                             </div>
                         </div>
 					</div>
@@ -194,7 +194,7 @@ const TeamCard = () => {
                     <div className="col-lg-3 col-sm-6">
                         <div className="single-team">
                             <div className="image">
-                                <img src="/img/team/team6.jpg" alt="image" />
+                                <img src={require("../../assets/images/user/10.jpg")} alt="image" />
     
                                 <ul className="social">
                                     <li>
@@ -221,8 +221,8 @@ const TeamCard = () => {
                             </div>
     
                             <div className="content">
-                                <h3>Kilva Smith</h3>
-                                <span>Web Deringer</span>
+                                <h3>None Provided</h3>
+                                <span>N/A</span>
                             </div>
                         </div>
 					</div>
@@ -230,7 +230,7 @@ const TeamCard = () => {
                     <div className="col-lg-3 col-sm-6">
                         <div className="single-team">
                             <div className="image">
-                                <img src="/img/team/team7.jpg" alt="image" />
+                                <img src={require("../../assets/images/user/10.jpg")} alt="image" />
     
                                 <ul className="social">
                                     <li>
@@ -257,8 +257,8 @@ const TeamCard = () => {
                             </div>
     
                             <div className="content">
-                                <h3>Zinkel Dew</h3>
-                                <span>Graphics Designer</span>
+                                <h3>None Provided</h3>
+                                <span>N/A</span>
                             </div>
                         </div>
 					</div>
@@ -266,7 +266,7 @@ const TeamCard = () => {
                     <div className="col-lg-3 col-sm-6">
                         <div className="single-team">
                             <div className="image">
-                                <img src="/img/team/team8.jpg" alt="image" />
+                                <img src={require("../../assets/images/user/10.jpg")} alt="image" />
     
                                 <ul className="social">
                                     <li>
@@ -293,8 +293,8 @@ const TeamCard = () => {
                             </div>
     
                             <div className="content">
-                                <h3>Thomas Olsen</h3>
-                                <span>Founder & CEO</span>
+                                <h3>None Provided</h3>
+                                <span>N/A</span>
                             </div>
                         </div>
 					</div>

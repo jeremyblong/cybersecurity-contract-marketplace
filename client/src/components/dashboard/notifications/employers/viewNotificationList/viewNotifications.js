@@ -98,7 +98,6 @@ const ViewNotificationListHelper = ({ userData }) => {
         })
     }, []);
 
-
     const renderProfilePicVideo = (last) => {
         if (last !== null && _.has(last, "link")) {
             if (last.type.includes("video")) {

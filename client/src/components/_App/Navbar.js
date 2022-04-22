@@ -243,12 +243,6 @@ const Navbar = ({ data, authenticated, authentication, saveListingData, saveSoft
                                                             <a onClick={() => setCollapsed(true)} className="nav-link nav-link-custom-homepage">Coming Soon</a>
                                                         </Link>
                                                     </li>
-
-                                                    <li className="nav-item custom-nav-item-link">
-                                                        <Link to="/404" activeClassName="active">
-                                                            <a onClick={() => setCollapsed(true)} className="nav-link nav-link-custom-homepage">404 Error Page</a>
-                                                        </Link>
-                                                    </li>
  
                                                     <li className="nav-item custom-nav-item-link">
                                                         <Link to="/privacy-policy" activeClassName="active">
@@ -257,7 +251,7 @@ const Navbar = ({ data, authenticated, authentication, saveListingData, saveSoft
                                                     </li>
 
                                                     <li className="nav-item custom-nav-item-link">
-                                                        <Link to="/terms-conditions" activeClassName="active">
+                                                        <Link to="/terms-and-conditions" activeClassName="active">
                                                             <a onClick={() => setCollapsed(true)} className="nav-link nav-link-custom-homepage">Terms & Conditions</a>
                                                         </Link>
                                                     </li>

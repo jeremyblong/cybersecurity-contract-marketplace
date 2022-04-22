@@ -17,6 +17,10 @@ import helpers from "./helpers/generalHelperFunctions.js";
 import moment from "moment";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { NotificationManager } from 'react-notifications';
+import PaginationGeneralHelper from "../../../universal/pagination/miscMainPagination.js";
+
+
+const itemsPerPage = 20;
 
 const SoftwareLandingMainHelper = (props) => {
 
@@ -31,22 +35,32 @@ const SoftwareLandingMainHelper = (props) => {
         RenderConditionalRealDataOrNot
     } = helpers;
 
-    //   const dispatch = useDispatch()
-    const data = []; // useSelector(content => content.data.productItems)
+    const [ currentPage, setCurrentPage ] = useState(0);
+    const [ pageCount, setPageCount ] = useState(0);
+    const [ itemOffset, setItemOffset ] = useState(0);
+    const [ permenantData, setPermenantDataState ] = useState([]);
+
     // eslint-disable-next-line 
     const [layoutColumns, setLayoutColumns] = useState(3);
-    // universal symbol for currency variable
-    const symbol = "$";
     const [open, setOpen] = useState(false);
     const [sidebaron, setSidebaron] = useState(true);
     const [singleProduct, setSingleProduct] = useState(null);
     const [searchKeyword, setSearchKeyword] = useState('');
     // eslint-disable-next-line
-    const [stock, setStock] = useState('');
     const [filterSidebar, setFilterSidebar] = useState(true);
     const [quantity, setQuantity] = useState(1);
     const filters = []; // useSelector(content => content.filters)
     const [products, setProducts ] = useState([]); // getVisibleproducts(data, filters)
+
+    useEffect(() => {
+
+        const endOffset = itemOffset + itemsPerPage;
+
+        setPageCount(Math.ceil(permenantData.length / itemsPerPage));
+
+        setProducts(permenantData.slice(itemOffset, endOffset));
+        
+    }, [itemOffset, itemsPerPage]);
 
     useEffect(() => {
         // already displayed/pooled listings
@@ -68,9 +82,9 @@ const SoftwareLandingMainHelper = (props) => {
 
                 new Promise((resolve, reject) => {
                     const subtractionArrLength = 20 - listings.length;
-                    console.log("subtractionArrLength", subtractionArrLength);
+
                     new Array(subtractionArrLength).fill("").map((item, index) => {
-                        console.log("index", index);
+
                         const generated = Math.floor(Math.random() * 1000) + 1;
                         const statusGeneration = Math.floor(Math.random() * 5) + 1;
                         newlyConstructedArr.push({
@@ -90,7 +104,14 @@ const SoftwareLandingMainHelper = (props) => {
                         }
                     });
                 }).then((passedArray) => {
-                    setProducts(passedArray);
+
+                    const endOffset = itemOffset + itemsPerPage;
+
+                    setPageCount(Math.ceil(passedArray.length / itemsPerPage));
+
+                    setPermenantDataState(passedArray);
+
+                    setProducts(passedArray.slice(itemOffset, endOffset));
                 });
             } else {
                 console.log("Err", res.data);
@@ -495,18 +516,8 @@ const SoftwareLandingMainHelper = (props) => {
                 }
             </div>
             </div>
-            <Row style={{ paddingTop: "17.5px" }}>
-                <div className="centered-both-ways">
-                    <Pagination className="m-b-30" aria-label="Page navigation example">
-                        <ul className="pagination pagination-lg pagination-secondary">
-                            <PaginationItem><PaginationLink href={null}>{"Previous"}</PaginationLink></PaginationItem>
-                            <PaginationItem active><PaginationLink href={null}>{"1"}</PaginationLink></PaginationItem>
-                            <PaginationItem><PaginationLink href={null}>{"2"}</PaginationLink></PaginationItem>
-                            <PaginationItem><PaginationLink href={null}>{"3"}</PaginationLink></PaginationItem>
-                            <PaginationItem><PaginationLink href={null}>{"Next"}</PaginationLink></PaginationItem>
-                        </ul>
-                    </Pagination>
-                </div>
+            <Row style={{ marginBottom: "75px" }}>
+                <PaginationGeneralHelper itemsPerPage={itemsPerPage} loopingData={permenantData} currentPage={currentPage} pageCount={pageCount} setItemOffset={setItemOffset} setCurrentPage={setCurrentPage} />
             </Row>
         </Container>
         </Fragment>

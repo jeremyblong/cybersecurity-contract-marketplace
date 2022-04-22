@@ -36,7 +36,7 @@ const Partner = () => {
 
     return (
         <div className="partner-area ptb-100">
-			<div className="container">
+			{/* <div className="container">
                 {display ? <OwlCarousel 
                     className="partner-wrap owl-carousel owl-theme"
                     {...options}
@@ -77,7 +77,7 @@ const Partner = () => {
                         </a>
                     </div>
                 </OwlCarousel> : ''}
-			</div>
+			</div> */}
 		</div>
     )
 }

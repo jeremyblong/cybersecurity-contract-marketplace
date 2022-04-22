@@ -47,3 +47,9 @@
 .spacer-top-portion-promoted {
     margin: 22.5px;
 }
+.sort-category-custom {
+    font-size: 1.15rem;
+    text-decoration-line: underline;
+    color: #7366ff;
+    margin-top: 17.5px;
+}

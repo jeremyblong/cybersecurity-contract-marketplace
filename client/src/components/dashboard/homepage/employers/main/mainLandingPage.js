@@ -472,7 +472,7 @@ const MainLandingPageEmployerHelper = ({ authentication, userData }) => {
                       </div>
                       <div className="media-body">
                         <div className="right-chart-content">
-                          <h4>{ready === true ? `$${balance}` : "Loading.."}</h4><span>Account Bal.</span>
+                          <h4>{ready === true ? `$${Math.round(balance / 100).toFixed(2)}` : "Loading.."}</h4><span>Account Bal.</span>
                         </div>
                       </div>
                     </div>

@@ -1,9 +1,8 @@
 .single-blog-stretch-both-ways {
     min-width: 100%;
     min-height: 400px;
-    border: 1.75px solid black;
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.375);
-    padding: 7.5px;
+    padding: 10px;
     margin-bottom: 37.5px;
 }
 .img-fluid-both-ways {

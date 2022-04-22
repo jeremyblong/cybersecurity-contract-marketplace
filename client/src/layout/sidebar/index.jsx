@@ -290,7 +290,7 @@ const Sidebar = (props) => {
         <nav className="sidebar-main">
             <div className="left-arrow" onClick={scrollToLeft}><ArrowLeft /></div>
             <div id="sidebar-menu" style={wrapper.split(' ').includes('horizontal-wrapper') ? { 'marginLeft': margin + 'px' } : { margin: '0px' }}>
-              <ul className="sidebar-links custom-scrollbar" >
+              <ul style={{ paddingBottom: "75px" }} className="sidebar-links custom-scrollbar" >
                 <li className="back-btn">
                   <div className="mobile-back text-right"><span>{"Back"}</span><i className="fa fa-angle-right pl-2" aria-hidden="true"></i></div>
                 </li>

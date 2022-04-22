@@ -73,6 +73,9 @@ const LatesNews = () => {
     }, []);
 
 
+    const randomizedImgNum = () => {
+      return Math.floor(Math.random() * (9 - 1 + 1) + 1)
+    }
     return (
         <section className="blog-area pb-70">
 			<div className="container">
@@ -88,7 +91,7 @@ const LatesNews = () => {
 								<Fragment key={index}>
 									<div className="col-lg-12 col-sm-12">
 										<div className="single-blog-stretch-both-ways">
-											<img src="/img/blog/blog1.jpg" alt="Image" className={"img-fluid-both-ways"} />
+											<img src={`/img/blog/blog${randomizedImgNum()}.jpg`} alt="Image" className={"img-fluid-both-ways"} />
 											<span>{blog.viewedBy.length} Total View(s)</span>
 											<div className="blog-content">
 												<h3>

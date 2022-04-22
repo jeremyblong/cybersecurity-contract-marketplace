@@ -8,7 +8,6 @@ const { Connection } = require("../../../../mongoUtil.js");
 router.post("/", (req, resppppp, next) => {
     const { 
         numberOfEmployees,
-        phoneNumber,
         yearsInBusiness,
         openAssets,
         specialty, 
@@ -36,7 +35,6 @@ router.post("/", (req, resppppp, next) => {
         } else {
 
             if (numberOfEmployees !== null) user["numberOfEmployees"] = numberOfEmployees;
-            if (phoneNumber !== null) user["phoneNumber"] = phoneNumber;
             if (yearsInBusiness !== 0) user["yearsInBusiness"] = yearsInBusiness;
             if (typeof openAssets !== "undefined" && openAssets.length > 0) user["openAssets"] = openAssets;
             if (typeof specialty !== "undefined" && specialty.length > 0) user["sectorOrSpecialty"] = specialty;

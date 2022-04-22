@@ -13,6 +13,11 @@ import { Modal } from 'react-responsive-modal';
 import { connect } from "react-redux";
 import io from 'socket.io-client';
 import Confetti from 'react-confetti';
+import helpers from "./helpers/helpers.js";
+import LeaveCommentTutorialVideoHelper from "./helpers/sheets/comment.js";
+
+const { renderProfilePicVideo } = helpers;
+
 
 const newSocket = io(process.env.REACT_APP_BASE_URL);
 
@@ -32,6 +37,9 @@ const ViewIndividualTutorialVideoHelper = ({ userData }) => {
 
     const { id } = useParams();
 
+    const [ isMessagePaneOpen, setMessagePaneOpenState ] = useState(false);
+    const [ selectedComment, setSelectedComment ] = useState(null);
+    const [ commentText, setCommentText ] = useState("");
     const [ ready, setReady ] = useState(false);
     const [ tutorial, setTutorial ] = useState(null);
     const [ modalTipOpen, setModalTipState ] = useState(false);
@@ -277,9 +285,48 @@ const ViewIndividualTutorialVideoHelper = ({ userData }) => {
             NotificationManager.error("We've encountered an error while attempting to 'tip' this user, please reload this page or contact support if the problem persists!", "Unknown error occurred while processing request!", 4750);
         })
     }
+
+    const handleCommentSubmission = () => {
+        console.log("handleCommentSubmission clicked");
+
+        const signedinLastProfileFile = typeof userData.profilePicsVideos !== "undefined" && userData.profilePicsVideos.length > 0 ? userData.profilePicsVideos[userData.profilePicsVideos.length - 1] : null;
+
+        const config = {
+            signedinUserID: userData.uniqueId,
+            commentText,
+            signedinUserNameFull: `${userData.firstName} ${userData.lastName}`,
+            accountType: userData.accountType,
+            tutorialID: id,
+            signedinLastProfileFile
+        }
+
+        axios.post(`${process.env.REACT_APP_BASE_URL}/leave/comment/tutorial/video/content`, config).then((res) => {
+            if (res.data.message === "Successfully left your comment on this video!") {
+                console.log(res.data);
+
+                NotificationManager.success("Successfully left your review on this specific video post, your comment was posted and is now LIVE!", "Successfully posted your comment!", 4750);
+
+                const { tutorial } = res.data;
+
+                setTutorial(tutorial);
+
+            } else {
+                console.log("Err", res.data);
+
+                NotificationManager.error("An unknown error occurred while attempting to upload your new comment onto this tutorial post, please reload the page or contact support if this problem persists...", "Error upload/updating post & profile!", 4750);
+            }
+        }).catch((err) => {
+            console.log(err);
+
+            NotificationManager.error("An unknown error occurred while attempting to upload your new comment onto this tutorial post, please reload the page or contact support if this problem persists...", "Error upload/updating post & profile!", 4750);
+        })
+    }
+
+
     const renderMainContent = () => {
         return (
             <Fragment>
+                <LeaveCommentTutorialVideoHelper selectedComment={selectedComment} setTutorialData={setTutorial} userData={userData} tutorialID={id} isMessagePaneOpen={isMessagePaneOpen} setMessagePaneOpenState={setMessagePaneOpenState} />
                 <Modal open={modalTipOpen} classNames={{
                     overlay: 'modalTutorialOverlay',
                     modal: 'modalTutorialModal',
@@ -349,41 +396,86 @@ const ViewIndividualTutorialVideoHelper = ({ userData }) => {
                     </Col>
                 </Row>
                 <Row>
-                    <div className="social-chat">
-                        <div className="your-msg">
-                            <Media>
-                                <Media className="img-50 min-50-img img-fluid m-r-20 rounded-circle" alt="" src={require("../../../../../assets/images/placeholder.png")} />
-                                <Media body><span className="f-w-600">First & Last <span>{"1 Year Ago"} <i className="fa fa-reply font-primary"></i></span></span>
-                                    <p>{"we are doing dance and singing songs, please vote our post which is very good for all young peoples"}</p>
-                                </Media>
-                            </Media>
-                        </div>
-                        <div className="other-msg">
-                            <Media>
-                                <Media className="img-50 min-50-img img-fluid m-r-20 rounded-circle" alt="" src={require("../../../../../assets/images/placeholder.png")} />
-                                <Media body><span className="f-w-600">First & Last <span>{"1 Month Ago"} <i className="fa fa-reply font-primary"></i></span></span>
-                                    <p>{"ohh yeah very good car and its features i will surely vote for it"} </p>
-                                </Media>
-                            </Media>
-                        </div>
-                        <div className="other-msg">
-                            <Media>
-                                <Media className="img-50 min-50-img img-fluid m-r-20 rounded-circle" alt="" src={require("../../../../../assets/images/placeholder.png")} />
-                                <Media body><span className="f-w-600">First & Last <span>{"15 Days Ago"} <i className="fa fa-reply font-primary"></i></span></span>
-                                    <p>{"ohh yeah very good car and its features i will surely vote for it"} </p>
-                                </Media>
-                            </Media>
-                        </div>
-                        <div className="your-msg">
-                            <Media>
-                                <Media className="img-50 min-50-img img-fluid m-r-20 rounded-circle" alt="" src={require("../../../../../assets/images/placeholder.png")} />
-                                <Media body><span className="f-w-600">First & Last <span>{"1 Year Ago"} <i className="fa fa-reply font-primary"></i></span></span>
-                                    <p>{"we are doing dance and singing songs, please vote our post which is very good for all young peoples"}</p>
-                                </Media>
-                            </Media>
-                        </div>
-                        <div className="text-center"><a href="#javascript">View More Comment's</a></div>
-                    </div>
+                    <Col sm="12" md="12" lg="12" xl="12">
+                        <Label style={{ marginTop: "10px", marginBottom: "10px" }} className={"blog-custom-label"}>Leave A Comment</Label>
+                        <textarea className="form-control blog-comment-textinput" value={commentText} onChange={(e) => setCommentText(e.target.value)} rows="5" cols="5" placeholder={"Enter your comment for this specific blog post..."}></textarea>
+                    </Col>
+                </Row>
+                <Row style={{ marginTop: "22.5px" }}>
+                    <Col sm="12" md="7" lg="7" xl="7">
+
+                    </Col>
+                    <Col sm="12" md="5" lg="5" xl="5">
+                        <Button disabled={typeof commentText !== "undefined" && commentText.length >= 50 ? false : true} className={"btn-square-success"} outline color={"success-2x"} style={{ width: "100%" }} onClick={() => handleCommentSubmission()}>Leave Comment!</Button>
+                    </Col>
+                </Row>
+                <Row>
+                    <section className="comment-box">
+                        <h4>Most Recent Tutorial Video Comment's</h4>
+                        <hr />
+                        <ul>
+                            {typeof tutorial.comments !== "undefined" && tutorial.comments.length > 0 ? tutorial.comments.map((comment, index) => {
+                                return (
+                                    <Fragment key={index}>
+                                        <li style={{ marginTop: "17.5px" }}>
+                                            <Media className="align-self-center">
+                                                {renderProfilePicVideo(comment.posterPicOrVideo)}
+                                                <Media body>
+                                                    <Row>
+                                                        <Col md="4">
+                                                            <h6 className="mt-0">{comment.posterName}<span> {comment.posterAccountType === "employers" ? "Employer Account" : "Hacker Account"}</span></h6>
+                                                        </Col>
+                                                        <Col md="8">
+                                                            <ul className="comment-social float-left float-md-right">
+                                                                <li className="digits"><i className="icofont icofont-thumbs-up"></i>{typeof comment.subComments !== "undefined" && comment.subComments.length > 0 ? comment.subComments.length : 0} Reply's (Total)</li>
+                                                                <li className="digits"><i className="icofont icofont-ui-chat"></i>{typeof comment.alreadyReacted !== "undefined" && comment.alreadyReacted.length > 0 ? comment.alreadyReacted.length : 0} Reaction's</li>
+                                                                <li className="digits"><i className="icofont icofont-thumbs-up"></i>Posted: {moment(comment.date).fromNow()}</li>
+                                                            </ul>
+                                                        </Col>
+                                                    </Row>
+                                                    <p>{comment.commentText}</p>
+                                                    <span className="span-leave-comment-sub">
+                                                        <h5 onClick={() => {
+                                                            setSelectedComment(comment);
+
+                                                            setMessagePaneOpenState(true);
+                                                        }} className="text-right right-text-hover-sub-reply" style={{ marginRight: "12.5px" }}>Leave Sub-Comment</h5>
+                                                    </span>
+                                                </Media>
+                                            </Media>
+                                        </li>
+                                        <ul>
+                                            {typeof comment.subComments !== "undefined" && comment.subComments.length > 0 ? comment.subComments.map((subcomment, index) => {
+                                                return (
+                                                    <Fragment key={index}>
+                                                        <li>
+                                                            <Media className="align-self-center">
+                                                                {renderProfilePicVideo(subcomment.posterPicOrVideo)}
+                                                                <Media body>
+                                                                    <Row>
+                                                                        <Col md="4">
+                                                                            <h6 className="mt-0">{subcomment.posterName}<span> {subcomment.posterAccountType === "employers" ? "Employer Account" : "Hacker Account"}</span></h6>
+                                                                        </Col>
+                                                                        <Col md="8">
+                                                                            <ul className="comment-social float-left float-md-right">
+                                                                                <li className="digits"><i className="icofont icofont-ui-chat"></i>{typeof subcomment.alreadyReacted !== "undefined" && subcomment.alreadyReacted.length > 0 ? subcomment.alreadyReacted.length : 0} Reaction's</li>
+                                                                                <li className="digits"><i className="icofont icofont-thumbs-up"></i>Posted: {moment(subcomment.date).fromNow()}</li>
+                                                                            </ul>
+                                                                        </Col>
+                                                                    </Row>
+                                                                    <p>{subcomment.commentText}</p>
+                                                                </Media>
+                                                            </Media>
+                                                        </li>
+                                                    </Fragment>
+                                                );
+                                            }) : null}
+                                        </ul>
+                                    </Fragment>
+                                );
+                            }) : null}
+                        </ul>
+                    </section>
                 </Row>
             </Fragment>
         );

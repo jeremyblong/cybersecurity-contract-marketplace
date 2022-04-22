@@ -1,0 +1,20 @@
+.boldish {
+    font-weight: 400;
+}
+.section-title-custom-wider {
+    min-width: 75vw;
+}
+@media only screen and (max-width: 850px) {
+    .section-title-custom-wider {
+        min-width: 92.5vw;
+    }
+}
+.pricing-content-darker-background {
+    background-color: #7366ffd8 !important;
+}
+.pricing-content-darker-background-center {
+    background-color: #f73162 !important;
+}
+.pricing-content-darker-background h2, .pricing-content-darker-background-center h2 {
+    color: white !important;
+}

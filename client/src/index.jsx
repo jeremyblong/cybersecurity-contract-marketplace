@@ -75,6 +75,8 @@ import SimpleReactLightbox from 'simple-react-lightbox';
 import UnauthorizedAccessPage from "./pages/dashboard/unauthorized/unauthorizedAccess.js";
 import CreateANewBlogPostPage from "./pages/unauthenticatedMisc/blogRelated/postNewBlogPage.js";
 import AboutCompanyDetails from "./pages/aboutCompany.js";
+import TermsConditions from "./pages/terms-conditions.js";
+
 
 require('dotenv').config();
 
@@ -238,6 +240,7 @@ const Root = (props) =>  {
         <Route exact path="/services-three" render={(props) => renderComponent(ServicesThree, props)} />
         <Route exact path="/blog-left-sidebar" render={(props) => renderComponent(BlogLeftSidebar, props)} />
         <Route exact path="/blog-right-sidebar" render={(props) => renderComponent(BlogRightSidebar, props)} />
+        <Route exact path="/terms-and-conditions" render={(props) => renderComponent(TermsConditions, props)} />
         <Route exact path="/create-new-blog" render={(props) => renderComponent(CreateANewBlogPostPage, props)} />
         <App>
           <TransitionGroup>

@@ -21,7 +21,7 @@
     "jwt-decode": "^3.1.2",
     "knob": "^1.1.0",
     "lodash": "^4.17.21",
-    "mapbox-gl": "^2.6.1",
+    "mapbox-gl": "^2.8.1",
     "moment": "^2.29.1",
     "nodemailer": "^6.6.5",
     "nodemailer-sendgrid-transport": "^0.2.0",
@@ -140,16 +140,12 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie 11",
+    "not chrome < 51",
+    "not safari < 10",
+    "not android < 51"
+  ]
 }

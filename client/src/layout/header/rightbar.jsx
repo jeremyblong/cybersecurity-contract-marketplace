@@ -10,7 +10,7 @@ import {
   translate,
 } from 'react-switch-lang';
 import { saveSendbirdInitialData } from "../../redux/actions/messaging/initialization/initSBLogic.js";
-import { English, Deutsch, Español, Français, Português, 简体中文, Notification, DeliveryProcessing, OrderComplete, TicketsGenerated, DeliveryComplete, ViewAll, MessageBox, EricaHughes, KoriThomas, Account, Inbox, LogOut, AinChavez, CheckOut, OrderTotal, GoToShopingBag } from '../../constant'
+import { English, Deutsch, Español, Français, Português, 简体中文, Notification, ViewAll, MessageBox, Account, Inbox, LogOut, AinChavez, CheckOut, OrderTotal, GoToShopingBag } from '../../constant'
 import { connect } from "react-redux";
 import _ from "lodash";
 import axios from "axios";
@@ -28,10 +28,13 @@ import fr from '../../assets/i18n/fr.json';
 import du from '../../assets/i18n/du.json';
 import cn from '../../assets/i18n/cn.json';
 import ae from '../../assets/i18n/ae.json';
-import { InputGroup, InputGroupAddon, Button } from 'reactstrap';
+import { InputGroup, InputGroupAddon, Button, Media, ListGroupItem, Row, Col } from 'reactstrap';
 import { updateCourseInformationData } from "../../redux/actions/courses/createNewCourse/index.js";
 import "./styles.css";
 import ReactPlayer from "react-player";
+import moment from "moment";
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+
 
 // translation logic...
 setTranslations({ en, es, pt, fr, du, cn, ae });
@@ -39,16 +42,77 @@ setDefaultLanguage('en');
 setLanguageCookie();
 
 // actual component starts...
-const Rightbar = ({ balance, ready, authenticated, data, authentication, saveListingData, saveSoftwareListingInfo, saveSendbirdInitialData, updateCourseInformationData }) => {   
+const Rightbar = ({ userData, SBData, balance, ready, authenticated, data, authentication, saveListingData, saveSoftwareListingInfo, saveSendbirdInitialData, updateCourseInformationData }) => {
   const history = useHistory();
-   
+
   const [searchresponsive, setSearchresponsive] = useState(false)
   const [langdropdown, setLangdropdown] = useState(false)
   const [moonlight, setMoonlight] = useState(false)
-  const [selected, setSelected] = useState("en")
+  const [selected, setSelected] = useState("en");
+  const [ notifications, setNotifications ] = useState([]);
   const [cartDropdown, setCartDropDown] = useState(false)
   const [notificationDropDown, setNotificationDropDown] = useState(false)
   const [chatDropDown, setChatDropDown] = useState(false);
+  const [groupChannels, setGroupChannels] = useState([]);
+
+  useEffect(() => {
+    if (typeof userData !== "undefined" && userData !== null) {
+      console.log("running!!!!!");
+
+      const configuration = {
+          params: {
+              uniqueId: userData.uniqueId,
+              accountType: userData.accountType 
+          }
+      }
+
+      const promises = [];
+
+      axios.get(`${process.env.REACT_APP_BASE_URL}/gather/account/notifications`, configuration).then((res) => {
+          if (res.data.message === "Successfully gathered notifications!") {
+              console.log("successfully gathered notifications..:", res.data);
+
+              const { notifications } = res.data;
+
+              for (let index = 0; index < notifications.length; index++) {
+                  const notify = notifications[index];
+                  
+                  promises.push(new Promise(async (resolve, reject) => {
+                      const result = await axios.get(`${process.env.REACT_APP_BASE_URL}/fetch/profile/pic/video/only`, {
+                          params: {
+                              uniqueId: notify.metadata.from
+                          }
+                      })
+
+                      if (result.data.message === "Gathered resource!") {
+                          const file = result.data.file;
+
+                          notify.profilePicVideo = file;
+
+                          resolve(notify);
+                      } else {
+                          resolve(null);
+                      }
+                  }))
+              }
+
+              Promise.all(promises).then((passedData) => {
+                  console.log("passedData", passedData);
+
+                  setNotifications(passedData);
+              })
+          } else {
+              console.log("err", res.data);
+
+              NotificationManager.error("An unknown error has occurred while attempting to gather related profile notifications! Please reload the page or contact support if the problem persists..", "Error occurred while fetching notifications!", 4750);
+          }
+        }).catch((err) => {
+            console.log(err);
+
+            NotificationManager.error("An unknown error has occurred while attempting to gather related profile notifications! Please reload the page or contact support if the problem persists..", "Error occurred while fetching notifications!", 4750);
+        })
+      }
+    }, [userData]);
 
   const handleSetLanguage = (key) => {
     setLanguage(key);
@@ -56,7 +120,7 @@ const Rightbar = ({ balance, ready, authenticated, data, authentication, saveLis
   };
 
   useEffect(() => {
-    if(localStorage.getItem("layout_version") === "dark-only"){
+    if (localStorage.getItem("layout_version") === "dark-only") {
       setMoonlight(true)
     }
   }, []);
@@ -115,27 +179,27 @@ const Rightbar = ({ balance, ready, authenticated, data, authentication, saveLis
   }
   const handleDeauthentication = () => {
     axios.get(`${process.env.REACT_APP_BASE_URL}/logout`, {
-        params: {
-            uniqueId: data.uniqueId,
-            accountType: data.accountType
-        },
-        withCredentials: true
+      params: {
+        uniqueId: data.uniqueId,
+        accountType: data.accountType
+      },
+      withCredentials: true
     }).then((res) => {
-        if (res.data.message === "Successfully logged out!") {
-            console.log("res.data - logout", res.data);
+      if (res.data.message === "Successfully logged out!") {
+        console.log("res.data - logout", res.data);
 
-            NotificationManager.info('You have successfully logged-out!', 'Successfully deauthenticated...', 3000);
+        NotificationManager.info('You have successfully logged-out!', 'Successfully deauthenticated...', 3000);
 
-            authentication({});
-            saveListingData({});
-            updateCourseInformationData({});
-            saveSendbirdInitialData({});
-            saveSoftwareListingInfo({});
-        } else {
-            console.log("err", res.data);
-        }
+        authentication({});
+        saveListingData({});
+        updateCourseInformationData({});
+        saveSendbirdInitialData({});
+        saveSoftwareListingInfo({});
+      } else {
+        console.log("err", res.data);
+      }
     }).catch((err) => {
-        console.log(err);
+      console.log(err);
     })
   }
   // gather availiable pending balance
@@ -170,18 +234,75 @@ const Rightbar = ({ balance, ready, authenticated, data, authentication, saveLis
   const renderProfilePicVideo = (last) => {
 
     if (last !== null && _.has(last, "link")) {
+      if (last.type.includes("video")) {
+        // video logic
+        return <ReactPlayer playing={true} loop={true} muted={true} controls={false} width={"100%"} className={"b-r-10 topbar-right-video-profile"} wrapper={"div"} url={`${process.env.REACT_APP_ASSET_LINK}/${last.link}`} />;
+      } else {
+        // image logic
+        return <img className="b-r-10 blue-medium-border-addition" src={`${process.env.REACT_APP_ASSET_LINK}/${last.link}`} alt="" />;
+      }
+    } else {
+      // image logic
+      return <img className="b-r-10 blue-medium-border-addition" src={process.env.REACT_APP_PLACEHOLDER_IMAGE} alt="" />;
+    }
+  }
+
+  useEffect(() => {
+    if (_.has(SBData, "OpenChannel")) {
+      console.log("true ran............................");
+
+      const listQuery = SBData.GroupChannel.createMyGroupChannelListQuery();
+      listQuery.includeEmpty = true;
+      listQuery.memberStateFilter = 'joined_only';    // 'all', 'joined_only', 'invited_only', 'invited_by_friend', and 'invited_by_non_friend'
+      listQuery.order = 'latest_last_message';    // 'chronological', 'latest_last_message', 'channel_name_alphabetical', and 'metadata_value_alphabetical'
+      listQuery.limit = 20;   // The value of pagination limit could be set up to 100.
+
+      if (listQuery.hasNext) {
+        listQuery.next((groupChannels, error) => {
+          if (error) {
+            console.log("Err fetching previous msgs..", error);
+          } else {
+            console.log("Gathered channels!", groupChannels);
+
+            setGroupChannels(groupChannels.slice(0, 5));
+          }
+        });
+      }
+    } else {
+      console.log("else ran................................");
+    }
+  }, [SBData]);
+
+  const renderOnlineStatus = (item, userData) => {
+    for (let index = 0; index < item.members.length; index++) {
+      const user = item.members[index];
+      if (user.userId !== userData.uniqueId) {
+        return user.connectionStatus;
+      }
+      if ((item.members.length - 1) === index) {
+        return user.connectionStatus;
+      }
+    }
+  }
+  const renderProfilePicVideoNotification = (last) => {
+    if (last !== null && _.has(last, "link")) {
         if (last.type.includes("video")) {
             // video logic
-            return <ReactPlayer playing={true} loop={true} muted={true} controls={false} width={"100%"} className={"b-r-10 topbar-right-video-profile"} wrapper={"div"} url={`${process.env.REACT_APP_ASSET_LINK}/${last.link}`} />;
+            return (
+                <Media className="notification-pic-video pic-vid-min-height-width" body>
+                    <ReactPlayer playing={true} loop={true} muted={true} width={"100%"} className={"notification-pic-video pic-vid-min-height-width"} wrapper={"div"} url={`${process.env.REACT_APP_ASSET_LINK}/${last.link}`} />
+                </Media>
+            );
         } else {
             // image logic
-            return <img className="b-r-10 blue-medium-border-addition" src={`${process.env.REACT_APP_ASSET_LINK}/${last.link}`} alt="" />;
-        }    
+            return <Media className="notification-pic-video pic-vid-min-height-width" body alt="profile-picture-sub" src={`${process.env.REACT_APP_ASSET_LINK}/${last.link}`} data-intro="This is Profile image" />;
+        }  
     } else {
         // image logic
-        return <img className="b-r-10 blue-medium-border-addition" src={process.env.REACT_APP_PLACEHOLDER_IMAGE} alt="" />;
+        return <Media className="notification-pic-video pic-vid-min-height-width" body alt="profile-picture-sub" src={process.env.REACT_APP_PLACEHOLDER_IMAGE} data-intro="This is Profile image" />;
     } 
   }
+  console.log("rightbar notifications", notifications);
   return (
     <Fragment>
       <div className="nav-right col-8 pull-right right-header p-0">
@@ -211,20 +332,40 @@ const Rightbar = ({ balance, ready, authenticated, data, authentication, saveLis
             <ul className={`notification-dropdown onhover-show-div ${notificationDropDown ? "active" : ""}`}>
               <li>
                 <Bell />
-                <h6 className="f-18 mb-0">{Notification}</h6>
+                <h6 className="f-18 mb-0">Recently Received Notification(s)</h6>
               </li>
-              <li>
+              {typeof notifications !== "undefined" && notifications.length > 0 ? notifications.map((notification, index) => {
+                console.log("notification", notification)
+                if (notification !== null) {
+                    return (
+                        <Fragment key={index}>
+                            <ListGroupItem className={notification.seenRead === true ? "list-group-item-action flex-column align-items-start notification-custom-notification dropdown-notification-top-bar active" : "list-group-item-action flex-column align-items-start notification-custom-notification dropdown-notification-top-bar"}>
+                                <Row>
+                                    <Col sm="12" md="2" lg="2" xl="2">
+                                        {renderProfilePicVideoNotification(notification.profilePicVideo)}
+                                    </Col>
+                                    <Col sm="12" md="10" lg="10" xl="10">
+                                        <div className="d-flex w-100 justify-content-between">
+                                            <h5 className="mb-1 maxed-title-notification">{notification.title.slice(0, 55)}{typeof notification.title !== "undefined" && notification.title.length >= 55 ? "..." : ""}</h5><small>{moment(notification.date).fromNow()}</small>
+                                        </div>
+                                        <p className="mb-1">{notification.description.slice(0, 125)}{typeof notification.description !== "undefined" && notification.description.length >= 125 ? "..." : ""}</p>
+                                        <small>{notification.dateString}</small>
+                                    </Col>
+                                </Row>
+                            </ListGroupItem>
+                        </Fragment>
+                    );
+                }
+              }) : <Fragment>
+                <SkeletonTheme baseColor="#c9c9c9" highlightColor="#444">
+                    <p>
+                        <Skeleton count={20} />
+                    </p>
+                </SkeletonTheme>
+              </Fragment>}
+              {/* <li>
                 <p><i className="fa fa-circle-o mr-3 font-primary"> </i>{DeliveryProcessing} <span className="pull-right">{"10 min."}</span></p>
-              </li>
-              <li>
-                <p><i className="fa fa-circle-o mr-3 font-success"></i>{OrderComplete}<span className="pull-right">{"1 hr"}</span></p>
-              </li>
-              <li>
-                <p><i className="fa fa-circle-o mr-3 font-info"></i>{TicketsGenerated}<span className="pull-right">{"3 hr"}</span></p>
-              </li>
-              <li>
-                <p><i className="fa fa-circle-o mr-3 font-danger"></i>{DeliveryComplete}<span className="pull-right">{"6 hr"}</span></p>
-              </li>
+              </li> */}
               <li><button onClick={() => {
                 if (data.accountType === "employers") {
                   history.push("/employer/notifications");
@@ -235,54 +376,54 @@ const Rightbar = ({ balance, ready, authenticated, data, authentication, saveLis
               </li>
             </ul>
           </li>
-          <Bookmark/>
+          {/* <Bookmark />
           <li>
             <div className="mode" onClick={() => MoonlightToggle(moonlight)}><i className={`fa ${moonlight ? 'fa-lightbulb-o' : 'fa-moon-o'}`}></i></div>
           </li>
           <li className="cart-nav onhover-dropdown">
-            <div className="cart-box" onClick={() => setCartDropDown(!cartDropdown)}><ShoppingCart/><span className="badge badge-pill badge-primary">{"2"}</span></div>
+            <div className="cart-box" onClick={() => setCartDropDown(!cartDropdown)}><ShoppingCart /><span className="badge badge-pill badge-primary">{"2"}</span></div>
             <ul className={`cart-dropdown onhover-show-div ${cartDropdown ? "active" : ""}`}>
               <li>
-                <h6 className="mb-0 f-20">Shopping Cart</h6><ShoppingCart/>
+                <h6 className="mb-0 f-20">Shopping Cart</h6><ShoppingCart />
               </li>
               <li className="mt-0">
-                <div className="media" ><img className="img-fluid rounded-circle mr-3 img-60" src={require("../../assets//images/ecommerce/01.jpg")} alt=""/>
+                <div className="media" ><img className="img-fluid rounded-circle mr-3 img-60" src={require("../../assets//images/ecommerce/01.jpg")} alt="" />
                   <div className="media-body"><span>{"V-Neck Shawl Collar Woman's Solid T-Shirt"}</span>
                     <p>{"Yellow(#fcb102)"}</p>
                     <div className="qty-box">
                       <InputGroup>
-                          <InputGroupAddon addonType="prepend">
-                              <button className="btn quantity-left-minus" type="button" data-type="minus" data-field=""><Minus/></button>
-                          </InputGroupAddon>
-                            <input className="form-control input-number" type="text" name="quantity" defaultValue="1"/>
-                          <InputGroupAddon addonType="prepend">
-                              <button className="btn quantity-right-plus" type="button" data-type="plus" data-field=""><Plus/></button>
-                          </InputGroupAddon>
+                        <InputGroupAddon addonType="prepend">
+                          <button className="btn quantity-left-minus" type="button" data-type="minus" data-field=""><Minus /></button>
+                        </InputGroupAddon>
+                        <input className="form-control input-number" type="text" name="quantity" defaultValue="1" />
+                        <InputGroupAddon addonType="prepend">
+                          <button className="btn quantity-right-plus" type="button" data-type="plus" data-field=""><Plus /></button>
+                        </InputGroupAddon>
                       </InputGroup>
                     </div>
                     <h6 className="text-right text-muted">{"$299.00"}</h6>
                   </div>
-                  <div className="close-circle"><a href={null}><X/></a></div>
+                  <div className="close-circle"><a href={null}><X /></a></div>
                 </div>
               </li>
               <li className="mt-0">
-                <div className="media" ><img className="img-fluid rounded-circle mr-3 img-60" src={require("../../assets//images/ecommerce/03.jpg")} alt=""/>
+                <div className="media" ><img className="img-fluid rounded-circle mr-3 img-60" src={require("../../assets//images/ecommerce/03.jpg")} alt="" />
                   <div className="media-body"><span>{"V-Neck Shawl Collar Woman's Solid T-Shirt"}</span>
                     <p>{"Yellow(#fcb102)"}</p>
                     <div className="qty-box">
                       <InputGroup>
-                          <InputGroupAddon addonType="prepend">
-                            <button className="btn quantity-left-minus" type="button" data-type="minus" data-field=""><Minus/></button>
-                          </InputGroupAddon>
-                          <input className="form-control input-number" type="text" name="quantity" defaultValue="1"/>
-                          <InputGroupAddon addonType="prepend">
-                            <button className="btn quantity-right-plus" type="button" data-type="plus" data-field=""><Plus/></button>
-                          </InputGroupAddon>
+                        <InputGroupAddon addonType="prepend">
+                          <button className="btn quantity-left-minus" type="button" data-type="minus" data-field=""><Minus /></button>
+                        </InputGroupAddon>
+                        <input className="form-control input-number" type="text" name="quantity" defaultValue="1" />
+                        <InputGroupAddon addonType="prepend">
+                          <button className="btn quantity-right-plus" type="button" data-type="plus" data-field=""><Plus /></button>
+                        </InputGroupAddon>
                       </InputGroup>
                     </div>
                     <h6 className="text-right text-muted">{"$299.00"}</h6>
                   </div>
-                  <div className="close-circle"><a href={null}><X/></a></div>
+                  <div className="close-circle"><a href={null}><X /></a></div>
                 </div>
               </li>
               <li>
@@ -295,40 +436,27 @@ const Rightbar = ({ balance, ready, authenticated, data, authentication, saveLis
                 <Button color="secondary" className="btn-block view-cart mt-2">{CheckOut}</Button>
               </li>
             </ul>
-          </li>
+          </li> */}
           <li className="onhover-dropdown" onClick={() => setChatDropDown(!chatDropDown)}><MessageSquare />
             <ul className={`chat-dropdown onhover-show-div ${chatDropDown ? "active" : ""}`}>
               <li>
                 <MessageSquare />
                 <h6 className="f-18 mb-0">{MessageBox}</h6>
               </li>
-              <li>
-                <div className="media"><img className="img-fluid rounded-circle mr-3" src={require("../../assets/images/user/1.jpg")} alt="" />
-                  <div className="status-circle online"></div>
-                  <div className="media-body"><span>{EricaHughes}</span>
-                    <p>{"Lorem Ipsum is simply dummy..."}</p>
-                  </div>
-                  <p className="f-12 font-success">{"58 mins ago"}</p>
-                </div>
-              </li>
-              <li>
-                <div className="media"><img className="img-fluid rounded-circle mr-3" src={require("../../assets/images/user/2.jpg")} alt="" />
-                  <div className="status-circle online"></div>
-                  <div className="media-body"><span>{KoriThomas}</span>
-                    <p>{"Lorem Ipsum is simply dummy..."}</p>
-                  </div>
-                  <p className="f-12 font-success">{"1 hr ago"}</p>
-                </div>
-              </li>
-              <li>
-                <div className="media"><img className="img-fluid rounded-circle mr-3" src={require("../../assets/images/user/4.jpg")} alt="" />
-                  <div className="status-circle offline"></div>
-                  <div className="media-body"><span>{AinChavez}</span>
-                    <p>{"Lorem Ipsum is simply dummy..."}</p>
-                  </div>
-                  <p className="f-12 font-danger">{"32 mins ago"}</p>
-                </div>
-              </li>
+              {groupChannels.map((item, i) => {
+                return (
+                  <li key={i}>
+                    <div className="media">
+                      <img className="img-fluid rounded-circle mr-3" src={item.coverUrl} alt="" />
+                      <div className={`status-circle ${renderOnlineStatus(item, userData)}`}></div>
+                      <div className="media-body"><span>{item.creator.nickname}</span>
+                        <p>{item.data}</p>
+                      </div>
+                      <p className="f-12 font-success">{moment(item.createdAt).fromNow()}</p>
+                    </div>
+                  </li>
+                );
+              })}
               <li className="text-center"> <button onClick={() => {
                 history.push("/messaging/main")
               }} className="btn btn-primary">{ViewAll}</button></li>
@@ -381,8 +509,10 @@ const Rightbar = ({ balance, ready, authenticated, data, authentication, saveLis
 
 const mapStateToProps = (state) => {
   return {
-      data: state.auth.data,
-      authenticated: (_.has(state.auth, "data") && Object.keys(state.auth.data).length > 0) ? true : false
+    data: state.auth.data,
+    SBData: _.has(state.sendbirdInitData, "sendbirdInitData") ? state.sendbirdInitData.sendbirdInitData : null,
+    authenticated: (_.has(state.auth, "data") && Object.keys(state.auth.data).length > 0) ? true : false,
+    userData: state.auth.data
   }
 }
 export default connect(mapStateToProps, { authentication, saveListingData, saveSoftwareListingInfo, saveSendbirdInitialData, updateCourseInformationData })(translate(Rightbar));

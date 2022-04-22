@@ -23,6 +23,9 @@ import {
 } from "./helpers/options/selectionOptions.js";
 import ReactPlayer from 'react-player';
 import "./styles.css";
+import { confirmAlert } from 'react-confirm-alert';
+
+
 
 const GeneralSettingsEmployerHelper = ({ userData, authentication }) => {
     const [openAssets, setOpenAssets] = useState([]);
@@ -267,7 +270,6 @@ const GeneralSettingsEmployerHelper = ({ userData, authentication }) => {
             if ((typeof addressLineOne !== "undefined" && addressLineOne.length > 0) && (typeof addressCity !== "undefined" && addressCity.length > 0) && (typeof country !== "undefined" && country.length > 0) && (typeof addressPostalCode !== "undefined" && addressPostalCode.length > 0)) {
                 axios.post(`${process.env.REACT_APP_BASE_URL}/update/employer/profile/information/basic`, {
                     numberOfEmployees: selectedOption,
-                    phoneNumber,
                     yearsInBusiness,
                     openAssets,
                     specialty, 
@@ -298,7 +300,6 @@ const GeneralSettingsEmployerHelper = ({ userData, authentication }) => {
                             specialty: ""
                         });
                         setYearsInBusiness(0);
-                        setPhoneNumber(null);
                         setSelectedOption(null);
                         setOpenAssets([]);
         
@@ -317,7 +318,6 @@ const GeneralSettingsEmployerHelper = ({ userData, authentication }) => {
         } else {
             axios.post(`${process.env.REACT_APP_BASE_URL}/update/employer/profile/information/basic`, {
                 numberOfEmployees: selectedOption,
-                phoneNumber,
                 yearsInBusiness,
                 openAssets,
                 specialty, 
@@ -348,7 +348,6 @@ const GeneralSettingsEmployerHelper = ({ userData, authentication }) => {
                         specialty: ""
                     });
                     setYearsInBusiness(0);
-                    setPhoneNumber(null);
                     setSelectedOption(null);
                     setOpenAssets([]);
     
@@ -361,6 +360,50 @@ const GeneralSettingsEmployerHelper = ({ userData, authentication }) => {
             }).catch((err) => {
                 console.log(err);
             })
+        }
+    }
+
+    const handlePhoneNumberUpdate = () => {
+        console.log("handlePhoneNumberUpdate clicked/ran..");
+
+        if (typeof phoneNumber !== "undefined" && phoneNumber !== null && phoneNumber.length >= 9) {
+            confirmAlert({
+                title: 'This will update your "Two-Factor" authentication number..',
+                message: `Are you sure you'd like to update your phone number? This will also affect your two-factor authentication device while logging in so be ABSOLUTELY sure you will be using this number & can access it for logins..`,
+                buttons: [
+                  {
+                    label: 'Yes, Update My Two-Factor Number!',
+                    onClick: () => {
+                        axios.post(`${process.env.REACT_APP_BASE_URL}/update/phone/number/employer`, {
+                            phoneNumber,
+                            id: userData.uniqueId
+                        }).then((res) => {
+                            if (res.data.message === "Successfully updated phone number!") {
+                                console.log(res.data);
+                
+                                setPhoneNumber(null);
+                
+                                NotificationManager.success(`We've successfully updated your phone number - you will now recieve two-factor authentication on this number..!`, 'Successfully updated phone number!', 4000);
+                            } else {
+                                console.log("err", res.data);
+                
+                                NotificationManager.error(`An error occurred while attempting to save your new data - we were unable to successfully update your profile.`, 'An error occurred while saving...', 4000);
+                            }
+                        }).catch((err) => {
+                            console.log(err);
+                        })
+                    }
+                  },
+                  {
+                    label: 'No, Cancel!',
+                    onClick: () => {
+    
+                    }
+                  }
+                ]
+            });
+        } else {
+            NotificationManager.warning(`You MUST complete the phone number input before attempting to change your primary-contact & two-factor device number...`, "Enter a value before changing your two-factor number!", 4750);
         }
     }
     console.log("personal", personal);
@@ -486,14 +529,24 @@ const GeneralSettingsEmployerHelper = ({ userData, authentication }) => {
                         </FormGroup>
                         </Col>
                         <Col sm="6" md="6">
-                        <FormGroup>
-                            <Label className="form-label">Contact Number (ONLY visible to active/hired applicants)</Label>
-                            <PhoneInput
-                                placeholder="Enter phone number"
-                                value={phoneNumber}
-                                onChange={setPhoneNumber}
-                            />
-                        </FormGroup>
+                            <Row>
+                                <Col sm="12" md="`12`" lg="`12`" xl="`12`">
+                                    <FormGroup>
+                                        <Label className="form-label">Contact Number (ONLY visible to active/hired applicants)</Label>
+                                        <PhoneInput
+                                            placeholder="Enter phone number" 
+                                            defaultCountry="US"
+                                            value={phoneNumber}
+                                            onChange={setPhoneNumber}
+                                        />
+                                    </FormGroup>
+                                </Col>
+                            </Row>
+                            <Row style={{ marginTop: "10px", marginBottom: "15px" }}>
+                                <Col sm="12" md="12" lg="12" xl="12">
+                                    <Button className='btn-square-success' color='success-2x' style={{ width: "100%" }} onClick={() => handlePhoneNumberUpdate()} outline>Update Phone Number</Button>
+                                </Col>
+                            </Row>
                         </Col>
                         <Col sm="6" md="6">
                         <FormGroup>

@@ -7,10 +7,10 @@ export const MENUITEMS = [
         Items:[
             {
                 title: 'Gigs/Opportunities', icon: Home, type: 'sub', active: false, children: [
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'Public', type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'Restricted/Private', type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'Earned/Won', type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'Directory Of Companies', type: 'link' },
+                    // { path: `${process.env.PUBLIC_URL}/`, title: 'Public', type: 'link' },
+                    // { path: `${process.env.PUBLIC_URL}/`, title: 'Restricted/Private', type: 'link' },
+                    // { path: `${process.env.PUBLIC_URL}/`, title: 'Earned/Won', type: 'link' },
+                    { path: `${process.env.PUBLIC_URL}/people/list/employers/general`, title: 'Directory Of Companies', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/employer/listings/available`, title: 'Employer Listings (All-Access/Anyone)', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/map/employers/available/jobs`, title: 'Interactive Map Of Active Jobs', type: 'link' }
                 ]
@@ -23,19 +23,19 @@ export const MENUITEMS = [
                     { path: `${process.env.PUBLIC_URL}/hacker/account/view/reviews/previous`, title: 'Manage Reviews & Past Work', type: 'link' }
                 ]
             },
-            {
-                title: 'Competition/Compete', icon: Activity, type: 'sub', active: false, children: [
-                    { path: `${process.env.PUBLIC_URL}/`, title: "Play CTF's", type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'Gamble/Bet Rank', type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'Leaderboards', type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'Weekly Event(s)', type: 'link' }
-                ]
-            },
+            // {
+            //     title: 'Competition/Compete', icon: Activity, type: 'sub', active: false, children: [
+            //         { path: `${process.env.PUBLIC_URL}/`, title: "Play CTF's", type: 'link' },
+            //         { path: `${process.env.PUBLIC_URL}/`, title: 'Gamble/Bet Rank', type: 'link' },
+            //         { path: `${process.env.PUBLIC_URL}/`, title: 'Leaderboards', type: 'link' },
+            //         { path: `${process.env.PUBLIC_URL}/`, title: 'Weekly Event(s)', type: 'link' }
+            //     ]
+            // },
             {
                 title: "Purchase", icon: ShoppingCart, type: "sub", active: false, children: [
-                    { path: `${process.env.PUBLIC_URL}/`, title: "Purchase 'Connects/Tokens'", type: 'link' },
+                    // { path: `${process.env.PUBLIC_URL}/`, title: "Purchase 'Connects/Tokens'", type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/purchase/various/boosts/hacker/account`, title: "Buy 'Profile Boosts'", type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'Buy Tickets - Restricted Events', type: 'link' },
+                    // { path: `${process.env.PUBLIC_URL}/`, title: 'Buy Tickets - Restricted Events', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/memberships/selection`, title: 'Subscribe To Membership', type: 'link' }
                 ]
             },
@@ -50,11 +50,11 @@ export const MENUITEMS = [
                     { path: `${process.env.PUBLIC_URL}/create/listing/software/exchange/hacker/account`, title: "Create A Listing (Hacker's ONLY)", type: 'link' }
                 ]
             },
-            {
-                title: "Hardware Exchange", icon: Cpu, type: "sub", active: false, children: [
-                    { path: `${process.env.PUBLIC_URL}/hardware/exchange/landing`, title: "Main Exchange Page", type: 'link' }
-                ]
-            }
+            // {
+            //     title: "Hardware Exchange", icon: Cpu, type: "sub", active: false, children: [
+            //         { path: `${process.env.PUBLIC_URL}/hardware/exchange/landing`, title: "Main Exchange Page", type: 'link' }
+            //     ]
+            // }
         ]
        
     },
@@ -65,10 +65,10 @@ export const MENUITEMS = [
             {
                 title: 'Recruit Hackers', icon: Monitor, type: 'sub', active: false, children: [
                     { path: `${process.env.PUBLIC_URL}/hacker/directory/main/profiles`, title: 'Hacker Directory', type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'Host A Competition', type: 'link' },
+                    // { path: `${process.env.PUBLIC_URL}/`, title: 'Host A Competition', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/create/employer/listing/general`, title: 'List An Opportunity', type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'Manage Active Interviews', type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'Active Jobs', type: 'link' },
+                    // { path: `${process.env.PUBLIC_URL}/`, title: 'Manage Active Interviews', type: 'link' },
+                    // { path: `${process.env.PUBLIC_URL}/`, title: 'Active Jobs', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/people/list/hackers/general`, title: "Browse Hacker's", type: 'link' }
                 ]
             },
@@ -82,16 +82,16 @@ export const MENUITEMS = [
             },
             {
                 title: 'Account Management', icon: User, type: 'sub', active: false, children: [
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'Manage Core Settings', type: 'link' },
+                    { path: `${process.env.PUBLIC_URL}/profile/settings/edit/employer`, title: 'Manage Core Settings', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/employer/introductory/video/upload`, title: 'Company Video/Intro', type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'Manage Public Profile', type: 'link' }
+                    // { path: `${process.env.PUBLIC_URL}`, title: 'Manage Public Profile', type: 'link' }
                 ]
             },
             {
                 title: 'Promote/Advertise', icon: Command, type: 'sub', active: false, children: [
                     { path: `${process.env.PUBLIC_URL}/employer/promote/various/account/data`, title: 'Advertise/Promote Account Data', type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'Manage Subscriptions', type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/`, title: 'Purchase Competition Slot/Entry', type: 'link' }
+                    // { path: `${process.env.PUBLIC_URL}/`, title: 'Manage Subscriptions', type: 'link' },
+                    // { path: `${process.env.PUBLIC_URL}/`, title: 'Purchase Competition Slot/Entry', type: 'link' }
                 ]
             }
             // {
@@ -154,7 +154,7 @@ export const MENUITEMS = [
                 title: "Bookmarked, Saved & Hearted/Liked Profile's", icon: User, type: 'sub',active: false, children: [
                     { path: `${process.env.PUBLIC_URL}/view/as/hacker/bookmarked/profiles/employer/accounts`, title: "Bookmarked Employer Account's", type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/view/as/hacker/view/bookmarked/profiles/hacker/accounts`, title: "Bookmarked Hacker Account's", type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/`, title: `'Hearted/Liked' Profile's`, type: 'link' }
+                    // { path: `${process.env.PUBLIC_URL}/`, title: `'Hearted/Liked' Profile's`, type: 'link' }
                 ]
             }
         ]          
@@ -167,7 +167,7 @@ export const MENUITEMS = [
                 title: "Bookmarked, Saved & Hearted/Liked Profile's", icon: User, type: 'sub',active: false, children: [
                     { path: `${process.env.PUBLIC_URL}/view/as/employer/view/bookmarked/profiles/employer/accounts`, title: "Bookmarked Employer Account's", type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/view/as/employer/view/bookmarked/profiles/hacker/accounts`, title: "Bookmarked Hacker Account's", type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/`, title: `'Hearted/Liked' Profile's`, type: 'link' }
+                    // { path: `${process.env.PUBLIC_URL}/`, title: `'Hearted/Liked' Profile's`, type: 'link' }
                 ]
             }
         ]          

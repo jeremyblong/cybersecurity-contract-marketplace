@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import "./styles.css";
 import { useParams } from "react-router-dom";
 import moment from "moment";
-import { Container, Row, Col, Card, Media, Progress, CardBody, CardHeader, CardFooter, Button, Label } from "reactstrap";
+import { Container, Row, Col, Card, Media, CardBody, Button, Label } from "reactstrap";
 import { connect } from "react-redux";
 import axios from "axios";
 import Breadcrumb from '../../../../layout/breadcrumb';
@@ -22,6 +22,7 @@ const ViewIndividualRestrictedAuthBlogHelper = ({ userData }) => {
     const { id } = useParams();
 
     const [ blog, setBlogData ] = useState(null);
+    const [ selectedComment, setSelectedComment ] = useState(null);
     const [ commentText, setCommentText ] = useState("");
     const [ isMessagePaneOpen, setMessagePaneOpenState ] = useState(false);
 
@@ -55,7 +56,7 @@ const ViewIndividualRestrictedAuthBlogHelper = ({ userData }) => {
 
     useEffect(() => {
 
-        const signedinLastProfileFile = userData.profilePicsVideos[userData.profilePicsVideos.length - 1];
+        const signedinLastProfileFile = typeof userData.profilePicsVideos !== "undefined" && userData.profilePicsVideos.length > 0 ? userData.profilePicsVideos[userData.profilePicsVideos.length - 1] : null;
 
         const config = {
             signedinUserID: userData.uniqueId,
@@ -199,7 +200,7 @@ const ViewIndividualRestrictedAuthBlogHelper = ({ userData }) => {
     const handleCommentSubmission = () => {
         console.log("handleCommentSubmission clicked");
 
-        const signedinLastProfileFile = userData.profilePicsVideos[userData.profilePicsVideos.length - 1];
+        const signedinLastProfileFile = typeof userData.profilePicsVideos !== "undefined" && userData.profilePicsVideos.length > 0 ? userData.profilePicsVideos[userData.profilePicsVideos.length - 1] : null;
 
         const config = {
             signedinUserID: userData.uniqueId,
@@ -232,10 +233,25 @@ const ViewIndividualRestrictedAuthBlogHelper = ({ userData }) => {
         })
     }
 
+    const calculateCommentsAllLength = (blog) => {
+        console.log("calculateCommentsAllLength ran..");
+
+        let sum = 0;
+
+        for (let index = 0; index < blog.comments.length; index++) {
+            const comment = blog.comments[index];
+            sum += 1;
+            for (let iii = 0; iii < comment.subComments.length; iii++) {
+                sum += 1;
+            }
+        }
+        return sum;
+    }
+
     return (
         <Fragment>
             <Breadcrumb parent="Viewing An Individual Blog Post" title={blog !== null ? `${blog.title.slice(0, 60)}${blog.title.length >= 60 ? "..." : ""}` : "Loading..."} />
-            <RestrictedBlogLeaveCommentHelperPane isMessagePaneOpen={isMessagePaneOpen} setMessagePaneOpenState={setMessagePaneOpenState} />
+            <RestrictedBlogLeaveCommentHelperPane selectedComment={selectedComment} setBlogData={setBlogData} userData={userData} blogID={id} isMessagePaneOpen={isMessagePaneOpen} setMessagePaneOpenState={setMessagePaneOpenState} />
             <Container fluid={true}>
                 <Card className="shadow">
                     <CardBody>
@@ -252,7 +268,7 @@ const ViewIndividualRestrictedAuthBlogHelper = ({ userData }) => {
                                                     <li className="border-right-digits-blog-individual"><i className="digits"></i>Total Views: <span style={{ textDecorationLine: "underline", marginRight: "12.5px" }}>{blog.totalViews} </span></li>
                                                     <li style={{ color: "green" }} className="digits border-right-digits-blog-individual"><i className="icofont icofont-thumbs-up"></i>{blog.likes}<span style={{ marginRight: "12.5px" }}> likes</span></li>
                                                     <li style={{ color: "red" }} className="digits border-right-digits-blog-individual"><i className="icofont icofont-thumbs-down"></i>{blog.dislikes}<span style={{ marginRight: "12.5px" }}> dislikes</span></li>
-                                                    <li style={{ paddingRight: "12.5px" }} className="digits border-right-digits-blog-individual"><i className="icofont icofont-ui-chat"></i>{blog.comments.length} Total Comment's</li>
+                                                    <li style={{ paddingRight: "12.5px" }} className="digits border-right-digits-blog-individual"><i className="icofont icofont-ui-chat"></i>{calculateCommentsAllLength(blog)} Total Comment's</li>
                                                 </ul>
                                                 <Label style={{ marginTop: "10px" }} className={"blog-custom-label"}>Blog Title</Label>
                                                 <h4 className="slim-margin-top">{blog.title}</h4>
@@ -300,7 +316,7 @@ const ViewIndividualRestrictedAuthBlogHelper = ({ userData }) => {
                                                 {typeof blog.comments !== "undefined" && blog.comments.length > 0 ? blog.comments.map((comment, index) => {
                                                     return (
                                                         <Fragment key={index}>
-                                                            <li>
+                                                            <li style={{ marginTop: "17.5px" }}>
                                                                 <Media className="align-self-center">
                                                                     {renderProfilePicVideo(comment.posterPicOrVideo)}
                                                                     <Media body>
@@ -318,32 +334,35 @@ const ViewIndividualRestrictedAuthBlogHelper = ({ userData }) => {
                                                                         </Row>
                                                                         <p>{comment.commentText}</p>
                                                                         <span className="span-leave-comment-sub">
-                                                                            <h5 onClick={() => setMessagePaneOpenState(true)} className="text-right right-text-hover-sub-reply" style={{ marginRight: "12.5px" }}>Leave Sub-Comment</h5>
+                                                                            <h5 onClick={() => {
+                                                                                setSelectedComment(comment);
+
+                                                                                setMessagePaneOpenState(true);
+                                                                            }} className="text-right right-text-hover-sub-reply" style={{ marginRight: "12.5px" }}>Leave Sub-Comment</h5>
                                                                         </span>
                                                                     </Media>
                                                                 </Media>
                                                             </li>
                                                             <ul>
-                                                                {typeof blog.subComments !== "undefined" && blog.subComments.length > 0 ? blog.subComments.map((comment, index) => {
+                                                                {typeof comment.subComments !== "undefined" && comment.subComments.length > 0 ? comment.subComments.map((subcomment, index) => {
                                                                     return (
                                                                         <Fragment key={index}>
                                                                             <li>
                                                                                 <Media className="align-self-center">
-                                                                                    {renderProfilePicVideo(comment.posterPicOrVideo)}
+                                                                                    {renderProfilePicVideo(subcomment.posterPicOrVideo)}
                                                                                     <Media body>
                                                                                         <Row>
                                                                                             <Col md="4">
-                                                                                                <h6 className="mt-0">{comment.posterName}<span> {comment.posterAccountType === "employers" ? "Employer Account" : "Hacker Account"}</span></h6>
+                                                                                                <h6 className="mt-0">{subcomment.posterName}<span> {subcomment.posterAccountType === "employers" ? "Employer Account" : "Hacker Account"}</span></h6>
                                                                                             </Col>
                                                                                             <Col md="8">
                                                                                                 <ul className="comment-social float-left float-md-right">
-                                                                                                    <li className="digits"><i className="icofont icofont-thumbs-up"></i>{typeof comment.subComments !== "undefined" && comment.subComments.length > 0 ? comment.subComments.length : 0} Reply's (Total)</li>
-                                                                                                    <li className="digits"><i className="icofont icofont-ui-chat"></i>{typeof comment.alreadyReacted !== "undefined" && comment.alreadyReacted.length > 0 ? comment.alreadyReacted.length : 0} Reaction's</li>
-                                                                                                    <li className="digits"><i className="icofont icofont-thumbs-up"></i>Posted: {moment(comment.date).fromNow()}</li>
+                                                                                                    <li className="digits"><i className="icofont icofont-ui-chat"></i>{typeof subcomment.alreadyReacted !== "undefined" && subcomment.alreadyReacted.length > 0 ? subcomment.alreadyReacted.length : 0} Reaction's</li>
+                                                                                                    <li className="digits"><i className="icofont icofont-thumbs-up"></i>Posted: {moment(subcomment.date).fromNow()}</li>
                                                                                                 </ul>
                                                                                             </Col>
                                                                                         </Row>
-                                                                                        <p>{comment.commentText}</p>
+                                                                                        <p>{subcomment.commentText}</p>
                                                                                     </Media>
                                                                                 </Media>
                                                                             </li>
