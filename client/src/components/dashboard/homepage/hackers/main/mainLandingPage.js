@@ -226,7 +226,9 @@ const MainLandingPageHackerHelper = ({ authentication, userData }) => {
                 </div>
               </div>
               <div className="greeting-user text-center">
-                <div className="profile-vector">{renderProfilePicVideoMainPageImg(lastPicVid)}</div>
+                <div className='centered-both-ways'>
+                  <div className="profile-vector">{renderProfilePicVideoMainPageImg(lastPicVid)}</div>
+                </div>
                 <h4 style={{ marginTop: "32.5px" }} className="f-w-600 white-text-custom"><span id="greeting">{daytimes}</span> <span className="right-circle"><i className="fa fa-check-circle f-14 middle"></i></span></h4>
                 <p className='white-text-custom'><span> {"Today's earrning is $405 & your sales increase rate is 3.7 over the last 24 hours"}</span></p>
                 <div className="whatsnew-btn"><a className="btn btn-primary" href={null}>{"Whats New !"}</a></div>

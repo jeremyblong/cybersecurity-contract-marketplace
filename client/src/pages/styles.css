@@ -8,3 +8,7 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+.beta-input::placeholder {
+  color: #f73164;
+  font-weight: 450;
+}

@@ -284,7 +284,7 @@ const SignIn = ({ authentication }) => {
                 <div className="container">
                     <div className="section-title">
                         <h2>Log In to your <em><strong>{checked === true ? "Hacker" : "Employer/Company"}</strong> account</em>!</h2>
-                        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laudantium quas cumque iste veniam id dolorem deserunt ratione error voluptas rem ullam possimus placeat, ut, odio</p>
+                        <p>Use this form to sign-in to your account & access our 'restricted' content and/or authenticated-data side of things, enter your credentials and enter/enjoy the world built for hackers - by hackers!</p>
                     </div>
 
                     <div className="contact-form-action">

@@ -287,6 +287,9 @@ app.use("/submit/comment/sub/reply/blog/content/restricted/response", require(".
 app.use("/update/phone/number/employer", require("./routes/employers/profile/generalInformation/phoneNumber/updatePhoneNumber.js"));
 app.use("/leave/comment/tutorial/video/content", require("./routes/hackers/tutorialCoursesShort/commentRelated/leaveInitialMainComment.js"));
 app.use("/submit/comment/sub/reply/tutorial/video/content/response", require("./routes/hackers/tutorialCoursesShort/commentRelated/leaveSubReplyCommentToOP.js"));
+app.use("/register/user/beta/testing/new", require("./routes/shared/betaTesting/addNewBetaUser/addNewUser.js"));
+app.use("/gather/beta/testers/default", require("./routes/shared/betaTesting/gatherTesters/gatherTestersByAccountType.js"));
+app.use("/send/invite/beta/user/testing", require("./routes/shared/betaTesting/inviteUser/inviteUserToBeta.js"));
 
 
 

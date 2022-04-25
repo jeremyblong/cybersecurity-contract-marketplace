@@ -88,6 +88,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "^3.4.3",
     "react-select": "^5.2.1",
+    "react-select-search": "^3.0.9",
     "react-show-more-text": "^1.5.2",
     "react-simplemde-editor": "^5.0.2",
     "react-slick": "^0.28.1",

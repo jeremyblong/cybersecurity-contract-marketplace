@@ -1,7 +1,6 @@
 import React, { Fragment, Component } from 'react';
 import Breadcrumb from '../../../../../../layout/breadcrumb';
 import { Container, Row, Col, Card, CardHeader, Media, CardBody, Button, Form, Popover, PopoverBody, PopoverHeader } from 'reactstrap';
-import {Email,MarekjecnoMailId,BOD,DDMMYY,Designer,ContactUs,ContactUsNumber,LocationDetails,MarkJecno,Follower,Following,Location} from '../../../../../../constant';
 import { withRouter } from "react-router-dom";
 import { renderProfilePicVideo } from "./helpers/miscFunctions/index.js";
 import axios from "axios";
@@ -14,6 +13,9 @@ import { confirmAlert } from 'react-confirm-alert';
 import { getCroppedImg } from "./helpers/croppingBannerImage/getCroppedImage.js";
 import { connect } from "react-redux";
 import _ from "lodash";
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+import moment from 'moment';
+
 
 class PersonalProfileDetailsMainHelper extends Component {
 constructor(props) {
@@ -28,10 +30,11 @@ constructor(props) {
         currentHeight: 550,
         currentWidth: 800,
         progress: 0,
-        data: {},
+        data: null,
         isOpen: false,
         errorUpload: "",
-        popoverOpen: false
+        popoverOpen: false,
+        location: null
     }
 }
     handleVerificationRedirect = (e) => {
@@ -53,9 +56,26 @@ constructor(props) {
 
                 const { user } = res.data;
 
-                this.setState({
-                    data: user
-                })
+                if (_.has(user, "userLatestLocation")) {
+                    axios.get(`https://api.tomtom.com/search/2/reverseGeocode/${encodeURIComponent(user.userLatestLocation.latitude)},${encodeURIComponent(user.userLatestLocation.longitude)}.json?key=${process.env.REACT_APP_TOMTOM_API_KEY}&countrySet=US`).then((res) => {
+                        if (res.data) {
+                            console.log("res.data", res.data);
+                            
+                            const { addresses } = res.data;
+
+                            this.setState({
+                                location: addresses[0].address.municipality,
+                                data: user
+                            })
+                        }
+                    }).catch((err) => {
+                        console.log(err);
+                    })
+                } else {
+                    this.setState({
+                        data: user
+                    })
+                }
             } else {
                 console.log("err", res.data);
             }
@@ -199,6 +219,9 @@ constructor(props) {
     }
     render() {
         const { aspect, file, submissionButton, data, errorUpload } = this.state;
+
+        console.log("user data!", data);
+
         return (
             <Fragment>
                 <Breadcrumb parent="Profile data" title="Hacker Profile" />
@@ -285,7 +308,7 @@ constructor(props) {
                             </CardHeader>
                             <div className="user-image">
                             <div className="avatar">
-                                {renderProfilePicVideo(data.profilePicsVideos)}
+                                {renderProfilePicVideo(data !== null && typeof data.profilePicsVideos !== "undefined" && data.profilePicsVideos.length > 0 ? data.profilePicsVideos : null)}
                             </div>
                                 <div id="Popover1" onClick={() => {
                                     this.setState({
@@ -314,32 +337,32 @@ constructor(props) {
                                 <Row >
                                     <Col md="6">
                                     <div className="ttl-info text-left">
-                                        <h6><i className="fa fa-envelope mr-2"></i> {Email}</h6><span>{MarekjecnoMailId}</span>
+                                        <h6><i className="fa fa-envelope mr-2"></i> Email Address</h6><span>{data !== null ? data.email : "Loading/Not-Available"}</span>
                                     </div>
                                     </Col>
                                     <Col md="6">
                                     <div className="ttl-info text-left ttl-sm-mb-0">
-                                        <h6><i className="fa fa-calendar"></i>   {BOD}</h6><span>{DDMMYY}</span>
+                                        <h6><i className="fa fa-calendar"></i>  Date Of Birth</h6><span>{_.has(data, "birthdate") ? moment(data.birthdate).format("MM/DD/YYYY") : "Loading/Not-Available"}</span>
                                     </div>
                                     </Col>
                                 </Row>
                                 </Col>
                                 <Col sm="12" lg="4" className="order-sm-0 order-xl-1">
                                 <div className="user-designation">
-                                    <div className="title"><a target="_blank" href="#javascript">{MarkJecno}</a></div>
-                                    <div className="desc mt-2">{Designer}</div>
+                                    <div className="title"><a target="_blank" href={null}>{data !== null ? `${data.firstName} ${data.lastName}` : "Loading/Not-Available"}</a></div>
+                                    <div className="desc mt-2">{data !== null ? data.accountType === "hackers" ? "Hacker Account" : "Employer Account" : "Loading/Not-Available"}</div>
                                 </div>
                                 </Col>
                                 <Col sm="6" lg="4" className="order-sm-2 order-xl-2">
                                 <Row>
                                     <Col md="6">
                                     <div className="ttl-info text-left ttl-xs-mt">
-                                        <h6><i className="fa fa-phone"></i>   {ContactUs}</h6><span>{ContactUsNumber}</span>
+                                        <h6><i className="fa fa-phone"></i>  Contact Number (*Private*)</h6><span>{data !== null ? data.phoneNumber : "Loading/Not-Available"}</span>
                                     </div>
                                     </Col>
                                     <Col md="6">
                                     <div className="ttl-info text-left ttl-sm-mb-0">
-                                        <h6><i className="fa fa-location-arrow"></i>   {Location}</h6><span>{LocationDetails}</span>
+                                        <h6><i className="fa fa-location-arrow"></i>  Approx. Location</h6><span>{this.state.location !== null ? this.state.location : "Loading/Not-Available"}</span>
                                     </div>
                                     </Col>
                                 </Row>
@@ -348,21 +371,29 @@ constructor(props) {
                             <hr />
                             <div className="social-media step4" data-intro="This is your Social details">
                                 <ul className="list-inline">
-                                <li className="list-inline-item"><a href="#javascript"><i className="fa fa-facebook"></i></a></li>
-                                <li className="list-inline-item"><a href="#javascript"><i className="fa fa-google-plus"></i></a></li>
-                                <li className="list-inline-item"><a href="#javascript"><i className="fa fa-twitter"></i></a></li>
-                                <li className="list-inline-item"><a href="#javascript"><i className="fa fa-instagram"></i></a></li>
-                                <li className="list-inline-item"><a href="#javascript"><i className="fa fa-rss"></i></a></li>
+                                <li className="list-inline-item"><a href={null}><i className="fa fa-facebook"></i></a></li>
+                                <li className="list-inline-item"><a href={null}><i className="fa fa-google-plus"></i></a></li>
+                                <li className="list-inline-item"><a href={null}><i className="fa fa-twitter"></i></a></li>
+                                <li className="list-inline-item"><a href={null}><i className="fa fa-instagram"></i></a></li>
+                                <li className="list-inline-item"><a href={null}><i className="fa fa-rss"></i></a></li>
                                 </ul>
                             </div>
                             <div className="follow">
                                 <Row>
-                                <Col col="6" className="text-md-right border-right">
-                                    <div className="follow-num counter">{"25869"}</div><span>{Follower}</span>
-                                </Col>
-                                <Col col="6" className="text-md-left">
-                                    <div className="follow-num counter">{"659887"}</div><span>{Following}</span>
-                                </Col>
+                                    {data !== null ? <Fragment>
+                                        <Col col="6" className="text-md-right border-right">
+                                            <div className="follow-num counter">{data.followingHackers.length + data.followingCompanies.length}</div><span>Total Follow(ing)</span>
+                                        </Col>
+                                        <Col col="6" className="text-md-left">
+                                            <div className="follow-num counter">{data.currentlyFollowedBy.length}</div><span>Total Follower(s)</span>
+                                        </Col>
+                                    </Fragment> : <Fragment>
+                                    <SkeletonTheme baseColor="#c9c9c9" highlightColor="#444">
+                                        <p>
+                                            <Skeleton count={20} />
+                                        </p>
+                                    </SkeletonTheme>
+                                    </Fragment>}
                                 </Row>
                             </div>
                             </div>
@@ -371,7 +402,7 @@ constructor(props) {
                     </Row>
                 </div>
                 <Row>
-                    <Col sm="12" md="12" lg="4" xl="4">
+                    <Col sm="12" md="12" lg="6" xl="6">
                         <Card>
                             <CardHeader className="b-l-primary border-3">
                                 <h5>Account Verification</h5>
@@ -383,35 +414,17 @@ constructor(props) {
                             </CardBody>
                         </Card>
                     </Col>
-                    <Col sm="12" md="12" lg="4" xl="4">
+                    <Col sm="12" md="12" lg="6" xl="6">
                         <Card>
                             <CardHeader className="b-l-primary border-3">
-                                <h5>Insert text here.</h5>
+                                <h5>Would you like to 'modify' your <strong>core</strong> account data/information?</h5>
                             </CardHeader>
                             <CardBody>
-                                <p>
-                                    {"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been"}
-                                    {"the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley"}
-                                    {"of type and scrambled. Lorem Ipsum is simply dummy text of the printing and typesetting"}
-                                    {"industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an"}
-                                    {"unknown printer took a galley of type and scrambled."}
-                                </p>
-                            </CardBody>
-                        </Card>
-                    </Col>
-                    <Col sm="12" md="12" lg="4" xl="4">
-                        <Card>
-                            <CardHeader className="b-l-primary border-3">
-                                <h5>Insert text here.</h5>
-                            </CardHeader>
-                            <CardBody>
-                                <p>
-                                    {"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been"}
-                                    {"the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley"}
-                                    {"of type and scrambled. Lorem Ipsum is simply dummy text of the printing and typesetting"}
-                                    {"industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an"}
-                                    {"unknown printer took a galley of type and scrambled."}
-                                </p>
+                                <p>You will need to select the button below to 'redirect' to the appropriate page to make the required/preferred changes to your own personal account..</p>
+                                <hr />
+                                <Button style={{ width: "100%" }} onClick={() => {
+                                    this.props.history.push("/profile/settings/edit")
+                                }} className={"btn-square-success"} outline color="success-2x">Redirect & Modify 'Core' Profile Information</Button>
                             </CardBody>
                         </Card>
                     </Col>

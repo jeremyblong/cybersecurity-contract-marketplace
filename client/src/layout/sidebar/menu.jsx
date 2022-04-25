@@ -224,9 +224,14 @@ export const MENUITEMS = [
             },
             {
                 title: "FAQ (Frequently Asked Questions) - Employer's", icon: Headphones, type: 'sub', active: false, children: [
-                        { path: `${process.env.PUBLIC_URL}/frequently/asked/questions/main/employer`, title: 'Main FAQ - View Before Contacting Support', type: 'link' }
-                    ]
-                }
+                    { path: `${process.env.PUBLIC_URL}/frequently/asked/questions/main/employer`, title: 'Main FAQ - View Before Contacting Support', type: 'link' }
+                ]
+            },
+            {
+                title: "ADMIN/BETA Logic", icon: Headphones, type: 'sub', active: false, children: [
+                    { path: `${process.env.PUBLIC_URL}/invite/beta/user/code/entry`, title: `Invite User(s) To BETA Mode / Add New User's`, type: 'link' }
+                ]
+            }
         ]          
     }    
 ]

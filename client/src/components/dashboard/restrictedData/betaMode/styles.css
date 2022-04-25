@@ -1,0 +1,12 @@
+.transparent-addon {
+    background-color: transparent;
+}
+.select-search .select-search__value input {
+    min-width: 100%;
+}
+.float-right-totally {
+    position: absolute;
+    right: 17.5px;
+    top: 10px;
+    bottom: 5px;
+}

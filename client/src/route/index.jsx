@@ -82,6 +82,7 @@ import ViewRecentReviewsAllEmployerPage from "../pages/dashboard/reviews/employe
 import ViewRecentReviewsAllHackerPage from "../pages/dashboard/reviews/hackers/viewPreviousReviews/viewRecentReviews.js";
 import CreateNewBlogPostPage from "../pages/dashboard/blogging/blogCreation/createNewBlogPost.js";
 import ViewIndividualRestrictedAuthBlogPage from "../pages/dashboard/blogging/individual/viewIndividualBlog.js";
+import CreateInviteEmailBetaListPage from "../pages/dashboard/restrictedData/betaMode/createBetaEmailList.js";
 
 export const routes = [
         { path:"/profile/settings/edit", Component: GeneralSettingsPage },
@@ -167,5 +168,6 @@ export const routes = [
         { path: "/employer/account/view/reviews/previous", Component: ViewRecentReviewsAllEmployerPage },
         { path: "/hacker/account/view/reviews/previous", Component: ViewRecentReviewsAllHackerPage },
         { path: "/blogging/creation/new/blog/post", Component: CreateNewBlogPostPage },
-        { path: "/view/individual/restricted/blog/content/:id", Component: ViewIndividualRestrictedAuthBlogPage }
+        { path: "/view/individual/restricted/blog/content/:id", Component: ViewIndividualRestrictedAuthBlogPage },
+        { path: "/invite/beta/user/code/entry", Component: CreateInviteEmailBetaListPage }
 ]; 

@@ -27,7 +27,9 @@ constructor (props) {
         switchAccountType: "You're registering as a 'Company/Employer'",
         checked: false,
         referralCode: "",
-        phoneNumber: ""
+        phoneNumber: "",
+        betamode: "",
+        betamodeActivated: false
     }
 }
 
@@ -51,7 +53,7 @@ constructor (props) {
 
         console.log("submitted.");
 
-        const { firstName, lastName, email, username, password, agreement, checked, referralCode, phoneNumber } = this.state;
+        const { firstName, lastName, email, username, password, agreement, checked, referralCode, phoneNumber, betacode, betamodeActivated } = this.state;
 
         if ((typeof phoneNumber !== "undefined" && phoneNumber.length >= 10) && (typeof firstName !== "undefined" && firstName.length > 0) && (typeof lastName !== "undefined" && lastName.length > 0) && (typeof email !== "undefined" && email.length > 0) && (typeof username !== "undefined" && username.length > 0) && (typeof password !== "undefined" && password.length > 0)) {
             if (agreement === true) {
@@ -65,7 +67,9 @@ constructor (props) {
                     agreement,
                     referralCode,
                     phoneNumber,
-                    accountType: checked === true ? "hackers" : "employers"
+                    accountType: checked === true ? "hackers" : "employers",
+                    betamodeActivated,
+                    betacode
                 }, {
                     withCredentials: true
                 }).then((res) => {
@@ -82,6 +86,8 @@ constructor (props) {
                             referralCode: null,
                             phoneNumber: "",
                             checked: false,
+                            betamodeActivated: false,
+                            betacode: "",
                             switchAccountType: "You're registering as a 'Company/Employer'"
                         }, () => {
                             NotificationManager.success('Successfully registered! We will log you in momentarily...', 'Successfully registered!', 3000);
@@ -100,6 +106,8 @@ constructor (props) {
                         })
                     } else if (res.data.message === "An unknown error has occurred while trying to locate referring user - please make sure you're entering a 'proper referral code' as we were unable to find any results for a user with that information/code..") {
                         NotificationManager.error(res.data.message, "Enter a VALID referral code OR just don't use one!", 4750);
+                    } else if (res.data.message === "Information/data does NOT match, you MUST enter a valid beta-invitation code & the date MUST be within 48 hours of the invitation date and/or time, please try this action again..") {
+                        NotificationManager.error(res.data.message, "Your beta-code does NOT match OR the date wasn't soon enough (must be within 48 hours of invitation date)", 4750);
                     } else {
                         NotificationManager.error('An error occurred during the registration process - please try again...', 'ERROR REGISTERING.', 3500);
                     }
@@ -132,8 +140,10 @@ constructor (props) {
                 <section className="user-area-all-style sign-up-area ptb-100">
                     <div className="container">
                         <div className="section-title">
-                            <h2>Create an account!</h2>
-                            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laudantium quas cumque iste veniam id dolorem deserunt ratione error voluptas rem ullam possimus placeat, ut, odio</p>
+                            <h2 style={{ textDecorationLine: "underline", color: "#f73164" }}>Create an account & access 'restricted' data!</h2>
+                            <h5 style={{ color: "red" }}>We are currently <em style={{ textDecorationLine: "underline" }}>ONLY</em> accepting beta-members at the current point in time, if you'd like to get involved and don't have a code - contact us or signup on the 'waitlist' page...</h5>
+                            <hr />
+                            <p>Welcome to {process.env.REACT_APP_APPLICATION_NAME}, we have an <strong style={{ textDecorationLine: "underline" }}>extensive authenticated</strong> software client-side marketplace <strong style={{ textDecorationLine: "underline", color: "#f73164" }}>AFTER</strong> successfully signing up and registering! There are approx. 100+- pages that are initially restricted to <strong style={{ color: "#f73164" }}>only authenticated user's</strong> so we HIGHLY recommend signing up and at least checking it out!</p>
                         </div>
                         
                         <div className="contact-form-action">
@@ -184,7 +194,7 @@ constructor (props) {
                                             value={this.state.email}
                                             onChange={this.handleChange}
                                             name="email" 
-                                            placeholder="Email Address" />
+                                            placeholder="Email Address (use notified email if 'beta' user..)" />
                                         </div>
                                     </div>
 
@@ -216,14 +226,28 @@ constructor (props) {
                                     <div className="col-md-12 col-sm-12">
                                         <div className="form-group">
                                             <input 
-                                            className="form-control" 
-                                            type="text" 
-                                            value={this.state.referralCode}
-                                            onChange={this.handleChange}
-                                            name="referralCode" 
-                                            placeholder="Enter your referral code (if you have one.. *NOT REQUIRED*)" />
+                                                className="form-control" 
+                                                type="text" 
+                                                value={this.state.referralCode}
+                                                onChange={this.handleChange}
+                                                name="referralCode" 
+                                                placeholder="Enter your referral code (if you have one.. *NOT REQUIRED*)" 
+                                            />
                                         </div>
                                     </div>
+
+                                    {this.state.betamodeActivated === true ? <div className="col-md-12 col-sm-12">
+                                        <div className="form-group">
+                                            <input 
+                                                className="form-control beta-input" 
+                                                type="text" 
+                                                value={this.state.betacode}
+                                                onChange={this.handleChange}
+                                                name="betacode" 
+                                                placeholder={"BETA CODE (if you have one..)"} 
+                                            />
+                                        </div>
+                                    </div> : null}
 
                                     <div style={{ paddingBottom: "15px" }} className="col-12">
                                         <div style={{ flexDirection: "row", display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -232,7 +256,7 @@ constructor (props) {
                                         </div>
                                     </div>
 
-                                    <div className="col-md-12 col-sm-12 col-xs-12 form-condition">
+                                    <div className="col-md-12 col-sm-6 col-xs-6 form-condition">
                                         <div className="agree-label">
                                             <input value={this.state.agreement} onChange={() => {
                                                 this.setState({
@@ -243,6 +267,18 @@ constructor (props) {
                                                 I agree with Pisa  
                                                 <Link to="/terms-conditions"><a>Terms & Conditions</a></Link> & 
                                                 <Link to="/privacy-policy"><a>Privacy Policy</a></Link>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div className="col-md-12 col-sm-6 col-xs-6 form-condition">
+                                        <div className="agree-label">
+                                            <input value={this.state.betamodeActivated} onChange={() => {
+                                                this.setState({
+                                                    betamodeActivated: !this.state.betamodeActivated
+                                                })
+                                            }} type="checkbox" id="chb2" />
+                                            <label forhtml="chb2">
+                                                ~ I'm signing-up with a <strong style={{ textDecorationLine: "underline", color: "#7366ff" }}>'beta' code!</strong> ~
                                             </label>
                                         </div>
                                     </div>

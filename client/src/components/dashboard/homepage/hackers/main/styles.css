@@ -25,3 +25,6 @@
 .img-fluid-min-profile {
     min-height: 100px;
 }
+.profile-vector .img-fluid-min-profile video {
+    border-radius: 50%;
+}
