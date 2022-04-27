@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import ReactMapboxGl, { Marker } from 'react-mapbox-gl';
 import "./styles.css";
 import { withRouter } from "react-router-dom";
-import { Container, Progress, Row, Col, Card, CardHeader, CardBody, Nav, NavItem, NavLink, Button, Badge, TabContent, TabPane, ListGroup, ListGroupItem, Pagination, PaginationItem, PaginationLink } from 'reactstrap'
+import { Container, Progress, Row, Col, Card, CardHeader, CardBody, Nav, NavItem, NavLink, Button, Badge, TabContent, TabPane, ListGroupItem } from 'reactstrap'
 import axios from "axios";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -15,6 +15,9 @@ import { DateRange } from 'react-date-range';
 import { authentication } from "../../../../../redux/actions/authentication/auth.js";
 import { NotificationManager } from 'react-notifications';
 import FilterMapOptionsHelper from "./filterOptions/filterListingOptions.js";
+import PaginationGeneralHelper from "../../../universal/pagination/miscMainPagination.js";
+
+
 
 const Map = ReactMapboxGl({
     accessToken: process.env.REACT_APP_MAPBOX_TOKEN
@@ -24,6 +27,9 @@ const MapFixed = ReactMapboxGl({
     accessToken: process.env.REACT_APP_MAPBOX_TOKEN,
     interactive: false
 });
+
+
+const itemsPerPage = 8;
 
 class MainMapViewEmployerJobsHelper extends Component {
 constructor(props) {
@@ -121,9 +127,14 @@ constructor(props) {
         verticleTab: "1",
         individual: null,
         datesSelectable: [],
-        map: null
+        map: null,
+        permenantData: [],
+        currentPage: 0,
+        pageCount: 0,
+        itemOffset: 0
     }
 }
+
     handleRandomAction = (e) => {
         e.preventDefault();
 
@@ -142,6 +153,22 @@ constructor(props) {
             console.log(err);
         })
     }
+
+    componentDidUpdate (prevProps, prevState) {
+
+        if (prevState.itemOffset !== this.state.itemOffset || prevState.itemsPerPage !== this.state.itemsPerPage) {
+            
+            const endOffset = this.state.itemOffset + itemsPerPage;
+
+            console.log("prevState prevState UPDATED --- !", prevState);
+
+            this.setState({
+                pageCount: Math.ceil(this.state.permenantData.length / itemsPerPage),
+                listings: this.state.permenantData.slice(this.state.itemOffset, endOffset)
+            })
+        }
+    }
+
     componentDidMount() {
         const { userData } = this.props;
         // check if geolocation is availiable...
@@ -176,11 +203,7 @@ constructor(props) {
 
                             if (user.value !== null) {
                                 authentication(user.value);
-
-                                // NotificationManager.success(`We've successfully updated your location so you have a better tailored user experience with our location-based services.`, 'Updated your location!', 3500);
                             }
-
-                            // NotificationManager.success(`We've successfully updated your location so you have a better tailored user experience with our location-based services.`, 'Updated your location!', 3500);
                         } else {
                             console.log("err", res.data);
 
@@ -206,8 +229,12 @@ constructor(props) {
 
                 const { listings } = res.data;
 
+                const endOffset = this.state.itemOffset + itemsPerPage;
+
                 this.setState({
-                    listings
+                    listings: listings.slice(this.state.itemOffset, endOffset),
+                    permenantData: listings,
+                    pageCount: Math.ceil(listings.length / itemsPerPage)
                 })
             } else {
                 console.log("err", res.data);
@@ -254,8 +281,18 @@ constructor(props) {
     onLoadMap = (map) => {
         map.resize();
     }
+    setItemOffset = (offset) => {
+        this.setState({
+            itemOffset: offset
+        })
+    }
+    setCurrentPage = (page) => {
+        this.setState({
+            currentPage: page
+        })
+    }
     render() {
-        const { individual, listings, verticleTab, datesSelectable } = this.state;
+        const { individual, listings, verticleTab, datesSelectable, permenantData, currentPage, pageCount, itemOffset } = this.state;
         return (
             <div>
                 {individual !== null ? <Sheet isOpen={this.state.isOpen} onClose={() => {
@@ -603,18 +640,8 @@ constructor(props) {
                             </div>
                         </Col>
                     </Row>
-                    <Row style={{ paddingTop: "17.5px" }}>
-                        <div className="centered-both-ways">
-                            <Pagination className="m-b-30" aria-label="Page navigation example">
-                                <ul className="pagination pagination-lg pagination-secondary">
-                                    <PaginationItem><PaginationLink href={null}>{"Previous"}</PaginationLink></PaginationItem>
-                                    <PaginationItem active><PaginationLink href={null}>{"1"}</PaginationLink></PaginationItem>
-                                    <PaginationItem><PaginationLink href={null}>{"2"}</PaginationLink></PaginationItem>
-                                    <PaginationItem><PaginationLink href={null}>{"3"}</PaginationLink></PaginationItem>
-                                    <PaginationItem><PaginationLink href={null}>{"Next"}</PaginationLink></PaginationItem>
-                                </ul>
-                            </Pagination>
-                        </div>
+                    <Row style={{ paddingTop: "42.5px", marginBottom: "42.5px" }}> 
+                        <PaginationGeneralHelper itemsPerPage={itemsPerPage} loopingData={permenantData} currentPage={currentPage} pageCount={pageCount} setItemOffset={this.setItemOffset} setCurrentPage={this.setCurrentPage} />
                     </Row>
                 </Container>
             </div>

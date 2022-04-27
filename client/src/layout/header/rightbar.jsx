@@ -376,10 +376,10 @@ const Rightbar = ({ userData, SBData, balance, ready, authenticated, data, authe
               </li>
             </ul>
           </li>
-          {/* <Bookmark />
+          {/* <Bookmark /> */}
           <li>
             <div className="mode" onClick={() => MoonlightToggle(moonlight)}><i className={`fa ${moonlight ? 'fa-lightbulb-o' : 'fa-moon-o'}`}></i></div>
-          </li>
+          </li> {/*
           <li className="cart-nav onhover-dropdown">
             <div className="cart-box" onClick={() => setCartDropDown(!cartDropdown)}><ShoppingCart /><span className="badge badge-pill badge-primary">{"2"}</span></div>
             <ul className={`cart-dropdown onhover-show-div ${cartDropdown ? "active" : ""}`}>

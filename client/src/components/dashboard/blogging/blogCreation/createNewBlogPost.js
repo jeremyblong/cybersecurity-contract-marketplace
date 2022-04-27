@@ -153,6 +153,13 @@ const CreateNewBlogPostHelper = ({ userData }) => {
 
                                                 const value = e.target.value;
 
+                                                const caret = e.target.selectionStart;
+                                                const element = e.target;
+                                                window.requestAnimationFrame(() => {
+                                                    element.selectionStart = caret
+                                                    element.selectionEnd = caret
+                                                })
+
                                                 return titleChecker.onChange(value, setValue);
                                             }} name={titleChecker.name} type={titleChecker.type} placeholder={titleChecker.placeholder} />
                                         </InputGroup>
@@ -165,7 +172,14 @@ const CreateNewBlogPostHelper = ({ userData }) => {
                                             <Input {...subtitleChecker.check(register)} className="form-control" value={currentValues.subtitle} onChange={(e) => {
 
                                                 const value = e.target.value;
-
+                                                
+                                                const caret = e.target.selectionStart;
+                                                const element = e.target;
+                                                window.requestAnimationFrame(() => {
+                                                    element.selectionStart = caret
+                                                    element.selectionEnd = caret
+                                                })
+                                                
                                                 return subtitleChecker.onChange(value, setValue);
                                             }} name={subtitleChecker.name} value={currentValues.subtitle} type={subtitleChecker.type} placeholder={subtitleChecker.placeholder} />
                                         </InputGroup>
@@ -200,7 +214,7 @@ const CreateNewBlogPostHelper = ({ userData }) => {
                                         {errors.hashtags ? <span className="span-tooltip">{errors.hashtags.message}</span> : null}
                                     </FormGroup>
                                     <FormGroup className="m-form__group">
-                                        <Label>Blog Main Content ~ <em style={{ color: "red", textDecorationLine: "underline" }}>You must enter between 500 - 3500 characters before posting..</em></Label>
+                                        <Label>Blog Main Content ~ <em style={{ color: "red", textDecorationLine: "underline" }}>You must enter between 500 - 12500 characters before posting..</em></Label>
                                         <SimpleMDE
                                             {...descriptionChecker.check(register)}
                                             id="post-content-custom"

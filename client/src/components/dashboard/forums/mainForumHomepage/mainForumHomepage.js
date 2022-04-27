@@ -66,13 +66,7 @@ const ForumHomepageMainHelper = ({ userData }) => {
     }, [itemOffset, itemsPerPage]);
 
     useEffect(() => {
-
-        const configuration = {
-            params: {
-                alreadyPooled: []
-            }
-        }
-
+        
         const newPopoverState = {};
 
         for (let index = 0; index < forums.length; index++) {

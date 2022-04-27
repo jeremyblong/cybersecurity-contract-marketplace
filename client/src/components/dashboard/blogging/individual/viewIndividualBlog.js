@@ -220,6 +220,7 @@ const ViewIndividualRestrictedAuthBlogHelper = ({ userData }) => {
                 const { blog } = res.data;
 
                 setBlogData(blog);
+                setCommentText("");
 
             } else {
                 console.log("Err", res.data);

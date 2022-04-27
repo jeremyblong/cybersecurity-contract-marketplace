@@ -78,13 +78,13 @@ const CreateNewBlogPostReduxFormHelpers = () => {
             return (
                 {...register("description", { required: {
                     value: true,
-                    message: "You MUST enter AT least 500 characters to 3500 characters"
+                    message: "You MUST enter AT least 500 characters to 12500 characters"
                 }, minLength: {
                     value: 500,
                     message: "You MUST enter AT Least 500 characters"
                 }, maxLength: {
-                    value: 3500,
-                    message: "You may ONLY enter 3500 characters or less"
+                    value: 12500,
+                    message: "You may ONLY enter 12500 characters or less"
                 }, onBlur: (data) => {
                     console.log("blurrred... data :", data);
                 }})}

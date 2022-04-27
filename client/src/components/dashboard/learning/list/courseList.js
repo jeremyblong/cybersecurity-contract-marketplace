@@ -11,6 +11,9 @@ import { connect } from "react-redux";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import helpers from "./helpers/helperFunctions.js";
+import PaginationGeneralHelper from "../../universal/pagination/miscMainPagination.js";
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+import _ from "lodash";
 
 const { 
     closeDislikePopover,
@@ -32,6 +35,8 @@ const settings = {
     slidesToShow: 1,
     slidesToScroll: 1
 };
+
+const itemsPerPage = 20;
 
 const CourseListHelper = ({ userData }) => {
 
@@ -112,7 +117,6 @@ const CourseListHelper = ({ userData }) => {
         exists: false
     }]);
     const [ promoted, setPromotedState ] = useState(["", "", "", "", "", "", "", "", "", ""]);
-    const [ popoverOpen, setPopoverOpen ] = useState(false);
     const [ popoverBookmark, setBookmarkPopoverState ] = useState({
         popover0: false,
         popover1: false,
@@ -155,6 +159,22 @@ const CourseListHelper = ({ userData }) => {
         popover10: false,
         popover11: false // aka 12th item MAXED paginated item's
     });
+    const [ currentPage, setCurrentPage ] = useState(0);
+    const [ pageCount, setPageCount ] = useState(0);
+    const [ itemOffset, setItemOffset ] = useState(0);
+    const [ permenantData, setPermenantDataState ] = useState([]);
+    const [ ready, setReady ] = useState(false);
+    const [ selectedQueries, setSelectedQueries ] = useState([]);
+
+    useEffect(() => {
+
+        const endOffset = itemOffset + itemsPerPage;
+
+        setPageCount(Math.ceil(permenantData.length / itemsPerPage));
+
+        setLearningData(permenantData.slice(itemOffset, endOffset));
+        
+    }, [itemOffset, itemsPerPage]);
 
     useEffect(() => {
         console.log("CourseList.js - mounted...!");
@@ -193,7 +213,14 @@ const CourseListHelper = ({ userData }) => {
                             // split current array to include new elements plus dummy data
                             const combined = [...newCoursesArray, ...learningData.splice(newCoursesArray.length, 12)];
                             // set state aka update mapped items
-                            setLearningData(combined);
+
+                            setPageCount(Math.ceil(combined.length / itemsPerPage));
+
+                            const endOffset = itemOffset + itemsPerPage;
+
+                            setPermenantDataState(combined);
+                            setLearningData(combined.slice(itemOffset, endOffset));
+                            setReady(true);
                         }
                     }
                 } 
@@ -244,6 +271,352 @@ const CourseListHelper = ({ userData }) => {
             return "danger";
         }
     }
+
+    const calculateFilterType = (course) => {
+        console.log("calculateFilterType course", course);
+
+        if (typeof selectedQueries !== "undefined" && selectedQueries.length > 0) {
+            if (_.has(course, "mainData")) {
+            
+                console.log("_.has(course, mainData) ran/running...!");
+    
+                const courseCategory = selectedQueries.filter((item) => item.type === 'category').map((item) => item.value);
+                const pricingOptions = selectedQueries.filter((item) => item.type === 'pricing').map((item) => item.numerical);
+                const languageOptions = selectedQueries.filter((item) => item.type === 'language').map((item) => item.abbrev);
+                const difficultyOptions = selectedQueries.filter((item) => item.type === 'difficulty').map((item) => item.value);
+                const lengthOptions = selectedQueries.filter((item) => item.type === 'hoursInLength').map((item) => item.value);
+    
+                const returningOperations = ( 
+                    // selectedQueries.indexOf(course) !== -1,
+                    courseCategory.includes(course.mainData.pageOneData.mainData.courseCategory.value) ||  
+                    pricingOptions.includes(course.mainData.pageOneData.mainData.pricing.numerical) || 
+                    languageOptions.includes(course.mainData.pageThreeData.languageSpoken.abbrev) || 
+                    difficultyOptions.includes(course.mainData.pageThreeData.skillLevel.value) || 
+                    lengthOptions.includes(course.mainData.pageThreeData.lengthInHours.value)
+                );
+                // return selected value
+                return returningOperations;
+            } else {
+                console.log("NOT ready yet..");
+    
+                return true;
+            }
+        } else {
+            return true;
+        }
+    }
+    
+    console.log("selectedQueries", selectedQueries);
+
+    const calculateSort = (a, b) => {
+        console.log("a b", a, b);
+        if (selectedQueries.includes("newest")) {
+            return new Date(b.date) - new Date(a.date);
+        } else {
+            return new Date(a.date) - new Date(b.date);
+        }
+    }
+
+    const renderMainContent = () => {
+        
+        if (selectedQueries.includes("oldest") || selectedQueries.includes("newest")) {
+            const sorted = learningData.sort((a, b) => calculateSort(a, b));
+
+            console.log("sorted", sorted);
+
+            return (
+                <Fragment>
+                    {sorted.filter((data) => calculateFilterType(data)).map((data, i) => {
+                        if (data.exists === true) {
+                            const bannerImageFull = `${process.env.REACT_APP_ASSET_LINK}/${data.mainData.pageThreeData.homepageImage.link}`;
+                            return (
+                                <Col xl="4 xl-50 box-col-6" sm="6" key={i}>
+                                    <Card>
+                                        <div className="blog-box blog-grid text-center product-box">
+                                            <div className="product-img">
+                                                <Media className="img-fluid top-radius-blog container-top-image-min" src={bannerImageFull} alt="" />
+                                                <div className="product-hover">
+                                                    <ul>
+                                                        <Button onClick={() => {
+                                                            handleRedirect(data);
+                                                        }} className={"btn-square-info"} color={"info"} style={{ width: "100%", marginBottom: "12.5px" }}>Visit/View Course</Button>
+                                                        <li>
+                                                            <i onClick={() => openBookmarkPopover(data, i, setBookmarkPopoverState)} id={`popoverBookmark${i}`} className="icon-bookmark fa-2x"></i>
+                                                        </li>
+                                                        <Popover rootClose target={`popoverBookmark${i}`} placement="bottom" isOpen={popoverBookmark[`popover${i}`]} toggle={() => closeBookmarkPopover(data, i, setBookmarkPopoverState)}>
+                                                            <div onMouseLeave={() => closeBookmarkPopover(data, i, setBookmarkPopoverState)} className={"exit-upon-leaving-div-wrapper"}>
+                                                                <PopoverHeader>Bookmark this listing? <div className="popover-cancel-container" onClick={() => {
+                                                                    closeBookmarkPopover(data, i, setBookmarkPopoverState)
+                                                                }}><img src={require("../../../../assets/icons/close-64.png")} className="small-close-popover-icon" /></div></PopoverHeader>
+                                                                <PopoverBody>Are you sure you'd like to 'bookmark' this listing? This will save this listing to your 'bookmarked items' so if you decide to <strong>re-visit</strong> this particular section of our platform - you'll be able to easily find this course again...
+                                                                <hr />
+                                                                <Button onClick={() => bookmarkCourse(data, i)} className={"btn-square-secondary"} outline color={"secondary-2x"} style={{ width: "100%", marginBottom: "12.5px" }}>Bookmark This Course!</Button>
+                                                                </PopoverBody>
+                                                            </div>
+                                                        </Popover>
+                                                        <li>
+                                                            <i onClick={() => openLikePopover(data, i, setLikePopoverState)} id={`popoverLike${i}`} className="fa fa-gratipay fa-2x"></i>
+                                                        </li>
+                                                        <Popover rootClose target={`popoverLike${i}`} placement="bottom" isOpen={likePopover[`popover${i}`]} toggle={() => closeLikePopover(data, i, setLikePopoverState)}>
+                                                            <div onMouseLeave={() => closeLikePopover(data, i, setLikePopoverState)} className={"exit-upon-leaving-div-wrapper"}>
+                                                                <PopoverHeader>React with a "Like" to this course? <div className="popover-cancel-container" onClick={() => closeLikePopover(data, i, setLikePopoverState)}><img src={require("../../../../assets/icons/close-64.png")} className="small-close-popover-icon" /></div></PopoverHeader>
+                                                                <PopoverBody>Are you sure you'd like to 'Like' this listing? This will "like" this course to show other user's that people are interested in this listing and/or people should check it out. Liking content will help your peer's decipher information on our platform...
+                                                                <hr />
+                                                                <Button onClick={() => likeThisCourse(data, i)} className={"btn-square-secondary"} outline color={"secondary-2x"} style={{ width: "100%", marginBottom: "12.5px" }}>"Like" This Course!</Button>
+                                                                </PopoverBody>
+                                                            </div>
+                                                        </Popover>
+                                                        <li>
+                                                            <i onClick={() => openDislikePopover(data, i, setDislikePopoverState)} id={`popoverThree${i}`} className="fa fa-thumbs-down fa-2x"></i>
+                                                        </li>
+                                                        <Popover rootClose target={`popoverThree${i}`} placement="bottom" isOpen={dislikePopover[`popover${i}`]} toggle={() => closeDislikePopover(data, i, setDislikePopoverState)}>
+                                                            <div onMouseLeave={() => closeDislikePopover(data, i, setDislikePopoverState)} className={"exit-upon-leaving-div-wrapper"}>
+                                                                <PopoverHeader>React with a "Dislike" to this course? <div className="popover-cancel-container" onClick={() => closeDislikePopover(data, i, setDislikePopoverState)}><img src={require("../../../../assets/icons/close-64.png")} className="small-close-popover-icon" /></div></PopoverHeader>
+                                                                <PopoverBody>Are you sure you'd like to 'Dislike' this listing? This will "Dislike" this course to show other user's that people are NOT interested in this listing. Disliking content will help your peer's decipher information on our platform regarding good VS bad content...
+                                                                <hr />
+                                                                <Button onClick={() => dislikeThisCourse(data, i)} className={"btn-square-secondary"} outline color={"secondary-2x"} style={{ width: "100%", marginBottom: "12.5px" }}>"Dislike" This Course!</Button>
+                                                                </PopoverBody>
+                                                            </div>
+                                                        </Popover>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div className="blog-details-main">
+                                                <ul className="blog-social">
+                                                    <li className="digits text-secondary-custom">{data.mainData.pageOneData.mainData.courseCategory.label}</li>
+                                                    <li className="digits text-secondary-custom">{`${data.mainData.pageOneData.mainData.pricing.label}`}</li>
+                                                </ul>
+                                                <ul className="blog-social">
+                                                    <li className="digits text-primary-custom">{`${data.totalViews} Total View(s) w/${data.purchased.length} Purchase's`}</li>
+                                                </ul>
+                                                <hr />
+                                                <ReactMarkdown children={data.mainData.pageOneData.mainData.description} remarkPlugins={[remarkGfm]} className="blog-bottom-details blog-bottom-details-maxed" />
+                                            </div>
+                                        </div>
+                                    </Card>
+                                </Col>
+                            );
+                        } else {
+                            return (
+                                <Col xl="4 xl-50 box-col-6" sm="6" key={i}>
+                                    <Card>
+                                        <div className="blog-box blog-grid text-center product-box">
+                                            <div className="product-img">
+                                                <Media className="img-fluid top-radius-blog container-top-image-min" src={require("../../../../assets/images/faq/1.jpg")} alt="" />
+                                                <div className="product-hover">
+                                                    <ul>
+                                                        <Button onClick={() => {
+                                                            handleRedirect(data);
+                                                        }} className={"btn-square-info"} color={"info"} style={{ width: "100%", marginBottom: "12.5px" }}>Visit/View Course</Button>
+                                                        <li>
+                                                            <i onClick={() => openBookmarkPopover(data, i, setBookmarkPopoverState)} id={`popoverBookmark${i}`} className="icon-bookmark fa-2x"></i>
+                                                        </li>
+                                                        <Popover rootClose target={`popoverBookmark${i}`} placement="bottom" isOpen={popoverBookmark[`popover${i}`]} toggle={() => closeBookmarkPopover(data, i, setBookmarkPopoverState)}>
+                                                            <div onMouseLeave={() => closeBookmarkPopover(data, i, setBookmarkPopoverState)} className={"exit-upon-leaving-div-wrapper"}>
+                                                                <PopoverHeader>Bookmark this listing? <div className="popover-cancel-container" onClick={() => {
+                                                                    closeBookmarkPopover(data, i, setBookmarkPopoverState)
+                                                                }}><img src={require("../../../../assets/icons/close-64.png")} className="small-close-popover-icon" /></div></PopoverHeader>
+                                                                <PopoverBody>Are you sure you'd like to 'bookmark' this listing? This will save this listing to your 'bookmarked items' so if you decide to <strong>re-visit</strong> this particular section of our platform - you'll be able to easily find this course again...
+                                                                <hr />
+                                                                <Button onClick={() => bookmarkCourse(data, i)} className={"btn-square-secondary"} outline color={"secondary-2x"} style={{ width: "100%", marginBottom: "12.5px" }}>Bookmark This Course!</Button>
+                                                                </PopoverBody>
+                                                            </div>
+                                                        </Popover>
+                                                        <li>
+                                                            <i onClick={() => openLikePopover(data, i, setLikePopoverState)} id={`popoverLike${i}`} className="fa fa-gratipay fa-2x"></i>
+                                                        </li>
+                                                        <Popover rootClose target={`popoverLike${i}`} placement="bottom" isOpen={likePopover[`popover${i}`]} toggle={() => closeLikePopover(data, i, setLikePopoverState)}>
+                                                            <div onMouseLeave={() => closeLikePopover(data, i, setLikePopoverState)} className={"exit-upon-leaving-div-wrapper"}>
+                                                                <PopoverHeader>React with a "Like" to this course? <div className="popover-cancel-container" onClick={() => closeLikePopover(data, i, setLikePopoverState)}><img src={require("../../../../assets/icons/close-64.png")} className="small-close-popover-icon" /></div></PopoverHeader>
+                                                                <PopoverBody>Are you sure you'd like to 'Like' this listing? This will "like" this course to show other user's that people are interested in this listing and/or people should check it out. Liking content will help your peer's decipher information on our platform...
+                                                                <hr />
+                                                                <Button onClick={() => likeThisCourse(data, i)} className={"btn-square-secondary"} outline color={"secondary-2x"} style={{ width: "100%", marginBottom: "12.5px" }}>"Like" This Course!</Button>
+                                                                </PopoverBody>
+                                                            </div>
+                                                        </Popover>
+                                                        <li>
+                                                            <i onClick={() => openDislikePopover(data, i, setDislikePopoverState)} id={`popoverThree${i}`} className="fa fa-thumbs-down fa-2x"></i>
+                                                        </li>
+                                                        <Popover rootClose target={`popoverThree${i}`} placement="bottom" isOpen={dislikePopover[`popover${i}`]} toggle={() => closeDislikePopover(data, i, setDislikePopoverState)}>
+                                                            <div onMouseLeave={() => closeDislikePopover(data, i, setDislikePopoverState)} className={"exit-upon-leaving-div-wrapper"}>
+                                                                <PopoverHeader>React with a "Dislike" to this course? <div className="popover-cancel-container" onClick={() => closeDislikePopover(data, i, setDislikePopoverState)}><img src={require("../../../../assets/icons/close-64.png")} className="small-close-popover-icon" /></div></PopoverHeader>
+                                                                <PopoverBody>Are you sure you'd like to 'Dislike' this listing? This will "Dislike" this course to show other user's that people are NOT interested in this listing. Disliking content will help your peer's decipher information on our platform regarding good VS bad content...
+                                                                <hr />
+                                                                <Button onClick={() => dislikeThisCourse(data, i)} className={"btn-square-secondary"} outline color={"secondary-2x"} style={{ width: "100%", marginBottom: "12.5px" }}>"Dislike" This Course!</Button>
+                                                                </PopoverBody>
+                                                            </div>
+                                                        </Popover>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div className="blog-details-main">
+                                                <ul className="blog-social">
+                                                    <li className="digits text-secondary-custom">{data.date}</li>
+                                                    <li className="digits text-secondary-custom">{"by"}: {data.writer}</li>
+                                                </ul>
+                                                <ul className="blog-social">
+                                                    <li className="digits text-primary-custom">{data.hits} {"Total Hits"}</li>
+                                                </ul>
+                                                <hr />
+                                                <h6 className="blog-bottom-details blog-bottom-details-maxed">{data.short_description}</h6>
+                                            </div>
+                                        </div>
+                                    </Card>
+                                </Col>
+                            );
+                        }
+                    })}
+                </Fragment>
+            );
+        } else {
+            return (
+                <Fragment>
+                    {learningData.filter((data) => calculateFilterType(data)).map((data, i) => {
+                        if (data.exists === true) {
+                            const bannerImageFull = `${process.env.REACT_APP_ASSET_LINK}/${data.mainData.pageThreeData.homepageImage.link}`;
+                            return (
+                                <Col xl="4 xl-50 box-col-6" sm="6" key={i}>
+                                    <Card>
+                                        <div className="blog-box blog-grid text-center product-box">
+                                            <div className="product-img">
+                                                <Media className="img-fluid top-radius-blog container-top-image-min" src={bannerImageFull} alt="" />
+                                                <div className="product-hover">
+                                                    <ul>
+                                                        <Button onClick={() => {
+                                                            handleRedirect(data);
+                                                        }} className={"btn-square-info"} color={"info"} style={{ width: "100%", marginBottom: "12.5px" }}>Visit/View Course</Button>
+                                                        <li>
+                                                            <i onClick={() => openBookmarkPopover(data, i, setBookmarkPopoverState)} id={`popoverBookmark${i}`} className="icon-bookmark fa-2x"></i>
+                                                        </li>
+                                                        <Popover rootClose target={`popoverBookmark${i}`} placement="bottom" isOpen={popoverBookmark[`popover${i}`]} toggle={() => closeBookmarkPopover(data, i, setBookmarkPopoverState)}>
+                                                            <div onMouseLeave={() => closeBookmarkPopover(data, i, setBookmarkPopoverState)} className={"exit-upon-leaving-div-wrapper"}>
+                                                                <PopoverHeader>Bookmark this listing? <div className="popover-cancel-container" onClick={() => {
+                                                                    closeBookmarkPopover(data, i, setBookmarkPopoverState)
+                                                                }}><img src={require("../../../../assets/icons/close-64.png")} className="small-close-popover-icon" /></div></PopoverHeader>
+                                                                <PopoverBody>Are you sure you'd like to 'bookmark' this listing? This will save this listing to your 'bookmarked items' so if you decide to <strong>re-visit</strong> this particular section of our platform - you'll be able to easily find this course again...
+                                                                <hr />
+                                                                <Button onClick={() => bookmarkCourse(data, i)} className={"btn-square-secondary"} outline color={"secondary-2x"} style={{ width: "100%", marginBottom: "12.5px" }}>Bookmark This Course!</Button>
+                                                                </PopoverBody>
+                                                            </div>
+                                                        </Popover>
+                                                        <li>
+                                                            <i onClick={() => openLikePopover(data, i, setLikePopoverState)} id={`popoverLike${i}`} className="fa fa-gratipay fa-2x"></i>
+                                                        </li>
+                                                        <Popover rootClose target={`popoverLike${i}`} placement="bottom" isOpen={likePopover[`popover${i}`]} toggle={() => closeLikePopover(data, i, setLikePopoverState)}>
+                                                            <div onMouseLeave={() => closeLikePopover(data, i, setLikePopoverState)} className={"exit-upon-leaving-div-wrapper"}>
+                                                                <PopoverHeader>React with a "Like" to this course? <div className="popover-cancel-container" onClick={() => closeLikePopover(data, i, setLikePopoverState)}><img src={require("../../../../assets/icons/close-64.png")} className="small-close-popover-icon" /></div></PopoverHeader>
+                                                                <PopoverBody>Are you sure you'd like to 'Like' this listing? This will "like" this course to show other user's that people are interested in this listing and/or people should check it out. Liking content will help your peer's decipher information on our platform...
+                                                                <hr />
+                                                                <Button onClick={() => likeThisCourse(data, i)} className={"btn-square-secondary"} outline color={"secondary-2x"} style={{ width: "100%", marginBottom: "12.5px" }}>"Like" This Course!</Button>
+                                                                </PopoverBody>
+                                                            </div>
+                                                        </Popover>
+                                                        <li>
+                                                            <i onClick={() => openDislikePopover(data, i, setDislikePopoverState)} id={`popoverThree${i}`} className="fa fa-thumbs-down fa-2x"></i>
+                                                        </li>
+                                                        <Popover rootClose target={`popoverThree${i}`} placement="bottom" isOpen={dislikePopover[`popover${i}`]} toggle={() => closeDislikePopover(data, i, setDislikePopoverState)}>
+                                                            <div onMouseLeave={() => closeDislikePopover(data, i, setDislikePopoverState)} className={"exit-upon-leaving-div-wrapper"}>
+                                                                <PopoverHeader>React with a "Dislike" to this course? <div className="popover-cancel-container" onClick={() => closeDislikePopover(data, i, setDislikePopoverState)}><img src={require("../../../../assets/icons/close-64.png")} className="small-close-popover-icon" /></div></PopoverHeader>
+                                                                <PopoverBody>Are you sure you'd like to 'Dislike' this listing? This will "Dislike" this course to show other user's that people are NOT interested in this listing. Disliking content will help your peer's decipher information on our platform regarding good VS bad content...
+                                                                <hr />
+                                                                <Button onClick={() => dislikeThisCourse(data, i)} className={"btn-square-secondary"} outline color={"secondary-2x"} style={{ width: "100%", marginBottom: "12.5px" }}>"Dislike" This Course!</Button>
+                                                                </PopoverBody>
+                                                            </div>
+                                                        </Popover>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div className="blog-details-main">
+                                                <ul className="blog-social">
+                                                    <li className="digits text-secondary-custom">{data.mainData.pageOneData.mainData.courseCategory.label}</li>
+                                                    <li className="digits text-secondary-custom">{`${data.mainData.pageOneData.mainData.pricing.label}`}</li>
+                                                </ul>
+                                                <ul className="blog-social">
+                                                    <li className="digits text-primary-custom">{`${data.totalViews} Total View(s) w/${data.purchased.length} Purchase's`}</li>
+                                                </ul>
+                                                <hr />
+                                                <ReactMarkdown children={data.mainData.pageOneData.mainData.description} remarkPlugins={[remarkGfm]} className="blog-bottom-details blog-bottom-details-maxed" />
+                                            </div>
+                                        </div>
+                                    </Card>
+                                </Col>
+                            );
+                        } else {
+                            return (
+                                <Col xl="4 xl-50 box-col-6" sm="6" key={i}>
+                                    <Card>
+                                        <div className="blog-box blog-grid text-center product-box">
+                                            <div className="product-img">
+                                                <Media className="img-fluid top-radius-blog container-top-image-min" src={require("../../../../assets/images/faq/1.jpg")} alt="" />
+                                                <div className="product-hover">
+                                                    <ul>
+                                                        <Button onClick={() => {
+                                                            handleRedirect(data);
+                                                        }} className={"btn-square-info"} color={"info"} style={{ width: "100%", marginBottom: "12.5px" }}>Visit/View Course</Button>
+                                                        <li>
+                                                            <i onClick={() => openBookmarkPopover(data, i, setBookmarkPopoverState)} id={`popoverBookmark${i}`} className="icon-bookmark fa-2x"></i>
+                                                        </li>
+                                                        <Popover rootClose target={`popoverBookmark${i}`} placement="bottom" isOpen={popoverBookmark[`popover${i}`]} toggle={() => closeBookmarkPopover(data, i, setBookmarkPopoverState)}>
+                                                            <div onMouseLeave={() => closeBookmarkPopover(data, i, setBookmarkPopoverState)} className={"exit-upon-leaving-div-wrapper"}>
+                                                                <PopoverHeader>Bookmark this listing? <div className="popover-cancel-container" onClick={() => {
+                                                                    closeBookmarkPopover(data, i, setBookmarkPopoverState)
+                                                                }}><img src={require("../../../../assets/icons/close-64.png")} className="small-close-popover-icon" /></div></PopoverHeader>
+                                                                <PopoverBody>Are you sure you'd like to 'bookmark' this listing? This will save this listing to your 'bookmarked items' so if you decide to <strong>re-visit</strong> this particular section of our platform - you'll be able to easily find this course again...
+                                                                <hr />
+                                                                <Button onClick={() => bookmarkCourse(data, i)} className={"btn-square-secondary"} outline color={"secondary-2x"} style={{ width: "100%", marginBottom: "12.5px" }}>Bookmark This Course!</Button>
+                                                                </PopoverBody>
+                                                            </div>
+                                                        </Popover>
+                                                        <li>
+                                                            <i onClick={() => openLikePopover(data, i, setLikePopoverState)} id={`popoverLike${i}`} className="fa fa-gratipay fa-2x"></i>
+                                                        </li>
+                                                        <Popover rootClose target={`popoverLike${i}`} placement="bottom" isOpen={likePopover[`popover${i}`]} toggle={() => closeLikePopover(data, i, setLikePopoverState)}>
+                                                            <div onMouseLeave={() => closeLikePopover(data, i, setLikePopoverState)} className={"exit-upon-leaving-div-wrapper"}>
+                                                                <PopoverHeader>React with a "Like" to this course? <div className="popover-cancel-container" onClick={() => closeLikePopover(data, i, setLikePopoverState)}><img src={require("../../../../assets/icons/close-64.png")} className="small-close-popover-icon" /></div></PopoverHeader>
+                                                                <PopoverBody>Are you sure you'd like to 'Like' this listing? This will "like" this course to show other user's that people are interested in this listing and/or people should check it out. Liking content will help your peer's decipher information on our platform...
+                                                                <hr />
+                                                                <Button onClick={() => likeThisCourse(data, i)} className={"btn-square-secondary"} outline color={"secondary-2x"} style={{ width: "100%", marginBottom: "12.5px" }}>"Like" This Course!</Button>
+                                                                </PopoverBody>
+                                                            </div>
+                                                        </Popover>
+                                                        <li>
+                                                            <i onClick={() => openDislikePopover(data, i, setDislikePopoverState)} id={`popoverThree${i}`} className="fa fa-thumbs-down fa-2x"></i>
+                                                        </li>
+                                                        <Popover rootClose target={`popoverThree${i}`} placement="bottom" isOpen={dislikePopover[`popover${i}`]} toggle={() => closeDislikePopover(data, i, setDislikePopoverState)}>
+                                                            <div onMouseLeave={() => closeDislikePopover(data, i, setDislikePopoverState)} className={"exit-upon-leaving-div-wrapper"}>
+                                                                <PopoverHeader>React with a "Dislike" to this course? <div className="popover-cancel-container" onClick={() => closeDislikePopover(data, i, setDislikePopoverState)}><img src={require("../../../../assets/icons/close-64.png")} className="small-close-popover-icon" /></div></PopoverHeader>
+                                                                <PopoverBody>Are you sure you'd like to 'Dislike' this listing? This will "Dislike" this course to show other user's that people are NOT interested in this listing. Disliking content will help your peer's decipher information on our platform regarding good VS bad content...
+                                                                <hr />
+                                                                <Button onClick={() => dislikeThisCourse(data, i)} className={"btn-square-secondary"} outline color={"secondary-2x"} style={{ width: "100%", marginBottom: "12.5px" }}>"Dislike" This Course!</Button>
+                                                                </PopoverBody>
+                                                            </div>
+                                                        </Popover>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div className="blog-details-main">
+                                                <ul className="blog-social">
+                                                    <li className="digits text-secondary-custom">{data.date}</li>
+                                                    <li className="digits text-secondary-custom">{"by"}: {data.writer}</li>
+                                                </ul>
+                                                <ul className="blog-social">
+                                                    <li className="digits text-primary-custom">{data.hits} {"Total Hits"}</li>
+                                                </ul>
+                                                <hr />
+                                                <h6 className="blog-bottom-details blog-bottom-details-maxed">{data.short_description}</h6>
+                                            </div>
+                                        </div>
+                                    </Card>
+                                </Col>
+                            );
+                        }
+                    })}
+                </Fragment>
+            );
+        }
+    }
+
+
     return (
         <Fragment>
             <Breadcrumb parent="Content Courses" title="Learn new skills!" />
@@ -284,162 +657,19 @@ const CourseListHelper = ({ userData }) => {
                                     })}
                                 </Slider>
                             </Col>
-                            {learningData.map((data, i) => {
-                                if (data.exists === true) {
-                                    const bannerImageFull = `${process.env.REACT_APP_ASSET_LINK}/${data.mainData.pageThreeData.homepageImage.link}`;
-                                    return (
-                                        <Col xl="4 xl-50 box-col-6" sm="6" key={i}>
-                                            <Card>
-                                                <div className="blog-box blog-grid text-center product-box">
-                                                    <div className="product-img">
-                                                        <Media className="img-fluid top-radius-blog container-top-image-min" src={bannerImageFull} alt="" />
-                                                        <div className="product-hover">
-                                                            <ul>
-                                                                <Button onClick={() => {
-                                                                    handleRedirect(data);
-                                                                }} className={"btn-square-info"} color={"info"} style={{ width: "100%", marginBottom: "12.5px" }}>Visit/View Course</Button>
-                                                                <li>
-                                                                    <i onClick={() => openBookmarkPopover(data, i, setBookmarkPopoverState)} id={`popoverBookmark${i}`} className="icon-bookmark fa-2x"></i>
-                                                                </li>
-                                                                <Popover rootClose target={`popoverBookmark${i}`} placement="bottom" isOpen={popoverBookmark[`popover${i}`]} toggle={() => closeBookmarkPopover(data, i, setBookmarkPopoverState)}>
-                                                                    <div onMouseLeave={() => closeBookmarkPopover(data, i, setBookmarkPopoverState)} className={"exit-upon-leaving-div-wrapper"}>
-                                                                        <PopoverHeader>Bookmark this listing? <div className="popover-cancel-container" onClick={() => {
-                                                                            closeBookmarkPopover(data, i, setBookmarkPopoverState)
-                                                                        }}><img src={require("../../../../assets/icons/close-64.png")} className="small-close-popover-icon" /></div></PopoverHeader>
-                                                                        <PopoverBody>Are you sure you'd like to 'bookmark' this listing? This will save this listing to your 'bookmarked items' so if you decide to <strong>re-visit</strong> this particular section of our platform - you'll be able to easily find this course again...
-                                                                        <hr />
-                                                                        <Button onClick={() => bookmarkCourse(data, i)} className={"btn-square-secondary"} outline color={"secondary-2x"} style={{ width: "100%", marginBottom: "12.5px" }}>Bookmark This Course!</Button>
-                                                                        </PopoverBody>
-                                                                    </div>
-                                                                </Popover>
-                                                                <li>
-                                                                    <i onClick={() => openLikePopover(data, i, setLikePopoverState)} id={`popoverLike${i}`} className="fa fa-gratipay fa-2x"></i>
-                                                                </li>
-                                                                <Popover rootClose target={`popoverLike${i}`} placement="bottom" isOpen={likePopover[`popover${i}`]} toggle={() => closeLikePopover(data, i, setLikePopoverState)}>
-                                                                    <div onMouseLeave={() => closeLikePopover(data, i, setLikePopoverState)} className={"exit-upon-leaving-div-wrapper"}>
-                                                                        <PopoverHeader>React with a "Like" to this course? <div className="popover-cancel-container" onClick={() => closeLikePopover(data, i, setLikePopoverState)}><img src={require("../../../../assets/icons/close-64.png")} className="small-close-popover-icon" /></div></PopoverHeader>
-                                                                        <PopoverBody>Are you sure you'd like to 'Like' this listing? This will "like" this course to show other user's that people are interested in this listing and/or people should check it out. Liking content will help your peer's decipher information on our platform...
-                                                                        <hr />
-                                                                        <Button onClick={() => likeThisCourse(data, i)} className={"btn-square-secondary"} outline color={"secondary-2x"} style={{ width: "100%", marginBottom: "12.5px" }}>"Like" This Course!</Button>
-                                                                        </PopoverBody>
-                                                                    </div>
-                                                                </Popover>
-                                                                <li>
-                                                                    <i onClick={() => openDislikePopover(data, i, setDislikePopoverState)} id={`popoverThree${i}`} className="fa fa-thumbs-down fa-2x"></i>
-                                                                </li>
-                                                                <Popover rootClose target={`popoverThree${i}`} placement="bottom" isOpen={dislikePopover[`popover${i}`]} toggle={() => closeDislikePopover(data, i, setDislikePopoverState)}>
-                                                                    <div onMouseLeave={() => closeDislikePopover(data, i, setDislikePopoverState)} className={"exit-upon-leaving-div-wrapper"}>
-                                                                        <PopoverHeader>React with a "Dislike" to this course? <div className="popover-cancel-container" onClick={() => closeDislikePopover(data, i, setDislikePopoverState)}><img src={require("../../../../assets/icons/close-64.png")} className="small-close-popover-icon" /></div></PopoverHeader>
-                                                                        <PopoverBody>Are you sure you'd like to 'Dislike' this listing? This will "Dislike" this course to show other user's that people are NOT interested in this listing. Disliking content will help your peer's decipher information on our platform regarding good VS bad content...
-                                                                        <hr />
-                                                                        <Button onClick={() => dislikeThisCourse(data, i)} className={"btn-square-secondary"} outline color={"secondary-2x"} style={{ width: "100%", marginBottom: "12.5px" }}>"Dislike" This Course!</Button>
-                                                                        </PopoverBody>
-                                                                    </div>
-                                                                </Popover>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                    <div className="blog-details-main">
-                                                        <ul className="blog-social">
-                                                            <li className="digits text-secondary-custom">{data.mainData.pageOneData.mainData.courseCategory.label}</li>
-                                                            <li className="digits text-secondary-custom">{`${data.mainData.pageOneData.mainData.pricing.label}`}</li>
-                                                        </ul>
-                                                        <ul className="blog-social">
-                                                            <li className="digits text-primary-custom">{`${data.totalViews} Total View(s) w/${data.purchased.length} Purchase's`}</li>
-                                                        </ul>
-                                                        <hr />
-                                                        <ReactMarkdown children={data.mainData.pageOneData.mainData.description} remarkPlugins={[remarkGfm]} className="blog-bottom-details blog-bottom-details-maxed" />
-                                                    </div>
-                                                </div>
-                                            </Card>
-                                        </Col>
-                                    );
-                                } else {
-                                    return (
-                                        <Col xl="4 xl-50 box-col-6" sm="6" key={i}>
-                                            <Card>
-                                                <div className="blog-box blog-grid text-center product-box">
-                                                    <div className="product-img">
-                                                        <Media className="img-fluid top-radius-blog container-top-image-min" src={require("../../../../assets/images/faq/1.jpg")} alt="" />
-                                                        <div className="product-hover">
-                                                            <ul>
-                                                                <Button onClick={() => {
-                                                                    handleRedirect(data);
-                                                                }} className={"btn-square-info"} color={"info"} style={{ width: "100%", marginBottom: "12.5px" }}>Visit/View Course</Button>
-                                                                <li>
-                                                                    <i onClick={() => openBookmarkPopover(data, i, setBookmarkPopoverState)} id={`popoverBookmark${i}`} className="icon-bookmark fa-2x"></i>
-                                                                </li>
-                                                                <Popover rootClose target={`popoverBookmark${i}`} placement="bottom" isOpen={popoverBookmark[`popover${i}`]} toggle={() => closeBookmarkPopover(data, i, setBookmarkPopoverState)}>
-                                                                    <div onMouseLeave={() => closeBookmarkPopover(data, i, setBookmarkPopoverState)} className={"exit-upon-leaving-div-wrapper"}>
-                                                                        <PopoverHeader>Bookmark this listing? <div className="popover-cancel-container" onClick={() => {
-                                                                            closeBookmarkPopover(data, i, setBookmarkPopoverState)
-                                                                        }}><img src={require("../../../../assets/icons/close-64.png")} className="small-close-popover-icon" /></div></PopoverHeader>
-                                                                        <PopoverBody>Are you sure you'd like to 'bookmark' this listing? This will save this listing to your 'bookmarked items' so if you decide to <strong>re-visit</strong> this particular section of our platform - you'll be able to easily find this course again...
-                                                                        <hr />
-                                                                        <Button onClick={() => bookmarkCourse(data, i)} className={"btn-square-secondary"} outline color={"secondary-2x"} style={{ width: "100%", marginBottom: "12.5px" }}>Bookmark This Course!</Button>
-                                                                        </PopoverBody>
-                                                                    </div>
-                                                                </Popover>
-                                                                <li>
-                                                                    <i onClick={() => openLikePopover(data, i, setLikePopoverState)} id={`popoverLike${i}`} className="fa fa-gratipay fa-2x"></i>
-                                                                </li>
-                                                                <Popover rootClose target={`popoverLike${i}`} placement="bottom" isOpen={likePopover[`popover${i}`]} toggle={() => closeLikePopover(data, i, setLikePopoverState)}>
-                                                                    <div onMouseLeave={() => closeLikePopover(data, i, setLikePopoverState)} className={"exit-upon-leaving-div-wrapper"}>
-                                                                        <PopoverHeader>React with a "Like" to this course? <div className="popover-cancel-container" onClick={() => closeLikePopover(data, i, setLikePopoverState)}><img src={require("../../../../assets/icons/close-64.png")} className="small-close-popover-icon" /></div></PopoverHeader>
-                                                                        <PopoverBody>Are you sure you'd like to 'Like' this listing? This will "like" this course to show other user's that people are interested in this listing and/or people should check it out. Liking content will help your peer's decipher information on our platform...
-                                                                        <hr />
-                                                                        <Button onClick={() => likeThisCourse(data, i)} className={"btn-square-secondary"} outline color={"secondary-2x"} style={{ width: "100%", marginBottom: "12.5px" }}>"Like" This Course!</Button>
-                                                                        </PopoverBody>
-                                                                    </div>
-                                                                </Popover>
-                                                                <li>
-                                                                    <i onClick={() => openDislikePopover(data, i, setDislikePopoverState)} id={`popoverThree${i}`} className="fa fa-thumbs-down fa-2x"></i>
-                                                                </li>
-                                                                <Popover rootClose target={`popoverThree${i}`} placement="bottom" isOpen={dislikePopover[`popover${i}`]} toggle={() => closeDislikePopover(data, i, setDislikePopoverState)}>
-                                                                    <div onMouseLeave={() => closeDislikePopover(data, i, setDislikePopoverState)} className={"exit-upon-leaving-div-wrapper"}>
-                                                                        <PopoverHeader>React with a "Dislike" to this course? <div className="popover-cancel-container" onClick={() => closeDislikePopover(data, i, setDislikePopoverState)}><img src={require("../../../../assets/icons/close-64.png")} className="small-close-popover-icon" /></div></PopoverHeader>
-                                                                        <PopoverBody>Are you sure you'd like to 'Dislike' this listing? This will "Dislike" this course to show other user's that people are NOT interested in this listing. Disliking content will help your peer's decipher information on our platform regarding good VS bad content...
-                                                                        <hr />
-                                                                        <Button onClick={() => dislikeThisCourse(data, i)} className={"btn-square-secondary"} outline color={"secondary-2x"} style={{ width: "100%", marginBottom: "12.5px" }}>"Dislike" This Course!</Button>
-                                                                        </PopoverBody>
-                                                                    </div>
-                                                                </Popover>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                    <div className="blog-details-main">
-                                                        <ul className="blog-social">
-                                                            <li className="digits text-secondary-custom">{data.date}</li>
-                                                            <li className="digits text-secondary-custom">{"by"}: {data.writer}</li>
-                                                        </ul>
-                                                        <ul className="blog-social">
-                                                            <li className="digits text-primary-custom">{data.hits} {"Total Hits"}</li>
-                                                        </ul>
-                                                        <hr />
-                                                        <h6 className="blog-bottom-details blog-bottom-details-maxed">{data.short_description}</h6>
-                                                    </div>
-                                                </div>
-                                            </Card>
-                                        </Col>
-                                    );
-                                }
-                            })}
+                            {ready === true ? renderMainContent() : <Fragment>
+                                <SkeletonTheme baseColor="#c9c9c9" highlightColor="#444">
+                                    <p>
+                                        <Skeleton count={40} />
+                                    </p>
+                                </SkeletonTheme>
+                            </Fragment>}
                         </Row>
-                        <Row style={{ paddingTop: "17.5px" }}>
-                            <div className="centered-both-ways">
-                                <Pagination className="m-b-30" aria-label="Page navigation example">
-                                    <ul className="pagination pagination-lg pagination-secondary">
-                                        <PaginationItem><PaginationLink href={null}>{"Previous"}</PaginationLink></PaginationItem>
-                                        <PaginationItem active><PaginationLink href={null}>{"1"}</PaginationLink></PaginationItem>
-                                        <PaginationItem><PaginationLink href={null}>{"2"}</PaginationLink></PaginationItem>
-                                        <PaginationItem><PaginationLink href={null}>{"3"}</PaginationLink></PaginationItem>
-                                        <PaginationItem><PaginationLink href={null}>{"Next"}</PaginationLink></PaginationItem>
-                                    </ul>
-                                </Pagination>
-                            </div>
+                        <Row style={{ paddingTop: "17.5px", marginBottom: "75px" }}>
+                            <PaginationGeneralHelper itemsPerPage={itemsPerPage} loopingData={permenantData} currentPage={currentPage} pageCount={pageCount} setItemOffset={setItemOffset} setCurrentPage={setCurrentPage} />
                         </Row>
                     </Col>
-                    <LearningFilterHelper />
+                    <LearningFilterHelper selectedQueries={selectedQueries} setSelectedQueries={setSelectedQueries} />
                 </Row>
             </Container>
         </Fragment>

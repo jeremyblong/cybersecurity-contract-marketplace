@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import { Col, Card, CardHeader, CardBody, Button, Media, Form, FormGroup, Input , Collapse, UncontrolledTooltip } from 'reactstrap';
+import { Col, Card, CardHeader, CardBody, Button, Media, Form, FormGroup, InputGroup, Row, Input , Collapse, UncontrolledTooltip, ModalHeader, Modal, ModalBody } from 'reactstrap';
 import one from "../../../../../../../../assets/images/user/1.jpg";
 import three from "../../../../../../../../assets/images/user/3.jpg";
 import five from "../../../../../../../../assets/images/user/5.jpg";
@@ -8,99 +8,176 @@ import eight from "../../../../../../../../assets/images/user/8.jpg";
 import eleven from "../../../../../../../../assets/images/user/11.png";
 import { useHistory } from "react-router-dom";
 import _ from "lodash";
-import { BuckyBarnes, JasonBorne, SarahLoren, AndewJon, JohnyWaston, ComerenDiaz, ActivityFeed } from "../../../../../../../../constant";
+import { BuckyBarnes, JasonBorne, AndewJon, JohnyWaston, ComerenDiaz } from "../../../../../../../../constant";
 import profileLogoPlaceholder from "../../../../../../../../assets/images/logo/logo-icon.png";
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+import { NotificationManager } from 'react-notifications';
+import axios from "axios";
+import helpers from "../helpers/functions/helperFunctions.js";
+import moment from 'moment';
+import Slider from "react-slick";
+import ReactPlayer from "react-player";
 
-const calculateStatusType = (num) => {
-    switch (num) {
-        case 1:
-            return "social-online";
-            break;
-        case 2:
-            return "social-offline";
-            break;
-        case 3:
-            return "social-busy";
-            break;
-        default:
-            break;
-    }
-}
+const settings = {
+    dots: true,
+    infinite: true,
+    draggable: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    responsive: [
+        {
+          breakpoint: 1350,
+          settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            infinite: true,
+            dots: true
+          }
+        },
+        {
+          breakpoint: 1024,
+          settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            initialSlide: 1
+          }
+        },
+        {
+          breakpoint: 675,
+          settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1
+          }
+        }
+      ]
+};
+
+
+const { renderPicVideoPreviousApplicant, calculateFileType } = helpers;
 
 
 const LeftBar = ({ applicantData, lastProfileItem, user }) => {
 
-    console.log("LEFTBAR user...: ", user);
+    console.log("LEFTBAR applicantData...: ", applicantData, user);
 
     const history = useHistory();
 
+    const [ applicants, setApplicants ] = useState([]);
     const [testingDatesOpen, setTestingDatesOpen] = useState(true);
     const [isMutual, setisMutual] = useState(true);
-    const [isActivity, setisActivity] = useState(true);
     const [ presetIndex, setIndexState ] = useState(null);
     // previous applications/bids/proposals...
-    const [ previouslyApplied, setPreviouslyAppliedState ] = useState([{
-        profilePicture: "https://picsum.photos/200/300",
-        name: "Jeremy Blong",
-        relatedListingTitle: "Praesent consequat lectus leo, a gravida dui efficitur sit amet. Integer scelerisque molestie elementum. Sed laoreet vestibulum mauris quis dictum",
-        status: calculateStatusType(Math.floor(Math.random() * 3) + 1)
-    }, {
-        profilePicture: "https://picsum.photos/200/300",
-        name: "Alex Jankins",
-        relatedListingTitle: "Praesent consequat lectus leo, a gravida dui efficitur sit amet. Integer scelerisque molestie elementum. Sed laoreet vestibulum mauris quis dictum",
-        status: calculateStatusType(Math.floor(Math.random() * 3) + 1)
-    }, {
-        profilePicture: "https://picsum.photos/200/300",
-        name: "Tom Mcdonald",
-        relatedListingTitle: "Praesent consequat lectus leo, a gravida dui efficitur sit amet. Integer scelerisque molestie elementum. Sed laoreet vestibulum mauris quis dictum",
-        status: calculateStatusType(Math.floor(Math.random() * 3) + 1)
-    }, {
-        profilePicture: "https://picsum.photos/200/300",
-        name: "Kid Inkedslao",
-        relatedListingTitle: "Praesent consequat lectus leo, a gravida dui efficitur sit amet. Integer scelerisque molestie elementum. Sed laoreet vestibulum mauris quis dictum",
-        status: calculateStatusType(Math.floor(Math.random() * 3) + 1)
-    }, {
-        profilePicture: "https://picsum.photos/200/300",
-        name: "Theo Tomhoas",
-        relatedListingTitle: "Praesent consequat lectus leo, a gravida dui efficitur sit amet. Integer scelerisque molestie elementum. Sed laoreet vestibulum mauris quis dictum",
-        status: calculateStatusType(Math.floor(Math.random() * 3) + 1)
-    }, {
-        profilePicture: "https://picsum.photos/200/300",
-        name: "Mikey Smikithy",
-        relatedListingTitle: "Praesent consequat lectus leo, a gravida dui efficitur sit amet. Integer scelerisque molestie elementum. Sed laoreet vestibulum mauris quis dictum",
-        status: calculateStatusType(Math.floor(Math.random() * 3) + 1)
-    }, {
-        profilePicture: "https://picsum.photos/200/300",
-        name: "Timoothy Walkings",
-        relatedListingTitle: "Praesent consequat lectus leo, a gravida dui efficitur sit amet. Integer scelerisque molestie elementum. Sed laoreet vestibulum mauris quis dictum",
-        status: calculateStatusType(Math.floor(Math.random() * 3) + 1)
-    }, {
-        profilePicture: "https://picsum.photos/200/300",
-        name: "Adam Jones",
-        relatedListingTitle: "Praesent consequat lectus leo, a gravida dui efficitur sit amet. Integer scelerisque molestie elementum. Sed laoreet vestibulum mauris quis dictum",
-        status: calculateStatusType(Math.floor(Math.random() * 3) + 1)
-    }, {
-        profilePicture: "https://picsum.photos/200/300",
-        name: "Alex Qualoda",
-        relatedListingTitle: "Praesent consequat lectus leo, a gravida dui efficitur sit amet. Integer scelerisque molestie elementum. Sed laoreet vestibulum mauris quis dictum",
-        status: calculateStatusType(Math.floor(Math.random() * 3) + 1)
-    }, {
-        profilePicture: "https://picsum.photos/200/300",
-        name: "Pochie Notch",
-        relatedListingTitle: "Praesent consequat lectus leo, a gravida dui efficitur sit amet. Integer scelerisque molestie elementum. Sed laoreet vestibulum mauris quis dictum",
-        status: calculateStatusType(Math.floor(Math.random() * 3) + 1)
-    }, {
-        profilePicture: "https://picsum.photos/200/300",
-        name: "Yelawolf Smelodo",
-        relatedListingTitle: "Praesent consequat lectus leo, a gravida dui efficitur sit amet. Integer scelerisque molestie elementum. Sed laoreet vestibulum mauris quis dictum",
-        status: calculateStatusType(Math.floor(Math.random() * 3) + 1)
-    }, {
-        profilePicture: "https://picsum.photos/200/300",
-        name: "Yolodanda Smith",
-        relatedListingTitle: "Praesent consequat lectus leo, a gravida dui efficitur sit amet. Integer scelerisque molestie elementum. Sed laoreet vestibulum mauris quis dictum",
-        status: calculateStatusType(Math.floor(Math.random() * 3) + 1)
-    }]);
+    const [ modalVisible, setModalVisible ] = useState(false);
+    const [ selected, setSelected ] = useState(null);
+
+    const redirectToViewOtherApplicant = (applicant) => {
+        console.log("redirectToViewOtherApplicant applicant", applicant);
+
+        history.push(`/view/individual/application/employer/${applicant.applicantId}`, { applicant });
+    } 
+
+    const renderEachSpecificFile = (file) => {
+        switch (calculateFileType(file.type)) {
+            case "png":
+                return <Media className="img-fluid min-height-applicant-file-display" src={`${process.env.REACT_APP_ASSET_LINK}/${file.link}`} alt="" />;
+                break;
+            case "jpeg":
+                return <Media className="img-fluid min-height-applicant-file-display" src={`${process.env.REACT_APP_ASSET_LINK}/${file.link}`} alt="" />;
+                break;
+            case "jpg":
+                return <Media className="img-fluid min-height-applicant-file-display" src={`${process.env.REACT_APP_ASSET_LINK}/${file.link}`} alt="" />;
+                break;
+            case "mp4":
+                return <ReactPlayer playing={true} loop={true} width={"100%"} height={"100%"} className={"inner-player-applicant"} wrapper={"div"} url={`${process.env.REACT_APP_ASSET_LINK}/${file.link}`} />;
+                break;
+            case "pdf":
+                return <Media className="img-fluid min-height-applicant-file-display" src={require("../../../../../../../../assets/images/cant-display-file-type.png")} alt="" />;
+                break;
+            case "pdf":
+                return <Media className="img-fluid min-height-applicant-file-display" src={require("../../../../../../../../assets/images/cant-display-file-type.png")} alt="" />;
+                break;
+            case "csv":
+                return <Media className="img-fluid min-height-applicant-file-display" src={require("../../../../../../../../assets/images/cant-display-file-type.png")} alt="" />;
+                break;
+            case "xlsx":
+                return <Media className="img-fluid min-height-applicant-file-display" src={require("../../../../../../../../assets/images/cant-display-file-type.png")} alt="" />;
+                break;
+            case "docx":
+                return <Media className="img-fluid min-height-applicant-file-display" src={require("../../../../../../../../assets/images/cant-display-file-type.png")} alt="" />;
+                break;
+            case "video/webm":
+                return <ReactPlayer playing={true} loop={true} width={"100%"} height={"100%"} className={"min-height-applicant-file-display"} wrapper={"div"} url={`${process.env.REACT_APP_ASSET_LINK}/${file.link}`} />;
+                break;
+            default:
+                break;
+        }
+    }
+
+    const renderApplicantArray = (files) => {
+        return (
+            <Fragment>
+                <Slider className={"slider-row-applicant-files-attached"} {...settings}>
+                    {typeof files !== "undefined" && files.length > 0 ? files.map((file, index) => {
+                        return (
+                            <Fragment key={index}>
+                                {renderEachSpecificFile(file)}
+                            </Fragment>
+                        );
+                    }) : null}
+                </Slider>
+            </Fragment>
+        );
+    }
+
+    const renderModal = () => {
+        if (selected !== null) {
+            return (
+                <Fragment>
+                    <Modal className="modal-lg modal-dialog-centered product-modal modal-applicant-data" isOpen={modalVisible}>
+                        <ModalBody>
+                            <ModalHeader toggle={() => setModalVisible(false)}>
+                                <div className="product-box row">
+                                    <Col lg="6" className="product-img">
+                                        <Row>
+                                            {renderApplicantArray(selected.attachedFiles)}
+                                        </Row>
+                                    </Col>
+                                    <Col lg="6" className="product-details  text-left">
+                                    <h4>{selected.applicantName}</h4>
+                                    <div className="product-price">
+                                        Digital/Physical: {selected.physicalOrDigitalOrBoth.label}
+                                        <del>Applied {moment(selected.dateApplied).fromNow()}</del>
+                                    </div>
+                                    <div className="product-view">
+                                        <h6 className="f-w-600">Message To Employer:</h6>
+                                        <p className="mb-0">{selected.messageToEmployer}</p>
+                                        <hr />
+                                        <h6 className="f-w-600">Cover Letter Text:</h6>
+                                        <p className="mb-0">{selected.coverLetterText}</p>
+                                        <hr />
+                                        <h6 className="f-w-600">Technical Hack Approach:</h6>
+                                        <p className="mb-0">{selected.technicalApproachToHack}</p>
+                                    </div>
+                                    <div style={{ marginTop: "27.5px" }} className="product-qnty">
+                                        <h6 className="f-w-600">Redirect to view other users that've applied to this same contract..</h6>
+                                        <Row>
+                                            <Col sm="12" md="6" lg="6" xl="6">
+                                                <Button outline className={"btn-square-secondary text-center"} color="secondary-2x" style={{ width: "100%" }} onClick={() => redirectToViewOtherApplicant(selected)}>View/Redirect To See This Applicant</Button>
+                                            </Col>
+                                        </Row>
+                                    </div>
+                                    </Col>
+                                </div>
+                            </ModalHeader>
+                        </ModalBody>
+                    </Modal>
+                </Fragment>
+            );
+        } else {
+            return null;
+        }
+    }
 
     const redirectToHackersProfile = (hackerID) => {
         console.log("redirectToHackersProfile ran...");
@@ -108,8 +185,36 @@ const LeftBar = ({ applicantData, lastProfileItem, user }) => {
         history.push(`/hacker/profile/individual/view/${hackerID}`);
     }
 
+    useEffect(() => {
+        const config = {
+            params: {
+                applicantId: applicantData.applicantId
+            }
+        };
+        axios.get(`${process.env.REACT_APP_BASE_URL}/gather/applicants/previous/all/contract/app`, config).then((res) => {
+            if (res.data.message === "Successfully gathered previous applications!") {
+                console.log(res.data);
+
+                const { applicants } = res.data;
+
+                setApplicants(applicants);
+            } else {
+                console.log("Err", res.data);
+
+                NotificationManager.error("An unknown error has occurred while attempting to gather 'previous applicants' - please reload the page or contact support if the problem persists!", "An error occurred while attempting to gather applicants (all previous)..", 4750);
+            }
+        }).catch((err) => {
+            console.log(err);
+
+            NotificationManager.error("An unknown error has occurred while attempting to gather 'previous applicants' - please reload the page or contact support if the problem persists!", "An error occurred while attempting to gather applicants (all previous)..", 4750);
+        })
+    }, []);
+
+    console.log("applicants", applicants);
+
     return (
         <Fragment>
+            {renderModal()}
             <Col xl="12">
                 <Card className={"add-shadow-md-custom"}>
                     <CardHeader>
@@ -200,25 +305,29 @@ const LeftBar = ({ applicantData, lastProfileItem, user }) => {
                                 </FormGroup>
                             </Form>
                             {/* social-status different types --- social-online, social-offline, social-busy */}
-                            {typeof previouslyApplied !== "undefined" && previouslyApplied.length > 0 ? previouslyApplied.map((applied, index) => {
+                            {typeof applicants !== "undefined" && applicants.length > 0 ? applicants.map((applicant, index) => {
                                 // return data...
                                 return (
                                     <Fragment key={index}>
                                         <Media>
-                                            <img className="img-50 rounded-circle m-r-15 custom-social-status-picture" src={applied.profilePicture} alt="TenImg" />
-                                            <div className={`custom-social-status-editted social-status ${applied.status}`}></div>
+                                            {renderPicVideoPreviousApplicant(typeof applicant.userData.profilePicsVideos !== "undefined" && applicant.userData.profilePicsVideos.length > 0 ? applicant.userData.profilePicsVideos[applicant.userData.profilePicsVideos.length - 1] : null)}
+                                            <div className={`custom-social-status-editted social-status ${applicant.status}`}></div>
                                             <Media onMouseOver={() => {
                                                 setIndexState(index);
                                             }} className={presetIndex === index ? "selected-hover-custom" : ""} body>
                                                 {index === presetIndex ? <Fragment>
-                                                    <div className="min-filler-height">
+                                                    <div className="min-filler-height centered-both-ways">
                                                         <Button onClick={() => {
                                                             // redirect to appropriate previous listing/job/opportunity
-                                                        }} style={{ width: "100%" }} outline className={"btn-pill-secondary"} color={"secondary-2x"}>View Previously Applied Job/Opportunity</Button>
+                                                            setSelected(applicant);
+                                                            setModalVisible(true);
+                                                        }} style={{ width: "100%" }} outline className={"btn-pill-secondary"} color={"secondary-2x"}>View Applicant Data</Button>
                                                     </div>
                                                 </Fragment> : <Fragment>
                                                     <div className="min-filler-height-noncentered">
-                                                        <span style={{ color: "#a927f9" }} className="f-w-600 d-block custom-name-name">{applied.name}</span><span className="d-block custom-desc-desc">{applied.relatedListingTitle}</span>
+                                                        <span style={{ color: "#a927f9" }} className="f-w-600 d-block custom-name-name">{applicant.applicantName}</span><span className="d-block custom-desc-desc"><strong style={{ textDecorationLine: "underline", color: "#7366ff" }}>Message To Employer</strong>: {applicant.messageToEmployer.slice(0, 100)}{typeof applicant.messageToEmployer !== "undefined" && applicant.messageToEmployer.length >= 100 ? "..." : ""}</span>
+                                                        <hr />
+                                                        <span className="d-block custom-desc-desc"><strong style={{ textDecorationLine: "underline", color: "#7366ff" }}>Cover Letter Text</strong>: {applicant.coverLetterText.slice(0, 75)}{typeof applicant.coverLetterText !== "undefined" && applicant.coverLetterText.length > 75 ? "..." : ""}</span>
                                                     </div>
                                                 </Fragment>}
                                             </Media>

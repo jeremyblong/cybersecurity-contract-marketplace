@@ -1,5 +1,3 @@
-import React, { Fragment } from "react";
-
 
 const courseCategoryOptions = [
     { value: 'spear-phishing-attacks', label: 'Spear Phishing Attacks' },

@@ -64,18 +64,7 @@ const LiveEmployerListingsHelper = ({ userData }) => {
             console.log(err);
         })
     }, []);
-
-    const calculateNumberOfHackers = (numString) => {
-        switch (numString) {
-            case "1-hacker":
-                
-                break;
-        
-            default:
-                break;
-        }
-    }
-
+    
     const calculateFilterType = (listing) => {
         console.log("calculateFilterType listing", listing);
 

@@ -327,56 +327,6 @@ const ManageApplicantsMainHelper = ({ userData }) => {
                                 <li>
                                     <hr />
                                 </li>
-                                <NavItem>
-                                    <span className="main-title">Created LIVE <em>Software</em> Listing's (digital)</span>
-                                </NavItem>
-                                <NavItem className={"customized-nav-item"}>
-                                    <CardBody className="dropdown-basic">
-                                        <Dropdown toggle={() => {}}>
-                                            <div className={"allow-full-height-dropdown"}>
-                                                <Button color={"primary"} className="dropbtn customized-dropdown-btn" >Posted Software Listing's ({[].length}) <span><i className="icofont icofont-arrow-down"></i></span></Button>
-                                                <DropdownMenu id={"custom-dropdown-links"} className="dropdown-content">
-                                                    {[].map((link, index) => {
-                                                        return (
-                                                            <Fragment key={index}>
-                                                                <DropdownItem className={"dropdown-link-custom-header"} header>Job ID - {link}</DropdownItem>
-                                                                <DropdownItem className={"list-group-item custom-listgroup-mapped-keys"} style={{ textDecorationLine: "underline", fontWeight: 450 }} onClick={() => handleSelectedJobChange(link)}>{"View Associated Job Applicant's"}</DropdownItem>
-                                                            </Fragment>
-                                                        );
-                                                    })}
-                                                </DropdownMenu>
-                                            </div>
-                                        </Dropdown>
-                                    </CardBody>
-                                </NavItem>
-                                <li>
-                                    <hr />
-                                </li>
-                                <NavItem>
-                                    <span className="main-title">Created LIVE <em>Hardware</em> Listing's (physical)</span>
-                                </NavItem>
-                                <NavItem className={"customized-nav-item"}>
-                                    <CardBody className="dropdown-basic">
-                                        <Dropdown toggle={() => {}}>
-                                            <div className={"allow-full-height-dropdown"}>
-                                                <Button color={"primary"} className="dropbtn customized-dropdown-btn" >Posted Hardware Listing's ({[].length}) <span><i className="icofont icofont-arrow-down"></i></span></Button>
-                                                <DropdownMenu id={"custom-dropdown-links"} className="dropdown-content">
-                                                    {[].map((link, index) => {
-                                                        return (
-                                                            <Fragment key={index}>
-                                                                <DropdownItem className={"dropdown-link-custom-header"} header>Job ID - {link}</DropdownItem>
-                                                                <DropdownItem className={"list-group-item custom-listgroup-mapped-keys"} style={{ textDecorationLine: "underline", fontWeight: 450 }} onClick={() => handleSelectedJobChange(link)}>{"View Associated Job Applicant's"}</DropdownItem>
-                                                            </Fragment>
-                                                        );
-                                                    })}
-                                                </DropdownMenu>
-                                            </div>
-                                        </Dropdown>
-                                    </CardBody>
-                                </NavItem>
-                                <li>
-                                    <hr />
-                                </li>
                                 <Modal className="fade show modal-bookmark" isOpen={tagModal} toggle={tagToggle} size="lg">
                                 <ModalHeader className="modal-title" toggle={tagToggle}>
                                     {"Create Tag"}

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import Breadcrumb from '../../../../../layout/breadcrumb';
 import { connect } from 'react-redux';
-import { Container, Row, Col, Card, CardHeader, CardBody, Button, ListGroup, Form, FormGroup, Input, Media, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
+import { Container, Row, Col, Card, CardHeader, CardBody, Button, ListGroup, Form, FormGroup, Input, Media } from 'reactstrap';
 import { Grid, List } from 'react-feather';
 import { Link, useHistory } from 'react-router-dom';
 import errorImg from '../../../../../assets/images/search-not-found.png';

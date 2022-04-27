@@ -167,6 +167,20 @@ const Root = (props) =>  {
           render={props => <Component key={props.match.params.id} {...props} />}
         />
       );
+    } else if (path === "/view/individual/tutorial/video/:id") {
+      return (
+        <Route
+          path={"/view/individual/tutorial/video/:id"}
+          render={props => <Component key={props.match.params.id} {...props} />}
+        />
+      );
+    } else if (path === "/view/individual/application/employer/:id") {
+      return (
+        <Route
+          path={"/view/individual/application/employer/:id"}
+          render={props => <Component key={props.match.params.id} {...props} />}
+        />
+      );
     } else {
       if (accountData.accountType === "employers") {
         // employer(s) authenticated acct.

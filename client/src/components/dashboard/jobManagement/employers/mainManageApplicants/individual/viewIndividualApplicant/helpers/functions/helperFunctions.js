@@ -77,9 +77,51 @@ const calculateFileType = (type) => {
             break;
     }
 };
-// <Media body className="rounded-circle" src={profilePicture} alt="" />
+
+const renderReviewPicVideoHelper = (last) => {
+    // check conditional item to render whether video or image
+
+    console.log("last", last);
+
+    if (last !== null) {
+        if (last.type.includes("video")) {
+            // video logic
+            return (
+                <Media className="img-50 img-fluid m-r-20 rounded-circle add-harsh-border-radius">
+                    <ReactPlayer playing={true} loop={true} muted={true} width={"100%"} className={"rounded-circle image-radius m-r-15"} wrapper={"div"} url={`${process.env.REACT_APP_ASSET_LINK}/${last.link}`} />
+                </Media>
+            );
+        } else {
+            // image logic
+            return <Media className="img-50 img-fluid m-r-20 rounded-circle add-harsh-border-radius" alt="" src={`${process.env.REACT_APP_ASSET_LINK}/${last.link}`} />;
+        }  
+    } else {
+        return <Media className="img-50 img-fluid m-r-20 rounded-circle add-harsh-border-radius" alt="" src={process.env.REACT_APP_PLACEHOLDER_IMAGE} />
+    }
+}
+
+const renderPicVideoPreviousApplicant = (last) => {
+    if (last !== null) {
+        if (last.type.includes("video")) {
+            // video logic
+            return (
+                <Media className="img-50 rounded-circle m-r-15 custom-social-status-picture">
+                    <ReactPlayer playing={true} loop={true} muted={true} width={"100%"} className={"rounded-circle image-radius m-r-15"} wrapper={"div"} url={`${process.env.REACT_APP_ASSET_LINK}/${last.link}`} />
+                </Media>
+            );
+        } else {
+            // image logic
+            return <img className="img-50 rounded-circle m-r-15 custom-social-status-picture" src={`${process.env.REACT_APP_ASSET_LINK}/${last.link}`} alt="TenImg" />
+        }  
+    } else {
+        return <img className="img-50 rounded-circle m-r-15 custom-social-status-picture" src={process.env.REACT_APP_PLACEHOLDER_IMAGE} alt="TenImg" />
+    }
+};
+
 
 export default {
     renderPictureOrVideoProfilePic,
-    calculateFileType
+    calculateFileType,
+    renderReviewPicVideoHelper,
+    renderPicVideoPreviousApplicant 
 }

@@ -11,6 +11,7 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 import moment from "moment";
 import StarRatings from 'react-star-ratings';
 import { useHistory } from "react-router-dom";
+import helpers from "../helpers/functions/helperFunctions.js";
 
 const settings = {
     dots: true,
@@ -22,6 +23,9 @@ const settings = {
 const randomDate = (start, end) => {
     return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 }
+
+
+const { renderReviewPicVideoHelper } = helpers;
 
 
 const TimelineTab = ({ applicantData, calculateFileType, renderPictureOrVideoProfilePic, lastProfileItem, user }) => {
@@ -102,6 +106,17 @@ const TimelineTab = ({ applicantData, calculateFileType, renderPictureOrVideoPro
                 return false;
                 break;
         };
+    }
+
+    const calculateRatingStars = (ratings) => {
+        let sum = 0;
+
+        for (const key in ratings) {
+            const rating = ratings[key];
+            sum += rating;
+        }
+
+        return Math.round((sum / Object.keys(ratings).length));
     }
 
     const bothBarsProps = {
@@ -251,18 +266,18 @@ const TimelineTab = ({ applicantData, calculateFileType, renderPictureOrVideoPro
                                     <hr />
                                     <div className="social-chat">
                                         {/* reviewText, starRating, reviewer, systemDate, date, picture */}
-                                        {typeof reviews !== "undefined" && reviews.length > 0 ? reviews.slice(0, 4).map((review, index) => {
+                                        {typeof user.reviews !== "undefined" && user.reviews.length > 0 ? user.reviews.map((review, index) => {
                                             return (
                                                 <Fragment key={index}>
                                                     <div>
                                                         <Media>
-                                                            <Media className="img-50 img-fluid m-r-20 rounded-circle add-harsh-border-radius" alt="" src={review.picture} />
+                                                            {renderReviewPicVideoHelper(review.reviewerPicOrVideo)}
                                                             <Media className={"your-msg your-msg-custom-wrapper"} body>
-                                                                <span className="f-w-600">{review.reviewer} <span id={"top-right-absolute-position"}>Reviewed about <strong style={{ color: "#f73164" }}>{moment(review.systemDate).fromNow()}</strong></span></span>
+                                                                <span className="f-w-600">{review.reviewerName} <span id={"top-right-absolute-position"}>Reviewed about <strong style={{ color: "#f73164" }}>{moment(review.date).fromNow()}</strong></span></span>
                                                                 <p>{review.reviewText}</p>
                                                                 <hr />
                                                                 <StarRatings
-                                                                    rating={review.starRating}
+                                                                    rating={calculateRatingStars(review.rating)}
                                                                     starRatedColor={"#f73164"}
                                                                     numberOfStars={10}
                                                                     starDimension={"75px"}

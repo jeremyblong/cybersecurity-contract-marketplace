@@ -290,6 +290,11 @@ app.use("/submit/comment/sub/reply/tutorial/video/content/response", require("./
 app.use("/register/user/beta/testing/new", require("./routes/shared/betaTesting/addNewBetaUser/addNewUser.js"));
 app.use("/gather/beta/testers/default", require("./routes/shared/betaTesting/gatherTesters/gatherTestersByAccountType.js"));
 app.use("/send/invite/beta/user/testing", require("./routes/shared/betaTesting/inviteUser/inviteUserToBeta.js"));
+app.use("/mark/view/tutorial/course/unique", require("./routes/shared/learningCoursesForSale/tutorialRelated/markViewUnique/markIndividualView.js"));
+app.use("/send/email/password/recovery/attempt", require("./routes/authentication/login/forgotPassword/requestPasswordRequestEmail.js"));
+app.use("/check/code/recovery/password/reset", require("./routes/authentication/login/forgotPassword/submitCheckCode/submitCodeAndCheckValid.js"));
+app.use("/submit/password/change/relevant/email", require("./routes/authentication/login/forgotPassword/submitNewPasswordField/checkAndSubmitNewPassword.js"));
+app.use("/gather/applicants/previous/all/contract/app", require("./routes/employers/employerListings/hireApplicant/gatherOtherApplicants/gatherAllApplicantDataSpecific.js"));
 
 
 

@@ -52,14 +52,14 @@ router.post("/", (req, resppppp, next) => {
                             authyId: user.authyId
                         }
 
-                        axios.post(`${config.get("baseServerURL")}/twilio/send/code`, configuration).then((responseeeee) => {
-                            if (responseeeee.data.message === "Successfully sent code!") {
-                                console.log("successfully sent message to cell phone!");
-
-                                if (((trimLowercaseIdentifier === user.username) || (trimLowercaseIdentifier === user.email)) && (password === decrypted)) {
+                        if (((trimLowercaseIdentifier === user.username) || (trimLowercaseIdentifier === user.email)) && (password === decrypted)) {
             
+                            axios.post(`${config.get("baseServerURL")}/twilio/send/code`, configuration).then((responseeeee) => {
+                                if (responseeeee.data.message === "Successfully sent code!") {
+                                    console.log("successfully sent message to cell phone!");
+    
                                     const token = getToken({ _id: user._id });
-                    
+                        
                                     const refreshToken = getRefreshToken({ _id: user._id });
                     
                                     user.refreshToken.push({ refreshToken, _id: new ObjectID() });
@@ -92,26 +92,26 @@ router.post("/", (req, resppppp, next) => {
                                         }
                                     })
                                 } else {
+                                    console.log("Failed to send code to phone/cell-device...", responseeeee.data);
+    
                                     resppppp.json({
-                                        message: "User could NOT be authenticated - make sure you're using a valid email and password combination."
+                                        message: "User could NOT be authenticated - make sure you're using a valid email and password combination.",
+                                        err: errrrrrror
                                     })
                                 }
-                            } else {
-                                console.log("Failed to send code to phone/cell-device...", responseeeee.data);
-
+                            }).catch((errrrrrror) => {
+                                console.log("errrrrrror", errrrrrror);
+    
                                 resppppp.json({
                                     message: "User could NOT be authenticated - make sure you're using a valid email and password combination.",
                                     err: errrrrrror
                                 })
-                            }
-                        }).catch((errrrrrror) => {
-                            console.log("errrrrrror", errrrrrror);
-
-                            resppppp.json({
-                                message: "User could NOT be authenticated - make sure you're using a valid email and password combination.",
-                                err: errrrrrror
                             })
-                        })
+                        } else {
+                            resppppp.json({
+                                message: "User could NOT be authenticated - make sure you're using a valid email and password combination."
+                            })
+                        }
                     }
                 }).catch((err) => {
                     console.log(err);

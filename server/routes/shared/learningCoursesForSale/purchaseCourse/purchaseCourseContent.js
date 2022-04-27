@@ -10,6 +10,8 @@ router.post("/", async (req, resppppp, next) => {
     
     const { signedInUserID, signedinAccountType, price, id, selectedCard } = req.body;
 
+    const updatedPrice = Number(Math.floor(price));
+
     const collection = Connection.db.db("db").collection(signedinAccountType);
 
     console.log("req", req.body);
@@ -44,9 +46,9 @@ router.post("/", async (req, resppppp, next) => {
         
                         const currentBal = customer.balance;
         
-                        if (currentBal >= price) {
+                        if (currentBal >= updatedPrice) {
                             await stripe.paymentIntents.create({
-                                amount: price,
+                                amount: updatedPrice,
                                 customer: user.stripeAccountDetails.id,
                                 currency: 'usd',
                                 payment_method: selectedCard.id,
@@ -54,7 +56,7 @@ router.post("/", async (req, resppppp, next) => {
                                 confirm: true,
                                 transfer_data: {
                                     destination: hackerResults.stripeAccountDetails.id,
-                                    amount: Number((price * config.get("percentageCut"))).toFixed(0)
+                                    amount: Number((updatedPrice * config.get("percentageCut"))).toFixed(0)
                                 }
                             }, (err, charge) => {
                                 if (err) {
@@ -112,10 +114,10 @@ router.post("/", async (req, resppppp, next) => {
                             if (bal.currency === "usd") {
                                 const currentBal = bal.amount;
         
-                                if (currentBal >= price) {
+                                if (currentBal >= updatedPrice) {
                                     if (user.stripeAccountVerified === true) {
                                         const paymentIntention = await await stripe.charges.create({
-                                            amount: price,
+                                            amount: updatedPrice,
                                             currency: 'usd',
                                             description: `You've purchased 'course-content' on ${config.get("applicationName")} and your data/course is NOW available for downloading..`,
                                             source: user.stripeAccountDetails.id
@@ -126,7 +128,7 @@ router.post("/", async (req, resppppp, next) => {
                                             // changes/data goes here..
 
                                             const transfer = await stripe.transfers.create({
-                                                amount: Number((price * config.get("percentageCut"))).toFixed(0),
+                                                amount: Number((updatedPrice * config.get("percentageCut"))).toFixed(0),
                                                 currency: 'usd',
                                                 destination: hackerResults.stripeAccountDetails.id
                                             });

@@ -10,8 +10,13 @@
     max-width: 100%;
     max-height: 100%;
 }
+.tutorial-video-player-img {
+    max-width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+}
 .scrollable-y-tutorials {
-    max-height: 125vh;
+    max-height: 237vh;
     overflow-y: scroll;
 }
 .muted-text-color {
@@ -28,4 +33,23 @@
 .height-auto-modal-tutorial {
     min-height: 37.5vh;
     margin: 25px;
+}
+.minimum-height-hovered {
+    min-height: 50px;
+}
+.spacer-card-tutorial {
+    padding: 7.5px;
+}
+.emphisized-view-more-subcomments {
+    margin-left: 75px;
+    margin-bottom: 7.5px;
+    text-decoration-line: underline;
+    margin-top: 7.5px;
+}
+.emphisized-view-more-subcomments:hover {
+    margin-left: 75px;
+    margin-bottom: 7.5px;
+    color: #f73164;
+    text-decoration-line: underline;
+    margin-top: 7.5px;
 }

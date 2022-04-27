@@ -5,7 +5,7 @@ import Breadcrumb from '../../../../../layout/breadcrumb';
 import axios from "axios";
 import { NotificationManager } from "react-notifications";
 import _ from "lodash";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import moment from "moment";
 import ReactPlayer from 'react-player';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
@@ -15,9 +15,13 @@ import io from 'socket.io-client';
 import Confetti from 'react-confetti';
 import helpers from "./helpers/helpers.js";
 import LeaveCommentTutorialVideoHelper from "./helpers/sheets/comment.js";
+import PaginationGeneralHelper from "../../../universal/pagination/miscMainPagination.js";
+
 
 const { renderProfilePicVideo } = helpers;
 
+
+const itemsPerPage = 5;
 
 const newSocket = io(process.env.REACT_APP_BASE_URL);
 
@@ -34,6 +38,8 @@ const getWindowDimensions = () => {
 }
 
 const ViewIndividualTutorialVideoHelper = ({ userData }) => {
+
+    const history = useHistory();
 
     const { id } = useParams();
 
@@ -54,6 +60,26 @@ const ViewIndividualTutorialVideoHelper = ({ userData }) => {
     const [ socket, setSocket ] = useState(null);
     const [ confettiShow, showConfettiEffect ] = useState(false);
     const [ timer, setTimerData ] = useState(null);
+    const [ currentlySelected, setCurrentlySelected ] = useState(null);
+    const [ permanantData, setPermanantData ] = useState([]);
+    const [ currentPage, setCurrentPage ] = useState(0);
+    const [ pageCount, setPageCount ] = useState(0);
+    const [ itemOffset, setItemOffset ] = useState(0);
+
+    useEffect(() => {
+
+        const endOffset = itemOffset + itemsPerPage;
+
+        setPageCount(Math.ceil(permanantData.length / itemsPerPage));
+
+        setTutorial(prevState => {
+            return {
+                ...prevState,
+                comments: permanantData.slice(itemOffset, endOffset)
+            }
+        });
+
+    }, [itemOffset, itemsPerPage]);
 
     useEffect(() => {
         setSocket(newSocket);
@@ -158,8 +184,73 @@ const ViewIndividualTutorialVideoHelper = ({ userData }) => {
 
                 const { tutorial } = res.data;
 
-                setTutorial(tutorial);
-                setReady(true);
+                const configgggg = {
+                    tutorialID: id,
+                    viewerID: userData.uniqueId,
+                    viewingUserAccountType: userData.accountType,
+                    viewingUserFullName: `${userData.firstName} ${userData.lastName}`,
+                    viewingUserLastProfilePicVideo: typeof userData.profilePicsVideos !== "undefined" && userData.profilePicsVideos.length > 0 ? userData.profilePicsVideos[userData.profilePicsVideos.length - 1] : null,
+                    viewerMemberSince: userData.registrationDate
+                };
+        
+                axios.post(`${process.env.REACT_APP_BASE_URL}/mark/view/tutorial/course/unique`, configgggg).then((res) => {
+                    if (res.data.message === "Successfully marked view on tutorial!") {
+                        console.log(res.data);
+        
+                        const { views } = res.data;
+
+                        tutorial.totalViews = views;
+                        // set page count to interate thru
+                        setPageCount(Math.ceil(tutorial.comments.length / itemsPerPage));
+                        // calculate offset
+                        const endOffset = itemOffset + itemsPerPage;
+                        // set looping/permanant data to iterate thru (pagination)
+                        setPermanantData(tutorial.comments);
+                        // set current tutorial data 
+                        setTutorial({
+                            ...tutorial,
+                            comments: tutorial.comments.slice(itemOffset, endOffset)
+                        });
+                        // awknowledge readiness and show data..!
+                        setReady(true);
+                    } else {
+                        console.log("Err", res.data);
+
+                        // set page count to interate thru
+                        setPageCount(Math.ceil(tutorial.comments.length / itemsPerPage));
+                        // calculate offset
+                        const endOffset = itemOffset + itemsPerPage;
+                        // set looping/permanant data to iterate thru (pagination)
+                        setPermanantData(tutorial.comments);
+                        // set current tutorial data 
+                        setTutorial({
+                            ...tutorial,
+                            comments: tutorial.comments.slice(itemOffset, endOffset)
+                        });
+                        // awknowledge readiness and show data..!
+                        setReady(true);
+        
+                        NotificationManager.error("We've encountered an error while attempting to gather the related tutorial videos/content, please reload this page or contact support if the problem persists!", "Unknown error occurred while processing request!", 4750);
+                    }
+                }).catch((err) => {
+                    console.log(err);
+        
+                    // set page count to interate thru
+                    setPageCount(Math.ceil(tutorial.comments.length / itemsPerPage));
+                    // calculate offset
+                    const endOffset = itemOffset + itemsPerPage;
+                    // set looping/permanant data to iterate thru (pagination)
+                    setPermanantData(tutorial.comments);
+                    // set current tutorial data 
+                    setTutorial({
+                        ...tutorial,
+                        comments: tutorial.comments.slice(itemOffset, endOffset)
+                    });
+                    // awknowledge readiness and show data..!
+                    setReady(true);
+
+                    NotificationManager.error("We've encountered an error while attempting to gather the related tutorial videos/content, please reload this page or contact support if the problem persists!", "Unknown error occurred while processing request!", 4750);
+                })
             } else {
                 console.log("Err", res.data);
 
@@ -309,6 +400,7 @@ const ViewIndividualTutorialVideoHelper = ({ userData }) => {
                 const { tutorial } = res.data;
 
                 setTutorial(tutorial);
+                setCommentText("");
 
             } else {
                 console.log("Err", res.data);
@@ -445,7 +537,7 @@ const ViewIndividualTutorialVideoHelper = ({ userData }) => {
                                             </Media>
                                         </li>
                                         <ul>
-                                            {typeof comment.subComments !== "undefined" && comment.subComments.length > 0 ? comment.subComments.map((subcomment, index) => {
+                                            {typeof comment.subComments !== "undefined" && comment.subComments.length > 0 ? comment.subComments.slice(0, 3).map((subcomment, index) => {
                                                 return (
                                                     <Fragment key={index}>
                                                         <li>
@@ -470,20 +562,33 @@ const ViewIndividualTutorialVideoHelper = ({ userData }) => {
                                                     </Fragment>
                                                 );
                                             }) : null}
+                                            {typeof comment.subComments !== "undefined" && comment.subComments.length > 3 ? <Fragment>
+                                                <li>
+                                                    <Media className="align-self-center">
+                                                        <a className={"text-center emphisized-view-more-subcomments"} onClick={() => {}}>View More Sub-Comment's...</a>
+                                                    </Media>
+                                                </li>
+                                            </Fragment> : null}
                                         </ul>
                                     </Fragment>
                                 );
                             }) : null}
                         </ul>
+                        <Row>
+                            <PaginationGeneralHelper itemsPerPage={itemsPerPage} loopingData={permanantData} currentPage={currentPage} pageCount={pageCount} setItemOffset={setItemOffset} setCurrentPage={setCurrentPage} />
+                        </Row>
                     </section>
                 </Row>
             </Fragment>
         );
     }
 
+    const redirectToIndividualTutorial = (element) => {
+        history.push(`/view/individual/tutorial/video/${element.id}`);
+    }
     console.log("tutorial", tutorial);
     
-    const { height, width } = useWindowDimensions();
+    const { width } = useWindowDimensions();
 
     return (
         <Fragment>
@@ -514,10 +619,10 @@ const ViewIndividualTutorialVideoHelper = ({ userData }) => {
                                 {tutorialListReady === true && typeof tutorialList !== "undefined" && tutorialList.length > 0 ? tutorialList.map((element, index) => {
                                     if (_.has(element, "mainData") && _.has(element.mainData, "courseContent")) {
                                         return (
-                                            <div key={index}>
+                                            <Card className='shadow spacer-card-tutorial' onMouseEnter={() => setCurrentlySelected(element)} key={index}>
                                                 <Col className='custom-card-chunk-tutorial-individual' xl="3" sm="12" lg="3" md="3">
                                                     <Row>
-                                                        <Col sm="12" md="5" lg="5" xl="5">
+                                                        <Col sm="12" md="12" lg="12" xl="12">
                                                             <div className="faq-image product-img">
                                                                 <video 
                                                                     onMouseOver={event => {
@@ -557,34 +662,40 @@ const ViewIndividualTutorialVideoHelper = ({ userData }) => {
                                                                 </video>
                                                             </div>
                                                         </Col>
-                                                        <Col sm="12" md="7" lg="7" xl="7">
+                                                    </Row>
+                                                    <Row>
+                                                        <Col sm="12" md="12" lg="12" xl="12">
                                                             <h6>{element.mainData.videoTitle.slice(0, 60)}{typeof element.mainData.videoTitle !== "undefined" && element.mainData.videoTitle.length >= 60 ? "..." : ""}</h6>
                                                             <hr />
                                                             <p className={'muted-text-color'}>{element.posterName.slice(0, 14)}{typeof element.posterName !== "undefined" && element.posterName.length >= 14 ? "..." : ""}</p>
                                                             <p className={"muted-text-color"}>{element.totalViews} Views - {moment(element.date).fromNow()}</p>
                                                         </Col>
                                                     </Row>
+                                                    {currentlySelected !== null && currentlySelected.id === element.id ? <Fragment>
+                                                        <Row>
+                                                            <Col sm="12" md="12" lg="12" xl="12">
+                                                                <div className="faq-image product-img minimum-height-hovered centered-both-ways">
+                                                                    <Button onClick={() => redirectToIndividualTutorial(element)} className={"btn-square-primary"} color={"primary"} style={{ width: "100%" }}>Redirect & View!</Button>
+                                                                </div>
+                                                            </Col>
+                                                        </Row>
+                                                    </Fragment> : null} 
                                                 </Col>
-                                            </div>
+                                            </Card>
                                         );
                                     } else {
                                         return (
-                                            <div key={index}>
+                                            <Card className='shadow spacer-card-tutorial' key={index}>
                                                 <Col className='custom-card-chunk-tutorial-individual' xl="3" sm="12" lg="3" md="3">
                                                     <Row>
-                                                        <Col sm="12" md="5" lg="5" xl="5">
+                                                        <Col sm="12" md="12" lg="12" xl="12">
                                                             <div className="faq-image product-img">
-                                                                <video 
-                                                                    onMouseOver={event => event.target.play()}
-                                                                    onMouseOut={event => event.target.pause()} 
-                                                                    className={"tutorial-video-player"} 
-                                                                    key={index}
-                                                                >
-                                                                    <source src={require("../../../../../assets/video/hacking-1.mp4")} />
-                                                                </video>
+                                                                <img src={require("../../../../../assets/images/boxbg.jpg")} className={"tutorial-video-player-img"} />
                                                             </div>
                                                         </Col>
-                                                        <Col sm="12" md="7" lg="7" xl="7">
+                                                    </Row>
+                                                    <Row>
+                                                        <Col sm="12" md="12" lg="12" xl="12">
                                                             <h6>{element.title.slice(0, 60)}{typeof element.title !== "undefined" && element.title.length >= 60 ? "..." : ""}</h6>
                                                             <hr />
                                                             <p className={'muted-text-color'}>{element.name.slice(0, 14)}{typeof element.name !== "undefined" && element.name.length >= 14 ? "..." : ""}</p>
@@ -592,7 +703,7 @@ const ViewIndividualTutorialVideoHelper = ({ userData }) => {
                                                         </Col>
                                                     </Row>
                                                 </Col>
-                                            </div>
+                                            </Card>
                                         );
                                     }
                                 }) : null}
