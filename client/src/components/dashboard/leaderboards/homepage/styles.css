@@ -1,0 +1,5 @@
+#full-stretch-table  {
+    min-width: 100% !important;
+    background-color: #f0f0f0 !important;
+    border: 1.25px solid black !important;
+}

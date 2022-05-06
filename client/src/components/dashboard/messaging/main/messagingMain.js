@@ -1,12 +1,10 @@
 import React,{useState,useEffect, Fragment} from 'react';
 import Breadcrumb from '../../../../layout/breadcrumb'
-import { Container, Row, Col, Card, CardBody, Media, Form, FormGroup, Input, Label, InputGroup, InputGroupAddon, Button, Nav, NavItem, NavLink, TabPane, TabContent } from 'reactstrap'
-import four from '../../../../assets/images/user/4.jpg';
-import one from '../../../../assets/images/user/1.jpg';
+import { Container, Row, Col, Card, CardBody, Media, Form, FormGroup, Input, Label, InputGroup, InputGroupAddon, Button, TabPane, TabContent } from 'reactstrap'
 import two from '../../../../assets/images/user/2.png';
 import errorImg from '../../../../assets/images/search-not-found.png';
 import {Picker} from 'emoji-mart'
-import { CALL, STATUS, PROFILE, EricaHughes, VincentPorter, Active, ChataApp_p1, ChataApp_p2, Following, Follower, MarkJecno, Send } from '../../../../constant';
+import { Active, ChataApp_p1, ChataApp_p2, Following, Follower, MarkJecno, Send } from '../../../../constant';
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 import "./styles.css";
@@ -444,7 +442,7 @@ const MessagingMainHelper = ({ SBData, userData }) =>  {
                         </div> : null}
                       </Col>
                       <Col className={`pl-0 chat-menu ${menuToggle ? 'show' : ''}`}>
-                            <Nav tabs className="nav  border-tab nav-primary">
+                            {/* <Nav tabs className="nav  border-tab nav-primary">
                                 <NavItem  id="myTab" role="tablist">
                                     <NavLink tag="a" href={null} className={activeTab === '1' ? 'active' : ''} onClick={() => setActiveTab('1')}>
                                         {CALL}
@@ -460,10 +458,10 @@ const MessagingMainHelper = ({ SBData, userData }) =>  {
                                         {PROFILE}
                                     </NavLink>
                                 </NavItem>
-                            </Nav>
+                            </Nav> */}
                             <TabContent activeTab={activeTab}>
                                 <TabPane tabId="1">
-                                    <div className="people-list">
+                                    {/* <div className="people-list">
                                         <ul className="list digits custom-scrollbar">
                                             <li className="clearfix"><Media className="rounded-circle user-image" src={four} alt="" />
                                                 <div className="about">
@@ -493,7 +491,7 @@ const MessagingMainHelper = ({ SBData, userData }) =>  {
                                                 </li>
                                             )}
                                         </ul>
-                                    </div>
+                                    </div> */}
                                 </TabPane>
                                 <TabPane tabId="2">
                                     <div className="people-list">

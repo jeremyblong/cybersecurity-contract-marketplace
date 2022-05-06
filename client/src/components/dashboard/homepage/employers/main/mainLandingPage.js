@@ -1,14 +1,13 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import Breadcrumb from '../../../../../layout/breadcrumb';
 import { Container, Row, Col, Card, CardHeader, CardBody, ListGroup, ListGroupItem, CardFooter, Button } from 'reactstrap'
-import DatePicker from "react-datepicker";
 import ApexCharts from 'react-apexcharts'
 import ChartistChart from 'react-chartist';
 import Knob from "knob";
-import { Currentlysale, Marketvalue } from '../../chartsData/apex-charts-data'
+import otherData from '../../chartsData/apex-charts-data'
 import { smallchart1data, smallchart1option, smallchart2data, smallchart2option, smallchart3data, smallchart3option, smallchart4data, smallchart4option } from '../../chartsData/chartist-charts-data'
-import { Send, Clock } from 'react-feather';
-import {Dashboard,Summary,Notification,MarketValue,Chat,New,Tomorrow,Yesterday,Daily,Weekly,Monthly,Store,Online,ReferralEarning,CashBalance,SalesForcasting,ProductOrderValue,Yearly,Today,Year,Month,Day,RightNow} from '../../../../../constant'
+import { Clock } from 'react-feather';
+import { Summary, Notification, New, Tomorrow, Yesterday, Daily, Weekly, Monthly, Store, Online, ReferralEarning, CashBalance, SalesForcasting, ProductOrderValue, Yearly, Today, Year, Month, Day, RightNow } from '../../../../../constant'
 import axios from "axios";
 import { connect } from "react-redux";
 import { authentication } from "../../../../../redux/actions/authentication/auth.js";
@@ -22,6 +21,14 @@ import moment from "moment";
 import ReactMapboxGl, { Marker } from 'react-mapbox-gl';
 
 
+const {
+  graphEmployerHackerInformation,
+  Riskfactorchart,
+  totalearning,
+  MarketValueOption, 
+  Monthlysales, 
+  columnCharts
+} = otherData;
 
 const { renderProfilePicVideoMainPageImg } = helpers;
 
@@ -46,13 +53,18 @@ const MainLandingPageEmployerHelper = ({ authentication, userData }) => {
   const curHr = today.getHours()
   const curMi = today.getMinutes()
   const [meridiem,setMeridiem] = useState("AM")
-  // eslint-disable-next-line
   const [date, setDate] = useState({ date: new Date() });
-  // eslint-disable-next-line
+  const [ total, setTotal ] = useState(0);
+  const [ pending, setPending ] = useState(0);
+  const [ chartDataReady, setChartDataReady ] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
   const handleChange = date => {
     setDate(date)
   };
+  const [ transactionalHistory, setTransactionalHistory ] = useState({
+    approved: [],
+    pending: []
+  })
 
 
   useEffect(() => {
@@ -81,7 +93,83 @@ const MainLandingPageEmployerHelper = ({ authentication, userData }) => {
   
         NotificationManager.warning("An unknown error has occurred while attempting to fetch your related balance related information, Contact support if the problem persists!", "Unknown error has occurred.", 4750);
     })  
+  }, []);
+
+  useEffect(() => {
+    const config = {
+      params: {
+          uniqueId: userData.uniqueId,
+          accountType: userData.accountType
+      }
+    }
+    axios.get(`${process.env.REACT_APP_BASE_URL}/gather/all/transactions/stripe/employer`, config).then((res) => {
+        if (res.data.message === "Gathered previous transactions!") {
+            console.log("res.data transactions ---- : ", res.data);
+
+            const { transactions } = res.data;
+
+            const { data } = transactions;
+
+            const pendingTransactions = [];
+            const approvedTransactions = [];
+
+            const customPromise = new Promise((resolve, reject) => {
+              let total = 0;
+              let pending = 0;
+
+              for (let index = 0; index < data.length; index++) {
+                const transaction = data[index];
+                
+                if (transaction.status === "requires_confirmation") {
+
+                  pending += Number(Math.round(transaction.amount / 100));
+
+                  pendingTransactions.push({ x: moment(transaction.created * 1000).format("MM/DD/YYYY"), y: Number(Math.round(transaction.amount / 100)) });
+                } else if (transaction.status === "succeeded") {
+
+                  total += Number(Math.round(transaction.amount / 100));
+
+                  approvedTransactions.push({ x: moment(transaction.created * 1000).format("MM/DD/YYYY"), y: Number(Math.round(transaction.amount / 100)) });
+                } else {
+                  console.log("neither processed...", transaction);
+                }
+
+                if ((data.length - 1) === index) {
+                  
+                  const combined = {
+                    pendingTransactions,
+                    approvedTransactions,
+                    total,
+                    pending
+                  };
+
+                  resolve(combined);
+                }
+              }
+            })
+
+            customPromise.then((passedData) => {
+              console.log("passedDataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", passedData);
+
+              setTransactionalHistory(passedData);
+              setTotal(passedData.total);
+              setPending(passedData.pending);
+              setChartDataReady(true);
+            })
+        } else {
+            console.log("err", res.data);
+            
+            NotificationManager.warning("An unknown error has occurred while attempting to fetch your previously completed transactional data, Contact support if the problem persists!", "Unknown error has occurred.", 4750);
+        }
+    }).catch((err) => {
+        console.log(err);
+  
+        NotificationManager.warning("An unknown error has occurred while attempting to fetch your previously completed transactional data, Contact support if the problem persists!", "Unknown error has occurred.", 4750);
+    })  
   }, [])
+
+  console.log("transactionalHistory", transactionalHistory);
+
   useEffect(() => {
 
     if (userData.accountType === "hackers") {
@@ -277,21 +365,21 @@ const MainLandingPageEmployerHelper = ({ authentication, userData }) => {
                   <Col xl="3" className="earning-content p-0">
                     <Row className="m-0 chart-left">
                       <Col xl="12" className="p-0 left_side_earning">
-                        <h5>{Dashboard}</h5>
-                        <p className="font-roboto">{"Overview of last month"}</p>
+                        <h5>${Number(total).toFixed(2)} </h5>
+                        <p className="font-roboto">Total Earned To-Date</p>
                       </Col>
                       <Col xl="12" className="p-0 left_side_earning">
-                        <h5>{"$4055.56"} </h5>
-                        <p className="font-roboto">{"This Month Earning"}</p>
+                        <h5>${Number(pending).toFixed(2)} </h5>
+                        <p className="font-roboto">Pending Funds/Funding (Unconfirmed)</p>
                       </Col>
-                      <Col xl="12" className="p-0 left_side_earning">
+                      {/* <Col xl="12" className="p-0 left_side_earning">
                         <h5>{"$1004.11"}</h5>
                         <p className="font-roboto">{"This Month Profit"}</p>
                       </Col>
                       <Col xl="12" className="p-0 left_side_earning">
                         <h5>{"90%"}</h5>
                         <p className="font-roboto">{"This Month Sale"}</p>
-                      </Col>
+                      </Col> */}
                       <Col xl="12" className="p-0 left-btn"><a className="btn btn-gradient" href="#javascript">{Summary}</a></Col>
                     </Row>
                   </Col>
@@ -311,8 +399,8 @@ const MainLandingPageEmployerHelper = ({ authentication, userData }) => {
                         <Col xl="4" md="4" sm="4" className="col-12 p-0 justify-content-end">
                           <div className="inner-top-right">
                             <ul className="d-flex list-unstyled justify-content-end">
-                              <li>{Online}</li>
-                              <li>{Store}</li>
+                              <li style={{ marginRight: "17.5px" }}>Pending</li>
+                              <li>Completed</li>
                             </ul>
                           </div>
                         </Col>
@@ -321,32 +409,38 @@ const MainLandingPageEmployerHelper = ({ authentication, userData }) => {
                         <Col xl="12">
                           <CardBody className="p-0">
                             <div className="current-sale-container">
-                              <ApexCharts id="chart-currently" options={Currentlysale.options} series={Currentlysale.series} type='area' height={240} />
+                              {chartDataReady === true ? <ApexCharts id="chart-currently" options={graphEmployerHackerInformation(null, null, "employers").options} series={graphEmployerHackerInformation(transactionalHistory.approvedTransactions, transactionalHistory.pendingTransactions, "employers").series} type='area' height={240} /> : <Fragment>
+                                <SkeletonTheme baseColor="#c9c9c9" highlightColor="#444">
+                                    <p>
+                                        <Skeleton count={15} />
+                                    </p>
+                                </SkeletonTheme>
+                              </Fragment>}
                             </div>
                           </CardBody>
                         </Col>
                       </Row>
                     </div>
                     <Row className="border-top m-0">
-                      <Col xl="4" md="6" sm="6" className="pl-0">
+                      <Col xl="6" md="6" sm="6" className="pl-0">
                         <div className="media p-0">
                           <div className="media-left"><i className="icofont icofont-crown"></i></div>
                           <div className="media-body">
-                            <h6>{ReferralEarning}</h6>
-                            <p>{"$5,000.20"}</p>
+                            <h6>Total Earned To-Date</h6>
+                            <p>${Number(total).toFixed(2)}</p>
                           </div>
                         </div>
                       </Col>
-                      <Col xl="4" md="6" sm="6">
+                      <Col xl="6" md="6" sm="6">
                         <div className="media p-0">
                           <div className="media-left bg-secondary"><i className="icofont icofont-heart-alt"></i></div>
                           <div className="media-body">
-                            <h6>{CashBalance}</h6>
-                            <p>{"$2,657.21"}</p>
+                            <h6>Pending Funds/Funding (Unconfirmed)</h6>
+                            <p>${Number(pending).toFixed(2)}</p>
                           </div>
                         </div>
                       </Col>
-                      <Col xl="4" md="12" className="pr-0">
+                      {/* <Col xl="4" md="12" className="pr-0">
                         <div className="media p-0">
                           <div className="media-left"><i className="icofont icofont-cur-dollar"></i></div>
                           <div className="media-body">
@@ -354,7 +448,7 @@ const MainLandingPageEmployerHelper = ({ authentication, userData }) => {
                             <p>{"$9,478.50"}</p>
                           </div>
                         </div>
-                      </Col>
+                      </Col> */}
                     </Row>
                   </Col>
                 </Row>
@@ -583,18 +677,25 @@ const MainLandingPageEmployerHelper = ({ authentication, userData }) => {
                 </Card>
               </Col>
               <Col xl="12" className="alert-sec">
-                <Card className="bg-img">
-                  <CardHeader>
-                    <div className="header-top">
-                      <h5 className="m-0">{"Alert"}  </h5>
-                      <div className="dot-right-icon"><i className="fa fa-ellipsis-h"></i></div>
-                    </div>
-                  </CardHeader>
-                  <CardBody>
-                    <div className="body-bottom">
-                      <h6>  {"10% off For drama lights Couslations..."}</h6><span className="font-roboto">{"Lorem Ipsum is simply dummy...It is a long established fact that a reader will be distracted by "} </span>
-                    </div>
-                  </CardBody>
+                <Card className={_.has(user, "profileBannerImage") ? "" : "bg-img"}>
+                  <img src={_.has(user, "profileBannerImage") ? `${process.env.REACT_APP_ASSET_LINK}/${user.profileBannerImage.link}` : null} className={"stretch-banner-snippet"} />
+                  <div className='tinter-card-employer'>
+                    <CardHeader>
+                      <div className="header-top">
+                        <h5 className="m-0">{"Profile Banner Pic"}  </h5>
+                        <div className="dot-right-icon"><i className="fa fa-ellipsis-h"></i></div>
+                      </div>
+                    </CardHeader>
+                    <CardBody>
+                      {user !== null ? <div className="body-bottom">
+                        <h4 className='text-white'><strong style={{ textDecorationLine: "underline", color: "#f73164" }}>{user.currentlyFollowedBy.length} Total Following</strong> (both employers & hackers - users you're following)</h4>
+                        <hr />
+                        <h4 className='text-white'><strong style={{ textDecorationLine: "underline", color: "#f73164" }}>{user.followingHackers.length + user.followingCompanies.length} Total Follower's</strong> (both employers & hackers)</h4>
+                      </div> : <Fragment>
+                        {renderSkelatonLoading(15)}
+                      </Fragment>}
+                    </CardBody>
+                  </div>
                 </Card>
               </Col>
             </Row>
@@ -643,7 +744,7 @@ const MainLandingPageEmployerHelper = ({ authentication, userData }) => {
               </CardFooter>
             </Card>
           </Col>
-          <Col xl="4 xl-50" className="appointment box-col-6">
+          {/* <Col xl="4 xl-50" className="appointment box-col-6">
             <Card className='shadow'>
               <CardHeader>
                 <div className="header-top">
@@ -659,7 +760,7 @@ const MainLandingPageEmployerHelper = ({ authentication, userData }) => {
               </CardHeader>
               <CardBody>
                 <div className="radar-chart">
-                  <ApexCharts id="marketchart" options={Marketvalue.options} series={Marketvalue.series} type='radar' height={300} />
+                  <ApexCharts id="marketchart" options={MarketValueOption.options} series={MarketValueOption.series} type='radar' height={300} />
                 </div>
               </CardBody>
             </Card>
@@ -715,8 +816,8 @@ const MainLandingPageEmployerHelper = ({ authentication, userData }) => {
                 </div>
               </CardBody>
             </Card>
-          </Col>
-          <Col xl="4 xl-50" lg="12" className="calendar-sec box-col-6">
+          </Col> */}
+          {/* <Col xl="4 xl-50" lg="12" className="calendar-sec box-col-6">
             <Card className="gradient-primary o-hidden shadow">
               <CardBody>
                 <div className="default-datepicker">
@@ -728,7 +829,7 @@ const MainLandingPageEmployerHelper = ({ authentication, userData }) => {
                 </div><span className="default-dots-stay overview-dots full-width-dots"><span className="dots-group"><span className="dots dots1"></span><span className="dots dots2 dot-small"></span><span className="dots dots3 dot-small"></span><span className="dots dots4 dot-medium"></span><span className="dots dots5 dot-small"></span><span className="dots dots6 dot-small"></span><span className="dots dots7 dot-small-semi"></span><span className="dots dots8 dot-small-semi"></span><span className="dots dots9 dot-small">                </span></span></span>
               </CardBody>
             </Card>
-          </Col>
+          </Col> */}
         </Row>
       </Container>
     </Fragment>

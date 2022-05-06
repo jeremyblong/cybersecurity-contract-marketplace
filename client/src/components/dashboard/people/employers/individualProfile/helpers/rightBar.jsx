@@ -14,7 +14,7 @@ import fourteen from "../../../../../../assets/images/user/14.png";
 import four from "../../../../../../assets/images/user/4.jpg";
 import ShowMoreText from "react-show-more-text";
 import _ from "lodash";
-import { SocialNetworks, Friends } from "../../../../../../constant";
+import { SocialNetworks } from "../../../../../../constant";
 import { useHistory } from "react-router-dom"; 
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { NotificationManager } from "react-notifications";
@@ -251,7 +251,7 @@ const RightBar = ({ employerData }) => {
                     </Collapse>
                 </Card>
             </Col>
-            <Col xl="12 xl-50 box-col-6">
+            {/* <Col xl="12 xl-50 box-col-6">
                 <Card className={"shadow-card-employer"}>
                     <CardHeader>
                         <h5 className="mb-0">
@@ -276,7 +276,7 @@ const RightBar = ({ employerData }) => {
                         </CardBody>
                     </Collapse>
                 </Card>
-            </Col>
+            </Col> */}
             <Col xl="12 xl-50 box-col-6">
                 <Card className={"shadow-card-employer"}>
                     {renderPicVideoPlaceholder(_.has(employerData, "profilePicsVideos") && typeof employerData.profilePicsVideos !== "undefined" && employerData.profilePicsVideos.length > 0 ? employerData.profilePicsVideos[employerData.profilePicsVideos.length - 1] : null)}

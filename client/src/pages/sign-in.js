@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, Fragment, useEffect } from 'react';
 import Navbar from '../components/_App/Navbar';
 import PageBanner from '../components/Common/PageBanner';
 import Footer from '../components/_App/Footer';
@@ -23,6 +23,7 @@ const SignIn = ({ authentication }) => {
     const [ hidePassword, setHidePassword ] = useState(false);
     const [ data, setData ] = useState({});
     const [ switchAccountType, switchType ] = useState("You're logging in as - 'Company/Employer'");
+    const [ seconds, setSeconds ] =  useState(0);
 
     const handleChange = (checked) => {
         setchecked(checked);
@@ -258,6 +259,8 @@ const SignIn = ({ authentication }) => {
                     <div style={{ marginBottom: "22.5px" }} className='centered-both-ways'>
                         <ReactCodeInput onChange={(value) => setCode(value)} type='number' fields={7} />
                     </div>
+                    <hr />
+                    {calculateDisplayText()}
 
                     <div className="col-12">
                         <button className="default-btn btn-two" type="submit">
@@ -268,6 +271,70 @@ const SignIn = ({ authentication }) => {
             );
         }
     }
+
+    const handleCodeResend = () => {
+        console.log("handleCodeResend clicked/ran..");
+
+        if (seconds === 0) {
+            const configgg = {
+                authyId: user.authyId,
+                formatted: user.phoneNumber, 
+                countryCode: "US"
+            }
+            axios.post(`${process.env.REACT_APP_BASE_URL}/send/phone/code/again/auth`, configgg).then((res) => {
+                if (res.data.message === "Successfully sent another code!") {
+                    console.log("Code sent!", res.data);
+    
+                    NotificationManager.success(`Successfully sent another code to your connected phone (the number connected to your account you're authenticating with) - please check your device & enter the new code into the input...!`, `Successfully re-sent code to desired/linked cellular number!`, 4750);
+
+                    setSeconds(30);
+
+                } else {
+                    console.log("err with code!", res.data);
+    
+                    NotificationManager.warning("An error occurred while attempting to send the 'recovery email' and the request cannot be made properly, please try again or contact support if the problem persists!", "Could NOT send recovery email/code!", 4750);
+                }
+            }).catch((errorCode) => {
+                console.log("errorCode", errorCode);
+    
+                NotificationManager.warning("An error occurred while attempting to send the 'recovery email' and the request cannot be made properly, please try again or contact support if the problem persists!", "Could NOT send recovery email/code!", 4750);
+            });
+        } else {
+            NotificationManager.warning(`You may NOT request another code yet for until the current timer count of ${seconds} runs up!`, `Wait ${seconds} more seconds until trying this action again!`, 4750);
+        }
+    }
+
+    const timerHelper = () => {
+        if (seconds === 0) {
+         return <a onClick={() => handleCodeResend()} style={{ color: "red", textDecorationLine: "underline" }}>resending the recovery code (using previously entered email..)</a>;
+        } else {
+         return <a style={{ color: "red", textDecorationLine: "underline" }}>{seconds} seconds until 'next-send' availability</a>;
+        }
+     }
+     const calculateDisplayText = () => {
+        if (page === 1) {
+            return <p className="reset-desc">Enter the email of your account to reset the password. Then you will receive a link to email to reset the password. If you have any issue about reset password <Link to="/contact"><a>contact us.</a></Link></p>;
+        } else if (page === 2) {
+            return <p className="reset-desc">Please enter the <strong>recovery code (CASE SENSITIVE)</strong> that was emailed to you a second ago, if you did NOT recieve this code ~ try {timerHelper()}</p>;
+        } else {
+            return null;
+        }
+     }
+
+    useEffect(()=>{
+        let myInterval = setInterval(() => {
+            if (seconds > 0) {
+                setSeconds(prevState => prevState - 1);
+            }
+            if (seconds === 0) {
+                clearInterval(myInterval);
+            } 
+        }, 1000)
+        return ()=> {
+            clearInterval(myInterval);
+        };
+    });
+
     console.log("data", data);
     return (
         <>

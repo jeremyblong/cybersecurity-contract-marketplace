@@ -23,18 +23,18 @@ export const MENUITEMS = [
                     { path: `${process.env.PUBLIC_URL}/hacker/account/view/reviews/previous`, title: 'Manage Reviews & Past Work', type: 'link' }
                 ]
             },
-            // {
-            //     title: 'Competition/Compete', icon: Activity, type: 'sub', active: false, children: [
-            //         { path: `${process.env.PUBLIC_URL}/`, title: "Play CTF's", type: 'link' },
-            //         { path: `${process.env.PUBLIC_URL}/`, title: 'Gamble/Bet Rank', type: 'link' },
-            //         { path: `${process.env.PUBLIC_URL}/`, title: 'Leaderboards', type: 'link' },
-            //         { path: `${process.env.PUBLIC_URL}/`, title: 'Weekly Event(s)', type: 'link' }
-            //     ]
-            // },
+            {
+                title: 'Competition & Leaderboard Related', icon: Activity, type: 'sub', active: false, children: [
+                    { path: `${process.env.PUBLIC_URL}/leaderboards/homepage`, title: "Leaderboard Homepage", type: 'link' }
+                    // { path: `${process.env.PUBLIC_URL}/`, title: 'Gamble/Bet Rank', type: 'link' },
+                    // { path: `${process.env.PUBLIC_URL}/`, title: 'Leaderboards', type: 'link' },
+                    // { path: `${process.env.PUBLIC_URL}/`, title: 'Weekly Event(s)', type: 'link' }
+                ]
+            },
             {
                 title: "Purchase", icon: ShoppingCart, type: "sub", active: false, children: [
                     // { path: `${process.env.PUBLIC_URL}/`, title: "Purchase 'Connects/Tokens'", type: 'link' },
-                    { path: `${process.env.PUBLIC_URL}/purchase/various/boosts/hacker/account`, title: "Buy 'Profile Boosts'", type: 'link' },
+                    // { path: `${process.env.PUBLIC_URL}/purchase/various/boosts/hacker/account`, title: "Buy 'Profile Boosts'", type: 'link' },
                     // { path: `${process.env.PUBLIC_URL}/`, title: 'Buy Tickets - Restricted Events', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/memberships/selection`, title: 'Subscribe To Membership', type: 'link' }
                 ]
@@ -64,7 +64,7 @@ export const MENUITEMS = [
         Items:[
             {
                 title: 'Recruit Hackers', icon: Monitor, type: 'sub', active: false, children: [
-                    { path: `${process.env.PUBLIC_URL}/hacker/directory/main/profiles`, title: 'Hacker Directory', type: 'link' },
+                    { path: `${process.env.PUBLIC_URL}/hacker/directory/main/profiles`, title: 'Hacker Directory (Filterable data..)', type: 'link' },
                     // { path: `${process.env.PUBLIC_URL}/`, title: 'Host A Competition', type: 'link' },
                     { path: `${process.env.PUBLIC_URL}/create/employer/listing/general`, title: 'List An Opportunity', type: 'link' },
                     // { path: `${process.env.PUBLIC_URL}/`, title: 'Manage Active Interviews', type: 'link' },

@@ -135,7 +135,7 @@ const LeftBar = ({ user }) => {
                     </Collapse>
                 </Card>
             </Col>
-            <Col xl="12">
+            {/* <Col xl="12">
                 <Card className={"add-shadow-general-card-profile"}>
                     <CardHeader>
                         <h5 className="mb-0">
@@ -184,7 +184,7 @@ const LeftBar = ({ user }) => {
                         </CardBody>
                     </Collapse>
                 </Card>
-            </Col>
+            </Col> */}
         </Fragment>
     );
 };

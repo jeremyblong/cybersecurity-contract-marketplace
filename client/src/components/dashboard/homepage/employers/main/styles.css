@@ -6,3 +6,20 @@
     min-width: 100%;
     min-height: 325px;
 }
+.stretch-banner-snippet {
+    min-width: 100%;
+    min-height: 100%;
+    object-fit: cover;
+    position: absolute;
+    z-index: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+.tinter-card-employer {
+    opacity: 0.625;
+    background-color: black;
+    min-width: 100%;
+    min-height: 375px;
+}

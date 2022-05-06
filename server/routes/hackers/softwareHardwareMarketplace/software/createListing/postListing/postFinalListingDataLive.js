@@ -3,7 +3,7 @@ const router = express.Router();
 const ListingCreate = require("../../../../../../schemas/listings/hackers/createNewSoftwareSaleListing.js");
 const { v4: uuidv4 } = require('uuid');
 const moment = require("moment");
-
+const _ = require("lodash");
 
 
 router.post("/", (req, resppppp, next) => {
@@ -57,8 +57,8 @@ router.post("/", (req, resppppp, next) => {
         responses: [], 
         bookmarks: 0, 
         likes: 0,
-        bids: auctionPriceRelatedData.auctionPurchaseType.includes("auction") ? [] : undefined,
-        currentBidPrice: auctionPriceRelatedData.auctionPurchaseType.includes("auction") ? auctionPriceRelatedData.startBid || 0 : undefined
+        bids: _.has(auctionPriceRelatedData, "auctionPurchaseType") && (auctionPriceRelatedData.auctionPurchaseType.includes("auction") || auctionPriceRelatedData.auctionPurchaseType.includes("auction-AND-buy-it-now")) ? [] : undefined,
+        currentBidPrice: _.has(auctionPriceRelatedData, "auctionPurchaseType") && (auctionPriceRelatedData.auctionPurchaseType.includes("auction") || auctionPriceRelatedData.auctionPurchaseType.includes("auction-AND-buy-it-now")) ? auctionPriceRelatedData.startBid || 0 : undefined
     });
 
     newListing.save((error, data) => {

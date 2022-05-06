@@ -28,3 +28,7 @@
 .profile-vector .img-fluid-min-profile video {
     border-radius: 50%;
 }
+.super-stretch-both-ways {
+    min-width: 100%;
+    min-height: 100%;
+}

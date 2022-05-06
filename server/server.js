@@ -295,7 +295,10 @@ app.use("/send/email/password/recovery/attempt", require("./routes/authenticatio
 app.use("/check/code/recovery/password/reset", require("./routes/authentication/login/forgotPassword/submitCheckCode/submitCodeAndCheckValid.js"));
 app.use("/submit/password/change/relevant/email", require("./routes/authentication/login/forgotPassword/submitNewPasswordField/checkAndSubmitNewPassword.js"));
 app.use("/gather/applicants/previous/all/contract/app", require("./routes/employers/employerListings/hireApplicant/gatherOtherApplicants/gatherAllApplicantDataSpecific.js"));
-
+app.use("/gather/all/transactions/stripe/employer", require("./routes/employers/transactionalHistory/gatherTransactions/gatherIssuingTransactions.js"));
+app.use("/gather/all/transactions/stripe/hacker", require("./routes/hackers/transactionalHistory/transactionalHistoryHacker.js"));
+app.use("/send/phone/code/again/auth", require("./routes/authentication/twilio/resendCode/resendRepeatRequestedCode.js"));
+app.use("/gather/hackers/random/general/leaderboards", require("./routes/hackers/leaderboards/gatherTopUsers.js"));
 
 
 app.get('*', function(req, res) {

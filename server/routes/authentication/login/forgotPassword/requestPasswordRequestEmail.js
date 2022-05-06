@@ -27,7 +27,7 @@ router.post("/", async (req, res) => {
             // errrrrrrrror
             console.log("errrrrrrrror!", errrrrrrrror);
 
-            resppppp.json({
+            res.json({
                 message: "An error occurred while attempting to send email..",
                 success: false,
                 code: null

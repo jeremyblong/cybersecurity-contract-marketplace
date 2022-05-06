@@ -21,15 +21,6 @@ router.post("/", bodyParser.raw({ type: 'application/json' }), async (request, r
 
     try {
         event = stripe.webhooks.constructEvent(request.body, sig, endpointSecret);
-        // create transporter object with smtp server details
-        const transporter = nodemailer.createTransport({
-            host: 'smtp.gmail.com',
-            port: 587,
-            auth: {
-                user: 'blongjeremy@gmail.com',
-                pass: 'gAGsD87rZ9#@'
-            }
-        });
 
         console.log("Event", event);
 

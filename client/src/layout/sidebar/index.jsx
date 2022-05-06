@@ -8,6 +8,7 @@ import configDB from '../../data/customizer/config';
 import { DefaultLayout } from '../theme-customizer';
 import { connect } from 'react-redux';
 import _ from "lodash";
+import "./styles.css";
 
 const Sidebar = (props) => {
   const id = window.location.pathname.split('/').pop()
@@ -285,7 +286,7 @@ const Sidebar = (props) => {
           <div className="toggle-sidebar" onClick={() => openCloseSidebar(sidebartoogle)}><Grid className="status_toggle middle sidebar-toggle" /></div>
         </div>
         <div className="logo-icon-wrapper">
-          <Link to={`/dashboard/default/${layout}`}><img className="img-fluid" src={require("../../assets/images/logo/logo-icon.png")} alt="" /></Link>
+          <Link to={`/dashboard/default/${layout}`}><img className="img-fluid maxed-small-top-left" src={require("../../assets/images/real-logo.png")} alt="" /></Link>
         </div>
         <nav className="sidebar-main">
             <div className="left-arrow" onClick={scrollToLeft}><ArrowLeft /></div>

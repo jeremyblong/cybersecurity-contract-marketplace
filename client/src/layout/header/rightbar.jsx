@@ -329,12 +329,12 @@ const Rightbar = ({ userData, SBData, balance, ready, authenticated, data, authe
           <li><span className="header-search"><Search onClick={() => SeacrhResposive(searchresponsive)} /></span></li>
           <li className="onhover-dropdown">
             <div className="notification-box" onClick={() => setNotificationDropDown(!notificationDropDown)}><Bell /><span className="badge badge-pill badge-secondary">2</span></div>
-            <ul className={`notification-dropdown onhover-show-div ${notificationDropDown ? "active" : ""}`}>
+            <ul className={`notification-dropdown notification-dropdown-custom onhover-show-div ${notificationDropDown ? "active" : ""}`}>
               <li>
                 <Bell />
                 <h6 className="f-18 mb-0">Recently Received Notification(s)</h6>
               </li>
-              {typeof notifications !== "undefined" && notifications.length > 0 ? notifications.map((notification, index) => {
+              {typeof notifications !== "undefined" && notifications.length > 0 ? notifications.slice(0, 7).map((notification, index) => {
                 console.log("notification", notification)
                 if (notification !== null) {
                     return (

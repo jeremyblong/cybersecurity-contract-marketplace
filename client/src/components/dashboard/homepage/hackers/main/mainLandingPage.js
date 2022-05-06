@@ -5,10 +5,9 @@ import DatePicker from "react-datepicker";
 import ApexCharts from 'react-apexcharts'
 import ChartistChart from 'react-chartist';
 import Knob from "knob";
-import { Currentlysale, Marketvalue } from '../../chartsData/apex-charts-data'
 import { smallchart1data, smallchart1option, smallchart2data, smallchart2option, smallchart3data, smallchart3option, smallchart4data, smallchart4option } from '../../chartsData/chartist-charts-data'
 import { Send, Clock } from 'react-feather';
-import { Dashboard, Summary, Notification, MarketValue, Chat, New, Tomorrow, Yesterday, Daily, Weekly, Monthly, Store, Online, ReferralEarning, CashBalance, SalesForcasting, ProductOrderValue, Yearly, Today, Year, Month, Day, RightNow } from '../../../../../constant'
+import { Dashboard, Summary, Notification, MarketValue, Chat, New, Tomorrow, Yesterday, Daily, Weekly, Monthly, Store, Online, ReferralEarning, CashBalance, SalesForcasting, ProductOrderValue, Yearly, Today, Year, Month, Day, RightNow, Total } from '../../../../../constant'
 import axios from "axios";
 import { connect } from "react-redux";
 import { authentication } from "../../../../../redux/actions/authentication/auth.js";
@@ -21,8 +20,16 @@ import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import _ from "lodash";
 import ReactMapboxGl, { Marker } from 'react-mapbox-gl';
 import moment from "moment";
+import otherData from "../../chartsData/apex-charts-data.jsx";
 
-
+const {
+  graphEmployerHackerInformation,
+  Riskfactorchart,
+  totalearning,
+  MarketValueOption, 
+  Monthlysales, 
+  columnCharts
+} = otherData;
 
 const { renderProfilePicVideoMainPageImg } = helpers;
 
@@ -44,19 +51,111 @@ const MainLandingPageHackerHelper = ({ authentication, userData }) => {
   const curHr = today.getHours()
   const curMi = today.getMinutes()
   const [meridiem,setMeridiem] = useState("AM")
-  // eslint-disable-next-line
-  const [date, setDate] = useState({ date: new Date() });
-  // eslint-disable-next-line
+  const [date, setDate] = useState({ startGraphDate: null, endGraphDate: null });
+  const [ total, setTotal ] = useState(0);
+  const [ transferTotal, setTransferTotal ] = useState(0);
+  const [ chartDataReady, setChartDataReady ] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
   const [ paymentData, setPaymentData ] = useState({
     available: 0,
     instant: 0,
     pending: 0,
     ready: false
+  });
+  const [ transactionalHistory, setTransactionalHistory ] = useState({
+    transfers: [],
+    paymentIntents: []
   })
-  const handleChange = date => {
-    setDate(date)
-  };
+  
+  useEffect(() => {
+    const config = {
+      params: {
+          uniqueId: userData.uniqueId,
+          accountType: userData.accountType
+      }
+    }
+    axios.get(`${process.env.REACT_APP_BASE_URL}/gather/all/transactions/stripe/hacker`, config).then((res) => {
+        if (res.data.message === "Gathered previous transactions!") {
+            console.log("res.data transactions --------------------------------------------------------------------------- : ", res.data);
+
+            const { transactions } = res.data;
+
+            const transfers = [];
+            const paymentIntents = [];
+
+            const customPromise = new Promise((resolve, reject) => {
+
+              if (typeof transactions !== "undefined" && transactions.length > 0) {
+                let paymentIntentTotal = 0;
+                let transferTotal = 0;
+  
+                setDate(prevState => {
+                  return {
+                    startGraphDate: new Date(Math.min(...transactions.map(e => new Date(e.created * 1000)))), 
+                    endGraphDate: new Date(Math.max(...transactions.map(e => new Date(e.created * 1000))))
+                  }
+                })
+  
+                for (let index = 0; index < transactions.length; index++) {
+                  const transaction = transactions[index];
+                  
+                  if (transaction.object === "transfer") {
+  
+                    transferTotal += Number(Math.round(transaction.amount / 100));
+  
+                    transfers.push({ x: moment(transaction.created * 1000).format("MM/DD/YYYY"), y: Number(Math.round(transaction.amount / 100)) });
+  
+                  } else if (transaction.object === "payment_intent") {
+  
+                    paymentIntentTotal += Number(Math.round(transaction.amount / 100));
+  
+                    paymentIntents.push({ x: moment(transaction.created * 1000).format("MM/DD/YYYY"), y: Number(Math.round(transaction.amount / 100)) });
+  
+                  } else {
+                    console.log("neither processed...", transaction);
+                  }
+  
+                  if ((transactions.length - 1) === index) {
+  
+                    const combined = {
+                      transfers,
+                      paymentIntents,
+                      paymentIntentTotal,
+                      transferTotal
+                    };
+  
+                    resolve(combined);
+                  }
+                }
+              } else {
+                resolve(null);
+              }
+            })
+
+            customPromise.then((passedData) => {
+              console.log("passedDataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", passedData);
+
+              if (passedData === null) {
+                setChartDataReady(null);
+              } else {
+                setTransactionalHistory(passedData);
+                setTotal(passedData.paymentIntentTotal);
+                setTransferTotal(passedData.transferTotal);
+                setChartDataReady(true);
+              }
+            })
+        } else {
+            console.log("errrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr", res.data);
+            
+            NotificationManager.warning("An unknown error has occurred while attempting to fetch your previously completed transactional data, Contact support if the problem persists!", "Unknown error has occurred.", 4750);
+        }
+    }).catch((err) => {
+        console.log(err);
+  
+        NotificationManager.warning("An unknown error has occurred while attempting to fetch your previously completed transactional data, Contact support if the problem persists!", "Unknown error has occurred.", 4750);
+    })  
+  }, [])
+
 
   useEffect(() => {
 
@@ -98,7 +197,6 @@ const MainLandingPageHackerHelper = ({ authentication, userData }) => {
                           NotificationManager.success(`We've successfully updated your location so you have a better tailored user experience with our location-based services.`, 'Updated your location!', 3500);
                       }
 
-                      // NotificationManager.success(`We've successfully updated your location so you have a better tailored user experience with our location-based services.`, 'Updated your location!', 3500);
                   } else {
                       console.log("err", res.data);
 
@@ -133,23 +231,8 @@ const MainLandingPageHackerHelper = ({ authentication, userData }) => {
     }else{
       setMeridiem('AM')
     }
-    
-    // var ordervalue1 = Knob({
-    //   value: 60,
-    //   angleOffset: 0,
-    //   thickness: 0.3,
-    //   width: 65,
-    //   fgColor: "#7366ff",
-    //   readOnly: false,
-    //   dynamicDraw: true,
-    //   tickColorizeValues: true,
-    //   bgColor: '#eef5fb',
-    //   lineCap: 'round',
-    //   displayPrevious: false
-    // })
-    // document.getElementById('ordervalue1').appendChild(ordervalue1);
 
-    var ordervalue2 = Knob({
+    let ordervalue2 = Knob({
       value: 60,
       angleOffset: 0,
       thickness: 0.3,
@@ -162,7 +245,7 @@ const MainLandingPageHackerHelper = ({ authentication, userData }) => {
     })
     document.getElementById('ordervalue2').appendChild(ordervalue2);
 
-    // eslint-disable-next-line
+
   }, [])
 
   useEffect(() => {
@@ -343,20 +426,12 @@ const MainLandingPageHackerHelper = ({ authentication, userData }) => {
                   <Col xl="3" className="earning-content p-0">
                     <Row className="m-0 chart-left">
                       <Col xl="12" className="p-0 left_side_earning">
-                        <h5>{Dashboard}</h5>
-                        <p className="font-roboto">{"Overview of last month"}</p>
+                        <h5>${Number(total).toFixed(2)} </h5>
+                        <p className="font-roboto">Payment Total (Intents - Unconfirmed)</p>
                       </Col>
                       <Col xl="12" className="p-0 left_side_earning">
-                        <h5>{"$4055.56"} </h5>
-                        <p className="font-roboto">{"This Month Earning"}</p>
-                      </Col>
-                      <Col xl="12" className="p-0 left_side_earning">
-                        <h5>{"$1004.11"}</h5>
-                        <p className="font-roboto">{"This Month Profit"}</p>
-                      </Col>
-                      <Col xl="12" className="p-0 left_side_earning">
-                        <h5>{"90%"}</h5>
-                        <p className="font-roboto">{"This Month Sale"}</p>
+                        <h5>${Number(transferTotal).toFixed(2)} </h5>
+                        <p className="font-roboto">Total Transferred</p>
                       </Col>
                       <Col xl="12" className="p-0 left-btn"><a className="btn btn-gradient" href={null}>{Summary}</a></Col>
                     </Row>
@@ -367,18 +442,15 @@ const MainLandingPageHackerHelper = ({ authentication, userData }) => {
                         <Col xl="8" md="8" sm="8" className="col-12 p-0">
                           <div className="inner-top-left">
                             <ul className="d-flex list-unstyled">
-                              <li>{Daily}</li>
-                              <li className="active">{Weekly}</li>
-                              <li>{Monthly}</li>
-                              <li>{Yearly}</li>
+                              <li>If multiple transactions occurred on the same day some may <strong style={{ textDecorationLine: "underline" }}>not</strong> display on this graph</li>
                             </ul>
                           </div>
                         </Col>
                         <Col xl="4" md="4" sm="4" className="col-12 p-0 justify-content-end">
                           <div className="inner-top-right">
                             <ul className="d-flex list-unstyled justify-content-end">
-                              <li>{Online}</li>
-                              <li>{Store}</li>
+                              <li style={{ marginRight: "17.5px" }}>Transfers</li>
+                              <li>Payment's (Intents)</li>
                             </ul>
                           </div>
                         </Col>
@@ -387,37 +459,34 @@ const MainLandingPageHackerHelper = ({ authentication, userData }) => {
                         <Col xl="12">
                           <CardBody className="p-0">
                             <div className="current-sale-container">
-                              <ApexCharts id="chart-currently" options={Currentlysale.options} series={Currentlysale.series} type='area' height={240} />
+                              {chartDataReady === true ? <ApexCharts id="chart-currently" options={graphEmployerHackerInformation(null, null, "hackers", date.startGraphDate, date.endGraphDate).options} series={graphEmployerHackerInformation(transactionalHistory.transfers, transactionalHistory.paymentIntents, "hackers", date.startGraphDate, date.endGraphDate).series} type='area' height={240} /> : chartDataReady === null ? <img src={require("../../../../../assets/images/no-stripe-transactions.png")} className={"super-stretch-both-ways"} /> : <Fragment>
+                                <SkeletonTheme baseColor="#c9c9c9" highlightColor="#444">
+                                    <p>
+                                        <Skeleton count={15} />
+                                    </p>
+                                </SkeletonTheme>
+                              </Fragment>}
                             </div>
                           </CardBody>
                         </Col>
                       </Row>
                     </div>
                     <Row className="border-top m-0">
-                      <Col xl="4" md="6" sm="6" className="pl-0">
+                      <Col xl="6" md="6" sm="6" className="pl-0">
                         <div className="media p-0">
                           <div className="media-left"><i className="icofont icofont-crown"></i></div>
                           <div className="media-body">
-                            <h6>{ReferralEarning}</h6>
-                            <p>{"$5,000.20"}</p>
+                            <h6>Total Transferred (Transfer's sometimes occur 'under the hood')</h6>
+                            <p>${Number(transferTotal).toFixed(2)}</p>
                           </div>
                         </div>
                       </Col>
-                      <Col xl="4" md="6" sm="6">
+                      <Col xl="6" md="6" sm="6">
                         <div className="media p-0">
                           <div className="media-left bg-secondary"><i className="icofont icofont-heart-alt"></i></div>
                           <div className="media-body">
-                            <h6>{CashBalance}</h6>
-                            <p>{"$2,657.21"}</p>
-                          </div>
-                        </div>
-                      </Col>
-                      <Col xl="4" md="12" className="pr-0">
-                        <div className="media p-0">
-                          <div className="media-left"><i className="icofont icofont-cur-dollar"></i></div>
-                          <div className="media-body">
-                            <h6>{SalesForcasting}</h6>
-                            <p>{"$9,478.50"}</p>
+                            <h6>Payment Total (Intents - Unconfirmed)</h6>
+                            <p>${Number(total).toFixed(2)}</p>
                           </div>
                         </div>
                       </Col>
@@ -644,18 +713,25 @@ const MainLandingPageHackerHelper = ({ authentication, userData }) => {
                 </Card>
               </Col>
               <Col xl="12" className="alert-sec">
-                <Card className="bg-img shadow">
-                  <CardHeader>
-                    <div className="header-top">
-                      <h5 className="m-0">{"Alert"}  </h5>
-                      <div className="dot-right-icon"><i className="fa fa-ellipsis-h"></i></div>
-                    </div>
-                  </CardHeader>
-                  <CardBody>
-                    <div className="body-bottom">
-                      <h6>  {"10% off For drama lights Couslations..."}</h6><span className="font-roboto">{"Lorem Ipsum is simply dummy...It is a long established fact that a reader will be distracted by "} </span>
-                    </div>
-                  </CardBody>
+                <Card className={_.has(user, "profileBannerImage") ? "" : "bg-img"}>
+                  <img src={_.has(user, "profileBannerImage") ? `${process.env.REACT_APP_ASSET_LINK}/${user.profileBannerImage.link}` : null} className={"stretch-banner-snippet"} />
+                  <div className='tinter-card-employer'>
+                    <CardHeader>
+                      <div className="header-top">
+                        <h5 className="m-0">{"Profile Banner Pic"}  </h5>
+                        <div className="dot-right-icon"><i className="fa fa-ellipsis-h"></i></div>
+                      </div>
+                    </CardHeader>
+                    <CardBody>
+                      {user !== null ? <div className="body-bottom">
+                        <h4 className='text-white'><strong style={{ textDecorationLine: "underline", color: "#f73164" }}>{user.currentlyFollowedBy.length} Total Following</strong> (both employers & hackers - users you're following)</h4>
+                        <hr />
+                        <h4 className='text-white'><strong style={{ textDecorationLine: "underline", color: "#f73164" }}>{user.followingHackers.length + user.followingCompanies.length} Total Follower's</strong> (both employers & hackers)</h4>
+                      </div> : <Fragment>
+                        {renderSkelatonLoading(15)}
+                      </Fragment>}
+                    </CardBody>
+                  </div>
                 </Card>
               </Col>
             </Row>
@@ -704,7 +780,7 @@ const MainLandingPageHackerHelper = ({ authentication, userData }) => {
               </CardFooter>
             </Card>
           </Col>
-          <Col xl="4 xl-50" className="appointment box-col-6">
+          {/* <Col xl="4 xl-50" className="appointment box-col-6">
             <Card className={"shadow"}>
               <CardHeader>
                 <div className="header-top">
@@ -720,7 +796,7 @@ const MainLandingPageHackerHelper = ({ authentication, userData }) => {
               </CardHeader>
               <CardBody>
                 <div className="radar-chart">
-                  <ApexCharts id="marketchart" options={Marketvalue.options} series={Marketvalue.series} type='radar' height={300} />
+                  <ApexCharts id="marketchart" options={MarketValueOption.options} series={MarketValueOption.series} type='radar' height={300} />
                 </div>
               </CardBody>
             </Card>
@@ -782,14 +858,14 @@ const MainLandingPageHackerHelper = ({ authentication, userData }) => {
               <CardBody>
                 <div className="default-datepicker">
                   <DatePicker
-                    selected={startDate}
-                    onChange={handleChange}
+                    // selected={null}
+                    onChange={null}
                     inline
                   />
                 </div><span className="default-dots-stay overview-dots full-width-dots"><span className="dots-group"><span className="dots dots1"></span><span className="dots dots2 dot-small"></span><span className="dots dots3 dot-small"></span><span className="dots dots4 dot-medium"></span><span className="dots dots5 dot-small"></span><span className="dots dots6 dot-small"></span><span className="dots dots7 dot-small-semi"></span><span className="dots dots8 dot-small-semi"></span><span className="dots dots9 dot-small">                </span></span></span>
               </CardBody>
             </Card>
-          </Col>
+          </Col> */}
         </Row>
       </Container>
     </Fragment>

@@ -5,105 +5,308 @@ const primary = localStorage.getItem('default_color') || configDB.data.color.pri
 const secondary = localStorage.getItem('secondary_color') || configDB.data.color.secondary_color;
 
 // Defaut
-export const Currentlysale = {
-  series: [{
-    name: 'series1',
-    data: [6, 20, 15, 40, 18, 20, 18, 23, 18, 35, 30, 55, 0]
-  }, {
-    name: 'series2',
-    data: [2, 22, 35, 32, 40, 25, 50, 38, 42, 28, 20, 45, 0]
-  }],
-  options: {
-    chart: {
-      height: 240,
-      type: 'area',
-      toolbar: {
-        show: false
-      },
-    },
-    dataLabels: {
-      enabled: false
-    },
-    stroke: {
-      curve: 'smooth'
-    },
-    xaxis: {
-      type: 'category',
-      low: 0,
-      offsetX: 0,
-      offsetY: 0,
-      show: false,
-      categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan"],
-      labels: {
-        low: 0,
-        offsetX: 0,
-        show: false,
-      },
-      axisBorder: {
-        low: 0,
-        offsetX: 0,
-        show: false,
-      },
-      axisTicks: {
-        show: false,
-      },
-    },
-    markers: {
-      strokeWidth: 3,
-      colors: "#ffffff",
-      strokeColors: [primary, secondary],
-      hover: {
-        size: 6,
+const graphEmployerHackerInformation = (approvedOrTransfers, pendingOrIntents, accountType, startDate, endDate) => {
+
+  if (accountType === "employers") {
+    const Currentlysale = {
+      series: [{
+        name: 'Pending Transactions (USD-$)',
+        data: pendingOrIntents
+      }, {
+        name: 'Completed Transactions (USD-$)',
+        data: approvedOrTransfers
+      }],
+      options: {
+        chart: {
+          height: 250,
+          width: "100%",
+          type: 'numeric',
+          toolbar: {
+            show: false
+          },
+        },
+        dataLabels: {
+          enabled: true
+        },
+        stroke: {
+          curve: 'smooth'
+        },
+        xaxis: {
+          type: 'area',
+          low: 0,
+          offsetX: 0,
+          offsetY: 0,
+          show: false,
+          // categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan"],
+          labels: {
+            low: 0,
+            offsetX: 0,
+            show: false,
+          },
+          axisBorder: {
+            low: 0,
+            offsetX: 0,
+            show: false,
+          },
+          axisTicks: {
+            show: false,
+          },
+        },
+        markers: {
+          strokeWidth: 3,
+          colors: "#ffffff",
+          strokeColors: [primary, secondary],
+          hover: {
+            size: 6,
+          }
+        },
+        yaxis: {
+          low: 0,
+          offsetX: 0,
+          offsetY: 0,
+          show: false,
+          labels: {
+            low: 0,
+            offsetX: 0,
+            show: true,
+          },
+          axisBorder: {
+            low: 0,
+            offsetX: 0,
+            show: false,
+          },
+        },
+        grid: {
+          show: false,
+          padding: {
+            left: 0,
+            right: 0,
+            bottom: -15,
+            top: -40
+          }
+        },
+        colors: [primary, secondary],
+        fill: {
+          type: 'gradient',
+          gradient: {
+            shadeIntensity: 1,
+            opacityFrom: 0.7,
+            opacityTo: 0.5,
+            stops: [0, 80, 100]
+          }
+        },
+        legend: {
+          show: false,
+        },
+        tooltip: {
+          x: {
+            format: 'MM'
+          },
+        },
       }
-    },
-    yaxis: {
-      low: 0,
-      offsetX: 0,
-      offsetY: 0,
-      show: false,
-      labels: {
-        low: 0,
-        offsetX: 0,
-        show: false,
-      },
-      axisBorder: {
-        low: 0,
-        offsetX: 0,
-        show: false,
-      },
-    },
-    grid: {
-      show: false,
-      padding: {
-        left: 0,
-        right: 0,
-        bottom: -15,
-        top: -40
+    }
+    return Currentlysale;
+
+  } else if (accountType === "hackers") {
+    const Currentlysale = {
+      series: [{
+        name: 'Pending Payments (Intents... USD-$)',
+        data: pendingOrIntents
+      }, {
+        name: 'Completed Transfers (USD-$)',
+        data: approvedOrTransfers
+      }],
+      options: {
+        chart: {
+          height: 250,
+          width: "100%",
+          type: 'datetime',
+          toolbar: {
+            show: false
+          },
+        },
+        dataLabels: {
+          enabled: true
+        },
+        stroke: {
+          curve: 'smooth'
+        },
+        xaxis: {
+          type: 'datetime',
+          low: 0,
+          min: new Date(startDate).getTime(), // start date
+          max: new Date(endDate).getTime(),
+          offsetX: 0,
+          offsetY: 0,
+          show: true,
+          // categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan"],
+          labels: {
+            low: 0,
+            offsetX: 0,
+            show: true,
+          },
+          axisBorder: {
+            low: 0,
+            offsetX: 0,
+            show: false,
+          },
+          axisTicks: {
+            show: false,
+          },
+        },
+        markers: {
+          strokeWidth: 3,
+          colors: "#ffffff",
+          strokeColors: [primary, secondary],
+          hover: {
+            size: 6,
+          }
+        },
+        yaxis: {
+          low: 0,
+          offsetX: 0,
+          offsetY: 0,
+          show: true,
+          labels: {
+            low: 0,
+            offsetX: 0,
+            show: true,
+          },
+          axisBorder: {
+            low: 0,
+            offsetX: 0,
+            show: false,
+          },
+        },
+        grid: {
+          show: false,
+          padding: {
+            left: 0,
+            right: 0,
+            bottom: -15,
+            top: -40
+          }
+        },
+        colors: [primary, secondary],
+        fill: {
+          type: 'gradient',
+          gradient: {
+            shadeIntensity: 1,
+            opacityFrom: 0.7,
+            opacityTo: 0.5,
+            stops: [0, 80, 100]
+          }
+        },
+        legend: {
+          show: false
+        }
       }
-    },
-    colors: [primary, secondary],
-    fill: {
-      type: 'gradient',
-      gradient: {
-        shadeIntensity: 1,
-        opacityFrom: 0.7,
-        opacityTo: 0.5,
-        stops: [0, 80, 100]
-      }
-    },
-    legend: {
-      show: false,
-    },
-    tooltip: {
-      x: {
-        format: 'MM'
-      },
-    },
+    }
+    return Currentlysale;
   }
+} 
 
-}
+const graphHackerInformation = (pending, finished) => {
+  const Currentlysale = {
+    series: [{
+      name: 'series1',
+      data: [6, 20, 15, 40, 18, 20, 18, 23, 18, 35, 30, 55, 0]
+    }, {
+      name: 'series2',
+      data: [2, 22, 35, 32, 40, 25, 50, 38, 42, 28, 20, 45, 0]
+    }],
+    options: {
+      chart: {
+        height: 240,
+        type: 'area',
+        toolbar: {
+          show: false
+        },
+      },
+      dataLabels: {
+        enabled: false
+      },
+      stroke: {
+        curve: 'smooth'
+      },
+      xaxis: {
+        type: 'category',
+        low: 0,
+        offsetX: 0,
+        offsetY: 0,
+        show: false,
+        categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan"],
+        labels: {
+          low: 0,
+          offsetX: 0,
+          show: false,
+        },
+        axisBorder: {
+          low: 0,
+          offsetX: 0,
+          show: false,
+        },
+        axisTicks: {
+          show: false,
+        },
+      },
+      markers: {
+        strokeWidth: 3,
+        colors: "#ffffff",
+        strokeColors: [primary, secondary],
+        hover: {
+          size: 6,
+        }
+      },
+      yaxis: {
+        low: 0,
+        offsetX: 0,
+        offsetY: 0,
+        show: false,
+        labels: {
+          low: 0,
+          offsetX: 0,
+          show: false,
+        },
+        axisBorder: {
+          low: 0,
+          offsetX: 0,
+          show: false,
+        },
+      },
+      grid: {
+        show: false,
+        padding: {
+          left: 0,
+          right: 0,
+          bottom: -15,
+          top: -40
+        }
+      },
+      colors: [primary, secondary],
+      fill: {
+        type: 'gradient',
+        gradient: {
+          shadeIntensity: 1,
+          opacityFrom: 0.7,
+          opacityTo: 0.5,
+          stops: [0, 80, 100]
+        }
+      },
+      legend: {
+        show: false,
+      },
+      tooltip: {
+        x: {
+          format: 'MM'
+        },
+      },
+    }
+  }
+  return Currentlysale;
+} 
 
-export const Marketvalue = {
+const MarketValueOption = {
   series: [{
     name: 'Market value',
     data: [20, 100, 40, 30, 50, 80, 33],
@@ -163,7 +366,7 @@ export const Marketvalue = {
 }
 
 // Ecommerce
-export const Monthlysales = {
+const Monthlysales = {
   series: [{
     name: 'series1',
     data: [280, 170, 440, 170, 270, 130]
@@ -236,7 +439,7 @@ export const Monthlysales = {
     colors: [primary, secondary, secondary],
   }
 }
-export const columnCharts = {
+const columnCharts = {
   series: [{
     name: 'Inflation',
     data: [2.3, 5.1, 3.0, 9.1, 2.0, 4.6, 2.2, 9.3, 5.4, 4.8, 3.5, 5.2]
@@ -332,7 +535,7 @@ export const columnCharts = {
   }
 }
 
-export const totalearning = {
+const totalearning = {
   series: [{
     name: 'Daily',
     data: [0.40, 0.50, 0.60, 0.70, 0.80, 0.90, 1.10, 1.15, 1.20, 1.25, 1.30, 1.35, 1.40, 1.45, 1.50,
@@ -439,7 +642,7 @@ export const totalearning = {
   }
 }
 
-export const Riskfactorchart = {
+const Riskfactorchart = {
   series: [70],
   options: {
     chart: {
@@ -508,3 +711,12 @@ export const Riskfactorchart = {
     colors: [primary],
   }
 }
+export default {
+  graphEmployerHackerInformation,
+  graphHackerInformation,
+  Riskfactorchart,
+  totalearning,
+  MarketValueOption, 
+  Monthlysales, 
+  columnCharts
+};

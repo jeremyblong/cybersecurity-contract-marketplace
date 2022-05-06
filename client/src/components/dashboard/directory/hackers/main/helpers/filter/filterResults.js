@@ -3,13 +3,88 @@ import { Search, MapPin } from 'react-feather';
 import {Row,Col,Card,CardHeader,CardBody,Input,Label,Button,Collapse } from 'reactstrap';
 import { Filters,FindJobs,Industry,SpecificSkills,AllSkills,AllIndustries } from "../../../../../../../constant";
 
-const HackerDirectoryFilterOptions = () => {
+
+const amountOfCompletedContractsFilterArr = [0, 1, 2, 3, 4, 5, 7, 9, 12, 15, 18, 20]
+const amountOfCurrentReviews = [0, 1, 2, 3, 4, 5, 7, 9, 12, 15, 18, 21, 25, 30, 35, 45, 55];
+const profileLoveHeartcount = [1, 2, 4, 7, 9, 14, 18, 25, 35, 50, 100, 125, 150, 175, 200, 250];
+
+const HackerDirectoryFilterOptions = ({ selectedQueries, setSelectedQueries }) => {
     
     const [isFilter, setIsFilter] = useState(true);
     const [location, setLocation] = useState(true);
     const [isJobTitle, setisJobTitle] = useState(true);
     const [isIndustry, setisIndustry] = useState(true);
     const [isSkill, setisSkill] = useState(true);
+
+    const filterByAmountOfActiveContracts = (completed) => {
+        console.log("filterByAmountOfActiveContracts number of hackers", completed);
+
+        const findIndex = selectedQueries.findIndex((item) => item.type === "hired-active-jobs" && item.hired === completed);
+
+        console.log("findIndex", findIndex);
+
+        if (findIndex !== -1) {
+
+            console.log("INCLUDES!!!");
+
+            setSelectedQueries(prevState => {
+                return prevState.filter((item) => (item.type === "hired-active-jobs" && item.hired !== completed) || (item.type !== "hired-active-jobs"));
+            })
+        } else {
+            setSelectedQueries(prevState => {
+                return [...prevState, {
+                    type: "hired-active-jobs",
+                    hired: completed
+                }];
+            })
+        }
+    }
+    const filterByNumberOfProfileHearts = (hearts) => {
+        console.log("filterByNumberOfProfileHearts number of hearts", hearts);
+
+        const findIndex = selectedQueries.findIndex((item) => item.type === "past-hearts" && item.hearts === hearts);
+
+        console.log("findIndex", findIndex);
+
+        if (findIndex !== -1) {
+
+            console.log("INCLUDES!!!");
+
+            setSelectedQueries(prevState => {
+                return prevState.filter((item) => (item.type === "past-hearts" && item.hearts !== hearts) || (item.type !== "past-hearts"));
+            })
+        } else {
+            setSelectedQueries(prevState => {
+                return [...prevState, {
+                    type: "past-hearts",
+                    hearts
+                }];
+            })
+        }
+    }
+    const filterByNumberOfPastReviews = (reviews) => {
+        console.log("filterByNumberOfPastReviews number of hackers", reviews);
+
+        const findIndex = selectedQueries.findIndex((item) => item.type === "past-reviews" && item.reviews === reviews);
+
+        console.log("findIndex", findIndex);
+
+        if (findIndex !== -1) {
+
+            console.log("INCLUDES!!!");
+
+            setSelectedQueries(prevState => {
+                return prevState.filter((item) => (item.type === "past-reviews" && item.reviews !== reviews) || (item.type !== "past-reviews"));
+            })
+        } else {
+            setSelectedQueries(prevState => {
+                return [...prevState, {
+                    type: "past-reviews",
+                    reviews
+                }];
+            })
+        }
+    }
 
     return (
         <Fragment>
@@ -38,25 +113,17 @@ const HackerDirectoryFilterOptions = () => {
                                                 <MapPin className="search-icon" />
                                             </div>
                                         </div>
+                                        <h3 className='sort-category-custom'>Sort By 'Number Of Currently Active Contracts'</h3>
                                         <div className="checkbox-animated">
-                                            <Label className="d-block" htmlFor="chk-ani">
-                                                <Input className="checkbox_animated" id="chk-ani" type="checkbox" />{"Full-time (8688)"}
-                                            </Label>
-                                            <Label className="d-block" htmlFor="chk-ani1">
-                                                <Input className="checkbox_animated" id="chk-ani1" type="checkbox" />{"Contract (503)"}
-                                            </Label>
-                                            <Label className="d-block" htmlFor="chk-ani2">
-                                                <Input className="checkbox_animated" id="chk-ani2" type="checkbox" />{"Part-time (288)"}
-                                            </Label>
-                                            <Label className="d-block" htmlFor="chk-ani3">
-                                                <Input className="checkbox_animated" id="chk-ani3" type="checkbox" />{"Internship (236)"}
-                                            </Label>
-                                            <Label className="d-block" htmlFor="chk-ani4">
-                                                <Input className="checkbox_animated" id="chk-ani4" type="checkbox" />{"Temporary (146)"}
-                                            </Label>
-                                            <Label className="d-block" htmlFor="chk-ani5">
-                                                <Input className="checkbox_animated" id="chk-ani5" type="checkbox" />{"Commission (25)"}
-                                            </Label>
+                                            {amountOfCompletedContractsFilterArr.map((item, index) => {
+                                                return (
+                                                    <Fragment key={index}>
+                                                        <Label className="d-block" htmlFor={`chk-ani${Math.random()}`}>
+                                                            <Input onClick={() => filterByAmountOfActiveContracts(item)} className="checkbox_animated" id={`chk-ani${Math.random()}`} type="checkbox" />{item === 20 ? `${item} total 'active' contracts (currently employed to) or beyond!` : `${item} total 'active' contracts (currently employed to)`}
+                                                        </Label>
+                                                    </Fragment>
+                                                );
+                                            })}
                                         </div>
                                         <Button color="primary" className="text-center">{FindJobs}</Button>
                                     </CardBody>
@@ -69,40 +136,23 @@ const HackerDirectoryFilterOptions = () => {
                                 <CardHeader>
                                     <h5 className="mb-0">
                                         <Button color="link pl-0" data-toggle="collapse" onClick={() => setLocation(!location)}
-                                            data-target="#collapseicon1" aria-expanded={location} aria-controls="collapseicon1">Program Features</Button>
+                                            data-target="#collapseicon1" aria-expanded={location} aria-controls="collapseicon1"><h3 className='sort-category-custom'>Sort By 'Number Of Past Reviews'</h3></Button>
                                     </h5>
                                 </CardHeader>
                                 <Collapse isOpen={location}>
                                     <CardBody className="animate-chk">
                                         <div className="location-checkbox">
-                                            <Label className="d-block" htmlFor="chk-ani6">
-                                                <Input className="checkbox_animated" id="chk-ani6" type="checkbox" />
-                                                {"IBB"}<span className="d-block">{"220 Listings"}</span>
-                                            </Label>
-                                            <Label className="d-block" htmlFor="chk-ani7">
-                                                <Input className="checkbox_animated" id="chk-ani7" type="checkbox" />
-                                                {"Offers bounties"}<span className="d-block">{"700 Listings"}</span>
-                                            </Label>
-                                            <Label className="d-block mb-0" htmlFor="chk-ani8">
-                                                <Input className="checkbox_animated" id="chk-ani8" type="checkbox" />
-                                                {"High response efficiency"}<span className="d-block">{"477 Listings"}</span>
-                                            </Label>
-                                            <Label className="d-block mb-0" htmlFor="chk-ani9">
-                                                <Input className="checkbox_animated" id="chk-ani9" type="checkbox" />
-                                                {"Managed by CyberHunt"}<span className="d-block">{"905 Listings"}</span>
-                                            </Label>
-                                            <Label className="d-block mb-0" htmlFor="chk-ani10">
-                                                <Input className="checkbox_animated" id="chk-ani10" type="checkbox" />
-                                                {"Offers retesting"}<span className="d-block">{"101 Listings"}</span>
-                                            </Label>
-                                            <Label className="d-block mb-0" htmlFor="chk-ani10">
-                                                <Input className="checkbox_animated" id="chk-ani10" type="checkbox" />
-                                                {"Active programs"}<span className="d-block">{"54 Listings"}</span>
-                                            </Label>
-                                            <Label className="d-block mb-0" htmlFor="chk-ani10">
-                                                <Input className="checkbox_animated" id="chk-ani10" type="checkbox" />
-                                                {"Bounty splitting"}<span className="d-block">{"665 Listings"}</span>
-                                            </Label>
+                                            <div className="checkbox-animated">
+                                                {amountOfCurrentReviews.map((item, index) => {
+                                                    return (
+                                                        <Fragment key={index}>
+                                                            <Label className="d-block" htmlFor={`chk-ani${Math.random()}`}>
+                                                                <Input onClick={() => filterByNumberOfPastReviews(item)} className="checkbox_animated" id={`chk-ani${Math.random()}`} type="checkbox" />{item === 55 ? `${item} total 'past reviews/contracts' or more!` : `${item} total 'past reviews/contracts'`}
+                                                            </Label>
+                                                        </Fragment>
+                                                    );
+                                                })}
+                                            </div>
                                         </div>
                                     </CardBody>
                                     <Button className="btn-block text-center" color="primary">All Program Types</Button>
@@ -114,79 +164,22 @@ const HackerDirectoryFilterOptions = () => {
                                 <CardHeader>
                                     <h5 className="mb-0">
                                         <Button color="link pl-0" onClick={() => setisJobTitle(!isJobTitle)}
-                                            data-toggle="collapse" data-target="#collapseicon2" aria-expanded={isJobTitle} aria-controls="collapseicon2">Asset Type</Button>
+                                            data-toggle="collapse" data-target="#collapseicon2" aria-expanded={isJobTitle} aria-controls="collapseicon2"><h3 className='sort-category-custom'>Sort By 'Number Of Profile Hearts/Love's'</h3></Button>
                                     </h5>
                                 </CardHeader>
                                 <Collapse isOpen={isJobTitle}>
                                     <CardBody className="animate-chk">
-                                        <Label className="d-block" htmlFor="chk-ani11">
-                                            <Input className="checkbox_animated" id="chk-ani11" type="checkbox" />
-                                            {"Any"}
-                                        </Label>
-                                        <Label className="d-block" htmlFor="chk-ani12">
-                                            <Input className="checkbox_animated" id="chk-ani12" type="checkbox" />
-                                            {"CIDR"}
-                                        </Label>
-                                        <Label className="d-block" htmlFor="chk-ani14">
-                                            <Input className="checkbox_animated" id="chk-ani14" type="checkbox" />
-                                            {"Domain"}
-                                        </Label>
-                                        <Label className="d-block" htmlFor="chk-ani15">
-                                            <Input className="checkbox_animated" id="chk-ani15" type="checkbox" />
-                                            {"iOS: App Store"}
-                                        </Label>
-                                        <Label className="d-block" htmlFor="chk-ani16">
-                                            <Input className="checkbox_animated" id="chk-ani16" type="checkbox" />
-                                            {"iOS: Testflight"}
-                                        </Label>
-                                        <Label className="d-block" htmlFor="chk-ani17">
-                                            <Input className="checkbox_animated" id="chk-ani17" type="checkbox" />
-                                            {"iOS: .ipa"}
-                                        </Label>
-                                        <Label className="d-block" htmlFor="chk-ani18">
-                                            <Input className="checkbox_animated" id="chk-ani18" type="checkbox" />
-                                            {"Android: Play Store"}
-                                        </Label>
-                                        <Label className="d-block" htmlFor="chk-ani19">
-                                            <Input className="checkbox_animated" id="chk-ani19" type="checkbox" />
-                                            {"Android: .apk"}
-                                        </Label>
-                                        <Label className="d-block" htmlFor="chk-ani20">
-                                            <Input className="checkbox_animated" id="chk-ani20" type="checkbox" />
-                                            {"Windows: Microsoft Store"}
-                                        </Label>
-                                        <Label className="d-block" htmlFor="chk-ani21">
-                                            <Input className="checkbox_animated" id="chk-ani21" type="checkbox" />
-                                            {"Source Code"}
-                                        </Label>
-                                        <Label className="d-block" htmlFor="chk-ani22">
-                                            <Input className="checkbox_animated" id="chk-ani22" type="checkbox" />
-                                            {"Executable"}
-                                        </Label>
-                                        <Label className="d-block" htmlFor="chk-ani23">
-                                            <Input className="checkbox_animated" id="chk-ani23" type="checkbox" />
-                                            {"Hardware/IoT"}
-                                        </Label>
-                                        <Label className="d-block" htmlFor="chk-ani24">
-                                            <Input className="checkbox_animated" id="chk-ani24" type="checkbox" />
-                                            {"External Network Testing"}
-                                        </Label>
-                                        <Label className="d-block" htmlFor="chk-ani25">
-                                            <Input className="checkbox_animated" id="chk-ani25" type="checkbox" />
-                                            {"Internal Network Testing"}
-                                        </Label>
-                                        <Label className="d-block" htmlFor="chk-ani26">
-                                            <Input className="checkbox_animated" id="chk-ani26" type="checkbox" />
-                                            {"Social Engineering Testing"}
-                                        </Label>
-                                        <Label className="d-block" htmlFor="chk-ani27">
-                                            <Input className="checkbox_animated" id="chk-ani27" type="checkbox" />
-                                            {"Physical/On-Site Testing"}
-                                        </Label>
-                                        <Label className="d-block mb-0" htmlFor="chk-ani28">
-                                            <Input className="checkbox_animated" id="chk-ani28" type="checkbox" />
-                                            {"Wireless Testing"}
-                                        </Label>
+                                        <div className="checkbox-animated">
+                                            {profileLoveHeartcount.map((item, index) => {
+                                                return (
+                                                    <Fragment key={index}>
+                                                        <Label className="d-block" htmlFor={`chk-ani${Math.random()}`}>
+                                                            <Input onClick={() => filterByNumberOfProfileHearts(item)} className="checkbox_animated" id={`chk-ani${Math.random()}`} type="checkbox" />{`${item} total 'profile loves/hearts' OR more..`}
+                                                        </Label>
+                                                    </Fragment>
+                                                );
+                                            })}
+                                        </div>
                                     </CardBody>
                                     <Button className="btn-block text-center" color="primary">View All Asset Types</Button>
                                 </Collapse>
