@@ -4,7 +4,7 @@ import "./styles.css";
 
 const WebsiteSecurity = () => {
     return (
-        <section className="security-area pb-70">
+        <section style={{ paddingTop: "175px" }} className="security-area pb-70">
 			<div className="container">
 				<div className="section-title">
 					<h2>Your <strong style={{ textDecorationLine: "underline", color: "#f73164" }}>COMPLETE</strong> one-stop shop for <strong style={{ textDecorationLine: "underline", color: "#f73164" }}>all</strong> of your hacking needs/wants. </h2>

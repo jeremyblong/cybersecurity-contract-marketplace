@@ -19,12 +19,15 @@ const session = require('express-session');
 const http = require("http");
 const server = http.createServer(app);
 const ClamScanConfiguration = require("./config/clamscan.js");
+const path = require("path");
 const io = require('socket.io')(server, {
 	cors: {
 		origin: '*',
 	}
 });
 const NodeClam = require('clamscan');
+
+app.use(helmet({ contentSecurityPolicy: false }));
 
 app.use(async (req, _, next) => {
 	req.clamscan = await new NodeClam().init({ ...ClamScanConfiguration })
@@ -60,16 +63,16 @@ app.use(bodyParser.urlencoded({
 
 const whitelist = config.get("WHITELISTED_DOMAINS") ? config.get("WHITELISTED_DOMAINS").split(",") : [];
 
-const corsOptions = {
-	origin: (origin, callback) => {
-	  if (!origin || whitelist.indexOf(origin) !== -1) {
-		callback(null, true)
-	  } else {
-		callback(new Error("Not allowed by CORS"))
-	  }
-	},
-	credentials: true,
-};
+// const corsOptions = {
+// 	origin: (origin, callback) => {
+// 	  if (!origin || whitelist.indexOf(origin) !== -1) {
+// 		callback(null, true)
+// 	  } else {
+// 		callback(new Error("Not allowed by CORS"))
+// 	  }
+// 	},
+// 	credentials: true,
+// };
 
 app.use((req, res, next) => {
     // Website you wish to allow to connect
@@ -102,7 +105,7 @@ app.use(session({
 	saveUninitialized: false
 }));
   
-app.use(cors(corsOptions));
+app.use(cors());
 
 app.use(passport.initialize());
 
@@ -113,7 +116,6 @@ const limiter = rateLimit({
 }); 
 
 app.use(xss());
-app.use(helmet());
 app.use(mongoSanitize());
 app.use(limiter);
 // ~ test route STARTS here ~
@@ -301,25 +303,24 @@ app.use("/send/phone/code/again/auth", require("./routes/authentication/twilio/r
 app.use("/gather/hackers/random/general/leaderboards", require("./routes/hackers/leaderboards/gatherTopUsers.js"));
 
 
-app.get('*', function(req, res) {
-  res.sendFile(__dirname, './client/public/index.html');
+app.use(express.static(path.join(__dirname, '../client/build')));
+
+// Handle React routing, return all requests to React app
+app.get('*', (req, res) => {
+  console.log("hit *", __dirname);
+
+  res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
 });
 
-app.get('*', cors(), function(_, res) {
-	res.sendFile(__dirname, './client/build/index.html'), function(err) {
-	  if (err) {
-		res.status(500).send(err)
-	  };
-	};
-});
-    
-app.get('/*', cors(), function(_, res) {
-	res.sendFile(__dirname, './client/build/index.html'), function(err) {
-		if (err) {
-		res.status(500).send(err)
-		};
-	};
-});
+if (process.env.NODE_ENV === 'production') {
+  // Serve any static files
+  app.use(express.static(path.join(__dirname, '../client/build')));
+
+  // Handle React routing, return all requests to React app
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+  });
+}
 
 io.on("connection", socket => {
 
@@ -348,7 +349,3 @@ server.listen(PORT, () => {
 
 	console.log(`app listening on port ${PORT}!`);
 });
-
-
-// NEED TO DO BEFORE PRODUCTION //
-// 1. Change hardwired email to dynamic variable email in routes/authentication/login/emailAlert/alertViaEmailOfAuth.js "to" recipient

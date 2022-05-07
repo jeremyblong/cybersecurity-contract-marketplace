@@ -9,7 +9,7 @@
     "JWT_SECRET": "aldkladkjfalkmeflmpppqlkqlknqndbcnkkxhhxmnsmsmwmwqqqqqq",
     "REFRESH_TOKEN_SECRET": "ljkadjflkwimemmemennwmwemweotiyiyutututoprprpeeemmmxmncncncnmnwkwk",
     "COOKIE_SECRET": "lakdkjflmqkmqlmpqpwolkmgolkmfjndjcnvksndkfjomqsqkewkwiirueruyeuty",
-    "WHITELISTED_DOMAINS": "http://localhost:3000",
+    "WHITELISTED_DOMAINS": "http://localhost:3000, http://localhost:5000",
     "frontendUrl": "http://localhost:3000",
     "SESSION_EXPIRY": 900,
     "REFRESH_TOKEN_EXPIRY": 2592000,
