@@ -58,6 +58,7 @@ const MainPaymentSelectionHelper = ({ userData }) => {
     const [ isOpen, setIsOpenState ] = useState(false);
     const [ currentApplication, setCurrentApplication ] = useState(null);
     const [ listingsData, setListings ] = useState([]);
+    const [ blogs, setBlogs ] = useState([]);
     const [ paymentPaneFull, setFullPaymentPaneOpen ] = useState(false);
     const [ currentlyDue, setCurrentlyDue ] = useState([]);
     const [ incrementalPayentsPane, setIncrementalPaymentsOpen ] = useState(false);
@@ -65,6 +66,13 @@ const MainPaymentSelectionHelper = ({ userData }) => {
     const { id } = useParams();
 
     const history = useHistory();
+
+
+    const handleRedirectToIndividualBlog = (blog) => {
+        console.log("handleRedirectToIndividualBlog clicked..:", blog);
+
+        history.push(`/view/individual/restricted/blog/content/${blog.id}`);
+    }
 
     const handleChange = event => {
         const searchTitle = event.target.value;
@@ -143,6 +151,27 @@ const MainPaymentSelectionHelper = ({ userData }) => {
             }
         }).catch((err) => {
             console.log("Critical errror...:", err);
+        })
+    }, []);
+
+    useEffect(() => {
+        const config = {
+            params: {
+                
+            }
+        } 
+        axios.get(`${process.env.REACT_APP_BASE_URL}/gather/blogs/randomized/short/restricted`, config).then((res) => {
+            if (res.data.message === "Successfully gathered blogs!") {
+                console.log(res.data);
+
+                const { blogs } = res.data;
+
+                setBlogs(blogs);
+            } else {
+                console.log("err", res.data);
+            }
+        }).catch((err) => {
+            console.log(err);
         })
     }, []);
 
@@ -373,127 +402,23 @@ const MainPaymentSelectionHelper = ({ userData }) => {
                             <h5 className="mb-0">{"Latest articles and videos"}</h5>
                         </div>
                         <Row>
-                            <Col xl="4" md="6">
-                                <Row>
-                                    <Col sm="12">
-                                        <Card>
+                            {typeof blogs !== "undefined" && blogs.length > 0 ? blogs.map((blog, index) => {
+                                return (
+                                    <Col onClick={() => handleRedirectToIndividualBlog(blog)} key={index} sm="12" md="4" lg="4" xl="4">
+                                        <Card className={"add-shadow-normal-faq-card hovered-blog-chunk-customized-two"}>
                                             <CardBody>
-                                                <div className="media"><Codepen className="m-r-30" />
+                                                <Media>
+                                                    <Codepen className="m-r-30" />
                                                     <Media body>
-                                                        <h6 className="f-w-600">{"Using Video"}</h6>
-                                                        <p>{"Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus."}</p>
+                                                        <h6 className="f-w-600">{blog.title.slice(0, 50)}{typeof blog.title !== "undefined" && blog.title.length >= 50 ? "..." : ""}</h6>
+                                                        <p>{blog.description.slice(0, 125)}{typeof blog.description !== "undefined" && blog.description.length >= 125 ? "..." : ""}</p>
                                                     </Media>
-                                                </div>
+                                                </Media>
                                             </CardBody>
                                         </Card>
                                     </Col>
-                                    <Col sm="12">
-                                        <Card>
-                                            <CardBody>
-                                                <div className="media"><Codepen className="m-r-30" />
-                                                    <Media body>
-                                                        <h6 className="f-w-600">{"Vel illum qu"}</h6>
-                                                        <p>{"Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus."}</p>
-                                                    </Media>
-                                                </div>
-                                            </CardBody>
-                                        </Card>
-                                    </Col>
-                                    <Col sm="12">
-                                        <Card>
-                                            <CardBody>
-                                                <div className="media"><Codepen className="m-r-30" />
-                                                    <Media body>
-                                                        <h6 className="f-w-600">{"Cum sociis natoqu"}</h6>
-                                                        <p>{"Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. "}</p>
-                                                    </Media>
-                                                </div>
-                                            </CardBody>
-                                        </Card>
-                                    </Col>
-                                </Row>
-                            </Col>
-                            <Col xl="4" md="6">
-                                <Row>
-                                    <Col sm="12">
-                                        <Card>
-                                            <CardBody>
-                                                <div className="media"><FileText className="m-r-30" />
-                                                    <Media body>
-                                                        <h6 className="f-w-600">{"Donec pede justo"}</h6>
-                                                        <p>{" Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. "}</p>
-                                                    </Media>
-                                                </div>
-                                            </CardBody>
-                                        </Card>
-                                    </Col>
-                                    <Col sm="12">
-                                        <Card>
-                                            <CardBody>
-                                                <div className="media"><FileText className="m-r-30" />
-                                                    <Media body>
-                                                        <h6 className="f-w-600">{"Nam quam nunc"}</h6>
-                                                        <p>{" Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus."}</p>
-                                                    </Media>
-                                                </div>
-                                            </CardBody>
-                                        </Card>
-                                    </Col>
-                                    <Col sm="12">
-                                        <Card>
-                                            <CardBody>
-                                                <div className="media">
-                                                    <FileText className="m-r-30" />
-                                                    <Media body>
-                                                        <h6 className="f-w-600">{"Using Video"} </h6>
-                                                        <p>{"Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus."}</p>
-                                                    </Media>
-                                                </div>
-                                            </CardBody>
-                                        </Card>
-                                    </Col>
-                                </Row>
-                            </Col>
-                            <Col xl="4">
-                                <Row>
-                                    <Col xl="12" md="6">
-                                        <Card>
-                                            <CardBody>
-                                                <div className="media"><Youtube className="m-r-30" />
-                                                    <Media body>
-                                                        <h6 className="f-w-600">{"Vel illum qu"}</h6>
-                                                        <p>{"Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus."}</p>
-                                                    </Media>
-                                                </div>
-                                            </CardBody>
-                                        </Card>
-                                    </Col>
-                                    <Col xl="12" md="6">
-                                        <Card>
-                                            <CardBody>
-                                                <div className="media"><Youtube className="m-r-30" />
-                                                    <Media body>
-                                                        <h6 className="f-w-600">{"Cum sociis natoqu"}</h6>
-                                                        <p>{"Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus."}</p>
-                                                    </Media>
-                                                </div>
-                                            </CardBody>
-                                        </Card>
-                                    </Col>
-                                    <Col xl="12">
-                                        <Card>
-                                            <CardBody>
-                                                <div className="media"><Youtube className="m-r-30" />
-                                                    <Media body>
-                                                        <h6 className="f-w-600">{"Donec pede justo"}</h6>
-                                                        <p>{"Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus."}</p>
-                                                    </Media>
-                                                </div>
-                                            </CardBody>
-                                        </Card>
-                                    </Col>
-                                </Row>
-                            </Col>
+                                );
+                            }) : null}
                         </Row>
                     </Col>
                 </Row>

@@ -71,40 +71,46 @@ const Sidebar = ({ blogs }) => {
                 </div>
             </div>
 
-            <div className="widget widget_categories">
-                <h3 className="widget-title">Archives</h3>
+            <section className="widget widget_categories">
+                <h3 className="widget-title">Quick Redirect (s)</h3>
                 <div className="post-wrap">
                     <ul>
                         <li>
-                            <Link to={"/"}>
-                                <a>February <span>2020</span></a>
+                            <Link to="/sign-in">
+                                <a>Sign-in/Sign-Up</a>
                             </Link>
                         </li>
                         <li>
-                            <Link to={"/"}>
-                                <a>March <span>2020</span></a>
+                            <Link to="contact">
+                                <a>Contact</a>
                             </Link>
                         </li>
                         <li>
-                            <Link to={"/"}>
-                                <a>April <span>2020</span></a>
+                            <Link to="/pricing-before-login">
+                                <a>Subscription/Pricing Plans</a>
                             </Link>
                         </li>
                         <li>
-                            <Link to={"/"}>
-                                <a>May <span>2020</span></a>
+                            <Link to="/terms-and-conditions">
+                                <a>Terms & Conditions</a>
                             </Link>
                         </li>
                         <li>
-                            <Link to={"/"}>
-                                <a>June <span>2020</span></a>
+                            <Link to="/blog-main">
+                                <a>Blogging Related</a>
+                            </Link>
+                        </li>
+                        <li>
+                            <Link to="/team">
+                                <a>Team (Current)</a>
                             </Link>
                         </li>
                     </ul>
                 </div>
-            </div>
+            </section>
 
-            <div className="widget widget_tag_cloud">
+
+            {/* <div className="widget widget_tag_cloud">
                 <h3 className="widget-title">Tags</h3>
                 <div className="post-wrap">
                     <div className="tagcloud">
@@ -133,7 +139,7 @@ const Sidebar = ({ blogs }) => {
                         </Link>
                     </div>
                 </div>
-            </div>       
+            </div>        */}
         </aside>
     )
 }

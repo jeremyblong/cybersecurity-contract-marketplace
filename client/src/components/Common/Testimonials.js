@@ -1,5 +1,7 @@
 import React from 'react';
 import OwlCarousel from 'react-owl-carousel3';
+import "./styles.css";
+
 
 const options = {
     loop:true,
@@ -32,11 +34,11 @@ const Testimonials = () => {
     }, [])
 
     return (
-        <section className="client-area ptb-100">
+        <section id={"client-area-bottom"} className="client-area ptb-100">
             <div className="container">
                 <div className="section-title white-title">
-					<h2>What Client’s Say About Us</h2>
-					<p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Doloribus quam neque quibusdam corrupti aspernatur corporis alias nisi dolorum expedita veritatis voluptates minima.</p>
+					<h2>What Client's Say About Us</h2>
+					<p>We have recently launched in the past weeks therefore we have very few if any reviews at the current moment. Stay tuned for future updates & posts once we gain more traction & feedback!</p>
 				</div>
 
                 {display ? <OwlCarousel 
@@ -45,7 +47,7 @@ const Testimonials = () => {
                 > 
                     <div className="single-client">
                         <i className="quotes bx bxs-quote-alt-left"></i>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit,do eiusmod tempor incididunt ut labore et dolore.</p>
+                        <p>No current or pending reviews - Stay tuned for future reviews as we just launching & building an audience...</p>
 
                         <ul>
                             <li><i className="bx bxs-star"></i></li>
@@ -57,14 +59,14 @@ const Testimonials = () => {
 
                         <div className="client-img">
                             <img src="/img/client-img/client1.jpg" alt="Image" />
-                            <h3>Alen Meair</h3>
+                            <h3>N/A</h3>
                             <span>Developer</span>
                         </div>
                     </div>
 
                     <div className="single-client">
                         <i className="quotes bx bxs-quote-alt-left"></i>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit,do eiusmod tempor incididunt ut labore et dolore.</p>
+                        <p>No current or pending reviews - Stay tuned for future reviews as we just launching & building an audience...</p>
 
                         <ul>
                             <li><i className="bx bxs-star"></i></li>
@@ -76,14 +78,14 @@ const Testimonials = () => {
 
                         <div className="client-img">
                             <img src="/img/client-img/client2.jpg" alt="Image" />
-                            <h3>Axon Detos</h3>
+                            <h3>N/A</h3>
                             <span>CEO</span>
                         </div>
                     </div>
 
                     <div className="single-client">
                         <i className="quotes bx bxs-quote-alt-left"></i>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit,do eiusmod tempor incididunt ut labore et dolore.</p>
+                        <p>No current or pending reviews - Stay tuned for future reviews as we just launching & building an audience...</p>
 
                         <ul>
                             <li><i className="bx bxs-star"></i></li>
@@ -95,14 +97,14 @@ const Testimonials = () => {
 
                         <div className="client-img">
                             <img src="/img/client-img/client3.jpg" alt="Image" />
-                            <h3>John Dona</h3>
+                            <h3>N/A</h3>
                             <span>Designer</span>
                         </div>
                     </div>
 
                     <div className="single-client">
                         <i className="quotes bx bxs-quote-alt-left"></i>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit,do eiusmod tempor incididunt ut labore et dolore.</p>
+                        <p>No current or pending reviews - Stay tuned for future reviews as we just launching & building an audience...</p>
 
                         <ul>
                             <li><i className="bx bxs-star"></i></li>
@@ -114,7 +116,7 @@ const Testimonials = () => {
                         
                         <div className="client-img">
                             <img src="/img/client-img/client4.jpg" alt="Image" />
-                            <h3>Jon Smith</h3>
+                            <h3>N/A</h3>
                             <span>Developer</span>
                         </div>
                     </div>

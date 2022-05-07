@@ -248,7 +248,7 @@ const Rightbar = ({ userData, SBData, balance, ready, authenticated, data, authe
   }
 
   useEffect(() => {
-    if (_.has(SBData, "OpenChannel")) {
+    if (_.has(SBData, "OpenChannel") && authenticated === true) {
       console.log("true ran............................");
 
       const listQuery = SBData.GroupChannel.createMyGroupChannelListQuery();

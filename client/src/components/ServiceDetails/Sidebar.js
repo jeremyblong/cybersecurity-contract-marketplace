@@ -18,44 +18,44 @@ const Sidebar = () => {
                 </div>
                 
                 <section className="widget widget_categories">
-                    <h3 className="widget-title">Categories</h3>
+                    <h3 className="widget-title">Quick Redirect (s)</h3>
                     <div className="post-wrap">
                         <ul>
                             <li>
-                                <Link href="#">
-                                    <a>Blockchain <span>(10)</span></a>
+                                <Link to="/sign-in">
+                                    <a>Sign-in/Sign-Up</a>
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#">
-                                    <a>Cyber security <span>(20)</span></a>
+                                <Link to="contact">
+                                    <a>Contact</a>
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#">
-                                    <a>Cybercrime <span>(10)</span></a>
+                                <Link to="/pricing-before-login">
+                                    <a>Subscription/Pricing Plans</a>
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#">
-                                    <a>Global news <span>(12)</span></a>
+                                <Link to="/terms-and-conditions">
+                                    <a>Terms & Conditions</a>
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#">
-                                    <a>Ransomware <span>(16)</span></a>
+                                <Link to="/blog-main">
+                                    <a>Blogging Related</a>
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#">
-                                    <a>Whitepapers <span>(17)</span></a>
+                                <Link to="/team">
+                                    <a>Team (Current)</a>
                                 </Link>
                             </li>
                         </ul>
                     </div>
                 </section>
 
-                <section className="widget widget_tag_cloud">
+                {/* <section className="widget widget_tag_cloud">
                     <h3 className="widget-title">Tags</h3>
                     <div className="post-wrap">
                         <div className="tagcloud">
@@ -83,7 +83,7 @@ const Sidebar = () => {
                             </Link>
                         </div>
                     </div>
-                </section>       
+                </section>        */}
             </aside>
         </div>
     )

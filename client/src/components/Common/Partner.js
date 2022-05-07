@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import OwlCarousel from 'react-owl-carousel3';
 
 const options = {
@@ -35,50 +35,52 @@ const Partner = () => {
     }, [])
 
     return (
-        <div className="partner-area ptb-100">
-			{/* <div className="container">
-                {display ? <OwlCarousel 
-                    className="partner-wrap owl-carousel owl-theme"
-                    {...options}
-                >
-                    <div className="partner-item">
-                        <img src="/img/partners/partner1.png" alt="Image" />
+        <Fragment>
+            {/* <div className="partner-area ptb-100">
+                <div className="container">
+                    {display ? <OwlCarousel 
+                        className="partner-wrap owl-carousel owl-theme"
+                        {...options}
+                    >
+                        <div className="partner-item">
+                            <img src="/img/partners/partner1.png" alt="Image" />
+                            
+                            <a className="partner-overly" href="#" target="_blank">
+                                <img src="/img/partners/hover-partner1.png" alt="Image" />
+                            </a>
+                        </div>
+
+                        <div className="partner-item">
+                            <img src="/img/partners/partner2.png" alt="Image" />
+                            <a className="partner-overly" href="#" target="_blank">
+                                <img src="/img/partners/hover-partner2.png" alt="Image" />
+                            </a>
+                        </div>
+
+                        <div className="partner-item">
+                            <img src="/img/partners/partner3.png" alt="Image" />
+                            <a className="partner-overly" href="#" target="_blank">
+                                <img src="/img/partners/hover-partner3.png" alt="Image" />
+                            </a>
+                        </div>
                         
-                        <a className="partner-overly" href="#" target="_blank">
-                            <img src="/img/partners/hover-partner1.png" alt="Image" />
-                        </a>
-                    </div>
+                        <div className="partner-item">
+                            <img src="/img/partners/partner4.png" alt="Image" />
+                            <a className="partner-overly" href="#" target="_blank">
+                                <img src="/img/partners/hover-partner4.png" alt="Image" />
+                            </a>
+                        </div>
 
-                    <div className="partner-item">
-                        <img src="/img/partners/partner2.png" alt="Image" />
-                        <a className="partner-overly" href="#" target="_blank">
-                            <img src="/img/partners/hover-partner2.png" alt="Image" />
-                        </a>
-                    </div>
-
-                    <div className="partner-item">
-                        <img src="/img/partners/partner3.png" alt="Image" />
-                        <a className="partner-overly" href="#" target="_blank">
-                            <img src="/img/partners/hover-partner3.png" alt="Image" />
-                        </a>
-                    </div>
-                    
-                    <div className="partner-item">
-                        <img src="/img/partners/partner4.png" alt="Image" />
-                        <a className="partner-overly" href="#" target="_blank">
-                            <img src="/img/partners/hover-partner4.png" alt="Image" />
-                        </a>
-                    </div>
-
-                    <div className="partner-item">
-                        <img src="/img/partners/partner5.png" alt="Image" />
-                        <a className="partner-overly" href="#" target="_blank">
-                            <img src="/img/partners/hover-partner5.png" alt="Image" />
-                        </a>
-                    </div>
-                </OwlCarousel> : ''}
-			</div> */}
-		</div>
+                        <div className="partner-item">
+                            <img src="/img/partners/partner5.png" alt="Image" />
+                            <a className="partner-overly" href="#" target="_blank">
+                                <img src="/img/partners/hover-partner5.png" alt="Image" />
+                            </a>
+                        </div>
+                    </OwlCarousel> : ''}
+                </div>
+            </div> */}
+        </Fragment>
     )
 }
 

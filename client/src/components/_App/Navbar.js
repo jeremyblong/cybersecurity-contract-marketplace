@@ -192,11 +192,11 @@ const Navbar = ({ data, authenticated, authentication, saveListingData, saveSoft
                                                         </Link>
                                                     </li>
 
-                                                    <li className="nav-item custom-nav-item-link">
+                                                    {/* <li className="nav-item custom-nav-item-link">
                                                         <Link to="/testimonials" activeClassName="active">
                                                             <a onClick={() => setCollapsed(true)} className="nav-link nav-link-custom-homepage">Testimonials</a>
                                                         </Link>
-                                                    </li>
+                                                    </li> */}
 
                                                     <li className="nav-item custom-nav-item-link">
                                                         <Link to="/team" activeClassName="active">
@@ -238,11 +238,11 @@ const Navbar = ({ data, authenticated, authentication, saveListingData, saveSoft
                                                         </ul>
                                                     </li>
 
-                                                    <li className="nav-item custom-nav-item-link">
+                                                    {/* <li className="nav-item custom-nav-item-link">
                                                         <Link to="/coming-soon" activeClassName="active">
                                                             <a onClick={() => setCollapsed(true)} className="nav-link nav-link-custom-homepage">Coming Soon</a>
                                                         </Link>
-                                                    </li>
+                                                    </li> */}
  
                                                     <li className="nav-item custom-nav-item-link">
                                                         <Link to="/privacy-policy" activeClassName="active">
@@ -261,7 +261,7 @@ const Navbar = ({ data, authenticated, authentication, saveListingData, saveSoft
                                             <li className="nav-item custom-nav-item-link">
                                                 <Link to="/#" activeClassName="active">
                                                     <a onClick={e => e.preventDefault()} className="nav-link nav-link-custom-homepage">
-                                                        Services <i className='bx bx-chevron-down'></i>
+                                                        Services/About <i className='bx bx-chevron-down'></i>
                                                     </a>
                                                 </Link>
                                                 
@@ -272,7 +272,7 @@ const Navbar = ({ data, authenticated, authentication, saveListingData, saveSoft
                                                         </Link>
                                                     </li>
                                                     
-                                                    <li className="nav-item custom-nav-item-link">
+                                                    {/* <li className="nav-item custom-nav-item-link">
                                                         <Link to="/services-one" activeClassName="active">
                                                             <a onClick={() => setCollapsed(true)} className="nav-link nav-link-custom-homepage">Services Style One</a>
                                                         </Link>
@@ -294,7 +294,7 @@ const Navbar = ({ data, authenticated, authentication, saveListingData, saveSoft
                                                         <Link to="/service-details" activeClassName="active">
                                                             <a onClick={() => setCollapsed(true)} className="nav-link nav-link-custom-homepage">Service Details</a>
                                                         </Link>
-                                                    </li>
+                                                    </li> */}
                                                 </ul>
                                             </li>
   

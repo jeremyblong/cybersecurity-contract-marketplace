@@ -50,8 +50,8 @@ const PricingPlan = () => {
 								</li>
 							</ul>
 
-                            <Link href="/contact">
-                                <a className="default-btn">Order Now</a>
+                            <Link className="default-btn" to="/sign-in">
+                                Order Now
                             </Link>
 						</div>
 					</div>
@@ -86,9 +86,8 @@ const PricingPlan = () => {
 									</span>
 								</li>
 							</ul>
-
-							<Link style={{ paddingBottom: "75px" }} href="/contact">
-                                <a className="default-btn">Order Now</a>
+							<Link style={{ marginTop: "75px" }} className="default-btn" to="/sign-in">
+                                Order Now
                             </Link>
 						</div>
 					</div>
@@ -122,8 +121,8 @@ const PricingPlan = () => {
 								</li>
 							</ul>
 
-							<Link href="/contact">
-                                <a className="default-btn">Order Now</a>
+							<Link className="default-btn" to="/sign-in">
+                                Order Now
                             </Link>
 						</div>
 					</div>

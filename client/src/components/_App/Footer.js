@@ -44,51 +44,51 @@ const Footer = () => {
 
                                 <ul>
                                     <li>
-                                        <Link href="/service-details">
-                                            <a>
+                                        <Link to="/service-details">
+                                            
                                                 <i className="bx bx-chevrons-right"></i>
                                                 Web Site Protection
-                                            </a>
+                                            
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link href="/service-details">
-                                            <a>
+                                        <Link to="/service-details">
+                                            
                                                 <i className="bx bx-chevrons-right"></i>
                                                 Hosting & Server Guard
-                                            </a>
+                                            
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link href="/service-details">
-                                            <a>
+                                        <Link to="/service-details">
+                                            
                                                 <i className="bx bx-chevrons-right"></i>
                                                 Web Administrator
-                                            </a>
+                                            
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link href="/service-details">
-                                            <a>
+                                        <Link to="/service-details">
+                                            
                                                 <i className="bx bx-chevrons-right"></i>
                                                 Conducting Training
-                                            </a>
+                                            
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link href="/service-details">
-                                            <a>
+                                        <Link to="/service-details">
+                                            
                                                 <i className="bx bx-chevrons-right"></i>
                                                 GRPS Smart Protection
-                                            </a>
+                                            
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link href="/service-details">
-                                            <a>
+                                        <Link to="/service-details">
+                                            
                                                 <i className="bx bx-chevrons-right"></i>
                                                 Security App
-                                            </a>
+                                            
                                         </Link>
                                     </li>
                                 </ul>
@@ -101,51 +101,51 @@ const Footer = () => {
 
                                 <ul>
                                     <li>
-                                        <Link href="/contact">
-                                            <a>
+                                        <Link to="/contact">
+                                            
                                                 <i className="bx bx-chevrons-right"></i>
                                                 Support Forum
-                                            </a>
+                                            
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link href="/faq">
-                                            <a>
+                                        <Link to="/faq">
+                                            
                                                 <i className="bx bx-chevrons-right"></i>
                                                 FAQ Questions
-                                            </a>
+                                            
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link href="/contact">
-                                            <a>
+                                        <Link to="/contact">
+                                            
                                                 <i className="bx bx-chevrons-right"></i>
                                                 24/7 Support for Help
-                                            </a>
+                                            
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link href="/contact">
-                                            <a>
+                                        <Link to="/contact">
+                                            
                                                 <i className="bx bx-chevrons-right"></i>
                                                 Counseling 
-                                            </a>
+                                            
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link href="/contact">
-                                            <a>
+                                        <Link to="/contact">
+                                            
                                                 <i className="bx bx-chevrons-right"></i>
                                                 Protection
-                                            </a>
+                                            
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link href="/contact">
-                                            <a>
+                                        <Link to="/contact">
+                                            
                                                 <i className="bx bx-chevrons-right"></i>
                                                 Securihty
-                                            </a>
+                                            
                                         </Link>
                                     </li>
                                 </ul>
@@ -158,51 +158,51 @@ const Footer = () => {
 
                                 <ul>
                                     <li>
-                                        <Link href="/contact">
-                                            <a>
+                                        <Link to="/contact">
+                                            
                                                 <i className="bx bx-chevrons-right"></i>
                                                 Security
-                                            </a>
+                                            
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link href="/contact">
-                                            <a>
+                                        <Link to="/contact">
+                                            
                                                 <i className="bx bx-chevrons-right"></i>
                                                 Protection
-                                            </a>
+                                            
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link href="/contact">
-                                            <a>
+                                        <Link to="/contact">
+                                            
                                                 <i className="bx bx-chevrons-right"></i>
                                                 Antivirus Packages
-                                            </a>
+                                            
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link href="/contact">
-                                            <a>
+                                        <Link to="/contact">
+                                            
                                                 <i className="bx bx-chevrons-right"></i>
                                                 Security App 
-                                            </a>
+                                            
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link href="/contact">
-                                            <a>
+                                        <Link to="/contact">
+                                            
                                                 <i className="bx bx-chevrons-right"></i>
                                                 Website Security 
-                                            </a>
+                                            
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link href="/contact">
-                                            <a>
+                                        <Link to="/contact">
+                                            
                                                 <i className="bx bx-chevrons-right"></i>
                                                 Digital Security
-                                            </a>
+                                            
                                         </Link>
                                     </li>
                                 </ul>
@@ -225,13 +225,13 @@ const Footer = () => {
                             <div className="condition-privacy">
                                 <ul>
                                     <li>
-                                        <Link href="/terms-conditions">
-                                            <a>Terms & Condition</a>
+                                        <Link to="/terms-conditions">
+                                            Terms & Condition
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link href="/privacy-policy">
-                                            <a>Privacy Policy</a>
+                                        <Link to="/privacy-policy">
+                                            Privacy Policy
                                         </Link>
                                     </li>
                                 </ul>

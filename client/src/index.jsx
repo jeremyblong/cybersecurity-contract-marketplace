@@ -246,12 +246,12 @@ const Root = (props) =>  {
         <Route exact path="/coming-soon" render={(props) => renderComponent(ComingSoon, props)} />
         <Route exact path="/privacy-policy" render={(props) => renderComponent(PrivacyPolicy, props)} />
         <Route exact path="/team" render={(props) => renderComponent(Team, props)} />
-        <Route exact path="/service-details" render={(props) => renderComponent(ServiceDetails, props)} />
+        {/* <Route exact path="/service-details" render={(props) => renderComponent(ServiceDetails, props)} /> */}
         <Route exact path="/blog-main" render={(props) => renderComponent(BlogGrid, props)} />
         <Route exact path="/blog-details/:id" render={(props) => renderComponent(BlogDetails, props)} />
-        <Route exact path="/services-one" render={(props) => renderComponent(ServicesOne, props)} />
+        {/* <Route exact path="/services-one" render={(props) => renderComponent(ServicesOne, props)} />
         <Route exact path="/services-two" render={(props) => renderComponent(ServicesTwo, props)} />
-        <Route exact path="/services-three" render={(props) => renderComponent(ServicesThree, props)} />
+        <Route exact path="/services-three" render={(props) => renderComponent(ServicesThree, props)} /> */}
         <Route exact path="/blog-left-sidebar" render={(props) => renderComponent(BlogLeftSidebar, props)} />
         <Route exact path="/blog-right-sidebar" render={(props) => renderComponent(BlogRightSidebar, props)} />
         <Route exact path="/terms-and-conditions" render={(props) => renderComponent(TermsConditions, props)} />

@@ -81,8 +81,13 @@ const ViewLiveActivehiredJobsGigsDisplayHelper = ({ userData }) => {
 
                                         const { coreEmployerData } = listing;
 
+                                        const now = moment();
+                                        const startDate = moment(listing.dateApplied); // starting date object
+                                        const endDate = moment(listing.employerPostedListingInfo.estimatedCompletionDate); // this is a date object
+
+                                        const percentage = now.diff(startDate) / endDate.diff(startDate) * 100;
+
                                         const progress = Math.floor(Math.random() * (100 - 0 + 1) + 0);
-                                        const random = Math.floor(Math.random() * (500 - 25 + 1) + 25);
                                         const employerName = `${listing.coreEmployerData.firstName} ${listing.coreEmployerData.lastName}`;
                                         const secondaryOrNot = (index % 2 === 1) ? true : false;
 
@@ -142,13 +147,13 @@ const ViewLiveActivehiredJobsGigsDisplayHelper = ({ userData }) => {
                                                         </div>
                                                         <div className="project-status mt-4">
                                                         <div className="media mb-0">
-                                                            <p className={secondaryOrNot === true ? "remove-bold-restyle-auction-left-secondary" : "remove-bold-restyle-auction-left-info"}>{progress} Day's Left... </p>
-                                                            <div className="media-body text-right"><span>Time Remaining To Complete Job</span></div>
+                                                            <p style={{ paddingBottom: "12.5px" }} className={secondaryOrNot === true ? "remove-bold-restyle-auction-left-secondary" : "remove-bold-restyle-auction-left-info"}>Time Remaining To Complete Job</p>
+                                                            {/* <div className="media-body text-right"><span>Time Remaining To Complete Job</span></div> */}
                                                         </div>
                                                         {progress === "100" ?
-                                                            <Progress className="sm-progress-bar progress-bar-animated" striped color={secondaryOrNot === true ? "secondary" : "info"} value={progress} style={{ height: "7.5px" }} />
+                                                            <Progress className="sm-progress-bar progress-bar-animated" striped color={secondaryOrNot === true ? "secondary" : "info"} value={percentage} style={{ height: "7.5px" }} />
                                                             :
-                                                            <Progress className="sm-progress-bar progress-bar-animated" striped color={secondaryOrNot === true ? "secondary" : "info"} value={progress} style={{ height: "7.5px" }} />
+                                                            <Progress className="sm-progress-bar progress-bar-animated" striped color={secondaryOrNot === true ? "secondary" : "info"} value={percentage} style={{ height: "7.5px" }} />
                                                         }
 
                                                         </div>

@@ -229,14 +229,14 @@ const SignIn = ({ authentication }) => {
 
                     <div className="col-lg-6 col-sm-6 form-condition">
                         <div className="agree-label">
-                            <input type="checkbox" id="chb1" />
-                            <label forhtml="chb1">Remember Me</label>
+                            {/* <input type="checkbox" id="chb1" />
+                            <label forhtml="chb1">Remember Me</label> */}
                         </div>
                     </div>
 
                     <div className="col-lg-6 col-sm-6">
                         <Link to="/forgot-password">
-                            <a className="forget">Forgot my password?</a>
+                            <a style={{ marginBottom: "12.5px" }} className="forget">Forgot my password?</a>
                         </Link>
                     </div>
 
