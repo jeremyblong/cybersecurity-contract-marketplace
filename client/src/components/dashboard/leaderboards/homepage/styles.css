@@ -3,3 +3,21 @@
     background-color: #f0f0f0 !important;
     border: 1.25px solid black !important;
 }
+@media only screen and (max-width: 875px) {
+    .hide-table-mobile {
+        display: none !important;
+    }
+}
+@media only screen and (min-width: 876px) {
+    .hide-content-table-desktop {
+        display: none !important;
+    }
+}
+.hide-content-table-desktop {
+    padding: 12.5px;
+}
+.stretch-within-bounds {
+    min-width: 100%;
+    min-height: 275px;
+    object-fit: contain;
+}

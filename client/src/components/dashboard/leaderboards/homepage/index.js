@@ -154,11 +154,20 @@ const LeaderboardHomepageHelper = (props) => {
     );
     return (
         <Fragment>
-            <TableHelper
-                columns={columns}
-                data={hackers}
-                renderRowSubComponent={renderRowSubComponent}
-            />
+            <div className='hide-table-mobile'>
+                <TableHelper
+                    columns={columns}
+                    data={hackers}
+                    renderRowSubComponent={renderRowSubComponent}
+                />
+            </div>
+            <div className='hide-content-table-desktop'>
+                <h4 style={{ marginTop: "50px" }} className='text-left'>You <strong>must</strong> view this page on <strong>DESKTOP</strong> to appropriately view the content!</h4>
+                <hr />
+                <img src={require("../../../../assets/images/leaderboard-hide.png")} className={"stretch-within-bounds"} />
+                <hr />
+                <p style={{ marginTop: "22.5px" }} className='text-left'>Some pages have intense interactive content which must be viewed on <strong>desktop and/or larger screens</strong>, try switching to your desktop/laptop to view the "leaderboard statistics"!</p>
+            </div>
         </Fragment>
     );
 }

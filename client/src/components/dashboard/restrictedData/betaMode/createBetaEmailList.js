@@ -118,7 +118,7 @@ const CreateInviteEmailBetaListHelper = ({ userData }) => {
     }
     
     const renderContent = () => {
-        if (matched === true) {
+        if (matched === false) {
             return (
                 <Fragment>
                     <Form>

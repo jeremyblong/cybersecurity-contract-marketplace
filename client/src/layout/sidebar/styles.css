@@ -4,3 +4,8 @@
     border: 2.50px solid lightgrey;
     box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.363) !important;
 }
+@media only screen and (max-width: 850px) {
+    .logo-wrapper .back-btn {
+        margin-top: -50px !important;
+    }
+}

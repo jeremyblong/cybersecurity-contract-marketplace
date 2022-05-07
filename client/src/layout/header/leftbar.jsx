@@ -1,9 +1,9 @@
 import React, { Fragment, useState, useLayoutEffect, useEffect } from 'react';
 import { Container, Row, Col } from 'reactstrap'
-import { X, Layers, GitPullRequest, User, Users, UserMinus, UserCheck, Airplay, Zap,Heart,Inbox, Sliders } from 'react-feather'
+import { X, Layers, Sliders } from 'react-feather'
 import { Link } from 'react-router-dom'
-import { errorPages, authPages, usefullPages, comingsoonPages } from './pages'
-import {BonusUi,MegaMenu,ErrorPage,Authentication,UsefullPages,ComingSoon, FileManager,SocialApp,UserEdit,UsersCards,UserProfile,KanbanBoard,Bookmark,LevelMenu} from '../../constant';
+import { hackerManagementPages, learningStreamingMorePages, employerRelatedPagesMain, paymentRelatedPages } from './pages'
+import { MegaMenu } from '../../constant';
 
 
 
@@ -150,7 +150,7 @@ const Leftbar = (props) => {
       <div className="header-logo-wrapper" id="out_side_click">
         <div className="logo-wrapper">
           <Link to={`${process.env.PUBLIC_URL}/dashboard/default`}>
-            <img className="img-fluid for-light" src={require("../../assets/images/logo-long-transparent.png")} alt="" />
+            <img className="img-fluid for-light" src={require("../../assets/images/logo/logo.png")} alt="" />
             <img className="img-fluid for-dark" src={require("../../assets/images/logo/logo_dark.png")} alt="" />
           </Link>
         </div>
@@ -171,10 +171,10 @@ const Leftbar = (props) => {
                       </div>
                       <div className="link-section icon">
                         <div className={`${megaboxtoggle1 ? "active" : ""}`}>
-                          <h6>{ErrorPage}</h6>
+                          <h6>Hacker Jobs/Contracts, Manage Active Jobs & More (hacker specific)...</h6>
                         </div>
                         <ul className={`${megaboxtoggle1 ? "d-none" : ""}`}>
-                          {errorPages.map((pagesItem, i) =>
+                          {hackerManagementPages.map((pagesItem, i) =>
                             <li key={i}>
                               <Link to={pagesItem.path}>{pagesItem.title}</Link>
                             </li>)}
@@ -184,10 +184,10 @@ const Leftbar = (props) => {
                     <Col className="mega-box" onClick={() => responsiveMegaBox2(megaboxtoggle2)}>
                       <div className="link-section doted">
                         <div className={`${megaboxtoggle2 ? "active" : ""}`}>
-                          <h6>{Authentication}</h6>
+                          <h6>Learning/Teaching & Other Related Redirect's</h6>
                         </div>
                         <ul className={`${megaboxtoggle2 ? "d-none" : ""}`}>
-                          {authPages.map((pagesItem, i) =>
+                          {learningStreamingMorePages.map((pagesItem, i) =>
                             <li key={i}><Link to={pagesItem.path}>{pagesItem.title}</Link></li>
                           )}
 
@@ -197,10 +197,10 @@ const Leftbar = (props) => {
                     <Col className="mega-box" onClick={() => responsiveMegaBox3(megaboxtoggle3)}>
                       <div className="link-section dashed-links">
                         <div className={`${megaboxtoggle3 ? "active" : ""}`}>
-                          <h6>{UsefullPages}</h6>
+                          <h6>Company/Employer Related Logic (Misc..)</h6>
                         </div>
                         <ul className={`${megaboxtoggle3 ? "d-none" : ""}`}>
-                          {usefullPages.map((pagesItem, i) =>
+                          {employerRelatedPagesMain.map((pagesItem, i) =>
                             <li key={i}><Link to={pagesItem.path}>{pagesItem.title}</Link></li>
                           )}
                         </ul>
@@ -209,11 +209,11 @@ const Leftbar = (props) => {
                     <Col className="mega-box" onClick={() => responsiveMegaBox4(megaboxtoggle4)}>
                       <div className="link-section">
                         <div className={`${megaboxtoggle4 ? "active" : ""}`}>
-                          <h6>{ComingSoon}</h6>
+                          <h6>Payment Related Actions (Both Companies/Hackers)</h6>
                         </div>
                         <ul className={`svg-icon ${megaboxtoggle4 ? "d-none" : ""}`}>
-                          {comingsoonPages.map((pagesItem, i) =>
-                            <li key={i}><Link to={pagesItem.path}><pagesItem.icon />{pagesItem.title}</Link></li>
+                          {paymentRelatedPages.map((pagesItem, i) =>
+                            <li key={i}><Link to={pagesItem.path}>{pagesItem.title}</Link></li>
                           )}
                         </ul>
 
