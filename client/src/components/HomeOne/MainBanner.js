@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import ModalVideo from 'react-modal-video';
 import Features from './Features';
 import { connect } from "react-redux";
@@ -16,7 +16,7 @@ const MainBanner = ({ authenticatedAccount }) => {
             <ModalVideo 
                 channel='youtube' 
                 isOpen={!isOpen} 
-                videoId='pF-3S-HTJSg' 
+                videoId='NoCi2i_6S3c' 
                 onClose={() => setIsOpen(!isOpen)} 
             />
             
@@ -34,16 +34,8 @@ const MainBanner = ({ authenticatedAccount }) => {
                                         <a className="default-btn">
                                             Redirect To Dashboard
                                         </a>
-                                    </Link> : <Link to="/contact">
-                                        <a className="default-btn">
-                                            Booking Now
-                                        </a>
-                                    </Link>}
-                                    <Link to="/about">
-                                        <a className="default-btn active">
-                                            About Us
-                                        </a>
-                                    </Link>
+                                    </Link> : <Link className="default-btn" to="/contact">Contact Us!</Link>}
+                                    <Link className="default-btn active" to="/about">About Us</Link>
                                 </div>
                             </div>
                         </div>
