@@ -52,7 +52,7 @@ const EffectiveProtection = () => {
 					</div>
 					<div className="col-lg-6">
 						<div className="complete-content">
-							<h2>Get paid to learn, compete, engage/interact and create all in your own time & convenience of working in your own home!</h2>
+							<h2 style={{ marginTop: "75px" }}>Get paid to learn, compete, engage/interact and create all in your own time & convenience of working in your own home!</h2>
 							<p><strong>The Hacker Marketplace</strong> introduces and encourages connecting with others in a social fashion in a typically non-social industry/environment, meeting <strong>like minded</strong> individuals and/or <strong>fellow hacker's</strong> and most of all; making <strong>legitimate money</strong> in a professional environment. Boost your skills, compete & <strong>get paid far more</strong> than you would with any other website/company. We also provide many more options of ways to produce a regular and <strong>consistent</strong> influx of cash to reward our user's in a fashion/manner that they truly deserve. Hacking takes <strong>extensive</strong> knowledge, time & resources which deserve to be handsomely rewarded..</p>
 
 							<div className="row">

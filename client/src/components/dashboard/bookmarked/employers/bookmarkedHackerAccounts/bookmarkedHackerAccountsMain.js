@@ -22,7 +22,6 @@ const BookmarkedHackerAccountsAsEmployerHelper = ({ userData }) => {
     // initialize state 
     const [ hackers, setHackers ] = useState([]);
     const [ ready, setReady ] = useState(false);
-
     const [ currentPage, setCurrentPage ] = useState(0);
     const [ pageCount, setPageCount ] = useState(0);
     const [ itemOffset, setItemOffset ] = useState(0);
@@ -36,7 +35,7 @@ const BookmarkedHackerAccountsAsEmployerHelper = ({ userData }) => {
 
         setHackers(permenantData.slice(itemOffset, endOffset));
         
-    }, [itemOffset, itemsPerPage]);
+    }, [ itemOffset, itemsPerPage ]);
 
     // run upon load...
     useEffect(() => {

@@ -20,7 +20,7 @@ const MainBanner = ({ authenticatedAccount }) => {
                 onClose={() => setIsOpen(!isOpen)} 
             />
             
-            <section className="banner-area banner-item-bg-1 jarallax">
+            <section style={{ paddingTop: "375px" }} className="banner-area banner-item-bg-1 jarallax">
                 <div className="container">
                     <div className="row align-items-center">
                         <div className="col-lg-9">
