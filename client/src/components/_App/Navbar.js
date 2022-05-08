@@ -5,6 +5,7 @@ import { Link, useHistory } from 'react-router-dom';
 import TopHeader from './TopHeader';
 import { connect } from "react-redux";
 import _ from "lodash";
+import "./styles.css";
 import axios from "axios";
 import { NotificationManager } from 'react-notifications';
 import { authentication } from "../../redux/actions/authentication/auth.js";
@@ -99,7 +100,7 @@ const Navbar = ({ data, authenticated, authentication, saveListingData, saveSoft
                         <div className="main-nav">
                             <div className="container-fluid">
                                 <nav className="navbar navbar-expand-md navbar-light">
-                                    <Link to="/">
+                                    <Link id={"logoooooo"} to="/">
                                         <a onClick={() => setCollapsed(true)} className="navbar-brand">
                                             <img src={require("../../assets/images/logo-long-transparent.png")} className={"logo-customized"} />
                                         </a>
@@ -344,7 +345,7 @@ const Navbar = ({ data, authenticated, authentication, saveListingData, saveSoft
                                             </li>
                                         </ul>
                                     </div>
-                                    <div className="others-option">
+                                    <div id={"hide-authentication-btns-mobile"} className="others-option">
                                         <div className="get-quote">
                                             {authenticated === false ? <Link to="/sign-in">
                                                 <a className="default-btn">

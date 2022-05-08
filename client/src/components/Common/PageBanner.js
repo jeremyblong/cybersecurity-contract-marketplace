@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom';
 
 const PageBanner = ({pageTitle, homePageUrl, homePageText, activePageText}) => {
     return (
-        <div className="page-title-area bg-22">
+        <div id={"create-spacer-toppie"} className="page-title-area bg-22">
             <div className="container">
                 <div className="page-title-content">
                     <h2>{pageTitle}</h2>
