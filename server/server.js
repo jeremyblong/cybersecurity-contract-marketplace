@@ -63,16 +63,19 @@ app.use(bodyParser.urlencoded({
 
 const whitelist = config.get("WHITELISTED_DOMAINS") ? config.get("WHITELISTED_DOMAINS").split(",") : [];
 
-// const corsOptions = {
-// 	origin: (origin, callback) => {
-// 	  if (!origin || whitelist.indexOf(origin) !== -1) {
-// 		callback(null, true)
-// 	  } else {
-// 		callback(new Error("Not allowed by CORS"))
-// 	  }
-// 	},
-// 	credentials: true,
-// };
+const corsOptions = {
+	origin: (origin, callback) => {
+		
+		console.log("ORIGIN", origin);
+
+		if (!origin || whitelist.indexOf(origin) !== -1) {
+			callback(null, true)
+		} else {
+			callback(new Error("Not allowed by CORS"))
+		}
+	},
+	credentials: true,
+};
 
 app.use((req, res, next) => {
     // Website you wish to allow to connect
@@ -105,7 +108,7 @@ app.use(session({
 	saveUninitialized: false
 }));
   
-app.use(cors());
+app.use(cors(corsOptions));
 
 app.use(passport.initialize());
 
