@@ -27,6 +27,7 @@
     background-color: #efefef;
     border: 2px solid #a7a7a7;
     max-height: 80px;
+    max-width: 80px;
     margin-right: 32.5px;
 }
 .maxed-out-blogging-creation-comment video {

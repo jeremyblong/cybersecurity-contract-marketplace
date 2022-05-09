@@ -283,15 +283,15 @@ const ViewIndividualRestrictedAuthBlogHelper = ({ userData }) => {
                                                 </div>
                                                 <hr />
                                                 <Row style={{ marginTop: "22.5px", marginBottom: "22.5px" }} >
-                                                    <Col sm="12" md="4" lg="4" xl="4">
-                                                        <Button className={"btn-square-success"} outline color={"success-2x"} style={{ width: "100%" }} onClick={() => likeThisBlog(blog)}>Like This Blog!</Button>
+                                                    <Col sm="12" md="6" lg="6" xl="6">
+                                                        <Button className={"btn-square-success mb-2"} outline color={"success-2x"} style={{ width: "100%" }} onClick={() => likeThisBlog(blog)}>Like This Blog!</Button>
                                                     </Col>
-                                                    <Col sm="12" md="4" lg="4" xl="4">
-                                                        <Button className={"btn-square-danger"} outline color={"danger-2x"} style={{ width: "100%" }} onClick={() => dislikeThisBlog(blog)}>Dislike This Blog!</Button>
+                                                    <Col sm="12" md="6" lg="6" xl="6">
+                                                        <Button className={"btn-square-danger mb-2"} outline color={"danger-2x"} style={{ width: "100%" }} onClick={() => dislikeThisBlog(blog)}>Dislike This Blog!</Button>
                                                     </Col>
-                                                    <Col sm="12" md="4" lg="4" xl="4">
+                                                    {/* <Col sm="12" md="4" lg="4" xl="4">
                                                         <Button className={"btn-square-primary"} outline color={"primary-2x"} style={{ width: "100%" }} onClick={() => bookmarkBlog(blog)}>Bookmark This Blog!</Button>
-                                                    </Col>
+                                                    </Col> */}
                                                 </Row>
                                                 <hr />
                                             </div>

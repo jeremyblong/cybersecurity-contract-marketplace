@@ -15,10 +15,9 @@ const ContactInfo = () => {
 			<div className="container-fluid">
 				<div className='row'>
 					<Col sm="12" md="12" lg="12" xl="12">
-						<Card style={{ margin: "22.5px" }} className={"shadow"}>
+						<Card style={{ margin: "22.5px" }} className={"shadow card-outter-wrapper"}>
 							<CardHeader className='b-l-info b-r-info'>
-								<h3>This is our <strong style={{ textDecorationLine: "underline" }}>corporate</strong> office location - we do NOT accept any walk-in's <strong style={{ textDecorationLine: "underline" }}>however</strong> we do accept 'booked' appointments..</h3>
-								<p className='lead'>If you're looking to <strong>partner with us</strong>, we would <strong>LOVE</strong> to introduce you to our team & corperate location and discuss next actions to help us further your agenda as well as ours!</p>
+								<h3>We currently do <strong>not</strong> have a corperate location <strong>yet</strong>, as we are primarily working remotely at the current moment. If you'd like a 'product demo', contact us to orchestrate a skype interview to walk-through our product!</h3>
 							</CardHeader>
 							<CardBody>
 								<Row>
@@ -26,14 +25,14 @@ const ContactInfo = () => {
 										<Card className='shadow equal-height'>
 											<CardBody>
 												<div className="calender-widget">
-													<div className="cal-img centered-both-ways">
+													<div className="cal-img centered-both-ways mobile-maxed-height">
 														<img src={require("../../assets/images/logo-saturated-long.png")} className={"inner-contact-img"} />
 													</div>
 													<div className="cal-desc text-left card-body">
 														<h6 className="f-w-600 address-text-header">{"Company Location/Address"}</h6>
 														<p className="text-left mt-1 mb-0 address-text-contact">The Hacker Marketplace</p>
-														<p className="text-left mt-1 mb-0 address-text-contact">1634 North Lake Ave.</p>
-														<p className="text-left mt-1 mb-0 address-text-contact">Los Angeles, California 90012</p>
+														<p className="text-left mt-1 mb-0 address-text-contact">Currently Remote</p>
+														<p className="text-left mt-1 mb-0 address-text-contact">Portland, OR 97214</p>
 													</div>
 												</div>
 											</CardBody>
@@ -43,7 +42,7 @@ const ContactInfo = () => {
 										<Card className='shadow'>
 											<CardBody>
 												<Map
-													center={[-118.3228, 34.0687]}
+													center={[-122.6784, 45.5152]}
 													style="mapbox://styles/mapbox/streets-v9"
 													containerStyle={{
 														height: "425px",
@@ -52,7 +51,7 @@ const ContactInfo = () => {
 													}}
 												>
 													<Marker
-														coordinates={[-118.3228, 34.0687]}
+														coordinates={[-122.6784, 45.5152]}
 														anchor="bottom"
 													>
 														<img src={require("../../assets/icons/location.png")}/>

@@ -9,6 +9,8 @@ import { DefaultLayout } from '../theme-customizer';
 import { connect } from 'react-redux';
 import _ from "lodash";
 import "./styles.css";
+import { isMobile } from 'react-device-detect';
+
 
 const Sidebar = (props) => {
   const id = window.location.pathname.split('/').pop()
@@ -278,7 +280,7 @@ const Sidebar = (props) => {
        <div className={`bg-overlay1`} onClick={() => {closeOverlay()}} ></div>
       <div className="sidebar-wrapper">
         <div className="logo-wrapper">
-          <Link to={props.userData.accountType === "employers" ? "/dashboard/employer" : "/dashboard/hacker"}>
+          <Link onClick={(event) => isMobile === true ? event.preventDefault() : null} to={props.userData.accountType === "employers" ? "/dashboard/employer" : "/dashboard/hacker"}>
             <img className="img-fluid logo_long_top_left for-light" src={require("../../assets/images/logo-saturated-shorter.png")} alt="" />
             <img className="img-fluid logo_long_top_left for-dark" src={require("../../assets/images/logo-saturated-shorter.png")} alt="" />
           </Link>

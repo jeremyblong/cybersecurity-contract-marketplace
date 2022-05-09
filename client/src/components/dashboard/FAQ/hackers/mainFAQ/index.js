@@ -467,7 +467,7 @@ const MainFAQHackerHelper = () => {
                                             const tags = course.mainData.pageOneData.mainData.courseHashtags;
                                             const mainImage = `${process.env.REACT_APP_ASSET_LINK}/${course.mainData.pageThreeData.homepageImage.link}`;
                                             return (
-                                                <Fragment>
+                                                <Fragment key={index}>
                                                     <Col className='mapped-col-faq' xl="3" sm="12" lg="3" md="3">
                                                         <Card className="features-faq product-box add-shadow-card-faq-faq-mapped">
                                                             <div className="faq-image product-img">
@@ -505,7 +505,7 @@ const MainFAQHackerHelper = () => {
                                             );
                                         } else {
                                             return (
-                                                <Col className='placeholder-content-col-faq' xl="3" sm="12" lg="3" md="3">
+                                                <Col key={index} className='placeholder-content-col-faq' xl="3" sm="12" lg="3" md="3">
                                                     <Card className="features-faq product-box features-box-faq-mapped">
                                                         <div className="faq-image product-img">
                                                             <img className="img-fluid" src={one} alt="" />
