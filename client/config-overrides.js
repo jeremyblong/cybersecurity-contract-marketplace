@@ -5,7 +5,7 @@ const cspConfigPolicy = {
     'base-uri': "'self'",
     'object-src': "'none'",
     'script-src': ["'unsafe-inline'", "'self'", "'unsafe-eval'"],
-    'style-src': ["https://fonts.googleapis.com http://cdnjs.cloudflare.com 'unsafe-inline'", "'self'", "'unsafe-eval'"],
+    'style-src': ["https://fonts.googleapis.com https://use.fontawesome.com http://cdnjs.cloudflare.com 'unsafe-inline'", "'self'", "'unsafe-eval'"],
     'font-src': "https://kit.fontawesome.com 'self' data:",
 };
 
