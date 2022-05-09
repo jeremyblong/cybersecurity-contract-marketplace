@@ -6,7 +6,7 @@ const cspConfigPolicy = {
     'object-src': "'none'",
     'script-src': ["'unsafe-inline'", "'self'", "'unsafe-eval'"],
     'style-src': ["https://fonts.googleapis.com http://cdnjs.cloudflare.com 'unsafe-inline'", "'self'", "'unsafe-eval'"],
-    'font-src': "https://kit.fontawesome.com 'self'",
+    'font-src': "https://kit.fontawesome.com 'self' data:",
 };
 
 function addCspHtmlWebpackPlugin(config) {
