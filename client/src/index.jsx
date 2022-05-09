@@ -32,6 +32,7 @@ import "react-image-gallery/styles/css/image-gallery.css";
 import 'emoji-mart/css/emoji-mart.css';
 import 'rc-slider/assets/index.css';
 import 'react-lazy-load-image-component/src/effects/blur.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 // components & other various imported functionality/components
 import React, { Fragment, useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';

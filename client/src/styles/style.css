@@ -8525,5 +8525,12 @@ Services Area Style
   color: #d80650;
 }
 
-/* End Home six */
-/*# sourceMappingURL=style.css.map */
+.react-dropdown-select-dropdown-handle {
+  max-width: 22.5px !important;
+  max-height: 22.5px !important;
+}
+.react-dropdown-select {
+  border: 1.50px solid grey !important;
+  padding: 5px 12.5px !important;
+  box-shadow: 0 0.375rem 1.5rem rgba(0, 0, 0, 0.275);
+}

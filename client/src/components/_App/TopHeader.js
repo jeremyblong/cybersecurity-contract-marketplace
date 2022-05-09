@@ -8,9 +8,9 @@ const TopHeader = () => {
                     <div className="col-lg-6 col-sm-8">
                         <ul className="header-content-left">
                             <li>
-                                <a href="mailto:support@thehackermarketplace.com">
+                                <a href="mailto:blongjeremy@gmail.com">
                                     <i className="bx bx-envelope"></i>
-                                    Email: support@thehackermarketplace.com
+                                    Email: blongjeremy@gmail.com
                                 </a>
                             </li>
 
@@ -24,23 +24,23 @@ const TopHeader = () => {
                     <div className="col-lg-6 col-sm-4">
                         <ul className="header-content-right">
                             <li>
-                                <a href="#" target="_blank">
+                                <a href={"https://www.facebook.com/thehackermarketplace"} target="_blank">
                                     <i className="bx bxl-facebook"></i>
                                 </a>
                             </li>
                             <li>
-                                <a href="#" target="_blank">
+                                <a href={null} target="_blank">
                                     <i className="bx bxl-twitter"></i>
                                 </a>
                             </li>
                             
                             <li>
-                                <a href="#" target="_blank">
+                                <a href={null} target="_blank">
                                     <i className="bx bxl-linkedin"></i>
                                 </a>
                             </li>
                             <li>
-                                <a href="#" target="_blank">
+                                <a href={null} target="_blank">
                                     <i className="bx bxl-instagram"></i>
                                 </a>
                             </li>
