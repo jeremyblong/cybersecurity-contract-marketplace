@@ -1986,6 +1986,7 @@ Client Area Style
 
 .client-area .owl-item.active.center .single-client {
   background-color: #d80650;
+
 }
 
 .client-area .owl-item.active.center .single-client .quotes {
@@ -2012,7 +2013,7 @@ Client Area Style
   background-color: #ffffff;
   position: relative;
   margin-top: 30px;
-  margin-bottom: 165px;
+  margin-bottom: 225px;
   border-radius: 4px;
   -webkit-transition: all 0.5s;
   transition: all 0.5s;
@@ -2020,6 +2021,10 @@ Client Area Style
   padding-left: 30px;
   padding-right: 30px;
   padding-bottom: 30px;
+  margin-right: 200px !important;
+}
+#client-area-bottom > div > div.slick-slider.client-wrap.owl-carousel.owl-theme.slick-initialized > div > div > div > div {
+  margin-right: 22.5px;
 }
 
 .single-client .quotes {
