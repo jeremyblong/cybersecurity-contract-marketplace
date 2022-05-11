@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import ImageGallery from 'react-image-gallery';
+import "../styles.css";
+
 
 const dummyNoteDescription = `Dillinger is a cloud-enabled, mobile-ready, offline-storage compatible,
 AngularJS-powered HTML5 Markdown editor.
@@ -299,12 +301,12 @@ const RenderConditionalRealDataOrNot = ({ history, singleProduct, onCloseModal, 
                                 </InputGroup> : null}
                                 </fieldset>
                                 <Col sm="12" md="12" lg="12" xl="12">
-                                    <ButtonGroup id="stretch-pill-button-custom-group" className="btn-group-pill">
-                                        <Button outline color="primary">Add To Cart!</Button>
+                                    <ButtonGroup id="stretch-pill-button-custom-group" className="btn-group-square">
+                                        {/* <Button outline color="primary">Add To Cart!</Button> */}
                                         <Button onClick={() => {
                                             handleRedirectToIndividualSoftwarePage(singleProduct, history, onCloseModal, true)
-                                        }} color="secondary">Visit/View Listing</Button>
-                                        <Button outline color="primary">Bookmark!</Button>
+                                        }} color="success-2x" outline>Visit/View Listing</Button>
+                                        {/* <Button outline color="primary">Bookmark!</Button> */}
                                     </ButtonGroup>
                                 </Col>
                             </div>

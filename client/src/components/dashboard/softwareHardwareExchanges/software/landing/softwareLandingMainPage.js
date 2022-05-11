@@ -426,22 +426,6 @@ const SoftwareLandingMainHelper = (props) => {
                                     {live === true ? <span className="ribbon ribbon-danger">
                                         {calculateAuctionType(auctionType)}
                                     </span> : ''}
-                                    {/* {(item.status === '50%') ?
-                                        <span className="ribbon ribbon-success ribbon-right">
-                                        {item.status}
-                                        </span> : ''}
-                                    {(item.status === 'gift') ?
-                                        <span className="ribbon ribbon-secondary ribbon-vertical-left">
-                                        <i className="icon-gift"></i>
-                                        </span> : ''}
-                                    {(item.status === 'love') ?
-                                        <span className="ribbon ribbon-bookmark ribbon-vertical-right ribbon-info">
-                                        <i className="icon-heart"></i>
-                                        </span> : ''}
-                                    {(item.status === 'Hot') ?
-                                        <span className="ribbon ribbon ribbon-clip ribbon-warning">
-                                        {item.status}
-                                        </span> : ''} */}
                                         <LazyLoadImage
                                             alt={"listing-picture-preview"}
                                             height={"100%"}
@@ -449,50 +433,27 @@ const SoftwareLandingMainHelper = (props) => {
                                             width={"100%"} 
                                             className="img-fluid custom-fluid-thumbnail"
                                         />
-                                        <div className="product-hover">
-                                            <ul>
-                                            <li>
-                                                <Link to={`/`}>
-                                                    <Button color="default" onClick={() => {
-                                                            console.log("purchase - add to cart!")
-                                                            //   addcart(item, quantity)
-                                                    }}>
-                                                        <i className="icon-shopping-cart"></i>
-                                                    </Button>
-                                                </Link>
-                                            </li>
-                                            <li>
-                                                <Button color="default" data-toggle="modal"
-                                                onClick={() => onOpenModal(live === true ? {
-                                                    id: item.uniqueId,
-                                                    live: true
-                                                } : {
-                                                    id: item.id,
-                                                    live: false
-                                                })}>
-                                                    <i className="icon-eye"></i>
-                                                </Button>
-                                            </li>
-                                            <li>
-                                                <Link to={`/`}>
-                                                    <Button color="default" onClick={() => {
-
-                                                    }}>
-                                                        <i className="icon-heart"></i>
-                                                    </Button>
-                                                </Link>
-                                            </li>
-                                            </ul>
+                                        <div className="product-hover centered-both-ways">
+                                            {live === true ? <Button style={{ width: "82.5%" }} color="success" className='btn btn-success' data-toggle="modal"
+                                            onClick={() => onOpenModal(live === true ? {
+                                                id: item.uniqueId,
+                                                live: true
+                                            } : {
+                                                id: item.id,
+                                                live: false
+                                            })}>
+                                                <i className="icon-eye"></i> View/Visit Listing
+                                            </Button> : null}
                                         </div>
                                     </div>
                                     <div className="product-details">
-                                        <div className="rating">
-                                            <i className="fa fa-star"></i>
-                                            <i className="fa fa-star"></i>
-                                            <i className="fa fa-star"></i>
-                                            <i className="fa fa-star"></i>
-                                            <i className="fa fa-star"></i>
-                                        </div>
+                                    {/* <div className="rating">
+                                        <i className="fa fa-star"></i>
+                                        <i className="fa fa-star"></i>
+                                        <i className="fa fa-star"></i>
+                                        <i className="fa fa-star"></i>
+                                        <i className="fa fa-star"></i>
+                                    </div> */}
                                     <h4 onClick={() => handleRedirectToIndividualSoftwarePage(item, history, null, false)} className="font-primary" >{title !== null ? title : item.name}</h4>
                                     <hr className="secondary-hr" />
                                     <p className="listing-description-header">Description/Brief-info</p>

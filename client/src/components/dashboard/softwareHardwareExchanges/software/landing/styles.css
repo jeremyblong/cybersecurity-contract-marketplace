@@ -70,7 +70,8 @@
 .custom-product-img-gallery {
     max-width: 95% !important;
 }
-/* .hover-click-state:hover {
-    cursor: pointer !important;
-    color: #f73164 !important;
-} */
+@media only screen and (max-width: 850px) {
+    .inner-img-thumbnail-slider-product-show {
+        max-width: 77.5vw !important;
+    }
+}
