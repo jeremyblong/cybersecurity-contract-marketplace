@@ -337,6 +337,7 @@ const ViewIndividualJobListingHelper = ({ userData, saveApplicationDetailsProgre
                                                 </CardHeader>
                                                 <CardBody>
                                                     <DateRange 
+                                                        className={"maxed-calendar-length-dates"}
                                                         showDateDisplay={false}
                                                         ranges={data.testingDatesHackers}
                                                     />
@@ -520,10 +521,10 @@ const ViewIndividualJobListingHelper = ({ userData, saveApplicationDetailsProgre
 
                                     <RenderCommentsEmployerListingHelper data={data} userData={userData} />
                                     
-                                    <div className="job-description">
+                                    {/* <div className="job-description">
                                         <Button color="primary mr-1"><span><i className="fa fa-check"></i></span> {"Save this job"}</Button>
                                         <Button color="primary"><span><i className="fa fa-share-alt"></i></span> {Share}</Button>
-                                    </div>
+                                    </div> */}
                                 </CardBody>
                             </div>
                         </Card>

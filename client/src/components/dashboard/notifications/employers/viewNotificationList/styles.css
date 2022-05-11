@@ -6,7 +6,7 @@
     box-shadow: 0.5rem 0.5rem 1rem rgba(0, 0, 0, 0.325) !important;
 }
 .notification-pic-video {
-    min-width: 100%;
+    min-width: 75px;
     min-height: 75px;
     max-height: 75px;
 }

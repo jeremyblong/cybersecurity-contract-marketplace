@@ -21,6 +21,7 @@ import { confirmAlert } from 'react-confirm-alert';
 import { NotificationManager } from 'react-notifications';
 import DepositFundsSheetPaneHelper from "./sheetHelpers/depositFunds/depositFundsSheetHelper.js";
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { isMobile } from 'react-device-detect';
 
 
 const Map = ReactMapboxGl({
@@ -505,7 +506,7 @@ const ManageIndividualHackerAlreadyHiredHelper = ({ userData }) => {
                                     showDateDisplay={false}
                                     ranges={dates}
                                     direction={"horizontal"}
-                                    months={2}
+                                    months={isMobile === true ? 1 : 2}
                                     className={"daterange-individual-hired"}
                                     onChange={() => {}}
                                 />

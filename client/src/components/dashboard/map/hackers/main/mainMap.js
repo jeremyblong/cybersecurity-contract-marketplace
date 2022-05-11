@@ -587,7 +587,7 @@ constructor(props) {
                                         </div> */}
                                         </div>
                                         <div id="scroller-details">
-                                            <ReactMarkdown children={item.listingDescription} remarkPlugins={[remarkGfm]} />
+                                            <ReactMarkdown className='markdowned-map-view' children={item.listingDescription} remarkPlugins={[remarkGfm]} />
                                         </div>
                                         <div className="controlled-horizontal-box">
                                             <p className="lead heavy-blue-lead">Related Hashtags</p>
@@ -599,29 +599,31 @@ constructor(props) {
                                                 </Row>
                                             </Col>
                                         </div>
-                                        <Row className="details">
-                                        
-                                        <Col xs="6"><span>Applicants</span></Col>
-                                        <Col xs="6" className={item.badge === "Done" ? 'text-success' : 'text-primary'}>{item.applicants.length}</Col>
-                                        <Col xs="6"> <span>Interviewing</span></Col>
-                                        <Col xs="6" className={item.badge === "Done" ? 'text-success' : 'text-primary'}>{0}</Col>
-                                        <Col xs="6"><span>Hackers Required</span></Col>
-                                        <Col xs="6" className={item.badge === "Done" ? 'text-success' : 'text-primary'}>{item.maxNumberOfApplicants.value}</Col>
-                                        </Row>
-                                        <div className="customers">
-                                        <ul>
-                                            <li className="d-inline-block"><img className="img-30 rounded-circle" src={require(`../../../../../assets/images/user/2.jpg`)} alt="" /></li>
-                                            <li className="d-inline-block"><img className="img-30 rounded-circle" src={require(`../../../../../assets/images/user/2.jpg`)} alt="" /></li>
-                                            <li className="d-inline-block"><img className="img-30 rounded-circle" src={require(`../../../../../assets/images/user/3.jpg`)} alt="" /></li>
-                                            <li className="d-inline-block ml-2">
-                                            <p className="f-12">{`+${Math.floor(Math.random() * 30) + 1} More`}</p>
-                                            </li>
-                                        </ul>
-                                        </div>
-                                        <div className="project-status mt-4">
-                                        <div className="media mb-0">
-                                            <p>{this.calculateTokens(item.tokensRequiredToApply.value)}% </p>
-                                            <div className="media-body text-right"><span>Cost to apply VS maximum (tokens)</span></div>
+                                        <div className='adjust-mobile-map-height'>
+                                            <Row className="details details-mobile-customized">
+                                                
+                                                <Col xs="6"><span>Applicants</span></Col>
+                                                <Col xs="6" className={item.badge === "Done" ? 'text-success' : 'text-primary'}>{item.applicants.length}</Col>
+                                                <Col xs="6"> <span>Interviewing</span></Col>
+                                                <Col xs="6" className={item.badge === "Done" ? 'text-success' : 'text-primary'}>{0}</Col>
+                                                <Col xs="6"><span>Hackers Required</span></Col>
+                                                <Col xs="6" className={item.badge === "Done" ? 'text-success' : 'text-primary'}>{item.maxNumberOfApplicants.value}</Col>
+                                            </Row>
+                                            <div className="customers details-mobile-customized">
+                                                <ul>
+                                                    <li className="d-inline-block"><img className="img-30 rounded-circle" src={require(`../../../../../assets/images/user/2.jpg`)} alt="" /></li>
+                                                    <li className="d-inline-block"><img className="img-30 rounded-circle" src={require(`../../../../../assets/images/user/2.jpg`)} alt="" /></li>
+                                                    <li className="d-inline-block"><img className="img-30 rounded-circle" src={require(`../../../../../assets/images/user/3.jpg`)} alt="" /></li>
+                                                    <li className="d-inline-block ml-2">
+                                                    <p className="f-12">{`+${Math.floor(Math.random() * 30) + 1} More`}</p>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div className="project-status mt-4">
+                                            <div className="media mb-0">
+                                                <p>{this.calculateTokens(item.tokensRequiredToApply.value)}% </p>
+                                                <div className="media-body text-right"><span>Cost to apply VS maximum (tokens)</span></div>
+                                            </div>
                                         </div>
                                         {/* {item.progress === "100" ?
                                             <Progress className="sm-progress-bar" color="success" value={item.progress} style={{ height: "5px" }} />
@@ -630,7 +632,7 @@ constructor(props) {
                                         } */}
                                         <Progress className="sm-progress-bar" striped color="primary" value={this.calculateTokens(item.tokensRequiredToApply.value)} style={{ height: "5px" }} />
                                         </div>
-                                        <div className="centered-button-div">
+                                        <div className="centered-button-div centered-button-div-mobile-styled">
                                             <Button onClick={() => {
                                                 this.handleRedirectIndividualListing(item);
                                             }} style={{ width: "100%" }} className="btn-pill btn-air-secondary" color="secondary">View/Visit Listing</Button>

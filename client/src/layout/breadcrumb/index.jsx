@@ -1,13 +1,14 @@
 import React, { Fragment } from 'react';
 import { Container, Row, Col, Breadcrumb, BreadcrumbItem } from 'reactstrap'
 import { Home } from 'react-feather';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+import "./styles.css";
 
 const Breadcrumbs = (props) => {
   return (
     <Fragment>
       <Container fluid={true}>
-        <div className="page-title">
+        <div className="page-title breadcrumb-customized">
           <Row>
             <Col xs="6">
               <h3>{props.title}</h3>

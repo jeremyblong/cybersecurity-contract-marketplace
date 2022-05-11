@@ -1,0 +1,5 @@
+@media only screen and (max-width: 850px) {
+    .notification-pic-video {
+        max-width: 75px !important;
+    }
+}

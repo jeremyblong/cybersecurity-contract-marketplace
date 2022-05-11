@@ -53,3 +53,8 @@
     color: #7366ff;
     margin-top: 17.5px;
 }
+@media only screen and (max-width: 850px) {
+    .shadowey-promoted-card {
+        min-width: 77.5vw !important;
+    }
+}

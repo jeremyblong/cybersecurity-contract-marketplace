@@ -20,6 +20,7 @@ import Calendar from 'react-calendar';
 import MessagingPaneMessageEmployerHelper from "./panes/messagePane/messageSendPane.js";
 import { confirmAlert } from 'react-confirm-alert';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { isMobile } from 'react-device-detect';
 
 
 const Map = ReactMapboxGl({
@@ -441,7 +442,7 @@ const ViewIndividualLiveHiredhackingJobHelper = ({ userData }) => {
                                         showDateDisplay={false}
                                         ranges={dates}
                                         direction={"horizontal"}
-                                        months={2}
+                                        months={isMobile === true ? 1 : 2}
                                         className={"daterange-individual-hired"}
                                         onChange={() => {}}
                                     />
@@ -508,7 +509,7 @@ const ViewIndividualLiveHiredhackingJobHelper = ({ userData }) => {
                         <Card className={"bordered-shadowed-card"}>
                             <CardBody>
                                 <Card className="card-absolute payment-card-actions-shadow-wrapper">
-                                    <CardHeader className="bg-primary">
+                                    <CardHeader className="bg-primary header-custom-mobile">
                                         <h5 style={{ textDecorationLine: "underline", color: "white" }}>View/Manage Submitted Contract Related Data</h5>
                                     </CardHeader>
                                     <CardBody>
@@ -587,7 +588,7 @@ const ViewIndividualLiveHiredhackingJobHelper = ({ userData }) => {
                         <Card className={"bordered-shadowed-card"}>
                             <CardBody>
                                 <Card className="card-absolute payment-card-actions-shadow-wrapper">
-                                    <CardHeader className="bg-secondary">
+                                    <CardHeader className="bg-secondary header-custom-mobile">
                                         <h5 style={{ textDecorationLine: "underline", color: "white" }}>Mark Job As Complete & Request Confirmation From Employer</h5>
                                     </CardHeader>
                                     <CardBody>

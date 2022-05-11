@@ -23,7 +23,7 @@ const INITIAL_STATE = {
     email: "",
     number: "",
     subject: "",
-    text: ""
+    message: ""
 };
 
 const ContactForm = () => {
@@ -35,22 +35,7 @@ const ContactForm = () => {
         setContact(prevState => ({ ...prevState, [name]: value }));
         // console.log(contact)
     }
-
-    const handleSubmit = async e => {
-        e.preventDefault();
-        try {
-            const url = `/api/contact`;
-            const { name, email, number, subject, text } = contact;
-            const payload = { name, email, number, subject, text };
-            const response = await axios.post(url, payload);
-            console.log(response);
-            setContact(INITIAL_STATE);
-            alertContent();
-        } catch (error) {
-            console.log(error)
-        }
-    };
-
+	
     return (
         <div className="faq-contact-area ptb-100">
             <div className="container">
@@ -68,7 +53,7 @@ const ContactForm = () => {
 											<div className="contact-wrap">
 												<div className="contact-form">
 													<h1 className='text-center' style={{ color: "#f73164", textDecorationLine: "underline", marginBottom: "17.5px" }}>Contact Form</h1>
-													<form onSubmit={handleSubmit}>
+													<form action={"https://formspree.io/f/xlezokab"} method={"POST"}>
 														<div className="row">
 															<div className="col-lg-6 col-md-6">
 																<div className="form-group">
@@ -125,12 +110,12 @@ const ContactForm = () => {
 															<div className="col-lg-12 col-md-12">
 																<div className="form-group">
 																	<textarea 
-																		name="text" 
+																		name="message" 
 																		cols="30" 
 																		rows="7" 
 																		placeholder="Write your message..." 
 																		className="form-control" 
-																		value={contact.text}
+																		value={contact.message}
 																		onChange={handleChange} 
 																		required 
 																	/>

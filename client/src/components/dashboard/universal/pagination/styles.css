@@ -25,3 +25,8 @@
     color: #fff !important;
     font-weight: bold !important;
 }
+@media only screen and (max-width: 850px) {
+    .container-classname-pagination-custom {
+       
+    }
+}

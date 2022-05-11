@@ -242,7 +242,7 @@ const UsersCardsEmployersAccountsHelper = (props) => {
                                         if (_.has(employer, "placeholder") && employer.placeholder === true) {
                                             return (
                                                 <Col md="12" lg="12" xl="12" className="box-col-12" key={i}>
-                                                    <Card className="custom-card centered-both-ways min-height-card-boosted">
+                                                    <Card style={{ marginBottom: "75px" }} className="custom-card centered-both-ways min-height-card-boosted">
                                                         <CardHeader className="card-header-banner-custom">
                                                             <Media body className="img-fluid banner-display-placeholder-profile" src={require(`../../../../../assets/images/placeholder-profile.png`)} alt="banner-image-display" />
                                                         </CardHeader>
@@ -283,7 +283,7 @@ const UsersCardsEmployersAccountsHelper = (props) => {
                                         } else {
                                             return (
                                                 <Col md="12" lg="12" xl="12" className="box-col-12" key={i}>
-                                                    <Card className="custom-card centered-both-ways min-height-card-boosted">
+                                                    <Card style={{ marginBottom: "75px" }} className="custom-card centered-both-ways min-height-card-boosted">
                                                     <CardHeader className="card-header-banner-custom">
                                                         <Media body className="img-fluid banner-banner-custom banner-display-placeholder-profile" src={bannerImage} alt="banner-image-display" />
                                                     </CardHeader>

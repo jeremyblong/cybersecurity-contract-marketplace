@@ -109,7 +109,7 @@ const LiveEmployerListingsHelper = ({ userData }) => {
                     {sorted.filter((listing) => calculateFilterType(listing)).map((listing, i) => {
                         console.log("sorted listing", listing);
                         return (
-                            <Col xl="6 xl-100" key={i}>
+                            <Col sm="12" md="6" lg="6" xl="6 xl-100" key={i}>
                                 <Card className={`${false ? '' : 'ribbon-vertical-left-wrapper'}`}>
                                     <div className="job-search">
                                         <CardBody id="custom-cardbody-listing-map">
@@ -160,7 +160,7 @@ const LiveEmployerListingsHelper = ({ userData }) => {
                     {listings.filter((listing) => calculateFilterType(listing)).map((listing, i) => {
                         console.log("listing", listing);
                         return (
-                            <Col xl="6 xl-100" key={i}>
+                            <Col sm="12" md="6" lg="6" xl="6 xl-100" key={i}>
                                 <Card className={`${false ? '' : 'ribbon-vertical-left-wrapper'}`}>
                                     <div className="job-search">
                                         <CardBody id="custom-cardbody-listing-map">
@@ -227,7 +227,7 @@ const LiveEmployerListingsHelper = ({ userData }) => {
                                         {typeof promotedListings !== "undefined" && promotedListings.length > 0 ? promotedListings.map((listing, i) => {
                                             console.log("promotedListings", listing);
                                             return (
-                                                <Col xl="6 xl-100" key={i}>
+                                                <Col sm="12" md="6" lg="6" xl="6 xl-100" key={i}>
                                                     <Card className={`${false ? 'shadowey-promoted-card' : 'shadowey-promoted-card ribbon-vertical-left-wrapper'}`}>
                                                         <div className="job-search">
                                                             <CardBody id="custom-cardbody-listing-map">
