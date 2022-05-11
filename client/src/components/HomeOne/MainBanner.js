@@ -23,7 +23,7 @@ const MainBanner = ({ authenticatedAccount }) => {
             <section style={{ paddingTop: "375px" }} className="banner-area banner-item-bg-1 jarallax">
                 <div className="container">
                     <div className="row align-items-center">
-                        <div className="col-lg-9">
+                        <div className="col-lg-12">
                             <div className="banner-text">
                                 <span>Freely & transparently interact and engage with anyone/everyone on our platform with no central authority figure. Simply the <strong>best & only</strong> marketplace of its kind..</span>
                                 <h1>Get your security tested by a <strong id={"landing-text-main"} style={{ textDecorationLine: "underline" }}>vetted</strong>, ethical <strong id={"landing-text-main"} style={{ textDecorationLine: "underline" }}>hacker</strong> for a reasonable price, <strong id={"landing-text-main"} style={{ textDecorationLine: "underline" }}>GUARANTEED.</strong></h1>
@@ -40,7 +40,7 @@ const MainBanner = ({ authenticatedAccount }) => {
                             </div>
                         </div>
                         
-                        <div className="col-lg-3">
+                        {/* <div className="col-lg-3">
                             <div className="video-btn-animat one">
                                 <div
                                     onClick={e => {e.preventDefault(); openModal()}}
@@ -49,7 +49,7 @@ const MainBanner = ({ authenticatedAccount }) => {
                                     <i className="bx bx-play"></i>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div> 
 

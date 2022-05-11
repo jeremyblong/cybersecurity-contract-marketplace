@@ -164,11 +164,11 @@ const ViewIndividualListingSoftwarePageHelper = ({ location, userData })  => {
                                             <p className="normal-text-styled">Coupons Accepted? : {_.has(passedData.auctionPriceRelatedData, "discountCodeAcceptance") ? passedData.auctionPriceRelatedData.discountCodeAcceptance.label : notApplicable}</p>
                                         </Col>
                                     </Row>
-                                    <Row>
+                                    {new Date() > new Date(timeLeft.calculated) ? null : <Row>
                                         <Col sm="12" md="12" lg="12" xl="12">
                                             <Button className='btn-square-success' color='success-2x' style={{ width: "100%", marginTop: "22.5px" }} outline onClick={() => setSheetPaneOpen(true)}>Submit A New Bid/Bet</Button>
                                         </Col>
-                                    </Row>
+                                    </Row>}
                                     <hr/>
                                 </CardBody>
                             </Card>
