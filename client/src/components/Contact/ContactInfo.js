@@ -3,6 +3,7 @@ import { Parallax } from 'react-parallax';
 import ReactMapboxGl, { Marker } from 'react-mapbox-gl';
 import { CardHeader, Card, CardBody, Col, Row } from 'reactstrap';
 import "./styles.css";
+import ContactForm from "./ContactForm.js";
 
 const Map = ReactMapboxGl({
     accessToken: process.env.REACT_APP_MAPBOX_TOKEN,
@@ -72,8 +73,9 @@ const ContactInfo = () => {
 						bgImageAlt="banner-image"
 						strength={425}
 					>
-						Blur transition from min to max
-						<div style={{ height: '500px' }} />
+						<div style={{ minHeight: '500px', height: "100%" }}>
+							<ContactForm />
+						</div>
 					</Parallax>
 				</div>
 			</div>
