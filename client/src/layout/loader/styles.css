@@ -1,5 +1,14 @@
 .fullscreen-loader {
-    min-width: 100vw !important;
-    min-height: 100vh !important;
-    background-color: black !important;
+    min-width: 100vw;
+    min-height: 100vh;
+    background-color: black;
+}
+@media only screen and (max-width: 850px) {
+    .fullscreen-loader video {
+        min-width: 100vw !important;
+        object-fit: cover !important;
+        min-height: 100vh !important;
+        padding: 12.5px !important;
+        background-color: black !important;
+    }
 }

@@ -65,3 +65,9 @@
     background-color: #a927f9 !important;
     font-size: 0.775rem;
 }
+@media only screen and (max-width: 850px) {
+    .card-mobile-smaller {
+        left: -30px !important;
+        min-width: 77.5vw !important;
+    }
+}

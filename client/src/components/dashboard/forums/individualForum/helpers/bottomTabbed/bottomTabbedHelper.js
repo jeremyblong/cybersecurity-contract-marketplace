@@ -100,9 +100,9 @@ const CustomTabsetBottomListingAuctionHelper = ({ poster, setOpenState, id, user
                                             <InputGroup className="text-box">
                                                 <Input className="form-control custom-css-additions-input-response input-txt-bx" type="text" name="message-to-send" placeholder="Post Your Comment(s) - Enter at least 25 characters..." onChange={(e) => setCommentText(e.target.value)} value={commentText} />
                                                 {typeof commentText !== "undefined" && commentText.length >= 25 ? <InputGroupAddon className='input-group-forum-addon-custom' addonType="append">
-                                                    <Button color='info-2x' outline className='btn-square-info' onClick={() => addNewComment(commentText, setCommentText, id, setComments, poster, userData, hashtags, setHashtags)}>Submit</Button>
+                                                    <Button color='info-2x' outline className='btn-square-info addon-mobile-align' onClick={() => addNewComment(commentText, setCommentText, id, setComments, poster, userData, hashtags, setHashtags)}>Submit</Button>
                                                 </InputGroupAddon> : <InputGroupAddon className='input-group-forum-addon-custom' addonType="append">
-                                                    <InputGroupText>{25 - commentText.length > 0 ? `${25 - commentText.length} Min Char Left` : "Successful Entry!"}</InputGroupText>
+                                                    <InputGroupText className='addon-mobile-align'>{25 - commentText.length > 0 ? `${25 - commentText.length} Min Char Left` : "Successful Entry!"}</InputGroupText>
                                                 </InputGroupAddon>}
                                                 <InputGroupAddon addonType="append">
                                                     <Button color="transparent"><i onClick={() => setShowEmojiPicker(!showEmojiPicker)} className="fa fa-smile-o fa-2x restyle-emoji-activator-icon" aria-hidden="true"></i>

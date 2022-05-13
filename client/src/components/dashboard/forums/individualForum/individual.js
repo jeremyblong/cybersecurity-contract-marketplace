@@ -12,13 +12,13 @@ import Slider from 'react-slick';
 import { Truck, Gift,CreditCard,Clock } from 'react-feather';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import ReactPlayer from "react-player";
-import _, { stubFalse } from "lodash";
+import _ from "lodash";
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm';
 import moment from "moment";
 import helpers from "./helpers/bottomTabbed/helpers/helperFunctions.js";
 import { NotificationManager } from "react-notifications";
-
+import { isMobile } from 'react-device-detect';
 
 
 const { RenderEmojiLogic } = helpers;
@@ -406,16 +406,16 @@ const IndividualForumHelper = ({ userData }) => {
                         <ReactMarkdown children={forum.description} className={"markdown-main-forum-post-desc"} remarkPlugins={[remarkGfm]} />
                         <hr/>
                         <div className="m-t-15">
-                            <Button style={{ width: "16.25%" }} color="success" className="m-r-10" onClick={() => handleLikeForumPostAddition()} >
+                            <Button style={isMobile === true ? { width: "100%" } : { width: "16.25%" }} color="success" className="m-r-10" onClick={() => handleLikeForumPostAddition()} >
                                 {"Like This Post"}
                             </Button>
-                            <Button style={{ width: "16.25%" }} color="danger" className="m-r-10" onClick={() => handleDislikeForumPostAddition()} >
+                            <Button style={isMobile === true ? { width: "100%" } : { width: "16.25%" }} color="danger" className="m-r-10" onClick={() => handleDislikeForumPostAddition()} >
                                 {"Dislike This Post"}
                             </Button>
-                            <Button style={{ width: "32.5%" }} id={"reactionPopoverCustom"} color="info" className="m-r-10" onClick={() => setReactionPopoverState(true)}>
+                            <Button style={isMobile === true ? { width: "100%" } : { width: "32.5%" }} id={"reactionPopoverCustom"} color="info" className="m-r-10" onClick={() => setReactionPopoverState(true)}>
                                 {"React/Respond With Emoji To Post"}
                             </Button>
-                            <Button style={{ width: "32.5%" }} color="primary" onClick={() => {}}>
+                            <Button style={isMobile === true ? { width: "100%" } : { width: "32.5%" }} color="primary" onClick={() => {}}>
                                 {"Report/Moderate"}
                             </Button>
                         </div>
@@ -490,9 +490,18 @@ const IndividualForumHelper = ({ userData }) => {
                     const calculated = (percentage / 9.25) * (percentage * 5.25);
                     return (
                         <div
-                            style={{
+                            style={isMobile === true ? {
                                 position: 'absolute',
-                                background: `rgba(${calculated}, 102, 50, ${calculated - 0.275})`,
+                                background: `rgba(${calculated}, 102, 255, ${calculated - 0.275})`,
+                                left: '0px',
+                                top: '0px',
+                                right: "0px",
+                                bottom: "0px",
+                                width: "100%",
+                                height: "100%",
+                            } : {
+                                position: 'absolute',
+                                background: `rgba(${calculated}, 102, 255, ${calculated - 0.275})`,
                                 minHeight: "1250px",
                                 left: '0px',
                                 top: '0px',

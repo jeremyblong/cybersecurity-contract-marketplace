@@ -267,3 +267,18 @@
     color: black;
     font-weight: 475;
 }
+@media only screen and (max-width: 850px) {
+    .background-parallax-vpn-setup-img {
+        min-height: calc(125vh + 25px) !important;
+    }
+    .react-parallax-bgimage {
+        object-fit: cover !important;
+        min-height: 100% !important;
+    }
+    .vpn-setup-card-parallax {
+        margin: 35px 7.5px !important;
+    }
+    .mobile-restyle-ago {
+        padding-top: 30px !important;
+    }
+}

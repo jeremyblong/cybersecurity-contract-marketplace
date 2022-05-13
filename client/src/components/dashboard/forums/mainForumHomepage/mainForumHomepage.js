@@ -10,6 +10,7 @@ import PaginationGeneralHelper from "../../universal/pagination/miscMainPaginati
 import FilterListingResultsAuctionsPaneHelper from "./helpers/filterPane/filterListingResultsPaneHelper.js";
 import axios from "axios";
 import moment from "moment";
+import { isMobile } from 'react-device-detect';
 
 
 
@@ -122,7 +123,16 @@ const ForumHomepageMainHelper = ({ userData }) => {
                     const calculated = (percentage / 9.25) * (percentage * 5.25);
                     return (
                         <div
-                            style={{
+                            style={isMobile === true ? {
+                                position: 'absolute',
+                                background: `rgba(${calculated}, 102, 255, ${calculated - 0.275})`,
+                                left: '0px',
+                                top: '0px',
+                                right: "0px",
+                                bottom: "0px",
+                                width: "100%",
+                                height: "100%",
+                            } : {
                                 position: 'absolute',
                                 background: `rgba(${calculated}, 102, 255, ${calculated - 0.275})`,
                                 minHeight: "1250px",
@@ -175,7 +185,7 @@ const ForumHomepageMainHelper = ({ userData }) => {
                                 <div className="position-far-right-forum">
                                     <Button onClick={() => {
                                         history.push("/create/new/forum/post");
-                                    }} color="info-2x" outline className="btn-square-info" style={{ width: "27.5%" }}>Create a forum/community post</Button>
+                                    }} color="info-2x" outline className="btn-square-info" style={isMobile === true ? { width: "100%" } : { width: "27.5%" }}>Create a forum/community post</Button>
                                 </div>
                             </Row>
                                 <div className={"vpn-inner-container"}>
@@ -200,7 +210,7 @@ const ForumHomepageMainHelper = ({ userData }) => {
                                                                                 [`top-popper-${index}`]: true
                                                                             }
                                                                         })} className="strong-header-forum">c/{forum.communityName}</strong> - Visibility - {forum.groupVisibility} - {moment(lastThread.date).fromNow()} <span className="justify-content-end-forum">
-                                                                            <small className="text-muted">Latest post posted {moment(forum.date).fromNow()}</small>
+                                                                            <small className="text-muted mobile-restyle-ago">Latest post posted {moment(forum.date).fromNow()}</small>
                                                                         </span></span>
                                                                         <Popover className="popover-forum-group" placement="bottom" isOpen={popovers[`top-popper-${index}`]} target={`top-popper-${index}`} toggle={() => setPopoversState(prevState => {
                                                                             return {

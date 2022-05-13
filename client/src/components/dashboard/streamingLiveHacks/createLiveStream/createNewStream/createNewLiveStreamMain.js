@@ -217,7 +217,7 @@ const CreateNewLiveStreamAsHackerHelper = ({ saveStreamPreFilledData, userData, 
                                         </Row>
                                         <Row>
                                             <Col sm="12" md="6" lg="6" xl="6">
-                                                <Card className={"shadow-showcase-custom"}>
+                                                <Card className={"shadow-showcase-custom card-mobile-smaller"}>
                                                     <Media className="p-20">
                                                         <div className="radio radio-primary mr-3">
                                                             <Input onClick={() => {
@@ -237,7 +237,7 @@ const CreateNewLiveStreamAsHackerHelper = ({ saveStreamPreFilledData, userData, 
                                                 </Card>
                                             </Col>
                                             <Col sm="12" md="6" lg="6" xl="6">
-                                                <Card className={"shadow-showcase-custom"}>
+                                                <Card className={"shadow-showcase-custom card-mobile-smaller"}>
                                                     <Media className="p-20">
                                                         <div className="radio radio-secondary mr-3">
                                                             <Input onClick={() => {
@@ -260,7 +260,7 @@ const CreateNewLiveStreamAsHackerHelper = ({ saveStreamPreFilledData, userData, 
                                         </Row>
                                         <Row>
                                             <Col sm="12" md="6" lg="6" xl="6">
-                                                <Card className={"shadow-showcase-custom"}>
+                                                <Card className={"shadow-showcase-custom card-mobile-smaller"}>
                                                     <Media className="p-20">
                                                         <div className="radio radio-success mr-3">
                                                             <Input onClick={() => {
@@ -280,7 +280,7 @@ const CreateNewLiveStreamAsHackerHelper = ({ saveStreamPreFilledData, userData, 
                                                 </Card>
                                             </Col>
                                             <Col sm="12" md="6" lg="6" xl="6">
-                                                <Card className={"shadow-showcase-custom"}>
+                                                <Card className={"shadow-showcase-custom card-mobile-smaller"}>
                                                     <Media className="p-20">
                                                         <div className="radio radio-info mr-3">
                                                             <Input onClick={() => {

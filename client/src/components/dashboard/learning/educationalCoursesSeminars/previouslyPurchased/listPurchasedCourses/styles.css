@@ -1,4 +1,10 @@
 .stretch-image-all-the-way {
     min-width: 100%;
-    min-height: 725px;
+    height: 725px;
+}
+@media only screen and (max-width: 850px) {
+    .stretch-image-all-the-way {
+        object-fit: contain !important;
+        max-height: 275px !important;
+    }
 }

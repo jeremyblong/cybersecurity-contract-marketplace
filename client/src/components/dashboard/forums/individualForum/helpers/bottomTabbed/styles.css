@@ -33,3 +33,8 @@
 .hashtag-forum-wrapper {
     margin-top: 12.5px;
 }
+@media only screen and (max-width: 850px) {
+    .custom-css-additions-input-response {
+       min-width: 50% !important;
+    }
+}
