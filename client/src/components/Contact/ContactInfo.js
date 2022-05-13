@@ -23,11 +23,11 @@ const ContactInfo = () => {
 							<CardBody>
 								<Row>
 									<Col sm="12" md="6" lg="6" xl="6">
-										<Card className='shadow equal-height'>
+										<Card className='shadow equal-height card-mobile'>
 											<CardBody>
 												<div className="calender-widget">
 													<div className="cal-img centered-both-ways mobile-maxed-height">
-														<img src={require("../../assets/images/logo-saturated-long.png")} className={"inner-contact-img"} />
+														<img style={{ marginBottom: "12.5px" }} src={require("../../assets/images/logo-saturated-long.png")} className={"inner-contact-img"} />
 													</div>
 													<div className="cal-desc text-left card-body">
 														<h6 className="f-w-600 address-text-header">{"Company Location/Address"}</h6>
@@ -40,10 +40,10 @@ const ContactInfo = () => {
 										</Card>
 									</Col>
 									<Col sm="12" md="6" lg="6" xl="6">
-										<Card className='shadow'>
+										<Card className='shadow card-mobile'>
 											<CardBody>
 												<Map
-													center={[-122.6784, 45.5152]}
+													center={[-122.412660, 37.784850]}
 													style="mapbox://styles/mapbox/streets-v9"
 													containerStyle={{
 														height: "425px",
@@ -52,7 +52,7 @@ const ContactInfo = () => {
 													}}
 												>
 													<Marker
-														coordinates={[-122.6784, 45.5152]}
+														coordinates={[-122.412660, 37.784850]}
 														anchor="bottom"
 													>
 														<img src={require("../../assets/icons/location.png")}/>

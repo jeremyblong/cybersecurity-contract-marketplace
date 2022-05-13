@@ -24,15 +24,15 @@ const Footer = () => {
                                     <li>
                                         <i className="bx bx-envelope"></i>
                                         <span>Email:</span> 
-                                        <a className='wrapme' href="mailto:support@thehackermarketplace.com">
-                                            support@thehackermarketplace.com
+                                        <a className='wrapme' href="mailto:blongjeremy@gmail.com">
+                                            blongjeremy@gmail.com
                                         </a>
                                     </li>
                                     
                                     <li>
                                         <i className="bx bx-location-plus"></i>
                                         <span>Address:</span> 
-                                            Central Los Angeles, CA 90012
+                                            San Francisco, CA 391 Ellis Street
                                     </li>
                                 </ul>
                             </div>
@@ -217,7 +217,7 @@ const Footer = () => {
                     <div className="row align-items-center">
                         <div className="col-lg-6">
                             <div className="copy-right">
-                                <p>Copyright 2020 © CyberHunt CyberSecurity Marketplace Inc.</p>
+                                <p>Copyright 2022 © CyberHunt CyberSecurity Marketplace Inc.</p>
                             </div>
                         </div>
 

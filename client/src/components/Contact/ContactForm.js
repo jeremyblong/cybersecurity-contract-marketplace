@@ -29,7 +29,7 @@ const ContactForm = () => {
                 <Container fluid={true}>
 					<Row>
 						<Col sm="12" md="12" lg="12" xl="12">
-							<Card className='shadow'>
+							<Card className='shadow card-mobile'>
 								<CardHeader className='b-l-primary b-r-primary'>
 									<h3>Contact <strong style={{ color: "#f73164", textDecorationLine: "underline" }}>{process.env.REACT_APP_APPLICATION_NAME}</strong> if you have any <strong style={{ textDecorationLine: "underline" }}>business</strong> inquries or any <strong style={{ textDecorationLine: "underline" }}>suggestions</strong> OR if you require immediate help..</h3>
 									<p className='lead'>Please feel free to reach out to us for <strong>any subject-matter or questions</strong> however, you should know that we prioritize responses in a certain manner to cater to business-related requests <strong>first & foremost</strong>, and then we process all other requests.</p>

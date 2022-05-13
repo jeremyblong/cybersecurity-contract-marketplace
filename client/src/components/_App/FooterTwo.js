@@ -19,12 +19,12 @@ const FooterTwo = () => {
 
 								<ul className="social-icon">
 									<li>
-										<a href="https://www.facebook.com/" target="_blank">
+										<a href="https://www.facebook.com/thehackermarketplace" target="_blank">
 											<i className="bx bxl-facebook"></i>
 										</a>
 									</li>
 									<li>
-										<a href="https://www.instagram.com/" target="_blank">
+										<a href="https://www.instagram.com/thehackermarketplace/" target="_blank">
 											<i className="bx bxl-instagram"></i>
 										</a>
 									</li>

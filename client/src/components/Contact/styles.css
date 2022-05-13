@@ -23,4 +23,8 @@
     .mobile-maxed-height {
         max-height: 125px !important;
     }
+    .card-mobile {
+        left: -35px !important;
+        min-width: 97.5vw !important;
+    }
 }

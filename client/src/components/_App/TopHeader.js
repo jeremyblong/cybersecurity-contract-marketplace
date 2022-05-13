@@ -16,7 +16,7 @@ const TopHeader = () => {
 
                             <li>
                                 <i className="bx bx-location-plus"></i>
-                                    Central Los Angeles, CA 90012
+                                    San Francisco, CA 391 Ellis Street
                             </li>
                         </ul>
                     </div>
@@ -28,7 +28,7 @@ const TopHeader = () => {
                                     <i className="bx bxl-facebook"></i>
                                 </a>
                             </li>
-                            <li>
+                            {/* <li>
                                 <a href={null} target="_blank">
                                     <i className="bx bxl-twitter"></i>
                                 </a>
@@ -38,9 +38,9 @@ const TopHeader = () => {
                                 <a href={null} target="_blank">
                                     <i className="bx bxl-linkedin"></i>
                                 </a>
-                            </li>
+                            </li> */}
                             <li>
-                                <a href={null} target="_blank">
+                                <a href={"https://www.instagram.com/thehackermarketplace/"} target="_blank">
                                     <i className="bx bxl-instagram"></i>
                                 </a>
                             </li>
