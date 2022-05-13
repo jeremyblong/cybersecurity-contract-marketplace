@@ -69,7 +69,7 @@ const FaqForm = () => {
 													name="phoneNumber" 
 													placeholder="Phone number" 
 													className="form-control" 
-													value={contact.number}
+													value={contact.phoneNumber}
 													onChange={handleChange} 
 													required 
 												/>
@@ -96,7 +96,7 @@ const FaqForm = () => {
 													rows="7" 
 													placeholder="Write your message..." 
 													className="form-control" 
-													value={contact.text}
+													value={contact.message}
 													onChange={handleChange} 
 													required 
 												/>
