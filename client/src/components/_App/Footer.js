@@ -1,14 +1,22 @@
 import React from 'react';
 import {Link} from 'react-router-dom'; 
+import ReactMapboxGl, { Marker } from 'react-mapbox-gl';
+import "./styles.css";
+
+const Map = ReactMapboxGl({
+    accessToken: process.env.REACT_APP_MAPBOX_TOKEN,
+    interactive: false
+});
+
 
 const Footer = () => {
     const currentYear = new Date().getFullYear();
     return (
         <>
             <footer className="footer-top-area pt-100 pb-70 jarallax">
-                <div className="container">
+                <div className="container-fluid container-footer-spacing">
                     <div className="row">
-                        <div className="col-lg-3 col-md-6">
+                        <div className="col-lg-3 col-xl-3 col-sm-12 col-md-6">
                             <div className="single-widget contact">
                                 <h3>Contact Us</h3>
 
@@ -38,56 +46,56 @@ const Footer = () => {
                             </div>
                         </div>
 
-                        <div className="col-lg-3 col-md-6">
+                        <div className="col-lg-3 col-xl-3 col-sm-12 col-md-6">
                             <div className="single-widget">
                                 <h3>Services Link</h3>
 
                                 <ul>
                                     <li>
-                                        <Link to="/service-details">
+                                        <Link to="/about">
                                             
                                                 <i className="bx bx-chevrons-right"></i>
-                                                Web Site Protection
+                                                About
                                             
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link to="/service-details">
+                                        <Link to="/pricing-before-login">
                                             
                                                 <i className="bx bx-chevrons-right"></i>
-                                                Hosting & Server Guard
+                                                Pricing & Subscriptions
                                             
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link to="/service-details">
+                                        <Link to="/team">
                                             
                                                 <i className="bx bx-chevrons-right"></i>
-                                                Web Administrator
+                                                Team
                                             
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link to="/service-details">
+                                        <Link to="/forgot-password">
                                             
                                                 <i className="bx bx-chevrons-right"></i>
-                                                Conducting Training
+                                                Forgot Password?
                                             
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link to="/service-details">
+                                        <Link to="/privacy-policy">
                                             
                                                 <i className="bx bx-chevrons-right"></i>
-                                                GRPS Smart Protection
+                                                Privacy Policy
                                             
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link to="/service-details">
+                                        <Link to="/terms-and-conditions">
                                             
                                                 <i className="bx bx-chevrons-right"></i>
-                                                Security App
+                                                Terms & Conditions
                                             
                                         </Link>
                                     </li>
@@ -95,16 +103,16 @@ const Footer = () => {
                             </div>
                         </div>
 
-                        <div className="col-lg-3 col-md-6">
+                        <div className="col-lg-3 col-xl-3 col-sm-12 col-md-6">
                             <div className="single-widget">
                                 <h3>Support & Help</h3>
 
                                 <ul>
                                     <li>
-                                        <Link to="/contact">
+                                        <Link to="/company-details">
                                             
                                                 <i className="bx bx-chevrons-right"></i>
-                                                Support Forum
+                                                Company Details (About Us)
                                             
                                         </Link>
                                     </li>
@@ -117,42 +125,60 @@ const Footer = () => {
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link to="/contact">
+                                        <Link to="/sign-up">
                                             
                                                 <i className="bx bx-chevrons-right"></i>
-                                                24/7 Support for Help
+                                                Sign-Up
                                             
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link to="/contact">
+                                        <Link to="/sign-in">
                                             
                                                 <i className="bx bx-chevrons-right"></i>
-                                                Counseling 
+                                                Login 
                                             
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link to="/contact">
+                                        <Link to="/blog-main">
                                             
                                                 <i className="bx bx-chevrons-right"></i>
-                                                Protection
+                                                Blog Main (Unauthenticated View)
                                             
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link to="/contact">
+                                        <Link to="/create-new-blog">
                                             
                                                 <i className="bx bx-chevrons-right"></i>
-                                                Securihty
+                                                Create New Blog (Admin ONLY)
                                             
                                         </Link>
                                     </li>
                                 </ul>
                             </div>
                         </div>
+                        <div className="col-lg-3 col-xl-3 col-sm-12 col-md-6">
+                            <Map
+                                center={[-122.412660, 37.784850]}
+                                style="mapbox://styles/mapbox/streets-v9"
+                                containerStyle={{
+                                    height: "325px",
+                                    width: '100%',
+                                    border: "3px solid white"
+                                }}
+                            >
+                                <Marker
+                                    coordinates={[-122.412660, 37.784850]}
+                                    anchor="bottom"
+                                >
+                                    <img src={require("../../assets/icons/location.png")}/>
+                                </Marker>
+                            </Map>
+                        </div>
 
-                        <div className="col-lg-3 col-md-6">
+                        {/* <div className="col-lg-3 col-md-6">
                             <div className="single-widget">
                                 <h3>Quick Links</h3>
 
@@ -161,7 +187,7 @@ const Footer = () => {
                                         <Link to="/contact">
                                             
                                                 <i className="bx bx-chevrons-right"></i>
-                                                Security
+                                                Contact
                                             
                                         </Link>
                                     </li>
@@ -207,7 +233,7 @@ const Footer = () => {
                                     </li>
                                 </ul>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </footer>

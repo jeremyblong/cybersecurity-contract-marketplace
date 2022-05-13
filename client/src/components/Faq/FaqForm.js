@@ -1,21 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
-import baseUrl from '../../utils/baseUrl';
-const MySwal = withReactContent(Swal);
-
-
-const alertContent = () => {
-    MySwal.fire({
-        title: 'Congratulations!',
-        text: 'Your message was successfully send and will back to you soon',
-        icon: 'success',
-        timer: 2000,
-        timerProgressBar: true,
-        showConfirmButton: false,
-    })
-}
 
 // Form initial state
 const INITIAL_STATE = {
@@ -36,21 +19,6 @@ const FaqForm = () => {
         // console.log(contact)
     }
 
-    const handleSubmit = async e => {
-        e.preventDefault();
-        try {
-            const url = `${baseUrl}/api/contact`;
-            const { name, email, number, subject, text } = contact;
-            const payload = { name, email, number, subject, text };
-            const response = await axios.post(url, payload);
-            console.log(response);
-            setContact(INITIAL_STATE);
-            alertContent();
-        } catch (error) {
-            console.log(error)
-        }
-    };
-
     return (
         <section className="faq-contact-area pb-100">
 			<div className="container">
@@ -59,11 +27,14 @@ const FaqForm = () => {
 						<div className="contact-wrap">
 							<div className="contact-form">
 								<div className="section-title">
-									<h2>Ask Questions</h2>
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Impedit, libero harum cum numquam repellendus autem recusandae voluptatem, asperiores iusto magni reprehenderit</p>
+									<h2>Ask Questions & Clarification</h2>
+									<p>Feel free to ask us <strong>any questions</strong> you might have, ranging from how our platform works to how to take specific actions if something is unclear. We will do our absolute best to circle back within a reasonable time frame (usually 1-3 business days)...</p>
 								</div>
 
-								<form onSubmit={handleSubmit}>
+								<form 
+									action="https://formspree.io/f/xyyoldzo"
+ 	 								method="POST"
+								>
 									<div className="row">
 										<div className="col-lg-6 col-md-6">
 											<div className="form-group">
@@ -95,7 +66,7 @@ const FaqForm = () => {
 											<div className="form-group">
 												<input 
 													type="text" 
-													name="number" 
+													name="phoneNumber" 
 													placeholder="Phone number" 
 													className="form-control" 
 													value={contact.number}
@@ -120,7 +91,7 @@ const FaqForm = () => {
 										<div className="col-lg-12 col-md-12">
 											<div className="form-group">
 												<textarea 
-													name="text" 
+													name="message" 
 													cols="30" 
 													rows="7" 
 													placeholder="Write your message..." 
@@ -133,7 +104,7 @@ const FaqForm = () => {
 										</div>
 										<div className="col-lg-12 col-sm-12">
 											<button type="submit" className="default-btn page-btn">
-												Send Message
+												Send Message!
 											</button>
 										</div>
 									</div>
