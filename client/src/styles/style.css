@@ -1589,6 +1589,7 @@ Security Area Style
   background-color: #fef4f8;
   padding: 30px;
   margin-bottom: 30px;
+  z-index: 0 !important;
   -webkit-transition: all 0.5s;
   transition: all 0.5s;
 }
@@ -1695,7 +1696,7 @@ Solutions Area Style
   background-size: cover;
   height: 400px;
   position: relative;
-  z-index: 1;
+  z-index: 0 !important;
   margin-bottom: 30px;
   overflow: hidden;
   -webkit-transition: all 0.5s;
@@ -1970,7 +1971,7 @@ Client Area Style
   background-size: cover;
   height: 100%;
   position: relative;
-  z-index: 1;
+  z-index: 0 !important;
 }
 
 .client-area::before {
@@ -1982,7 +1983,7 @@ Client Area Style
   height: 100%;
   background-color: #010e19;
   opacity: 0.82;
-  z-index: -1;
+  z-index: -1 !important;
 }
 
 .client-area .owl-item.active.center .single-client {
@@ -2302,7 +2303,7 @@ Footer Top Area Style
   height: 100%;
   max-width: 100vw !important;
   position: relative;
-  z-index: 1;
+  z-index: 0 !important;
 }
 
 .footer-top-area::before {
