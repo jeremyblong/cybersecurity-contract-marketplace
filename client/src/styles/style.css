@@ -46,6 +46,7 @@ html, body {
   margin: 0;
   font-size: 15px;
   line-height: 1.7;
+  z-index: 0 !important;
   font-family: "Rubik", sans-serif;
   color: #212121;
   overflow-x: hidden !important;
