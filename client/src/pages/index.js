@@ -53,7 +53,7 @@ const Index = () => {
 
                     <div className="modal-content-customized-subscribe">
                         <div className="modal-header bg-secondary text-center">
-                            <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            <button onClick={() => setIsOpen(false)} type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                             <Container>
                                 <Row className='stretch-complete'>
                                     <Col sm="12" md="12" lg="12" xl="12">
