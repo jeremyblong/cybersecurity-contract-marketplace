@@ -12,8 +12,46 @@ input[type=number] {
   color: #f73164;
   font-weight: 450;
 }
+#modal-subscription {
+  min-width: 45vw !important;
+  max-width: 45vw !important;
+  height: 100% !important;
+  background-color: white !important;
+  position: fixed !important;
+  bottom: 45px !important;
+  right: 22.5px !important;
+  z-index: 999999999999999999999999 !important;
+  overflow-y: scroll !important;
+}
+.ReactModal__Overlay {
+  z-index: 999999999999999999999999999999999999999999999999 !important;
+}
+.stretch-complete {
+  min-width: 100% !important;
+}
 @media only screen and (max-width: 850px) {
   #create-spacer-toppie {
     padding-top: 425px;
+  }
+  #modal-subscription {
+    min-width: 100% !important;
+    max-width: 100% !important;
+    height: 100% !important;
+    background-color: white !important;
+    position: fixed !important;
+    bottom: 0px !important;
+    padding-bottom: 22.5px !important;
+    right: 0 !important;
+    z-index: 999999999999999999999999 !important;
+    overflow-y: scroll !important;
+  }
+  .subscriptionmodalbody {
+    padding-bottom: 12.5px !important;
+  }
+  .ReactModal__Overlay {
+    z-index: 999999999999999999999999999999999999999999999999 !important;
+  }
+  .stretch-complete {
+    min-width: 100% !important;
   }
 }
