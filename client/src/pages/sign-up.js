@@ -141,7 +141,7 @@ constructor (props) {
                     <div className="container">
                         <div className="section-title">
                             <h2 style={{ textDecorationLine: "underline", color: "#f73164" }}>Create an account & access 'restricted' data!</h2>
-                            <h5 style={{ color: "red" }}>We are currently <em style={{ textDecorationLine: "underline" }}>ONLY</em> accepting beta-members at the current point in time, if you'd like to get involved and don't have a code - contact us or signup on the 'waitlist' page...</h5>
+                            {/* <h5 style={{ color: "red" }}>We are currently <em style={{ textDecorationLine: "underline" }}>ONLY</em> accepting beta-members at the current point in time, if you'd like to get involved and don't have a code - contact us or signup on the 'waitlist' page...</h5> */}
                             <hr />
                             <p>Welcome to {process.env.REACT_APP_APPLICATION_NAME}, we have an <strong style={{ textDecorationLine: "underline" }}>extensive authenticated</strong> software client-side marketplace <strong style={{ textDecorationLine: "underline", color: "#f73164" }}>AFTER</strong> successfully signing up and registering! There are approx. 100+- pages that are initially restricted to <strong style={{ color: "#f73164" }}>only authenticated user's</strong> so we HIGHLY recommend signing up and at least checking it out!</p>
                         </div>
@@ -270,7 +270,7 @@ constructor (props) {
                                             </label>
                                         </div>
                                     </div>
-                                    <div className="col-md-12 col-sm-6 col-xs-6 form-condition">
+                                    {/* <div className="col-md-12 col-sm-6 col-xs-6 form-condition">
                                         <div className="agree-label">
                                             <input value={this.state.betamodeActivated} onChange={() => {
                                                 this.setState({
@@ -281,7 +281,7 @@ constructor (props) {
                                                 ~ I'm signing-up with a <strong style={{ textDecorationLine: "underline", color: "#7366ff" }}>'beta' code!</strong> ~
                                             </label>
                                         </div>
-                                    </div>
+                                    </div> */}
 
                                     <div className="col-12">
                                         <button className="default-btn btn-two" type="submit">
