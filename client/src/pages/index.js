@@ -42,7 +42,7 @@ const Index = () => {
     
     return ( 
         <div id={"lessen-index"}>
-            <Modal
+            {/* <Modal
                 id={"modal-subscription"}
                 isOpen={modalIsOpen}
                 onAfterOpen={() => {}}
@@ -89,7 +89,7 @@ const Index = () => {
                         </div>
                     </div>  
         
-            </Modal>
+            </Modal> */}
 
 
             <Navbar />
