@@ -1,0 +1,11 @@
+.margin-password-input {
+    padding:  12.5px 42.5px;
+}
+#sheet-auth-auth {
+    z-index: 0 !important;
+}
+@media only screen and (max-width: 850px) {
+    .margin-password-input {
+        padding:  5px !important;
+    }
+}

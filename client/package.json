@@ -128,6 +128,7 @@
     "sweetalert2-react-content": "^4.1.1",
     "thunk": "0.0.1",
     "twilio-video": "^2.21.0",
+    "universal-cookie": "^4.0.4",
     "webpack": "^4.42.0"
   },
   "devDependencies": {
