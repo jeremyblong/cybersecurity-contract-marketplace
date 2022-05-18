@@ -118,6 +118,10 @@ const Root = (props) =>  {
 
   useEffect(() => {
 
+    if (process.env.NODE_ENV === "development") {
+      setPermission(true);
+    }
+
     setTimeout(() => {
       const accountData = store.getState().auth.data;
 
@@ -241,81 +245,96 @@ const Root = (props) =>  {
       </ProtectedRoute>
     );
   }
+  const renderPaneRestriction = () => {
+    if (process.env.NODE_ENV === "production") {
+      if (cookies.get('authenticated') !== "true") {
+        return (
+          <Fragment>
+            <Sheet id={"sheet-auth-auth"} disableDrag={true} isOpen={authModal} onClose={() => setAuthModal(false)}>
+              <Sheet.Container>
+                <Sheet.Header />
+                <Sheet.Content>
+                  <Container className='margin-password-input' fluid={true}>
+                    <Row style={{ marginTop: "22.5px" }}>
+                        <Col sm="12" xl="12" lg="12" md="12">
+                          <Card>
+                              <CardHeader className='b-l-info b-r-info'>
+                                  <h5>Enter the password you were provided - if you do not have a code, please reach out to <a style={{ color: "blue" }} href={"mailto:support@thehackermarketplace.com"}>our email</a> to request access...</h5>
+                              </CardHeader>
+                              <CardBody>
+                                <FormGroup className=" m-form__group">
+                                  <Label>Enter your code/password</Label>
+                                  <InputGroup>
+                                    <InputGroupAddon addonType="prepend"><InputGroupText>{"PASSWORD"}</InputGroupText></InputGroupAddon>
+                                    <Input onChange={(e) => setPassword(e.target.value)} value={password} className="form-control" type="text" placeholder="Enter your password..."/>
+                                  </InputGroup>
+                                </FormGroup>
+                              </CardBody>
+                              <CardFooter className='b-l-info b-r-info'>
+                                <h4 className='text-left'>Enter the proper password or request one if you'd like to access our 'beta' launch/version...</h4>
+                                <hr />
+                                <Button className={"btn-square-success"} outline color={"success-2x"} style={{ width: "100%" }} onClick={() => handleAuthAttempt()}>Submit & Request Access!</Button>
+                              </CardFooter>
+                          </Card>
+                      </Col>
+                    </Row>
+                  </Container>
+                </Sheet.Content>
+              </Sheet.Container>
+
+              <Sheet.Backdrop />
+            </Sheet>
+          </Fragment>
+        );
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
+  }
   return(
     <Fragment>
       <Provider store={store}>
       <MountingLogicRedux props={props} />
       <SimpleReactLightbox>
       <RecoilRoot>
-      <NotificationContainer />
-      {cookies.get('authenticated') !== "true" ? <Sheet id={"sheet-auth-auth"} disableDrag={true} isOpen={authModal} onClose={() => setAuthModal(false)}>
-        <Sheet.Container>
-          <Sheet.Header />
-          <Sheet.Content>
-            <Container className='margin-password-input' fluid={true}>
-              <Row style={{ marginTop: "22.5px" }}>
-                  <Col sm="12" xl="12" lg="12" md="12">
-                    <Card>
-                        <CardHeader className='b-l-info b-r-info'>
-                            <h5>Enter the password you were provided - if you do not have a code, please reach out to <a style={{ color: "blue" }} href={"mailto:support@thehackermarketplace.com"}>our email</a> to request access...</h5>
-                        </CardHeader>
-                        <CardBody>
-                          <FormGroup className=" m-form__group">
-                            <Label>Enter your code/password</Label>
-                            <InputGroup>
-                              <InputGroupAddon addonType="prepend"><InputGroupText>{"PASSWORD"}</InputGroupText></InputGroupAddon>
-                              <Input onChange={(e) => setPassword(e.target.value)} value={password} className="form-control" type="text" placeholder="Enter your password..."/>
-                            </InputGroup>
-                          </FormGroup>
-                        </CardBody>
-                        <CardFooter className='b-l-info b-r-info'>
-                          <h4 className='text-left'>Enter the proper password or request one if you'd like to access our 'beta' launch/version...</h4>
-                          <hr />
-                          <Button className={"btn-square-success"} outline color={"success-2x"} style={{ width: "100%" }} onClick={() => handleAuthAttempt()}>Submit & Request Access!</Button>
-                        </CardFooter>
-                    </Card>
-                </Col>
-              </Row>
-            </Container>
-          </Sheet.Content>
-        </Sheet.Container>
-
-        <Sheet.Backdrop />
-      </Sheet> : null}
-      {permission === true || cookies.get('authenticated') === "true" ? <Fragment>
-        <BrowserRouter>
-          <Switch>
-            <Route exact path="/" render={(props) => renderComponent(Index, props)} />
-            <Route exact path="/company-details" render={(props) => renderComponent(AboutCompanyDetails, props)} />
-            <Route exact path="/sign-in" render={(props) => renderComponent(SignIn, props)} />
-            <Route exact path="/sign-up" render={(props) => renderComponent(SignUp, props)} />
-            <Route exact path="/forgot-password" render={(props) => renderComponent(ForgotPassword, props)} />
-            <Route exact path="/contact" render={(props) => renderComponent(Contact, props)} />
-            <Route exact path="/about" render={(props) => renderComponent(About, props)} />
-            <Route exact path="/frequently-asked-questions" render={(props) => renderComponent(FAQ, props)} />
-            <Route exact path="/testimonials" render={(props) => renderComponent(Testimonials, props)} />
-            <Route exact path="/pricing-before-login" render={(props) => renderComponent(Pricing, props)} />
-            <Route exact path="/coming-soon" render={(props) => renderComponent(ComingSoon, props)} />
-            <Route exact path="/privacy-policy" render={(props) => renderComponent(PrivacyPolicy, props)} />
-            <Route exact path="/team" render={(props) => renderComponent(Team, props)} />
-            {/* <Route exact path="/service-details" render={(props) => renderComponent(ServiceDetails, props)} /> */}
-            <Route exact path="/blog-main" render={(props) => renderComponent(BlogGrid, props)} />
-            <Route exact path="/blog-details/:id" render={(props) => renderComponent(BlogDetails, props)} />
-            {/* <Route exact path="/services-one" render={(props) => renderComponent(ServicesOne, props)} />
-            <Route exact path="/services-two" render={(props) => renderComponent(ServicesTwo, props)} />
-            <Route exact path="/services-three" render={(props) => renderComponent(ServicesThree, props)} /> */}
-            <Route exact path="/blog-left-sidebar" render={(props) => renderComponent(BlogLeftSidebar, props)} />
-            <Route exact path="/blog-right-sidebar" render={(props) => renderComponent(BlogRightSidebar, props)} />
-            <Route exact path="/terms-and-conditions" render={(props) => renderComponent(TermsConditions, props)} />
-            <Route exact path="/create-new-blog" render={(props) => renderComponent(CreateANewBlogPostPage, props)} />
-            <App>
-              <TransitionGroup>
-                {routes.map(({ path, Component }) => renderDashboardComponents(path, Component))}
-              </TransitionGroup>
-            </App>
-          </Switch>
-        </BrowserRouter>
-      </Fragment> : null}
+        <NotificationContainer />
+        {/* {renderPaneRestriction()} */}
+        <Fragment>
+          <BrowserRouter>
+            <Switch>
+              <Route exact path="/" render={(props) => renderComponent(Index, props)} />
+              <Route exact path="/company-details" render={(props) => renderComponent(AboutCompanyDetails, props)} />
+              <Route exact path="/sign-in" render={(props) => renderComponent(SignIn, props)} />
+              <Route exact path="/sign-up" render={(props) => renderComponent(SignUp, props)} />
+              <Route exact path="/forgot-password" render={(props) => renderComponent(ForgotPassword, props)} />
+              <Route exact path="/contact" render={(props) => renderComponent(Contact, props)} />
+              <Route exact path="/about" render={(props) => renderComponent(About, props)} />
+              <Route exact path="/frequently-asked-questions" render={(props) => renderComponent(FAQ, props)} />
+              <Route exact path="/testimonials" render={(props) => renderComponent(Testimonials, props)} />
+              <Route exact path="/pricing-before-login" render={(props) => renderComponent(Pricing, props)} />
+              <Route exact path="/coming-soon" render={(props) => renderComponent(ComingSoon, props)} />
+              <Route exact path="/privacy-policy" render={(props) => renderComponent(PrivacyPolicy, props)} />
+              <Route exact path="/team" render={(props) => renderComponent(Team, props)} />
+              {/* <Route exact path="/service-details" render={(props) => renderComponent(ServiceDetails, props)} /> */}
+              <Route exact path="/blog-main" render={(props) => renderComponent(BlogGrid, props)} />
+              <Route exact path="/blog-details/:id" render={(props) => renderComponent(BlogDetails, props)} />
+              {/* <Route exact path="/services-one" render={(props) => renderComponent(ServicesOne, props)} />
+              <Route exact path="/services-two" render={(props) => renderComponent(ServicesTwo, props)} />
+              <Route exact path="/services-three" render={(props) => renderComponent(ServicesThree, props)} /> */}
+              <Route exact path="/blog-left-sidebar" render={(props) => renderComponent(BlogLeftSidebar, props)} />
+              <Route exact path="/blog-right-sidebar" render={(props) => renderComponent(BlogRightSidebar, props)} />
+              <Route exact path="/terms-and-conditions" render={(props) => renderComponent(TermsConditions, props)} />
+              <Route exact path="/create-new-blog" render={(props) => renderComponent(CreateANewBlogPostPage, props)} />
+              <App>
+                <TransitionGroup>
+                  {routes.map(({ path, Component }) => renderDashboardComponents(path, Component))}
+                </TransitionGroup>
+              </App>
+            </Switch>
+          </BrowserRouter>
+        </Fragment>
       </RecoilRoot>
       </SimpleReactLightbox>
       </Provider>

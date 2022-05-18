@@ -158,9 +158,12 @@ router.post("/", async (req, res) => {
                             }, (regErr, regRes) => {
                               if (regErr) {
             
-                                  console.log('regError Registering User with Authy');
+                                  console.log('regError Registering User with Authy', regErr);
             
-                                  res.status(500).json(regErr);
+                                  res.status(500).json({
+                                    message: regErr.body.message,
+                                    regErr
+                                  });
             
                                   return;
                               } else {
@@ -279,9 +282,12 @@ router.post("/", async (req, res) => {
                               }, (regErr, regRes) => {
                                 if (regErr) {
               
-                                    console.log('regError Registering User with Authy');
+                                    console.log('regError Registering User with Authy', regErr);
               
-                                    res.status(500).json(regErr);
+                                    res.status(500).json({
+                                      message: regErr.body.message,
+                                      regErr
+                                    });
               
                                     return;
                                 } else {
@@ -397,9 +403,12 @@ router.post("/", async (req, res) => {
                           }, (regErr, regRes) => {
                             if (regErr) {
           
-                                console.log('regError Registering User with Authy');
+                                console.log('regError Registering User with Authy', regErr);
           
-                                res.status(500).json(regErr);
+                                res.status(500).json({
+                                  message: regErr.body.message,
+                                  regErr
+                                });
           
                                 return;
                             } else {
@@ -546,9 +555,12 @@ router.post("/", async (req, res) => {
                     }, (regErr, regRes) => {
                       if (regErr) {
     
-                          console.log('regError Registering User with Authy');
+                          console.log('regError Registering User with Authy', regErr);
     
-                          res.status(500).json(regErr);
+                          res.status(500).json({
+                            message: regErr.body.message,
+                            regErr
+                          });
     
                           return;
                       } else {
@@ -667,9 +679,12 @@ router.post("/", async (req, res) => {
                       }, (regErr, regRes) => {
                         if (regErr) {
       
-                            console.log('regError Registering User with Authy');
+                            console.log('regError Registering User with Authy', regErr);
       
-                            res.status(500).json(regErr);
+                            res.status(500).json({
+                              message: regErr.body.message,
+                              regErr
+                            });
       
                             return;
                         } else {
@@ -787,7 +802,10 @@ router.post("/", async (req, res) => {
   
                         console.log('regError Registering User with Authy');
   
-                        res.status(500).json(regErr);
+                        res.status(500).json({
+                          message: regErr.body.message,
+                          regErr
+                        });
   
                         return;
                     } else {

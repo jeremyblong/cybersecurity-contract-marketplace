@@ -28,6 +28,14 @@ const CreateInviteEmailBetaListHelper = ({ userData }) => {
 
     const submitCodeAndCheck = () => {
         console.log("submitCodeAndCheck clicked..");
+
+        if (code === process.env.REACT_APP_ADD_NEW_EMPLOYEE_USER_CODE) {
+            setMatched(true);
+
+            NotificationManager.success("Successfully entered the 'proper' code & access was granted!", "Successfully entered the correct code, access granted!", 4750);
+        } else {
+            NotificationManager.error("Code does NOT match! Please enter a valid code, or stop trying to access something you do not have access to..", "Code did NOT match!", 4750);
+        }
     }
 
     useEffect(() => {

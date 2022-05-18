@@ -29,7 +29,7 @@ constructor (props) {
         referralCode: "",
         phoneNumber: "",
         betamode: "",
-        betamodeActivated: false
+        betamodeActivated: true
     }
 }
 
@@ -58,62 +58,66 @@ constructor (props) {
         if ((typeof phoneNumber !== "undefined" && phoneNumber.length >= 10) && (typeof firstName !== "undefined" && firstName.length > 0) && (typeof lastName !== "undefined" && lastName.length > 0) && (typeof email !== "undefined" && email.length > 0) && (typeof username !== "undefined" && username.length > 0) && (typeof password !== "undefined" && password.length > 0)) {
             if (agreement === true) {
                 // agreed
-                axios.post(`${process.env.REACT_APP_BASE_URL}/registration/${checked === true ? "hacker" : "employer"}`, {
-                    firstName, 
-                    lastName, 
-                    email, 
-                    username, 
-                    password, 
-                    agreement,
-                    referralCode,
-                    phoneNumber,
-                    accountType: checked === true ? "hackers" : "employers",
-                    betamodeActivated,
-                    betacode
-                }, {
-                    withCredentials: true
-                }).then((res) => {
-                    if (res.data.message === "Successfully registered!") {
-                        console.log("success!", res.data);
-
-                        this.setState({
-                            firstName: "",
-                            lastName: "",
-                            email: "",
-                            password: "",
-                            username: "",
-                            agreement: false,
-                            referralCode: null,
-                            phoneNumber: "",
-                            checked: false,
-                            betamodeActivated: false,
-                            betacode: "",
-                            switchAccountType: "You're registering as a 'Company/Employer'"
-                        }, () => {
-                            NotificationManager.success('Successfully registered! We will log you in momentarily...', 'Successfully registered!', 3000);
-
-                            setTimeout(() => {
-                                // do authentication - registration redux logic
-
-                                this.props.authentication(res.data.data);
-
-                                if (res.data.data.accountType === "employers") {
-                                    this.props.history.push("/dashboard/employer");
-                                } else {
-                                    this.props.history.push("/dashboard/hacker");
-                                }
-                            }, 3000);
-                        })
-                    } else if (res.data.message === "An unknown error has occurred while trying to locate referring user - please make sure you're entering a 'proper referral code' as we were unable to find any results for a user with that information/code..") {
-                        NotificationManager.error(res.data.message, "Enter a VALID referral code OR just don't use one!", 4750);
-                    } else if (res.data.message === "Information/data does NOT match, you MUST enter a valid beta-invitation code & the date MUST be within 48 hours of the invitation date and/or time, please try this action again..") {
-                        NotificationManager.error(res.data.message, "Your beta-code does NOT match OR the date wasn't soon enough (must be within 48 hours of invitation date)", 4750);
-                    } else {
-                        NotificationManager.error('An error occurred during the registration process - please try again...', 'ERROR REGISTERING.', 3500);
-                    }
-                }).catch((err) => {
-                    console.log(err);
-                })
+                if (betamodeActivated === true) {
+                    axios.post(`${process.env.REACT_APP_BASE_URL}/registration/${checked === true ? "hacker" : "employer"}`, {
+                        firstName, 
+                        lastName, 
+                        email, 
+                        username, 
+                        password, 
+                        agreement,
+                        referralCode,
+                        phoneNumber,
+                        accountType: checked === true ? "hackers" : "employers",
+                        betamodeActivated,
+                        betacode
+                    }, {
+                        withCredentials: true
+                    }).then((res) => {
+                        if (res.data.message === "Successfully registered!") {
+                            console.log("success!", res.data);
+    
+                            this.setState({
+                                firstName: "",
+                                lastName: "",
+                                email: "",
+                                password: "",
+                                username: "",
+                                agreement: false,
+                                referralCode: null,
+                                phoneNumber: "",
+                                checked: false,
+                                betamodeActivated: false,
+                                betacode: "",
+                                switchAccountType: "You're registering as a 'Company/Employer'"
+                            }, () => {
+                                NotificationManager.success('Successfully registered! We will log you in momentarily...', 'Successfully registered!', 3000);
+    
+                                setTimeout(() => {
+                                    // do authentication - registration redux logic
+    
+                                    this.props.authentication(res.data.data);
+    
+                                    if (res.data.data.accountType === "employers") {
+                                        this.props.history.push("/dashboard/employer");
+                                    } else {
+                                        this.props.history.push("/dashboard/hacker");
+                                    }
+                                }, 3000);
+                            })
+                        } else if (res.data.message === "An unknown error has occurred while trying to locate referring user - please make sure you're entering a 'proper referral code' as we were unable to find any results for a user with that information/code..") {
+                            NotificationManager.error(res.data.message, "Enter a VALID referral code OR just don't use one!", 4750);
+                        } else if (res.data.message === "Information/data does NOT match, you MUST enter a valid beta-invitation code & the date MUST be within 48 hours of the invitation date and/or time, please try this action again..") {
+                            NotificationManager.error(res.data.message, "Your beta-code does NOT match OR the date wasn't soon enough (must be within 48 hours of invitation date)", 4750);
+                        } else {
+                            NotificationManager.error('An error occurred during the registration process - please try again...', 'ERROR REGISTERING.', 3500);
+                        }
+                    }).catch((err) => {
+                        console.log(err);
+                    })
+                } else {
+                    NotificationManager.warning("You MUST enter a proper/correct beta-code at this point in time as our launch is restricted to only 'eligible/invited' users...", "Please enter a VALID 'BETA' code!", 4750);
+                }
             } else {
                 // didnt agree yet
                 NotificationManager.warning('You MUST agree to the terms & conditions before continuing with registration!', 'Please agree to terms & conditions', 3500);
@@ -141,7 +145,7 @@ constructor (props) {
                     <div className="container">
                         <div className="section-title">
                             <h2 style={{ textDecorationLine: "underline", color: "#f73164" }}>Create an account & access 'restricted' data!</h2>
-                            {/* <h5 style={{ color: "red" }}>We are currently <em style={{ textDecorationLine: "underline" }}>ONLY</em> accepting beta-members at the current point in time, if you'd like to get involved and don't have a code - contact us or signup on the 'waitlist' page...</h5> */}
+                            <h5 style={{ color: "red" }}>We are currently <em style={{ textDecorationLine: "underline" }}>ONLY</em> accepting beta-members at the current point in time, if you'd like to get involved and don't have a code - contact us or signup on the 'waitlist' page...</h5>
                             <hr />
                             <p>Welcome to {process.env.REACT_APP_APPLICATION_NAME}, we have an <strong style={{ textDecorationLine: "underline" }}>extensive authenticated</strong> software client-side marketplace <strong style={{ textDecorationLine: "underline", color: "#f73164" }}>AFTER</strong> successfully signing up and registering! There are approx. 100+- pages that are initially restricted to <strong style={{ color: "#f73164" }}>only authenticated user's</strong> so we HIGHLY recommend signing up and at least checking it out!</p>
                         </div>
@@ -270,9 +274,9 @@ constructor (props) {
                                             </label>
                                         </div>
                                     </div>
-                                    {/* <div className="col-md-12 col-sm-6 col-xs-6 form-condition">
+                                    <div className="col-md-12 col-sm-6 col-xs-6 form-condition">
                                         <div className="agree-label">
-                                            <input value={this.state.betamodeActivated} onChange={() => {
+                                            <input checked={this.state.betamodeActivated} onChange={() => {
                                                 this.setState({
                                                     betamodeActivated: !this.state.betamodeActivated
                                                 })
@@ -281,7 +285,7 @@ constructor (props) {
                                                 ~ I'm signing-up with a <strong style={{ textDecorationLine: "underline", color: "#7366ff" }}>'beta' code!</strong> ~
                                             </label>
                                         </div>
-                                    </div> */}
+                                    </div>
 
                                     <div className="col-12">
                                         <button className="default-btn btn-two" type="submit">
