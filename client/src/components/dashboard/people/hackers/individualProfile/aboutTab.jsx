@@ -117,7 +117,7 @@ const AboutTab = ({ userData, setPermenantDataState, permenantData, user, isOpen
                                     <Row className="details-about">
                                         <Col sm="6">
                                             <div className="your-details"><span className="f-w-600">Years Of Experience:</span>
-                                                <p>This user has approx <em style={{ color: "#7366ff" }}>{user.yearsOfExperience.label}</em></p>
+                                                <p>This user has approx <em style={{ color: "#7366ff" }}>{_.has(user, "yearsOfExperience") ? user.yearsOfExperience.label : "Loading/Not-Specified..."}</em></p>
                                             </div>
                                         </Col>
                                         <Col sm="6">

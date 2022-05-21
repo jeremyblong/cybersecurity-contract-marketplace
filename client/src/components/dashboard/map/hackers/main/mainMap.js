@@ -527,7 +527,7 @@ constructor(props) {
                     <Sheet.Backdrop />
                 </Sheet>
                 <Container fluid={true}>
-                    <Row>
+                    {/* <Row>
                         <Col md="12" lg="12" xl="12" sm="12">
                             <Button onClick={() => {
                                 this.setState({
@@ -535,7 +535,7 @@ constructor(props) {
                                 })
                             }} style={{ width: "100%", marginTop: "12.5px" }} color="secondary">Open up filter option's pane</Button>
                         </Col>
-                    </Row>
+                    </Row> */}
                     <Row style={{ paddingTop: "10px" }}>
                         <Col md="6" lg="6" sm="12">
                             <Map
