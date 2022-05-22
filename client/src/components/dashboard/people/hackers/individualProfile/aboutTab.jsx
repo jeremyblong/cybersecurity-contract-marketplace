@@ -177,7 +177,7 @@ const AboutTab = ({ userData, setPermenantDataState, permenantData, user, isOpen
                                 </CardBody>
                             </Card>
                         </Col>
-                        <Col sm="12">
+                        {/* <Col sm="12">
                             <Card className={"add-shadow-general-card-profile"}>
                                 <CardHeader className="social-header">
                                     <h5><span>{"Education and Employement"}</span><span className="pull-right"><MoreVertical /></span></h5>
@@ -227,7 +227,7 @@ const AboutTab = ({ userData, setPermenantDataState, permenantData, user, isOpen
                                     </Row>
                                 </CardBody>
                             </Card>
-                        </Col>
+                        </Col> */}
                         <Col sm="12">
                             <Card className={"add-shadow-general-card-profile"}>
                                 <CardHeader>

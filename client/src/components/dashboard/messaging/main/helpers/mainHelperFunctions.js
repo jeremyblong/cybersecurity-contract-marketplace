@@ -132,14 +132,18 @@ const renderStatus = (item, userData) => {
     }
 }
 const renderLastProfilePicMainUser = (user) => {
-    const reversed = user.profilePicsVideos.reverse();
+    if (typeof user.profilePicsVideos !== "undefined" && user.profilePicsVideos.length > 0) {
+        const reversed = user.profilePicsVideos.reverse();
 
-    for (let index = 0; index < reversed.length; index++) {
-        const item = reversed[index];
-        if (item.type.includes("image")) {
-            return `${process.env.REACT_APP_ASSET_LINK}/${item.link}`;
-            break;
+        for (let index = 0; index < reversed.length; index++) {
+            const item = reversed[index];
+            if (item.type.includes("image")) {
+                return `${process.env.REACT_APP_ASSET_LINK}/${item.link}`;
+                break;
+            }
         }
+    } else {
+        return process.env.REACT_APP_PLACEHOLDER_IMAGE;
     }
 }
 const onKeyPressPrivateSubmitted = (e) => {
