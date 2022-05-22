@@ -51,7 +51,7 @@ const LeftBar = ({ employerData, activeHearts }) => {
                                 <div className="likes-profile text-center">
                                     <h5><span><i className="fa fa-heart font-danger"></i> {typeof activeHearts !== "undefined" ? `${activeHearts.length} profile 'hearts'` : 0}</span></h5>
                                 </div>
-                                <div className="text-center">{"35 New Likes This Week"}</div>
+                                {/* <div className="text-center">{"35 New Likes This Week"}</div> */}
                             </Fragment> : <Fragment>
                                 <div className="likes-profile text-center">
                                     <h5><span><i className="fa fa-heart font-danger"></i> {typeof activeHearts !== "undefined" ? `${activeHearts.length} profile 'hearts'` : 0}</span></h5>

@@ -333,10 +333,10 @@ const MessagingMainHelper = ({ SBData, userData }) =>  {
                             <div className="name f-w-600">{`${userData.firstName} ${userData.lastName}`}</div>
                             <div className="status custom-chat-row">
                                 {userData.accountType === "hackers" ? "hacker" : "employer"}
-                                <div className="checkbox checkbox-success checkbox-custom-group-change">
+                                {/* <div className="checkbox checkbox-success checkbox-custom-group-change">
                                     <Input checked={groupType.checked} onChange={(e) => handleCheckGroupType(e, setGroupType, setMessageListState, setChannelState)} id="checkbox-primary" type="checkbox" defaultChecked/>
                                     <Label for="checkbox-primary"><strong style={{ textDecorationLine: "underline" }}>{groupType.checked === true ? "Public" : "Private"}</strong> Convo's</Label>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                         </div>

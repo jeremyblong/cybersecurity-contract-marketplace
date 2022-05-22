@@ -54,7 +54,7 @@ const LeftBar = ({ user }) => {
                             </div> : <div className="likes-profile text-center">
                                 <h5><span><i className="fa fa-eye font-danger"></i> {user !== null ? user.totalUniqueViews : 0} Total Page View's</span></h5>
                             </div>}
-                            <div className="text-center">{"35 New Likes This Week"}</div>
+                            {/* <div className="text-center">{"35 New Likes This Week"}</div> */}
                             <div className="customers text-center social-group">
                                 <ul>
                                     <li className="d-inline-block">
