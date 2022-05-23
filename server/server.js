@@ -305,7 +305,7 @@ app.use("/gather/all/transactions/stripe/employer", require("./routes/employers/
 app.use("/gather/all/transactions/stripe/hacker", require("./routes/hackers/transactionalHistory/transactionalHistoryHacker.js"));
 app.use("/send/phone/code/again/auth", require("./routes/authentication/twilio/resendCode/resendRepeatRequestedCode.js"));
 app.use("/gather/hackers/random/general/leaderboards", require("./routes/hackers/leaderboards/gatherTopUsers.js"));
-
+app.use("/mark/view/unauth/blog/post/anyone", require("./routes/unauthenticated/blogs/markView/markBlogViewAny.js"));
 
 app.use(express.static(path.join(__dirname, '../client/build')));
 

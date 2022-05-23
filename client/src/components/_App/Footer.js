@@ -243,7 +243,7 @@ const Footer = () => {
                     <div className="row align-items-center">
                         <div className="col-lg-6">
                             <div className="copy-right">
-                                <p>Copyright 2022 © CyberHunt CyberSecurity Marketplace Inc.</p>
+                                <p>Copyright 2022 © The Hacker Marketplace Inc.</p>
                             </div>
                         </div>
 

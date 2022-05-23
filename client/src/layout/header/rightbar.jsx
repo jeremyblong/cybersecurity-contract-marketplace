@@ -104,12 +104,12 @@ const Rightbar = ({ userData, SBData, balance, ready, authenticated, data, authe
           } else {
               console.log("err", res.data);
 
-              NotificationManager.error("An unknown error has occurred while attempting to gather related profile notifications! Please reload the page or contact support if the problem persists..", "Error occurred while fetching notifications!", 4750);
+              // NotificationManager.error("An unknown error has occurred while attempting to gather related profile notifications! Please reload the page or contact support if the problem persists..", "Error occurred while fetching notifications!", 4750);
           }
         }).catch((err) => {
             console.log(err);
 
-            NotificationManager.error("An unknown error has occurred while attempting to gather related profile notifications! Please reload the page or contact support if the problem persists..", "Error occurred while fetching notifications!", 4750);
+            // NotificationManager.error("An unknown error has occurred while attempting to gather related profile notifications! Please reload the page or contact support if the problem persists..", "Error occurred while fetching notifications!", 4750);
         })
       }
     }, [userData]);

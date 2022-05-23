@@ -19,7 +19,7 @@ import helpers from "./helpers/helpers.js";
 import _ from "lodash";
 import moment from "moment";
 import ReactMapboxGl, { Marker } from 'react-mapbox-gl';
-
+import { Link } from "react-router-dom";
 
 const {
   graphEmployerHackerInformation,
@@ -309,7 +309,7 @@ const MainLandingPageEmployerHelper = ({ authentication, userData }) => {
       const bannerImageVideo = _.has(user, "profileBannerImage") ? `${process.env.REACT_APP_ASSET_LINK}/${user.profileBannerImage.link}` : process.env.REACT_APP_PLACEHOLDER_IMAGE;
       return (
         <Fragment>
-          <Card className="o-hidden profile-greeting">
+          <Card className="o-hidden profile-greeting profile-card-realign">
             <img src={bannerImageVideo} className={"backgroundcard-image"} />
             <CardBody className='ontop-other'>
               <div className="media">
@@ -324,8 +324,8 @@ const MainLandingPageEmployerHelper = ({ authentication, userData }) => {
               <div className="greeting-user text-center">
                 <div className="profile-vector centered-both-ways">{renderProfilePicVideoMainPageImg(lastPicVid)}</div>
                 <h4 style={{ marginTop: "32.5px" }} className="f-w-600 white-text-custom"><span id="greeting">{daytimes}</span> <span className="right-circle"><i className="fa fa-check-circle f-14 middle"></i></span></h4>
-                <p className='white-text-custom'><span> {"Today's earrning is $405 & your sales increase rate is 3.7 over the last 24 hours"}</span></p>
-                <div className="whatsnew-btn"><a className="btn btn-primary" href="#javascript">{"Whats New !"}</a></div>
+                {/* <p className='white-text-custom'><span> {"Today's earrning is $405 & your sales increase rate is 3.7 over the last 24 hours"}</span></p> */}
+                <div className="whatsnew-btn"><Link to={"/profile/settings/edit/employer"} className="btn btn-primary">{"Manage Profile Data!"}</Link></div>
                 <div className="left-icon"><i className="fa fa-bell"> </i></div>
               </div>
             </CardBody>
@@ -380,7 +380,7 @@ const MainLandingPageEmployerHelper = ({ authentication, userData }) => {
                         <h5>{"90%"}</h5>
                         <p className="font-roboto">{"This Month Sale"}</p>
                       </Col> */}
-                      <Col xl="12" className="p-0 left-btn"><a className="btn btn-gradient" href="#javascript">{Summary}</a></Col>
+                      <Col xl="12" className="p-0 left-btn"><a className="btn btn-gradient" href={null}>{Summary}</a></Col>
                     </Row>
                   </Col>
                   <Col xl="9" className="p-0">
@@ -645,7 +645,7 @@ const MainLandingPageEmployerHelper = ({ authentication, userData }) => {
                 </ListGroup>
               </CardBody>
               <div style={{ marginTop: "22.5px" }} className="card-footer">
-                <div className="bottom-btn"><a href="#javascript">{"More..."}</a></div>
+                <div className="bottom-btn"><a href={null}>{"More..."}</a></div>
               </div>
             </Card>
           </Col>

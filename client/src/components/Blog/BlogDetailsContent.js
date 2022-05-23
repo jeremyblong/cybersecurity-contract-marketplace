@@ -39,6 +39,27 @@ const BlogDetailsContent = ({ userData, authenticated }) => {
 				id
 			}
 		}
+		axios.get(`${process.env.REACT_APP_BASE_URL}/mark/view/unauth/blog/post/anyone`, configuration).then((res) => {
+            if (res.data.message === "Successfully marked view!") {
+                console.log("Successfully marked view!", res.data);
+            } else {
+                console.log("ERROR!...:", res.data);
+
+                NotificationManager.error("We could not mark your 'view' for this blog post, your page view was NOT calculated/added!", "Could NOT mark view!", 4750);
+            }
+        }).catch((err) => {
+            console.log("CRITICAL Successfully submitted data!...:", err);
+
+            NotificationManager.error("We could not mark your 'view' for this blog post, your page view was NOT calculated/added!", "Could NOT mark view!", 4750);
+        })
+	}, []);
+
+	useEffect(() => {
+		const configuration = {
+			params: {
+				id
+			}
+		}
 		axios.get(`${process.env.REACT_APP_BASE_URL}/gather/individual/foward/facing/blog`, configuration).then((res) => {
             if (res.data.message === "Successfully gathered blog!") {
                 console.log("Successfully gathered blog!", res.data);
@@ -212,7 +233,7 @@ const BlogDetailsContent = ({ userData, authenticated }) => {
 				signedinUserID: userData.uniqueId,
 				signedinUserFullName: `${userData.firstName} ${userData.lastName}`,
 				commentText,
-				mostRecentProfilePicVideo: userData.profilePicsVideos[userData.profilePicsVideos.length - 1], 
+				mostRecentProfilePicVideo: typeof userData.profilePicsVideos !== "undefined" && userData.profilePicsVideos.length > 0 ? userData.profilePicsVideos[userData.profilePicsVideos.length - 1] : null, 
 				signedinAccountType: userData.accountType
 			};
 	

@@ -88,7 +88,7 @@ const BlogGrid = () => {
                                     <div className="col-lg-4 col-sm-6">
                                         <div className="single-blog">
                                             <img src="/img/blog/blog1.jpg" alt="Image" />
-                                            <span>{blog.viewedBy.length} Total View(s)</span>
+                                            <span>{blog.totalViews} Total View(s)</span>
                                             <div className="blog-content">
                                                 <h3>
                                                     <Link to={{ pathname: `/blog-details/${blog.id}` }}>

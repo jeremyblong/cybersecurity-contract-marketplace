@@ -8546,3 +8546,11 @@ Services Area Style
     margin-bottom: 20px;
   }
 }
+.profile-card-realign {
+  min-height: 57.5vh !important;
+  border: 2px solid grey !important;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.225) !important;
+}
+.roundme {
+  min-height: 92.5px !important;
+}

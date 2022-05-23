@@ -10,7 +10,7 @@ const Layout = ({ children }) => {
                 <meta charSet="utf-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
  
-                <title>CyberHunt - Hunt IRL</title>
+                <title>The Hacker Marketplace Inc.</title>
             </Head>
 
             {children}

@@ -5,7 +5,7 @@ const verificationCompletedEmployerEmail = (email) => {
     const mailOptions = {
         from: 'blongjeremy@gmail.com',
         to: email,
-        subject: 'CyberHunt Verification Completed!',
+        subject: 'The Hacker Marketplace Inc. Verification Completed!',
         html: `<table border="0" cellpadding="0" cellspacing="0" width="100%">
             <tr>
                 <td bgcolor="#7366ff" align="center" style="padding: 0px 10px 0px 10px;">
@@ -33,7 +33,7 @@ const verificationCompletedEmployerEmail = (email) => {
                                         <td bgcolor="#ffffff" align="center" style="padding: 20px 30px 60px 30px;">
                                             <table border="0" cellspacing="0" cellpadding="0">
                                                 <tr>
-                                                    <td align="center" style="border-radius: 3px;" bgcolor="#7366ff"><a href="#" target="_blank" style="font-size: 20px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #ffffff; text-decoration: none; padding: 15px 25px; border-radius: 2px; border: 1px solid #000000; display: inline-block;">Visit CyberHunt!</a></td>
+                                                    <td align="center" style="border-radius: 3px;" bgcolor="#7366ff"><a href="#" target="_blank" style="font-size: 20px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #ffffff; text-decoration: none; padding: 15px 25px; border-radius: 2px; border: 1px solid #000000; display: inline-block;">Visit The Hacker Marketplace Inc.!</a></td>
                                                 </tr>
                                             </table>
                                         </td>
@@ -53,7 +53,7 @@ const verificationCompletedEmployerEmail = (email) => {
                         </tr>
                         <tr>
                             <td bgcolor="#ffffff" align="left" style="padding: 0px 30px 40px 30px; border-radius: 0px 0px 4px 4px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;">
-                                <p style="margin: 0;">Cheers,<br>CyberHunt Team</p>
+                                <p style="margin: 0;">Cheers,<br>The Hacker Marketplace Inc. Team</p>
                             </td>
                         </tr>
                     </table>
@@ -92,7 +92,7 @@ const verificationReviewedAndApprovedEmployer = (email) => {
     const mailOptions = {
         from: 'blongjeremy@gmail.com',
         to: email,
-        subject: 'CyberHunt Verification Completed/Finished!',
+        subject: 'The Hacker Marketplace Inc. Verification Completed/Finished!',
         html: `<table border="0" cellpadding="0" cellspacing="0" width="100%">
             <tr>
                 <td bgcolor="#7366ff" align="center" style="padding: 0px 10px 0px 10px;">
@@ -110,7 +110,7 @@ const verificationReviewedAndApprovedEmployer = (email) => {
                     <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
                         <tr>
                             <td bgcolor="#ffffff" align="left" style="padding: 20px 30px 40px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;">
-                                <p style="margin: 0;">We're excited to inform you that we have VERIFIED your "employer" account successfully and you now have FULL access to all features and functionality within our platform including but not limited to posting jobs or interacting with restricted components. User's on CyberHunt will also be able to see that you're now in a "verified" state as well!</p>
+                                <p style="margin: 0;">We're excited to inform you that we have VERIFIED your "employer" account successfully and you now have FULL access to all features and functionality within our platform including but not limited to posting jobs or interacting with restricted components. User's on The Hacker Marketplace Inc. will also be able to see that you're now in a "verified" state as well!</p>
                             </td>
                         </tr>
                         <tr>
@@ -120,7 +120,7 @@ const verificationReviewedAndApprovedEmployer = (email) => {
                                         <td bgcolor="#ffffff" align="center" style="padding: 20px 30px 60px 30px;">
                                             <table border="0" cellspacing="0" cellpadding="0">
                                                 <tr>
-                                                    <td align="center" style="border-radius: 3px;" bgcolor="#7366ff"><a href="#" target="_blank" style="font-size: 20px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #ffffff; text-decoration: none; padding: 15px 25px; border-radius: 2px; border: 1px solid #000000; display: inline-block;">Visit CyberHunt!</a></td>
+                                                    <td align="center" style="border-radius: 3px;" bgcolor="#7366ff"><a href="#" target="_blank" style="font-size: 20px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #ffffff; text-decoration: none; padding: 15px 25px; border-radius: 2px; border: 1px solid #000000; display: inline-block;">Visit The Hacker Marketplace Inc.!</a></td>
                                                 </tr>
                                             </table>
                                         </td>
@@ -141,7 +141,7 @@ const verificationReviewedAndApprovedEmployer = (email) => {
                         </tr>
                         <tr>
                             <td bgcolor="#ffffff" align="left" style="padding: 0px 30px 40px 30px; border-radius: 0px 0px 4px 4px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;">
-                                <p style="margin: 0;">Cheers,<br>CyberHunt Team</p>
+                                <p style="margin: 0;">Cheers,<br>The Hacker Marketplace Inc. Team</p>
                             </td>
                         </tr>
                     </table>
@@ -180,7 +180,7 @@ const verificationReviewedAndDeniedEmployer = (email) => {
     const mailOptions = {
         from: 'blongjeremy@gmail.com',
         to: email,
-        subject: 'CyberHunt Verification Completed/Finished!',
+        subject: 'The Hacker Marketplace Inc. Verification Completed/Finished!',
         html: `<table border="0" cellpadding="0" cellspacing="0" width="100%">
             <tr>
                 <td bgcolor="#7366ff" align="center" style="padding: 0px 10px 0px 10px;">
@@ -208,7 +208,7 @@ const verificationReviewedAndDeniedEmployer = (email) => {
                                         <td bgcolor="#ffffff" align="center" style="padding: 20px 30px 60px 30px;">
                                             <table border="0" cellspacing="0" cellpadding="0">
                                                 <tr>
-                                                    <td align="center" style="border-radius: 3px;" bgcolor="#7366ff"><a href="#" target="_blank" style="font-size: 20px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #ffffff; text-decoration: none; padding: 15px 25px; border-radius: 2px; border: 1px solid #000000; display: inline-block;">Visit CyberHunt!</a></td>
+                                                    <td align="center" style="border-radius: 3px;" bgcolor="#7366ff"><a href="#" target="_blank" style="font-size: 20px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #ffffff; text-decoration: none; padding: 15px 25px; border-radius: 2px; border: 1px solid #000000; display: inline-block;">Visit The Hacker Marketplace Inc.!</a></td>
                                                 </tr>
                                             </table>
                                         </td>
@@ -235,7 +235,7 @@ const verificationReviewedAndDeniedEmployer = (email) => {
                         </tr>
                         <tr>
                             <td bgcolor="#ffffff" align="left" style="padding: 0px 30px 40px 30px; border-radius: 0px 0px 4px 4px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;">
-                                <p style="margin: 0;">Cheers,<br>CyberHunt Team</p>
+                                <p style="margin: 0;">Cheers,<br>The Hacker Marketplace Inc. Team</p>
                             </td>
                         </tr>
                     </table>
