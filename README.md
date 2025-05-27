@@ -2,7 +2,7 @@
 
 **The Hacker Marketplace** is a full-stack, cybersecurity-focused **contract marketplace** and **bug bounty platform** where ethical hackers, penetration testers, and cybersecurity professionals connect with companies to monetize their knowledge, skills, and tools.
 
-🎥 [Watch Platform Demo](https://youtu.be/4S0FZQCvd8s)
+🎥 [![Watch on YouTube](https://blockchainsocialmedia.s3.us-east-1.amazonaws.com/Screenshot+2025-05-27+131735.png)](https://youtu.be/4S0FZQCvd8s)
 
 ---
 
